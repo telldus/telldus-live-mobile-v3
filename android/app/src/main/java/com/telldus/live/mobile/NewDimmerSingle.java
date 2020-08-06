@@ -304,6 +304,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                     R.drawable.shape_left_black_round,
                     R.drawable.shape_border_right_round_black,
                     R.drawable.shape_left_black,
+                    R.drawable.shape_border_round_black_fill,
                     viewId,
                     views,
                     context
@@ -316,6 +317,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                     R.drawable.shape_left_white_round,
                     R.drawable.shape_border_right_round_white,
                     R.drawable.shape_left_white,
+                    R.drawable.shape_border_round_white_fill,
                     viewId,
                     views,
                     context
@@ -328,6 +330,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                     R.drawable.shape_left_rounded_corner,
                     R.drawable.shape_right_rounded_corner,
                     R.drawable.button_background_no_bordradi,
+                    R.drawable.button_background,
                     viewId,
                     views,
                     context
@@ -350,6 +353,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                     R.drawable.shape_border_left_round_black_fill,
                     R.drawable.shape_border_right_round_black_fill,
                     R.drawable.shape_left_black_fill,
+                    R.drawable.shape_border_round_black_fill,
                     viewId,
                     views,
                     context
@@ -361,6 +365,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                     R.drawable.shape_border_left_round_white_fill,
                     R.drawable.shape_border_right_round_white_fill,
                     R.drawable.shape_left_white_fill,
+                    R.drawable.shape_border_round_white_fill,
                     viewId,
                     views,
                     context
@@ -381,6 +386,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                     R.drawable.shape_left_black_round_fill,
                     R.drawable.shape_border_right_round_black_fill,
                     R.drawable.shape_left_black_fill,
+                    R.drawable.shape_border_round_black_fill,
                     viewId,
                     views,
                     context
@@ -399,6 +405,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                     R.drawable.shape_left_white_round_fill,
                     R.drawable.shape_border_right_round_white_fill,
                     R.drawable.shape_left_white_fill,
+                    R.drawable.shape_border_round_white_fill,
                     viewId,
                     views,
                     context
@@ -418,6 +425,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                         R.drawable.shape_left_rounded_corner_primary_fill,
                         R.drawable.shape_right_rounded_corner_primary_fill,
                         R.drawable.button_background_no_bordradi_primary_fill,
+                        R.drawable.button_background_primary_fill,
                         viewId,
                         views,
                         context
@@ -429,6 +437,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                         R.drawable.shape_left_rounded_corner_secondary_fill,
                         R.drawable.shape_right_rounded_corner_secondary_fill,
                         R.drawable.button_background_no_bordradi_secondary_fill,
+                        R.drawable.button_background_secondary_fill,
                         viewId,
                         views,
                         context
@@ -446,10 +455,13 @@ public class NewDimmerSingle extends AppWidgetProvider {
 
     public static void setCoverBackground(
             int renderedButtonsCount, Boolean isLastButton,
-            int drawableWhenFirst, int drawableWhenLast, int drawableWhenInMiddle,
+            int drawableWhenFirst, int drawableWhenLast, int drawableWhenInMiddle, int drawableWhenTheOnly,
             int viewId, RemoteViews views, Context context
     ) {
-        if (renderedButtonsCount == 0) {
+
+        if (renderedButtonsCount == 0 && isLastButton) {
+            views.setInt(viewId, "setBackgroundResource", drawableWhenTheOnly);
+        } else if (renderedButtonsCount == 0) {
             views.setInt(viewId, "setBackgroundResource", drawableWhenFirst);
         } else if (isLastButton) {
             views.setInt(viewId, "setBackgroundResource", drawableWhenLast);
