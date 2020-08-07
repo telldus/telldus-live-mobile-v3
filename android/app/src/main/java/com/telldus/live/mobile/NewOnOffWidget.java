@@ -769,7 +769,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         if (ACTION_MORE_ACTIONS.equals(intent.getAction())) {
             Intent dialogueIntent = new Intent(context, DevicesGroupDialogueActivity.class);
             dialogueIntent.putExtra("widgetId", widgetId);
-            dialogueIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            dialogueIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             context.startActivity(dialogueIntent);
         }
     }
