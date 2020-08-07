@@ -244,11 +244,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                 }
             }
 
-            int slidervalue = 0;
-            if (deviceStateValue != null && !deviceStateValue.equals("") && !deviceStateValue.equals("null")) {
-                slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
-            }
-            views.setTextViewText(R.id.txtDimmer, String.valueOf(slidervalue)+"%");
+            views.setTextViewText(R.id.txtDimmer, context.getResources().getString(R.string.reserved_widget_android_dim));
 
             renderedButtonsCount++;
 
