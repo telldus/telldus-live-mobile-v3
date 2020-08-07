@@ -74,6 +74,7 @@ type Props = {
 	isSaving433MhzParams?: boolean,
 	devicetype: string,
 	renderExtraSettingsTop?: Function,
+	hideHeader?: boolean,
 };
 
 const DeviceSettings = React.memo<Object>((props: Props): Object => {
@@ -94,6 +95,7 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 		isSaving433MhzParams = false,
 		devicetype,
 		renderExtraSettingsTop,
+		hideHeader = false,
 	} = props;
 
 	function _keyboardDidHide() {
@@ -598,9 +600,11 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 
 	return (
 		<View style={[coverStyleDef, coverStyle]}>
-			<Text style={titleStyle}>
-				{formatMessage(i18n.deviceSettings)}
-			</Text>
+			{!hideHeader &&
+				<Text style={titleStyle}>
+					{formatMessage(i18n.deviceSettings)}
+				</Text>
+			}
 			{!!renderExtraSettingsTop && renderExtraSettingsTop()}
 			{Setting}
 			{((showScan || !!learnButton) && clientId) &&
