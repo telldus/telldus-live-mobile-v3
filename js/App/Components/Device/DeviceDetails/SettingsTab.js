@@ -590,9 +590,11 @@ class SettingsTab extends View {
 			const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
 			if (settings || updateAllParamsFromLocal) {
 
-				promises.push(
-					dispatch(setDeviceParameter(id, 'devicetype', devicetype))
-				);
+				if (isDeviceTypeEqual) {
+					promises.push(
+						dispatch(setDeviceParameter(id, 'devicetype', devicetype))
+					);
+				}
 
 				Object.keys(parameters).map((p: string) => {
 					if (typeof parameters[p] !== 'undefined' && parameters[p] !== null) {
