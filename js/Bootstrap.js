@@ -32,21 +32,21 @@ import 'intl/locale-data/jsonp/fr';
 import 'intl/locale-data/jsonp/nb';
 import 'intl/locale-data/jsonp/de';
 
-require('@formatjs/intl-pluralrules/polyfill');
-require('@formatjs/intl-pluralrules/dist/locale-data/en');
-require('@formatjs/intl-pluralrules/dist/locale-data/sv');
-require('@formatjs/intl-pluralrules/dist/locale-data/cs');
-require('@formatjs/intl-pluralrules/dist/locale-data/fr');
-require('@formatjs/intl-pluralrules/dist/locale-data/nb');
-require('@formatjs/intl-pluralrules/dist/locale-data/de');
+import '@formatjs/intl-pluralrules/polyfill';
+import '@formatjs/intl-pluralrules/locale-data/en';
+import '@formatjs/intl-pluralrules/locale-data/sv';
+import '@formatjs/intl-pluralrules/locale-data/cs';
+import '@formatjs/intl-pluralrules/locale-data/fr';
+import '@formatjs/intl-pluralrules/locale-data/nb';
+import '@formatjs/intl-pluralrules/locale-data/de';
 
-require('@formatjs/intl-relativetimeformat/polyfill');
-require('@formatjs/intl-relativetimeformat/dist/locale-data/en');
-require('@formatjs/intl-relativetimeformat/dist/locale-data/sv');
-require('@formatjs/intl-relativetimeformat/dist/locale-data/cs');
-require('@formatjs/intl-relativetimeformat/dist/locale-data/fr');
-require('@formatjs/intl-relativetimeformat/dist/locale-data/nb');
-require('@formatjs/intl-relativetimeformat/dist/locale-data/de');
+import '@formatjs/intl-relativetimeformat/polyfill';
+import '@formatjs/intl-relativetimeformat/locale-data/en';
+import '@formatjs/intl-relativetimeformat/locale-data/sv';
+import '@formatjs/intl-relativetimeformat/locale-data/cs';
+import '@formatjs/intl-relativetimeformat/locale-data/fr';
+import '@formatjs/intl-relativetimeformat/locale-data/nb';
+import '@formatjs/intl-relativetimeformat/locale-data/de';
 
 import React from 'react';
 import { Text } from './BaseComponents';
@@ -57,6 +57,10 @@ import {
 } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
+import {
+	SafeAreaProvider,
+	initialWindowMetrics,
+} from 'react-native-safe-area-context';
 
 import App from './App';
 import { configureStore } from './App/Store/ConfigureStore';
@@ -107,13 +111,16 @@ function Bootstrap(): Object {
 
 		render(): Provider {
 			return (
-				<Provider store={store}>
-					<PersistGate
-						persistor={persistor}
-						onBeforeLift={this.onBeforeLift}>
-						<WithIntlProvider/>
-					</PersistGate>
-				</Provider>
+				<SafeAreaProvider
+					initialMetrics={initialWindowMetrics}>
+					<Provider store={store}>
+						<PersistGate
+							persistor={persistor}
+							onBeforeLift={this.onBeforeLift}>
+							<WithIntlProvider/>
+						</PersistGate>
+					</Provider>
+				</SafeAreaProvider>
 			);
 		}
 	}

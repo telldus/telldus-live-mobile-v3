@@ -42,6 +42,9 @@ import LineChart from './LineChart';
 import {
 	storeHistory,
 } from '../../../Actions/LocalStorage';
+import {
+	toggleAppLayoutUpdatePermission,
+} from '../../../Actions/App';
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import Theme from '../../../Theme';
 
@@ -61,6 +64,7 @@ type Props = {
 	liveData: Object,
 	sensorId: number,
 
+	dispatch: Function,
 	onToggleChartData: (Object) => void,
 	refreshHistoryDataAfterLiveUpdate: () => Promise<any>,
 };
@@ -201,7 +205,9 @@ class SensorHistoryLineChart extends View<Props, State> {
 		const { fullscreen } = this.state;
 		const { show } = fullscreen;
 		const force = !show ? true : false;
-
+		if (Platform.OS === 'ios') {
+			this.props.dispatch(toggleAppLayoutUpdatePermission(!show));
+		}
 		const isLoading = Platform.OS === 'android' ? true : false;
 		this.setState({
 			fullscreen: {
@@ -228,6 +234,9 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	setFullscreenState(show: boolean, force: boolean = false, isLoading: boolean, orientation?: string = this.state.orientation) {
+		if (Platform.OS === 'ios' && !show) {
+			this.props.dispatch(toggleAppLayoutUpdatePermission(show));
+		}
 		this.setState({
 			fullscreen: {
 				show,
@@ -615,4 +624,10 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps)(SensorHistoryLineChart);
+const mapDispatchToProps = (dispatch: Function): Object => {
+	return {
+		dispatch,
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SensorHistoryLineChart);

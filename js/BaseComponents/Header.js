@@ -23,6 +23,8 @@
 
 import React, {
 	useCallback,
+	useState,
+	useEffect,
 } from 'react';
 import {
 	Platform,
@@ -46,6 +48,9 @@ import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
 import AttentionCatcher from './AttentionCatcher';
 import _ from 'lodash';
+
+import { hasStatusBar as hasStatusBarMeth } from '../App/Lib';
+
 import i18n from '../App/Translations/common';
 
 type Props = {
@@ -73,14 +78,24 @@ const HeaderComponent = (props: Props): Object => {
 		showAttentionCapture,
 		style,
 		onPressLogo,
+		forceHideStatus,
 	} = props;
 
 	const {
 		iosToolbarBtnColor,
 		toolbarTextColor,
-	 } = Theme.Core;
+	} = Theme.Core;
 
-	 const intl = useIntl();
+	const [ hasStatusBar, setHasStatusBar ] = useState(false);
+
+	useEffect(() => {
+		(async () => {
+			const _hasStatusBar = await hasStatusBarMeth();
+			setHasStatusBar(_hasStatusBar);
+		})();
+	}, []);
+
+	const intl = useIntl();
 
 	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
 	const {
@@ -94,6 +109,7 @@ const HeaderComponent = (props: Props): Object => {
 		toolbarButton,
 		androidToolbarSearch,
 		headerButton,
+		statusBar,
 	} = getStyles(appLayout, {
 		rounded,
 		children,
@@ -385,6 +401,11 @@ const HeaderComponent = (props: Props): Object => {
 
 	return (
 		<View style={{ flex: 0 }}>
+			{
+				(!forceHideStatus && Platform.OS === 'android' && hasStatusBar) ? (
+					<View style={statusBar}/>
+				) : null
+			}
 			<View style={[navbar, style]}>
 				{!!leftButton && renderLeftButton(leftButton)}
 				{renderChildren()}

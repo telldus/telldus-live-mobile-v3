@@ -24,6 +24,7 @@
 
 import React from 'react';
 import { ScrollView, Image } from 'react-native';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { connect } from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createSelector } from 'reselect';
@@ -51,6 +52,7 @@ import {
 	navigate,
 	getPremiumAccounts,
 	capitalize,
+	hasStatusBar,
 } from '../../Lib';
 
 import Theme from '../../Theme';
@@ -79,6 +81,7 @@ type Props = {
 type State = {
 	iapTestImageWidth: number,
 	iapTestImageheight: number,
+	hasStatusBar: boolean,
 };
 
 class Drawer extends View<Props, State> {
@@ -91,6 +94,7 @@ constructor(props: Props) {
 	this.state = {
 		iapTestImageWidth: 0,
 		iapTestImageheight: 0,
+		hasStatusBar: false,
 	};
 
 	const {
@@ -121,6 +125,14 @@ constructor(props: Props) {
 		},
 	];
 
+	this._hasStatusBar();
+}
+
+_hasStatusBar = async () => {
+	const _hasStatusBar = await hasStatusBar();
+	this.setState({
+		hasStatusBar: _hasStatusBar,
+	});
 }
 
 componentDidMount() {
@@ -372,7 +384,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				width: drawerWidth,
 				minWidth: 250,
 				backgroundColor: brandPrimary,
-				marginTop: 0,
+				marginTop: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'center',
