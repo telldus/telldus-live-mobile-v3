@@ -591,7 +591,6 @@ public class DevicesGroupDialogueActivity extends Activity {
             TextView dim_value = (TextView) findViewById(R.id.dim_value);
             deviceStateValue = (deviceStateValue == null || deviceStateValue.trim().isEmpty()) ? "0" : deviceStateValue;
             int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
-            dim_value.setText(String.valueOf(slidervalue)+"%");
 
             Slider dim_slider = (Slider) findViewById(R.id.dim_slider);
 
@@ -599,6 +598,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             float nextDimValue = Float.parseFloat(deviceStateValue);
             // Setting over and over will trigger "setOnChangeListener" which inturn will result calling API and cause infinite cycle.
             if (nextDimValue != currentDimValue && methodRequested == null) {
+                dim_value.setText(String.valueOf(slidervalue)+"%");
                 dim_slider.setValue(nextDimValue);
             }
 
