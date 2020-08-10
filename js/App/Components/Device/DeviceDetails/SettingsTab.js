@@ -562,7 +562,8 @@ class SettingsTab extends View {
 		const isDeviceTypeEqual = this.isDeviceTypeEqual(device.deviceType, devicetypeNext);
 		if (!isDeviceTypeEqual) {
 			promises.push(
-				dispatch(setMetadata(id, 'devicetype', devicetypeNext))
+				dispatch(setMetadata(id, 'deviceType', devicetypeNext)),
+				dispatch(setDeviceParameter(id, 'devicetype', devicetypeNext))
 			);
 		}
 
@@ -581,7 +582,7 @@ class SettingsTab extends View {
 
 		const {
 			devicetype,
-		} = this.DeviceVendorInfo433MHz.deviceInfo || {};
+		} = this.DeviceVendorInfo433MHz ? (this.DeviceVendorInfo433MHz.deviceInfo || {}) : {};
 
 		const updateAllParamsFromLocal = hasModelChanged || hasProtocolChanged;
 
@@ -603,30 +604,29 @@ class SettingsTab extends View {
 						);
 					}
 				});
-
-				this.setState({
-					isSaving433MhzParams: true,
-				});
-
-				let isAllGood = true;
-				try {
-					await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
-						return promise.then((res: any): any => {
-							if (!res || !res.status || res.status !== 'success') {
-								isAllGood = false;
-							}
-							return res;
-						}).catch((err: any): any => {
-							isAllGood = false;
-							return err;
-						});
-					}));
-				} catch (e) {
-					isAllGood = false;
-				} finally {
-					this.postSaveParams433MHz(id, isAllGood);
-				}
 			}
+		}
+		this.setState({
+			isSaving433MhzParams: true,
+		});
+
+		let isAllGood = true;
+		try {
+			await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
+				return promise.then((res: any): any => {
+					if (!res || !res.status || res.status !== 'success') {
+						isAllGood = false;
+					}
+					return res;
+				}).catch((err: any): any => {
+					isAllGood = false;
+					return err;
+				});
+			}));
+		} catch (e) {
+			isAllGood = false;
+		} finally {
+			this.postSaveParams433MHz(id, isAllGood);
 		}
 	}
 
@@ -863,6 +863,7 @@ class SettingsTab extends View {
 			nodeInfo = {},
 			name,
 			clientDeviceId,
+			deviceType,
 		} = device;
 
 		if (!id && !excludeActive) {
@@ -999,7 +1000,7 @@ class SettingsTab extends View {
 										renderExtraSettingsTop={gatewaySupportEditModel ? this.renderExtraSettingsTop : undefined}/>
 								}
 								<ChangeDevicetypeBlock
-									devicetype={devicetype}
+									devicetype={deviceType}
 									onValueChange={this._onValueChange}
 									coverStyle={{
 										marginTop: settings433MHz ? padding : padding / 2,
