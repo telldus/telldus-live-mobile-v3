@@ -36,6 +36,7 @@ import Icon from './Icon';
 
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
+import { hasStatusBar } from '../App/Lib';
 
 type Props = {
 	navigation: Object,
@@ -80,6 +81,8 @@ class NavigationHeader extends PureComponent<Props, State> {
 	keyboardDidShowListener: Object;
 	keyboardDidHideListener: Object;
 
+	_hasStatusBar: () => void;
+
 	static defaultProps: DefaultProps = {
 		isFromModal: false,
 		showLeftIcon: true,
@@ -100,6 +103,8 @@ class NavigationHeader extends PureComponent<Props, State> {
 			hasStatusBar: false,
 		};
 
+		this._hasStatusBar();
+
 		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
 	}
@@ -119,6 +124,14 @@ class NavigationHeader extends PureComponent<Props, State> {
 		this.keyboardDidShowListener.remove();
 		this.keyboardDidHideListener.remove();
 	}
+
+	_hasStatusBar = async () => {
+		const _hasStatusBar = await hasStatusBar();
+		this.setState({
+			hasStatusBar: _hasStatusBar,
+		});
+	}
+
 
 	_keyboardDidShow = () => {
 		this.setState({

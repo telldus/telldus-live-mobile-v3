@@ -552,7 +552,7 @@ public class NewRGBConfigureActivity extends Activity {
     }
 
     void createDeviceApi() {
-        String params = "/devices/list?supportedMethods=4023&includeIgnored=1&extras=devicetype,transport,room";
+        String params = "/devices/list?supportedMethods="+Constants.supportedMethods+"&includeIgnored=1&extras=devicetype,transport,room";
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, "DeviceApi1", new OnAPITaskComplete() {
             @Override

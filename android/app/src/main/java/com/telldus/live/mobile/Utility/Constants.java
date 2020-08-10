@@ -39,4 +39,6 @@ public class Constants  {
     public final static Float BASE_ICON_SIZE_FACTOR = 0.7f;
     public final static Float BASE_FONT_SIZE_FACTOR_MAX = 0.2f;
     public final static Float BASE_FONT_SIZE_FACTOR_MIN = 0.05f;
+
+    public final static int supportedMethods = 4023;
 }
