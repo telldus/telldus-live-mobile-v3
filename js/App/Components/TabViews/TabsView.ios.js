@@ -135,6 +135,16 @@ const NavigatorConfigs = {
 	animationEnabled: false, // Check if exist in v5
 	tabBarOptions: {
 		allowFontScaling: false,
+		tabStyle: {
+			alignItems: 'stretch',
+			justifyContent: 'space-between',
+		},
+		safeAreaInsets: {
+			top: 0,
+			bottom: 0,
+			right: 0,
+			left: 0,
+		},
 	},
 };
 

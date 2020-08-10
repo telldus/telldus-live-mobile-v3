@@ -67,6 +67,7 @@ type Props = {
 	deviceId?: string,
 	dialogueData: Object,
 	cachedLayout: Object,
+	preventLayoutUpdate: boolean,
 };
 
 class App extends React.Component<Props> {
@@ -159,8 +160,13 @@ class App extends React.Component<Props> {
 	}
 
 	onLayout = (ev: Object) => {
-		const { cachedLayout, dispatch } = this.props;
-		const { width } = cachedLayout;
+		const { cachedLayout, dispatch, preventLayoutUpdate } = this.props;
+
+		if (preventLayoutUpdate) {
+			return;
+		}
+
+		const { width, x, y } = cachedLayout;
 
 		const { layout } = ev.nativeEvent;
 
@@ -172,7 +178,7 @@ class App extends React.Component<Props> {
 		// Only when orientation changes.
 		// This conditional check will prevent layout update when keyboard
 		// is shown or any other event.
-		if (layout.width !== width) {
+		if (layout.width !== width || layout.x !== x || layout.y !== y) {
 			dispatch(setAppLayout(ev.nativeEvent.layout));
 		}
 	}
@@ -302,6 +308,7 @@ function mapStateToProps(store: Object): Object {
 	let {
 		changeLogVersion: prevChangeLogVersion,
 		layout = {},
+		preventLayoutUpdate = false,
 	} = store.app;
 
 	return {
@@ -314,6 +321,7 @@ function mapStateToProps(store: Object): Object {
 		deviceId,
 		dialogueData: store.modal,
 		cachedLayout: layout,
+		preventLayoutUpdate,
 	};
 }
 
