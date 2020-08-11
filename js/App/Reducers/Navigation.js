@@ -57,6 +57,9 @@ function navigation(state: State = initialState, action: Action): State {
 		const _hiddenTabs = state.hiddenTabs || {};
 		let hiddenTabCurrentUser = _hiddenTabs[userId] || [];
 		let _hiddenTabCurrentUser = [...hiddenTabCurrentUser, tab];
+		if (_hiddenTabCurrentUser.indexOf(tab) === -1) {
+			_hiddenTabCurrentUser = [...hiddenTabCurrentUser, tab];
+		}
 
 		return {
 			...state,
