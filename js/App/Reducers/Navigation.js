@@ -56,13 +56,13 @@ function navigation(state: State = initialState, action: Action): State {
 		} = action.payload;
 		const _hiddenTabs = state.hiddenTabs || {};
 		let hiddenTabCurrentUser = _hiddenTabs[userId] || [];
-		hiddenTabCurrentUser.push(tab);
+		let _hiddenTabCurrentUser = [...hiddenTabCurrentUser, tab];
 
 		return {
 			...state,
 			hiddenTabs: {
 				..._hiddenTabs,
-				[userId]: hiddenTabCurrentUser,
+				[userId]: _hiddenTabCurrentUser,
 			},
 		};
 	}
