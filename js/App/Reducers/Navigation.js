@@ -25,10 +25,12 @@ import type { Action } from '../Actions/Types';
 
 type State = {
 	screen: string,
+	hiddenTabs: Object,
 };
 
 const initialState: State = {
 	screen: 'Login',
+	hiddenTabs: {},
 };
 
 function navigation(state: State = initialState, action: Action): State {
@@ -46,6 +48,41 @@ function navigation(state: State = initialState, action: Action): State {
 			...state,
 			screen: 'Dashboard',
 		};
+	}
+	if (action.type === 'HIDE_TAB') {
+		const {
+			userId,
+			tab,
+		} = action.payload;
+		const _hiddenTabs = state.hiddenTabs || {};
+		let hiddenTabCurrentUser = _hiddenTabs[userId] || [];
+		hiddenTabCurrentUser.push(tab);
+
+		return {
+			...state,
+			hiddenTabs: {
+				..._hiddenTabs,
+				[userId]: hiddenTabCurrentUser,
+			},
+		};
+	}
+	if (action.type === 'UNHIDE_TAB') {
+		const {
+			userId,
+			tab,
+		} = action.payload;
+		const _hiddenTabs = state.hiddenTabs || {};
+		let hiddenTabCurrentUser = _hiddenTabs[userId] || [];
+		let _hiddenTabCurrentUser = hiddenTabCurrentUser.filter((_tab: string): boolean => _tab !== tab);
+
+		return {
+			...state,
+			hiddenTabs: {
+				..._hiddenTabs,
+				[userId]: _hiddenTabCurrentUser,
+			},
+		};
+
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return {
