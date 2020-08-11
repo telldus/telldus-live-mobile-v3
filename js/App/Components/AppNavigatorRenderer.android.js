@@ -51,6 +51,7 @@ type Props = {
 	appLayout: Object,
 	currentScreen: string,
 	hasGateways: boolean,
+	hiddenTabsCurrentUser: Array<string>,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -123,6 +124,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			'currentScreen',
 			'screenReaderEnabled',
 			'hasGateways',
+			'hiddenTabsCurrentUser',
 		]);
 	}
 
@@ -251,6 +253,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			screenReaderEnabled,
 			toggleDialogueBox,
 			currentScreen: CS,
+			hiddenTabsCurrentUser,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
@@ -281,6 +284,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			showAttentionCaptureAddDevice,
 			source: 'postlogin',
 			...MainNavHeaderProps,
+			hiddenTabsCurrentUser,
 		};
 
 		return (
@@ -334,10 +338,21 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		screenReaderEnabled,
 	} = state.app;
 
+	const {
+		userId = '',
+	} = state.user;
+
+	const {
+		hiddenTabs = {},
+	} = state.navigation;
+
+	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
 		currentScreen: state.navigation.screen,
+		hiddenTabsCurrentUser,
 	};
 }
 

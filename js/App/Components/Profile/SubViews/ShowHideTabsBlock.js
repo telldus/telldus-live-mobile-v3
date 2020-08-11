@@ -31,6 +31,7 @@ import {
 	useSelector,
 	useDispatch,
 } from 'react-redux';
+import { Platform } from 'react-native';
 
 import {
 	View,
@@ -90,34 +91,46 @@ const ShowHideTabsBlock = memo<Object>((props: Object): Object => {
 
 	const dispatch = useDispatch();
 
+	const supportedTabs = [
+		{
+			label: formatMessage(i18n.dashboard),
+			name: 'Dashboard',
+		},
+		{
+			label: formatMessage(i18n.devices),
+			name: 'Devices',
+		},
+		{
+			label: formatMessage(i18n.sensors),
+			name: 'Sensors',
+		},
+		{
+			label: formatMessage(i18n.scheduler),
+			name: 'Scheduler',
+		},
+	];
+
 	const onValueChange = useCallback((itemKey: string) => {
 		if (hiddenTabsCurrentUser.indexOf(itemKey) === -1) {
+			if (Platform.OS === 'android') {
+				let count = 0;
+				supportedTabs.forEach((st: Object) => {
+					if (hiddenTabsCurrentUser.indexOf(st.name) !== -1) {
+						count++;
+					}
+				});
+				if (count === (supportedTabs.length - 1)) {
+					return;
+				}
+			}
 			dispatch(tabHide(itemKey, userId));
 		} else {
 			dispatch(tabUnhide(itemKey, userId));
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hiddenTabsCurrentUser, userId]);
+	}, [hiddenTabsCurrentUser, userId, supportedTabs]);
 
 	const items = useMemo((): Array<Object> => {
-		const supportedTabs = [
-			{
-				label: formatMessage(i18n.dashboard),
-				name: 'Dashboard',
-			},
-			{
-				label: formatMessage(i18n.devices),
-				name: 'Devices',
-			},
-			{
-				label: formatMessage(i18n.sensors),
-				name: 'Sensors',
-			},
-			{
-				label: formatMessage(i18n.scheduler),
-				name: 'Scheduler',
-			},
-		];
 		return supportedTabs.map(({
 			label,
 			name,
@@ -140,14 +153,14 @@ const ShowHideTabsBlock = memo<Object>((props: Object): Object => {
 					}]}/>
 			);
 		});
-	}, [contentCoverStyle, formatMessage, hiddenTabsCurrentUser, intl, labelTextStyle, layout, onValueChange, switchStyle, touchableStyle]);
+	}, [contentCoverStyle, hiddenTabsCurrentUser, intl, labelTextStyle, layout, onValueChange, supportedTabs, switchStyle, touchableStyle]);
 
 	return (
 		<View style={containerStyle}>
 			<Text
 				level={2}
 				style={titleStyle}>
-        Tabs to display
+				Tabs to display
 			</Text>
 			{items}
 		</View>
