@@ -454,6 +454,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		showAttentionCaptureAddDevice,
 		source,
 		addingNewLocation,
+		hiddenTabsCurrentUser,
 	} = props.screenProps;
 
 	const Navigator = React.useMemo((): Object => {
@@ -468,6 +469,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		showAttentionCaptureAddDevice,
 		source,
 		addingNewLocation,
+		hiddenTabsCurrentUser,
 	]);
 
 	return (
@@ -483,6 +485,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 	'showAttentionCapture',
 	'showAttentionCaptureAddDevice',
 	'addingNewLocation',
+	'hiddenTabsCurrentUser',
 ]));
 
 export default AppNavigator;

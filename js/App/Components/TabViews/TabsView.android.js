@@ -53,7 +53,6 @@ const ScreenConfigs = [
 ];
 
 const NavigatorConfigs = {
-	initialRouteName: 'Dashboard',
 	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: true,
@@ -68,7 +67,11 @@ const NavigatorConfigs = {
 const Tab = createMaterialTopTabNavigator();
 
 const TabsView = React.memo<Object>((props: Object): Object => {
-	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+	const {
+		hiddenTabsCurrentUser = [],
+	} = props.screenProps;
+	const _ScreenConfigs = ScreenConfigs.filter((sc: Object): boolean => hiddenTabsCurrentUser.indexOf(sc.name) === -1);
+	return prepareNavigator(Tab, {ScreenConfigs: _ScreenConfigs, NavigatorConfigs}, props);
 }, (prevProps: Object, nextProps: Object): boolean => shouldNavigatorUpdate(prevProps, nextProps, [
 	'hideHeader',
 	'showAttentionCapture',

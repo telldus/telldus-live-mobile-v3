@@ -60,8 +60,6 @@ const ScreenConfigs = [
 ];
 
 const NavigatorConfigs = {
-	initialRouteName: 'Dashboard',
-	initialRouteKey: 'Dashboard', // Check if exist in v5
 	swipeEnabled: false, // Check if exist in v5
 	lazy: true,
 	animationEnabled: false, // Check if exist in v5
@@ -84,7 +82,11 @@ const NavigatorConfigs = {
 const Tab = createBottomTabNavigator();
 
 const TabsView = React.memo<Object>((props: Object): Object => {
-	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+	const {
+		hiddenTabsCurrentUser = [],
+	} = props.screenProps;
+	const _ScreenConfigs = ScreenConfigs.filter((sc: Object): boolean => hiddenTabsCurrentUser.indexOf(sc.name) === -1);
+	return prepareNavigator(Tab, {ScreenConfigs: _ScreenConfigs, NavigatorConfigs}, props);
 }, (prevProps: Object, nextProps: Object): boolean => shouldNavigatorUpdate(prevProps, nextProps, [
 	'hideHeader',
 	'showAttentionCapture',
