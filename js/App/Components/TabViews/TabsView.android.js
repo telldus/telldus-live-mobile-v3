@@ -33,6 +33,9 @@ import {
 	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
 
+// NOTE [IMP]: Changing the order or updating the tabs
+// need to reflect in places like tab hide/show logic and so
+// Eg: Lib/NavigationService/prepareVisibleTabs
 const ScreenConfigs = [
 	{
 		name: 'Dashboard',
