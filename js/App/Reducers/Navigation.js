@@ -21,6 +21,8 @@
 
 'use strict';
 
+import omit from 'lodash/omit';
+
 import type { Action } from '../Actions/Types';
 
 type State = {
@@ -86,6 +88,15 @@ function navigation(state: State = initialState, action: Action): State {
 			},
 		};
 
+	}
+	if (action.type === 'LOGGED_OUT_SELECTED') {
+		let { userId } = action.payload;
+		const { hiddenTabs = {} } = state;
+
+		return {
+			...state,
+			hiddenTabs: omit(hiddenTabs, userId),
+		};
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return {
