@@ -48,7 +48,7 @@ function navigation(state: State = initialState, action: Action): State {
 	if (action.type === 'APP_START') {
 		return {
 			...state,
-			screen: 'Dashboard',
+			screen: 'Dashboard', // TODO: Handle when tabs are hidden
 		};
 	}
 	if (action.type === 'HIDE_TAB') {
