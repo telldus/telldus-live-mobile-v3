@@ -22,7 +22,9 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import {
+	ScrollView,
+} from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 import {
 	CommonActions,
@@ -133,7 +135,7 @@ class Summary extends View<null, Props, State> {
 		const { navigation, schedule, hiddenTabsCurrentUser } = this.props;
 
 		const {
-			tabToCheckOrVeryNext,
+			visibleTabs = [],
 			tabToCheckOrVeryNextIndex,
 		} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Scheduler');
 
@@ -142,11 +144,9 @@ class Summary extends View<null, Props, State> {
 				name: 'Tabs',
 				state: {
 					index: tabToCheckOrVeryNextIndex,
-					routes: [
-						{
-							name: tabToCheckOrVeryNext,
-						},
-					],
+					routes: visibleTabs.map((vt: string): Object => {
+						return {'name': vt};
+					}),
 				},
 			},
 			{
