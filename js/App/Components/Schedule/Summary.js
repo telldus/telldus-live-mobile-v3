@@ -33,7 +33,11 @@ import {
 	View,
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getSelectedDays, getDeviceActionIcon } from '../../Lib';
+import {
+	getSelectedDays,
+	getDeviceActionIcon,
+	prepareVisibleTabs,
+} from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 
@@ -126,16 +130,21 @@ class Summary extends View<null, Props, State> {
 	}
 
 	resetNavigation = () => {
-		const { navigation, schedule } = this.props;
+		const { navigation, schedule, hiddenTabsCurrentUser } = this.props;
+
+		const {
+			tabToCheckOrVeryNext,
+			tabToCheckOrVeryNextIndex,
+		} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Scheduler');
 
 		let routes = [
 			{
 				name: 'Tabs',
 				state: {
-					index: 3,
+					index: tabToCheckOrVeryNextIndex,
 					routes: [
 						{
-							name: 'Scheduler',
+							name: tabToCheckOrVeryNext,
 						},
 					],
 				},
