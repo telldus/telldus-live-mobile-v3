@@ -22,6 +22,9 @@
 'use strict';
 
 import React from 'react';
+import {
+	Platform,
+} from 'react-native';
 
 import shouldUpdate from './shouldUpdate';
 
@@ -145,9 +148,49 @@ const shouldNavigatorUpdate = (prevProps: Object, nextProps: Object, additionalS
 	return !flag1 && !flag2;
 };
 
+const prepareVisibleTabs = (hiddenList: Array<string> = [], tabToCheck?: string = ''): Object => {
+	let visibleTabs = [], mainTabsInOrder = [
+			'Dashboard',
+			'Devices',
+			'Sensors',
+			'Scheduler',
+		],
+		tabToCheckOrVeryNextIndex = mainTabsInOrder.indexOf(tabToCheck),
+		_tabToCheckOrVeryNextIndex = tabToCheckOrVeryNextIndex,
+		tabToCheckOrVeryNext;
+
+	if (Platform.OS === 'ios') {
+		mainTabsInOrder.push('MoreOptionsTab');
+	}
+
+	mainTabsInOrder.forEach((tab: string, i: number) => {
+		if (hiddenList.indexOf(tab) === -1) {
+			visibleTabs.push(tab);
+		}
+		if (_tabToCheckOrVeryNextIndex === i) {
+			if (hiddenList.indexOf(tab) === -1) {
+				tabToCheckOrVeryNext = tab;
+				tabToCheckOrVeryNextIndex = i;
+			} else {
+				_tabToCheckOrVeryNextIndex = i + 1;
+			}
+		}
+	});
+
+	const firstVisibleTab = visibleTabs.length > 0 ? visibleTabs[0] : '';
+
+	return {
+		visibleTabs,
+		firstVisibleTab,
+		tabToCheckOrVeryNext,
+		tabToCheckOrVeryNextIndex,
+	};
+};
+
 module.exports = {
 	navigate,
 	navigationRef,
 	prepareNavigator,
 	shouldNavigatorUpdate,
+	prepareVisibleTabs,
 };
