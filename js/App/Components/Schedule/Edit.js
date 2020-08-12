@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
-import {View, TouchableButton, Throbber} from '../../../BaseComponents';
+import { View, TouchableButton } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays, getDeviceActionIcon } from '../../Lib';
 import { ActionRow, DaysRow, ScheduleSwitch, TimeRow, AdvancedSettingsBlock } from './SubViews';
@@ -247,15 +247,24 @@ class Edit extends View<null, Props, State> {
 		const { formatMessage, formatDate } = intl;
 		const { active, method, methodValue, weekdays, retries = 0, retryInterval = 0, reps = 0 } = schedule;
 		const {
-			container, row, save, cancel, throbber,
-			buttonStyle, labelStyle,
-			throbberContainer,
+			container,
+			row,
+			save,
+			buttonStyle,
+			labelStyle,
 			buttonCoverStyle,
 		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
 		const labelPostScript = formatMessage(i18n.activateEdit);
 		const { deviceType, supportedMethods = {} } = this.device;
 		const actionIcons = getDeviceActionIcon(deviceType, null, supportedMethods);
+
+		const {
+			isSaving,
+			isDeleting,
+		} = this.state;
+
+		const disable = isDeleting || isSaving;
 
 		return (
 			<ScrollView
@@ -314,30 +323,21 @@ class Edit extends View<null, Props, State> {
 							labelStyle={labelStyle}
 							onPress={this.onSaveSchedule}
 							accessible={true}
+							disabled={disable}
+							showThrobber={isSaving}
 						/>
-						{this.state.isSaving &&
-							(
-								<Throbber
-									throbberContainerStyle={throbberContainer}
-									throbberStyle={throbber}
-								/>
-							)}
 					</View>
 					<View style={buttonCoverStyle}>
 						<TouchableButton
 							text={i18n.delete}
-							style={[buttonStyle, cancel]}
+							style={buttonStyle}
+							buttonLevel={isDeleting ? undefined : 10}
 							labelStyle={labelStyle}
 							onPress={this.onDeleteSchedule}
 							accessible={true}
+							disabled={disable}
+							showThrobber={isDeleting}
 						/>
-						{this.state.isDeleting &&
-					(
-						<Throbber
-							throbberContainerStyle={throbberContainer}
-							throbberStyle={throbber}
-						/>
-					)}
 					</View>
 				</View>
 			</ScrollView>
@@ -388,13 +388,13 @@ class Edit extends View<null, Props, State> {
 				marginVertical: padding / 4,
 			},
 			save: {
-				backgroundColor: Theme.Core.brandSecondary,
 				marginTop: padding / 2,
 			},
 			cancel: {
 				backgroundColor: Theme.Core.brandDanger,
 			},
 			buttonCoverStyle: {
+				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginVertical: padding / 4,
@@ -405,13 +405,6 @@ class Edit extends View<null, Props, State> {
 			},
 			labelStyle: {
 				fontSize: fontSizeButtonLabel,
-			},
-			throbberContainer: {
-				right: -(deviceWidth * 0.12),
-			},
-			throbber: {
-				fontSize: 30,
-				color: Theme.Core.brandSecondary,
 			},
 		};
 	};
