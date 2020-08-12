@@ -75,6 +75,9 @@ import {
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+import {
+	useNonHiddenMainTabs,
+} from '../../Hooks/Navigation';
 
 import i18n from '../../Translations/common';
 
@@ -104,6 +107,10 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		premiumPurchase = JSON.stringify({enable: false}),
 	} = firebaseRemoteConfig;
 	const { enable } = JSON.parse(premiumPurchase);
+
+	const {
+		firstVisibleTab,
+	} = useNonHiddenMainTabs();
 
 	function onPressRedeemGift() {
 		navigation.navigate('RedeemGiftScreen');
@@ -177,7 +184,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						});
 						dispatch(showToast(messageOnSuccesSwitch));
 						navigation.navigate('Tabs', {
-							screen: 'Dashboard',
+							screen: firstVisibleTab,
 						});
 					}).catch((err: Object) => {
 						dispatch(toggleVisibilitySwitchAccountAS({
@@ -233,6 +240,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		premAccounts,
 		pushToken,
 		userId,
+		firstVisibleTab,
 	]);
 
 	const hasMultipleAccounts = Object.keys(accounts).length > 1;
