@@ -20,14 +20,38 @@
 // @flow
 'use strict';
 
-import * as AppHooks from './App';
-import * as DialogueboxHooks from './Dialoguebox';
-import * as iApHooks from './IAP';
-import * as Navigation from './Navigation';
+import {
+	useMemo,
+} from 'react';
+import {
+	useSelector,
+} from 'react-redux';
+
+import {
+	prepareVisibleTabs,
+} from '../Lib/NavigationService';
+
+const useNonHiddenMainTabs = (tabToCheck?: string = ''): Object => {
+
+	const { hiddenTabs = {} } = useSelector((store: Object): Object => store.navigation);
+	const { userId } = useSelector((store: Object): Object => store.user);
+	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+
+	const {
+		visibleTabs,
+		firstVisibleTab,
+		tabToCheckOrVeryNext,
+		tabToCheckOrVeryNextIndex,
+	} = useMemo((): Array<string> => prepareVisibleTabs(hiddenTabsCurrentUser, tabToCheck), [hiddenTabsCurrentUser, tabToCheck]);
+
+	return {
+		visibleTabs,
+		firstVisibleTab,
+		tabToCheckOrVeryNext,
+		tabToCheckOrVeryNextIndex,
+	};
+};
 
 module.exports = {
-	...AppHooks,
-	...DialogueboxHooks,
-	...iApHooks,
-	...Navigation,
+	useNonHiddenMainTabs,
 };
