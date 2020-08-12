@@ -52,6 +52,9 @@ import {
 	getSensors,
 	addDevice433Failed,
 } from '../../../Actions';
+import {
+	prepareVisibleTabs,
+} from '../../../Lib/NavigationService';
 
 type Props = {
 	addDevice: Object,
@@ -64,6 +67,7 @@ type Props = {
 	locale: string,
 	processWebsocketMessage: (string, string, string, Object) => any,
 	route: Object,
+	hiddenTabsCurrentUser: Array<string>,
 };
 
 type State = {
@@ -200,8 +204,11 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	closeAdd433MHz = () => {
-		const { navigation } = this.props;
-		navigation.navigate('Devices');
+		const { navigation, hiddenTabsCurrentUser } = this.props;
+		const {
+			tabToCheckOrVeryNext,
+		} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Devices');
+		navigation.navigate(tabToCheckOrVeryNext);
 	}
 
 	render(): Object {
@@ -215,6 +222,7 @@ export class AddDeviceContainer extends View<Props, State> {
 			sessionId,
 			route,
 			currentScreen,
+			hiddenTabsCurrentUser,
 		} = this.props;
 		const { appLayout } = screenProps;
 		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
@@ -268,6 +276,7 @@ export class AddDeviceContainer extends View<Props, State> {
 							sessionId,
 							showLeftIcon,
 							route,
+							hiddenTabsCurrentUser,
 						},
 					)}
 				</KeyboardAvoidingView>
@@ -285,13 +294,19 @@ export const mapStateToProps = (store: Object): Object => {
 
 	const {
 		screen: currentScreen,
+		hiddenTabs = {},
 	} = store.navigation;
+
+	const { userId } = store.user;
+
+	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
 
 	return {
 		addDevice: store.addDevice,
 		locale,
 		sessionId,
 		currentScreen,
+		hiddenTabsCurrentUser,
 	};
 };
 

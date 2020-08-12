@@ -38,6 +38,10 @@ import {
 } from '../../../../BaseComponents';
 import { NameRow, DeviceInfoBlock } from './SubViews';
 
+import {
+	prepareVisibleTabs,
+} from '../../../Lib/NavigationService';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -45,6 +49,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	appLayout: Object,
 	route: Object,
+	hiddenTabsCurrentUser: Array<string>,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,
@@ -103,11 +108,11 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	if (nextProps.currentScreen === 'DeviceName') {
+	if (nextProps.currentScreen === nextProps.ScreenName) {
 		if (!isEqual(this.state, nextState)) {
 			return true;
 		}
-		if (nextProps.appLayout.width !== this.props.appLayout.width) {
+		if (!isEqual(this.props, nextProps)) {
 			return true;
 		}
 		return false;
@@ -148,7 +153,7 @@ submitName() {
 }
 
 postSubmitName = async () => {
-	const { navigation, actions, route } = this.props;
+	const { navigation, actions, route, hiddenTabsCurrentUser } = this.props;
 	const { rowData } = this.state;
 
 	try {
@@ -191,7 +196,11 @@ postSubmitName = async () => {
 					}
 				}
 
-				navigation.navigate('Devices', {
+				const {
+					tabToCheckOrVeryNext,
+				} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Devices');
+
+				navigation.navigate(tabToCheckOrVeryNext, {
 					gateway,
 					newDevices: rowData,
 				});

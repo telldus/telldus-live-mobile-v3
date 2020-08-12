@@ -46,7 +46,8 @@ import {
 import {
 	get433DevicePostConfigScreenOptions,
 	getTelldusLearnImage,
-} from '../../../Lib/DeviceUtils';
+	prepareVisibleTabs,
+} from '../../../Lib';
 
 import Theme from '../../../Theme';
 
@@ -219,7 +220,7 @@ onNext = async (handleLoading?: boolean = true) => {
 		});
 	}
 
-	const { navigation, addDevice, actions, route } = this.props;
+	const { navigation, addDevice, actions, route, hiddenTabsCurrentUser } = this.props;
 
 	try {
 		await actions.getDevices();
@@ -249,7 +250,11 @@ onNext = async (handleLoading?: boolean = true) => {
 			});
 		}
 
-		navigation.navigate('Devices', {
+		const {
+			tabToCheckOrVeryNext,
+		} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Devices');
+
+		navigation.navigate(tabToCheckOrVeryNext, {
 			gateway,
 			newDevices: rowData,
 		});
