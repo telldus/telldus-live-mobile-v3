@@ -155,8 +155,7 @@ const prepareVisibleTabs = (hiddenList: Array<string> = [], tabToCheck?: string 
 			'Sensors',
 			'Scheduler',
 		],
-		tabToCheckOrVeryNextIndex = mainTabsInOrder.indexOf(tabToCheck),
-		_tabToCheckOrVeryNextIndex = tabToCheckOrVeryNextIndex,
+		_tabToCheckOrVeryNextIndex = mainTabsInOrder.indexOf(tabToCheck),
 		tabToCheckOrVeryNext;
 
 	if (Platform.OS === 'ios') {
@@ -170,7 +169,6 @@ const prepareVisibleTabs = (hiddenList: Array<string> = [], tabToCheck?: string 
 		if (_tabToCheckOrVeryNextIndex === i) {
 			if (hiddenList.indexOf(tab) === -1) {
 				tabToCheckOrVeryNext = tab;
-				tabToCheckOrVeryNextIndex = i;
 			} else {
 				_tabToCheckOrVeryNextIndex = i + 1;
 			}
@@ -183,7 +181,7 @@ const prepareVisibleTabs = (hiddenList: Array<string> = [], tabToCheck?: string 
 		visibleTabs,
 		firstVisibleTab,
 		tabToCheckOrVeryNext,
-		tabToCheckOrVeryNextIndex,
+		tabToCheckOrVeryNextIndex: visibleTabs.indexOf(tabToCheckOrVeryNext),
 	};
 };
 
