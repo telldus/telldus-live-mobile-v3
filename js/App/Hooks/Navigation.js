@@ -42,7 +42,7 @@ const useNonHiddenMainTabs = (tabToCheck?: string = ''): Object => {
 		firstVisibleTab,
 		tabToCheckOrVeryNext,
 		tabToCheckOrVeryNextIndex,
-	} = useMemo((): Array<string> => prepareVisibleTabs(hiddenTabsCurrentUser, tabToCheck), [hiddenTabsCurrentUser, tabToCheck]);
+	} = useMemo((): Object => prepareVisibleTabs(hiddenTabsCurrentUser, tabToCheck), [hiddenTabsCurrentUser, tabToCheck]);
 
 	return {
 		visibleTabs,

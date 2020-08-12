@@ -48,7 +48,7 @@ type Props = {
 	ScreenName: string,
 	route: Object,
 	currentScreen: string,
-	hiddenTabsCurrentUser: Array<stirng>,
+	hiddenTabsCurrentUser: Array<string>,
 
 	navigation: Object,
 	children: Object,

@@ -60,6 +60,7 @@ type Props = {
 	route: Object,
 	currentScreen: string,
 	ScreenName: string,
+	hiddenTabsCurrentUser: Array<string>,
 
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
