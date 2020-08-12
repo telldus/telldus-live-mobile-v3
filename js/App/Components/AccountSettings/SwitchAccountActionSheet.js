@@ -67,6 +67,9 @@ import {
 import {
 	useAppTheme,
 } from '../../Hooks/Theme';
+import {
+	useNonHiddenMainTabs,
+} from '../../Hooks/Navigation';
 
 import i18n from '../../Translations/common';
 
@@ -109,6 +112,10 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 	const intl = useIntl();
 
 	const actionSheetRef: Object = React.useRef();
+
+	const {
+		firstVisibleTab,
+	} = useNonHiddenMainTabs();
 
 	function showActionSheet() {
 		if (actionSheetRef.current) {
@@ -236,7 +243,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 							}));
 						}
 						navigate('Tabs', {
-							screen: 'Dashboard',
+							screen: firstVisibleTab,
 						});
 					}).catch((err: Object) => {
 						closeActionSheet();
@@ -262,6 +269,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		showAddNewAccount,
 		switchingId,
 		userId,
+		firstVisibleTab,
 	]);
 
 	let ACCOUNTS = [];
