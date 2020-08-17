@@ -34,11 +34,14 @@ import {
 	DropDown,
 	View,
 	Text,
+	RippleButton,
+	IconTelldus,
 } from '../../../../../BaseComponents';
 
 import {
 	getAllDevicetypes,
 	findDeviceTypeInfo,
+	getDeviceIcons,
 } from '../../../../Lib/DeviceUtils';
 
 import Theme from '../../../../Theme';
@@ -60,7 +63,15 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 	const dtypes = getAllDevicetypes();
 	const initialItem = findDeviceTypeInfo(devicetype, dtypes) || {};
 	const initialValue = initialItem.name || '';
-	const [ value, setValue ] = useState(initialValue);
+	const initialKey = initialItem.id || '';
+	const [ valueKey, setValueKey ] = useState({
+		value: initialValue,
+		vKey: initialKey,
+	});
+	const {
+		value,
+		vKey,
+	} = valueKey;
 
 	const {
 		items,
@@ -75,6 +86,7 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 			_items.push({
 				key: id,
 				value: name,
+				icon: getDeviceIcons(id),
 			});
 		});
 		return {
@@ -90,17 +102,111 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 		coverStyleDef,
 		labelStyle,
 		pickerBaseTextStyle,
+		ddItemStyle,
 	} = getStyles(layout);
 
 	const saveSortingDB = useCallback((val: string, itemIndex: number, data: Array<any>) => {
-		setValue(val);
+		const {
+			key,
+			value: _value,
+		} = data[itemIndex] || {};
+
+		setValueKey({
+			value: _value,
+			vKey: key,
+		});
 		if (onValueChange) {
-			const { key } = data[itemIndex] || {};
 			onValueChange(key);
 		}
 	}, [onValueChange]);
 
 	const labelSortingDB = 'Device type';
+
+	const renderItem = useCallback((_props: Object): Object | null => {
+		const {
+			style,
+			onPress,
+			item,
+			index,
+		} = _props;
+
+		if (!item) {
+			return null;
+		}
+
+		const {
+			value: _value,
+			icon,
+			key,
+		} = item;
+
+		return (
+			<RippleButton
+				onPress={onPress}
+				onPressData={index}
+				style={[...style, {
+					flexDirection: 'row',
+					alignItems: 'center',
+				}]}>
+				<IconTelldus
+					icon={icon}
+					level={key === vKey ? 19 : 15}
+					style={ddItemStyle}/>
+				<Text
+					level={key === vKey ? 19 : 3}
+					style={[ddItemStyle, {
+						marginLeft: 8,
+					}]}
+					numberOfLine={1}>
+					{_value}
+				</Text>
+			</RippleButton>
+		);
+	}, [ddItemStyle, vKey]);
+
+	const renderBase = useCallback((_props: Object): Object => {
+		const {
+			items: _items,
+			onPress,
+			style,
+			textStyle,
+			baseLeftIcon,
+		} = _props;
+
+		if (!_items) {
+			return null;
+		}
+
+		const {
+			title,
+			selectedItem = {},
+		} = _items;
+
+		return (
+			<RippleButton
+				onPress={onPress}
+				style={[...style, {
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'flex-end',
+				}]}>
+				<IconTelldus
+					icon={selectedItem.icon}
+					level={15}
+					style={ddItemStyle}/>
+				<Text
+					level={3}
+					style={[textStyle, {
+						flex: 0,
+						marginLeft: 8,
+					}]}
+					numberOfLine={1}>
+					{title}
+				</Text>
+				{baseLeftIcon}
+			</RippleButton>
+		);
+	}, [ddItemStyle]);
 
 	return (
 		<View
@@ -123,6 +229,8 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 				accessibilityLabelPrefix={labelSortingDB}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerBaseTextStyle={pickerBaseTextStyle}
+				renderItem={renderItem}
+				renderBase={renderBase}
 			/>
 		</View>
 	);
@@ -181,6 +289,9 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize,
 			flexWrap: 'wrap',
 			marginLeft: fontSize,
+		},
+		ddItemStyle: {
+			fontSize,
 		},
 	};
 };

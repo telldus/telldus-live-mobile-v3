@@ -32,7 +32,6 @@ import {
 	TouchableButton,
 	EditBox,
 	ThemedScrollView,
-	Text,
 } from '../../../../BaseComponents';
 
 import { LearnButton } from '../../TabViews/SubViews';
@@ -882,7 +881,6 @@ class SettingsTab extends View {
 			learnButtonWithScan,
 			labelStyle,
 			editBoxStyle,
-			titleStyle,
 			padding,
 		} = this.getStyle(appLayout);
 
@@ -978,14 +976,14 @@ class SettingsTab extends View {
 									appLayout={appLayout}
 									intl={intl}
 								/>
-								{
-									<Text style={titleStyle}>
-										{formatMessage(i18n.deviceSettings)}
-									</Text>
-								}
+								<ChangeDevicetypeBlock
+									devicetype={deviceType}
+									onValueChange={this._onValueChange}
+									coverStyle={{
+										marginTop: padding / 2,
+									}}/>
 								{!!settings433MHz &&
 									<DeviceSettings
-										hideHeader
 										coverStyle={coverStyleDeviceSettings433}
 										labelStyle={labelStyleDeviceSettings433}
 										deviceId={id}
@@ -999,12 +997,6 @@ class SettingsTab extends View {
 										devicetype={devicetype}
 										renderExtraSettingsTop={gatewaySupportEditModel ? this.renderExtraSettingsTop : undefined}/>
 								}
-								<ChangeDevicetypeBlock
-									devicetype={deviceType}
-									onValueChange={this._onValueChange}
-									coverStyle={{
-										marginTop: settings433MHz ? padding : padding / 2,
-									}}/>
 								{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}
