@@ -3,7 +3,7 @@
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 960 400" enable-background="new 0 0 960 400" xml:space="preserve">
 <g id="BackgroundColor">
-	<rect fill="#E26901" width="960" height="400"/>
+	<rect fill="#000" width="960" height="400"/>
 </g>
 <g id="overlay">
 	<polygon opacity="0.04" fill="#F2F2F2" enable-background="new    " points="-0.996,381.028 923.992,-0.856 -0.996,-0.856 	"/>
