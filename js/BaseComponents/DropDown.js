@@ -80,6 +80,7 @@ type Props = {
 	pickerBaseTextStyle?: Array<any> | Object,
 	iconLeftPickerBase?: Object,
 	renderItem?: Function,
+	renderBase?: Function,
 	valueExtractor?: Function,
 	labelExtractor?: Function,
 	itemSize?: number,
@@ -168,6 +169,7 @@ static defaultProps: DefaultProps = {
 			disabled,
 			iconLeftPickerBase,
 			colors,
+			renderBase,
 		} = this.props;
 
 		const {
@@ -176,6 +178,29 @@ static defaultProps: DefaultProps = {
 			rightIconStyle,
 		} = this.getStyle(appLayout);
 		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
+
+		if (renderBase) {
+			return renderBase({
+				style: [pickerBaseCoverStyleDef, pickerBaseCoverStyle],
+				textStyle: [
+					pickerBaseTextStyleDef,
+					{color: colors.textFour},
+					pickerBaseTextStyle,
+				],
+				onPress: this.onPressPicker,
+				disabled: disabled,
+				items,
+				baseLeftIcon: React.isValidElement(baseLeftIcon) ?
+					baseLeftIcon
+					:
+					<IconTelldus
+						level={6}
+						icon={baseLeftIcon}
+						accessible={false}
+						style={rightIconStyle}/>,
+
+			});
+		}
 
 		return (
 			<RippleButton
