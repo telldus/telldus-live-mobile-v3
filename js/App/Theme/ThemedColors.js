@@ -187,6 +187,9 @@ export default {
 		get ShadeThree() {
 			return Core.rowTextColor;
 		},
+		get posterBG() {
+			return Core.brandSecondary;
+		},
 	},
 
 	dark: {
@@ -337,6 +340,9 @@ export default {
 		},
 		get ShadeThree() {
 			return this.textTwo;
+		},
+		get posterBG() {
+			return Core.brandDanger;
 		},
 	},
 };
