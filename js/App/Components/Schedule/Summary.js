@@ -22,7 +22,10 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import {
+	ScrollView,
+	Platform,
+} from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 import {
 	CommonActions,
@@ -128,16 +131,32 @@ class Summary extends View<null, Props, State> {
 	resetNavigation = () => {
 		const { navigation, schedule } = this.props;
 
+		let _routes = [
+			{
+				name: 'Dashboard',
+			},
+			{
+				name: 'Devices',
+			},
+			{
+				name: 'Sensors',
+			},
+			{
+				name: 'Scheduler',
+			},
+		];
+		if (Platform.OS === 'ios') {
+			_routes.push({
+				name: 'MoreOptionsTab',
+			});
+		}
+
 		let routes = [
 			{
 				name: 'Tabs',
 				state: {
 					index: 3,
-					routes: [
-						{
-							name: 'Scheduler',
-						},
-					],
+					routes: _routes,
 				},
 			},
 			{
