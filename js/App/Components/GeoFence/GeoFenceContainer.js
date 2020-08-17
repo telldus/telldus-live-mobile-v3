@@ -220,7 +220,7 @@ export class GeoFenceContainer extends View<Props, State> {
 					actions.toggleFeatureGeoFence({
 						enableGeoFence,
 					});
-					actions.showToast('GeoFence is now turned off'); // TODO: Translate
+					actions.showToast(formatMessage(i18n.gFTurnedOff));
 				} else {
 					actions.showToast(messageOnFail);
 				}
@@ -236,7 +236,7 @@ export class GeoFenceContainer extends View<Props, State> {
 					actions.toggleFeatureGeoFence({
 						enableGeoFence,
 					});
-					actions.showToast('GeoFence is now turned on'); // TODO: Translate
+					actions.showToast(formatMessage(i18n.gFTurnedOn));
 				} else {
 					actions.showToast(messageOnFail);
 				}
