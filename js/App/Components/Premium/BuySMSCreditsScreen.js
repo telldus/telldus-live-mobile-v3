@@ -45,8 +45,8 @@ import {
 import {
 	getSMSPlans,
 	getPaymentOptions,
-	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
 import {
 	createTransaction,
 } from '../../Actions/User';
@@ -176,7 +176,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 			level={3}
 			style={container}>
 			<NavigationHeaderPoster
-				h1={capitalizeFirstLetterOfEachWord('Premium access')}
+				h1={capitalize(formatMessage(i18n.premiumAccess))}
 				h2={formatMessage(i18n.purchaseSMSCredits)}
 				align={'right'}
 				showLeftIcon={true}
