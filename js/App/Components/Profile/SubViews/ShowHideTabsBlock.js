@@ -160,7 +160,7 @@ const ShowHideTabsBlock = memo<Object>((props: Object): Object => {
 			<Text
 				level={2}
 				style={titleStyle}>
-				Tabs to display
+				Menu tabs to display
 			</Text>
 			{items}
 		</View>
