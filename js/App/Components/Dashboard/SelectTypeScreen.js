@@ -25,7 +25,6 @@ import React, {
 	useCallback,
 	useEffect,
 	useMemo,
-	useState,
 } from 'react';
 import {
 	useSelector,
@@ -36,11 +35,8 @@ import { useIntl } from 'react-intl';
 import {
 	View,
 	ThemedScrollView,
-	FloatingButton,
+	IconedSelectableBlock,
 } from '../../../BaseComponents';
-import {
-	TypeBlock,
-} from './SubViews';
 
 import {
 	preAddDb,
@@ -61,8 +57,6 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 		onDidMount,
 		navigation,
 	} = props;
-
-	const [ selectedType, setSelectedType ] = useState(DEVICE_KEY);
 
 	const {
 		formatMessage,
@@ -88,7 +82,7 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 	const metWeatherIdsInCurrentDb = userDbsAndMetWeatherIds[activeDashboardId] || [];
 
 
-	const onPressNext = useCallback((params: Object) => {
+	const onPressNext = useCallback((selectedType: string) => {
 		dispatch(preAddDb({}));
 		if (selectedType === MET_ID) {
 			const uniqueId = getRandomNumberNotinArray(metWeatherIdsInCurrentDb);
@@ -99,42 +93,46 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 		} else {
 			navigation.navigate('SelectItemsScreen', {selectedType});
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedType]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [metWeatherIdsInCurrentDb]);
 
 	const onPress = useCallback((typeSelected: string) => {
-		setSelectedType(typeSelected);
-	}, []);
+		onPressNext(typeSelected);
+	}, [onPressNext]);
 
 	const blocks = useMemo((): Array<Object> => {
 		const items = [{
 			label: formatMessage(i18n.labelDevice),
 			typeId: DEVICE_KEY,
 			onPress,
+			icon: 'devicealt',
 		},
 		{
 			label: formatMessage(i18n.labelSensor),
 			onPress,
 			typeId: SENSOR_KEY,
+			icon: 'sensor',
 		},
 		{
 			label: 'MET Weather', // TODO: translate
 			onPress,
 			typeId: MET_ID,
+			icon: 'sensor',
 		},
 		];
 		return items.map((item: Object, index: number): Object => {
 			return (
-				<TypeBlock
+				<IconedSelectableBlock
 					key={`${index}`}
-					layout={layout}
 					onPress={item.onPress}
-					label={item.label}
-					typeId={item.typeId}
-					selected={selectedType === item.typeId}/>
+					h1={item.label}
+					icon={item.icon}
+					onPressData={item.typeId}
+					enabled
+				/>
 			);
 		});
-	}, [formatMessage, layout, onPress, selectedType]);
+	}, [formatMessage, onPress]);
 
 	return (
 		<View style={{flex: 1}}>
@@ -145,9 +143,6 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 					{blocks}
 				</View>
 			</ThemedScrollView>
-			<FloatingButton
-				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}/>
 		</View>
 	);
 });
@@ -170,7 +165,6 @@ const getStyles = ({layout}: Object): Object => {
 			flexDirection: 'row',
 			paddingTop: padding / 2,
 			flexWrap: 'wrap',
-			marginLeft: padding / 2,
 		},
 	};
 };
