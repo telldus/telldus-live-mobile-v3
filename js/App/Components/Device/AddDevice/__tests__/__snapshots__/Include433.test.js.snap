@@ -136,6 +136,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
           }
         >
           <View
+            fill="#e26901"
             height={313}
             style={
               Object {
@@ -418,6 +419,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
           }
         >
           <View
+            fill="#e26901"
             height={313}
             style={
               Object {
@@ -898,6 +900,7 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
           }
         >
           <View
+            fill="#e26901"
             height={313}
             style={
               Object {
