@@ -36,9 +36,6 @@ import {
 import {
 	Platform,
 } from 'react-native';
-import {
-	CommonActions,
-} from '@react-navigation/native';
 
 import {
 	View,
@@ -93,7 +90,7 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 		}
 	}, []);
 
-	useEffect((): Function => {
+	useEffect((): Function => { // TODO: Translate
 		onDidMount('Copy Devices And Schedules', 'Select gateway');
 		return () => {
 			clearAll();
@@ -178,7 +175,7 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 				...copyConfig,
 				isCopying: false,
 				failedCopying: true,
-				errorMessage: 'Something went wrong while copying devices and schedules',
+				errorMessage: 'Something went wrong while copying devices and schedules', // TODO: Translate
 			});
 			return;
 		}
@@ -290,6 +287,7 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 						<Text
 							level={15}
 							style={progressText}>
+							{/* TODO: Translate */}
 							{progress === 100 ?
 								'Completed copying devices and schedules'
 								:
@@ -317,6 +315,7 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 					textStyle={infoTextStyle}/>
 			)
 			}
+			{/* TODO: Translate */}
 			<TouchableButton
 				text={isCopying ? 'COPYING...' : 'COPY'}
 				onPress={onPressCopy}
