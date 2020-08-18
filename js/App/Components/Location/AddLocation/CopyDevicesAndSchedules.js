@@ -160,40 +160,11 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 
 	const navigateCommon = useCallback(() => {
 		clearAll();
-		let routes = [{ name: 'Tabs' }];
 		if (Platform.OS === 'ios') {
-			routes = [
-				{
-					name: 'Tabs',
-					state: {
-						index: 4,
-						routes: [
-							{
-								name: 'MoreOptionsTab',
-							},
-						],
-					},
-				},
-				{
-					name: 'Gateways',
-				},
-			];
+			navigation.navigate('MoreOptionsTab');
+		} else {
+			navigation.navigate('Tabs');
 		}
-		routes = [
-			...routes,
-			{
-				name: 'InfoScreen',
-				params: {
-					info: 'add_device',
-					clientId: clientInfo.clientId,
-				},
-			},
-		];
-		const resetAction = CommonActions.reset({
-			index: 1,
-			routes,
-		});
-		navigation.dispatch(resetAction);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [clearAll, clientInfo.clientId]);
 
