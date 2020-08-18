@@ -109,14 +109,19 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 			sectionIds: _sectionIds,
 			sections: _sections = {},
 		} = parseJobsForListView(_jobs, gateways, devices, userOptions);
-		return {
-			sectionIds: _sectionIds,
-			sections: Object.keys(_sections).map((key: string): Object => {
-				return {
+		let __sections = [];
+		Object.keys(_sections).map((key: string): Object => {
+			if (_sections[key] && _sections[key].length > 0) {
+				__sections.push({
 					data: _sections[key],
 					key,
-				};
-			}),
+				});
+			}
+		});
+
+		return {
+			sectionIds: _sectionIds,
+			sections: __sections,
 		};
 	}, [_jobs, devices, gateways, userOptions]);
 
@@ -165,6 +170,7 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 		const {
 			key,
 		} = section;
+
 		const day = moment().add(key, 'days');
 		const weekday = formatDate(day, {weekday: 'long'});
 		const date = formatDate(day, {
@@ -176,7 +182,9 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 		return (
 			<View
 				level={2}
-				style={sectionCoverStyle}>
+				style={[sectionCoverStyle, {
+					marginTop: sectionIds.indexOf(parseInt(key, 10)) === 0 ? 0 : padding,
+				}]}>
 				<Text
 					level={6}
 					style={sectionTextStyle}>
@@ -184,7 +192,7 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 				</Text>
 			</View>
 		);
-	}, [formatDate, sectionCoverStyle, sectionTextStyle]);
+	}, [formatDate, padding, sectionCoverStyle, sectionTextStyle, sectionIds]);
 
 	const _onRefresh = useCallback(() => {
 		setIsRefreshing(true);
