@@ -31,6 +31,8 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import { View } from '../../../../BaseComponents';
 import Name from '../Common/Name';
 
+import capitalize from '../../../Lib/capitalize';
+
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -59,7 +61,7 @@ class LocationName extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = formatMessage(i18n.name);
+		this.h1 = capitalize(formatMessage(i18n.name));
 		this.h2 = formatMessage(i18n.LNheaderTwo);
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;

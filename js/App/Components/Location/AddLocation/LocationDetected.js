@@ -33,6 +33,8 @@ import { Clients } from './SubViews';
 
 import i18n from '../../../Translations/common';
 
+import capitalize from '../../../Lib/capitalize';
+
 type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
@@ -55,7 +57,7 @@ class LocationDetected extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `1. ${formatMessage(i18n.LDheaderOne)}`;
+		this.h1 = `1. ${capitalize(formatMessage(i18n.LDheaderOne))}`;
 		this.h2 = formatMessage(i18n.LDheaderTwo);
 		this.buttonLabel = formatMessage(i18n.manualActivation).toUpperCase();
 
