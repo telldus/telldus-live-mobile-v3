@@ -50,7 +50,7 @@ const Title = memo<Object>(({ name, tileWidth, icon, iconContainerStyle, iconSty
 				numberOfLines={1}
 				duration={5000}
 				repeatSpacer={50}
-				marqueeDelay={1000}
+				marqueeDelay={5000}
 				style={[
 					styles.name, {
 						fontSize: Math.floor(tileWidth / 10),
