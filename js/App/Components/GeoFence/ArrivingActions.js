@@ -26,6 +26,8 @@ import { useIntl } from 'react-intl';
 
 import Actions from './Actions';
 
+import capitalize from '../../Lib/capitalize';
+
 import i18n from '../../Translations/common';
 
 type Props = {
@@ -50,7 +52,7 @@ const ArrivingActions = React.memo<Object>((props: Props): Object => {
 	const isEdit = isEditMode();
 
 	useEffect(() => {
-		const h = formatMessage(i18n.arrivingActions);
+		const h = capitalize(formatMessage(i18n.arrivingActions));
 		const h1 = `${isEdit ? h : `2. ${h}`}`;
 		onDidMount(h1, formatMessage(i18n.selectActionArrive));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
