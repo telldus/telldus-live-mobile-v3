@@ -38,9 +38,7 @@ import {
 import {
 	getNoNameSensors,
 } from '../../../Lib/SensorUtils';
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../../Lib/appUtils';
+import capitalize from '../../../Lib/capitalize';
 
 import Theme from '../../../Theme';
 
@@ -81,7 +79,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelSelectSensor)), formatMessage(i18n.labelSelectSensorToAdd));
+	onDidMount(capitalize(formatMessage(i18n.labelSelectSensor)), formatMessage(i18n.labelSelectSensorToAdd));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
