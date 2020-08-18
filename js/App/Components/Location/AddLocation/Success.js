@@ -108,17 +108,32 @@ class Success extends View<void, Props, State> {
 		const { clientInfo } = route.params || {};
 
 		let routes = [{ name: 'Tabs' }];
+		let _routes = [
+			{
+				name: 'Dashboard',
+			},
+			{
+				name: 'Devices',
+			},
+			{
+				name: 'Sensors',
+			},
+			{
+				name: 'Scheduler',
+			},
+		];
+		if (Platform.OS === 'ios') {
+			_routes.push({
+				name: 'MoreOptionsTab',
+			});
+		}
 		if (Platform.OS === 'ios') {
 			routes = [
 				{
 					name: 'Tabs',
 					state: {
 						index: 4,
-						routes: [
-							{
-								name: 'MoreOptionsTab',
-							},
-						],
+						routes: _routes,
 					},
 				},
 				{

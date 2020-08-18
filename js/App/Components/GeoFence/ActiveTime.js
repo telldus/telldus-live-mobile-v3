@@ -117,17 +117,32 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		dispatch(addGeofence()).then(() => {
 			setIsLoading(false);
 			const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(fence.latitude, fence.longitude, fence.radius);
+			let _routes = [
+				{
+					name: 'Dashboard',
+				},
+				{
+					name: 'Devices',
+				},
+				{
+					name: 'Sensors',
+				},
+				{
+					name: 'Scheduler',
+				},
+			];
+			if (Platform.OS === 'ios') {
+				_routes.push({
+					name: 'MoreOptionsTab',
+				});
+			}
 			navigation.dispatch(CommonActions.reset({
 				index: 2,
 				routes: [
 					{name: 'Tabs',
 						state: {
 							index: Platform.OS === 'android' ? 1 : 4,
-							routes: [
-								{
-									name: Platform.OS === 'android' ? 'Devices' : 'MoreOptionsTab',
-								},
-							],
+							routes: _routes,
 						}},
 					{
 						name: 'GeoFenceNavigator',
