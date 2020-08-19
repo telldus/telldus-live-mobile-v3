@@ -28,6 +28,7 @@ import { connect } from 'react-redux';
 import { View, NavigationHeaderPoster } from '../../../../BaseComponents';
 import i18n from '../../../Translations/common';
 import { hideModal } from '../../../Actions';
+import capitalize from '../../../Lib/capitalize';
 
 type Props = {
 	hideModal: () => Function,
@@ -106,7 +107,7 @@ class ProfileHeaderPoster extends View<Props, null> {
 
 		return (
 			<NavigationHeaderPoster
-				h1={intl.formatMessage(i18n.headerOneProfileAndSettings)}
+				h1={capitalize(intl.formatMessage(i18n.headerOneProfileAndSettings))}
 				h2={intl.formatMessage(i18n.headerTwoProfileAndSettings)}
 				appLayout={appLayout}
 				intl={intl}

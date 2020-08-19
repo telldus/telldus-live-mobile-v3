@@ -30,6 +30,8 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import { View } from '../../../../BaseComponents';
 import CitiesList from '../Common/CitiesList';
 
+import capitalize from '../../../Lib/capitalize';
+
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -59,7 +61,7 @@ class EditTimeZoneCity extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `${formatMessage(i18n.headerOneTimeZoneCity)}`;
+		this.h1 = `${capitalize(formatMessage(i18n.headerOneTimeZoneCity))}`;
 		this.h2 = formatMessage(i18n.headerTwoTimeZoneCity);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;

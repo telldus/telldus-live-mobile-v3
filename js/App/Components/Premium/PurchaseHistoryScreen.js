@@ -49,6 +49,7 @@ import {
 } from '../../Lib/appUtils';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
+import capitalize from '../../Lib/capitalize';
 
 const prepareListData = (history: Array<Object>): Array<Object> => {
 	let result = groupBy(history, (items: Object): any => {
@@ -120,7 +121,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 	const renderItem = useCallback(({item, index, section}: Object): Object => {
 		return ((): Object => {
 			function getTypeAndMonth({type, quantity}: Object): Object {
-				const preS = `${'Premium access'}, `;
+				const preS = `${capitalize(formatMessage(i18n.premiumAccess))}, `;
 				switch (type) {
 					case 'pro': {// TODO: check with Johannes
 						const months = 1 * quantity;

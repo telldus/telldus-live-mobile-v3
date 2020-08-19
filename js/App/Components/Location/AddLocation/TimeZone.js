@@ -40,6 +40,8 @@ import LabelBox from '../Common/LabelBox';
 
 import i18n from '../../../Translations/common';
 
+import capitalize from '../../../Lib/capitalize';
+
 type Props = {
 	timeZone: string,
 	navigation: Object,
@@ -75,7 +77,7 @@ class TimeZone extends View<void, Props, State> {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = formatMessage(i18n.LTZheaderOne);
+		this.h1 = capitalize(formatMessage(i18n.LTZheaderOne));
 		this.h2 = formatMessage(i18n.LTZheaderTwo);
 		this.label = formatMessage(i18n.LTZheaderOne);
 

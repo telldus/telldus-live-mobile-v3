@@ -42,9 +42,7 @@ import {
 	toggleVisibilityExchangeOffer,
 } from '../../Actions';
 import shouldUpdate from '../../Lib/shouldUpdate';
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
 
 type Props = {
 	showModal: boolean,
@@ -65,7 +63,7 @@ constructor(props: Props) {
 	this.header = formatMessage(i18n.userAgreementHeaderPhrase, {eula: this.eula});
 	this.footer = formatMessage(i18n.iAgree).toUpperCase();
 
-	this.h1 = capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelExchangeProgram));
+	this.h1 = capitalize(formatMessage(i18n.labelExchangeProgram));
 	this.h2 = `${formatMessage(i18n.labelUpgradeGateway)}!`;
 
 	this.f1 = formatMessage(i18n.labelReadAndOrder).toUpperCase();
