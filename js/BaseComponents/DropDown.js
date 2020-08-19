@@ -28,6 +28,7 @@ import React, {
 import { Dropdown } from 'react-native-material-dropdown';
 import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 import View from './View';
 import Text from './Text';
@@ -60,6 +61,7 @@ type Props = {
 	dropdownOffsetTopCount?: number,
 	showMax?: boolean,
 	onFocus: Function,
+	insets: Object,
 
 	fontSize?: number,
 	baseColor?: string,
@@ -161,6 +163,7 @@ static defaultProps: DefaultProps = {
 			'dropdownOffsetTopCount',
 			'showMax',
 			'onFocus',
+			'insets',
 		]);
 		if (propsChange) {
 			return true;
@@ -390,7 +393,7 @@ static defaultProps: DefaultProps = {
 		);
 	}
 	getStyle(appLayout: Object): Object {
-		const { fontSize, colors } = this.props;
+		const { fontSize, colors, insets } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -409,7 +412,7 @@ static defaultProps: DefaultProps = {
 		return {
 			pickerStyleDef: {
 				width: width - (2 * padding),
-				left: padding,
+				left: insets.left + padding,
 				backgroundColor: card,
 			},
 			dropDownContainerStyleDef: {
@@ -453,4 +456,4 @@ static defaultProps: DefaultProps = {
 	}
 }
 
-export default withTheme(DropDown);
+export default withTheme(withSafeAreaInsets(DropDown));
