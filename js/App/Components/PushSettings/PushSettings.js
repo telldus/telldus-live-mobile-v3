@@ -30,7 +30,10 @@ import {
 } from '../../../BaseComponents';
 import { PushSettingsRow } from '../Settings/SubViews';
 
-import { shouldUpdate } from '../../Lib';
+import {
+	shouldUpdate,
+	capitalize,
+} from '../../Lib';
 
 import Theme from '../../Theme';
 
@@ -60,7 +63,7 @@ constructor(props: Props) {
 	super(props);
 
 	const { formatMessage } = this.props.intl;
-	this.h1 = formatMessage(i18n.labelPushSettings);
+	this.h1 = capitalize(formatMessage(i18n.labelPushSettings));
 	this.h2 = formatMessage(i18n.labelManagePush);
 }
 

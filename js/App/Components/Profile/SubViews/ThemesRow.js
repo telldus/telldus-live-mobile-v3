@@ -77,7 +77,7 @@ const ThemesRow = (props: Props): Object => {
 				justifyContent: 'flex-end',
 				alignItems: 'center',
 			}}>
-				{item.shades.map((s: string, i: number): Object => {
+				{!!item.shades && item.shades.map((s: string, i: number): Object => {
 					return (
 						<View style={{
 							backgroundColor: s,

@@ -37,6 +37,8 @@ import {
 } from '../../../../BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
 
+import capitalize from '../../../Lib/capitalize';
+
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -69,7 +71,7 @@ class EditTimeZoneContinent extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `${formatMessage(i18n.headerOneTimeZoneContinent)}`;
+		this.h1 = `${capitalize(formatMessage(i18n.headerOneTimeZoneContinent))}`;
 		this.h2 = formatMessage(i18n.headerTwoTimeZoneContinent);
 		this.labelAutodetect = formatMessage(i18n.autodetect);
 

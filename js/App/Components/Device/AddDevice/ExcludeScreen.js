@@ -43,6 +43,8 @@ import {
 } from '../../../Actions';
 
 import { LayoutAnimations } from '../../../Lib';
+import capitalize from '../../../Lib/capitalize';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -91,7 +93,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.noDeviceFound), formatMessage(i18n.checkAndTryAgain));
+	onDidMount(capitalize(formatMessage(i18n.noDeviceFound)), formatMessage(i18n.checkAndTryAgain));
 }
 
 onPressExit() {
@@ -106,7 +108,7 @@ onExcludeSuccessImmediate() {
 	});
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.excluded), formatMessage(i18n.excludedSuccessfully));
+	onDidMount(capitalize(formatMessage(i18n.excluded)), formatMessage(i18n.excludedSuccessfully));
 }
 
 onPressCancelExclude() {
@@ -129,7 +131,7 @@ onExcludeTimedoutImmediate() {
 onCantEnterExclusionTimeout() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.couldNotExclude), formatMessage(i18n.cantEnterExclusionTwo));
+	onDidMount(capitalize(formatMessage(i18n.couldNotExclude)), formatMessage(i18n.cantEnterExclusionTwo));
 }
 
 registerForWebSocketEvents = (callbacks: Object): () => Object => {

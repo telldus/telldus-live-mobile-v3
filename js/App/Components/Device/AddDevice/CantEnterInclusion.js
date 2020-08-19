@@ -30,6 +30,8 @@ import {
 
 import { CantEnterInclusionExclusionUI } from '../Common';
 
+import capitalize from '../../../Lib/capitalize';
+
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -55,7 +57,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.cantInclude), formatMessage(i18n.cantEnterInclusionTwo));
+	onDidMount(capitalize(formatMessage(i18n.cantInclude)), formatMessage(i18n.cantEnterInclusionTwo));
 }
 
 onPressExit() {

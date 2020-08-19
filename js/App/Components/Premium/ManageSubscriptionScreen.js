@@ -49,9 +49,9 @@ import {
 	getUserProfile,
 } from '../../Actions/Login';
 import {
-	capitalizeFirstLetterOfEachWord,
 	isPremiumBonus,
 } from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -148,7 +148,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={capitalizeFirstLetterOfEachWord('Premium access')}
+				h1={capitalize(formatMessage(i18n.premiumAccess))}
 				h2={formatMessage(i18n.manageSubscription)}
 				align={'right'}
 				showLeftIcon={true}

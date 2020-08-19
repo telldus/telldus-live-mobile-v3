@@ -334,7 +334,6 @@ const ScreenConfigs = [
 	{
 		name: 'UpdatePasswordScreen',
 		Component: UpdatePasswordScreen,
-		ContainerComponent: FormContainerComponent,
 		options: {
 			headerShown: false,
 		},
