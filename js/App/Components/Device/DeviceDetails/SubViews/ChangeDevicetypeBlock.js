@@ -167,7 +167,6 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 	const renderBase = useCallback((_props: Object): Object => {
 		const {
 			items: _items,
-			onPress,
 			style,
 			textStyle,
 			baseLeftIcon,
@@ -184,7 +183,6 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 
 		return (
 			<RippleButton
-				onPress={onPress}
 				style={[...style, {
 					flexDirection: 'row',
 					alignItems: 'center',
@@ -231,6 +229,7 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 				pickerBaseTextStyle={pickerBaseTextStyle}
 				renderItem={renderItem}
 				renderBase={renderBase}
+				showMax
 			/>
 		</View>
 	);
