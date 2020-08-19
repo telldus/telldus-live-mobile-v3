@@ -54,6 +54,8 @@ import {
 } from '../../Actions/GeoFence';
 import GeoFenceUtils from '../../Lib/GeoFenceUtils';
 
+import capitalize from '../../Lib/capitalize';
+
 import i18n from '../../Translations/common';
 
 type Props = {
@@ -102,7 +104,7 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 	const [ regionToReset, setRegionToReset ] = useState();
 
 	useEffect(() => {
-		onDidMount(`1. ${formatMessage(i18n.area)}`, formatMessage(i18n.selectArea));
+		onDidMount(`1. ${capitalize(formatMessage(i18n.area))}`, formatMessage(i18n.selectArea));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

@@ -33,6 +33,7 @@ import {
 import { GatewayRow } from '../../TabViews/SubViews';
 
 import { parseGatewaysForListView } from '../../../Reducers/Gateways';
+import capitalize from '../../../Lib/capitalize';
 
 import Theme from '../../../Theme';
 
@@ -75,7 +76,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.labelSelectLocation), formatMessage(i18n.AddZDSLHeaderTwo));
+	onDidMount(capitalize(formatMessage(i18n.labelSelectLocation)), formatMessage(i18n.AddZDSLHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

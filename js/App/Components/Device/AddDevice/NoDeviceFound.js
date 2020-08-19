@@ -32,6 +32,8 @@ import {
 	ThemedScrollView,
 } from '../../../../BaseComponents';
 
+import capitalize from '../../../Lib/capitalize';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -63,7 +65,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.noDeviceFound), formatMessage(i18n.checkAndTryAgain));
+	onDidMount(capitalize(formatMessage(i18n.noDeviceFound)), formatMessage(i18n.checkAndTryAgain));
 }
 
 onPressExit() {

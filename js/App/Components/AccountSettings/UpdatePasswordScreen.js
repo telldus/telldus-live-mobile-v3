@@ -43,6 +43,7 @@ import {
 import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -145,7 +146,7 @@ const UpdatePasswordScreen = (props: Object): Object => {
 	return (
 		<>
 			<NavigationHeaderPoster
-				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.changePassword))} h2={formatMessage(i18n.enterNewPassBelow)}
+				h1={capitalize(formatMessage(i18n.changePassword))} h2={formatMessage(i18n.enterNewPassBelow)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}

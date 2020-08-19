@@ -92,7 +92,7 @@ constructor(props: Props) {
 
 	const { formatMessage } = this.props.intl;
 
-	this.h1 = formatMessage(i18n.labelLocalControl);
+	this.h1 = capitalise(formatMessage(i18n.labelLocalControl));
 	this.h2 = formatMessage(i18n.labelContactSupport);
 
 	this.onChangeTextRouter = this.onChangeTextRouter.bind(this);

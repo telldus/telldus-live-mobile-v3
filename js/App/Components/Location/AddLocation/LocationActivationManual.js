@@ -41,6 +41,8 @@ import LabelBox from '../Common/LabelBox';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
+import capitalize from '../../../Lib/capitalize';
+
 type Props = {
 	navigation: Object,
 	dispatch: Function,
@@ -74,7 +76,7 @@ class LocationActivationManual extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `1. ${formatMessage(i18n.LAMheaderOne)}`;
+		this.h1 = `1. ${capitalize(formatMessage(i18n.LAMheaderOne))}`;
 		this.h2 = formatMessage(i18n.LAMheaderTwo);
 		this.label = formatMessage(i18n.label);
 

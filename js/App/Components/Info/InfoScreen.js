@@ -35,6 +35,8 @@ import {
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
+import capitalize from '../../Lib/capitalize';
+
 import {
 	showToast,
 	addNewGateway,
@@ -179,7 +181,7 @@ getContents = (): Object => {
 
 	const { info = ''} = route.params || {};
 
-	const posterH1 = formatMessage(i18n.getStarted),
+	const posterH1 = capitalize(formatMessage(i18n.getStarted)),
 		cancelLabel = formatMessage(i18n.labelNotNow).toUpperCase(),
 		cancelOnPress = this.goBack;
 
