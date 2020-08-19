@@ -45,6 +45,7 @@ import {
 import {
 	getUserProfile,
 } from '../../Actions/Login';
+import capitalize from '../../Lib/capitalize';
 
 import i18n from '../../Translations/common';
 
@@ -144,7 +145,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 			level={3}
 			style={container}>
 			<NavigationHeaderPoster
-				h1={formatMessage(i18n.redeemCard)} h2={formatMessage(i18n.applyVoucherCode)}
+				h1={capitalize(formatMessage(i18n.redeemCard))} h2={formatMessage(i18n.applyVoucherCode)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}

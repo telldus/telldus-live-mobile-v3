@@ -39,6 +39,7 @@ import {
 import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -107,7 +108,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 
 	const getInfo = useCallback((): string => {
 		return ((): Object => {
-			const postS = ` ${'Premium access'}`;
+			const postS = ` ${capitalize(formatMessage(i18n.premiumAccess))}`;
 			switch (product) {
 				case 'pro': {// TODO: check with Johannes
 					const months = 1 * quantity;

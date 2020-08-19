@@ -53,9 +53,9 @@ import {
 import {
 	getSubscriptionPlans,
 	getPaymentOptions,
-	capitalizeFirstLetterOfEachWord,
 	premiumAboutToExpire,
 } from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
 import {
 	createTransaction,
 	toggleVisibilityProExpireHeadsup,
@@ -312,7 +312,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			level={3}
 			style={container}>
 			<NavigationHeaderPoster
-				h1={capitalizeFirstLetterOfEachWord('Premium access')}
+				h1={capitalize(formatMessage(i18n.premiumAccess))}
 				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
 				align={'right'}
 				showLeftIcon={true}
