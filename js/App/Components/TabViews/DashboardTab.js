@@ -65,8 +65,16 @@ import {
 	SensorDashboardTile,
 	DashboardRow,
 } from './SubViews';
+import {
+	MetWeatherDbTile,
+} from './SubViews/MET';
 
-import { LayoutAnimations } from '../../Lib';
+import {
+	LayoutAnimations,
+	DEVICE_KEY,
+	SENSOR_KEY,
+	MET_ID,
+} from '../../Lib';
 
 type Props = {
 	rows: Array<Object>,
@@ -79,7 +87,7 @@ type Props = {
 	sortingDB: 'Manual' | 'Alphabetical',
 
 	navigation: Object,
-	changeSensorDisplayTypeDB: (id?: number) => void,
+	changeSensorDisplayTypeDB: (id?: number, kind?: string) => void,
 	dispatch: Function,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
@@ -181,10 +189,10 @@ class DashboardTab extends View {
 		this.timer = null;
 	}
 
-	changeDisplayType(id: number) {
+	changeDisplayType(id: number, kind: string) {
 		this.stopSensorTimer();
 		LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
-		this.props.changeSensorDisplayTypeDB(id);
+		this.props.changeSensorDisplayTypeDB(id, kind);
 		this.startSensorTimer();
 	}
 
@@ -509,6 +517,7 @@ class DashboardTab extends View {
 				<Text
 					style={{
 						color: Theme.Core.eulaContentColor,
+						textAlign: 'center',
 					}}
 					key={id}>
 					{message}
@@ -550,15 +559,12 @@ class DashboardTab extends View {
 			borderRadius: 2,
 		};
 
-		let rowItem;
-		if (objectType !== 'sensor' && objectType !== 'device') {
+		let rowItem = <EmptyView/>;
+		if (objectType !== SENSOR_KEY && objectType !== DEVICE_KEY && objectType !== MET_ID) {
 			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
-		}
-		if (!data) {
+		} else if (!data) {
 			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
-		}
-
-		if (objectType === 'sensor') {
+		} else if (objectType === SENSOR_KEY) {
 			rowItem = <SensorDashboardTile
 				key={id}
 				item={data}
@@ -568,7 +574,7 @@ class DashboardTab extends View {
 				intl={screenProps.intl}
 				onPress={this.changeDisplayType}
 			/>;
-		} else {
+		} else if (objectType === DEVICE_KEY) {
 			rowItem = <DashboardRow
 				key={id}
 				item={data}
@@ -581,6 +587,14 @@ class DashboardTab extends View {
 				openRGBControl={this.openRGBControl}
 				openThermostatControl={this.openThermostatControl}
 			/>;
+		} else if (objectType === MET_ID) {
+			rowItem = <MetWeatherDbTile
+				key={id}
+				item={data}
+				style={tileStyle}
+				tileWidth={tileWidth}
+				intl={screenProps.intl}
+				onPress={this.changeDisplayType}/>;
 		}
 
 		return (
@@ -670,12 +684,13 @@ const getRows = createSelector(
 		({ gateways }: Object): Object => gateways,
 		({ app }: Object): Object => app,
 		({ user }: Object): Object => user,
+		({ thirdParties }: Object): Object => thirdParties,
 	],
-	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object, user: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app, user)
+	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object, user: Object, thirdParties: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app, user, thirdParties)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
-	const { deviceIds = [], sensorIds = []} = state.dashboard;
+	const { deviceIds = {}, sensorIds = {}, metWeatherIds = {}} = state.dashboard;
 	const { defaultSettings } = state.app;
 	const { dbCarousel = true, activeDashboardId, sortingDB } = defaultSettings || {};
 
@@ -685,12 +700,14 @@ function mapStateToProps(state: Object, props: Object): Object {
 	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
 	const userDbsAndDeviceIds = deviceIds[userId] || {};
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+	const userDbsAndMetWeathersIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeathersIds[activeDashboardId] || [];
 
 	const { screen: currentScreen } = state.navigation;
 
 	return {
 		rows: getRows(state),
-		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0),
+		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0),
 		dbCarousel,
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
@@ -701,8 +718,8 @@ function mapStateToProps(state: Object, props: Object): Object {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		changeSensorDisplayTypeDB: (id?: number) => {
-			dispatch(changeSensorDisplayTypeDB(id));
+		changeSensorDisplayTypeDB: (id?: number, kind?: string) => {
+			dispatch(changeSensorDisplayTypeDB(id, kind));
 		},
 		dispatch,
 	};
