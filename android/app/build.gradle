@@ -272,11 +272,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
 
-    implementation 'com.huawei.hms:safetydetect:4.0.2.300'
+    implementation 'com.huawei.hms:safetydetect:5.0.1.300'
 
     if (DEPLOY_STORE == "huawei") {
-        implementation 'com.huawei.agconnect:agconnect-core:1.0.0.300'
-        implementation 'com.huawei.hms:maps:4.0.1.300'
+        implementation 'com.huawei.agconnect:agconnect-core:1.4.0.300'
+        implementation 'com.huawei.hms:maps:5.0.1.300'
     }
 }
 
