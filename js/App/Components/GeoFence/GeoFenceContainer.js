@@ -325,11 +325,13 @@ export class GeoFenceContainer extends View<Props, State> {
 			helpIconCoverStyle,
 			helpIconStyle,
 			backgroundMaskStyle,
+			switchCircleSize,
 		} = this.getStyles(appLayout);
 
 		const throbber = <Throbber
 			throbberContainerStyle={{
 				position: 'relative',
+				width: switchCircleSize * 2.1,
 			}}
 			throbberStyle={{
 				color: '#fff',
@@ -360,11 +362,18 @@ export class GeoFenceContainer extends View<Props, State> {
 						:
 						<>
 							{help}
-							<ThemedSwitch
-								onValueChange={this.onValueChange}
-								backgroundActive={'#fff'}
-								backgroundInactive={'#fff'}
-								value={enableGeoFence}/>
+							<View style={{
+								width: switchCircleSize * 2.1,
+								alignItems: 'flex-end',
+							}}>
+								<ThemedSwitch
+									onValueChange={this.onValueChange}
+									backgroundActive={'#fff'}
+									backgroundInactive={'#fff'}
+									value={enableGeoFence}
+									switchBorderRadius={30}
+									circleSize={switchCircleSize}/>
+							</View>
 						</>
 				}
 			</View>,
@@ -430,8 +439,10 @@ export class GeoFenceContainer extends View<Props, State> {
 
 		const fontSize = deviceWidth * 0.08;
 		const maskSize = fontSize * 0.7;
+		const switchCircleSize = deviceWidth * 0.06;
 
 		return {
+			switchCircleSize,
 			rightIconsCoverStyle: {
 				flexDirection: 'row',
 				alignItems: 'center',

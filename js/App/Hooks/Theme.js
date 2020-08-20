@@ -88,15 +88,9 @@ const useAppThemeOptions = (): Object => {
 			],
 		};
 	});
-	const value = colorScheme || 'light';
 	options.push({
 		value: DEVICE_THEME_KEY,
 		label: formatMessage(i18n.themeOption3),
-		shades: [
-			ThemedColors[value].ShadeOne,
-			ThemedColors[value].ShadeTwo,
-			ThemedColors[value].ShadeThree,
-		],
 	});
 	return {
 		options,

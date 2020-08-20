@@ -30,6 +30,8 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import { View, Text, RoundedInfoButton, GeometricHeader } from '../../../../BaseComponents';
 import GeoPosition from '../Common/GeoPosition';
 
+import capitalize from '../../../Lib/capitalize';
+
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -65,7 +67,7 @@ class Position extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = formatMessage(i18n.headerOnePosition);
+		this.h1 = capitalize(formatMessage(i18n.headerOnePosition));
 		this.h2 = formatMessage(i18n.headerTwoPosition);
 
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;

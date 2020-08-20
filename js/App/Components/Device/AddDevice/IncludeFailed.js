@@ -34,6 +34,8 @@ import {
 	IconTelldus,
 } from '../../../../BaseComponents';
 
+import capitalize from '../../../Lib/capitalize';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -64,7 +66,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.cantInclude), formatMessage(i18n.alreadyIncluded));
+	onDidMount(capitalize(formatMessage(i18n.cantInclude)), formatMessage(i18n.alreadyIncluded));
 }
 
 onPressExit() {

@@ -55,6 +55,7 @@ type Props = {
 	extraData?: Object,
 	disabled?: boolean,
 	dropDownPosition: 'top' | 'bottom',
+	dropdownOffsetTopCount?: number,
 
 	fontSize?: number,
 	baseColor?: string,
@@ -140,6 +141,7 @@ static defaultProps: DefaultProps = {
 			'itemSize',
 			'colorScheme',
 			'themeInApp',
+			'dropdownOffsetTopCount',
 		]);
 		if (propsChange) {
 			return true;
@@ -233,6 +235,7 @@ static defaultProps: DefaultProps = {
 			itemSize,
 			dropDownPosition,
 			colors,
+			dropdownOffsetTopCount,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
@@ -244,7 +247,9 @@ static defaultProps: DefaultProps = {
 		} = this.getStyle(appLayout);
 		const _itemSize = itemSize || Math.ceil(fontSize * 1.5 + itemPadding * 2);
 		const iCount = items.length < itemCount ? items.length : itemCount;
-		let dropdownTop = dropDownPosition === 'bottom' ? ((iCount * _itemSize) - itemPadding) : -(iCount * _itemSize);
+
+		const _dropdownOffsetTopCount = typeof dropdownOffsetTopCount === 'number' ? dropdownOffsetTopCount : iCount;
+		let dropdownTop = dropDownPosition === 'bottom' ? ((_dropdownOffsetTopCount * _itemSize) - itemPadding) : -(_dropdownOffsetTopCount * _itemSize);
 
 		return (
 			<View style={[dropDownContainerStyleDef, dropDownContainerStyle]}>

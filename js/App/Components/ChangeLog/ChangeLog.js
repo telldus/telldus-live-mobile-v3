@@ -44,6 +44,8 @@ import Screens from './SubViews/Screens';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
+import capitalize from '../../Lib/capitalize';
+
 import { setChangeLogVersion, hideChangeLog } from '../../Actions';
 
 type Props = {
@@ -103,7 +105,7 @@ class ChangeLogNavigator extends View {
 		this.isIos = Platform.OS === 'ios';
 
 		const appVersion = DeviceInfo.getReadableVersion();
-		this.h1 = formatMessage(i18n.changeLogHeaderOne);
+		this.h1 = capitalize(formatMessage(i18n.changeLogHeaderOne));
 		this.h2 = `${formatMessage(i18n.changeLogHeaderTwo)} ${appVersion.substring(0, 4)}`;
 
 		this.skipButton = formatMessage(i18n.skipButton).toUpperCase();

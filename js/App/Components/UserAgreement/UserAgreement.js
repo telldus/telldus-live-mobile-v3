@@ -52,6 +52,7 @@ import {
 	PropsThemedComponent,
 } from '../HOC/withTheme';
 import shouldUpdate from '../../Lib/shouldUpdate';
+import capitalize from '../../Lib/capitalize';
 
 type Props = PropsThemedComponent & {
 	showModal: boolean,
@@ -84,7 +85,7 @@ class UserAgreement extends View<Props, State> {
 		super(props);
 		let { formatMessage } = this.props.intl;
 		this.eula = formatMessage(i18n.eula);
-		this.header = formatMessage(i18n.userAgreementHeaderPhrase, {eula: this.eula});
+		this.header = capitalize(formatMessage(i18n.userAgreementHeaderPhrase, {eula: this.eula}));
 		this.footer = formatMessage(i18n.iAgree).toUpperCase();
 
 		this.onAgree = this.onAgree.bind(this);
