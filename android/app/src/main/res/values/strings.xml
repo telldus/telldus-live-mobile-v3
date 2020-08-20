@@ -174,5 +174,6 @@
 
 	<string name="reserved_widget_android_label_rgb_control_option">Select swatch or color picker</string>
 	<string name="reserved_widget_android_dimmingLevel">Dimming level</string>
+	<string name="reserved_widget_android_dim">Dim</string>
 
 </resources>
