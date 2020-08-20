@@ -29,6 +29,9 @@ import { utils } from 'live-shared-data';
 const { images: {DEVICES} } = utils;
 
 import {
+	SupportedCommandClasses,
+} from '../ZWave';
+import {
 	ThemedScrollView,
 	View,
 	LocationDetails,
@@ -233,6 +236,8 @@ class OverviewTab extends View<Props, null> {
 					style={[styles.LocationDetail, {
 						marginBottom: styles.padding * 2,
 					}]}/>
+				<SupportedCommandClasses
+					id={device.id}/>
 			</ThemedScrollView>
 		);
 	}
@@ -249,6 +254,7 @@ class OverviewTab extends View<Props, null> {
 			itemsContainer: {
 				flexGrow: 1,
 				marginTop: padding,
+				paddingBottom: padding * 2,
 			},
 			LocationDetail: {
 				flex: 0,
