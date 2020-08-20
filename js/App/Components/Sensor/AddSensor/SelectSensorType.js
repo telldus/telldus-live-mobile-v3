@@ -41,6 +41,7 @@ import {
 	is433MHzTransport,
 	goToWebShop,
 } from '../../../Lib/DeviceUtils';
+import capitalize from '../../../Lib/capitalize';
 
 import Theme from '../../../Theme';
 
@@ -76,7 +77,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.labelSensorType), formatMessage(i18n.AddZSTypeHeaderTwo));
+	onDidMount(capitalize(formatMessage(i18n.labelSensorType)), formatMessage(i18n.AddZSTypeHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

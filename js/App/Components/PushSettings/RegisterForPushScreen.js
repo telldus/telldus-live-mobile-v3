@@ -58,6 +58,7 @@ import {
 import {
 	linearU,
 } from '../../Lib/LayoutAnimations';
+import capitalize from '../../Lib/capitalize';
 
 import { pushServiceId } from '../../../Config';
 
@@ -302,7 +303,8 @@ const RegisterForPushScreen = (props: Object): Object => {
 			level={3}
 			style={container}>
 			<NavigationHeaderPoster
-				h1={formatMessage(i18n.registerForPush)} h2={formatMessage(i18n.receiveNotifications)}
+				h1={capitalize(formatMessage(i18n.registerForPush))}
+				h2={formatMessage(i18n.receiveNotifications)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}

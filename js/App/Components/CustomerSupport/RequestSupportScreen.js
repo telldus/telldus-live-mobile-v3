@@ -105,11 +105,6 @@ constructor(props: Props) {
 	this.contactSupport = this.contactSupport.bind(this);
 	this.onPressPositive = this.onPressPositive.bind(this);
 
-	const { formatMessage } = this.props.screenProps.intl;
-
-	this.h1 = formatMessage(i18n.labelLocalControl);
-	this.h2 = formatMessage(i18n.labelContactSupport);
-
 	this.onChangeTextEmail = this.onChangeTextEmail.bind(this);
 }
 
@@ -286,7 +281,8 @@ render(testData: Object): Object {
 			keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
 
 			<ScrollableNavigationHeaderPoster
-				h1={formatMessage(i18n.labelHelpAndSupport)} h2={formatMessage(i18n.weCanHelpYou)}
+				h1={capitalize(formatMessage(i18n.labelHelpAndSupport))}
+				h2={formatMessage(i18n.weCanHelpYou)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
