@@ -91,7 +91,6 @@ class AddLocationContainer extends View<null, Props, State> {
 		return true;
 	}
 
-
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 		if (nextProps.ScreenName === nextProps.currentScreen) {
 			const isStateEqual = isEqual(this.state, nextState);
