@@ -21,9 +21,16 @@
 
 'use strict';
 
-import React, { Component } from 'react';
+import React, {
+	useMemo,
+	memo,
+} from 'react';
 
 import GeoHeader from '../App/Components/TabViews/img/telldus_geometric_bg.svg';
+
+import {
+	useAppTheme,
+} from '../App/Hooks/Theme';
 
 type Props = {
 	headerHeight: number,
@@ -32,61 +39,44 @@ type Props = {
     style?: number | Object | Array<Object>,
 };
 
-type defaultProps = {
-	headerHeight: number,
-	headerWidth: number,
-};
+const GeometricHeader = (props: Props): Object => {
 
-export default class GeometricHeader extends Component<Props, null> {
-props: Props;
-static defaultProps: defaultProps = {
-	headerHeight: 20,
-	headerWidth: 100,
-}
-
-ORIGINAL_SIZE: {
-	width: number,
-	height: number,
-};
-
-constructor(props: Props) {
-	super();
-
-	this.ORIGINAL_SIZE = {
-		height: 400,
-		width: 960,
-	};
-}
-
-prepareSize(): Object {
-	const {
-		headerWidth,
-	} = this.props;
-	const {
-		height,
-		width,
-	} = this.ORIGINAL_SIZE;
-
-	let requiredHeight = Math.ceil((headerWidth / width) * height);
-	return {
-		width: headerWidth,
-		height: requiredHeight,
-	};
-}
-
-render(): Object {
 	let {
 		style,
-	} = this.props;
+		headerWidth,
+	} = props;
+
+	const prepareSize = useMemo((): Object => {
+		const height = 400, width = 960;
+
+		let requiredHeight = Math.ceil((headerWidth / width) * height);
+		return {
+			width: headerWidth,
+			height: requiredHeight,
+		};
+	}, [headerWidth]);
 
 	const {
 		height,
 		width,
-	} = this.prepareSize();
+	} = prepareSize;
+
+	const {
+		colors,
+	} = useAppTheme();
 
 	return (
-		<GeoHeader style={style} height={height} width={width}/>
+		<GeoHeader
+			fill={colors.posterBG}
+			style={style}
+			height={height}
+			width={width}/>
 	);
-}
-}
+};
 
+GeometricHeader.defaultProps = {
+	headerHeight: 20,
+	headerWidth: 100,
+};
+
+export default memo<Object>(GeometricHeader);

@@ -43,6 +43,8 @@ import {
 
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 
+import capitalize from '../../../Lib/capitalize';
+
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -71,7 +73,7 @@ class Success extends View<void, Props, State> {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = formatMessage(i18n.LSheaderOne);
+		this.h1 = capitalize(formatMessage(i18n.LSheaderOne));
 		this.h2 = formatMessage(i18n.LSheaderTwo);
 
 		this.title = `${formatMessage(i18n.messageTitle)}!`;
@@ -107,17 +109,32 @@ class Success extends View<void, Props, State> {
 		const { clientInfo } = route.params || {};
 
 		let routes = [{ name: 'Tabs' }];
+		let _routes = [
+			{
+				name: 'Dashboard',
+			},
+			{
+				name: 'Devices',
+			},
+			{
+				name: 'Sensors',
+			},
+			{
+				name: 'Scheduler',
+			},
+		];
+		if (Platform.OS === 'ios') {
+			_routes.push({
+				name: 'MoreOptionsTab',
+			});
+		}
 		if (Platform.OS === 'ios') {
 			routes = [
 				{
 					name: 'Tabs',
 					state: {
 						index: 4,
-						routes: [
-							{
-								name: 'MoreOptionsTab',
-							},
-						],
+						routes: _routes,
 					},
 				},
 				{

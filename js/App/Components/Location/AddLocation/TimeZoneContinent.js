@@ -34,6 +34,8 @@ import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';
 
+import capitalize from '../../../Lib/capitalize';
+
 type Props = {
 	navigation: Object,
 	onDidMount: Function,
@@ -54,7 +56,7 @@ class TimeZoneContinent extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = formatMessage(i18n.headerOneTimeZoneContinent);
+		this.h1 = capitalize(formatMessage(i18n.headerOneTimeZoneContinent));
 		this.h2 = formatMessage(i18n.headerTwoTimeZoneContinent);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;

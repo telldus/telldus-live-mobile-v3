@@ -30,6 +30,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { SvgXml } from 'react-native-svg';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -37,6 +38,8 @@ import {
 } from '../../../BaseComponents';
 
 import Theme from '../../Theme';
+
+import i18n from '../../Translations/common';
 
 const HelpOverlay = (props: Object): Object => {
 
@@ -47,6 +50,10 @@ const HelpOverlay = (props: Object): Object => {
 		pointCurrentLocation,
 		fenceRadius,
 	} = props;
+
+	const {
+		formatMessage,
+	} = useIntl();
 
 	const {
 		infoTextStyle,
@@ -107,13 +114,13 @@ const HelpOverlay = (props: Object): Object => {
 							<SvgXml xml={closeArrow} />
 							<Text
 								style={[infoTextStyle, closeTextStyle]}>
-                    CLOSE
+								{formatMessage(i18n.dialoguePositiveText).toUpperCase()}
 							</Text>
 						</View>
 						<View style={controlGFIconBoxStyle}>
 							<Text
 								style={[infoTextStyle, controlGFTextStyle]}>
-                    TAP TO TURN ON/OFF GEOFENCE
+								{formatMessage(i18n.tapToTurnedOffGf).toUpperCase()}
 							</Text>
 							<SvgXml xml={controlGFArrow} />
 						</View>
@@ -121,7 +128,7 @@ const HelpOverlay = (props: Object): Object => {
 							<SvgXml xml={currentLocationArrow} />
 							<Text
 								style={[infoTextStyle, currentLocationTextStyle]}>
-                    CURRENT POSITION
+								{formatMessage(i18n.currentPosition).toUpperCase()}
 							</Text>
 						</View>
 						)}
@@ -129,7 +136,7 @@ const HelpOverlay = (props: Object): Object => {
 							<SvgXml xml={geofenceArrow} />
 							<Text
 								style={[infoTextStyle, geofenceTextStyle]}>
-                    A GEOFENCE
+								{formatMessage(i18n.aGeoFence).toUpperCase()}
 							</Text>
 						</View>
 						)}
@@ -137,14 +144,14 @@ const HelpOverlay = (props: Object): Object => {
 							<SvgXml xml={currentPosArrow} />
 							<Text
 								style={[infoTextStyle, currentPosTextStyle]}>
-                    CENTER TO CURRENT POSITION
+								{formatMessage(i18n.centerToCurrentPosition).toUpperCase()}
 							</Text>
 						</View>
 						<View style={addNewIconBoxStyle}>
 							<SvgXml xml={AddNewArrow} />
 							<Text
 								style={[infoTextStyle, addNewTextStyle]}>
-                    ADD NEW GEOFENCE
+								{formatMessage(i18n.addNewGf).toUpperCase()}
 							</Text>
 						</View>
 					</View>

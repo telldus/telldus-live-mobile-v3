@@ -45,6 +45,8 @@ import {
 	getUserSMSHistory,
 } from '../../Actions/User';
 
+import capitalize from '../../Lib/capitalize';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -179,7 +181,7 @@ const SMSHistoryScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={formatMessage(i18n.smsHistory)} h2={formatMessage(i18n.labelSentSMS)}
+				h1={capitalize(formatMessage(i18n.smsHistory))} h2={formatMessage(i18n.labelSentSMS)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}

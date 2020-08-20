@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+} from 'react';
 import { Switch } from 'react-native-switch';
 import {
 	useSelector,
@@ -48,6 +50,7 @@ const ThemedSwitch = (props: Object): Object => {
 		circleInActiveColor,
 		circleBorderWidth = 0,
 		innerCircleStyle,
+		switchBorderRadius = 30,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -94,7 +97,7 @@ const ThemedSwitch = (props: Object): Object => {
 			switchLeftPx={3} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
 			switchRightPx={3} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
 			switchWidthMultiplier={1.8} // multipled by the `circleSize` prop to calculate total width of the Switch
-			switchBorderRadius={2}
+			switchBorderRadius={switchBorderRadius}
 		/>
 	);
 };
@@ -120,4 +123,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default ThemedSwitch;
+export default memo<Object>(ThemedSwitch);

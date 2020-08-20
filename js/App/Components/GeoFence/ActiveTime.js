@@ -57,6 +57,7 @@ import {
 } from '../../Hooks/Dialoguebox';
 
 import GeoFenceUtils from '../../Lib/GeoFenceUtils';
+import capitalize from '../../Lib/capitalize';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -84,7 +85,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 	let { fence } = useSelector((state: Object): Object => state.fences);
 
 	useEffect(() => {
-		onDidMount(`4. ${formatMessage(i18n.activeTime)}`, formatMessage(i18n.selectTimeForFence));
+		onDidMount(`4. ${capitalize(formatMessage(i18n.activeTime))}`, formatMessage(i18n.selectTimeForFence));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -117,17 +118,32 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		dispatch(addGeofence()).then(() => {
 			setIsLoading(false);
 			const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(fence.latitude, fence.longitude, fence.radius);
+			let _routes = [
+				{
+					name: 'Dashboard',
+				},
+				{
+					name: 'Devices',
+				},
+				{
+					name: 'Sensors',
+				},
+				{
+					name: 'Scheduler',
+				},
+			];
+			if (Platform.OS === 'ios') {
+				_routes.push({
+					name: 'MoreOptionsTab',
+				});
+			}
 			navigation.dispatch(CommonActions.reset({
 				index: 2,
 				routes: [
 					{name: 'Tabs',
 						state: {
 							index: Platform.OS === 'android' ? 1 : 4,
-							routes: [
-								{
-									name: Platform.OS === 'android' ? 'Devices' : 'MoreOptionsTab',
-								},
-							],
+							routes: _routes,
 						}},
 					{
 						name: 'GeoFenceNavigator',
