@@ -59,6 +59,7 @@ import {
 } from '../../../Actions/Jobs';
 import {
 	selectDevice,
+	editSchedule,
 } from '../../../Actions/Schedule';
 import Theme from '../../../Theme';
 
@@ -146,8 +147,18 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 		padding,
 	} = getStyles({layout});
 
-
-	const _editJob = useCallback((data: Object) => {
+	const _editJob = useCallback((schedule: Object) => {
+		dispatch(editSchedule(schedule));
+		navigation.navigate('Schedule', {
+			editMode: true,
+			screen: 'Edit',
+			origin: 'DeviceDetails_SchedulesTab',
+			params: {
+				editMode: true,
+				origin: 'DeviceDetails_SchedulesTab',
+			},
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const _renderItem = useCallback(({item, index}: Object): Object => {
