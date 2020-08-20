@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/widget_root">
+    <LinearLayout
+        android:id="@+id/iconWidget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/shape_widget"
+        android:layout_gravity="center|center"
+        android:gravity="center|center"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingBottom="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center|center"
+            android:layout_gravity="center|center"
+            android:id="@+id/widget_content_cover"
+            android:visibility="gone"
+            android:layout_weight="1">
+            <include layout="@layout/button_dim"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center|center"
+            android:layout_weight="0">
+            <TextView
+                android:id="@+id/txtWidgetTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reserved_widget_android_unknown"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:maxLines="1"/>
+        </LinearLayout>
+    </LinearLayout>
+    <include layout="@layout/premium_required_info_rgb"/>
+</FrameLayout>
