@@ -90,11 +90,14 @@ export default class ActionRGB extends View<null, Props, State> {
 		actions.selectAction(1024, methodValue);
 
 		if (isEditMode()) {
-			navigation.navigate(route.params.actionKey);
+			navigation.navigate(route.params.actionKey, {
+				...route.params,
+			});
 		} else {
 			navigation.navigate({
 				name: 'Time',
 				key: 'Time',
+				params: route.params,
 			});
 		}
 	};

@@ -129,7 +129,11 @@ class Summary extends View<null, Props, State> {
 	}
 
 	resetNavigation = () => {
-		const { navigation, schedule } = this.props;
+		const { navigation, schedule, route } = this.props;
+
+		const {
+			params = {},
+		} = route;
 
 		let _routes = [
 			{
@@ -154,22 +158,73 @@ class Summary extends View<null, Props, State> {
 		let routes = [
 			{
 				name: 'Tabs',
+				key: 'Tabs',
 				state: {
 					index: 3,
 					routes: _routes,
 				},
 			},
-			{
-				name: 'InfoScreen',
-				params: {
-					info: 'add_schedule_another',
-					deviceId: schedule.deviceId,
-				},
-			},
 		];
 
+		if (params.origin === 'DeviceDetails_SchedulesTab') {
+			routes = [
+				{
+					name: 'Tabs',
+					key: 'Tabs',
+					state: {
+						index: 1,
+						routes: [
+							{
+								name: 'Dashboard',
+							},
+							{
+								name: 'Devices',
+							},
+							{
+								name: 'Sensors',
+							},
+							{
+								name: 'Scheduler',
+							},
+						],
+					},
+				},
+				{
+					name: 'DeviceDetails',
+					key: 'DeviceDetails',
+					params: {id: schedule.deviceId},
+					state: {
+						index: 3,
+						routes: [
+							{
+								name: 'Overview',
+							},
+							{
+								name: 'History',
+							},
+							{
+								name: 'Settings',
+							},
+							{
+								name: 'SchedulesTab',
+							},
+						],
+					},
+				},
+			];
+		}
+
+		routes.push({
+			name: 'InfoScreen',
+			key: 'InfoScreen',
+			params: {
+				info: 'add_schedule_another',
+				deviceId: schedule.deviceId,
+			},
+		});
+
 		const resetAction = CommonActions.reset({
-			index: 1,
+			index: routes.length - 1,
 			routes,
 		});
 		navigation.dispatch(resetAction);

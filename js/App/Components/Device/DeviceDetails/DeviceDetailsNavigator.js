@@ -35,6 +35,7 @@ import {
 import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
+import SchedulesTab from './SchedulesTab';
 import { DeviceDetailsHeaderPoster } from './SubViews';
 
 import {
@@ -86,6 +87,19 @@ const ScreenConfigs = [
 			),
 		},
 	},
+	{
+		name: 'SchedulesTab',
+		Component: SchedulesTab,
+		options: {
+			tabBarLabel: ({ color }: Object): Object => (
+				<TabBar
+					icon="time"
+					tintColor={color}
+					label={i18n.schedules}
+					accessibilityLabel={i18n.schedules}/>
+			),
+		},
+	},
 ];
 const NavigatorConfigs = {
 	initialRouteName: 'Overview',
@@ -102,7 +116,7 @@ const NavigatorConfigs = {
 			const isPortrait = height > width;
 			const deviceWidth = isPortrait ? width : height;
 
-			tabWidth = width / 3;
+			tabWidth = width / 4;
 			fontSize = deviceWidth * 0.03;
 			paddingVertical = 10 + (fontSize * 0.5);
 		}

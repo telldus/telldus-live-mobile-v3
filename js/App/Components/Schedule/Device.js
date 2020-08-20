@@ -119,10 +119,11 @@ export default class Device extends View<void, Props, State> {
 	};
 
 	selectDevice = (row: Object) => {
-		const { actions, navigation } = this.props;
+		const { actions, navigation, route = {} } = this.props;
 		navigation.navigate({
 			name: row.supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',
 			key: row.supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',
+			params: route.params,
 		});
 		actions.selectDevice(row.id);
 	};
