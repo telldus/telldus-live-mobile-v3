@@ -25,26 +25,37 @@ import React from 'react';
 import { createSelector } from 'reselect';
 import {
 	Dimensions,
-	FlatList,
 	RefreshControl,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import DragAndDropScrollView from 'react-native-drag-and-drop-scroll-view';
 
 import {
 	Text,
 	View,
 	EmptyView,
+	TouchableOpacity,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
 	NoGateways,
 } from './SubViews/EmptyInfo';
 
-import { getDevices, getSensors, getGateways } from '../../Actions';
-import { changeSensorDisplayTypeDB } from '../../Actions/Dashboard';
+import {
+	getDevices,
+	getSensors,
+	getGateways,
+	showToast,
+	changeSortingDB,
+} from '../../Actions';
+import {
+	changeSensorDisplayTypeDB,
+	updateDashboardOrder,
+	removeFromDashboard,
+} from '../../Actions/Dashboard';
 
 import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
@@ -65,6 +76,7 @@ type Props = {
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
 	currentScreen: string,
+	sortingDB: 'Manual' | 'Alphabetical',
 
 	navigation: Object,
 	changeSensorDisplayTypeDB: (id?: number) => void,
@@ -388,11 +400,32 @@ class DashboardTab extends View {
 		return data;
 	}
 
-	_keyExtractor = (item: Object, index: number): string => {
+	_onSortOrderUpdate = (data: Array<Object>) => {
 		const {
-			data = {},
-		} = item || {};
-		return `${data.id}-${index}`;
+			sortingDB,
+			dispatch,
+		} = this.props;
+
+		if (sortingDB === 'Alphabetical') {
+			const settings = { sortingDB: 'Manual' };
+			dispatch(changeSortingDB(settings));
+			dispatch(showToast('Dashboard sorting has been changed to "Manual" mode.')); // TODO: Translate
+		}
+
+		dispatch(updateDashboardOrder(data));
+	}
+
+	_onDelete = (index: number, item: Object, fullData: Array<Object>, {animateDeleted}: Object) => {
+		if (item) {
+			const {
+				objectType,
+				data,
+			} = item;
+
+			animateDeleted(() => {
+				this.props.dispatch(removeFromDashboard(objectType, data.id));
+			});
+		}
 	}
 
 	render(): Object {
@@ -408,7 +441,7 @@ class DashboardTab extends View {
 			addingNewLocation,
 			addNewLocation,
 		} = screenProps;
-		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
+		const { isRefreshing, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		const style = this.getStyles({
 			appLayout,
@@ -434,9 +467,10 @@ class DashboardTab extends View {
 				level={3}
 				onLayout={this._onLayout}
 				style={style.container}>
-				<FlatList
-					ref="list"
+				<DragAndDropScrollView
 					data={rows}
+					enableDragDrop
+					showBin
 					renderItem={this._renderRow}
 					refreshControl={
 						<RefreshControl
@@ -445,19 +479,20 @@ class DashboardTab extends View {
 							onRefresh={this.onRefresh}
 						/>
 					}
-					key={numColumns}
-					numColumns={numColumns}
 					extraData={extraData}
-					style={{width: '100%'}}
+					style={{
+						width: '100%',
+					}}
 					contentContainerStyle={{
+						flexDirection: 'row',
+						flexWrap: 'wrap',
 						flexGrow: 1,
 						paddingVertical: style.padding,
 						paddingHorizontal: isDBEmpty ? 30 : style.padding,
 					}}
 					scrollEnabled={scrollEnabled}
-					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-					keyExtractor={this._keyExtractor}
-				/>
+					onSortOrderUpdate={this._onSortOrderUpdate}
+					onDelete={this._onDelete}/>
 			</View>
 		);
 	}
@@ -486,6 +521,12 @@ class DashboardTab extends View {
 		if (!row || !row.item) {
 			return <EmptyView/>;
 		}
+
+		const {
+			move,
+			moveEnd,
+		} = row;
+
 		const { screenProps } = this.props;
 		const { intl } = screenProps;
 		let { tileWidth } = this.state;
@@ -509,15 +550,16 @@ class DashboardTab extends View {
 			borderRadius: 2,
 		};
 
+		let rowItem;
 		if (objectType !== 'sensor' && objectType !== 'device') {
-			return this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
+			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		}
 		if (!data) {
-			return this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
+			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		}
 
 		if (objectType === 'sensor') {
-			return <SensorDashboardTile
+			rowItem = <SensorDashboardTile
 				key={id}
 				item={data}
 				isGatewayActive={isOnline || supportLocalControl}
@@ -526,20 +568,29 @@ class DashboardTab extends View {
 				intl={screenProps.intl}
 				onPress={this.changeDisplayType}
 			/>;
+		} else {
+			rowItem = <DashboardRow
+				key={id}
+				item={data}
+				isGatewayActive={isOnline || supportLocalControl}
+				style={tileStyle}
+				tileWidth={tileWidth}
+				intl={screenProps.intl}
+				setScrollEnabled={this.setScrollEnabled}
+				onPressDimButton={this.showDimInfo}
+				openRGBControl={this.openRGBControl}
+				openThermostatControl={this.openThermostatControl}
+			/>;
 		}
 
-		return <DashboardRow
-			key={id}
-			item={data}
-			isGatewayActive={isOnline || supportLocalControl}
-			style={tileStyle}
-			tileWidth={tileWidth}
-			intl={screenProps.intl}
-			setScrollEnabled={this.setScrollEnabled}
-			onPressDimButton={this.showDimInfo}
-			openRGBControl={this.openRGBControl}
-			openThermostatControl={this.openThermostatControl}
-		/>;
+		return (
+			<TouchableOpacity
+				onLongPress={move}
+				onPressOut={moveEnd}
+				style={{flex: 0}}>
+				{rowItem}
+			</TouchableOpacity>
+		);
 	}
 
 	getPadding(): number {
@@ -626,7 +677,7 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	const { deviceIds = [], sensorIds = []} = state.dashboard;
 	const { defaultSettings } = state.app;
-	const { dbCarousel = true, activeDashboardId } = defaultSettings || {};
+	const { dbCarousel = true, activeDashboardId, sortingDB } = defaultSettings || {};
 
 	const { userId } = state.user;
 
@@ -644,6 +695,7 @@ function mapStateToProps(state: Object, props: Object): Object {
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
 		currentScreen,
+		sortingDB,
 	};
 }
 
