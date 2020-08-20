@@ -24,9 +24,14 @@
 
 import React, {
 	useCallback,
+	useState,
+	useMemo,
 } from 'react';
+import {
+	// useDispatch,
+	useSelector,
+} from 'react-redux';
 import { useIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 
 import {
 	DropDown,
@@ -34,21 +39,44 @@ import {
 	Text,
 } from '../../../../BaseComponents';
 
-import { changeSortingDB } from '../../../Actions';
-
 import Theme from '../../../Theme';
 
-import i18n from '../../../Translations/common';
-
-const DBSortControlBlock = (props: Object): Object => {
+const SelectCoordinatesDD = (props: Object): Object => {
 	const {
-		dropDownContainerStyle,
+		setConfig,
+		MANUAL_ID,
+		MANUAL_VALUE,
 	} = props;
-	const intl = useIntl();
-	const { formatMessage } = intl;
 
-	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	const { sortingDB: sortingDBProp } = defaultSettings;
+	const intl = useIntl();
+
+	const [ selected, setSelected ] = useState(MANUAL_ID);
+
+	const { layout } = useSelector((state: Object): Object => state.app);
+	const { byId = {} } = useSelector((state: Object): Object => state.gateways);
+
+	let {items, value} = useMemo((): Object => {
+		let _value = selected === MANUAL_ID ? MANUAL_VALUE : '';
+		let _items = [];
+		Object.keys(byId).forEach((id: string): Object => {
+			const _item = byId[id];
+			if (id === selected) {
+				_value = _item.name;
+			}
+			_items.push({
+				key: id,
+				value: _item.name,
+			});
+		});
+		_items.unshift({
+			key: MANUAL_ID,
+			value: MANUAL_VALUE,
+		});
+		return {
+			items: _items,
+			value: _value,
+		};
+	}, [MANUAL_ID, MANUAL_VALUE, byId, selected]);
 
 	const {
 		dropDownContainerStyleDef,
@@ -60,20 +88,26 @@ const DBSortControlBlock = (props: Object): Object => {
 		pickerBaseTextStyle,
 	} = getStyles(layout);
 
-	const dispatch = useDispatch();
-	const saveSortingDB = useCallback((value: string, itemIndex: number, data: Array<any>) => {
-		(() => {
-			const { key: sortingDB } = data[itemIndex];
-			const settings = { sortingDB };
-			dispatch(changeSortingDB(settings));
-		})();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	const _onValueChange = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
+		setSelected(data[itemIndex].key);
+		let _latitude = '', _longitude = '';
+		if (byId[data[itemIndex].key]) {
+			const {
+				latitude,
+				longitude,
+			} = byId[data[itemIndex].key];
+			_latitude = latitude;
+			_longitude = longitude;
+		}
+		setConfig({
+			manual: data[itemIndex].key === MANUAL_ID,
+			latitude: _latitude,
+			longitude: _longitude,
+			id: data[itemIndex].key,
+		});
+	}, [MANUAL_ID, byId, setConfig]);
 
-	const alpha = formatMessage(i18n.labelAlphabetical);
-	const manual = formatMessage(i18n.labelManual);
-
-	const labelSortingDB = formatMessage(i18n.sorting);
+	const labelSortingDB = 'Select coordinates';
 
 	return (
 		<View
@@ -85,15 +119,13 @@ const DBSortControlBlock = (props: Object): Object => {
 				{labelSortingDB}
 			</Text>
 			<DropDown
-				items={[
-					{key: 'Alphabetical', value: alpha},
-					{key: 'Manual', value: manual},
-				]}
-				value={sortingDBProp === 'Alphabetical' ? alpha : manual}
-				onValueChange={saveSortingDB}
+				items={items}
+				value={value}
+				dropDownPosition={'bottom'}
+				onValueChange={_onValueChange}
 				appLayout={layout}
 				intl={intl}
-				dropDownContainerStyle={[dropDownContainerStyleDef, dropDownContainerStyle]}
+				dropDownContainerStyle={dropDownContainerStyleDef}
 				dropDownHeaderStyle={dropDownHeaderStyle}
 				fontSize={fontSize}
 				accessibilityLabelPrefix={labelSortingDB}
@@ -120,7 +152,8 @@ const getStyles = (appLayout: Object): Object => {
 
 	return {
 		dropDownContainerStyleDef: {
-			marginBottom: fontSize / 2,
+			marginBottom: 0,
+			flex: 1,
 		},
 		dropDownHeaderStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
@@ -158,4 +191,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(DBSortControlBlock);
+export default React.memo<Object>(SelectCoordinatesDD);

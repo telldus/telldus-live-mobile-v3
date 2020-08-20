@@ -83,7 +83,11 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
 	const { screen } = useSelector((state: Object): Object => state.navigation);
 	const { didFetch: gDidFetch, allIds: gAllIds } = useSelector((state: Object): Object => state.gateways);
+	const { didFetch: dDidFetch, allIds: dAllIds } = useSelector((state: Object): Object => state.devices);
+	const { didFetch: sDidFetch, allIds: sAllIds } = useSelector((state: Object): Object => state.sensors);
 	const hasGateways = gDidFetch && gAllIds.length > 0;
+	const hasDevices = dDidFetch && dAllIds.length > 0;
+	const hasSensors = sDidFetch && sAllIds.length > 0;
 
 	const {
 		style,
@@ -167,6 +171,10 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 			});
 		};
 
+		const editDb = () => {
+			navigate('SelectTypeScreen');
+		};
+
 		const AddButton = {
 			component: <Image source={{uri: 'icon_plus'}} style={addIconStyle}/>,
 			style: rightButtonStyle,
@@ -200,6 +208,15 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 					...AddButton,
 					onPress: newSchedule,
 					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
+				};
+			case 'Dashboard':
+				if (!hasGateways || (!hasDevices && !hasSensors)) {
+					return null;
+				}
+				return {
+					...AddButton,
+					onPress: editDb, // TODO: translate
+					accessibilityLabel: `Edit Dashboard, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			default:
 				return null;
@@ -262,13 +279,14 @@ const getStyles = (appLayout: Object): Object => {
 		logoStyle: {
 			...Platform.select({
 				android:
-					(!isPortrait) ? {
-						position: 'absolute',
-						left: deviceHeight * 0.6255,
-						top: deviceHeight * 0.0400,
+					isPortrait ? {
 					}
 						:
-						{},
+						{
+							position: 'absolute',
+							left: deviceHeight * 0.16,
+							top: 0,
+						},
 			}),
 		},
 		settingsButtonStyle: {

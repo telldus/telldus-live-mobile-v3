@@ -80,6 +80,15 @@ import GatewaysScreen from './TabViews/GatewaysScreen';
 import AdvancedSettings from './Settings/AdvancedSettings';
 import GeoFenceEventsLogScreen from './Settings/GeoFenceEventsLogScreen';
 
+import DashboardActionsContainer from './Dashboard/DashboardActionsContainer';
+import SelectItemsScreen from './Dashboard/SelectItemsScreen';
+import SelectTypeScreen from './Dashboard/SelectTypeScreen';
+import SelectScaleScreen from './Dashboard/SelectScaleScreen';
+import SetCoordinates from './Dashboard/SetCoordinates';
+import SelectWeatherAttributes from './Dashboard/SelectWeatherAttributes';
+import SelectWeatherForecastDay from './Dashboard/SelectWeatherForecastDay';
+import SetNameMetWeather from './Dashboard/SetNameMetWeather';
+
 import {
 	RegisterScreen,
 	LoginScreen,
@@ -411,6 +420,68 @@ const ScreenConfigs = [
 		Component: GeoFenceEventsLogScreen,
 		options: {
 			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectItemsScreen',
+		Component: SelectItemsScreen,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+		},
+	},
+	{
+		name: 'SelectTypeScreen',
+		Component: SelectTypeScreen,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectScaleScreen',
+		Component: SelectScaleScreen,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+		},
+	},
+	{
+		name: 'SetCoordinates',
+		Component: SetCoordinates,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+		},
+	},
+	{
+		name: 'SelectWeatherAttributes',
+		Component: SelectWeatherAttributes,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+		},
+	},
+	{
+		name: 'SelectWeatherForecastDay',
+		Component: SelectWeatherForecastDay,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+		},
+	},
+	{
+		name: 'SetNameMetWeather',
+		Component: SetNameMetWeather,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
 ];

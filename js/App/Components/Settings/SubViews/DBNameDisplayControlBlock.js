@@ -34,21 +34,21 @@ import {
 	Text,
 } from '../../../../BaseComponents';
 
-import { changeSortingDB } from '../../../Actions';
+import { changeDBTileNameDisplayMode } from '../../../Actions';
 
 import Theme from '../../../Theme';
 
-import i18n from '../../../Translations/common';
+// import i18n from '../../../Translations/common';
 
-const DBSortControlBlock = (props: Object): Object => {
+const DBNameDisplayControlBlock = (props: Object): Object => {
 	const {
 		dropDownContainerStyle,
 	} = props;
 	const intl = useIntl();
-	const { formatMessage } = intl;
+	// const { formatMessage } = intl;
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	const { sortingDB: sortingDBProp } = defaultSettings;
+	const { tileNameDisplayMode: tileNameDisplayModeCurrent } = defaultSettings;
 
 	const {
 		dropDownContainerStyleDef,
@@ -61,19 +61,19 @@ const DBSortControlBlock = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const dispatch = useDispatch();
-	const saveSortingDB = useCallback((value: string, itemIndex: number, data: Array<any>) => {
+	const saveNameDisplayModeDB = useCallback((value: string, itemIndex: number, data: Array<any>) => {
 		(() => {
-			const { key: sortingDB } = data[itemIndex];
-			const settings = { sortingDB };
-			dispatch(changeSortingDB(settings));
+			const { key: tileNameDisplayMode } = data[itemIndex];
+			const settings = { tileNameDisplayMode };
+			dispatch(changeDBTileNameDisplayMode(settings));
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const alpha = formatMessage(i18n.labelAlphabetical);
-	const manual = formatMessage(i18n.labelManual);
+	const trunc = 'Truncate';
+	const scroll = 'Scroll';
 
-	const labelSortingDB = formatMessage(i18n.sorting);
+	const labelNameDisplayControlDB = 'Tile name display mode';
 
 	return (
 		<View
@@ -82,21 +82,21 @@ const DBSortControlBlock = (props: Object): Object => {
 			<Text
 				level={3}
 				style={labelStyle} numberOfLine={1}>
-				{labelSortingDB}
+				{labelNameDisplayControlDB}
 			</Text>
 			<DropDown
 				items={[
-					{key: 'Alphabetical', value: alpha},
-					{key: 'Manual', value: manual},
+					{key: 'Truncate', value: trunc},
+					{key: 'Scroll', value: scroll},
 				]}
-				value={sortingDBProp === 'Alphabetical' ? alpha : manual}
-				onValueChange={saveSortingDB}
+				value={tileNameDisplayModeCurrent === 'Scroll' ? scroll : trunc}
+				onValueChange={saveNameDisplayModeDB}
 				appLayout={layout}
 				intl={intl}
 				dropDownContainerStyle={[dropDownContainerStyleDef, dropDownContainerStyle]}
 				dropDownHeaderStyle={dropDownHeaderStyle}
 				fontSize={fontSize}
-				accessibilityLabelPrefix={labelSortingDB}
+				accessibilityLabelPrefix={labelNameDisplayControlDB}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerBaseTextStyle={pickerBaseTextStyle}
 			/>
@@ -158,4 +158,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(DBSortControlBlock);
+export default React.memo<Object>(DBNameDisplayControlBlock);

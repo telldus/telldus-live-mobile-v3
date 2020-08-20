@@ -68,6 +68,7 @@ import {
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
 	checkAndLinkAccountIfRequired,
+	updateAllMetWeatherDbTiles,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -350,6 +351,8 @@ actionsToPerformOnStart = async () => {
 	this.checkIfOpenThermostatControl();
 
 	dispatch(checkAndLinkAccountIfRequired());
+
+	dispatch(updateAllMetWeatherDbTiles());
 
 	const {
 		isDrawerOpen,
@@ -720,6 +723,7 @@ render(): Object {
 		onLayout,
 		gateways,
 		visibilityEula,
+		showSwitchAccountAS,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
@@ -728,7 +732,7 @@ render(): Object {
 	const showEulaModal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen(visibilityEula ? ['ProfileTab'] : []);
 	const showUA = showEulaModal && !showChangeLog;
 
-	const showLoadingIndicatorFinal = showLoadingIndicator && !showUA;
+	const showLoadingIndicatorFinal = showLoadingIndicator && !showUA && !showSwitchAccountAS;
 
 	return (
 		<View style={{flex: 1}}>

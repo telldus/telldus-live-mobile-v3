@@ -21,54 +21,81 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+	useMemo,
+} from 'react';
+import {
+	useSelector,
+} from 'react-redux';
+import {
+} from 'react-native';
+import TextTicker from 'react-native-text-ticker';
 
 import { View, Text, BlockIcon, StyleSheet } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
-const Title = ({ name, tileWidth, icon, iconContainerStyle, iconStyle, info, formatMessage }: Object): Object => (
-	<View
-		level={2}
-		style={[styles.title, {
-			width: tileWidth,
-			height: Math.ceil(tileWidth * 0.6),
-			paddingHorizontal: tileWidth * 0.06,
-			paddingVertical: tileWidth * 0.06,
-		}]}>
-		{!!icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
-		<View style={styles.textCover}>
-			<Text
-				ellipsizeMode="middle"
+const Title = memo<Object>(({ name, tileWidth, icon, iconContainerStyle, iconStyle, info, formatMessage }: Object): Object => {
+
+	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
+	const { tileNameDisplayMode } = defaultSettings;
+
+	const NameInfo = useMemo((): Object => {
+		return (
+			<TextTicker
+				disabled={tileNameDisplayMode === 'Truncate'}
+				ellipsizeMode={tileNameDisplayMode === 'Truncate' ? 'middle' : undefined}
 				numberOfLines={1}
+				duration={5000}
+				repeatSpacer={50}
+				marqueeDelay={5000}
 				style={[
 					styles.name, {
 						fontSize: Math.floor(tileWidth / 10),
 						opacity: name ? 1 : 0.7,
 					},
-				]}>
+				]}
+				bounce={false}>
 				{name ? name : formatMessage(i18n.noName)}
-			</Text>
-			{!!info &&
+			</TextTicker>
+		);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [name, tileWidth, tileNameDisplayMode]);
+
+	return (
+		<View
+			level={2}
+			style={[styles.title, {
+				width: tileWidth,
+				height: Math.ceil(tileWidth * 0.6),
+				paddingHorizontal: tileWidth * 0.06,
+				paddingVertical: tileWidth * 0.06,
+			}]}>
+			{!!icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
+			<View style={styles.textCover}>
+				{NameInfo}
+				{!!info &&
 			typeof info === 'string' ?
-				<Text
-					ellipsizeMode="middle"
-					numberOfLines={1}
-					style={[
-						styles.name, {
-							fontSize: Math.floor(tileWidth / 12),
-							color: Theme.Core.rowTextColor,
-						},
-					]}>
-					{info}
-				</Text>
-				:
-				info
-			}
+					<Text
+						ellipsizeMode="middle"
+						numberOfLines={1}
+						style={[
+							styles.name, {
+								fontSize: Math.floor(tileWidth / 12),
+								color: Theme.Core.rowTextColor,
+							},
+						]}>
+						{info}
+					</Text>
+					:
+					info
+				}
+			</View>
 		</View>
-	</View>
-);
+	);
+});
 
 type Props = {
 	style: Object,

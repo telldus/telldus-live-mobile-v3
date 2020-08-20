@@ -53,6 +53,7 @@ import {
 	DBSortControlBlock,
 	LanguageControlBlock,
 	SensorLastUpdateModeControlBlock,
+	DBNameDisplayControlBlock,
 } from '../Settings/SubViews';
 import {
 	WidgetFontSizeSetting,
@@ -247,6 +248,8 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 				</Text>
 				<DBSortControlBlock
 					showLabel={true}
+					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
+				<DBNameDisplayControlBlock
 					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
 				<SettingsRow
 					label={formatMessage(i18n.autoCycleSenVal)}

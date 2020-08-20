@@ -109,6 +109,7 @@ import ThemedTextInput from './ThemedTextInput';
 import ThemedMaterialIcon from './ThemedMaterialIcon';
 import ThemedSwitch from './ThemedSwitch';
 import TabBarWithTabVisibility from './TabBarWithTabVisibility';
+import IconedSelectableBlock from './IconedSelectableBlock';
 
 import {
 	AppState,
@@ -203,6 +204,7 @@ module.exports = {
 	MainTabBarIOS,
 	MainTabNavHeader,
 	TabBarWithTabVisibility,
+	IconedSelectableBlock,
 
 	AppState,
 	Dimensions,
