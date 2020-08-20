@@ -4,6 +4,7 @@ jest.useFakeTimers();
 
 const initialState = {
 	screen: 'Login',
+	hiddenTabs: {},
 };
 
 

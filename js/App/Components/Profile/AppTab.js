@@ -57,6 +57,7 @@ import {
 import {
 	WidgetFontSizeSetting,
 	ThemesBlock,
+	ShowHideTabsBlock,
 } from './SubViews';
 
 import { LayoutAnimations } from '../../Lib';
@@ -236,6 +237,9 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					submitPushToken={submitPushToken}
 				/>
 				<LanguageControlBlock/>
+				<ShowHideTabsBlock
+					intl={intl}
+					layout={layout}/>
 				<Text
 					level={2}
 					style={titleStyle}>

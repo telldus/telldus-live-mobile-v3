@@ -31,6 +31,7 @@ import EulaLink from './EulaLink';
 import WidgetFontSizeSetting from './WidgetFontSizeSetting';
 import SwitchOrAddAccountButton from './SwitchOrAddAccountButton';
 import ThemesBlock from './ThemesBlock';
+import ShowHideTabsBlock from './ShowHideTabsBlock';
 
 module.exports = {
 	EditNameBlock,
@@ -42,4 +43,5 @@ module.exports = {
 	WidgetFontSizeSetting,
 	SwitchOrAddAccountButton,
 	ThemesBlock,
+	ShowHideTabsBlock,
 };

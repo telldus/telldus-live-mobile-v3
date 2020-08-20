@@ -55,7 +55,10 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { LayoutAnimations } from '../../Lib';
+import {
+	LayoutAnimations,
+	prepareVisibleTabs,
+} from '../../Lib';
 
 type Props = {
 	rows: Array<Object>,
@@ -65,6 +68,7 @@ type Props = {
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
 	currentScreen: string,
+	hiddenTabsCurrentUser: Array<string>,
 
 	navigation: Object,
 	changeSensorDisplayTypeDB: (id?: number) => void,
@@ -210,20 +214,25 @@ class DashboardTab extends View {
 	}
 
 	componentDidMount() {
-		const { isDBEmpty, navigation, currentScreen } = this.props;
+		const { isDBEmpty, navigation, currentScreen, hiddenTabsCurrentUser } = this.props;
 		const possibleScreen = ['Dashboard', 'Tabs', 'Login'];
 		if (isDBEmpty && possibleScreen.indexOf(currentScreen) !== -1) {
 			// Navigating to other tab inside componentDidMount of one tab has an issue in Android
 			// ISSUE: It successfully navigates to 'Devices' after after a second it navigates
 			// back to Dashboard itself.
 			// No issues in iOS though.
+
+			const {
+				tabToCheckOrVeryNext,
+			} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Devices');
+
 			if (Platform.OS === 'android') {
 				this.timeoutSwitchTabAndroid = setTimeout(() => {
-					navigation.navigate('Devices');
+					navigation.navigate(tabToCheckOrVeryNext);
 					this.timeoutSwitchTabAndroid = null;
 				}, 1000);
 			} else {
-				navigation.navigate('Devices');
+				navigation.navigate(tabToCheckOrVeryNext);
 			}
 		}
 		this.startSensorTimer();
@@ -635,7 +644,12 @@ function mapStateToProps(state: Object, props: Object): Object {
 	const userDbsAndDeviceIds = deviceIds[userId] || {};
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 
-	const { screen: currentScreen } = state.navigation;
+	const {
+		screen: currentScreen,
+		hiddenTabs = {},
+	} = state.navigation;
+
+	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
 
 	return {
 		rows: getRows(state),
@@ -644,6 +658,7 @@ function mapStateToProps(state: Object, props: Object): Object {
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
 		currentScreen,
+		hiddenTabsCurrentUser,
 	};
 }
 

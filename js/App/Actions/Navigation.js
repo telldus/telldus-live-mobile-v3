@@ -29,4 +29,18 @@ module.exports = {
 		type: 'CHANGE_SCREEN',
 		screen,
 	}),
+	tabHide: (tab: string, userId: string): Action => ({
+		type: 'HIDE_TAB',
+		payload: {
+			tab,
+			userId,
+		},
+	}),
+	tabUnhide: (tab: string, userId: string): Action => ({
+		type: 'UNHIDE_TAB',
+		payload: {
+			tab,
+			userId,
+		},
+	}),
 };

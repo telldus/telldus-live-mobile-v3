@@ -28,7 +28,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import TabViews from './index';
 import {
-	MainTabBarIOS,
+	TabBarWithTabVisibility,
 } from '../../../BaseComponents';
 
 import {
@@ -36,103 +36,37 @@ import {
 	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
 
-import i18n from '../../Translations/common';
-
+// NOTE [IMP]: Changing the order or updating the tabs
+// need to reflect in places like tab hide/show logic and so
+// Eg: Lib/NavigationService/prepareVisibleTabs
 const ScreenConfigs = [
 	{
 		name: 'Dashboard',
 		Component: TabViews.Dashboard,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color, focused }: Object): Object => (
-					<MainTabBarIOS
-						iconHint={'dashboard'}
-						labelIntl={i18n.dashboard}
-						focused={focused}
-						screenName={'Dashboard'}
-						tabBarAccesibilityLabelIntl={i18n.dashboardTab}
-					/>
-				),
-			};
-		},
 	},
 	{
 		name: 'Devices',
 		Component: TabViews.Devices,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color, focused }: Object): Object => (
-					<MainTabBarIOS
-						iconHint={'devices'}
-						labelIntl={i18n.devices}
-						focused={focused}
-						screenName={'Devices'}
-						tabBarAccesibilityLabelIntl={i18n.devicesTab}
-					/>
-				),
-			};
-		},
 	},
 	{
 		name: 'Sensors',
 		Component: TabViews.Sensors,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color, focused }: Object): Object => (
-					<MainTabBarIOS
-						iconHint={'sensors'}
-						labelIntl={i18n.sensors}
-						focused={focused}
-						screenName={'Sensors'}
-						tabBarAccesibilityLabelIntl={i18n.sensorsTab}
-					/>
-				),
-			};
-
-		},
 	},
 	{
 		name: 'Scheduler',
 		Component: TabViews.Scheduler,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color, focused }: Object): Object => (
-					<MainTabBarIOS
-						iconHint={'scheduler'}
-						labelIntl={i18n.scheduler}
-						focused={focused}
-						screenName={'Scheduler'}
-						tabBarAccesibilityLabelIntl={i18n.schedulerTab}
-					/>
-				),
-			};
-		},
 	},
 	{
 		name: 'MoreOptionsTab',
 		Component: TabViews.MoreOptionsTab,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color, focused }: Object): Object => (
-					<MainTabBarIOS
-						iconName={'overflow'}
-						labelIntl={i18n.more}
-						focused={focused}
-						screenName={'MoreOptionsTab'}
-						tabBarAccesibilityLabelIntl={i18n.more}
-					/>
-				),
-			};
-		},
 	},
 ];
 
 const NavigatorConfigs = {
-	initialRouteName: 'Dashboard',
-	initialRouteKey: 'Dashboard', // Check if exist in v5
 	swipeEnabled: false, // Check if exist in v5
 	lazy: true,
 	animationEnabled: false, // Check if exist in v5
+	tabBar: (props: Object): Object => <TabBarWithTabVisibility {...props}/>,
 	tabBarOptions: {
 		allowFontScaling: false,
 		tabStyle: {
@@ -151,12 +85,17 @@ const NavigatorConfigs = {
 const Tab = createBottomTabNavigator();
 
 const TabsView = React.memo<Object>((props: Object): Object => {
-	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+	const {
+		hiddenTabsCurrentUser = [],
+	} = props.screenProps;
+	const _ScreenConfigs = ScreenConfigs.filter((sc: Object): boolean => hiddenTabsCurrentUser.indexOf(sc.name) === -1);
+	return prepareNavigator(Tab, {ScreenConfigs: _ScreenConfigs, NavigatorConfigs}, props);
 }, (prevProps: Object, nextProps: Object): boolean => shouldNavigatorUpdate(prevProps, nextProps, [
 	'hideHeader',
 	'showAttentionCapture',
 	'showAttentionCaptureAddDevice',
 	'addingNewLocation',
+	'hiddenTabsCurrentUser',
 ]));
 
 module.exports = TabsView;

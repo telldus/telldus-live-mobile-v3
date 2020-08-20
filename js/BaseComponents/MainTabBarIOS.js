@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import {
 	useSelector,
 } from 'react-redux';
@@ -29,7 +31,7 @@ import { useIntl } from 'react-intl';
 import { useTheme } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 
-import View from './View';
+import TouchableOpacity from './TouchableOpacity';
 import Text from './Text';
 import getTabBarIcon from '../App/Lib/getTabBarIcon';
 
@@ -43,6 +45,7 @@ const MainTabBarIOS = React.memo<Object>((props: Object): Object => {
 		tabBarAccesibilityLabelIntl,
 		iconHint,
 		iconName,
+		onPress,
 	} = props;
 
 	const { colors } = useTheme();
@@ -74,15 +77,22 @@ const MainTabBarIOS = React.memo<Object>((props: Object): Object => {
 		iconName,
 	]);
 
+	const _onPress = useCallback(() => {
+		onPress(screenName);
+	}, [onPress, screenName]);
+
 	return (
-		<View style={containerStyle} accessibilityLabel={accessibilityLabel}>
+		<TouchableOpacity
+			onPress={_onPress}
+			style={containerStyle}
+			accessibilityLabel={accessibilityLabel}>
 			{!!icon && icon}
 			<Text
 				numberOfLines={1}
 				style={[labelStyle, {color: tintColor}]}>
 				{formatMessage(labelIntl)}
 			</Text>
-		</View>
+		</TouchableOpacity>
 	);
 });
 

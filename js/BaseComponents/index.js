@@ -108,6 +108,7 @@ import ThemedImage from './ThemedImage';
 import ThemedTextInput from './ThemedTextInput';
 import ThemedMaterialIcon from './ThemedMaterialIcon';
 import ThemedSwitch from './ThemedSwitch';
+import TabBarWithTabVisibility from './TabBarWithTabVisibility';
 
 import {
 	AppState,
@@ -201,6 +202,7 @@ module.exports = {
 	TransparentFullPageLoadingIndicator,
 	MainTabBarIOS,
 	MainTabNavHeader,
+	TabBarWithTabVisibility,
 
 	AppState,
 	Dimensions,

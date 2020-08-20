@@ -24,7 +24,6 @@
 import React from 'react';
 import {
 	ScrollView,
-	Platform,
 } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 import {
@@ -36,7 +35,11 @@ import {
 	View,
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getSelectedDays, getDeviceActionIcon } from '../../Lib';
+import {
+	getSelectedDays,
+	getDeviceActionIcon,
+	prepareVisibleTabs,
+} from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 
@@ -129,39 +132,31 @@ class Summary extends View<null, Props, State> {
 	}
 
 	resetNavigation = () => {
-		const { navigation, schedule, route } = this.props;
+		const {
+			navigation,
+			schedule,
+			route,
+			hiddenTabsCurrentUser,
+		} = this.props;
 
 		const {
 			params = {},
 		} = route;
 
-		let _routes = [
-			{
-				name: 'Dashboard',
-			},
-			{
-				name: 'Devices',
-			},
-			{
-				name: 'Sensors',
-			},
-			{
-				name: 'Scheduler',
-			},
-		];
-		if (Platform.OS === 'ios') {
-			_routes.push({
-				name: 'MoreOptionsTab',
-			});
-		}
+		const {
+			visibleTabs = [],
+			tabToCheckOrVeryNextIndex,
+		} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Scheduler');
 
 		let routes = [
 			{
 				name: 'Tabs',
 				key: 'Tabs',
 				state: {
-					index: 3,
-					routes: _routes,
+					index: tabToCheckOrVeryNextIndex,
+					routes: visibleTabs.map((vt: string): Object => {
+						return {'name': vt};
+					}),
 				},
 			},
 		];

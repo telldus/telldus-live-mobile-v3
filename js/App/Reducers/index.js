@@ -40,7 +40,7 @@ import { reducers } from 'live-shared-data';
 const config = {
 	key: localStorageKey,
 	storage: AsyncStorage,
-	blacklist: ['dimmer', 'schedule', 'liveApi', 'modal', 'addDevice', 'navigation'],
+	blacklist: ['dimmer', 'schedule', 'liveApi', 'modal', 'addDevice'],
 	migrate: migrations,
 };
 
