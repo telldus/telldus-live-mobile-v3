@@ -42,6 +42,7 @@ import {
 import {
 	ReplaceFailedNode,
 	Device433EditModel,
+	ChangeDevicetypeBlock,
 } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../../Actions/Devices';
@@ -60,6 +61,7 @@ import {
 	setDeviceModel,
 	setDeviceProtocol,
 	setWidgetParamsValue,
+	setMetadata,
 } from '../../../Actions';
 import {
 	shouldUpdate,
@@ -107,6 +109,7 @@ type State = {
 	isSaving433MhzParams: boolean,
 	editName: boolean,
 	deviceName: string,
+	devicetype: string,
 };
 
 
@@ -141,8 +144,14 @@ class SettingsTab extends View {
 			settings433MHz = null,
 		} = this.get433MHzDeviceSettings();
 
+		const {
+			name,
+			deviceType,
+			ignored,
+		} = props.device || {};
+
 		this.state = {
-			isHidden: props.device.ignored,
+			isHidden: ignored,
 			excludeActive: false,
 			isMarking: false,
 			isReplacing: false,
@@ -151,7 +160,8 @@ class SettingsTab extends View {
 			widget433MHz,
 			isSaving433MhzParams: false,
 			editName: false,
-			deviceName: props.device.name,
+			deviceName: name,
+			devicetype: deviceType,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -529,6 +539,7 @@ class SettingsTab extends View {
 		} = this.props;
 		const {
 			widget433MHz,
+			devicetype: devicetypeNext,
 		} = this.state;
 
 		const {
@@ -546,6 +557,15 @@ class SettingsTab extends View {
 		} = widgetParams433Device;
 
 		let promises = [];
+
+		const isDeviceTypeEqual = this.isDeviceTypeEqual(device.deviceType, devicetypeNext);
+		if (!isDeviceTypeEqual) {
+			promises.push(
+				dispatch(setMetadata(id, 'deviceType', devicetypeNext)),
+				dispatch(setDeviceParameter(id, 'devicetype', devicetypeNext))
+			);
+		}
+
 		const hasProtocolChanged = protocol !== _protocol;
 		if (hasProtocolChanged) {
 			promises.push(
@@ -561,7 +581,7 @@ class SettingsTab extends View {
 
 		const {
 			devicetype,
-		} = this.DeviceVendorInfo433MHz.deviceInfo || {};
+		} = this.DeviceVendorInfo433MHz ? (this.DeviceVendorInfo433MHz.deviceInfo || {}) : {};
 
 		const updateAllParamsFromLocal = hasModelChanged || hasProtocolChanged;
 
@@ -570,9 +590,11 @@ class SettingsTab extends View {
 			const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
 			if (settings || updateAllParamsFromLocal) {
 
-				promises.push(
-					dispatch(setDeviceParameter(id, 'devicetype', devicetype))
-				);
+				if (isDeviceTypeEqual) {
+					promises.push(
+						dispatch(setDeviceParameter(id, 'devicetype', devicetype))
+					);
+				}
 
 				Object.keys(parameters).map((p: string) => {
 					if (typeof parameters[p] !== 'undefined' && parameters[p] !== null) {
@@ -581,30 +603,29 @@ class SettingsTab extends View {
 						);
 					}
 				});
-
-				this.setState({
-					isSaving433MhzParams: true,
-				});
-
-				let isAllGood = true;
-				try {
-					await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
-						return promise.then((res: any): any => {
-							if (!res || !res.status || res.status !== 'success') {
-								isAllGood = false;
-							}
-							return res;
-						}).catch((err: any): any => {
-							isAllGood = false;
-							return err;
-						});
-					}));
-				} catch (e) {
-					isAllGood = false;
-				} finally {
-					this.postSaveParams433MHz(id, isAllGood);
-				}
 			}
+		}
+		this.setState({
+			isSaving433MhzParams: true,
+		});
+
+		let isAllGood = true;
+		try {
+			await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
+				return promise.then((res: any): any => {
+					if (!res || !res.status || res.status !== 'success') {
+						isAllGood = false;
+					}
+					return res;
+				}).catch((err: any): any => {
+					isAllGood = false;
+					return err;
+				});
+			}));
+		} catch (e) {
+			isAllGood = false;
+		} finally {
+			this.postSaveParams433MHz(id, isAllGood);
 		}
 	}
 
@@ -632,14 +653,30 @@ class SettingsTab extends View {
 		});
 	}
 
+	isDeviceTypeEqual = (devicetypeCurrent: string = '', devicetypeNext: string = ''): boolean => {
+		devicetypeCurrent = devicetypeCurrent.toUpperCase();
+		return devicetypeCurrent === devicetypeNext || devicetypeCurrent.slice(1, devicetypeCurrent.length) === devicetypeNext;
+	}
+
 	hasSettingsChanged = (widget433MHz: Object): boolean => {
+		const {
+			devicetype,
+		} = this.state;
+
+		const {
+			addDevice433,
+			device = {},
+		} = this.props;
+
+		const isDeviceTypeEqual = this.isDeviceTypeEqual(device.deviceType, devicetype);
+		if (!isDeviceTypeEqual) {
+			return true;
+		}
+
 		if (!widget433MHz) {
 			return false;
 		}
-		const {
-			addDevice433,
-			device,
-		} = this.props;
+
 		const {
 			parameter,
 			model,
@@ -682,6 +719,12 @@ class SettingsTab extends View {
 		}
 
 		return hasChanged;
+	}
+
+	_onValueChange = (devicetype: string) => {
+		this.setState({
+			devicetype,
+		});
 	}
 
 	componentDidMount() {
@@ -819,6 +862,7 @@ class SettingsTab extends View {
 			nodeInfo = {},
 			name,
 			clientDeviceId,
+			deviceType,
 		} = device;
 
 		if (!id && !excludeActive) {
@@ -837,6 +881,7 @@ class SettingsTab extends View {
 			learnButtonWithScan,
 			labelStyle,
 			editBoxStyle,
+			padding,
 		} = this.getStyle(appLayout);
 
 		if (editName) {
@@ -931,8 +976,13 @@ class SettingsTab extends View {
 									appLayout={appLayout}
 									intl={intl}
 								/>
+								<ChangeDevicetypeBlock
+									devicetype={deviceType}
+									onValueChange={this._onValueChange}
+									coverStyle={{
+										marginTop: padding / 2,
+									}}/>
 								{!!settings433MHz &&
-								<>
 									<DeviceSettings
 										coverStyle={coverStyleDeviceSettings433}
 										labelStyle={labelStyleDeviceSettings433}
@@ -946,7 +996,8 @@ class SettingsTab extends View {
 										isSaving433MhzParams={isSaving433MhzParams}
 										devicetype={devicetype}
 										renderExtraSettingsTop={gatewaySupportEditModel ? this.renderExtraSettingsTop : undefined}/>
-									{settingsHasChanged &&
+								}
+								{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}
 											onPress={isSaving433MhzParams ? null : this.onPressSaveParams433MHz}
@@ -955,8 +1006,6 @@ class SettingsTab extends View {
 												backgroundColor: isSaving433MhzParams ? btnDisabledBg : brandSecondary,
 											}]}
 											showThrobber={isSaving433MhzParams}/>
-									}
-								</>
 								}
 								{!settings433MHz && learnButton}
 								{isZWave && (
@@ -1032,6 +1081,7 @@ class SettingsTab extends View {
 			brandDanger,
 			btnDisabledBg,
 			brandSecondary,
+			subHeader,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -1045,6 +1095,7 @@ class SettingsTab extends View {
 			brandDanger,
 			btnDisabledBg,
 			brandSecondary,
+			padding,
 			container: {
 				flex: 0,
 				paddingHorizontal: padding,
@@ -1082,6 +1133,12 @@ class SettingsTab extends View {
 			},
 			editBoxStyle: {
 				marginTop: padding * 2,
+			},
+			titleStyle: {
+				marginTop: padding,
+				marginBottom: 5,
+				color: subHeader,
+				fontSize: Math.floor(deviceWidth * 0.045),
 			},
 		};
 	}

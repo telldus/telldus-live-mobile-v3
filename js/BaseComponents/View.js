@@ -21,7 +21,11 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	createRef,
+	memo,
+	forwardRef,
+} from 'react';
 import { View, Animated } from 'react-native';
 import Base from './Base';
 import type { ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
@@ -30,41 +34,71 @@ import {
 	prepareRootPropsView,
 } from './prepareRootProps';
 import {
-	withTheme,
-	PropsThemedComponent,
-} from '../App/Components/HOC/withTheme';
+	useAppTheme,
+} from '../App/Hooks/Theme';
 
 type NewProps = {|padder?: boolean, level?: number, animated?: boolean, style: Object | Array<any>|};
 type Props = {|...NewProps, ...ViewProps|};
 
 
-type PropsThemedViewComponent = Props & PropsThemedComponent;
+type PropsThemedViewComponent = Props & Object;
+
+const ThemedView = memo<Object>(forwardRef<Object, Object>((props: Object, ref: any): Object => {
+	const {
+		children,
+		animated,
+		...others
+	} = props;
+
+	const theme = useAppTheme();
+
+	if (animated) {
+		return (
+			<Animated.View
+				ref={ref}
+				{...prepareRootPropsView({
+					...others,
+					...theme,
+				})}>
+				{children}
+			</Animated.View>
+		);
+	}
+
+	return (
+		<View
+			ref={ref}
+			{...prepareRootPropsView({
+				...others,
+				...theme,
+			})}>
+			{children}
+		</View>
+	);
+}));
+
 class ViewComponent extends Base {
 	props: PropsThemedViewComponent;
 
+	viewRef: any;
+	measureInWindow: Function;
+
+	constructor(props: PropsThemedViewComponent) {
+		super(props);
+		this.viewRef = createRef();
+		this.measureInWindow = this._measureInWindow;
+	}
+
+	_measureInWindow(callback?: Function) {
+		this.viewRef.current.measureInWindow(callback);
+	}
+
 	render(): React$Element<any> {
-		const {
-			children,
-			animated,
-			...others
-		} = this.props;
-
-		if (animated) {
-			return (
-				<Animated.View
-					{...prepareRootPropsView(others)}>
-					{children}
-				</Animated.View>
-			);
-		}
-
-		return (
-			<View
-				{...prepareRootPropsView(others)}>
-				{children}
-			</View>
-		);
+		return <ThemedView
+			ref={this.viewRef}
+			{...this.props}
+		/>;
 	}
 }
 
-export default withTheme(ViewComponent, true);
+export default ViewComponent;
