@@ -440,7 +440,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
                         Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
                         Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
-                        Boolean showDevice = ((sizeSuppMeth <= 2 && sizeSuppMeth > 0) && !hasThermo) || hasRGB;
+                        Boolean hasDIM = ((supportedMethods.get("DIM") != null) && supportedMethods.get("DIM"));
+                        Boolean showDevice = ((sizeSuppMeth <= 2 && sizeSuppMeth > 0) && !hasThermo) || hasRGB || hasDIM;
 
                         JSONArray stateValues = curObj.getJSONArray("stateValues");
                         String secondaryStateValueLoc = "", stateValue = "";

@@ -110,11 +110,17 @@ public class NewOnOffWidget extends AppWidgetProvider {
             return;
         }
 
+        HashMap dim = CommonUtilities.getWidgetDimensions(appWidgetManager, appWidgetId);
+        Double width = Double.parseDouble(dim.get("width").toString());
+        Double height = Double.parseDouble(dim.get("height").toString());
+        Double ratio = width / height;
+
         int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
         int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
         int fontSizeFour = (int) (fontSize * 0.9);
         int fontSizeFive = (int) (fontSize * 0.6);
         fontSizeFour = fontSizeFour > Constants.widgetTitleMaxSize ? Constants.widgetTitleMaxSize : fontSizeFour;
+        int fontSizeSix = (int) (fontSize * 0.45);
 
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
@@ -173,6 +179,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
 
+        Boolean hasDIM = CommonUtilities.hasMethod(supportedMethods, "DIM");
+
         views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
         views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
@@ -186,6 +194,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         Object normalizeUIO = extraArgs.get("normalizeUI");
         Boolean normalizeUI = normalizeUIO == null ? false : (Boolean) normalizeUIO;
+
+        int renderedButtonsCount = 0;
 
         // Bell
         if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
@@ -280,6 +290,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_round_white_fill);
                 }
             }
+
+            renderedButtonsCount++;
 
             if (normalizeUI) {
                 hideFlashIndicator(views, R.id.flashing_indicator_on);
@@ -384,6 +396,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.rgbActionCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
 
+            renderedButtonsCount++;
+
             if (normalizeUI) {
                 hideFlashIndicator(views, R.id.flashing_indicator_rgb);
             }
@@ -487,8 +501,93 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 }
             }
 
+            renderedButtonsCount++;
+
             if (normalizeUI) {
                 hideFlashIndicator(views, R.id.flashing_indicator_on);
+            }
+        }
+
+        // DIM
+        if (hasDIM) {
+            views.setViewVisibility(R.id.iconCheck, View.GONE);
+            views.setViewVisibility(R.id.dimmerCoverLinear, View.VISIBLE);
+            views.setViewVisibility(R.id.dimmerCover, View.VISIBLE);
+
+            Boolean isLastButton = false;
+            int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
+                            "DIM",
+                            transparent,
+                            renderedButtonsCount,
+                            isLastButton,
+                            R.id.dimmerCover,
+                            views,
+                            context
+                        );
+            views.setImageViewBitmap(R.id.dimmer, CommonUtilities.buildTelldusIcon(
+                "dim25",
+                colorIdle,
+                80,
+                35,
+                65,
+                context));
+            views.setTextColor(R.id.txtDimmer, colorIdle);
+            views.setTextViewTextSize(R.id.txtDimmer, COMPLEX_UNIT_SP, fontSizeSix);
+
+            views.setOnClickPendingIntent(R.id.dimmerCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
+
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf((METHOD_DIM)))) {
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
+                                        "DIM",
+                                        transparent,
+                                        renderedButtonsCount,
+                                        isLastButton,
+                                        R.id.flash_view_dim,
+                                        R.id.flashing_indicator_dim,
+                                        R.id.dimmerCover,
+                                        views,
+                                        context
+                                    );
+                views.setImageViewBitmap(R.id.dimmer, CommonUtilities.buildTelldusIcon(
+                    "dim25",
+                    colorOnAction,
+                    80,
+                    35,
+                    65,
+                    context));
+                views.setTextColor(R.id.txtDimmer, colorOnAction);
+            }
+
+            if (methodRequested != null && isShowingStatus == 1) {
+                if (methodRequested != null && methodRequested.equals(String.valueOf(METHOD_DIM))) {
+                        views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
+                        views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
+                        views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            80,
+                            95,
+                            65,
+                            context));
+                    hideFlashIndicator(views, R.id.flashing_indicator_dim);
+                    CommonUtilities.handleBackgroundPostActionOne(
+                        "DIM",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.dimmerCover,
+                        views,
+                        context
+                    );
+                }
+            }
+
+            views.setTextViewText(R.id.txtDimmer, context.getResources().getString(R.string.reserved_widget_android_dim));
+
+            renderedButtonsCount++;
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_dim);
             }
         }
 
@@ -590,6 +689,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     hasOn ? R.drawable.shape_left_white_round_fill : R.drawable.shape_border_round_white_fill);
                 }
             }
+
+            renderedButtonsCount++;
 
             if (normalizeUI) {
                 hideFlashIndicator(views, R.id.flashing_indicator_off);

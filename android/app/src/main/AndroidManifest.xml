@@ -109,7 +109,7 @@
         <service android:name=".ServiceBackground.RestartSensorUpdateAlarmManager"></service>
 
         <receiver android:name=".NewOnOffWidget"
-          android:label="@string/reserved_widget_android_widget_info_device_2">
+          android:label="@string/reserved_widget_android_labelDevice">
           <intent-filter>
             <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
           </intent-filter>
