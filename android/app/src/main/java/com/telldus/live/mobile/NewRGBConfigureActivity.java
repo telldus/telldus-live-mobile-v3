@@ -411,6 +411,8 @@ public class NewRGBConfigureActivity extends Activity {
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
                     String deviceCurrentState = null;
+                    String requestedStateValue = null;
+                    String requestedSecStateValue = null;
 
                     String trans = "default";
                     if (radio_dark.isChecked()) {
@@ -437,7 +439,9 @@ public class NewRGBConfigureActivity extends Activity {
                         -1, // As of now required/handled only for thermostats
                         secondaryStateValue,  // As of now required/handled only for thermostats
                         primarySetting,
-                            secondarySetting
+                            secondarySetting,
+                            requestedStateValue,
+                            requestedSecStateValue
                     );
                     db.addWidgetDevice(mInsert);
                     NewRGBWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());

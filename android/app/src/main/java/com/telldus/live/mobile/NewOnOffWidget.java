@@ -769,6 +769,14 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             if (methodRequested != null && isShowingStatus == 1) {
                 Boolean wasSuccess = state != null && state.equals(methodRequested); // TODO: Check dim value/RGB value
+                if (methodRequested.equals(String.valueOf(METHOD_RGB))) {
+                    int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
+                    System.out.println("TEST secondaryStateValue "+ secondaryStateValue);
+                    System.out.println("TEST currentColor "+ currentColor);
+                    int _r = Color.red(currentColor), _g = Color.green(currentColor), _b = Color.blue(currentColor);
+                    System.out.println("TEST _r : "+ _r + ", _g : "+ _g +", _b : " + _b);
+                }
+                
                 if (wasSuccess) {
                     views.setViewVisibility(R.id.moreActionsIcon, View.VISIBLE);
                     views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(

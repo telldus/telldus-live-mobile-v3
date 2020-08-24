@@ -259,6 +259,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
                     String deviceCurrentState = null;
+                    String requestedStateValue = null;
+                    String requestedSecStateValue = null;
 
                     String trans = "default";
                     if (radio_dark.isChecked()) {
@@ -285,7 +287,9 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         -1, // As of now required/handled only for thermostats
                         null,  // As of now required/handled only for thermostats
                         null, // As of now set only for RGB[control option]
-                            null // As of now set only for RGB[control option]
+                            null, // As of now set only for RGB[control option]
+                            requestedStateValue,
+                            requestedSecStateValue
                     );
                     db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());

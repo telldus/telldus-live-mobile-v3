@@ -287,6 +287,8 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
 
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
+                    String requestedStateValue = null;
+                    String requestedSecStateValue = null;
 
                     Map<String, Object> dInfoMap = DeviceInfoMap.get(id);
                     int clientDeviceId = dInfoMap.get("clientDeviceId") != null ? Integer.parseInt(dInfoMap.get("clientDeviceId").toString(), 10) : -1;
@@ -310,7 +312,9 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                         clientId,
                         secondaryStateValue,
                         null, // As of now set only for RGB[control option]
-                            null // As of now set only for RGB[control option]
+                            null, // As of now set only for RGB[control option]
+                            requestedStateValue,
+                            requestedSecStateValue
                         );
                     db.addWidgetDevice(mInsert);
 

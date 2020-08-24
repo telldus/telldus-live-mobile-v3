@@ -260,6 +260,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
+                    String requestedStateValue = null;
+                    String requestedSecStateValue = null;
 
                     Map<String, Object> dInfoMap = DeviceInfoMap.get(id);
 
@@ -280,7 +282,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         -1, // As of now required/handled only for thermostats
                         secondaryStateValue,  // As of now required/handled only for thermostats
                         "full", // As of now set only for RGB[control option]
-                            null // As of now set only for RGB[control option]
+                            null, // As of now set only for RGB[control option]
+                            requestedStateValue,
+                            requestedSecStateValue
                         );
                     db.addWidgetDevice(mInsert);
 
