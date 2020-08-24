@@ -368,7 +368,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 views.setInt(R.id.rgb_dynamic_background,"setColorFilter", bgColor);
             }
 
-            if (methodRequested != null && isShowingStatus == 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
                 hideFlashIndicator(views, R.id.flashing_indicator_rgb);
                 views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
                 if (state == null || !state.equals(String.valueOf(METHOD_RGB))) {
@@ -561,8 +561,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
 
             if (methodRequested != null && isShowingStatus == 1) {
-                Boolean wasSuccess = methodRequested.equals(String.valueOf(METHOD_DIM)); // TODO: Check if dim value is also equal
-                if (methodRequested != null && wasSuccess) {
+                if (methodRequested.equals(String.valueOf(METHOD_DIM))) {
+                    Boolean wasSuccess = false; // TODO: Check if dim value is equal
+                    if (wasSuccess) {
                         views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
                         views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
                         views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
@@ -572,28 +573,29 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                 85,
                                 85,
                             context));
-                } else {
-                    views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
-                    views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
-                    views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
+                    } else {
+                        views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
+                        views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
+                        views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
                             "statusx",
                             ContextCompat.getColor(context, R.color.widgetRed),
                             160,
                             85,
                             85,
                             context));
+                    }
+                    hideFlashIndicator(views, R.id.flashing_indicator_dim);
+                    CommonUtilities.handleBackgroundPostActionOne(
+                            "DIM",
+                            transparent,
+                            renderedButtonsCount,
+                            isLastButton,
+                            R.id.dimmerCover,
+                            views,
+                            context
+                    );
                 }
             }
-            hideFlashIndicator(views, R.id.flashing_indicator_dim);
-            CommonUtilities.handleBackgroundPostActionOne(
-                    "DIM",
-                    transparent,
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.id.dimmerCover,
-                    views,
-                    context
-            );
 
             views.setTextViewText(R.id.txtDimmer, context.getResources().getString(R.string.reserved_widget_android_dim));
 
