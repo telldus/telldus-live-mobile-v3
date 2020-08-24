@@ -221,18 +221,30 @@ public class NewDimmerSingle extends AppWidgetProvider {
             }
 
             if (methodRequested != null && isShowingStatus == 1) {
-                if (methodRequested != null && methodRequested.equals(String.valueOf(METHOD_DIM))) {
-                        views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
-                        views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
-                        views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
+                Boolean wasSuccess = methodRequested.equals(String.valueOf(METHOD_DIM)); // TODO: Check if dim value is also equal
+                if (methodRequested != null && wasSuccess) {
+                    views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
+                    views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
+                    views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
                             ContextCompat.getColor(context, R.color.widgetGreen),
                             80,
                             95,
                             65,
                             context));
-                    hideFlashIndicator(views, R.id.flashing_indicator_dim);
-                    CommonUtilities.handleBackgroundPostActionOne(
+                } else {
+                    views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
+                    views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
+                    views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            80,
+                            95,
+                            65,
+                            context));
+                }
+                hideFlashIndicator(views, R.id.flashing_indicator_dim);
+                CommonUtilities.handleBackgroundPostActionOne(
                         "DIM",
                         transparent,
                         renderedButtonsCount,
@@ -240,8 +252,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                         R.id.dimmerCover,
                         views,
                         context
-                    );
-                }
+                );
             }
 
             views.setTextViewText(R.id.txtDimmer, context.getResources().getString(R.string.reserved_widget_android_dim));
