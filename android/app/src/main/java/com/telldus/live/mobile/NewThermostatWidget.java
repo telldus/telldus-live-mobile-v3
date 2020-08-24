@@ -493,7 +493,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
             String stateValue = widgetInfo.getDeviceStateValue();
             String secStateValue = widgetInfo.getSecondaryStateValue();
 
-            db.updateDeviceInfo(methReq, state, stateValue, 1, secStateValue, widgetId);
+            db.updateDeviceInfo(methReq, state, stateValue, 1, secStateValue, widgetId, null, null);
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
@@ -607,22 +607,22 @@ public class NewThermostatWidget extends AppWidgetProvider {
                                             }
                                         }
                                         catch (Exception e) {
-                                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId);
+                                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId, null, null);
                                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                             updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                         }
                                     }
 
-                                    db.updateDeviceInfo(methReq, state2, stateValue2, 0, secStateValue2, widgetId);
+                                    db.updateDeviceInfo(methReq, state2, stateValue2, 0, secStateValue2, widgetId, null, null);
                                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                     updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 } else {
-                                    db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId);
+                                    db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId, null, null);
                                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                     updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 }
                             } catch (JSONException e) {
-                                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
+                                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId, null, null);
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                 updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
@@ -632,7 +632,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
                         @Override
                         public void onError(ANError result) {
-                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
+                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId, null, null);
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                             updateAppWidget(context, widgetManager, widgetId, new HashMap());
                         }
@@ -640,7 +640,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
             }
             @Override
             public void onError(ANError error) {
-                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
+                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId, null, null);
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }

@@ -169,6 +169,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
         String primarySetting = DeviceWidgetInfo.getPrimarySetting();
 
+        String deviceStateValue = DeviceWidgetInfo.getDeviceStateValue();
+        deviceStateValue = deviceStateValue == "null" ? "" : deviceStateValue;
+        String requestedStateValue = DeviceWidgetInfo.getRequestedStateValue();
+        String requestedSecStateValue = DeviceWidgetInfo.getRequestedSecStateValue();
+
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
         Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
@@ -326,7 +331,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     (int) (iconWidth * 0.7),
                     context));
 
-            if (methodRequested != null && isShowingStatus != 1 && state == null && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
+            if (methodRequested != null && isShowingStatus != 1 && state == null && (methodRequested.equals(String.valueOf(METHOD_RGB)))) {
                 int colorOnAction = ContextCompat.getColor(context, R.color.white);
 
                 Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
@@ -368,31 +373,44 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 views.setInt(R.id.rgb_dynamic_background,"setColorFilter", bgColor);
             }
 
-            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
+            if (methodRequested != null && isShowingStatus == 1) {
+                if (methodRequested.equals(String.valueOf(METHOD_RGB))) {
+                    if (methodRequested.equals(String.valueOf(METHOD_RGB))) {
+                        Boolean wasSuccess = state != null && state.equals(String.valueOf(METHOD_RGB));
+                        if (secondaryStateValue != null && requestedSecStateValue != null) {
+                            int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
+                            int requestedColor = Integer.parseInt(requestedSecStateValue, 10);
+                            int _r = Color.red(currentColor), _g = Color.green(currentColor), _b = Color.blue(currentColor);
+                            int r = Color.red(requestedColor), g = Color.green(requestedColor), b = Color.blue(requestedColor);
+                            wasSuccess = r == _r && g == _g && b == _b;
+                        }
+                        if (wasSuccess) {
+                            views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
+                                    "statuscheck",
+                                    ContextCompat.getColor(context, R.color.widgetGreen),
+                                    160,
+                                    85,
+                                    85,
+                                    context));
+                        } else {
+                            views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
+                                    "statusx",
+                                    ContextCompat.getColor(context, R.color.widgetRed),
+                                    160,
+                                    85,
+                                    85,
+                                    context));
+                        }
+                    }
+                }
                 hideFlashIndicator(views, R.id.flashing_indicator_rgb);
                 views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
-                if (state == null || !state.equals(String.valueOf(METHOD_RGB))) {
-                    views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
-                            "statusx",
-                            ContextCompat.getColor(context, R.color.widgetRed),
-                            160,
-                            85,
-                            85,
-                            context));
-                } else {
-                    views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
-                            "statuscheck",
-                            ContextCompat.getColor(context, R.color.widgetGreen),
-                            160,
-                            85,
-                            85,
-                            context));
-                }
                 if (transparent.equals("dark")) {
                     views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.shape_left_black_fill);
                 } else if (transparent.equals("light") || transparent.equals("true")) {
                     views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.shape_left_white_fill);
                 } else {
+                    views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.button_background_no_bordradi);
                 }
             }
 
@@ -562,7 +580,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             if (methodRequested != null && isShowingStatus == 1) {
                 if (methodRequested.equals(String.valueOf(METHOD_DIM))) {
-                    Boolean wasSuccess = false; // TODO: Check if dim value is equal
+                    Boolean wasSuccess = state != null && state.equals(String.valueOf(METHOD_DIM));
+                    if (deviceStateValue != null && requestedStateValue != null) {
+                        wasSuccess = deviceStateValue.equals(requestedStateValue);
+                    }
                     if (wasSuccess) {
                         views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
                         views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
@@ -770,13 +791,20 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (methodRequested != null && isShowingStatus == 1) {
                 Boolean wasSuccess = state != null && state.equals(methodRequested); // TODO: Check dim value/RGB value
                 if (methodRequested.equals(String.valueOf(METHOD_RGB))) {
-                    int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
-                    System.out.println("TEST secondaryStateValue "+ secondaryStateValue);
-                    System.out.println("TEST currentColor "+ currentColor);
-                    int _r = Color.red(currentColor), _g = Color.green(currentColor), _b = Color.blue(currentColor);
-                    System.out.println("TEST _r : "+ _r + ", _g : "+ _g +", _b : " + _b);
+                    if (secondaryStateValue != null && requestedSecStateValue != null) {
+                        int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
+                        int requestedColor = Integer.parseInt(requestedSecStateValue, 10);
+
+                        int _r = Color.red(currentColor), _g = Color.green(currentColor), _b = Color.blue(currentColor);
+                        int r = Color.red(requestedColor), g = Color.green(requestedColor), b = Color.blue(requestedColor);
+                        wasSuccess = r == _r && g == _g && b == _b;
+                    }
+                } else if (methodRequested.equals(String.valueOf(METHOD_DIM))) {
+                    if (deviceStateValue != null && requestedStateValue != null) {
+                        wasSuccess = deviceStateValue.equals(requestedStateValue);
+                    }
                 }
-                
+
                 if (wasSuccess) {
                     views.setViewVisibility(R.id.moreActionsIcon, View.VISIBLE);
                     views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
@@ -959,7 +987,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         if (ACTION_BELL.equals(intent.getAction()) && methods != 0) {
 
-            db.updateDeviceInfo(METHOD_BELL, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_BELL, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -969,7 +997,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
-            db.updateDeviceInfo(METHOD_ON, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_ON, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -978,7 +1006,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             createDeviceActionApi(context, deviceId, 1, widgetId, db, "On");
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
-            db.updateDeviceInfo(METHOD_OFF, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_OFF, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1037,7 +1065,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
                     String secondaryStateValue = widgetInfo.getSecondaryStateValue();
                     String stateValue = widgetInfo.getDeviceStateValue();
-                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }

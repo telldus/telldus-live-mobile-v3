@@ -381,11 +381,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateDeviceMethodRequested(String methodRequested, int widgetId) {
+    public boolean updateDeviceMethodRequested(int widgetId, String methodRequested, String requestedStateValue, String requestedSecStateValue) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_METHOD_REQUESTED, methodRequested);
+        contentValues.put(REQUESTED_DEVICE_STATE_VALUE, requestedStateValue);
+        contentValues.put(REQUESTED_DEVICE_SECONDARY_STATE_VALUE, requestedSecStateValue);
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs);
@@ -407,7 +409,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public boolean updateDeviceInfo(String methodRequested, String deviceState,
                                     String stateValue, Integer isShowingStatus,
-                                    String secStateValue, int widgetId) {
+                                    String secStateValue, int widgetId,
+                                    String requestedStateValue, String requestedSecStateValue) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -416,6 +419,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         contentValues.put(DEVICE_METHOD_REQUESTED, methodRequested);
         contentValues.put(DEVICE_IS_SHOWING_STATUS, isShowingStatus);
         contentValues.put(DEVICE_SECONDARY_STATE_VALUE, secStateValue);
+        contentValues.put(REQUESTED_DEVICE_STATE_VALUE, requestedStateValue);
+        contentValues.put(REQUESTED_DEVICE_SECONDARY_STATE_VALUE, requestedSecStateValue);
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs);

@@ -248,7 +248,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             bellCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_BELL, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(METHOD_BELL, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -323,7 +323,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             upCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_UP, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(METHOD_UP, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -398,7 +398,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             downCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_DOWN, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(METHOD_DOWN, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -473,7 +473,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             stopCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_STOP, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(METHOD_STOP, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -548,7 +548,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             offCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_OFF, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(METHOD_OFF, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -652,7 +652,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                         callEndPointRunnable = new Runnable() {
                             @Override
                             public void run() {
-                                db.updateDeviceInfo(METHOD_DIM, null, stateValue, 0, secondaryStateValue, widgetId);
+                                db.updateDeviceInfo(METHOD_DIM, null, stateValue, 0, secondaryStateValue, widgetId, String.valueOf(dimValue), null);
                                 removeHandlerResetDeviceStateToNull();
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                 updateUI(widgetId);
@@ -704,7 +704,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             onCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_ON, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(METHOD_ON, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -783,7 +783,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                             currentColorControlled = pickedColor;
                             int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
 
-                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId);
+                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId, null, String.valueOf(pickedColor));
                             removeHandlerResetDeviceStateToNull();
 
                             updateUI(widgetId);
@@ -876,7 +876,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                             currentColorControlled = pickedColor;
                             int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
 
-                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId);
+                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId, null, String.valueOf(pickedColor));
                             removeHandlerResetDeviceStateToNull();
 
                             updateUI(widgetId);
@@ -1110,7 +1110,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
                     String secondaryStateValue = widgetInfo.getSecondaryStateValue();
                     String stateValue = widgetInfo.getDeviceStateValue();
-                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
 

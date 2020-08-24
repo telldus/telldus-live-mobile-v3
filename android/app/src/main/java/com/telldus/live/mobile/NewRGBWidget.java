@@ -514,7 +514,9 @@ public class NewRGBWidget extends AppWidgetProvider {
 
         if (ACTION_RGB_SINGLE.equals(intent.getAction()) && methods != 0) {
             String stateValue = widgetInfo.getDeviceStateValue();
-            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId);
+            String primarySetting = widgetInfo.getPrimarySetting();
+            int pickedColor = Color.parseColor(primarySetting);
+            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId, null, String.valueOf(pickedColor));
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -541,7 +543,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
                     String secondaryStateValue = widgetInfo.getSecondaryStateValue();
                     String stateValue = widgetInfo.getDeviceStateValue();
-                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }
