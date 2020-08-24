@@ -720,11 +720,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.onCover, View.GONE);
             views.setViewVisibility(R.id.rgbActionCover, View.GONE);
 
-            views.setViewVisibility(R.id.iconOff, View.GONE);
-            views.setViewVisibility(R.id.iconOn, View.GONE);
-            views.setViewVisibility(R.id.palette, View.GONE);
-            views.setViewVisibility(R.id.dimmer, View.GONE);
-
             views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
             views.setViewVisibility(R.id.onOffCoverLinear, View.VISIBLE);
             views.setViewVisibility(R.id.onOffCover, View.VISIBLE);
@@ -771,7 +766,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         65,
                         context));
             }
-            
+
             if (methodRequested != null && isShowingStatus == 1) {
                 Boolean wasSuccess = state != null && state.equals(methodRequested); // TODO: Check dim value/RGB value
                 if (wasSuccess) {
