@@ -252,7 +252,11 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    if (widgetKey.equals("NewOnOffWidget")) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    } else {
+                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    }
 
                     createDeviceApi(deviceId, 4, 0, widgetId, context);
                 }
@@ -323,7 +327,11 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    if (widgetKey.equals("NewOnOffWidget")) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    } else {
+                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    }
 
                     createDeviceApi(deviceId, 128, 0, widgetId, context);
                 }
@@ -394,7 +402,11 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    if (widgetKey.equals("NewOnOffWidget")) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    } else {
+                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    }
 
                     createDeviceApi(deviceId, 256, 0, widgetId, context);
                 }
@@ -465,7 +477,11 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    if (widgetKey.equals("NewOnOffWidget")) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    } else {
+                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    }
 
                     createDeviceApi(deviceId, 512, 0, widgetId, context);
                 }
@@ -536,7 +552,11 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    if (widgetKey.equals("NewOnOffWidget")) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    } else {
+                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    }
 
                     createDeviceApi(deviceId, 2, 0, widgetId, context);
                 }
@@ -636,7 +656,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                                 removeHandlerResetDeviceStateToNull();
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                 updateUI(widgetId);
-                                if (widgetKey.equals("NewDimmerSingle")) {
+                                if (widgetKey.equals("NewOnOffWidget")) {
+                                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                                } else if (widgetKey.equals("NewDimmerSingle")) {
                                     NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 } else if (!_hasRGB) {
                                     NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
@@ -686,7 +708,12 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+
+                    if (widgetKey.equals("NewOnOffWidget")) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    } else {
+                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    }
 
                     createDeviceApi(deviceId, 1, 0, widgetId, context);
                 }
@@ -765,7 +792,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                             extraArgs.put("colorControlledFromModal", currentColorControlled);
 
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                            if (primarySetting.equalsIgnoreCase("full")) {
+                            if (widgetKey.equals("NewOnOffWidget")) {
+                                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                            } else if (primarySetting.equalsIgnoreCase("full")) {
                                 NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
                             } else {
                                 NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
@@ -856,7 +885,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                             extraArgs.put("colorControlledFromModal", currentColorControlled);
 
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                            if (primarySetting.equalsIgnoreCase("full")) {
+                            if (widgetKey.equals("NewOnOffWidget")) {
+                                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                            } else if (primarySetting.equalsIgnoreCase("full")) {
                                 NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
                             } else {
                                 NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
@@ -979,7 +1010,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateUI(widgetId);
 
-                if (widgetKey.equals("NewDimmerSingle")) {
+                if (widgetKey.equals("NewOnOffWidget")) {
+                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                } else if (widgetKey.equals("NewDimmerSingle")) {
                     NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 } else if (hasRGB) {
                     String primarySetting = widgetInfo.getPrimarySetting();
@@ -999,7 +1032,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateUI(widgetId);
 
-                if (widgetKey.equals("NewDimmerSingle")) {
+                if (widgetKey.equals("NewOnOffWidget")) {
+                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                } else if (widgetKey.equals("NewDimmerSingle")) {
                     NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 } else if (hasRGB) {
                     String primarySetting = widgetInfo.getPrimarySetting();
@@ -1038,7 +1073,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 rgbSelectedSwatch = null;
                 updateUI(widgetId);
 
-                if (primarySetting.equalsIgnoreCase("full")) {
+                if (widgetKey.equals("NewOnOffWidget")) {
+                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                } else if (primarySetting.equalsIgnoreCase("full")) {
                     NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 } else {
                     NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
@@ -1052,7 +1089,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 rgbSelectedSwatch = null;
                 updateUI(widgetId);
 
-                if (primarySetting.equalsIgnoreCase("full")) {
+                if (widgetKey.equals("NewOnOffWidget")) {
+                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                } else if (primarySetting.equalsIgnoreCase("full")) {
                     NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 } else {
                     NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
@@ -1078,7 +1117,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                     Integer methods = widgetInfo.getDeviceMethods();
                     Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
                     Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
-                    if (widgetKey.equals("NewDimmerSingle")) {
+                    if (widgetKey.equals("NewOnOffWidget")) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    } else if (widgetKey.equals("NewDimmerSingle")) {
                         NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                     } else if (hasRGB) {
                         String primarySetting = widgetInfo.getPrimarySetting();
