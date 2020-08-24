@@ -195,6 +195,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Object normalizeUIO = extraArgs.get("normalizeUI");
         Boolean normalizeUI = normalizeUIO == null ? false : (Boolean) normalizeUIO;
 
+        Boolean isNearly1By1 = CommonUtilities.isNearly1By1(context, appWidgetManager, appWidgetId);
+
         int renderedButtonsCount = 0;
 
         // Bell
@@ -559,28 +561,39 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
 
             if (methodRequested != null && isShowingStatus == 1) {
-                if (methodRequested != null && methodRequested.equals(String.valueOf(METHOD_DIM))) {
+                Boolean wasSuccess = methodRequested.equals(String.valueOf(METHOD_DIM)); // TODO: Check if dim value is also equal
+                if (methodRequested != null && wasSuccess) {
                         views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
                         views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
                         views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
                             ContextCompat.getColor(context, R.color.widgetGreen),
-                            80,
-                            95,
-                            65,
+                                160,
+                                85,
+                                85,
                             context));
-                    hideFlashIndicator(views, R.id.flashing_indicator_dim);
-                    CommonUtilities.handleBackgroundPostActionOne(
-                        "DIM",
-                        transparent,
-                        renderedButtonsCount,
-                        isLastButton,
-                        R.id.dimmerCover,
-                        views,
-                        context
-                    );
+                } else {
+                    views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
+                    views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
+                    views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            160,
+                            85,
+                            85,
+                            context));
                 }
             }
+            hideFlashIndicator(views, R.id.flashing_indicator_dim);
+            CommonUtilities.handleBackgroundPostActionOne(
+                    "DIM",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.dimmerCover,
+                    views,
+                    context
+            );
 
             views.setTextViewText(R.id.txtDimmer, context.getResources().getString(R.string.reserved_widget_android_dim));
 
@@ -695,6 +708,108 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (normalizeUI) {
                 hideFlashIndicator(views, R.id.flashing_indicator_off);
             }
+        }
+
+        if (isNearly1By1 && renderedButtonsCount > 1) {
+            views.setViewVisibility(R.id.iconCheck, View.GONE);
+            views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
+            views.setViewVisibility(R.id.dimmerCover, View.GONE);
+            views.setViewVisibility(R.id.offCover, View.GONE);
+            views.setViewVisibility(R.id.onCover, View.GONE);
+            views.setViewVisibility(R.id.rgbActionCover, View.GONE);
+
+            views.setViewVisibility(R.id.iconOff, View.GONE);
+            views.setViewVisibility(R.id.iconOn, View.GONE);
+            views.setViewVisibility(R.id.palette, View.GONE);
+            views.setViewVisibility(R.id.dimmer, View.GONE);
+
+            views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
+            views.setViewVisibility(R.id.onOffCoverLinear, View.VISIBLE);
+            views.setViewVisibility(R.id.onOffCover, View.VISIBLE);
+
+            int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
+                    "MORE",
+                    transparent,
+                    0,
+                    true,
+                    R.id.onOffCover,
+                    views,
+                    context
+            );
+
+            String moreActionsIcon = hasDIM ? "dim25" : "buttononoff";
+
+            views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
+                    moreActionsIcon,
+                    colorIdle,
+                    80,
+                    35,
+                    65,
+                    context));
+
+            views.setOnClickPendingIntent(R.id.onOffCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
+
+            if (methodRequested != null && state == null && isShowingStatus != 1) {
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
+                        "MORE",
+                        transparent,
+                        0,
+                        true,
+                        R.id.flash_view_on_off,
+                        R.id.flashing_indicator_on_off,
+                        R.id.onOffCover,
+                        views,
+                        context
+                );
+                views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
+                        moreActionsIcon,
+                        colorOnAction,
+                        80,
+                        35,
+                        65,
+                        context));
+            }
+
+            if (methodRequested != null && isShowingStatus == 1) {
+                Boolean wasSuccess = true; // TODO: Implement
+                if (wasSuccess) {
+                    System.out.println("TEST wasSuccess "+ wasSuccess);
+                    views.setViewVisibility(R.id.moreActionsIcon, View.VISIBLE);
+                    views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            160,
+                            85,
+                            85,
+                            context));
+                } else {
+                    views.setViewVisibility(R.id.moreActionsIcon, View.VISIBLE);
+                    views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            160,
+                            85,
+                            85,
+                            context));
+                }
+                hideFlashIndicator(views, R.id.flashing_indicator_on_off);
+                CommonUtilities.handleBackgroundPostActionOne(
+                        "MORE",
+                        transparent,
+                        0,
+                        true,
+                        R.id.onOffCover,
+                        views,
+                        context
+                );
+            }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_on_off);
+            }
+        } else {
+            views.setViewVisibility(R.id.onOffCoverLinear, View.GONE);
+            views.setViewVisibility(R.id.onOffCover, View.GONE);
         }
 
         if (isBasicUser) {
@@ -871,6 +986,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             Intent dialogueIntent = new Intent(context, DevicesGroupDialogueActivity.class);
             dialogueIntent.putExtra("widgetId", widgetId);
             dialogueIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            dialogueIntent.putExtra("widgetKey", "NewOnOffWidget");
             context.startActivity(dialogueIntent);
         }
     }
