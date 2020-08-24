@@ -231,6 +231,7 @@ public class DevicesAPI {
                                 return;
                             }
                             if (reset && (!newState.equals(reqState) || !isEqualDimValueEqual)) {
+                                db.updateDeviceState(newState, widgetId, stateValueDim, stateValueRGB);
                                 Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                                 removeHandlerRunnablePair(deviceId, widgetId);
                                 callBack.onSuccess(response);
@@ -260,6 +261,7 @@ public class DevicesAPI {
                                 return;
                             }
                             if (reset && (!newState.equals(reqState) || !isEqual)) {
+                                db.updateDeviceState(newState, widgetId, stateValueDim, stateValueRGB);
                                 Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                                 removeHandlerRunnablePair(deviceId, widgetId);
                                 callBack.onSuccess(response);
