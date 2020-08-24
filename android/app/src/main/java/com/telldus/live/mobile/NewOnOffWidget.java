@@ -771,11 +771,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         65,
                         context));
             }
-
+            
             if (methodRequested != null && isShowingStatus == 1) {
-                Boolean wasSuccess = true; // TODO: Implement
+                Boolean wasSuccess = state != null && state.equals(methodRequested); // TODO: Check dim value/RGB value
                 if (wasSuccess) {
-                    System.out.println("TEST wasSuccess "+ wasSuccess);
                     views.setViewVisibility(R.id.moreActionsIcon, View.VISIBLE);
                     views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
