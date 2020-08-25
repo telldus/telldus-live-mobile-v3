@@ -63,6 +63,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   private static String widgetSensor = "WIDGET_SENSOR";
   private static String widgetDeviceThermo = "WIDGET_THERMO";
   private static String widgetDeviceRGB = "WIDGET_RGB";
+  private static String widgetDeviceDimmer1by1 = "WIDGET_DIMMER_1BY1";
 
   private static String ACTION_LOGIN = "ACTION_LOGIN";
 
@@ -123,6 +124,10 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     for (int widgetId : widgetIdsDeviceRGB) {
       wUpdater.updateUIWidgetDeviceRGB(widgetId, context, new HashMap());
     }
+    int widgetIdsDeviceDimmer1by1[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewDimmerSingle.class));
+    for (int widgetId : widgetIdsDeviceDimmer1by1) {
+      wUpdater.updateUIWidgetDimmer1By1(widgetId, context, new HashMap());
+    }
   }
 
   @ReactMethod
@@ -159,6 +164,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
           NewAppWidget.updateAppWidget(context, widgetManager, wId, new HashMap());
           NewThermostatWidget.updateAppWidget(context, widgetManager, wId, new HashMap());
           NewRGBWidget.updateAppWidget(context, widgetManager, wId, new HashMap());
+          NewDimmerSingle.updateAppWidget(context, widgetManager, wId, new HashMap());
         }
       }
     }
@@ -180,7 +186,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     disableWidgetsOnLogout(widgetIdsDThermo, widgetDeviceThermo);
     int widgetIdsDRGB[] = wUpdater.getAllRGBWidgets(context);
     disableWidgetsOnLogout(widgetIdsDRGB, widgetDeviceRGB);
-
+    int widgetIdsDDimmer1by1[] = wUpdater.getAllDimmer1by1Widgets(context);
+    disableWidgetsOnLogout(widgetIdsDDimmer1by1, widgetDeviceDimmer1by1);
     // Clear token and other credentials from shared preference
     prefManager.clear();
   }
@@ -204,6 +211,9 @@ public class WidgetModule extends ReactContextBaseJavaModule {
       if (widgetType.equals(widgetDeviceRGB)) {
         wUpdater.updateUIWidgetDeviceRGB(widgetId, context, new HashMap());
       }
+      if (widgetType.equals(widgetDeviceDimmer1by1)) {
+        wUpdater.updateUIWidgetDimmer1By1(widgetId, context, new HashMap());
+      }
     }
   }
 
@@ -213,6 +223,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     refreshWidgetsDevices3By1(deviceIds, devicesData);
     refreshWidgetsDevicesThermo(deviceIds, devicesData);
     refreshWidgetsDevicesRGB(deviceIds, devicesData);
+    refreshWidgetsDevicesRGB(deviceIds, devicesData);
+    refreshWidgetsDevicesDimmer1By1(deviceIds, devicesData);
   }
 
   public void refreshWidgetsDevices2By1(ReadableArray deviceIds, ReadableMap devicesData) {
@@ -237,6 +249,12 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     Context context = getReactApplicationContext();
     int widgetIds[] = wUpdater.getAllRGBWidgets(context);
     refreshWidgetsDevicesCommon(widgetIds, deviceIds, devicesData, widgetDeviceRGB);
+  }
+
+  public void refreshWidgetsDevicesDimmer1By1(ReadableArray deviceIds, ReadableMap devicesData) {
+    Context context = getReactApplicationContext();
+    int widgetIds[] = wUpdater.getAllDimmer1by1Widgets(context);
+    refreshWidgetsDevicesCommon(widgetIds, deviceIds, devicesData, widgetDeviceDimmer1by1);
   }
 
   public void refreshWidgetsDevicesCommon(int[] widgetIds, ReadableArray deviceIds, ReadableMap devicesData, String widgetType) {
@@ -292,6 +310,9 @@ public class WidgetModule extends ReactContextBaseJavaModule {
             if (widgetType.equals(widgetDeviceThermo)) {
               wUpdater.updateUIWidgetDeviceThermo(widgetId, context, new HashMap());
             }
+            if (widgetType.equals(widgetDeviceDimmer1by1)) {
+              wUpdater.updateUIWidgetDimmer1By1(widgetId, context, new HashMap());
+            }
           }
         }
 
@@ -310,6 +331,9 @@ public class WidgetModule extends ReactContextBaseJavaModule {
             }
             if (widgetType.equals(widgetDeviceRGB)) {
               wUpdater.updateUIWidgetDeviceRGB(widgetId, context, new HashMap());
+            }
+            if (widgetType.equals(widgetDeviceDimmer1by1)) {
+              wUpdater.updateUIWidgetDimmer1By1(widgetId, context, new HashMap());
             }
           }
         }
