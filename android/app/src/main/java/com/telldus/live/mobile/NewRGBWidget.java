@@ -165,7 +165,7 @@ public class NewRGBWidget extends AppWidgetProvider {
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
 
-        Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
+        Boolean hasRGB = CommonUtilities.hasMethod(supportedMethods,"RGB");
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_rgb_widget);
 
