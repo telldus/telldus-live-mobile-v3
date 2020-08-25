@@ -104,7 +104,7 @@ public class DevicesGroupDialogueActivity extends Activity {
     int currentColorControlled;
 
     String[] methodsToShow = null;
-    String widgetKey = null;
+    String widgetKey = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +125,7 @@ public class DevicesGroupDialogueActivity extends Activity {
 
         methodsToShow = extras.getStringArray("methodsToShow");
         widgetKey = extras.getString("widgetKey");
+        widgetKey = widgetKey == null ? "" : widgetKey;
 
         updateUI(widgetId);
     }
