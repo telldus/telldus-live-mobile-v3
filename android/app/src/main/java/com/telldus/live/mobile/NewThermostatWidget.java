@@ -362,25 +362,12 @@ public class NewThermostatWidget extends AppWidgetProvider {
     }
 
     public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
-        hideAllFlashIndicators(views);
-
         views.setInt(visibleFlashId, "setBackgroundResource", drawable);
         views.setViewVisibility(flashId, View.VISIBLE);
     }
 
     public static void hideFlashIndicator(RemoteViews views, int flashId) {
         views.setViewVisibility(flashId, View.GONE);
-    }
-
-    public static void hideAllFlashIndicators(RemoteViews views) {
-        Integer[] primaryShadedButtons = new Integer[]{R.id.flashing_indicator_on, R.id.flashing_indicator_off};
-
-        List<Integer> list = Arrays.asList(primaryShadedButtons);
-
-        for (int i = 0; i < list.size(); i++) {
-            int id = list.get(i);
-            views.setViewVisibility(id, View.GONE);
-        }
     }
 
     private static PendingIntent getPendingSelf(Context context, String action, int id) {
