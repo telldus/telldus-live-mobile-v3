@@ -187,7 +187,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.rgbActionCover, View.VISIBLE);
 
             Boolean isLastButton = true;
-            handleBackgroundWhenIdleOne(
+            CommonUtilities.handleBackgroundWhenIdleOne(
                                 "RGB",
                                 transparent,
                                 renderedButtonsCount,
@@ -250,7 +250,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                 int flashSize = (int) (7 * d);
                 Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, flashColor);
 
-                showFlashIndicator(
+                CommonUtilities.showFlashIndicatorRGB(
                         views,
                         R.id.flash_view_rgb,
                         R.id.flashing_indicator_rgb,
@@ -290,9 +290,9 @@ public class NewRGBWidget extends AppWidgetProvider {
                             iconSize,
                             context));
                 }
-                hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_rgb);
                 views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
-                handleBackgroundPostActionOne(
+                CommonUtilities.handleBackgroundPostActionOne(
                         "RGB",
                         transparent,
                         renderedButtonsCount,
@@ -310,7 +310,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             }
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_rgb);
             }
             
             renderedButtonsCount++;
@@ -341,112 +341,6 @@ public class NewRGBWidget extends AppWidgetProvider {
         }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
-
-    public static void handleBackgroundPostActionOne(
-            String button, String transparent,
-            int renderedButtonsCount, Boolean isLastButton,
-            int viewId, RemoteViews views, Context context) {
-        if (transparent.equals("dark")) {
-            setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_border_left_round_black_fill,
-                    R.drawable.shape_border_right_round_black_fill,
-                    R.drawable.shape_left_black_fill,
-                    R.drawable.shape_border_round_black_fill,
-                    viewId,
-                    views,
-                    context
-            );
-        } else if (transparent.equals("light") || transparent.equals("true")) {
-            setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_border_left_round_white_fill,
-                    R.drawable.shape_border_right_round_white_fill,
-                    R.drawable.shape_left_white_fill,
-                    R.drawable.shape_border_round_white_fill,
-                    viewId,
-                    views,
-                    context
-            );
-        }
-    }
-
-    public static Boolean isPrimaryShade(String button) {
-        String[] primaryShadedButtons = new String[]{"OFF", "STOP"};
-
-        List<String> list = Arrays.asList(primaryShadedButtons);
-
-        return list.contains(button);
-    }
-
-    public static int handleBackgroundWhenIdleOne(
-        String button, String transparent,
-        int renderedButtonsCount, Boolean isLastButton,
-        int viewId, RemoteViews views, Context context) {
-
-            if (transparent.equals("dark")) {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_black_round,
-                    R.drawable.shape_border_right_round_black_fill,
-                    R.drawable.shape_left_black,
-                    R.drawable.shape_border_round_black_fill,
-                    viewId,
-                    views,
-                    context
-                );
-                return ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light") || transparent.equals("true")) {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_white_round,
-                    R.drawable.shape_border_right_round_white_fill,
-                    R.drawable.shape_left_white,
-                    R.drawable.shape_border_round_white_fill,
-                    viewId,
-                    views,
-                    context
-                );
-                return ContextCompat.getColor(context, R.color.white);
-            } else {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_rounded_corner,
-                    R.drawable.shape_right_rounded_corner,
-                    R.drawable.button_background_no_bordradi,
-                    R.drawable.button_background,
-                    viewId,
-                    views,
-                    context
-                );
-                if (isPrimaryShade(button)) {
-                    return ContextCompat.getColor(context, R.color.brandPrimary);
-                }
-                return ContextCompat.getColor(context, R.color.brandSecondary);
-            }
-    }
-
-    public static void setCoverBackground(
-        int renderedButtonsCount, Boolean isLastButton,
-        int drawableWhenFirst, int drawableWhenLast, int drawableWhenInMiddle, int drawableWhenTheOnly,
-        int viewId, RemoteViews views, Context context
-        ) {
-
-        if (renderedButtonsCount == 0 && isLastButton) {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenTheOnly);
-        } else if (renderedButtonsCount == 0) {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenFirst);
-        } else if (isLastButton) {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenLast);
-        } else {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenInMiddle);
-        }
     }
 
     @Override
@@ -576,17 +470,6 @@ public class NewRGBWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             boolean b = db.deleteWidgetInfoDevice(appWidgetId);
         }
-    }
-
-    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, Bitmap backgroundFlash) {
-        hideFlashIndicator(views, flashId);
-
-        views.setImageViewBitmap(visibleFlashId, backgroundFlash);
-        views.setViewVisibility(flashId, View.VISIBLE);
-    }
-
-    public static void hideFlashIndicator(RemoteViews views, int flashId) {
-        views.setViewVisibility(flashId, View.GONE);
     }
 
     public void updateUserProfile(final int widgetId, final Context context) {

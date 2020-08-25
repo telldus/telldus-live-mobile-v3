@@ -376,6 +376,13 @@ public class CommonUtilities  {
         views.setViewVisibility(flashId, View.VISIBLE);
     }
 
+    public static void showFlashIndicatorRGB(RemoteViews views, int visibleFlashId, int flashId, Bitmap backgroundFlash) {
+        CommonUtilities.hideAllFlashIndicators(views);
+
+        views.setImageViewBitmap(visibleFlashId, backgroundFlash);
+        views.setViewVisibility(flashId, View.VISIBLE);
+    }
+
     public static Boolean isPrimaryShade(String button) {
         String[] primaryShadedButtons = new String[]{"OFF", "STOP"};
 

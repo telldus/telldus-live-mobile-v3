@@ -422,7 +422,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, flashColor);
 
                 views.setViewVisibility(R.id.rgb_dynamic_background, View.VISIBLE);
-                showFlashIndicatorRGB(
+                CommonUtilities.showFlashIndicatorRGB(
                         views,
                         R.id.flash_view_rgb,
                         R.id.flashing_indicator_rgb,
@@ -806,13 +806,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
-
-    public static void showFlashIndicatorRGB(RemoteViews views, int visibleFlashId, int flashId, Bitmap backgroundFlash) {
-        CommonUtilities.hideAllFlashIndicators(views);
-
-        views.setImageViewBitmap(visibleFlashId, backgroundFlash);
-        views.setViewVisibility(flashId, View.VISIBLE);
     }
 
     private static PendingIntent getPendingSelf(Context context, String action, int id) {

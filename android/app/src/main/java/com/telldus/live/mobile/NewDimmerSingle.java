@@ -244,7 +244,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
                             65,
                             context));
                     }
-                    hideFlashIndicator(views, R.id.flashing_indicator_dim);
+                    CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim);
                     CommonUtilities.handleBackgroundPostActionOne(
                         "DIM",
                         transparent,
@@ -262,7 +262,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
             renderedButtonsCount++;
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_dim);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim);
             }
         }
 
@@ -382,10 +382,6 @@ public class NewDimmerSingle extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             boolean b = db.deleteWidgetInfoDevice(appWidgetId);
         }
-    }
-
-    public static void hideFlashIndicator(RemoteViews views, int flashId) {
-        views.setViewVisibility(flashId, View.GONE);
     }
 
     public void updateUserProfile(final int widgetId, final Context context) {
