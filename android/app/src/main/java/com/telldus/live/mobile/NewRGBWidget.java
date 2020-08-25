@@ -156,6 +156,8 @@ public class NewRGBWidget extends AppWidgetProvider {
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         String state = DeviceWidgetInfo.getState();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
+        String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
+        String requestedSecStateValue = DeviceWidgetInfo.getRequestedSecStateValue();
 
         String secondarySetting = DeviceWidgetInfo.getSecondarySetting();
         secondarySetting = secondarySetting == null ? "0" : secondarySetting;
@@ -273,7 +275,15 @@ public class NewRGBWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.palette, View.VISIBLE);
                 views.setViewVisibility(R.id.dimValue, View.GONE);
 
-                if (state != null && state.equals(String.valueOf(METHOD_RGB))) {
+                Boolean wasSuccess = state != null && state.equals(String.valueOf(METHOD_RGB));
+                if (secondaryStateValue != null && requestedSecStateValue != null) {
+                    int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
+                    int requestedColor = Integer.parseInt(requestedSecStateValue, 10);
+                    int _r = Color.red(currentColor), _g = Color.green(currentColor), _b = Color.blue(currentColor);
+                    int r = Color.red(requestedColor), g = Color.green(requestedColor), b = Color.blue(requestedColor);
+                    wasSuccess = r == _r && g == _g && b == _b;
+                }
+                if (wasSuccess) {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
                             ContextCompat.getColor(context, R.color.widgetGreen),

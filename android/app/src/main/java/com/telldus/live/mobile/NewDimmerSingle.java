@@ -147,6 +147,7 @@ public class NewDimmerSingle extends AppWidgetProvider {
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
         String deviceStateValue = DeviceWidgetInfo.getDeviceStateValue();
         deviceStateValue = deviceStateValue == "null" ? "" : deviceStateValue;
+        String requestedStateValue = DeviceWidgetInfo.getRequestedStateValue();
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -222,7 +223,10 @@ public class NewDimmerSingle extends AppWidgetProvider {
 
             if (methodRequested != null && isShowingStatus == 1) {
                 if (methodRequested.equals(String.valueOf(METHOD_DIM))) {
-                    Boolean wasSuccess = false; // TODO: Check if dim value is equal
+                    Boolean wasSuccess = state != null && state.equals(String.valueOf(METHOD_DIM));
+                    if (deviceStateValue != null && requestedStateValue != null) {
+                        wasSuccess = deviceStateValue.equals(requestedStateValue);
+                    }
                     if (wasSuccess) {
                         views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
                         views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
