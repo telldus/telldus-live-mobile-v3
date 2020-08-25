@@ -968,25 +968,6 @@ public class DevicesGroupDialogueActivity extends Activity {
         }
     }
 
-    public Integer getClosestCheckPoint(Integer value) {
-        if (value == null) {
-            return 0;
-        }
-        Integer[] checkPoints = new Integer[]{25, 50, 75};
-        Integer distOne = Math.abs(checkPoints[0] - value);
-        Integer distTwo = Math.abs(checkPoints[1] - value);
-        Integer distThree = Math.abs(checkPoints[2] - value);
-        Integer minOne = Math.min(distOne, distTwo);
-        Integer minTwo = Math.min(minOne, distThree);
-        if (minTwo == distOne) {
-            return checkPoints[0];
-        } else if (minTwo == distTwo) {
-            return checkPoints[1];
-        } else {
-            return checkPoints[2];
-        }
-    }
-
     public void createDeviceApi(final int deviceId, int method, int value, final int widgetId, final Context context) {
         PrefManager prefManager = new PrefManager(context);
         final MyDBHandler db = new MyDBHandler(context);
