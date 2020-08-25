@@ -370,6 +370,7 @@ public class CommonUtilities  {
     }
 
     public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
+        hideAllFlashIndicators(views);
 
         views.setInt(visibleFlashId, "setBackgroundResource", drawable);
         views.setViewVisibility(flashId, View.VISIBLE);
@@ -385,5 +386,33 @@ public class CommonUtilities  {
 
     public static boolean hasMethod(Map<String, Boolean> supportedMethods, String methodName) {
         return ((supportedMethods.get(methodName) != null) && supportedMethods.get(methodName));
+    }
+
+    public static void hideAllFlashIndicators(RemoteViews views) {
+        Integer[] flash_indicators = new Integer[]{
+                R.id.flashing_indicator_on,
+                R.id.flashing_indicator_off,
+                R.id.flashing_indicator_rgb,
+                R.id.flashing_indicator_dim,
+                R.id.flashing_indicator_on_off,
+                R.id.flashing_indicator_bell,
+                R.id.flashing_indicator_up,
+                R.id.flashing_indicator_down,
+                R.id.flashing_indicator_stop,
+                R.id.flashing_indicator_dim25,
+                R.id.flashing_indicator_dim50,
+                R.id.flashing_indicator_dim75,
+        };
+
+        List<Integer> list = Arrays.asList(flash_indicators);
+
+        for (int i = 0; i < list.size(); i++) {
+            int id = list.get(i);
+            views.setViewVisibility(id, View.GONE);
+        }
+    }
+
+    public static void hideFlashIndicator(RemoteViews views, int flashId) {
+        views.setViewVisibility(flashId, View.GONE);
     }
 }
