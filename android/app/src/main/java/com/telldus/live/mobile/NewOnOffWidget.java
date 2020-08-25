@@ -110,11 +110,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
             return;
         }
 
-        HashMap dim = CommonUtilities.getWidgetDimensions(appWidgetManager, appWidgetId);
-        Double width = Double.parseDouble(dim.get("width").toString());
-        Double height = Double.parseDouble(dim.get("height").toString());
-        Double ratio = width / height;
-
         int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
         int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
         int fontSizeFour = (int) (fontSize * 0.9);
@@ -726,7 +721,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
 
             if (methodRequested != null && isShowingStatus == 1) {
-                Boolean wasSuccess = state != null && state.equals(methodRequested); // TODO: Check dim value/RGB value
+                Boolean wasSuccess = state != null && state.equals(methodRequested);
                 if (methodRequested.equals(String.valueOf(METHOD_RGB))) {
                     if (secondaryStateValue != null && requestedSecStateValue != null) {
                         int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
