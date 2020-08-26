@@ -45,6 +45,8 @@ import {
 	widgetAndroidConfigure,
 	networkConnection,
 	toggleDialogueBoxState,
+	checkForInAppUpdates,
+	addInAppStatusUpdateListener,
 } from './App/Actions';
 import {
 	getTranslatableDayNames,
@@ -87,6 +89,7 @@ class App extends React.Component<Props> {
 
 	timeoutToCallCallback: any;
 	clearListenerNetWorkInfo: any;
+	clearInAppStatusUpdateListener: any;
 
 	constructor(props: Props) {
 		super(props);
@@ -105,10 +108,16 @@ class App extends React.Component<Props> {
 		this.timeoutToCallCallback = null;
 
 		this.clearListenerNetWorkInfo = null;
+
+		this.clearInAppStatusUpdateListener = null;
 	}
 
 	componentDidMount() {
 		let { dispatch, deviceId } = this.props;
+
+		this.clearInAppStatusUpdateListener = dispatch(addInAppStatusUpdateListener());
+		dispatch(checkForInAppUpdates());
+
 		AccessibilityInfo.isScreenReaderEnabled().then((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
@@ -156,6 +165,10 @@ class App extends React.Component<Props> {
 		clearTimeout(this.timeoutToCallCallback);
 		if (this.clearListenerNetWorkInfo) {
 			this.clearListenerNetWorkInfo();
+		}
+
+		if (this.clearInAppStatusUpdateListener) {
+			this.clearInAppStatusUpdateListener();
 		}
 	}
 
