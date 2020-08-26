@@ -61,6 +61,7 @@ import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.UserAPI;
 import com.telldus.live.mobile.Utility.RGBUtilities;
+import com.telldus.live.mobile.Utility.WidgetUtilities;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
@@ -113,39 +114,16 @@ public class NewRGBWidget extends AppWidgetProvider {
 
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
-
-            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.logged_out);
-            String preScript = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_one);
-            String phraseTwo = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_two);
-            view.setTextViewText(R.id.loggedOutInfoOne, preScript + ": ");
-            view.setTextViewText(R.id.loggedOutInfoEmail, userId);
-            view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
-
-            view.setTextViewTextSize(R.id.loggedOutInfoOne, COMPLEX_UNIT_SP, fontSizeSix);
-            view.setTextViewTextSize(R.id.loggedOutInfoEmail, COMPLEX_UNIT_SP, fontSizeSix);
-            view.setTextViewTextSize(R.id.loggedOutInfoTwo, COMPLEX_UNIT_SP, fontSizeSix);
-
-            appWidgetManager.updateAppWidget(appWidgetId, view);
+            RemoteViews remoteViews = WidgetUtilities.setUIWhenDifferentAccount(context, fontSizeSix, userId);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
             return;
         }
 
         Integer deviceId = DeviceWidgetInfo.getDeviceId();
         if (deviceId.intValue() == -1) {
-            iconWidth = (int) iconWidth / 2;
-            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
-            view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_device_not_found));
-            view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
-                    "info",
-                    ContextCompat.getColor(context, R.color.brightRed),
-                    iconWidth,
-                    (int) (iconWidth * 0.8),
-                    (int) (iconWidth * 0.8),
-                    context));
-
-            view.setTextViewTextSize(R.id.widgetItemRemovedInfo, COMPLEX_UNIT_SP, fontSizeFive);
-
-            appWidgetManager.updateAppWidget(appWidgetId, view);
+            RemoteViews remoteViews = WidgetUtilities.setUIWhenItemNotFound(context, fontSizeFive, iconWidth / 2);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             return;
         }
 
