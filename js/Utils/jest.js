@@ -139,3 +139,18 @@ jest.mock('axios', (): Object => {
 	});
 	return mockAxios;
 });
+
+jest.mock('sp-react-native-in-app-updates', (): Object => {
+	return class InAppUpdates {
+		constructor() {
+		}
+		addStatusUpdateListener() {
+		}
+		removeStatusUpdateListener() {
+		}
+		checkNeedsUpdate() {
+		}
+		startUpdate() {
+		}
+	};
+});
