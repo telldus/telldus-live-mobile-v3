@@ -45,6 +45,9 @@ import {
 	getEventOptions,
 	setEvent,
 } from './Events';
+import {
+	storeGeoFenceEvent,
+} from './LocalStorage';
 
 import type { ThunkAction } from './Types';
 import {
@@ -126,10 +129,12 @@ function setupGeoFence(intl: Object): ThunkAction {
 		} = geoFence.config || {};
 
 		BackgroundGeolocation.onGeofence((geofence: Object) => {
-			dispatch(debugGFOnGeofence({
+			const event = {
 				...geofence,
 				inAppTime: Date.now(),
-			}));
+			};
+			storeGeoFenceEvent(event);
+			dispatch(debugGFOnGeofence(event));
 			if (Platform.OS === 'ios' && !backgroundTimerStartedIniOS) {
 				BackgroundTimer.start();
 				backgroundTimerStartedIniOS = true;
@@ -225,6 +230,12 @@ const GeoFenceHeadlessTask = async (store: Object, event: Object): Promise<any> 
 		const {
 			uuid,
 		} = location;
+
+		const _event = {
+			...params,
+			inAppTime: Date.now(),
+		};
+		storeGeoFenceEvent(_event);
 
 		queue[uuid] = true;
 
