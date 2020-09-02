@@ -126,6 +126,8 @@ function setupGeoFence(intl: Object): ThunkAction {
 			geofenceModeHighAccuracy = true,
 			preventSuspend = false,
 			geofenceInitialTriggerEntry = false,
+			locationUpdateInterval = 1000,
+			geofenceProximityRadius = 400,
 		} = geoFence.config || {};
 
 		BackgroundGeolocation.onGeofence((geofence: Object) => {
@@ -147,6 +149,8 @@ function setupGeoFence(intl: Object): ThunkAction {
 			desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
 			geofenceInitialTriggerEntry,
 			distanceFilter,
+			locationUpdateInterval,
+			fastestLocationUpdateInterval: locationUpdateInterval,
 			// Activity Recognition
 			stopTimeout,
 			// Application config
@@ -160,6 +164,8 @@ function setupGeoFence(intl: Object): ThunkAction {
 			// Android
 			enableHeadless,
 			geofenceModeHighAccuracy,
+			geofenceProximityRadius,
+			foregroundService: true,
 			notification: {
 				smallIcon: 'drawable/icon_notif', // <-- defaults to app icon
 				largeIcon: 'drawable/icon_notif',

@@ -79,13 +79,19 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		preventSuspend = false,
 		showNotificationOnActionFail = true,
 		geofenceInitialTriggerEntry = false,
+		locationUpdateInterval = 1000,
+		geofenceProximityRadius = 400,
 	} = config;
 
 	const [ inLineEditActiveDF, setInLineEditActiveDF ] = useState();
 	const [ inLineEditActiveST, setInLineEditActiveST ] = useState();
+	const [ inLineEditActiveUI, setInLineEditActiveUI ] = useState();
+	const [ inLineEditActiveFPR, setInLineEditActiveFPR ] = useState();
 
 	const [ df, setDf ] = useState(distanceFilter);
 	const [ st, setSt ] = useState(stopTimeout);
+	const [ ui, setUi ] = useState(locationUpdateInterval);
+	const [ fpr, setFpr ] = useState(geofenceProximityRadius);
 
 	const {
 		itemsContainer,
@@ -149,12 +155,60 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		st,
 	]);
 
+	const onPressEditUI = useCallback(() => {
+		if (inLineEditActiveUI) {
+			if (!ui) {
+				return;
+			}
+			const _ui = parseInt(ui, 10);
+			if (isNaN(_ui)) {
+				return;
+			}
+			onUpdateGeoFenceConfig({
+				locationUpdateInterval: _ui,
+			});
+		}
+		setInLineEditActiveUI(!inLineEditActiveUI);
+	}, [
+		onUpdateGeoFenceConfig,
+		inLineEditActiveUI,
+		ui,
+	]);
+
+	const onPressEditFPR = useCallback(() => {
+		if (inLineEditActiveFPR) {
+			if (!fpr) {
+				return;
+			}
+			const _fpr = parseInt(fpr, 10);
+			if (isNaN(_fpr)) {
+				return;
+			}
+			onUpdateGeoFenceConfig({
+				geofenceProximityRadius: _fpr,
+			});
+		}
+		setInLineEditActiveFPR(!inLineEditActiveFPR);
+	}, [
+		onUpdateGeoFenceConfig,
+		inLineEditActiveFPR,
+		fpr,
+	]);
+
 	const onChangeTextDF = useCallback((value: string) => {
 		setDf(value);
 	}, []);
 
 	const onChangeTextST = useCallback((value: string) => {
 		setSt(value);
+	}, []);
+
+	const onChangeTextUI = useCallback((value: string) => {
+		setUi(value);
+	}, []);
+
+	const onChangeTextFPR = useCallback((value: string) => {
+		setFpr(value);
 	}, []);
 
 	const onValueChangeSOT = useCallback((value: boolean) => {
@@ -255,6 +309,40 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							onPressIconValueRight={onPressEditST}
 							onChangeText={onChangeTextST}
 							onSubmitEditing={onPressEditST}
+							appLayout={layout}
+							intl={intl}
+							type={'text'}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						<SettingsRow
+							label={'Update interval(milli secs)(Distance Filter should be 0): '}
+							value={ui}
+							iconValueRight={inLineEditActiveUI ? 'done' : 'edit'}
+							inLineEditActive={inLineEditActiveUI}
+							onPressIconValueRight={onPressEditUI}
+							onChangeText={onChangeTextUI}
+							onSubmitEditing={onPressEditUI}
+							appLayout={layout}
+							intl={intl}
+							type={'text'}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						<SettingsRow
+							label={'Fence proximity radius(in meters): '}
+							value={fpr}
+							iconValueRight={inLineEditActiveFPR ? 'done' : 'edit'}
+							inLineEditActive={inLineEditActiveFPR}
+							onPressIconValueRight={onPressEditFPR}
+							onChangeText={onChangeTextFPR}
+							onSubmitEditing={onPressEditFPR}
 							appLayout={layout}
 							intl={intl}
 							type={'text'}
@@ -399,6 +487,7 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize,
 			color: '#000',
 			justifyContent: 'center',
+			width: '80%',
 		},
 		touchableStyle: {
 			height: fontSize * 3.1,
