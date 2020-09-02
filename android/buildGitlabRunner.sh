@@ -28,7 +28,7 @@ module.exports = {
 EOF
 
 cat > gradle.properties <<EOF
-TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE=../android-signing/telldus.keystore
+TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE=../android-signing/telldus-upload.keystore
 TELLDUS_REACT_NATIVE_LOCAL_KEY_ALIAS=telldus
 TELLDUS_REACT_NATIVE_LOCAL_STORE_PASSWORD=${ANDROID_STORE_PASSWORD}
 TELLDUS_REACT_NATIVE_LOCAL_KEY_PASSWORD=${ANDROID_KEY_PASSWORD}
@@ -65,9 +65,14 @@ if [ "${DEPLOY_STORE}" == "huawei" ]; then
 	# Use react-native-hms-map instead of react-native-maps for Huawei
 	git -C ../ clone git@code.telldus.com:3rd-party/react-native-hms-map.git
 	yarn add react-native-maps@"file:./react-native-hms-map"
+
+    ./gradlew clean
+    ./gradlew assembleRelease
+else
+    ./gradlew clean
+    ./gradlew bundleRelease
 fi
 # TODO: Confirm and update the module link - "react-native-hms-map" Once it is open sourced
 # As of now it is a different module available by this name at NPM
 
-./gradlew clean
-./gradlew assembleRelease
+
