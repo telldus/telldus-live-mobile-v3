@@ -42,9 +42,8 @@ android: &android
       - android/gradle
   artifacts:
     paths:
-      - android/app/build/outputs/bundle/release/app.aab
+      - android/app/build/outputs/bundle/release/app-release.aab
       - android/app/build/outputs/apk/release/app-release.apks
-      - android/app/build/generated/assets/react/release/index.android.bundle.packager.map
       - android/app/build/outputs/apk/release/app-release.apk
       - android/sourcemap.js
     expire_in: '1 mos'
