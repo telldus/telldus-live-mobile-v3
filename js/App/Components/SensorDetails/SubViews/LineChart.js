@@ -306,7 +306,7 @@ render(): Object | null {
 				<VictoryZoomVoronoiContainer
 					labelComponent={<VictoryTooltip
 						style={{
-							textAnchor: 'left',
+							textAnchor: 'start',
 						}}
 					/>}
 					labels={this.showToolTipLabel}/>
