@@ -80,7 +80,7 @@ else
         --mode=universal \
         --bundle=app/build/outputs/bundle/release/app-release.aab \
         --output=universal.apks \
-        --ks=../android-signing/telldus-upload.keystore \
+        --ks=android-signing/telldus-upload.keystore \
         --ks-pass=pass:${ANDROID_STORE_PASSWORD} \
         --ks-key-alias=telldus \
         --key-pass=pass:${ANDROID_KEY_PASSWORD};
