@@ -660,6 +660,7 @@ class HistoryTab extends View {
 					</View>
 					<SensorHistoryLineChart
 						{...chartProps}
+						intl={intl}
 						timestamp={timestamp}
 						appLayout={appLayout}
 						showCalendar={showCalendar}

@@ -64,6 +64,7 @@ type Props = {
 	liveData: Object,
 	sensorId: number,
 
+	intl: Object,
 	dispatch: Function,
 	onToggleChartData: (Object) => void,
 	refreshHistoryDataAfterLiveUpdate: () => Promise<any>,
@@ -348,6 +349,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			isChartLoading,
 			smoothing,
 			graphView,
+			intl,
 		} = this.props;
 
 		if (chartDataOne.length === 0 && chartDataTwo.length === 0) {
@@ -398,6 +400,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			graphView,
 			setLargeYTick: this.setLargeYTick,
 			y2Tick,
+			intl,
 		};
 
 		return (

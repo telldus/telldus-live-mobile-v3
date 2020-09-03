@@ -28,7 +28,8 @@ import {
 	VictoryLine,
 	VictoryTheme,
 	VictoryScatter,
-	VictoryZoomContainer,
+	createContainer,
+	VictoryTooltip,
 } from 'victory-native';
 import moment from 'moment';
 const isEqual = require('react-fast-compare');
@@ -57,6 +58,7 @@ type Props = {
 	min: Object,
 	max: Object,
 
+	intl: Object,
 	y2Tick: string,
 	setLargeYTick: (string) => void,
 };
@@ -85,6 +87,8 @@ getYTwo: (Object) => number;
 formatYTickOne: (number) => number;
 formatYTickTwo: (number) => number;
 
+VictoryZoomVoronoiContainer: Object;
+
 constructor(props: Props) {
 	super(props);
 
@@ -100,6 +104,8 @@ constructor(props: Props) {
 	this.formatYTickTwo = this.formatYTickTwo.bind(this);
 
 	this.minyTickLength = 2;
+
+	this.VictoryZoomVoronoiContainer = createContainer('zoom', 'voronoi');
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -320,6 +326,16 @@ renderLine(d: Array<Object>, i: number, styles: Object): null | Object {
 	/>);
 }
 
+showToolTipLabel = (data: Object): string => {
+	const {
+		datum,
+	} = data;
+	const {
+		intl,
+	} = this.props;
+	return `date:${intl.formatDate(moment.unix(datum.ts))}\nvalue: ${datum.value}`;
+}
+
 render(): Object | null {
 	const {
 		chartDataOne,
@@ -356,6 +372,10 @@ render(): Object | null {
 	const lineOne = this.renderLine(chartDataOne, 0, others);
 	const lineTwo = this.renderLine(chartDataTwo, 1, others);
 
+	const {
+		VictoryZoomVoronoiContainer,
+	} = this;
+
 	return (
 		<VictoryChart
 			theme={VictoryTheme.material}
@@ -363,7 +383,13 @@ render(): Object | null {
 			padding={chartPadding}
 			domainPadding={{ y: domainPadding, x: 20 }}
 			containerComponent={
-				<VictoryZoomContainer/>
+				<VictoryZoomVoronoiContainer
+					labelComponent={<VictoryTooltip
+						style={{
+							textAnchor: 'left',
+						}}
+					/>}
+					labels={this.showToolTipLabel}/>
 			}
 			{...dependentConfigs}
 		>
