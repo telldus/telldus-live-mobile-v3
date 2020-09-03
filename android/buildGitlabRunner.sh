@@ -71,6 +71,19 @@ if [ "${DEPLOY_STORE}" == "huawei" ]; then
 else
     ./gradlew clean
     ./gradlew bundleRelease
+
+    # Download bundletool
+    curl -O -L "https://github.com/google/bundletool/releases/download/1.2.0/bundletool-all-1.2.0.jar"
+
+    # Use bundletool to create universal .apks zip
+    java -jar bundletool-all-1.2.0.jar build-apks \
+        --mode=universal \
+        --bundle=app/build/outputs/bundle/release/app-release.aab \
+        --output=universal.apks \
+        --ks=../android-signing/telldus-upload.keystore \
+        --ks-pass=pass:${ANDROID_STORE_PASSWORD} \
+        --ks-key-alias=telldus \
+        --key-pass=pass:${ANDROID_KEY_PASSWORD};
 fi
 # TODO: Confirm and update the module link - "react-native-hms-map" Once it is open sourced
 # As of now it is a different module available by this name at NPM
