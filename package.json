@@ -62,7 +62,7 @@
     "react-native": "0.62.2",
     "react-native-accessibility": "git+https://github.com/MaxToyberman/react-native-accessibility.git#319008ffbfd9115cf520a718f3dfc88381161313",
     "react-native-background-fetch": "^3.1.0",
-    "react-native-background-geolocation": "^3.8.1",
+    "react-native-background-geolocation": "^3.9.0",
     "react-native-background-timer": "^2.3.1",
     "react-native-cached-image": "https://github.com/telldus/react-native-cached-image.git",
     "react-native-calendars": "~1.302.0",
