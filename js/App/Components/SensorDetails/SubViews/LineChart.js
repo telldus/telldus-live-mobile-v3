@@ -39,8 +39,11 @@ import { View } from '../../../../BaseComponents';
 import {
 	getTickConfigY,
 } from '../../../Lib/chartUtils';
+import capitalize from '../../../Lib/capitalize';
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 type Props = {
 	chartDataOne: Array<Object>,
@@ -260,7 +263,12 @@ showToolTipLabel = (data: Object): string => {
 	const {
 		intl,
 	} = this.props;
-	return `date:${intl.formatDate(moment.unix(datum.ts))}\nvalue: ${datum.value}`;
+	const {
+		formatDate,
+		formatTime,
+		formatMessage,
+	} = intl;
+	return `${capitalize(formatMessage(i18n.date))}: ${formatDate(moment.unix(datum.ts))}\n${capitalize(formatMessage(i18n.time))}: ${formatTime(moment.unix(datum.ts))}\n${capitalize(formatMessage(i18n.labelValue))}: ${datum.value}`;
 }
 
 render(): Object | null {
