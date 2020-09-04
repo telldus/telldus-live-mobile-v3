@@ -58,6 +58,8 @@ import {
 import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
+
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
@@ -383,12 +385,12 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				[
 					<View style={actionSheetButtonOneCover}>
 						<Text style={actionSheetButtonOne}>
-							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.logIntoExisting))}
+							{capitalize(formatMessage(i18n.logIntoExisting))}
 						</Text>
 					</View>,
 					<View style={actionSheetButtonTwoCover}>
 						<Text style={actionSheetButtonTwo}>
-							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.createNewAccount))}
+							{capitalize(formatMessage(i18n.createNewAccount))}
 						</Text>
 					</View>,
 				]
