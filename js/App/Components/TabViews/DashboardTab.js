@@ -31,12 +31,12 @@ import {
 	Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {
 	Text,
 	View,
 	EmptyView,
+	Icon,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
@@ -288,7 +288,10 @@ class DashboardTab extends View {
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}>
-				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
+				<Icon
+					name={'star'}
+					size={style.starIconSize}
+					level={7}/>
 				<Text
 					level={4}
 					style={style.noItemsTitle}>

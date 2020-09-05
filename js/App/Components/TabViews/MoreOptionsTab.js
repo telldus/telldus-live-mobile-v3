@@ -32,7 +32,6 @@ import {
 	useSelector,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	RippleButton,
@@ -41,6 +40,7 @@ import {
 	FormattedMessage,
 	PosterWithText,
 	View,
+	ThemedMaterialIcon,
 } from '../../../BaseComponents';
 
 import {
@@ -124,9 +124,10 @@ const MoreOptionsTab = (props: Props): Object => {
 				enable: true,
 			},
 			{
-				iconComponent: <MaterialIcons
+				iconComponent: <ThemedMaterialIcon
 					style={iconStyle}
-					name={'group-add'}/>,
+					name={'group-add'}
+					level={7}/>,
 				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.switchOrAddAccount)),
 				onPress: performAddOrSwitch,
 				enable: true,
@@ -146,9 +147,10 @@ const MoreOptionsTab = (props: Props): Object => {
 				enable: true,
 			},
 			{
-				iconComponent: <MaterialIcons
+				iconComponent: <ThemedMaterialIcon
 					style={iconStyle}
-					name={'location-on'}/>,
+					name={'location-on'}
+					level={7}/>,
 				textIntl: i18n.Geofencing,
 				onPress: () => {
 					navigation.navigate('GeoFenceNavigator');
@@ -179,9 +181,14 @@ const MoreOptionsTab = (props: Props): Object => {
 					<RippleButton
 						level={2}
 						style={rowCoverStyle} onPress={onPress} key={`${i}`}>
-						{!!icon && <IconTelldus style={iconStyle} icon={icon}/>}
+						{!!icon && <IconTelldus
+							level={7}
+							style={iconStyle}
+							icon={icon}/>}
 						{!!iconComponent && iconComponent}
-						<Text style={labelStyle}>
+						<Text
+							level={7}
+							style={labelStyle}>
 							{!!text && text}
 							{!!textIntl && <FormattedMessage {...textIntl} style={labelStyle}/>}
 						</Text>
@@ -221,7 +228,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		brandSecondary,
 		shadow,
 	} = Theme.Core;
 
@@ -249,13 +255,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		iconStyle: {
 			fontSize: fontSizeText * 1.2,
-			color: brandSecondary,
 			marginRight: 15,
 			textAlign: 'left',
 		},
 		labelStyle: {
 			fontSize: fontSizeText,
-			color: brandSecondary,
 		},
 	};
 };

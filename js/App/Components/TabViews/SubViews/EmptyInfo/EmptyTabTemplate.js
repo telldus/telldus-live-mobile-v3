@@ -74,7 +74,10 @@ const EmptyTabTemplate = (props: Props): Object => {
 			style={{
 				flex: 1,
 			}}>
-			{!!icon && <IconTelldus icon={icon} style={iconStyle}/>}
+			{!!icon && <IconTelldus
+				level={7}
+				icon={icon}
+				style={iconStyle}/>}
 			{!!headerText && <Text
 				level={4}
 				style={headerStyle}>
@@ -137,7 +140,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		iconStyle: {
 			fontSize: Math.floor(deviceWidth * 0.12),
-			color: Theme.Core.brandSecondary,
 			marginBottom: 15,
 		},
 	};
