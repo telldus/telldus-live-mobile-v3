@@ -282,7 +282,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					navigation={navigation}/>}
 				{enable && (
 					<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
-						<Text style={redeemTextSyle}>
+						<Text
+							level={7}
+							style={redeemTextSyle}>
 							{formatMessage(i18n.viewPurchaseHistory)}
 						</Text>
 					</TouchableOpacity>
@@ -290,8 +292,13 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				{enable && (
 					<TouchableOpacity onPress={onPressRedeemGift}>
 						<View style={redeemCoverStyle}>
-							<IconTelldus icon={'gift'} style={redeemIconStyle}/>
-							<Text style={redeemTextSyle}>
+							<IconTelldus
+								icon={'gift'}
+								style={redeemIconStyle}
+								level={7}/>
+							<Text
+								level={7}
+								style={redeemTextSyle}>
 								{capitalize(formatMessage(i18n.redeemCard))}
 							</Text>
 						</View>
@@ -384,11 +391,9 @@ const getStyles = (appLayout: Object, {
 		},
 		redeemTextSyle: {
 			fontSize: fontSize * 0.9,
-			color: Theme.Core.brandSecondary,
 		},
 		redeemIconStyle: {
 			fontSize: fontSize,
-			color: Theme.Core.brandSecondary,
 			marginRight: 5,
 		},
 	};

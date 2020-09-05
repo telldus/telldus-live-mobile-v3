@@ -38,7 +38,6 @@ import {
 } from '../../../Hooks/App';
 
 import i18n from '../../../Translations/common';
-import Theme from '../../../Theme';
 
 import { toggleVisibilityEula } from '../../../Actions/User';
 
@@ -67,7 +66,10 @@ const EulaLink = (props: Object): Object => {
 	}
 
 	return (
-		<Text onPress={onPressEula} style={buttonResubmit}>
+		<Text
+			level={7}
+			onPress={onPressEula}
+			style={buttonResubmit}>
 			{formatMessage(i18n.eula)}
 		</Text>
 	);
@@ -82,7 +84,6 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		buttonResubmit: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.brandSecondary,
 			alignSelf: 'center',
 			paddingVertical: 5,
 			marginBottom: fontSize / 2,

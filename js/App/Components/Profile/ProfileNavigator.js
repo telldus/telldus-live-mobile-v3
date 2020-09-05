@@ -48,12 +48,12 @@ const ScreenConfigs = [
 		name: 'AppTab',
 		Component: AppTab,
 		options: {
-			tabBarLabel: ({color}: Object): Object => {
+			tabBarLabel: ({color, focused}: Object): Object => {
 				return (
 					<TabBar
 						icon="phone"
-						tintColor={color}
 						label={i18n.labelApp}
+						focused={focused}
 						accessibilityLabel={i18n.labelAccessibleAppTab}/>
 				);
 			},
@@ -63,12 +63,12 @@ const ScreenConfigs = [
 		name: 'ProfileTab',
 		Component: ProfileTab,
 		options: {
-			tabBarLabel: ({color}: Object): Object => {
+			tabBarLabel: ({color, focused}: Object): Object => {
 				return (
 					<TabBar
 						icon="user"
-						tintColor={color}
 						label={i18n.labelProfile}
+						focused={focused}
 						accessibilityLabel={i18n.labelAccessibleProfileTab}/>
 				);
 			},
@@ -78,12 +78,12 @@ const ScreenConfigs = [
 		name: 'SupportTab',
 		Component: SupportTab,
 		options: {
-			tabBarLabel: ({color}: Object): Object => {
+			tabBarLabel: ({color, focused}: Object): Object => {
 				return (
 					<TabBar
 						icon="faq"
-						tintColor={color}
 						label={i18n.userHelp}
+						focused={focused}
 						accessibilityLabel={i18n.labelAccessibleSupportTab}/>
 				);
 			},

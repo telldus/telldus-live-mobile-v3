@@ -155,13 +155,17 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 						}]}/>
 					<View style={tweetTextCover}>
 						<Text>
-							<Text style={tweetDateStyle}>
+							<Text
+								level={7}
+								style={tweetDateStyle}>
 								{formatDate(created_at)}
 							</Text>
 							<Text style={Theme.Styles.hiddenText}>
 								{'.'}
 							</Text>
-							<Text style={tweetDateStyle}>
+							<Text
+								level={7}
+								style={tweetDateStyle}>
 								{formatTime(created_at)}
 							</Text>
 						</Text>
@@ -245,7 +249,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		tweetDateStyle: {
 			fontSize: fontSize * 0.9,
-			color: Theme.Core.brandSecondary,
 		},
 	};
 };

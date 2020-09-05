@@ -111,7 +111,10 @@ const SMSBlock = (props: Object): Object => {
 					textFieldStyle={textFieldStyle}
 					labelTextStyle={labelTextStyle}/>
 			</View>
-			<Text style={linkTextStyle} onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
+			<Text
+				level={7}
+				style={linkTextStyle}
+				onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
 		</>
 	);
 };
@@ -131,7 +134,6 @@ const getStyle = (appLayout: Object): Object => {
 			marginTop: padding / 2,
 			alignSelf: 'center',
 			fontSize: fontSize * 0.9,
-			color: Theme.Core.brandSecondary,
 			textAlignVertical: 'center',
 			textAlign: 'center',
 			padding: 5,

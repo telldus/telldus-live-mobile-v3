@@ -103,8 +103,13 @@ const HelpAndSupportBlock = (props: Object): Object => {
 						style={[coverTwoStyle, {
 							marginLeft: i === 0 ? 0 : padding / 2,
 						}]}>
-						<IconTelldus icon={icon} style={iconStyle}/>
-						<Text style={textStyle}>
+						<IconTelldus
+							level={7}
+							icon={icon}
+							style={iconStyle}/>
+						<Text
+							level={7}
+							style={textStyle}>
 							{text}
 						</Text>
 					</View>
@@ -119,7 +124,9 @@ const HelpAndSupportBlock = (props: Object): Object => {
 			<View
 				level={2}
 				style={coverOneStyle}>
-				<Text style={titleStyle}>
+				<Text
+					level={7}
+					style={titleStyle}>
 					{formatMessage(i18n.labelHelpAndSupport)}
 				</Text>
 				<Text
@@ -157,7 +164,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			fontSize: fontSize * 1.4,
-			color: Theme.Core.brandSecondary,
 			textAlign: 'center',
 		},
 		bodyStyle: {
@@ -178,12 +184,10 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		iconStyle: {
 			fontSize: fontSize * 3.4,
-			color: Theme.Core.brandSecondary,
 			textAlign: 'center',
 		},
 		textStyle: {
 			fontSize,
-			color: Theme.Core.brandSecondary,
 			textAlign: 'center',
 			fontWeight: 'bold',
 			marginTop: 5,
