@@ -50,7 +50,7 @@ const SafeAreaViewComponent = (props: Props): Object => {
 		children,
 		onLayout,
 		backgroundColor = colors.screenBackground,
-		safeAreaBackgroundColor = colors.primary,
+		safeAreaBackgroundColor = colors.safeAreaBG,
 		...otherProperties
 	} = props;
 

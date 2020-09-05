@@ -400,13 +400,18 @@ const HeaderComponent = (props: Props): Object => {
 	}, [appLayout]);
 
 	return (
-		<View style={{ flex: 0 }}>
+		<View
+			style={{ flex: 0 }}>
 			{
 				(!forceHideStatus && Platform.OS === 'android' && hasStatusBar) ? (
-					<View style={statusBar}/>
+					<View
+						level={11}
+						style={statusBar}/>
 				) : null
 			}
-			<View style={[navbar, style]}>
+			<View
+				level={11}
+				style={[navbar, style]}>
 				{!!leftButton && renderLeftButton(leftButton)}
 				{renderChildren()}
 				{showAttentionCapture && renderRightButtonAttentionCapture()}
@@ -427,7 +432,6 @@ const getStyles = (appLayout: Object, {
 
 	const {
 		navBarTopPadding: paddingTop,
-		toolbarDefaultBg,
 		toolbarHeight,
 		toolbarInputColor,
 		headerButtonHorizontalPadding,
@@ -437,7 +441,6 @@ const getStyles = (appLayout: Object, {
 
 	return {
 		navbar: {
-			backgroundColor: toolbarDefaultBg,
 			justifyContent: (!Array.isArray(children)) ? 'center' : 'space-between',
 			flexDirection: 'row',
 			alignItems: 'center',
@@ -448,7 +451,6 @@ const getStyles = (appLayout: Object, {
 		},
 		statusBar: {
 			height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-			backgroundColor: toolbarDefaultBg,
 		},
 		logoImage: {
 			width: deviceWidth * 0.307333333,
