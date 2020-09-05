@@ -93,6 +93,9 @@ const getBGColor = (props: Object): ?string => {
 		case 10: {
 			return colors.danger;
 		}
+		case 11: {
+			return colors.safeAreaBG;
+		}
 		default:
 			return 'transparent';
 	}

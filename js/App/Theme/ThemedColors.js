@@ -40,6 +40,9 @@ const common = {
 export default {
 	light: {
 		...common,
+		get safeAreaBG() {
+			return Core.brandPrimary;
+		},
 		get text() {
 			return '#A59F9A';
 		},
@@ -194,17 +197,20 @@ export default {
 
 	dark: {
 		...common,
+		get safeAreaBG() {
+			return Core.grayPrimary;
+		},
 		get text() {
 			return '#A59F9A';
 		},
 		get textTwo() {
-			return '#fff';
+			return Core.textColorValue;
 		},
 		get textThree() {
-			return '#fff';
+			return Core.textColorLabel;
 		},
 		get textFour() {
-			return '#fff';
+			return Core.textColorValue;
 		},
 		get textFive() {
 			return '#fff';
@@ -225,22 +231,22 @@ export default {
 			return '#000';
 		},
 		get card() {
-			return '#000';
+			return Core.grayPrimary;
 		},
 		get screenBackground() {
-			return '#777777';
+			return Core.screenBGDark;
 		},
 		get backgroundColorOne() {
 			return '#777777';
 		},
 		get activeTintOne() {
-			return Core.brandSecondary;
+			return Core.brandSecondaryShadeOne;
 		},
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
 		},
 		get thumbColorActiveSwitch() {
-			return Core.brandSecondary;
+			return Core.brandSecondaryShadeOne;
 		},
 		get thumbColorInActiveSwitch() {
 			return Core.inactiveSwitch;
@@ -255,7 +261,7 @@ export default {
 			return '#f5f5f5';
 		},
 		get headerOneColorBlockEnabled() {
-			return Core.brandSecondary;
+			return Core.brandSecondaryShadeOne;
 		},
 		get headerOneColorBlockDisabled() {
 			return '#999999';
@@ -279,13 +285,13 @@ export default {
 			return Core.rowTextColor;
 		},
 		get headerIconColorBlock() {
-			return Core.brandSecondary;
+			return Core.brandSecondaryShadeOne;
 		},
 		get colorTimeExpired() {
 			return '#990000';
 		},
 		get footerPrimary() {
-			return Core.brandSecondary;
+			return Core.brandSecondaryShadeOne;
 		},
 		get footerSecondary() {
 			return '#000';
@@ -294,7 +300,7 @@ export default {
 			return '#fff';
 		},
 		get backgroundOneButtonEnabled() {
-			return Core.brandSecondary;
+			return Core.brandSecondaryShadeOne;
 		},
 		get backgroundOneButtonDisabled() {
 			return '#b5b5b5';
@@ -309,7 +315,7 @@ export default {
 			return '#ffffff';
 		},
 		get checkBoxIconActiveOne() {
-			return Core.brandSecondary;
+			return Core.brandSecondaryShadeOne;
 		},
 		get checkBoxIconInactiveOne() {
 			return 'transparent';
@@ -321,7 +327,7 @@ export default {
 			return 'transparent';
 		},
 		get checkBoxIconBorderActiveOne() {
-			return Core.brandSecondary;
+			return Core.brandSecondaryShadeOne;
 		},
 		get checkBoxIconBorderInactiveOne() {
 			return '#ffffff';
@@ -342,7 +348,7 @@ export default {
 			return this.textTwo;
 		},
 		get posterBG() {
-			return Core.brandDanger;
+			return Core.brandSecondaryShadeOne;
 		},
 	},
 };

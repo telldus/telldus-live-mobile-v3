@@ -63,6 +63,13 @@ export default {
 		return (Platform.OS === 'ios') ? 0 : 10;
 	},
 
+	grayPrimary: '#2E2E2E',
+	screenBGDark: '#121212',
+	brandSecondaryShadeOne: '#FFA450',
+
+	textColorLabel: '#E4E4E4',
+	textColorValue: '#ABABAB',
+
 	appBackground: '#eeeeee',
 	sectionTextColor: '#8e8e93',
 	rowTextColor: '#8e8e93',
