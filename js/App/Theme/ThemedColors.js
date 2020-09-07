@@ -202,6 +202,27 @@ export default {
 		get colorOffActiveBg() {
 			return Core.brandPrimary;
 		},
+		get colorOnInActiveBg() {
+			return '#eeeeee';
+		},
+		get colorOffInActiveBg() {
+			return '#eeeeee';
+		},
+		get colorOnActiveIcon() {
+			return '#FFFFFF';
+		},
+		get colorOffActiveIcon() {
+			return '#FFFFFF';
+		},
+		get colorOnInActiveIcon() {
+			return Core.brandSecondary;
+		},
+		get colorOffInActiveIcon() {
+			return Core.brandPrimary;
+		},
+		get inAppBrandSecondary() {
+			return Core.brandSecondary;
+		},
 	},
 
 	dark: {
@@ -363,10 +384,31 @@ export default {
 			return Core.textColorLabel;
 		},
 		get colorOnActiveBg() {
-			return Core.brandSecondaryShadeOne;
+			return '#FFA450';
 		},
 		get colorOffActiveBg() {
-			return Core.colorOffActiveBg;
+			return '#607D8B';
+		},
+		get colorOnInActiveBg() {
+			return '#424242';
+		},
+		get colorOffInActiveBg() {
+			return '#424242';
+		},
+		get colorOnActiveIcon() {
+			return '#FFFFFF';
+		},
+		get colorOffActiveIcon() {
+			return '#FFFFFF';
+		},
+		get colorOnInActiveIcon() {
+			return '#FFA450';
+		},
+		get colorOffInActiveIcon() {
+			return '#607D8B';
+		},
+		get inAppBrandSecondary() {
+			return '#FFA450';
 		},
 	},
 };
