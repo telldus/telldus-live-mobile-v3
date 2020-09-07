@@ -41,7 +41,6 @@ import {
 	shouldUpdate,
 } from '../../../Lib';
 
-import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {

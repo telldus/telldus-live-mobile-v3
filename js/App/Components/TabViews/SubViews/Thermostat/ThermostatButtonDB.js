@@ -27,10 +27,6 @@ import { View } from '../../../../../BaseComponents';
 import HeatInfoBlock from './HeatInfoBlock';
 
 import {
-	withTheme,
-} from '../../../HOC/withTheme';
-
-import {
 	shouldUpdate,
 } from '../../../../Lib';
 

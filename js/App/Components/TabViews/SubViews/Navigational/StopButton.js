@@ -25,12 +25,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { IconTelldus, View } from '../../../../../BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
 import { deviceSetState } from '../../../../Actions/Devices';
-import Theme from '../../../../Theme';
 
 import {
 	withTheme,
