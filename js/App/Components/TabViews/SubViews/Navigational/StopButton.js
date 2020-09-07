@@ -32,6 +32,10 @@ import i18n from '../../../../Translations/common';
 import { deviceSetState } from '../../../../Actions/Devices';
 import Theme from '../../../../Theme';
 
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
+
 type Props = {
 	device: Object,
 	commandStop: number,
@@ -51,6 +55,9 @@ type Props = {
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class StopButton extends View {
@@ -96,14 +103,26 @@ class StopButton extends View {
 		const noop = function () {
 		};
 
-		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style, local, disableActionIndicator } = this.props;
+		let {
+			isGatewayActive,
+			supportedMethod,
+			isInState,
+			name,
+			methodRequested,
+			iconSize,
+			style,
+			local,
+			disableActionIndicator,
+			colors,
+		} = this.props;
+
+		const styles = getStyles({colors});
 
 		let stopButtonStyle = !isGatewayActive ?
 			(isInState === 'STOP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'STOP' ? styles.enabledBackgroundStop : styles.disabledBackground);
 		let stopIconColor = !isGatewayActive ?
-			(isInState === 'STOP' ? '#fff' : '#a2a2a2') : (isInState === 'STOP' ? '#fff' : Theme.Core.brandPrimary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			(isInState === 'STOP' ? '#fff' : '#a2a2a2') : (isInState === 'STOP' ? '#fff' : colors.colorHighLightOffGroup);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
 
 		return (
 			<TouchableOpacity
@@ -133,36 +152,44 @@ StopButton.defaultProps = {
 	disableActionIndicator: false,
 };
 
-const styles = StyleSheet.create({
-	navigationButton: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	enabled: {
-		color: '#1a355b',
-	},
-	enabledBackground: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	disabledBackground: {
-		backgroundColor: '#eeeeee',
-	},
-	enabledBackgroundStop: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	offlineBackground: {
-		backgroundColor: '#a2a2a2',
-	},
-	disabled: {
-		color: '#eeeeee',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorHighLightOnGroup,
+		colorHighLightOffGroup,
+	} = colors;
+
+	return {
+		navigationButton: {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		enabled: {
+			color: '#1a355b',
+		},
+		enabledBackground: {
+			backgroundColor: colorHighLightOnGroup,
+		},
+		disabledBackground: {
+			backgroundColor: '#eeeeee',
+		},
+		enabledBackgroundStop: {
+			backgroundColor: colorHighLightOffGroup,
+		},
+		offlineBackground: {
+			backgroundColor: '#a2a2a2',
+		},
+		disabled: {
+			color: '#eeeeee',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
@@ -170,4 +197,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(StopButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(StopButton));

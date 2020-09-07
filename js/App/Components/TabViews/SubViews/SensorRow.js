@@ -40,6 +40,10 @@ import LastUpdatedInfo from './Sensor/LastUpdatedInfo';
 import i18n from '../../../Translations/common';
 
 import {
+	withTheme,
+} from '../../HOC/withTheme';
+
+import {
 	formatLastUpdated,
 	checkIfLarge,
 	shouldUpdate,
@@ -62,6 +66,10 @@ type Props = {
 
 	isNew: boolean,
 	gatewayId: string,
+
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
@@ -144,8 +152,15 @@ class SensorRow extends View<Props, State> {
 			}
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-				'appLayout', 'sensor', 'isGatewayActive', 'defaultType', 'isLast',
-				'isNew', 'gatewayId',
+				'appLayout',
+				'sensor',
+				'isGatewayActive',
+				'defaultType',
+				'isLast',
+				'isNew',
+				'gatewayId',
+				'themeInApp',
+				'colorScheme',
 			]);
 			if (propsChange) {
 				return true;
@@ -366,7 +381,14 @@ class SensorRow extends View<Props, State> {
 	}
 
 	getStyles(): Object {
-		const { appLayout, isGatewayActive, sensor = {}, isLast, isNew } = this.props;
+		const {
+			appLayout,
+			isGatewayActive,
+			sensor = {},
+			isLast,
+			isNew,
+			colors,
+		} = this.props;
 		const { data = {} } = sensor;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -380,13 +402,17 @@ class SensorRow extends View<Props, State> {
 			brandSecondary,
 		} = Theme.Core;
 
+		const {
+			colorHighLightOffGroup,
+		} = colors;
+
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
 		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
+		let backgroundColor = isGatewayActive ? colorHighLightOffGroup : Theme.Core.offlineColor;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const widthValueBlock = (buttonWidth * 2) + 6;
@@ -452,7 +478,7 @@ class SensorRow extends View<Props, State> {
 				borderRadius: 25,
 				width: 25,
 				height: 25,
-				backgroundColor: backgroundColor,
+				backgroundColor,
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginHorizontal: 5,
@@ -518,4 +544,4 @@ class SensorRow extends View<Props, State> {
 	}
 }
 
-module.exports = SensorRow;
+module.exports = withTheme(SensorRow);

@@ -28,6 +28,10 @@ const isEqual = require('react-fast-compare');
 
 import shouldUpdate from '../../../Lib/shouldUpdate';
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
@@ -45,6 +49,9 @@ type Props = {
 	onButtonColor?: string,
 	iconOnColor?: string,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 type State = {
@@ -78,7 +85,7 @@ class DimmerOnButton extends View {
 			return true;
 		}
 		const propsChange = shouldUpdate(this.props, nextProps, [
-			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local', 'onButtonColor', 'iconOnColor',
+			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local', 'onButtonColor', 'iconOnColor', 'themeInApp', 'colorScheme',
 		]);
 		if (propsChange) {
 			return true;
@@ -106,7 +113,11 @@ class DimmerOnButton extends View {
 			onButtonColor,
 			iconOnColor,
 			disableActionIndicator,
+			colors,
 		} = this.props;
+
+		const styles = getStyles({colors});
+
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNON' ? styles.offline : styles.disabled) :
@@ -114,8 +125,8 @@ class DimmerOnButton extends View {
 				(isInState === 'TURNON' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
 			(isInState === 'TURNON' ? '#fff' : '#a2a2a2') :
-			iconOnColor ? iconOnColor : (isInState === 'TURNON' ? '#fff' : Theme.Core.brandSecondary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			iconOnColor ? iconOnColor : (isInState === 'TURNON' ? '#fff' : colors.colorHighLightOnGroup);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
 
 		return (
 			<View
@@ -141,41 +152,48 @@ class DimmerOnButton extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	enabled: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	disabled: {
-		backgroundColor: '#eeeeee',
-	},
-	offline: {
-		backgroundColor: '#a2a2a2',
-	},
-	textEnabled: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		color: 'green',
-	},
-	textDisabled: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		color: '#a2a2a2',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-	button: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorHighLightOnGroup,
+	} = colors;
+
+	return {
+		enabled: {
+			backgroundColor: colorHighLightOnGroup,
+		},
+		disabled: {
+			backgroundColor: '#eeeeee',
+		},
+		offline: {
+			backgroundColor: '#a2a2a2',
+		},
+		textEnabled: {
+			textAlign: 'center',
+			textAlignVertical: 'center',
+			color: 'green',
+		},
+		textDisabled: {
+			textAlign: 'center',
+			textAlignVertical: 'center',
+			color: '#a2a2a2',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+		button: {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+	};
+};
 
 DimmerOnButton.defaultProps = {
 	enabled: true,
 	disableActionIndicator: false,
 };
 
-module.exports = DimmerOnButton;
+module.exports = withTheme(DimmerOnButton);

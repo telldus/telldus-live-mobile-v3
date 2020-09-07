@@ -27,6 +27,10 @@ import { View } from '../../../../../BaseComponents';
 import HeatInfoBlock from './HeatInfoBlock';
 
 import {
+	withTheme,
+} from '../../../HOC/withTheme';
+
+import {
 	shouldUpdate,
 } from '../../../../Lib';
 
@@ -38,6 +42,10 @@ type Props = {
 	showStopButton?: boolean,
 	isOpen: boolean,
 	currentTemp?: number,
+
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	style: Object,
 	intl: Object,
@@ -94,6 +102,8 @@ class ThermostatButton extends View<Props, State> {
 			'isOpen',
 			'currentTemp',
 			'onPressOverride',
+			'colorScheme',
+			'themeInApp',
 		]);
 		if (propsChange) {
 			return true;
@@ -124,6 +134,7 @@ class ThermostatButton extends View<Props, State> {
 			infoBlockStyle,
 			style,
 			disableActionIndicator,
+			colors,
 		} = this.props;
 
 		const { stateValues = {} } = device;
@@ -151,7 +162,7 @@ class ThermostatButton extends View<Props, State> {
 			disableActionIndicator={disableActionIndicator}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
-			mode === 'off' ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			mode === 'off' ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
 
 		return (
 			<View style={style}>
@@ -171,21 +182,11 @@ const styles = StyleSheet.create({
 		padding: 3,
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
-		backgroundColor: Theme.Core.brandSecondary,
 	},
 	buttonCommon: {
 		height: Theme.Core.rowHeight,
 		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	itemIconContainerOn: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	itemIconContainerOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
 	},
 	iconStyle: {
 		fontSize: 30,
@@ -214,4 +215,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ThermostatButton;
+export default withTheme(ThermostatButton);

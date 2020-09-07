@@ -25,12 +25,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { IconTelldus, View } from '../../../../../BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
 import { deviceSetState } from '../../../../Actions/Devices';
-import Theme from '../../../../Theme';
+
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
 
 type Props = {
 	commandDown: number,
@@ -50,6 +53,9 @@ type Props = {
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class DownButton extends View {
@@ -95,15 +101,26 @@ class DownButton extends View {
 		const noop = function () {
 		};
 
-		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style, local, disableActionIndicator } = this.props;
+		let {
+			isGatewayActive,
+			supportedMethod,
+			isInState,
+			name,
+			methodRequested,
+			iconSize,
+			style,
+			local,
+			disableActionIndicator,
+			colors,
+		} = this.props;
 
+		const styles = getStyles({colors});
 
 		let downButtonStyle = !isGatewayActive ?
 			(isInState === 'DOWN' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'DOWN' ? styles.enabledBackground : styles.disabledBackground);
 		let downIconColor = !isGatewayActive ?
-			(isInState === 'DOWN' ? '#fff' : '#a2a2a2') : (isInState === 'DOWN' ? '#fff' : Theme.Core.brandSecondary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			(isInState === 'DOWN' ? '#fff' : '#a2a2a2') : (isInState === 'DOWN' ? '#fff' : colors.colorHighLightOnGroup);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
 
 		return (
 			<TouchableOpacity
@@ -131,31 +148,39 @@ DownButton.defaultProps = {
 	disableActionIndicator: false,
 };
 
-const styles = StyleSheet.create({
-	enabled: {
-		color: '#1a355b',
-	},
-	enabledBackground: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	disabledBackground: {
-		backgroundColor: '#eeeeee',
-	},
-	enabledBackgroundStop: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	offlineBackground: {
-		backgroundColor: '#a2a2a2',
-	},
-	disabled: {
-		color: '#eeeeee',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorHighLightOnGroup,
+		colorHighLightOffGroup,
+	} = colors;
+
+	return {
+		enabled: {
+			color: '#1a355b',
+		},
+		enabledBackground: {
+			backgroundColor: colorHighLightOnGroup,
+		},
+		disabledBackground: {
+			backgroundColor: '#eeeeee',
+		},
+		enabledBackgroundStop: {
+			backgroundColor: colorHighLightOffGroup,
+		},
+		offlineBackground: {
+			backgroundColor: '#a2a2a2',
+		},
+		disabled: {
+			color: '#eeeeee',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
@@ -163,4 +188,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(DownButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(DownButton));

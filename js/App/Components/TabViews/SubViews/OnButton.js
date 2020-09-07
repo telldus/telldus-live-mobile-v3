@@ -27,6 +27,10 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
@@ -50,6 +54,9 @@ type Props = {
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class OnButton extends View {
@@ -101,13 +108,17 @@ class OnButton extends View {
 			local,
 			actionIcon,
 			disableActionIndicator,
+			colors,
 		} = this.props;
+
+		const styles = getStyles({colors});
+
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState !== 'TURNOFF' ? styles.offline : styles.disabled) : (isInState !== 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
-			(isInState !== 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState !== 'TURNOFF' ? '#fff' : Theme.Core.brandSecondary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			(isInState !== 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState !== 'TURNOFF' ? '#fff' : colors.colorHighLightOnGroup);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
 
 		const iconName = actionIcon ? actionIcon : 'on';
 
@@ -129,36 +140,37 @@ class OnButton extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	enabled: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	disabled: {
-		backgroundColor: '#eeeeee',
-	},
-	offline: {
-		backgroundColor: '#a2a2a2',
-	},
-	textEnabled: {
-		color: '#fff',
-	},
-	textDisabled: {
-		color: Theme.Core.brandSecondary,
-	},
-	button: {
-		alignItems: 'stretch',
-		justifyContent: 'center',
-	},
-	buttonText: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorHighLightOnGroup,
+	} = colors;
+
+	return {
+		enabled: {
+			backgroundColor: colorHighLightOnGroup,
+		},
+		disabled: {
+			backgroundColor: '#eeeeee',
+		},
+		offline: {
+			backgroundColor: '#a2a2a2',
+		},
+		button: {
+			alignItems: 'stretch',
+			justifyContent: 'center',
+		},
+		buttonText: {
+			textAlign: 'center',
+			textAlignVertical: 'center',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 OnButton.defaultProps = {
 	enabled: true,
 	command: 1,
@@ -173,4 +185,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(OnButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(OnButton));

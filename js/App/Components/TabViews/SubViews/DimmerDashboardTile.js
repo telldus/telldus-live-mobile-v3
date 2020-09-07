@@ -295,15 +295,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		borderBottomRightRadius: 2,
 	},
-	itemIconContainerOn: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	itemIconContainerOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
-	},
 	iconStyle: {
 		fontSize: 22,
 	},

@@ -44,6 +44,10 @@ import ThermostatButton from './Thermostat/ThermostatButton';
 import MultiActionModal from './Device/MultiActionModal';
 
 import {
+	withTheme,
+} from '../../HOC/withTheme';
+
+import {
 	getLabelDevice,
 	shouldUpdate,
 	getPowerConsumed,
@@ -74,6 +78,10 @@ type Props = {
 	propsSwipeRow: Object,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
+
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	onBell: (number) => void,
 	onDown: (number) => void,
@@ -164,10 +172,19 @@ class DeviceRow extends View<Props, State> {
 			}
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
-				'isNew', 'gatewayId', 'isLast', 'currentTemp',
+				'appLayout',
+				'device',
+				'setScrollEnabled',
+				'isGatewayActive',
+				'powerConsumed',
+				'isNew',
+				'gatewayId',
+				'isLast',
+				'currentTemp',
 				'offColorMultiplier',
 				'onColorMultiplier',
+				'themeInApp',
+				'colorScheme',
 			]);
 			if (propsChange) {
 				return true;
@@ -541,7 +558,7 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
-		const { isNew, isLast } = this.props;
+		const { isNew, isLast, colors } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
@@ -551,12 +568,16 @@ class DeviceRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
-			brandPrimary,
 			brandSecondary,
 			shadow,
 			paddingFactor,
 			offlineColor,
 		} = Theme.Core;
+
+		const {
+			colorHighLightOnGroup,
+			colorHighLightOffGroup,
+		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
 		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
@@ -564,7 +585,7 @@ class DeviceRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? brandPrimary : brandSecondary;
+		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? colorHighLightOffGroup : colorHighLightOnGroup;
 		let backgroundColor = !isGatewayActive ? offlineColor : color;
 
 		const padding = deviceWidth * paddingFactor;
@@ -633,7 +654,7 @@ class DeviceRow extends View<Props, State> {
 				color: '#fff',
 			},
 			iconContainerStyle: {
-				backgroundColor: backgroundColor,
+				backgroundColor,
 				borderRadius: 25,
 				width: 25,
 				height: 25,
@@ -704,4 +725,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(DeviceRow);
+module.exports = connect(mapStateToProps, null)(withTheme(DeviceRow));

@@ -196,6 +196,12 @@ export default {
 		get headerIconColor() {
 			return '#ffffff';
 		},
+		get colorHighLightOnGroup() {
+			return Core.brandSecondary;
+		},
+		get colorHighLightOffGroup() {
+			return Core.brandPrimary;
+		},
 	},
 
 	dark: {
@@ -355,6 +361,12 @@ export default {
 		},
 		get headerIconColor() {
 			return Core.textColorLabel;
+		},
+		get colorHighLightOnGroup() {
+			return Core.brandSecondaryShadeOne;
+		},
+		get colorHighLightOffGroup() {
+			return Core.colorHighLightOffGroup;
 		},
 	},
 };

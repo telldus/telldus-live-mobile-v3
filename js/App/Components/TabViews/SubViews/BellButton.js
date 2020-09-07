@@ -29,6 +29,10 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 import { shouldUpdate } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
@@ -39,6 +43,10 @@ type Props = {
 	device: Object,
 	isOpen: boolean,
 	iconColor?: string,
+
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	isGatewayActive: boolean,
 	intl: Object,
@@ -75,6 +83,8 @@ class BellButton extends View {
 			'device',
 			'onPressOverride',
 			'iconColor',
+			'colorScheme',
+			'themeInApp',
 		]);
 		if (propsChange) {
 			return true;
@@ -110,11 +120,11 @@ class BellButton extends View {
 	}
 
 	render(): Object {
-		let { device, isGatewayActive, bellButtonStyle, disableActionIndicator = false, iconColor } = this.props;
+		let { device, isGatewayActive, bellButtonStyle, disableActionIndicator = false, iconColor, colors } = this.props;
 		let { methodRequested, name, local } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
-		let _iconColor = iconColor || (!isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary);
-		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+		let _iconColor = iconColor || (!isGatewayActive ? '#a2a2a2' : colors.colorHighLightOnGroup);
+		let dotColor = local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
 
 		return (
 			<TouchableOpacity onPress={this.onBell} style={[styles.bell, this.props.style, bellButtonStyle]} accessibilityLabel={accessibilityLabel}>
@@ -157,4 +167,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(BellButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(BellButton));

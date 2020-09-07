@@ -36,6 +36,10 @@ import RGBDashboardTile from './RGBDashboardTile';
 import ThermostatButtonDB from './Thermostat/ThermostatButtonDB';
 
 import {
+	withTheme,
+} from '../../HOC/withTheme';
+
+import {
 	getLabelDevice,
 	getPowerConsumed,
 	shouldUpdate,
@@ -58,6 +62,9 @@ type Props = {
 	currentTemp?: number,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
     style: Object,
 	setScrollEnabled: (boolean) => void,
@@ -108,6 +115,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'currentTemp',
 		'offColorMultiplier',
 		'onColorMultiplier',
+		'themeInApp',
+		'colorScheme',
 	]);
 	if (propsChange) {
 		return true;
@@ -291,13 +300,17 @@ getButtonsInfo(item: Object, styles: Object): Object {
 }
 
 render(): Object {
-	const { item, tileWidth, intl, appLayout } = this.props;
+	const { item, tileWidth, intl, appLayout, colors } = this.props;
 	const { showMoreActions } = this.state;
 	const { name, isInState } = item;
 	const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
 	const info = this.getInfo();
-	const styles = this.getStyles(appLayout, tileWidth);
+	const styles = this.getStyles({
+		appLayout,
+		tileWidth,
+		colors,
+	});
 	const { buttons, buttonsInfo } = this.getButtonsInfo(item, styles);
 	const { iconContainerStyle, iconsName } = buttonsInfo[0];
 	const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
@@ -379,7 +392,17 @@ closeMoreActions() {
 	});
 }
 
-getStyles(appLayout: Object, tileWidth: number): Object {
+getStyles({
+	appLayout,
+	tileWidth,
+	colors,
+}: Object): Object {
+
+	const {
+		colorHighLightOnGroup,
+		colorHighLightOffGroup,
+	} = colors;
+
 	return {
 		buttonsContainerStyle: {
 			height: tileWidth * 0.4,
@@ -397,10 +420,10 @@ getStyles(appLayout: Object, tileWidth: number): Object {
 			borderRadius: tileWidth * 0.025,
 		},
 		itemIconContainerOn: {
-			backgroundColor: Theme.Core.brandSecondary,
+			backgroundColor: colorHighLightOnGroup,
 		},
 		itemIconContainerOff: {
-			backgroundColor: Theme.Core.brandPrimary,
+			backgroundColor: colorHighLightOffGroup,
 		},
 		itemIconContainerOffline: {
 			backgroundColor: Theme.Core.offlineColor,
@@ -430,4 +453,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(DashboardRow);
+module.exports = connect(mapStateToProps, null)(withTheme(DashboardRow));

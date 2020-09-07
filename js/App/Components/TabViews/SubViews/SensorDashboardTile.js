@@ -43,10 +43,17 @@ import {
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 type Props = {
 	item: Object,
 	tileWidth: number,
 	displayType: string,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	style: Object,
 	onPress: (number) => void,
@@ -104,7 +111,7 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item']);
+		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item', 'themeInApp', 'colorScheme']);
 	}
 
 	getSlideList(item: Object): Object {
@@ -201,17 +208,20 @@ class SensorDashboardTile extends View<Props, null> {
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 		const lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 
-		const info = this.getLastUpdated(lastUpdated, minutesAgo, gatewayTimezone);
-
-		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
-
-		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerActive;
-		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
 		const {
 			sensorValueCover,
 			dotCoverStyle,
 			dotStyle,
+			itemIconContainerOffline,
+			itemIconContainerActive,
 		} = this.getStyles();
+
+		const info = this.getLastUpdated(lastUpdated, minutesAgo, gatewayTimezone);
+
+		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
+
+		let iconContainerStyle = !isGatewayActive ? itemIconContainerOffline : itemIconContainerActive;
+		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
 
 		return (
 			<DashboardShadowTile
@@ -263,12 +273,16 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	getStyles(): Object {
-		const { tileWidth, isGatewayActive, item } = this.props;
+		const { tileWidth, isGatewayActive, item, colors } = this.props;
 		const { data = {}} = item;
 
-		const backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
-
 		const dotSize = tileWidth * 0.045;
+
+		const {
+			colorHighLightOffGroup,
+		} = colors;
+
+		const backgroundColor = isGatewayActive ? colorHighLightOffGroup : Theme.Core.offlineColor;
 
 		return {
 			iconStyle: {
@@ -295,7 +309,7 @@ class SensorDashboardTile extends View<Props, null> {
 			sensorValueCover: {
 				height: '100%',
 				width: tileWidth,
-				backgroundColor: backgroundColor,
+				backgroundColor,
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 			},
@@ -313,6 +327,12 @@ class SensorDashboardTile extends View<Props, null> {
 				borderRadius: dotSize / 2,
 				marginLeft: 2 + (dotSize * 0.2),
 			},
+			itemIconContainerActive: {
+				backgroundColor: colorHighLightOffGroup,
+			},
+			itemIconContainerOffline: {
+				backgroundColor: Theme.Core.offlineColor,
+			},
 		};
 	}
 }
@@ -329,12 +349,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-start',
 		alignItems: 'center',
 	},
-	itemIconContainerActive: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
-	},
 });
 
-module.exports = SensorDashboardTile;
+module.exports = withTheme(SensorDashboardTile, true);

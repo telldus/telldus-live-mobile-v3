@@ -22,11 +22,15 @@
 'use strict';
 
 import React from 'react';
-import { Animated, StyleSheet, Platform } from 'react-native';
+import { Animated, Platform } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { Text, View } from '../../../../../BaseComponents';
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
+
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
 
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
@@ -61,6 +65,9 @@ type Props = {
 	methodRequested: string,
 	local: boolean,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 type State = {
@@ -132,18 +139,21 @@ class SliderScale extends View {
 			methodRequested,
 			local,
 			disableActionIndicator,
+			colors,
 		} = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
 		});
 
+		const styles = getStyles({colors});
+
 		let thumbStyle = !isGatewayActive ? styles.offline :
 			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
 		let scaleStyle = !isGatewayActive ? styles.offline :
 			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
 		let valueColor = !isGatewayActive ? '#a2a2a2' :
-			isInState === 'DIM' ? '#fff' : Theme.Core.brandSecondary;
+			isInState === 'DIM' ? '#fff' : colors.colorHighLightOnGroup;
 		let backgroundStyle = isGatewayActive && isInState === 'DIM' ? styles.enabled : styles.disabled;
 		let dotColor = local ? Theme.Core.brandPrimary : '#fff';
 
@@ -194,44 +204,47 @@ class SliderScale extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	enabledBackground: {
-		backgroundColor: '#fff',
-	},
-	enabled: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	enabledOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	disabled: {
-		backgroundColor: '#eeeeee',
-	},
-	offline: {
-		backgroundColor: '#a2a2a2',
-	},
-	thumb: {
-		flex: 1,
-		position: 'absolute',
-		justifyContent: 'center',
-		elevation: 2,
-	},
-	sliderScale: {
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	thumbText: {
-		position: 'absolute',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		alignSelf: 'center',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+	const {
+		colorHighLightOnGroup,
+	} = colors;
+
+	return {
+		enabledBackground: {
+			backgroundColor: '#fff',
+		},
+		enabled: {
+			backgroundColor: colorHighLightOnGroup,
+		},
+		disabled: {
+			backgroundColor: '#eeeeee',
+		},
+		offline: {
+			backgroundColor: '#a2a2a2',
+		},
+		thumb: {
+			flex: 1,
+			position: 'absolute',
+			justifyContent: 'center',
+			elevation: 2,
+		},
+		sliderScale: {
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		thumbText: {
+			position: 'absolute',
+			textAlign: 'center',
+			textAlignVertical: 'center',
+			alignSelf: 'center',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 SliderScale.defaultProps = {
 	thumbHeight: 12,
@@ -241,4 +254,4 @@ SliderScale.defaultProps = {
 	disableActionIndicator: false,
 };
 
-module.exports = injectIntl(SliderScale);
+module.exports = withTheme(injectIntl(SliderScale));
