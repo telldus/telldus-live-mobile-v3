@@ -44,7 +44,7 @@ export default {
 			return Core.brandPrimary;
 		},
 		get text() {
-			return '#A59F9A';
+			return Core.inactiveTintColor;
 		},
 		get textTwo() {
 			return Core.subHeader;
@@ -193,6 +193,9 @@ export default {
 		get posterBG() {
 			return Core.brandSecondary;
 		},
+		get headerIconColor() {
+			return '#ffffff';
+		},
 	},
 
 	dark: {
@@ -201,7 +204,7 @@ export default {
 			return Core.grayPrimary;
 		},
 		get text() {
-			return '#A59F9A';
+			return Core.inactiveTintColor;
 		},
 		get textTwo() {
 			return Core.textColorValue;
@@ -349,6 +352,9 @@ export default {
 		},
 		get posterBG() {
 			return Core.brandSecondaryShadeOne;
+		},
+		get headerIconColor() {
+			return Core.textColorLabel;
 		},
 	},
 };

@@ -96,6 +96,9 @@ const getBGColor = (props: Object): ?string => {
 		case 11: {
 			return colors.safeAreaBG;
 		}
+		case 12: {
+			return colors.headerIconColor;
+		}
 		default:
 			return 'transparent';
 	}
@@ -202,6 +205,9 @@ const getTextColor = (props: Object): ?string => {
 		case 21: {
 			return colors.iconTwoColorBlock;
 		}
+		case 22: {
+			return colors.headerIconColor;
+		}
 		default:
 			return;
 	}
@@ -252,6 +258,9 @@ const getTintColor = (props: Object): ?string => {
 		}
 		case 3: {
 			return colors.iconTwoColorBlock;
+		}
+		case 4: {
+			return colors.headerIconColor;
 		}
 		default:
 			return;
