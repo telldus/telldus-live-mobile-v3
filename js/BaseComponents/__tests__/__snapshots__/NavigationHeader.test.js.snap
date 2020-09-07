@@ -58,7 +58,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
         style={
           Array [
             Object {
-              "color": "#fff",
+              "color": "#ffffff",
               "fontSize": 45,
             },
             Object {
@@ -172,7 +172,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
         style={
           Array [
             Object {
-              "color": "#fff",
+              "color": "#ffffff",
               "fontSize": 45,
             },
             Object {
