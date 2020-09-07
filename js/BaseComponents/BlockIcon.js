@@ -28,7 +28,6 @@ import Theme from '../App/Theme';
 
 type DefaultProps = {
 	color: string,
-	bgColor: string,
 	backgroundMask: boolean,
 };
 
