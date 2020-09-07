@@ -88,6 +88,9 @@ export default {
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
 		},
+		get inActiveTintTwo() {
+			return Core.inactiveGray;
+		},
 		get thumbColorActiveSwitch() {
 			return Core.brandSecondary;
 		},
@@ -223,6 +226,9 @@ export default {
 		get inAppBrandSecondary() {
 			return Core.brandSecondary;
 		},
+		get inAppBrandPrimary() {
+			return Core.brandPrimary;
+		},
 		get buttonSeparatorColor() {
 			return '#dddddd';
 		},
@@ -231,6 +237,15 @@ export default {
 		},
 		get dimL2Color() {
 			return '#EA8F41';
+		},
+		get sunriseColor() {
+			return '#ffa726';
+		},
+		get sunsetColor() {
+			return '#ef5350';
+		},
+		get timeColor() {
+			return Core.brandSecondary;
 		},
 	},
 
@@ -283,6 +298,9 @@ export default {
 		},
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
+		},
+		get inActiveTintTwo() {
+			return Core.inactiveGray;
 		},
 		get thumbColorActiveSwitch() {
 			return Core.brandSecondaryShadeOne;
@@ -419,6 +437,9 @@ export default {
 		get inAppBrandSecondary() {
 			return '#FFA450';
 		},
+		get inAppBrandPrimary() {
+			return '#607D8B';
+		},
 		get buttonSeparatorColor() {
 			return Core.grayPrimary;
 		},
@@ -427,6 +448,15 @@ export default {
 		},
 		get dimL2Color() {
 			return '#EA8F41';
+		},
+		get sunriseColor() {
+			return '#ffa726'; // TODO: Confirm with Johannes
+		},
+		get sunsetColor() {
+			return '#ef5350'; // TODO: Confirm with Johannes
+		},
+		get timeColor() {
+			return this.inAppBrandSecondary;
 		},
 	},
 };

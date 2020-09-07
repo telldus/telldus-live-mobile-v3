@@ -99,6 +99,12 @@ const getBGColor = (props: Object): ?string => {
 		case 12: {
 			return colors.headerIconColor;
 		}
+		case 13: {
+			return colors.inAppBrandSecondary;
+		}
+		case 14: {
+			return colors.inActiveTintTwo;
+		}
 		default:
 			return 'transparent';
 	}
@@ -208,6 +214,9 @@ const getTextColor = (props: Object): ?string => {
 		case 22: {
 			return colors.headerIconColor;
 		}
+		case 23: {
+			return colors.inAppBrandSecondary;
+		}
 		default:
 			return;
 	}
@@ -261,6 +270,9 @@ const getTintColor = (props: Object): ?string => {
 		}
 		case 4: {
 			return colors.headerIconColor;
+		}
+		case 5: {
+			return colors.inAppBrandSecondary;
 		}
 		default:
 			return;
