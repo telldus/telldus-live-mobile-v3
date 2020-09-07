@@ -24,7 +24,6 @@
 import React from 'react';
 
 import { ListRow, View, Text, StyleSheet } from '../../../../../BaseComponents';
-import Theme from '../../../../Theme';
 
 type Props = {
 	text: string,

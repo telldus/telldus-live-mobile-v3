@@ -82,7 +82,6 @@ class DeviceRow extends View<null, Props, null> {
 		const {
 			colors,
 		} = this.props;
-		const { brandSecondary } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
