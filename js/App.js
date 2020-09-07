@@ -52,6 +52,10 @@ import {
 	setGAUserProperty,
 } from './App/Lib';
 
+import {
+	withTheme,
+} from './App/Components/HOC/withTheme';
+
 import Theme from './App/Theme';
 const changeLogVersion = '3.14';
 
@@ -68,6 +72,7 @@ type Props = {
 	dialogueData: Object,
 	cachedLayout: Object,
 	preventLayoutUpdate: boolean,
+	colors: Object,
 };
 
 class App extends React.Component<Props> {
@@ -108,7 +113,7 @@ class App extends React.Component<Props> {
 	}
 
 	componentDidMount() {
-		let { dispatch, deviceId } = this.props;
+		let { dispatch, deviceId, colors } = this.props;
 		AccessibilityInfo.isScreenReaderEnabled().then((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
@@ -117,7 +122,7 @@ class App extends React.Component<Props> {
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
 		if (Platform.OS === 'android' && StatusBar) {
 			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
+			StatusBar.setBackgroundColor(colors.safeAreaBG);
 		}
 
 		this.clearListenerNetWorkInfo = dispatch(networkConnection());
@@ -331,4 +336,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(App));
+module.exports = connect(mapStateToProps, mapDispatchToProps)(withTheme((injectIntl(App))));

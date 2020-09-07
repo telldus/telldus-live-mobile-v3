@@ -27,7 +27,6 @@ import React, {
 } from 'react';
 import {
 	Platform,
-	Image,
 } from 'react-native';
 import {
 	useSelector,
@@ -39,6 +38,7 @@ import Header from './Header';
 import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
 import CampaignIcon from './CampaignIcon';
 import Icon from './Icon';
+import ThemedImage from './ThemedImage';
 
 import {
 	resetSchedule,
@@ -123,7 +123,7 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 						name="bars"
 						size={buttonSize > 22 ? buttonSize : 22}
 						style={menuIconStyle}
-						color={'#fff'}/>,
+						level={22}/>,
 				},
 				ios: {},
 			}),
@@ -133,7 +133,8 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 				onPress: navigateToCampaign,
 				iconComponent: <CampaignIcon
 					size={buttonSize > 22 ? buttonSize : 22}
-					style={campaingIconStyle}/>,
+					style={campaingIconStyle}
+					level={22}/>,
 			},
 		];
 
@@ -168,7 +169,11 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		};
 
 		const AddButton = {
-			component: <Image source={{uri: 'icon_plus'}} style={addIconStyle}/>,
+			component: <ThemedImage
+				source={{uri: 'icon_plus'}}
+				style={addIconStyle}
+				level={4}
+			/>,
 			style: rightButtonStyle,
 			onPress: () => {},
 		};

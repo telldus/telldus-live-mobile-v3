@@ -25,7 +25,6 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 const isEqual = require('react-fast-compare');
 import { connect } from 'react-redux';
@@ -168,12 +167,19 @@ class MainTabsAndroid extends Component<Props, State> {
 				accessibilityLabel={accessibilityLabel}
 				onPress={this.onTabPress}
 				onLayout={this.onLayout}>
-				<View style={[styles.tabBar, tabBarStyle]}>
-					<Text style={labelStyle} onLayout={this.onLabelLayout}>
+				<View
+					level={11}
+					style={[styles.tabBar, tabBarStyle]}>
+					<Text
+						style={labelStyle}
+						onLayout={this.onLabelLayout}
+						level={22}>
 						{label}
 					</Text>
 					{(currentScreen === tab.name) ?
-						<View style={indicatorActiveStyle}/>
+						<View
+							level={12}
+							style={indicatorActiveStyle}/>
 						:
 						<View style={indicatorPassiveStyle}/>
 					}
@@ -203,7 +209,6 @@ class MainTabsAndroid extends Component<Props, State> {
 			labelStyle: {
 				paddingHorizontal: isPortrait ? height * 0.0333 : 0,
 				paddingVertical: isPortrait ? 15 : 0,
-				color: '#fff',
 				fontSize: isPortrait ? width * 0.0333 : height * 0.0333,
 			},
 			indicatorPassiveStyle: {
@@ -215,7 +220,6 @@ class MainTabsAndroid extends Component<Props, State> {
 				marginTop: isPortrait ? undefined : height * 0.08,
 			},
 			indicatorActiveStyle: {
-				backgroundColor: '#fff',
 				height: 2,
 				width: layout.width,
 				position: isPortrait ? 'absolute' : 'relative',
@@ -239,7 +243,6 @@ export default connect(mapStateToProps, null)(MainTabsAndroid);
 
 const styles = StyleSheet.create({
 	tabBar: {
-		backgroundColor: Theme.Core.brandPrimary,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
