@@ -148,13 +148,17 @@ class SliderScale extends View {
 
 		const styles = getStyles({colors});
 
-		let thumbStyle = !isGatewayActive ? styles.offline :
-			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
-		let scaleStyle = !isGatewayActive ? styles.offline :
-			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
-		let valueColor = !isGatewayActive ? '#a2a2a2' :
-			isInState === 'DIM' ? '#fff' : colors.colorOnActiveBg;
-		let backgroundStyle = isGatewayActive && isInState === 'DIM' ? styles.enabled : styles.disabled;
+		let thumbStyle = !isGatewayActive ?
+			(isInState === 'DIM' ? styles.enabled : styles.offline) :
+			isInState === 'DIM' ? styles.enabledBackground : styles.onInActive;
+		let scaleStyle = !isGatewayActive ?
+			(isInState === 'DIM' ? styles.enabled : styles.offline) :
+			isInState === 'DIM' ? styles.enabledBackground : styles.onInActive;
+		let valueColor = !isGatewayActive ?
+			(isInState === 'DIM' ? colors.colorOnActiveIcon : '#a2a2a2') :
+			isInState === 'DIM' ? colors.colorOnActiveIcon : colors.colorOnInActiveIcon;
+		let backgroundStyle = !isGatewayActive ?
+			(isInState === 'DIM' ? styles.offline : styles.disabled) : isInState === 'DIM' ? styles.enabled : styles.disabled;
 		let dotColor = local ? Theme.Core.brandPrimary : '#fff';
 
 		let bottomValue = (containerHeight / 2) - (thumbHeight * 2);
@@ -207,20 +211,26 @@ class SliderScale extends View {
 const getStyles = ({colors}: Object): Object => {
 	const {
 		colorOnActiveBg,
+		colorOnInActiveBg,
+		colorOnActiveIcon,
+		colorOnInActiveIcon,
 	} = colors;
 
 	return {
-		enabledBackground: {
-			backgroundColor: '#fff',
-		},
 		enabled: {
+			backgroundColor: colorOnActiveIcon,
+		},
+		enabledBackground: {
 			backgroundColor: colorOnActiveBg,
 		},
 		disabled: {
-			backgroundColor: '#eeeeee',
+			backgroundColor: colorOnInActiveBg,
 		},
 		offline: {
 			backgroundColor: '#a2a2a2',
+		},
+		onInActive: {
+			backgroundColor: colorOnInActiveIcon,
 		},
 		thumb: {
 			flex: 1,

@@ -125,8 +125,8 @@ class DimmerOffButton extends View {
 			offButtonColor ? { backgroundColor: offButtonColor } :
 				(isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
-			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') :
-			iconOffColor ? iconOffColor : (isInState === 'TURNOFF' ? '#fff' : colors.colorOffActiveBg);
+			(isInState === 'TURNOFF' ? colors.colorOffActiveIcon : '#a2a2a2') :
+			iconOffColor ? iconOffColor : (isInState === 'TURNOFF' ? colors.colorOffActiveIcon : colors.colorOffInActiveIcon);
 		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
@@ -159,6 +159,7 @@ const getStyles = ({
 
 	const {
 		colorOffActiveBg,
+		colorOffInActiveBg,
 	} = colors;
 
 	return {
@@ -166,7 +167,7 @@ const getStyles = ({
 			backgroundColor: colorOffActiveBg,
 		},
 		disabled: {
-			backgroundColor: '#eeeeee',
+			backgroundColor: colorOffInActiveBg,
 		},
 		offline: {
 			backgroundColor: '#a2a2a2',

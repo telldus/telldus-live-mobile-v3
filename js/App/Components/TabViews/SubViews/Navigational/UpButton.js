@@ -119,7 +119,7 @@ class UpButton extends View {
 		let upButtonStyle = !isGatewayActive ?
 			(isInState === 'UP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'UP' ? styles.enabledBackground : styles.disabledBackground);
 		let upIconColor = !isGatewayActive ?
-			(isInState === 'UP' ? '#fff' : '#a2a2a2') : (isInState === 'UP' ? '#fff' : colors.colorOnActiveBg);
+			(isInState === 'UP' ? colors.colorOnActiveIcon : '#a2a2a2') : (isInState === 'UP' ? colors.colorOnActiveIcon : colors.colorOnInActiveIcon);
 		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
@@ -129,7 +129,7 @@ class UpButton extends View {
 				accessibilityLabel={`${this.labelUpButton}, ${name}`}>
 				<IconTelldus icon="up" size={iconSize}
 		      style={{
-			      color: supportedMethod ? upIconColor : '#eeeeee',
+			      color: supportedMethod ? upIconColor : colors.colorOnInActiveBg,
 		      }}
 				/>
 				{
@@ -152,7 +152,7 @@ const getStyles = ({colors}: Object): Object => {
 
 	const {
 		colorOnActiveBg,
-		colorOffActiveBg,
+		colorOnInActiveBg,
 	} = colors;
 
 	return {
@@ -168,10 +168,7 @@ const getStyles = ({colors}: Object): Object => {
 			backgroundColor: colorOnActiveBg,
 		},
 		disabledBackground: {
-			backgroundColor: '#eeeeee',
-		},
-		enabledBackgroundStop: {
-			backgroundColor: colorOffActiveBg,
+			backgroundColor: colorOnInActiveBg,
 		},
 		offlineBackground: {
 			backgroundColor: '#a2a2a2',

@@ -120,7 +120,7 @@ class StopButton extends View {
 		let stopButtonStyle = !isGatewayActive ?
 			(isInState === 'STOP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'STOP' ? styles.enabledBackgroundStop : styles.disabledBackground);
 		let stopIconColor = !isGatewayActive ?
-			(isInState === 'STOP' ? '#fff' : '#a2a2a2') : (isInState === 'STOP' ? '#fff' : colors.colorOffActiveBg);
+			(isInState === 'STOP' ? colors.colorOffActiveIcon : '#a2a2a2') : (isInState === 'STOP' ? colors.colorOffActiveIcon : colors.colorOffInActiveIcon);
 		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
@@ -130,7 +130,7 @@ class StopButton extends View {
 				accessibilityLabel={`${this.labelStopButton}, ${name}`}>
 				<IconTelldus icon="stop" size={iconSize}
 					style={{
-						color: supportedMethod ? stopIconColor : '#eeeeee',
+						color: supportedMethod ? stopIconColor : colors.colorOffInActiveBg,
 					}}
 				/>
 				{
@@ -154,8 +154,8 @@ StopButton.defaultProps = {
 const getStyles = ({colors}: Object): Object => {
 
 	const {
-		colorOnActiveBg,
 		colorOffActiveBg,
+		colorOffInActiveBg,
 	} = colors;
 
 	return {
@@ -167,11 +167,8 @@ const getStyles = ({colors}: Object): Object => {
 		enabled: {
 			color: '#1a355b',
 		},
-		enabledBackground: {
-			backgroundColor: colorOnActiveBg,
-		},
 		disabledBackground: {
-			backgroundColor: '#eeeeee',
+			backgroundColor: colorOffInActiveBg,
 		},
 		enabledBackgroundStop: {
 			backgroundColor: colorOffActiveBg,

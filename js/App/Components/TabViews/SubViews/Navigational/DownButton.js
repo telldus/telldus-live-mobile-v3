@@ -119,7 +119,7 @@ class DownButton extends View {
 		let downButtonStyle = !isGatewayActive ?
 			(isInState === 'DOWN' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'DOWN' ? styles.enabledBackground : styles.disabledBackground);
 		let downIconColor = !isGatewayActive ?
-			(isInState === 'DOWN' ? '#fff' : '#a2a2a2') : (isInState === 'DOWN' ? '#fff' : colors.colorOnActiveBg);
+			(isInState === 'DOWN' ? colors.colorOnActiveIcon : '#a2a2a2') : (isInState === 'DOWN' ? colors.colorOnActiveIcon : colors.colorOnInActiveIcon);
 		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
@@ -129,7 +129,7 @@ class DownButton extends View {
 				accessibilityLabel={`${this.labelDownButton}, ${name}`}>
 				<IconTelldus icon="down" size={iconSize}
 					style={{
-						color: supportedMethod ? downIconColor : '#eeeeee',
+						color: supportedMethod ? downIconColor : colors.colorOnInActiveBg,
 					}}
 				/>
 				{
@@ -152,7 +152,7 @@ const getStyles = ({colors}: Object): Object => {
 
 	const {
 		colorOnActiveBg,
-		colorOffActiveBg,
+		colorOnInActiveBg,
 	} = colors;
 
 	return {
@@ -163,16 +163,10 @@ const getStyles = ({colors}: Object): Object => {
 			backgroundColor: colorOnActiveBg,
 		},
 		disabledBackground: {
-			backgroundColor: '#eeeeee',
-		},
-		enabledBackgroundStop: {
-			backgroundColor: colorOffActiveBg,
+			backgroundColor: colorOnInActiveBg,
 		},
 		offlineBackground: {
 			backgroundColor: '#a2a2a2',
-		},
-		disabled: {
-			color: '#eeeeee',
 		},
 		dot: {
 			position: 'absolute',

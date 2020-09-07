@@ -109,7 +109,7 @@ class BellDashboardTile extends View<Props, null> {
 
 		const accessibilityLabelButton = `${this.labelBellButton}, ${name}`;
 
-		let iconColor = isGatewayActive ? colors.colorOnActiveBg : Theme.Core.offlineColor;
+		let iconColor = isGatewayActive ? colors.colorOnInActiveIcon : Theme.Core.offlineColor;
 
 		let dotColor = local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
@@ -138,7 +138,7 @@ class BellDashboardTile extends View<Props, null> {
 const getStyles = ({colors}: Object): Object => {
 
 	const {
-		colorOnActiveBg,
+		colorOnInActiveBg,
 	} = colors;
 
 	return {
@@ -150,20 +150,14 @@ const getStyles = ({colors}: Object): Object => {
 			flexDirection: 'row',
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: '#eeeeee',
 			borderBottomLeftRadius: 2,
 			borderBottomRightRadius: 2,
+			backgroundColor: colorOnInActiveBg,
 		},
 		dot: {
 			position: 'absolute',
 			top: 3,
 			left: 3,
-		},
-		itemIconContainerOn: {
-			backgroundColor: colorOnActiveBg,
-		},
-		itemIconContainerOffline: {
-			backgroundColor: Theme.Core.offlineColor,
 		},
 	};
 };

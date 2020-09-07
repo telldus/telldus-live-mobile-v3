@@ -201,7 +201,15 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, isGatewayActive, intl } = this.props;
+		const {
+			item,
+			tileWidth,
+			isGatewayActive,
+			intl,
+			colors,
+			themeInApp,
+			colorScheme,
+		} = this.props;
 		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
 		const { lastUpdated, gatewayTimezone } = item;
@@ -221,7 +229,7 @@ class SensorDashboardTile extends View<Props, null> {
 		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
 		let iconContainerStyle = !isGatewayActive ? itemIconContainerOffline : itemIconContainerActive;
-		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
+		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? colors.colorOffActiveBg : Theme.Core.offlineColor) : 'transparent';
 
 		return (
 			<DashboardShadowTile
@@ -267,7 +275,11 @@ class SensorDashboardTile extends View<Props, null> {
 					}]}
 					valueCoverStyle={sensorValueCover}
 					dotCoverStyle={dotCoverStyle}
-					dotStyle={dotStyle}/>
+					dotStyle={dotStyle}
+					extraData={{
+						themeInApp,
+						colorScheme,
+					}}/>
 			</DashboardShadowTile>
 		);
 	}

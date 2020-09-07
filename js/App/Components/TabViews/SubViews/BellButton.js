@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { View, IconTelldus } from '../../../../BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
@@ -121,8 +121,11 @@ class BellButton extends View {
 	render(): Object {
 		let { device, isGatewayActive, bellButtonStyle, disableActionIndicator = false, iconColor, colors } = this.props;
 		let { methodRequested, name, local } = device;
+
+		const styles = getStyles({colors});
+
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
-		let _iconColor = iconColor || (!isGatewayActive ? '#a2a2a2' : colors.colorOnActiveBg);
+		let _iconColor = iconColor || (!isGatewayActive ? '#a2a2a2' : colors.colorOnInActiveIcon);
 		let dotColor = local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
@@ -145,18 +148,25 @@ BellButton.defaultProps = {
 	disableActionIndicator: false,
 };
 
-const styles = StyleSheet.create({
-	bell: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#eeeeee',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorOnInActiveBg,
+	} = colors;
+
+	return {
+		bell: {
+			justifyContent: 'center',
+			alignItems: 'center',
+			backgroundColor: colorOnInActiveBg,
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {

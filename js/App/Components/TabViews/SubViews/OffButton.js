@@ -116,7 +116,7 @@ class OffButton extends View {
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) : (isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
-			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : colors.colorOffActiveBg);
+			(isInState === 'TURNOFF' ? colors.colorOffActiveIcon : '#a2a2a2') : (isInState === 'TURNOFF' ? colors.colorOffActiveIcon : colors.colorOffInActiveIcon);
 		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		const iconName = actionIcon ? actionIcon : 'off';
@@ -143,6 +143,7 @@ const getStyles = ({colors}: Object): Object => {
 
 	const {
 		colorOffActiveBg,
+		colorOffInActiveBg,
 	} = colors;
 
 	return {
@@ -150,7 +151,7 @@ const getStyles = ({colors}: Object): Object => {
 			backgroundColor: colorOffActiveBg,
 		},
 		disabled: {
-			backgroundColor: '#eeeeee',
+			backgroundColor: colorOffInActiveBg,
 		},
 		offline: {
 			backgroundColor: '#a2a2a2',
