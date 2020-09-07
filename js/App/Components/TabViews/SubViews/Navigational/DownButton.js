@@ -119,8 +119,8 @@ class DownButton extends View {
 		let downButtonStyle = !isGatewayActive ?
 			(isInState === 'DOWN' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'DOWN' ? styles.enabledBackground : styles.disabledBackground);
 		let downIconColor = !isGatewayActive ?
-			(isInState === 'DOWN' ? '#fff' : '#a2a2a2') : (isInState === 'DOWN' ? '#fff' : colors.colorHighLightOnGroup);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
+			(isInState === 'DOWN' ? '#fff' : '#a2a2a2') : (isInState === 'DOWN' ? '#fff' : colors.colorOnActiveBg);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity
@@ -151,8 +151,8 @@ DownButton.defaultProps = {
 const getStyles = ({colors}: Object): Object => {
 
 	const {
-		colorHighLightOnGroup,
-		colorHighLightOffGroup,
+		colorOnActiveBg,
+		colorOffActiveBg,
 	} = colors;
 
 	return {
@@ -160,13 +160,13 @@ const getStyles = ({colors}: Object): Object => {
 			color: '#1a355b',
 		},
 		enabledBackground: {
-			backgroundColor: colorHighLightOnGroup,
+			backgroundColor: colorOnActiveBg,
 		},
 		disabledBackground: {
 			backgroundColor: '#eeeeee',
 		},
 		enabledBackgroundStop: {
-			backgroundColor: colorHighLightOffGroup,
+			backgroundColor: colorOffActiveBg,
 		},
 		offlineBackground: {
 			backgroundColor: '#a2a2a2',

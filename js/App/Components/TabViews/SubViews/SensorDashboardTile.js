@@ -279,10 +279,10 @@ class SensorDashboardTile extends View<Props, null> {
 		const dotSize = tileWidth * 0.045;
 
 		const {
-			colorHighLightOffGroup,
+			colorOffActiveBg,
 		} = colors;
 
-		const backgroundColor = isGatewayActive ? colorHighLightOffGroup : Theme.Core.offlineColor;
+		const backgroundColor = isGatewayActive ? colorOffActiveBg : Theme.Core.offlineColor;
 
 		return {
 			iconStyle: {
@@ -328,7 +328,7 @@ class SensorDashboardTile extends View<Props, null> {
 				marginLeft: 2 + (dotSize * 0.2),
 			},
 			itemIconContainerActive: {
-				backgroundColor: colorHighLightOffGroup,
+				backgroundColor: colorOffActiveBg,
 			},
 			itemIconContainerOffline: {
 				backgroundColor: Theme.Core.offlineColor,

@@ -66,7 +66,8 @@ export default {
 	grayPrimary: '#2E2E2E',
 	screenBGDark: '#121212',
 	brandSecondaryShadeOne: '#FFA450',
-	colorHighLightOffGroup: '#607D8B',
+	colorOffActiveBg: '#607D8B',
+	inactiveBG: '#424242',
 
 	textColorLabel: '#E4E4E4',
 	textColorValue: '#ABABAB',

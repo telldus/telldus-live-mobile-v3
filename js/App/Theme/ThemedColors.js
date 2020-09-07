@@ -196,10 +196,10 @@ export default {
 		get headerIconColor() {
 			return '#ffffff';
 		},
-		get colorHighLightOnGroup() {
+		get colorOnActiveBg() {
 			return Core.brandSecondary;
 		},
-		get colorHighLightOffGroup() {
+		get colorOffActiveBg() {
 			return Core.brandPrimary;
 		},
 	},
@@ -362,11 +362,11 @@ export default {
 		get headerIconColor() {
 			return Core.textColorLabel;
 		},
-		get colorHighLightOnGroup() {
+		get colorOnActiveBg() {
 			return Core.brandSecondaryShadeOne;
 		},
-		get colorHighLightOffGroup() {
-			return Core.colorHighLightOffGroup;
+		get colorOffActiveBg() {
+			return Core.colorOffActiveBg;
 		},
 	},
 };

@@ -403,7 +403,7 @@ class SensorRow extends View<Props, State> {
 		} = Theme.Core;
 
 		const {
-			colorHighLightOffGroup,
+			colorOffActiveBg,
 		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -412,7 +412,7 @@ class SensorRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let backgroundColor = isGatewayActive ? colorHighLightOffGroup : Theme.Core.offlineColor;
+		let backgroundColor = isGatewayActive ? colorOffActiveBg : Theme.Core.offlineColor;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const widthValueBlock = (buttonWidth * 2) + 6;

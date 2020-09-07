@@ -125,8 +125,8 @@ class DimmerOnButton extends View {
 				(isInState === 'TURNON' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
 			(isInState === 'TURNON' ? '#fff' : '#a2a2a2') :
-			iconOnColor ? iconOnColor : (isInState === 'TURNON' ? '#fff' : colors.colorHighLightOnGroup);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
+			iconOnColor ? iconOnColor : (isInState === 'TURNON' ? '#fff' : colors.colorOnActiveBg);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<View
@@ -155,12 +155,12 @@ class DimmerOnButton extends View {
 const getStyles = ({colors}: Object): Object => {
 
 	const {
-		colorHighLightOnGroup,
+		colorOnActiveBg,
 	} = colors;
 
 	return {
 		enabled: {
-			backgroundColor: colorHighLightOnGroup,
+			backgroundColor: colorOnActiveBg,
 		},
 		disabled: {
 			backgroundColor: '#eeeeee',

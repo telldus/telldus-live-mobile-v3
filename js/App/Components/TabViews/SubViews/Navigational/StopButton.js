@@ -120,8 +120,8 @@ class StopButton extends View {
 		let stopButtonStyle = !isGatewayActive ?
 			(isInState === 'STOP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'STOP' ? styles.enabledBackgroundStop : styles.disabledBackground);
 		let stopIconColor = !isGatewayActive ?
-			(isInState === 'STOP' ? '#fff' : '#a2a2a2') : (isInState === 'STOP' ? '#fff' : colors.colorHighLightOffGroup);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
+			(isInState === 'STOP' ? '#fff' : '#a2a2a2') : (isInState === 'STOP' ? '#fff' : colors.colorOffActiveBg);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity
@@ -154,8 +154,8 @@ StopButton.defaultProps = {
 const getStyles = ({colors}: Object): Object => {
 
 	const {
-		colorHighLightOnGroup,
-		colorHighLightOffGroup,
+		colorOnActiveBg,
+		colorOffActiveBg,
 	} = colors;
 
 	return {
@@ -168,13 +168,13 @@ const getStyles = ({colors}: Object): Object => {
 			color: '#1a355b',
 		},
 		enabledBackground: {
-			backgroundColor: colorHighLightOnGroup,
+			backgroundColor: colorOnActiveBg,
 		},
 		disabledBackground: {
 			backgroundColor: '#eeeeee',
 		},
 		enabledBackgroundStop: {
-			backgroundColor: colorHighLightOffGroup,
+			backgroundColor: colorOffActiveBg,
 		},
 		offlineBackground: {
 			backgroundColor: '#a2a2a2',

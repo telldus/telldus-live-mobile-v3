@@ -109,9 +109,9 @@ class BellDashboardTile extends View<Props, null> {
 
 		const accessibilityLabelButton = `${this.labelBellButton}, ${name}`;
 
-		let iconColor = isGatewayActive ? colors.colorHighLightOnGroup : Theme.Core.offlineColor;
+		let iconColor = isGatewayActive ? colors.colorOnActiveBg : Theme.Core.offlineColor;
 
-		let dotColor = local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
+		let dotColor = local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity
@@ -138,7 +138,7 @@ class BellDashboardTile extends View<Props, null> {
 const getStyles = ({colors}: Object): Object => {
 
 	const {
-		colorHighLightOnGroup,
+		colorOnActiveBg,
 	} = colors;
 
 	return {
@@ -160,7 +160,7 @@ const getStyles = ({colors}: Object): Object => {
 			left: 3,
 		},
 		itemIconContainerOn: {
-			backgroundColor: colorHighLightOnGroup,
+			backgroundColor: colorOnActiveBg,
 		},
 		itemIconContainerOffline: {
 			backgroundColor: Theme.Core.offlineColor,

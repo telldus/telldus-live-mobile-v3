@@ -162,7 +162,7 @@ class ThermostatButton extends View<Props, State> {
 			disableActionIndicator={disableActionIndicator}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
-			mode === 'off' ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
+			mode === 'off' ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<View style={style}>

@@ -161,7 +161,7 @@ class ThermostatButtonDB extends View<Props, State> {
 			}]}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
-			mode === 'off' ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
+			mode === 'off' ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity onPress={this.onPressMoreButtons} style={containerStyle}>

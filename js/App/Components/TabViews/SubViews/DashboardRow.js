@@ -399,8 +399,8 @@ getStyles({
 }: Object): Object {
 
 	const {
-		colorHighLightOnGroup,
-		colorHighLightOffGroup,
+		colorOnActiveBg,
+		colorOffActiveBg,
 	} = colors;
 
 	return {
@@ -420,10 +420,10 @@ getStyles({
 			borderRadius: tileWidth * 0.025,
 		},
 		itemIconContainerOn: {
-			backgroundColor: colorHighLightOnGroup,
+			backgroundColor: colorOnActiveBg,
 		},
 		itemIconContainerOff: {
-			backgroundColor: colorHighLightOffGroup,
+			backgroundColor: colorOffActiveBg,
 		},
 		itemIconContainerOffline: {
 			backgroundColor: Theme.Core.offlineColor,

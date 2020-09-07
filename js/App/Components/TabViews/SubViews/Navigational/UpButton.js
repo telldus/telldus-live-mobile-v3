@@ -119,8 +119,8 @@ class UpButton extends View {
 		let upButtonStyle = !isGatewayActive ?
 			(isInState === 'UP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'UP' ? styles.enabledBackground : styles.disabledBackground);
 		let upIconColor = !isGatewayActive ?
-			(isInState === 'UP' ? '#fff' : '#a2a2a2') : (isInState === 'UP' ? '#fff' : colors.colorHighLightOnGroup);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
+			(isInState === 'UP' ? '#fff' : '#a2a2a2') : (isInState === 'UP' ? '#fff' : colors.colorOnActiveBg);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity
@@ -151,8 +151,8 @@ UpButton.defaultProps = {
 const getStyles = ({colors}: Object): Object => {
 
 	const {
-		colorHighLightOnGroup,
-		colorHighLightOffGroup,
+		colorOnActiveBg,
+		colorOffActiveBg,
 	} = colors;
 
 	return {
@@ -165,13 +165,13 @@ const getStyles = ({colors}: Object): Object => {
 			color: '#1a355b',
 		},
 		enabledBackground: {
-			backgroundColor: colorHighLightOnGroup,
+			backgroundColor: colorOnActiveBg,
 		},
 		disabledBackground: {
 			backgroundColor: '#eeeeee',
 		},
 		enabledBackgroundStop: {
-			backgroundColor: colorHighLightOffGroup,
+			backgroundColor: colorOffActiveBg,
 		},
 		offlineBackground: {
 			backgroundColor: '#a2a2a2',

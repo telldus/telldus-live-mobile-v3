@@ -575,8 +575,8 @@ class DeviceRow extends View<Props, State> {
 		} = Theme.Core;
 
 		const {
-			colorHighLightOnGroup,
-			colorHighLightOffGroup,
+			colorOnActiveBg,
+			colorOffActiveBg,
 		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -585,7 +585,7 @@ class DeviceRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? colorHighLightOffGroup : colorHighLightOnGroup;
+		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? colorOffActiveBg : colorOnActiveBg;
 		let backgroundColor = !isGatewayActive ? offlineColor : color;
 
 		const padding = deviceWidth * paddingFactor;

@@ -153,7 +153,7 @@ class SliderScale extends View {
 		let scaleStyle = !isGatewayActive ? styles.offline :
 			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
 		let valueColor = !isGatewayActive ? '#a2a2a2' :
-			isInState === 'DIM' ? '#fff' : colors.colorHighLightOnGroup;
+			isInState === 'DIM' ? '#fff' : colors.colorOnActiveBg;
 		let backgroundStyle = isGatewayActive && isInState === 'DIM' ? styles.enabled : styles.disabled;
 		let dotColor = local ? Theme.Core.brandPrimary : '#fff';
 
@@ -206,7 +206,7 @@ class SliderScale extends View {
 
 const getStyles = ({colors}: Object): Object => {
 	const {
-		colorHighLightOnGroup,
+		colorOnActiveBg,
 	} = colors;
 
 	return {
@@ -214,7 +214,7 @@ const getStyles = ({colors}: Object): Object => {
 			backgroundColor: '#fff',
 		},
 		enabled: {
-			backgroundColor: colorHighLightOnGroup,
+			backgroundColor: colorOnActiveBg,
 		},
 		disabled: {
 			backgroundColor: '#eeeeee',

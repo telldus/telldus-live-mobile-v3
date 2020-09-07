@@ -122,8 +122,8 @@ class BellButton extends View {
 		let { device, isGatewayActive, bellButtonStyle, disableActionIndicator = false, iconColor, colors } = this.props;
 		let { methodRequested, name, local } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
-		let _iconColor = iconColor || (!isGatewayActive ? '#a2a2a2' : colors.colorHighLightOnGroup);
-		let dotColor = local ? colors.colorHighLightOffGroup : colors.colorHighLightOnGroup;
+		let _iconColor = iconColor || (!isGatewayActive ? '#a2a2a2' : colors.colorOnActiveBg);
+		let dotColor = local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity onPress={this.onBell} style={[styles.bell, this.props.style, bellButtonStyle]} accessibilityLabel={accessibilityLabel}>
