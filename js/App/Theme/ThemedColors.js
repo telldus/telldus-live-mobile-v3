@@ -321,7 +321,7 @@ export default {
 			return Core.brandSecondaryShadeOne;
 		},
 		get colorTimeExpired() {
-			return '#990000';
+			return '#EF9A9A';
 		},
 		get footerPrimary() {
 			return Core.brandSecondaryShadeOne;
