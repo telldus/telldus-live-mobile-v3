@@ -223,6 +223,9 @@ export default {
 		get inAppBrandSecondary() {
 			return Core.brandSecondary;
 		},
+		get buttonSeparatorColor() {
+			return '#dddddd';
+		},
 	},
 
 	dark: {
@@ -409,6 +412,9 @@ export default {
 		},
 		get inAppBrandSecondary() {
 			return '#FFA450';
+		},
+		get buttonSeparatorColor() {
+			return Core.grayPrimary;
 		},
 	},
 };
