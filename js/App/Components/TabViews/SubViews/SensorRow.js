@@ -173,6 +173,14 @@ class SensorRow extends View<Props, State> {
 			return true;
 		}
 
+		const themeHasChanged = shouldUpdate(otherProps, nextOtherProps, [
+			'themeInApp',
+			'colorScheme',
+		]);
+		if (themeHasChanged) {
+			return true;
+		}
+
 		return false;
 	}
 

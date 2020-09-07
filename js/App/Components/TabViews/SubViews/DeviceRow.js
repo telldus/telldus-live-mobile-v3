@@ -198,6 +198,14 @@ class DeviceRow extends View<Props, State> {
 			return true;
 		}
 
+		const themeHasChanged = shouldUpdate(otherProps, nextOtherProps, [
+			'themeInApp',
+			'colorScheme',
+		]);
+		if (themeHasChanged) {
+			return true;
+		}
+
 		return false;
 	}
 
@@ -675,7 +683,6 @@ class DeviceRow extends View<Props, State> {
 			bell: {
 				justifyContent: 'center',
 				alignItems: 'center',
-				backgroundColor: '#eeeeee',
 				width: buttonWidth * 2,
 				borderLeftWidth: 1,
 				borderLeftColor: '#ddd',
