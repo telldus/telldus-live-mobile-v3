@@ -81,11 +81,6 @@ const useAppThemeOptions = (): Object => {
 		return {
 			value,
 			label,
-			shades: [
-				ThemedColors[value].ShadeOne,
-				ThemedColors[value].ShadeTwo,
-				ThemedColors[value].ShadeThree,
-			],
 		};
 	});
 	options.push({
