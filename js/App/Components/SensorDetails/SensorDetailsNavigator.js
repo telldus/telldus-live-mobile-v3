@@ -36,6 +36,10 @@ import {
 import { SensorDetailsHeaderPoster } from './SubViews';
 
 import {
+	withTheme,
+} from '../../Components/HOC/withTheme';
+
+import {
 	prepareNavigator,
 	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
@@ -47,10 +51,10 @@ const ScreenConfigs = [
 		name: 'SOverview',
 		Component: Overview,
 		options: {
-			tabBarLabel: ({ color }: Object): Object => (
+			tabBarLabel: ({ focused }: Object): Object => (
 				<TabBar
 					icon="home"
-					tintColor={color}
+					focused={focused}
 					label={i18n.overviewHeader}
 					accessibilityLabel={i18n.deviceOverviewTab}/>
 			),
@@ -60,10 +64,10 @@ const ScreenConfigs = [
 		name: 'SHistory',
 		Component: History,
 		options: {
-			tabBarLabel: ({ color }: Object): Object => (
+			tabBarLabel: ({ focused }: Object): Object => (
 				<TabBar
 					icon="history"
-					tintColor={color}
+					focused={focused}
 					label={i18n.historyHeader}
 					accessibilityLabel={i18n.deviceHistoryTab}/>
 			),
@@ -73,16 +77,40 @@ const ScreenConfigs = [
 		name: 'SSettings',
 		Component: Settings,
 		options: {
-			tabBarLabel: ({ color }: Object): Object => (
+			tabBarLabel: ({ focused }: Object): Object => (
 				<TabBar
 					icon="settings"
-					tintColor={color}
+					focused={focused}
 					label={i18n.settingsHeader}
 					accessibilityLabel={i18n.deviceSettingsTab}/>
 			),
 		},
 	},
 ];
+
+const ThemedTabBar = withTheme(React.memo<Object>((props: Object): Object => {
+	const {
+		posterProps,
+		tabBarProps,
+		colors,
+	} = props;
+
+	const {
+		headerIconColor,
+	} = colors;
+
+	return (
+		<View style={{flex: 0}}>
+			<SensorDetailsHeaderPoster {...posterProps}/>
+			<MaterialTopTabBar
+				{...tabBarProps}
+				indicatorStyle={{
+					backgroundColor: headerIconColor,
+				}}
+			/>
+		</View>
+	);
+}));
 
 const NavigatorConfigs = {
 	initialRouteName: 'SOverview',
@@ -104,26 +132,24 @@ const NavigatorConfigs = {
 			paddingVertical = 10 + (fontSize * 0.5);
 		}
 		return (
-			<View style={{flex: 0}}>
-				<SensorDetailsHeaderPoster {...rest}/>
-				<MaterialTopTabBar {...rest}
-					tabStyle={{
+			<ThemedTabBar
+				tabBarProps={{
+					...rest,
+					tabStyle: {
 						...tabStyle,
 						width: tabWidth,
 						paddingVertical,
-					}}
-					labelStyle={{
+					},
+					labelStyle: {
 						...labelStyle,
 						fontSize,
-					}}
-				/>
-			</View>
+					},
+				}}
+				posterProps={{...rest}}
+			/>
 		);
 	},
 	tabBarOptions: {
-		indicatorStyle: {
-			backgroundColor: '#fff',
-		},
 		style: {
 			...Theme.Core.shadow,
 			justifyContent: 'center',
@@ -134,8 +160,6 @@ const NavigatorConfigs = {
 		},
 		upperCaseLabel: false,
 		scrollEnabled: true,
-		activeTintColor: Theme.Core.brandSecondary,
-		inactiveTintColor: Theme.Core.inactiveTintColor,
 		showIcon: false,
 		allowFontScaling: false,
 	},
