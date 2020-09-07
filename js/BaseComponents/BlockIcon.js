@@ -50,7 +50,6 @@ export default class BlockIcon extends Component<Props, null> {
 
 	static defaultProps: DefaultProps = {
 		color: '#fff',
-		bgColor: Theme.Core.brandPrimary,
 		backgroundMask: false,
 	};
 
@@ -84,10 +83,15 @@ export default class BlockIcon extends Component<Props, null> {
 	}
 
 	_getDefaultStyle = (): Object => {
+		const {
+			bgColor,
+			blockLevel,
+		} = this.props;
+		const _bgColor = blockLevel ? undefined : (bgColor ? bgColor : Theme.Core.brandPrimary);
 		return {
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: this.props.bgColor,
+			backgroundColor: _bgColor,
 		};
 	};
 }

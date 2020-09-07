@@ -49,9 +49,7 @@ export default class NowRow extends View<Props, null> {
 		return (
 			<ListRow
 				roundIcon={''}
-				roundIconContainerStyle={[roundIconContainerStyle, {
-					backgroundColor: Theme.Core.brandPrimary,
-				}]}
+				roundIconContainerStyle={roundIconContainerStyle}
 				time={null}
 				rowStyle={{
 					backgroundColor: 'transparent',

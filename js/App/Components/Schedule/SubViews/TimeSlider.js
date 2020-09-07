@@ -23,9 +23,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { IconTelldus, View } from '../../../../BaseComponents';
+import {
+	IconTelldus,
+	View,
+	ThemedMaterialIcon,
+} from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import Description from './Description';
 import TimeField from './TimeField';
@@ -180,11 +183,11 @@ class TimeSlider extends View<null, Props, State> {
 					<Description style={descriptionStyle} appLayout={appLayout}>{description}</Description>
 					{isEditing ?
 						<TouchableOpacity onPress={this.onEndEdit} style={iconEditStyle}>
-							<IconTelldus icon={'checkmark'} size={iconEditSize} color={Theme.Core.brandSecondary}/>
+							<IconTelldus icon={'checkmark'} size={iconEditSize} level={23}/>
 						</TouchableOpacity>
 						:
 						<TouchableOpacity onPress={this.onEdit} style={iconEditStyle}>
-							<Icon name={'edit'} size={iconEditSize} color={Theme.Core.brandSecondary}/>
+							<ThemedMaterialIcon name={'edit'} size={iconEditSize} level={23}/>
 						</TouchableOpacity>
 					}
 				</View>

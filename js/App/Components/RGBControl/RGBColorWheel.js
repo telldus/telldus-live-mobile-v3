@@ -232,8 +232,8 @@ render(): Object {
 		swatchWheelCover,
 		device,
 		showActionIndicator,
-		colorWheelCoverLevel,
-		swatchesCoverLevel,
+		colorWheelCoverLevel = 2,
+		swatchesCoverLevel = 2,
 	} = this.props;
 
 	const colorSwatches = this.COLOR_SWATCHES.map((color: string, i: number): any => {

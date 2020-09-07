@@ -95,8 +95,13 @@ render(): Object {
 			<TouchableOpacity
 				onPress={this.toggleAdvanced}
 				style={toggleAdvancedCover}>
-				<IconTelldus icon={'settings'} style={iconSettingsStyle}/>
-				<Text style={settingsTextStyle}>
+				<IconTelldus
+					level={23}
+					icon={'settings'}
+					style={iconSettingsStyle}/>
+				<Text
+					level={23}
+					style={settingsTextStyle}>
 					{showAdvanced ?
 						intl.formatMessage(i18n.labelHideAdvanced)
 						:
@@ -118,7 +123,7 @@ getStyles(): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { paddingFactor, brandSecondary } = Theme.Core;
+	const { paddingFactor } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	return {
@@ -130,12 +135,10 @@ getStyles(): Object {
 		},
 		iconSettingsStyle: {
 			fontSize: deviceWidth * 0.040666667,
-			color: brandSecondary,
 			marginRight: 8,
 		},
 		settingsTextStyle: {
 			fontSize: deviceWidth * 0.040666667,
-			color: brandSecondary,
 		},
 	};
 }

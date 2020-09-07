@@ -169,6 +169,7 @@ class JobRow extends View<null, Props, null> {
 			showNow,
 			expired,
 			currentScreen,
+			colors,
 		} = this.props;
 
 		const {
@@ -273,7 +274,11 @@ class JobRow extends View<null, Props, null> {
 					>
 						<NowRow
 							text={formatMessage(i18n.now)}
-							roundIconContainerStyle={roundIconContainer}
+							roundIconContainerStyle={[
+								roundIconContainer, {
+									backgroundColor: colors.colorOffActiveBg,
+								},
+							]}
 							rowWithTriangleContainerStyle={rowWithTriangleContainerNow}
 							textStyle={time}
 							lineStyle={lineStyle}
@@ -481,6 +486,7 @@ class JobRow extends View<null, Props, null> {
 
 		const {
 			textTwo,
+			colorOffActiveBg,
 		} = colors;
 
 		const { land } = Theme.Core.headerHeightFactor;
@@ -581,7 +587,7 @@ class JobRow extends View<null, Props, null> {
 			lineStyle: {
 				height: 1 + (deviceWidth * 0.005),
 				width: '100%',
-				backgroundColor: Theme.Core.brandPrimary,
+				backgroundColor: colorOffActiveBg,
 			},
 			rowWithTriangleContainerNow: {
 				width: rowWithTriangleWidth + timeWidth,

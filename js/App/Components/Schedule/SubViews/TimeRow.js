@@ -27,17 +27,21 @@ import { ActivityIndicator } from 'react-native';
 
 import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
-import Theme from '../../../Theme';
 import { getHoursAndMinutes } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 import i18n from '../../../Translations/common';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 
 type Time = {
 	hour: number,
 	minute: number,
 };
 
-type Props = {
+type Props = PropsThemedComponent & {
 	schedule: Schedule,
 	device: Object,
 	containerStyle?: Object,
@@ -52,7 +56,7 @@ type State = {
 	loading: boolean,
 };
 
-export default class TimeRow extends View<null, Props, State> {
+class TimeRow extends View<null, Props, State> {
 
 	static propTypes = {
 		schedule: PropTypes.object.isRequired,
@@ -234,7 +238,11 @@ export default class TimeRow extends View<null, Props, State> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const { offset, randomInterval, type } = this.props.schedule;
+		const {
+			colors,
+			schedule,
+		} = this.props;
+		const { offset, randomInterval, type } = schedule;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -248,7 +256,7 @@ export default class TimeRow extends View<null, Props, State> {
 			},
 			blockIcon: {
 				size,
-				color: Theme.Core[`${type}Color`],
+				color: colors[`${type}Color`],
 				style: {
 					width: deviceWidth * 0.1556,
 					textAlign: 'center',
@@ -279,3 +287,5 @@ export default class TimeRow extends View<null, Props, State> {
 	};
 
 }
+
+export default withTheme(TimeRow);

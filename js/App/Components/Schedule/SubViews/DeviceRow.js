@@ -67,6 +67,7 @@ class DeviceRow extends View<null, Props, null> {
 					icon={icon}
 					style={iconStyle}
 					containerStyle={iconContainer}
+					blockLevel={13}
 				/>
 				<TextRowWrapper appLayout={appLayout} style={descriptionContainer}>
 					<Title numberOfLines={1} ellipsizeMode="tail" appLayout={appLayout} style={titleStyle}>
@@ -110,7 +111,6 @@ class DeviceRow extends View<null, Props, null> {
 				borderRadius: borderRadius,
 				alignItems: 'center',
 				justifyContent: 'center',
-				backgroundColor: brandSecondary,
 			},
 			descriptionContainer: {
 				flex: 1,
