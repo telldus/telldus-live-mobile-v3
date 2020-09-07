@@ -31,6 +31,7 @@ import { connect } from 'react-redux';
 import { LocaleConfig } from 'react-native-calendars';
 import { injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
+const isEqual = require('react-fast-compare');
 
 import {
 	PreLoginNavigator,
@@ -73,6 +74,8 @@ type Props = {
 	cachedLayout: Object,
 	preventLayoutUpdate: boolean,
 	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class App extends React.Component<Props> {
@@ -142,14 +145,28 @@ class App extends React.Component<Props> {
 	}
 
 	componentDidUpdate(prevProps: Object) {
-		const { dispatch, accessToken } = this.props;
-		const { accessToken: accessTokenPrev = {} } = prevProps;
+		const {
+			dispatch,
+			accessToken,
+			colorScheme,
+			themeInApp,
+			colors,
+		} = this.props;
+		const {
+			accessToken: accessTokenPrev = {},
+			colorScheme: colorSchemePrev,
+			themeInApp: themeInAppPrev,
+	 } = prevProps;
 		if (accessToken) {
 			// Update accesstoken at the widget side, when ever it is refreshed at the App.
 			if (accessTokenPrev.access_token !== accessToken.access_token) {
 				dispatch(widgetAndroidConfigure());// Android.
 				// TODO: Do for iOS once widget is implemented.
 			}
+		}
+		if ((!isEqual(colorSchemePrev, colorScheme) || !isEqual(themeInAppPrev, themeInApp)) && Platform.OS === 'android' && StatusBar) {
+			StatusBar.setTranslucent(true);
+			StatusBar.setBackgroundColor(colors.safeAreaBG);
 		}
 	}
 
