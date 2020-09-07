@@ -131,7 +131,7 @@ class DimmerOffButton extends View {
 
 		return (
 			<View
-				style={[style, buttonStyle]}
+				style={[styles.styleDef, style, buttonStyle]}
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon="off" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
@@ -160,9 +160,14 @@ const getStyles = ({
 	const {
 		colorOffActiveBg,
 		colorOffInActiveBg,
+		buttonSeparatorColor,
 	} = colors;
 
 	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
 		enabled: {
 			backgroundColor: colorOffActiveBg,
 		},

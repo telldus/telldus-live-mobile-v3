@@ -125,7 +125,7 @@ class StopButton extends View {
 
 		return (
 			<TouchableOpacity
-				style={[stopButtonStyle, style]}
+				style={[styles.styleDef, stopButtonStyle, style]}
 				onPress={supportedMethod ? this.onStop : noop}
 				accessibilityLabel={`${this.labelStopButton}, ${name}`}>
 				<IconTelldus icon="stop" size={iconSize}
@@ -156,13 +156,13 @@ const getStyles = ({colors}: Object): Object => {
 	const {
 		colorOffActiveBg,
 		colorOffInActiveBg,
+		buttonSeparatorColor,
 	} = colors;
 
 	return {
-		navigationButton: {
-			flex: 1,
-			justifyContent: 'center',
-			alignItems: 'center',
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
 		},
 		enabled: {
 			color: '#1a355b',

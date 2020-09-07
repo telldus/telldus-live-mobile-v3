@@ -124,7 +124,7 @@ class UpButton extends View {
 
 		return (
 			<TouchableOpacity
-				style={[upButtonStyle, style]}
+				style={[styles.styleDef, upButtonStyle, style]}
 				onPress={supportedMethod ? this.onUp : noop}
 				accessibilityLabel={`${this.labelUpButton}, ${name}`}>
 				<IconTelldus icon="up" size={iconSize}
@@ -153,13 +153,13 @@ const getStyles = ({colors}: Object): Object => {
 	const {
 		colorOnActiveBg,
 		colorOnInActiveBg,
+		buttonSeparatorColor,
 	} = colors;
 
 	return {
-		navigationButton: {
-			flex: 1,
-			justifyContent: 'center',
-			alignItems: 'center',
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
 		},
 		enabled: {
 			color: '#1a355b',

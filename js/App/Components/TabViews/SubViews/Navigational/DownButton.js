@@ -124,7 +124,7 @@ class DownButton extends View {
 
 		return (
 			<TouchableOpacity
-				style={[downButtonStyle, style]}
+				style={[styles.styleDef, downButtonStyle, style]}
 				onPress={supportedMethod ? this.onDown : noop}
 				accessibilityLabel={`${this.labelDownButton}, ${name}`}>
 				<IconTelldus icon="down" size={iconSize}
@@ -153,9 +153,14 @@ const getStyles = ({colors}: Object): Object => {
 	const {
 		colorOnActiveBg,
 		colorOnInActiveBg,
+		buttonSeparatorColor,
 	} = colors;
 
 	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
 		enabled: {
 			color: '#1a355b',
 		},

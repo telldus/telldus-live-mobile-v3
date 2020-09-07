@@ -388,8 +388,6 @@ const styles = StyleSheet.create({
 		alignItems: 'stretch',
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	buttonStyle: {
 		flex: 1,
@@ -399,8 +397,6 @@ const styles = StyleSheet.create({
 	buttonContainerStyle: {
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 });
 

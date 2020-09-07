@@ -132,8 +132,6 @@ class ToggleButton extends View {
 const styles = StyleSheet.create({
 	turnOff: {
 		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

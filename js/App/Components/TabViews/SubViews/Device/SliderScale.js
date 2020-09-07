@@ -166,7 +166,7 @@ class SliderScale extends View {
 		let accessibilityLabel = `${this.labelPhraseOne} ${displayedValue}%, ${name}. ${this.labelPhraseTwo}`;
 
 		return (
-			<View style={[{flex: 1, justifyContent: 'center'}, backgroundStyle, style]}
+			<View style={[styles.styleDef, backgroundStyle, style]}
 				accessibilityLabel={accessibilityLabel}
 				importantForAccessibility={importantForAccessibility}>
 				<View
@@ -214,9 +214,16 @@ const getStyles = ({colors}: Object): Object => {
 		colorOnInActiveBg,
 		colorOnActiveIcon,
 		colorOnInActiveIcon,
+		buttonSeparatorColor,
 	} = colors;
 
 	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+			flex: 1,
+			justifyContent: 'center',
+		},
 		enabled: {
 			backgroundColor: colorOnActiveIcon,
 		},

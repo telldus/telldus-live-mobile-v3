@@ -125,7 +125,7 @@ class OffButton extends View {
 			<TouchableOpacity
 				disabled={!enabled}
 				onPress={this.onPress}
-				style={[this.props.style, buttonStyle]}
+				style={[styles.styleDef, this.props.style, buttonStyle]}
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon={iconName} style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
@@ -144,9 +144,14 @@ const getStyles = ({colors}: Object): Object => {
 	const {
 		colorOffActiveBg,
 		colorOffInActiveBg,
+		buttonSeparatorColor,
 	} = colors;
 
 	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
 		enabled: {
 			backgroundColor: colorOffActiveBg,
 		},

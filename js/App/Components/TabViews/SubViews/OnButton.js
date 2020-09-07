@@ -126,7 +126,7 @@ class OnButton extends View {
 			<TouchableOpacity
 				disabled={!enabled}
 				onPress={this.onPress}
-				style={[this.props.style, buttonStyle]}
+				style={[styles.styleDef, this.props.style, buttonStyle]}
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon={iconName} style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
@@ -145,9 +145,14 @@ const getStyles = ({colors}: Object): Object => {
 	const {
 		colorOnActiveBg,
 		colorOnInActiveBg,
+		buttonSeparatorColor,
 	} = colors;
 
 	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
 		enabled: {
 			backgroundColor: colorOnActiveBg,
 		},
@@ -156,14 +161,6 @@ const getStyles = ({colors}: Object): Object => {
 		},
 		offline: {
 			backgroundColor: '#a2a2a2',
-		},
-		button: {
-			alignItems: 'stretch',
-			justifyContent: 'center',
-		},
-		buttonText: {
-			textAlign: 'center',
-			textAlignVertical: 'center',
 		},
 		dot: {
 			position: 'absolute',

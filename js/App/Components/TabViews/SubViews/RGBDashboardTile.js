@@ -339,8 +339,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'stretch',
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	buttonStyle: {
 		flex: 1,
@@ -352,8 +350,6 @@ const styles = StyleSheet.create({
 		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderBottomLeftRadius: 2,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	iconStyle: {
 		fontSize: 22,

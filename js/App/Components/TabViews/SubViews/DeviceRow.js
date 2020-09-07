@@ -585,6 +585,7 @@ class DeviceRow extends View<Props, State> {
 		const {
 			colorOnActiveBg,
 			colorOffActiveBg,
+			buttonSeparatorColor,
 		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -685,7 +686,7 @@ class DeviceRow extends View<Props, State> {
 				alignItems: 'center',
 				width: buttonWidth * 2,
 				borderLeftWidth: 1,
-				borderLeftColor: '#ddd',
+				borderLeftColor: buttonSeparatorColor,
 				height: rowHeight,
 			},
 			navigation: {
