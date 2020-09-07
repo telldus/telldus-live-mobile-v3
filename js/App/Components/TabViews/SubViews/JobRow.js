@@ -286,7 +286,17 @@ class JobRow extends View<null, Props, null> {
 	}
 
 	_renderActionIcon = (): Object => {
-		const { intl, method, appLayout, methodValue, expired, active, deviceSupportedMethods, deviceType } = this.props;
+		const {
+			intl,
+			method,
+			appLayout,
+			methodValue,
+			expired,
+			active,
+			deviceSupportedMethods,
+			deviceType,
+			colors,
+		} = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 
@@ -407,7 +417,7 @@ class JobRow extends View<null, Props, null> {
 						containerStyle={[
 							methodIconContainer,
 							{
-								backgroundColor: !active ? inactiveGray : expired ? '#999999' : action.bgColor,
+								backgroundColor: !active ? inactiveGray : expired ? '#999999' : colors[action.bgColor],
 							}]}
 						style={methodIcon}
 					/>,
@@ -489,7 +499,7 @@ class JobRow extends View<null, Props, null> {
 				let roundVal = Math.round(methodValue / 255 * 100);
 				showDarkBG = roundVal >= 50 && roundVal < 100;
 			}
-			backgroundColor = !active ? inactiveGray : (expired ? '#999999' : (showDarkBG ? action.bgColorDark : action.bgColor));
+			backgroundColor = !active ? inactiveGray : (expired ? '#999999' : (showDarkBG ? colors[action.bgColorDark] : colors[action.bgColor]));
 		}
 
 		return {

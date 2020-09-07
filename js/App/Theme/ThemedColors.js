@@ -226,6 +226,12 @@ export default {
 		get buttonSeparatorColor() {
 			return '#dddddd';
 		},
+		get dimL1Color() {
+			return '#EEA567';
+		},
+		get dimL2Color() {
+			return '#EA8F41';
+		},
 	},
 
 	dark: {
@@ -415,6 +421,12 @@ export default {
 		},
 		get buttonSeparatorColor() {
 			return Core.grayPrimary;
+		},
+		get dimL1Color() {
+			return '#EEA567';
+		},
+		get dimL2Color() {
+			return '#EA8F41';
 		},
 	},
 };
