@@ -43,6 +43,7 @@ import Theme from '../../../../Theme';
 
 import {
 	withTheme,
+	PropsThemedComponent,
 } from '../../../HOC/withTheme';
 
 type Props = PropsThemedComponent & {

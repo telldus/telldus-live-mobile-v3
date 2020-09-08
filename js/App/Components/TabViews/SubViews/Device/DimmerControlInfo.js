@@ -33,6 +33,7 @@ import DimSlider from './DimSlider';
 
 import {
 	withTheme,
+	PropsThemedComponent,
 } from '../../../HOC/withTheme';
 
 import shouldUpdate from '../../../../Lib/shouldUpdate';

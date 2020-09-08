@@ -39,6 +39,7 @@ import CalendarDay from './CalendarDay';
 
 import {
 	withTheme,
+	PropsThemedComponent,
 } from '../../HOC/withTheme';
 
 import i18n from '../../../Translations/common';
