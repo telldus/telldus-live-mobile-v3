@@ -50,6 +50,7 @@ type Props = {
 	resizeMode?: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center',
 	h1Style: Object,
 	h2Style: Object,
+	renderCustomComponent?: Function,
 };
 
 type DefaultProps = {
@@ -134,6 +135,7 @@ class LocationDetails extends Component<Props, State> {
 			resizeMode,
 			h1Style,
 			h2Style,
+			renderCustomComponent,
 		} = this.props;
 
 		const {
@@ -204,6 +206,7 @@ class LocationDetails extends Component<Props, State> {
 						)}
 					</View>
 				</View>
+				{!!renderCustomComponent && renderCustomComponent()}
 			</TouchableOpacity>
 		);
 	}
