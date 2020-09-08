@@ -41,7 +41,11 @@ import {
 } from '../../../../Lib';
 import Theme from '../../../../Theme';
 
-type Props = {
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
@@ -202,12 +206,24 @@ class SliderDetails extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, style, appLayout } = this.props;
+		const {
+			device,
+			intl,
+			isGatewayActive,
+			style,
+			appLayout,
+			colors,
+		} = this.props;
+
+		const {
+			inAppBrandSecondary,
+		} = colors;
+
 		const { supportedMethods = {} } = device;
 		const { DIM } = supportedMethods;
-		const minimumTrackTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';
+		const minimumTrackTintColor = isGatewayActive ? inAppBrandSecondary : '#cccccc';
 		const maximumTrackTintColor = isGatewayActive ? 'rgba(219, 219, 219, 255)' : '#e5e5e5';
-		const thumbTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';
+		const thumbTintColor = isGatewayActive ? inAppBrandSecondary : '#cccccc';
 
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -306,4 +322,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(SliderDetails);
+module.exports = connect(null, mapDispatchToProps)(withTheme(SliderDetails));

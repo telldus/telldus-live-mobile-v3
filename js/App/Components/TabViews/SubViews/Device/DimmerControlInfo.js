@@ -31,12 +31,16 @@ import {
 } from '../../../../../BaseComponents';
 import DimSlider from './DimSlider';
 
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
+
 import shouldUpdate from '../../../../Lib/shouldUpdate';
 
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
     name: string,
     id: number,
 	style: Object,
@@ -53,7 +57,12 @@ class DimmerControlInfo extends View<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return shouldUpdate(this.props, nextProps, ['appLayout', 'isOnline']);
+		return shouldUpdate(this.props, nextProps, [
+			'appLayout',
+			'isOnline',
+			'themeInApp',
+			'colorScheme',
+		]);
 	}
 
 	render(): Object {
@@ -65,11 +74,16 @@ class DimmerControlInfo extends View<Props, null> {
 			isOnline,
 			appLayout,
 			intl,
+			colors,
 		} = this.props;
 
-		const minimumTrackTintColor = isOnline ? Theme.Core.brandSecondary : '#cccccc';
+		const {
+			inAppBrandSecondary,
+		} = colors;
+
+		const minimumTrackTintColor = isOnline ? inAppBrandSecondary : '#cccccc';
 		const maximumTrackTintColor = isOnline ? 'rgba(219, 219, 219, 255)' : '#e5e5e5';
-		const thumbTintColor = isOnline ? Theme.Core.brandSecondary : '#cccccc';
+		const thumbTintColor = isOnline ? inAppBrandSecondary : '#cccccc';
 
 		const {
 			dimInfoDialogueContainer,
@@ -175,4 +189,4 @@ class DimmerControlInfo extends View<Props, null> {
 	}
 }
 
-export default DimmerControlInfo;
+export default withTheme(DimmerControlInfo);

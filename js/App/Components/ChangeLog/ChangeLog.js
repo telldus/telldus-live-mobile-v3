@@ -305,7 +305,8 @@ class ChangeLogNavigator extends View {
 								buttonStyle={[floatingButtonLeft, floatingCommon]}
 								iconStyle={styles.buttonIconStyle}
 								innerContainer={innerContainer}
-								accessibilityLabel={this.prevLabel}/>
+								accessibilityLabel={this.prevLabel}
+								buttonInnerViewLevel={13}/>
 							)}
 							{Screens.length > 1 && Screens.map((screen: number, index: number): Object => {
 								let level = Screens[index] === currentScreen ?
@@ -324,7 +325,8 @@ class ChangeLogNavigator extends View {
 								onPress={this.onPressNext}
 								buttonStyle={[floatingCommon, floatingButtonRight]}
 								innerContainer={innerContainer}
-								accessibilityLabel={this.nextLabel}/>
+								accessibilityLabel={this.nextLabel}
+								buttonInnerViewLevel={13}/>
 						</View>
 					</ScrollView>
 				</SafeAreaView>

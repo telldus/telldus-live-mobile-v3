@@ -59,6 +59,7 @@ type Props = {
 	buttonLevel?: number,
 	iconLevel?: number,
 	throbberLevel?: number,
+	buttonInnerViewLevel?: number,
 };
 
 class FloatingButton extends Component<Props, null> {
@@ -102,6 +103,7 @@ class FloatingButton extends Component<Props, null> {
 			buttonLevel,
 			iconLevel,
 			throbberLevel,
+			buttonInnerViewLevel,
 		} = this.props;
 		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
@@ -126,7 +128,7 @@ class FloatingButton extends Component<Props, null> {
 				accessibilityLabel={accessibilityLabel}
 				disabled={disabled}>
 				<View
-					level={bLevel}
+					level={buttonInnerViewLevel}
 					style={[innerContainerDef, innerContainer]}>
 					{!!imageSource &&
 					(

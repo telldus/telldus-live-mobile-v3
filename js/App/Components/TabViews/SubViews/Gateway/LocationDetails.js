@@ -100,7 +100,9 @@ class LocationDetails extends View {
 					/>
 					<TouchableOpacity disabled={!onPress} onPress={this.onPress} accessible={accessible}>
 						<View style={[locationTextContainer, descriptionContainerStyle]}>
-							<Text numberOfLines={1} style={[textHSH, h1Style]}>
+							<Text
+								level={23}
+								numberOfLines={1} style={[textHSH, h1Style]}>
 								{!!H1 && H1}
 							</Text>
 							<Text numberOfLines={1} style={[textLocation, h2Style]}>
@@ -150,7 +152,6 @@ class LocationDetails extends View {
 				fontSize: textLocationSize,
 			},
 			textHSH: {
-				color: '#F06F0C',
 				fontSize: textHSHSize,
 			},
 		};

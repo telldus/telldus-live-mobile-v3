@@ -37,7 +37,12 @@ import { LayoutAnimations, formatModeValue } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
 	baseColor: string,
     title: string,
     currentValue: number,
@@ -169,11 +174,11 @@ render(): Object {
 		offInfoText,
 		playIconStyle,
 		offContentCover,
-		brandSecondary,
 		fanIconStyle,
 		box3,
 		box2,
 		box1,
+		inAppBrandSecondary,
 	} = this.getStyles();
 
 	const cModevalue = this.formatModeValue(currentValueInScreen);
@@ -185,7 +190,7 @@ render(): Object {
 		<View style={InfoCover} pointerEvents="box-none">
 			<View style={box1}>
 				<Text style={[infoTitleStyle, {
-					color: controllingMode === 'fan' ? brandSecondary : baseColor,
+					color: controllingMode === 'fan' ? inAppBrandSecondary : baseColor,
 				}]}>
 					{!!title && hideModeControl ?
 						''
@@ -295,18 +300,21 @@ render(): Object {
 }
 
 getStyles(): Object {
-	const { appLayout } = this.props;
+	const { appLayout, colors } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
+		inAppBrandSecondary,
+	} = colors;
+
+	const {
 		rowTextColor,
-		brandSecondary,
 	} = Theme.Core;
 
 	return {
-		brandSecondary,
+		inAppBrandSecondary,
 		InfoCover: {
 			position: 'absolute',
 			top: 0,
@@ -381,12 +389,12 @@ getStyles(): Object {
 			fontSize: deviceWidth * 0.04,
 			textAlign: 'center',
 			textAlignVertical: 'bottom',
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			marginTop: 5,
 		},
 		doneIconStyle: {
 			fontSize: deviceWidth * 0.055,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			textAlign: 'center',
 			textAlignVertical: 'center',
 			marginTop: deviceWidth * 0.02,
@@ -401,12 +409,12 @@ getStyles(): Object {
 			justifyContent: 'center',
 		},
 		playIconStyle: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize: deviceWidth * 0.07,
 			marginTop: 5,
 		},
 		offInfoText: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize: deviceWidth * 0.04,
 			textAlign: 'center',
 			marginTop: 5,
@@ -420,4 +428,4 @@ getStyles(): Object {
 }
 }
 
-module.exports = injectIntl(ControlInfoBlock);
+module.exports = withTheme(injectIntl(ControlInfoBlock));
