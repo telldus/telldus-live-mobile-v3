@@ -90,6 +90,24 @@ class GatewayRow extends PureComponent<Props, State> {
 		);
 	}
 
+	renderCustomComponent = (): Object => {
+		let {
+			appLayout,
+			disabled,
+		} = this.props;
+		let styles = this.getStyles(appLayout);
+		return (
+			<View style={styles.arrowCover} pointerEvents={'none'}>
+				{
+					disabled ?
+						<IconTelldus icon={'notavailable'} style={styles.notAvailableIcon}/>
+						:
+						<Image source={{uri: 'right_arrow_key'}} style={styles.arrow}/>
+				}
+			</View>
+		);
+	}
+
 	render(): Object {
 		let {
 			location,
@@ -144,15 +162,8 @@ class GatewayRow extends PureComponent<Props, State> {
 					style={styles.locationDetails}
 					h1Style={styles.h1Style}
 					h2Style={styles.h2Style}
-					onPress={disabled ? undefined : this.onPressGateway}/>
-				<View style={styles.arrowCover} pointerEvents={'none'}>
-					{
-						disabled ?
-							<IconTelldus icon={'notavailable'} style={styles.notAvailableIcon}/>
-							:
-							<Image source={{uri: 'right_arrow_key'}} style={styles.arrow}/>
-					}
-				</View>
+					onPress={disabled ? undefined : this.onPressGateway}
+					renderCustomComponent={this.renderCustomComponent}/>
 			</View>
 		);
 	}
@@ -192,17 +203,17 @@ class GatewayRow extends PureComponent<Props, State> {
 				alignItems: 'center',
 			},
 			locationDetails: {
-				width: rowWidth,
-				height: rowHeight,
 				marginVertical: padding / 4,
 				backgroundColor: colorBackground,
+				width: rowWidth,
+				height: rowHeight,
 			},
 			arrowCover: {
 				flex: 0,
 				position: 'absolute',
 				zIndex: 1,
 				right: padding * 2,
-				top: '40%',
+				top: '50%',
 			},
 			arrow: {
 				tintColor: iconTwoColorBlock,
