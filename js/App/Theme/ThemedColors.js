@@ -35,6 +35,9 @@ const common = {
 	get badgeColor() {
 		return '#ED1727';
 	},
+	get success() {
+		return Core.brandSuccess;
+	},
 };
 
 export default {

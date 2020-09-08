@@ -241,6 +241,12 @@ const getTextColor = (props: Object): ?string => {
 		case 28: {
 			return colors.textTen;
 		}
+		case 29: {
+			return colors.danger;
+		}
+		case 30: {
+			return colors.success;
+		}
 		default:
 			return;
 	}
