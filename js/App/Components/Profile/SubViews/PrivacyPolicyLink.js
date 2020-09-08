@@ -76,7 +76,7 @@ const PrivacyPolicyLink = (props: Object): Object => {
 
 	return (
 		<Text
-			level={7}
+			level={23}
 			onPress={onPressPP}
 			style={buttonResubmit}>
 			{formatMessage(i18n.privacyPolicy)}

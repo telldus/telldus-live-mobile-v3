@@ -190,7 +190,7 @@ const SettingsRow = (props: Props): Object => {
 						{!!iconLabelRight && (
 							<TouchableOpacity onPress={_onPressIconLabelRight} style={iconLabelRightCover}>
 								<IconTelldus
-									level={9}
+									level={23}
 									icon={iconLabelRight}
 									style={iconLabelRightStyle}/>
 							</TouchableOpacity>
@@ -217,7 +217,7 @@ const SettingsRow = (props: Props): Object => {
 						{!!iconLabelRight && (
 							<TouchableOpacity onPress={_onPressIconLabelRight} style={iconLabelRightCover}>
 								<IconTelldus
-									level={9}
+									level={23}
 									icon={iconLabelRight}
 									style={iconLabelRightStyle}/>
 							</TouchableOpacity>
@@ -267,7 +267,7 @@ const SettingsRow = (props: Props): Object => {
 								{typeof iconValueRight === 'string' ? <ThemedMaterialIcon
 									name={iconValueRight}
 									size={_iconValueRightSize}
-									level={9}/> : iconValueRight}
+									level={23}/> : iconValueRight}
 							</TouchableOpacity>
 						)}
 					</TouchableOpacity>

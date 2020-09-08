@@ -104,10 +104,15 @@ const AutoRenewalBlock = (props: Object): Object => {
 				undefined
 				:
 				isAutoRenew ?
-					<IconTelldus icon={'settings'} style={upgradeSyle}/>
+					<IconTelldus
+						level={23}
+						icon={'settings'}
+						style={upgradeSyle}/>
 					:
 					(enablePurchase && isNotiOS) ?
-						<Text style={upgradeSyle}>{formatMessage(i18n.renew)}</Text>
+						<Text
+							level={23}
+							style={upgradeSyle}>{formatMessage(i18n.renew)}</Text>
 						:
 						undefined
 			}
@@ -139,7 +144,6 @@ const getStyle = (appLayout: Object): Object => {
 
 	return {
 		upgradeSyle: {
-			color: Theme.Core.brandSecondary,
 			fontSize: deviceWidth * 0.04,
 		},
 		cartIconStyle: {

@@ -112,7 +112,7 @@ const SMSBlock = (props: Object): Object => {
 					labelTextStyle={labelTextStyle}/>
 			</View>
 			<Text
-				level={7}
+				level={23}
 				style={linkTextStyle}
 				onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
 		</>

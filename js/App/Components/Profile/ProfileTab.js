@@ -283,7 +283,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				{enable && (
 					<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
 						<Text
-							level={7}
+							level={23}
 							style={redeemTextSyle}>
 							{formatMessage(i18n.viewPurchaseHistory)}
 						</Text>
@@ -295,9 +295,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 							<IconTelldus
 								icon={'gift'}
 								style={redeemIconStyle}
-								level={7}/>
+								level={23}/>
 							<Text
-								level={7}
+								level={23}
 								style={redeemTextSyle}>
 								{capitalize(formatMessage(i18n.redeemCard))}
 							</Text>

@@ -51,7 +51,7 @@ const WhatsNewLink = (props: Object): Object => {
 
 	return (
 		<Text
-			level={7}
+			level={23}
 			onPress={onPressWhatsNew} style={buttonResubmit}>
 			{formatMessage(i18n.labelWhatsNew)}
 		</Text>
