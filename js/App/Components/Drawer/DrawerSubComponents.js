@@ -51,6 +51,7 @@ const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwi
 
 	return (
 		<RippleButton
+			level={16}
 			style={styles.navigationHeader}
 			onPress={onPress}>
 			<View style={{
@@ -65,18 +66,26 @@ const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwi
 					style={styles.navigationHeaderImage}/>
 				<View>
 					<View style={styles.navigationHeaderTextCover}>
-						<Text numberOfLines={1} style={styles.navigationHeaderText}>
+						<Text
+							numberOfLines={1}
+							level={23}
+							style={styles.navigationHeaderText}>
 							{firstName}
 						</Text>
 						{lastName ?
-							<Text numberOfLines={1} style={styles.navigationHeaderText}>
+							<Text
+								numberOfLines={1}
+								level={23}
+								style={styles.navigationHeaderText}>
 								{` ${lastName}`}
 							</Text>
 							:
 							null
 						}
 					</View>
-					<Text style={styles.switchOrAdd}>
+					<Text
+						level={28}
+						style={styles.switchOrAdd}>
 						{textSwitchAccount}
 					</Text>
 				</View>
@@ -86,16 +95,21 @@ const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwi
 };
 
 const DrawerSubHeader = ({styles, textIntl}: Object): Object => (
-	<View style={styles.navigationTitle}>
+	<View
+		level={13}
+		style={styles.navigationTitle}>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...textIntl} style={styles.navigationTextTitle}/></Text>
 	</View>
 );
 
 const SettingsLink = ({styles, textIntl, text, iconName, iconComponent, onPressLink}: Object): Object => (
 	<RippleButton style={styles.linkCoverStyle} onPress={onPressLink}>
-		{!!iconName && <IconTelldus style={styles.linkIconStyle} icon={iconName}/>}
+		{!!iconName && <IconTelldus
+			level={23}
+			style={styles.linkIconStyle}
+			icon={iconName}/>}
 		{!!iconComponent && iconComponent}
-		<Text level={5} style={styles.linkLabelStyle}>
+		<Text level={27} style={styles.linkLabelStyle}>
 			{!!text && text}
 			{!!textIntl && <FormattedMessage {...textIntl} style={styles.linkLabelStyle}/>}
 		</Text>

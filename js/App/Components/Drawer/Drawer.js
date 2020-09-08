@@ -285,7 +285,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 					textSwitchAccount={formatMessage(i18n.switchOrAddAccount)}
 					onPress={this._showSwitchAccountActionSheet}/>
 				<View
-					level={3}
+					level={17}
 					style={{
 						flex: 1,
 					}}>
@@ -359,7 +359,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 
 		const {
 			paddingFactor,
-			brandSecondary,
 			brandPrimary,
 		} = Theme.Core;
 
@@ -383,7 +382,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				paddingVertical: padding * 2,
 				width: drawerWidth,
 				minWidth: 250,
-				backgroundColor: brandPrimary,
 				marginTop: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 				flexDirection: 'row',
 				justifyContent: 'center',
@@ -396,7 +394,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				borderRadius: ImageSize / 2,
 			},
 			navigationHeaderText: {
-				color: brandSecondary,
 				fontSize: fontSizeHeader,
 				zIndex: 3,
 				textAlignVertical: 'center',
@@ -415,7 +412,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 					paddingVertical: padding / 2,
 					paddingLeft: 10,
 					alignItems: 'center',
-					backgroundColor: brandSecondary,
 				},
 				navigationTextTitle: {
 					color: '#fff',
@@ -424,7 +420,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				},
 			},
 			switchOrAdd: {
-				color: '#fff',
 				fontSize: fontSizeHeaderTwo,
 				zIndex: 3,
 				textAlignVertical: 'center',
@@ -455,11 +450,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				justifyContent: 'flex-start',
 				marginBottom: 5,
 			},
-			addNewLocationText: {
-				fontSize: fontSizeAddLocText,
-				color: brandSecondary,
-				marginLeft: 10,
-			},
 			settingsLinkCover: {
 				marginBottom: padding * 0.9,
 			},
@@ -477,7 +467,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			},
 			linkIconStyle: {
 				fontSize: fontSizeSettingsIcon,
-				color: brandSecondary,
 				marginRight: 8,
 				marginLeft: 10,
 				textAlign: 'left',

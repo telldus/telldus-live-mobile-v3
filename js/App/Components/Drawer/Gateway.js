@@ -109,7 +109,7 @@ class Gateway extends PureComponent<Props, null> {
 					onPress={this.onPress}
 					resizeMode={'stretch'}/>
 				<View style={iconSettingsContainer} pointerEvents="none">
-					<IconTelldus icon={'settings'} size={iconSize} level={6}/>
+					<IconTelldus icon={'settings'} size={iconSize} level={25}/>
 				</View>
 			</RippleButton>
 		);
@@ -121,8 +121,9 @@ class Gateway extends PureComponent<Props, null> {
 		} = this.props;
 
 		const {
-			headerOneColorBlockEnabled,
 			textSix,
+			inAppBrandSecondary,
+			textSeven,
 		} = colors;
 
 		const fontSizeH1 = Math.floor(drawerWidth * 0.048);
@@ -175,7 +176,7 @@ class Gateway extends PureComponent<Props, null> {
 				marginRight: iconContainerWidth * 2,
 				width: drawerWidth - (iconContainerWidth + (drawerWidth * 0.22)),
 				flexWrap: 'wrap',
-				color: headerOneColorBlockEnabled,
+				color: inAppBrandSecondary,
 			},
 			h2Style: {
 				fontSize: fontSizeH2,
@@ -183,7 +184,7 @@ class Gateway extends PureComponent<Props, null> {
 			},
 			statusStyle: {
 				fontSize: fontSizeH3,
-				color: textSix,
+				color: textSeven,
 			},
 			statusInfoStyle: {
 				fontSize: fontSizeH3 * 2,
