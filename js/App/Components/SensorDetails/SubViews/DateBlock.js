@@ -90,7 +90,9 @@ render(): Object {
 		<RippleButton
 			style={blockContainerStyle}
 			onPress={this.onPress}>
-			{align === 'left' && (<View style={iconContainerStyle}>
+			{align === 'left' && (<View
+				level={13}
+				style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
 			<View style={dateContainerStyle}>
@@ -104,7 +106,9 @@ render(): Object {
 					value={moment.unix(date)}
 					style={dateStyle}/>
 			</View>
-			{align === 'right' && (<View style={iconContainerStyle}>
+			{align === 'right' && (<View
+				level={13}
+				style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
 		</RippleButton>
@@ -140,7 +144,6 @@ getStyle(appLayout: Object, align: Align): Object {
 			height: iconContainerSize,
 			width: iconContainerSize,
 			borderRadius: iconContainerSize / 2,
-			backgroundColor: brandSecondary,
 			justifyContent: 'center',
 			alignItems: 'center',
 			marginVertical: padding,

@@ -37,10 +37,14 @@ import {
 } from '../../../../BaseComponents';
 import CalendarDay from './CalendarDay';
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	isVisible: boolean,
 	current: any,
 	onPressPositive: (any) => void,
@@ -57,7 +61,7 @@ type DefaultProps = {
 	isVisible: boolean,
 };
 
-export default class CalendarModalComponent extends View<Props, null> {
+class CalendarModalComponent extends View<Props, null> {
 props: Props;
 static defaultProps: DefaultProps = {
 	isVisible: false,
@@ -291,11 +295,14 @@ render(): Object {
 }
 
 getStyle(appLayout: Object): Object {
+	const {
+		colors,
+	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { brandSecondary, eulaContentColor, offlineColor } = Theme.Core;
+	const { eulaContentColor, offlineColor } = Theme.Core;
 
 	const adjustCelendar = !this.isTablet && !isPortrait;
 
@@ -305,6 +312,10 @@ getStyle(appLayout: Object): Object {
 	const fontSizePosterTextTwo = posterHeight * 0.3;
 	const fontSizeFooterText = adjustCelendar ? deviceWidth * 0.03 : deviceWidth * 0.05;
 	const footerPadding = adjustCelendar ? fontSizeFooterText * 0.5 : fontSizeFooterText;
+
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	return {
 		containerStyle: {
@@ -336,7 +347,7 @@ getStyle(appLayout: Object): Object {
 		},
 		calendarTheme: {
 			textSectionTitleColor: offlineColor,
-			selectedDayBackgroundColor: brandSecondary,
+			selectedDayBackgroundColor: inAppBrandSecondary,
 			todayTextColor: '#00adf5',
 			arrowColor: '#000',
 			monthTextColor: '#000',
@@ -357,7 +368,7 @@ getStyle(appLayout: Object): Object {
 			paddingRight: adjustCelendar ? 10 : 0,
 		},
 		positiveLabelStyle: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize: fontSizeFooterText,
 			marginLeft: 20,
 			marginRight: 15,
@@ -369,3 +380,5 @@ getStyle(appLayout: Object): Object {
 	};
 }
 }
+
+export default withTheme(CalendarModalComponent);
