@@ -642,6 +642,8 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 (0% )
               </Text>
               <View
+                colorScheme="light"
+                dark={false}
                 style={
                   Array [
                     Object {
