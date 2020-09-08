@@ -358,7 +358,7 @@ class SensorRow extends View<Props, State> {
 		return (
 			<View style={coverStyle}>
 				<Text
-					level={6}
+					level={25}
 					style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5 }]}
 					ellipsizeMode="middle"
 					numberOfLines={1}>
@@ -371,7 +371,7 @@ class SensorRow extends View<Props, State> {
 						updateIntervalInSeconds={60}
 						timestamp={lastUpdatedValue}
 						gatewayTimezone={sensor.gatewayTimezone}
-						level={minutesAgo < 1440 ? 6 : 8}
+						level={minutesAgo < 1440 ? 25 : 8}
 						textStyle={[
 							textInfoStyle, {
 								opacity: minutesAgo < 1440 ? 1 : 0.5,
@@ -379,7 +379,7 @@ class SensorRow extends View<Props, State> {
 						]} />
 					:
 					<Text
-						level={5}
+						level={26}
 						style={textInfoStyle}>
 						{this.offline}
 					</Text>
@@ -438,12 +438,14 @@ class SensorRow extends View<Props, State> {
 				flex: 1,
 				justifyContent: 'center',
 				alignItems: 'flex-start',
+				marginLeft: 6,
 			},
 			nameTablet: {
 				flex: 1,
 				justifyContent: 'space-between',
 				alignItems: 'flex-start',
 				flexDirection: 'row',
+				marginLeft: 6,
 			},
 			nameText: {
 				fontSize: nameFontSize,

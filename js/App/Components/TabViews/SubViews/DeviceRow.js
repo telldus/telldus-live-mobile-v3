@@ -533,13 +533,13 @@ class DeviceRow extends View<Props, State> {
 		return (
 			<View style={coverStyle}>
 				<Text
-					level={6}
+					level={25}
 					style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1}>
 					{deviceName}
 				</Text>
 				{!!info && (
 					<Text
-						level={6}
+						level={25}
 						style = {textPowerStyle} numberOfLines={1}>
 						{info}
 					</Text>

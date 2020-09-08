@@ -159,7 +159,7 @@ getStyles(): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary } = Theme.Core;
+	const { shadow, paddingFactor } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const rowHeight = deviceWidth * 0.27;
@@ -170,17 +170,17 @@ getStyles(): Object {
 	const {
 		card,
 		colorBlockDisabled,
-		headerOneColorBlockEnabled,
 		headerOneColorBlockDisabled,
 		iconOneColorBlockEnabled,
 		iconOneColorBlockDisabled,
 		iconTwoColorBlock,
 		infoOneColorBlockEnabled,
 		infoOneColorBlockDisabled,
+		inAppBrandSecondary,
 	} = colors;
 
 	const colorBackground = enabled ? card : colorBlockDisabled;
-	const colorHeaderOneText = enabled ? headerOneColorBlockEnabled : headerOneColorBlockDisabled;
+	const colorHeaderOneText = enabled ? inAppBrandSecondary : headerOneColorBlockDisabled;
 	const colorIcon = enabled ? iconOneColorBlockEnabled : iconOneColorBlockDisabled;
 
 	const imageComponentWidth = deviceWidth * 0.16;
@@ -235,7 +235,7 @@ getStyles(): Object {
 		},
 		iconSecurity: {
 			fontSize: h1FontSize,
-			color: brandSecondary,
+			color: colorHeaderOneText,
 		},
 		notAvailableIcon: {
 			fontSize: rowHeight * 0.25,
