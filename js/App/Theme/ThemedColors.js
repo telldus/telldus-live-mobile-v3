@@ -360,7 +360,7 @@ export default {
 			return '#999999';
 		},
 		get iconOneColorBlockEnabled() {
-			return '#1b365d';
+			return '#ffffff';
 		},
 		get iconOneColorBlockDisabled() {
 			return '#bdbdbd';
