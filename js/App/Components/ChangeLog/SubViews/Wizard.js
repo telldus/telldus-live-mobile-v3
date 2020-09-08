@@ -157,7 +157,6 @@ export default class WizardOne extends PureComponent<Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 
 		const {
-			brandSecondary,
 			shadow,
 			paddingFactor,
 		} = Theme.Core;

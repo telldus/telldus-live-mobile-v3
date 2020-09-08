@@ -101,7 +101,7 @@ getStyle(appLayout: Object): Object {
 
 	const { state, marking } = this.props;
 	const { selected, marked, startingDay, endingDay } = marking;
-	const { brandInfo, inactiveGray, brandSecondary } = Theme.Core;
+	const { brandInfo, inactiveGray } = Theme.Core;
 
 	const adjustDay = !this.isTablet && !isPortrait;
 

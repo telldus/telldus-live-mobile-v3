@@ -120,7 +120,7 @@ getStyle(appLayout: Object, align: Align): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { paddingFactor, brandSecondary, shadow } = Theme.Core;
+	const { paddingFactor, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const outerPadding = padding * 2;
