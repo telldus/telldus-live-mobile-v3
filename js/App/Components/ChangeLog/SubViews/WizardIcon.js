@@ -46,11 +46,17 @@ export default class WizardOne extends PureComponent<Props, null> {
 			iconSize,
 			iconColor,
 			iconStyle,
+			iconLevel,
 		} = this.props;
 
 		return (
 			<View>
-				{(!!icon && typeof icon === 'string') && <IconTelldus icon={icon} style={iconStyle} size={iconSize} color={iconColor}/>}
+				{(!!icon && typeof icon === 'string') && <IconTelldus
+					icon={icon}
+					style={iconStyle}
+					size={iconSize}
+					color={iconColor}
+					level={iconLevel}/>}
 				{React.isValidElement(icon) && icon}
 			</View>
 		);

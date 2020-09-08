@@ -63,7 +63,6 @@ export default class WizardOne extends PureComponent<Props, null> {
 	}
 
 	getScreenData(currentScreen: number, styles: Object): Object {
-		const { brandSecondary } = Theme.Core;
 		const {
 			iconStyle,
 			// iconTwoStyle,
@@ -74,7 +73,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 		let screenData = {
 			icon: null,
 			iconSize,
-			iconColor: brandSecondary,
+			iconLevel: 23,
 			iconStyle,
 			title: '',
 			description: '',
@@ -178,17 +177,14 @@ export default class WizardOne extends PureComponent<Props, null> {
 				marginVertical: padding * 2,
 			},
 			iconStyle: {
-				color: brandSecondary,
 				textAlign: 'center',
 			},
 			iconTwoStyle: {
 				height: iconSize * 0.9,
 				width: iconSize * 0.9,
-				tintColor: brandSecondary,
 				marginVertical: 5 + (iconSize * 0.14),
 			},
 			iconThreeStyle: {
-				color: brandSecondary,
 				textAlignVertical: 'center',
 				textAlign: 'center',
 			},
