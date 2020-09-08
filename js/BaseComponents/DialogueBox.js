@@ -34,10 +34,13 @@ import DialogueHeader from './DialogueHeader';
 
 import capitalize from '../App/Lib/capitalize';
 import i18n from '../App/Translations/common';
-import Theme from '../App/Theme';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	showDialogue?: boolean,
 	appLayout: Object,
 
@@ -77,8 +80,6 @@ type defaultProps = {
 	backdropOpacity: number,
 	showHeader: boolean,
 	capitalizeHeader: boolean,
-	negTextColor: string,
-	posTextColor: string,
 };
 
 class DialogueBox extends Component<Props, null> {
@@ -95,8 +96,6 @@ class DialogueBox extends Component<Props, null> {
 		backdropOpacity: 0.60,
 		showHeader: true,
 		capitalizeHeader: true,
-		negTextColor: '#6B6969',
-		posTextColor: Theme.Core.brandSecondary,
 	}
 
 	renderHeader: (Object) => void;
@@ -364,7 +363,12 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	getStyles(): Object {
-		const { appLayout, negTextColor, posTextColor } = this.props;
+		const {
+			appLayout,
+			negTextColor,
+			posTextColor,
+			colors,
+		} = this.props;
 		const { width, height } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -375,6 +379,14 @@ class DialogueBox extends Component<Props, null> {
 		const headerWidth = Math.ceil(deviceWidth * 0.75);
 		const headerHeight = Math.ceil(deviceWidth * 0.12);
 		const borderRadi = 5;
+
+		const {
+			inAppBrandSecondary,
+			dialogueBoxNegativeTextColor,
+		} = colors;
+
+		const _negTextColor = negTextColor || dialogueBoxNegativeTextColor;
+		const _posTextColor = posTextColor || inAppBrandSecondary;
 
 		return {
 			modal: {
@@ -388,14 +400,6 @@ class DialogueBox extends Component<Props, null> {
 				justifyContent: 'space-between',
 				borderRadius: borderRadi,
 				overflow: 'hidden',
-			},
-			notificationModalHeader: {
-				justifyContent: 'center',
-				alignItems: 'flex-start',
-				paddingVertical: fontSize,
-				paddingHorizontal: 5 + fontSize,
-				width: deviceWidth * 0.75,
-				backgroundColor: '#e26901',
 			},
 			headerWidth,
 			headerHeight,
@@ -432,13 +436,13 @@ class DialogueBox extends Component<Props, null> {
 				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterNegativeText: {
-				color: negTextColor,
+				color: _negTextColor,
 				fontSize,
 				fontWeight: 'bold',
 				fontFamily: 'Roboto-Regular',
 			},
 			notificationModalFooterPositiveText: {
-				color: posTextColor,
+				color: _posTextColor,
 				fontSize,
 				fontWeight: 'bold',
 				fontFamily: 'Roboto-Regular',
@@ -453,4 +457,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(injectIntl(DialogueBox));
+export default connect(mapStateToProps, null)(withTheme(injectIntl(DialogueBox)));
