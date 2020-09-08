@@ -35,10 +35,14 @@ import {
 } from '../../../../BaseComponents';
 import LabelBox from './LabelBox';
 
-import i18n from '../../../Translations/common';
-import Theme from '../../../Theme';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 
-type Props = {
+import i18n from '../../../Translations/common';
+
+type Props = PropsThemedComponent & {
 	navigation: Object,
 	intl: intlShape.isRequired,
 	onDidMount: Function,
@@ -122,7 +126,18 @@ class Name extends View {
 	}
 
 	render(): Object {
-		let { appLayout, dialogueOpen, currentScreen, isLoading } = this.props;
+		let {
+			appLayout,
+			dialogueOpen,
+			currentScreen,
+			isLoading,
+			colors,
+		} = this.props;
+
+		const {
+			inAppBrandSecondary,
+		} = colors;
+
 		const styles = this.getStyle(appLayout);
 
 		let importantForAccessibility = !dialogueOpen && currentScreen === 'EditName' ? 'no' : 'no-hide-descendants';
@@ -139,8 +154,8 @@ class Name extends View {
 						autoCapitalize="sentences"
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={Theme.Core.brandSecondary}
-						tintColor={Theme.Core.brandSecondary}
+						baseColor={inAppBrandSecondary}
+						tintColor={inAppBrandSecondary}
 						defaultValue={this.state.locationName}
 						labelOffset={{
 							x0: 5,
@@ -185,4 +200,4 @@ class Name extends View {
 	}
 }
 
-export default Name;
+export default withTheme(Name);

@@ -593,7 +593,9 @@ class Details extends View<Props, State> {
 						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
 						<TouchableWithoutFeedback onPress={this.onPressGatewayInfo}>
 							<View style={boxItemsCover}>
-								<Text style={[textName]}>
+								<Text
+									level={23}
+									style={textName}>
 									{type}
 								</Text>
 								<Text style={locationInfo}>
@@ -740,7 +742,6 @@ class Details extends View<Props, State> {
 				height: deviceHeight * 0.12,
 			},
 			textName: {
-				color: brandSecondary,
 				fontSize: fontSizeName,
 			},
 			locationInfo: {
