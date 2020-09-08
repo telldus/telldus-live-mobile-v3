@@ -105,6 +105,15 @@ const getBGColor = (props: Object): ?string => {
 		case 14: {
 			return colors.inActiveTintTwo;
 		}
+		case 15: {
+			return colors.inAppBrandPrimary;
+		}
+		case 16: {
+			return colors.drawerBg;
+		}
+		case 17: {
+			return colors.drawerBottomBg;
+		}
 		default:
 			return 'transparent';
 	}
@@ -216,6 +225,21 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 23: {
 			return colors.inAppBrandSecondary;
+		}
+		case 24: {
+			return colors.inAppBrandPrimary;
+		}
+		case 25: {
+			return colors.textSeven;
+		}
+		case 26: {
+			return colors.textEight;
+		}
+		case 27: {
+			return colors.textNine;
+		}
+		case 28: {
+			return colors.textTen;
 		}
 		default:
 			return;

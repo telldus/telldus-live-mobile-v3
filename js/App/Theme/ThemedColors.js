@@ -61,6 +61,18 @@ export default {
 		get textSix() {
 			return Core.rowTextColor;
 		},
+		get textSeven() {
+			return Core.rowTextColor;
+		},
+		get textEight() {
+			return Core.eulaContentColor;
+		},
+		get textNine() {
+			return Core.eulaContentColor;
+		},
+		get textTen() {
+			return '#fff';
+		},
 		get textInsideBrandSecondary() {
 			return '#fff';
 		},
@@ -247,6 +259,12 @@ export default {
 		get timeColor() {
 			return Core.brandSecondary;
 		},
+		get drawerBg() {
+			return Core.brandPrimary;
+		},
+		get drawerBottomBg() {
+			return Core.appBackground;
+		},
 	},
 
 	dark: {
@@ -255,7 +273,7 @@ export default {
 			return Core.grayPrimary;
 		},
 		get text() {
-			return Core.inactiveTintColor;
+			return Core.textColorLabel;
 		},
 		get textTwo() {
 			return Core.textColorValue;
@@ -271,6 +289,18 @@ export default {
 		},
 		get textSix() {
 			return '#fff';
+		},
+		get textSeven() {
+			return Core.textColorValue;
+		},
+		get textEight() {
+			return Core.textColorValue;
+		},
+		get textNine() {
+			return Core.textColorLabel;
+		},
+		get textTen() {
+			return Core.textColorValue;
 		},
 		get textInsideBrandSecondary() {
 			return '#fff';
@@ -457,6 +487,12 @@ export default {
 		},
 		get timeColor() {
 			return this.inAppBrandSecondary;
+		},
+		get drawerBg() {
+			return '#424242';
+		},
+		get drawerBottomBg() {
+			return '#424242';
 		},
 	},
 };
