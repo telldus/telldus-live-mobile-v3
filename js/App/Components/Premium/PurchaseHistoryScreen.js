@@ -197,7 +197,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 				style={sectionStyle}
 				key={key}>
 				<Text
-					level={6}
+					level={4}
 					style={sectionTextStyle}>{key}</Text>
 			</View>
 		))();
