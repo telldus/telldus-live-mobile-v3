@@ -265,6 +265,9 @@ export default {
 		get drawerBottomBg() {
 			return Core.appBackground;
 		},
+		get dialogueBoxNegativeTextColor() {
+			return '#6B6969';
+		},
 	},
 
 	dark: {
@@ -493,6 +496,9 @@ export default {
 		},
 		get drawerBottomBg() {
 			return '#424242';
+		},
+		get dialogueBoxNegativeTextColor() {
+			return '#6B6969';
 		},
 	},
 };
