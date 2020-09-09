@@ -28,12 +28,16 @@ import {
 	IconTelldus,
 	Throbber,
 } from '../../../../../BaseComponents';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../../HOC/withTheme';
 
 import shouldUpdate from '../../../../Lib/shouldUpdate';
 
 import Theme from '../../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	appLayout: Object,
     icon: string,
     h1: string,
@@ -56,6 +60,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'icon',
 		'status',
 		'appLayout',
+		'themeInApp',
+		'colorScheme',
 	]);
 }
 
@@ -100,19 +106,23 @@ render(testData: Object): Object {
 }
 
 getStyles(appLayout: Object): Object {
-	const { status } = this.props;
+	const { status, colors } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { brandSecondary, rowTextColor, brandSuccess, sunsetColor } = Theme.Core;
+	const {
+		inAppBrandSecondary,
+	} = colors;
+
+	const { rowTextColor, brandSuccess, sunsetColor } = Theme.Core;
 
 	const iconSize = Math.floor(deviceWidth * 0.09);
 	const h1Size = Math.floor(deviceWidth * 0.05);
 	const h2Size = Math.floor(deviceWidth * 0.035);
 
 	const iconColor = status === 'ok' ? brandSuccess :
-		status === 'fail' ? sunsetColor : brandSecondary;
+		status === 'fail' ? sunsetColor : inAppBrandSecondary;
 
 	return {
 		testRowCover: {
@@ -129,7 +139,7 @@ getStyles(appLayout: Object): Object {
 		},
 		h1Style: {
 			fontSize: h1Size,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		h2Style: {
 			fontSize: h2Size,
@@ -143,4 +153,4 @@ getStyles(appLayout: Object): Object {
 }
 }
 
-export default TestRow;
+export default withTheme(TestRow);
