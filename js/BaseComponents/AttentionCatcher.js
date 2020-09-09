@@ -137,14 +137,14 @@ render(): Object {
 			}} pointerEvents={'none'}>
 				{arrowPos === 'left' && (
 					<ThemedImage
-						level={2}
+						level={5}
 						source={{uri: 'triangle'}}
 						style={triangleCommon}
 						resizeMode={'stretch'}
 					/>
 				)}
 				<View
-					level={8}
+					level={13}
 					style={{
 						justifyContent: 'center',
 						padding: 7,
