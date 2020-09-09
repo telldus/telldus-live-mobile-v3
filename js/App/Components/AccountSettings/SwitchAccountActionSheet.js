@@ -345,7 +345,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
 			</View>
 			<Text style={actionSheetButtonAccText}>
-				{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
+				{capitalize(formatMessage(i18n.addAccount))}
 			</Text>
 		</View>];
 
@@ -368,7 +368,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			title={showAddNewAccount ?
 				<View style={actionSheetTitleCover}>
 					<Text style={actionSheetTitle} onPress={closeActionSheet}>
-						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
+						{capitalize(formatMessage(i18n.addAccount))}
 					</Text>
 				</View>
 				:
