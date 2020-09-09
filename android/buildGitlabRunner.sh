@@ -40,7 +40,7 @@ GEOLOCATION_APPLICATION_KEY=${GEOLOCATION_APPLICATION_KEY}
 
 android.useAndroidX=true
 android.enableJetifier=true
-org.gradle.jvmargs=-Xms512M
+org.gradle.jvmargs=-Xmx2048m
 FLIPPER_VERSION=0.33.1
 EOF
 
