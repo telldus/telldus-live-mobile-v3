@@ -55,9 +55,6 @@ import {
 	showToast,
 	toggleVisibilitySwitchAccountAS,
 } from '../../Actions';
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
 
 import {
@@ -419,6 +416,7 @@ const getStyles = (appLayout: Object, {
 		textFive,
 		textSix,
 		inAppBrandSecondary,
+		screenBackground,
 	} = colors;
 
 	const {
@@ -467,7 +465,8 @@ const getStyles = (appLayout: Object, {
 		},
 		actionSheetTitleBox: {
 			height: titleBoxHeight,
-			marginBottom: StyleSheet.hairlineWidth,
+			borderBottomWidth: StyleSheet.hairlineWidth,
+			borderColor: screenBackground,
 			backgroundColor: card,
 		},
 		actionSheetButtonOneCover: {
