@@ -69,6 +69,8 @@ type Props = PropsThemedComponent & {
 	posTextColor?: string,
 	notificationModalFooterPositiveTextCoverStyle: Object | Array<any>,
 	notificationModalFooterStyle: Array<any> | Object,
+	negTextColorLevel?: number,
+	posTextColorLevel?: number,
 };
 
 type defaultProps = {
@@ -241,6 +243,8 @@ class DialogueBox extends Component<Props, null> {
 			showPositive,
 			notificationModalFooterStyle,
 			notificationModalFooterPositiveTextCoverStyle,
+			negTextColorLevel,
+			posTextColorLevel,
 		} = this.props;
 		if (!showNegative && !showPositive) {
 			return null;
@@ -262,7 +266,9 @@ class DialogueBox extends Component<Props, null> {
 					}]}
 					onPress={this.onPressNegative}
 					accessibilityLabel={accessibilityLabelNegative}>
-						<Text style={styles.notificationModalFooterNegativeText}>{nText}</Text>
+						<Text
+							level={negTextColorLevel}
+							style={styles.notificationModalFooterNegativeText}>{nText}</Text>
 					</TouchableOpacity>
 					:
 					null
@@ -273,7 +279,9 @@ class DialogueBox extends Component<Props, null> {
 					}, notificationModalFooterPositiveTextCoverStyle]}
 					onPress={this.onPressPositive}
 					accessibilityLabel={accessibilityLabelPositive}>
-						<Text style={styles.notificationModalFooterPositiveText}>{pText}</Text>
+						<Text
+							level={posTextColorLevel}
+							style={styles.notificationModalFooterPositiveText}>{pText}</Text>
 					</TouchableOpacity>
 					:
 					null
@@ -368,6 +376,8 @@ class DialogueBox extends Component<Props, null> {
 			negTextColor,
 			posTextColor,
 			colors,
+			negTextColorLevel,
+			posTextColorLevel,
 		} = this.props;
 		const { width, height } = appLayout;
 		const isPortrait = height > width;
@@ -436,13 +446,13 @@ class DialogueBox extends Component<Props, null> {
 				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterNegativeText: {
-				color: _negTextColor,
+				color: negTextColorLevel ? undefined : _negTextColor,
 				fontSize,
 				fontWeight: 'bold',
 				fontFamily: 'Roboto-Regular',
 			},
 			notificationModalFooterPositiveText: {
-				color: _posTextColor,
+				color: posTextColorLevel ? undefined : _posTextColor,
 				fontSize,
 				fontWeight: 'bold',
 				fontFamily: 'Roboto-Regular',
