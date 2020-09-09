@@ -44,6 +44,9 @@ import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -57,6 +60,13 @@ const UpdatePasswordScreen = (props: Object): Object => {
 		textFieldStyleConfirm,
 	} = props;
 	const { app: {layout} } = useSelector((state: Object): Object => state);
+
+	const {
+		colors,
+	} = useAppTheme();
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	const { formatMessage } = useIntl();
 
@@ -79,7 +89,10 @@ const UpdatePasswordScreen = (props: Object): Object => {
 		bodyStyle,
 		currentLabelStyle,
 		buttonStyle,
-	} = getStyles(layout);
+	} = getStyles({
+		colors,
+		layout,
+	});
 
 	const dispatch = useDispatch();
 	const onSubmit = useCallback((): Function => {
@@ -169,8 +182,8 @@ const UpdatePasswordScreen = (props: Object): Object => {
 						onChangeText={onChangeTextCurrent}
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={Theme.Core.brandSecondary}
-						tintColor={Theme.Core.brandSecondary}
+						baseColor={inAppBrandSecondary}
+						tintColor={inAppBrandSecondary}
 						returnKeyType={'done'}
 						secureTextEntry={true}
 					/>
@@ -213,8 +226,11 @@ const UpdatePasswordScreen = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
+const getStyles = ({
+	layout,
+	colors,
+}: Object): Object => {
+	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
@@ -238,7 +254,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			fontSize: fontSize * 1.6,
-			color: Theme.Core.brandSecondary,
+			color: colors.inAppBrandSecondary,
 		},
 		bodyStyle: {
 			fontSize,
@@ -253,7 +269,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		currentLabelStyle: {
 			alignSelf: 'flex-start',
-			color: Theme.Core.brandSecondary,
+			color: colors.inAppBrandSecondary,
 			fontSize,
 			marginTop: 20,
 		},

@@ -165,7 +165,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		addIconStyle,
 		addIconCoverStyle,
 		gravatarStyle,
-		brandSecondary,
+		inAppBrandSecondary,
 		rbSize,
 		rbOuterSize,
 		throbberContainerStyle,
@@ -328,8 +328,8 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 								buttonSize={rbSize}
 								buttonOuterSize={rbOuterSize}
 								borderWidth={3}
-								buttonInnerColor={brandSecondary}
-								buttonOuterColor={brandSecondary}
+								buttonInnerColor={inAppBrandSecondary}
+								buttonOuterColor={inAppBrandSecondary}
 								onPress={onPressRB}
 								obj={{userId: accessToken.userId}}
 								index={index}/>
@@ -418,11 +418,11 @@ const getStyles = (appLayout: Object, {
 		textThree,
 		textFive,
 		textSix,
+		inAppBrandSecondary,
 	} = colors;
 
 	const {
 		paddingFactor,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -442,7 +442,7 @@ const getStyles = (appLayout: Object, {
 	return {
 		rbOuterSize,
 		rbSize,
-		brandSecondary,
+		inAppBrandSecondary,
 		actionSheetOverlay: {
 			borderTopLeftRadius: 8,
 			borderTopRightRadius: 8,
@@ -472,7 +472,7 @@ const getStyles = (appLayout: Object, {
 		},
 		actionSheetButtonOneCover: {
 			flex: 1,
-			backgroundColor: brandSecondary,
+			backgroundColor: inAppBrandSecondary,
 			alignItems: 'center',
 			justifyContent: 'center',
 			borderRadius: 8,
@@ -491,7 +491,7 @@ const getStyles = (appLayout: Object, {
 		},
 		actionSheetButtonTwo: {
 			fontSize,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			textAlignVertical: 'center',
 			textAlign: 'center',
 		},
@@ -548,7 +548,7 @@ const getStyles = (appLayout: Object, {
 		},
 		throbberStyle: {
 			fontSize: rbOuterSize,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 		},
 	};
 };
