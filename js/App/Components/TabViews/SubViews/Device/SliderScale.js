@@ -150,15 +150,15 @@ class SliderScale extends View {
 
 		let thumbStyle = !isGatewayActive ?
 			(isInState === 'DIM' ? styles.enabled : styles.offline) :
-			isInState === 'DIM' ? styles.enabledBackground : styles.onInActive;
+			isInState === 'DIM' ? styles.enabled : styles.onInActive;
 		let scaleStyle = !isGatewayActive ?
 			(isInState === 'DIM' ? styles.enabled : styles.offline) :
-			isInState === 'DIM' ? styles.enabledBackground : styles.onInActive;
+			isInState === 'DIM' ? styles.enabled : styles.onInActive;
 		let valueColor = !isGatewayActive ?
 			(isInState === 'DIM' ? colors.colorOnActiveIcon : '#a2a2a2') :
 			isInState === 'DIM' ? colors.colorOnActiveIcon : colors.colorOnInActiveIcon;
 		let backgroundStyle = !isGatewayActive ?
-			(isInState === 'DIM' ? styles.offline : styles.disabled) : isInState === 'DIM' ? styles.enabled : styles.disabled;
+			(isInState === 'DIM' ? styles.offline : styles.disabled) : isInState === 'DIM' ? styles.enabledBackground : styles.disabled;
 		let dotColor = local ? Theme.Core.brandPrimary : '#fff';
 
 		let bottomValue = (containerHeight / 2) - (thumbHeight * 2);
