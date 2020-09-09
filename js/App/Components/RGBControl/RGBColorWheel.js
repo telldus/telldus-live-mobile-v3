@@ -31,7 +31,6 @@ import {
 
 import { deviceSetStateRGB, requestDeviceAction } from '../../Actions/Devices';
 import { getMainColorRGB } from '../../Lib/rgbUtils';
-import Theme from '../../Theme';
 
 type Props = {
 	device: Object,

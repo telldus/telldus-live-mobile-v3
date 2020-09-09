@@ -29,8 +29,6 @@ import DownButton from './Navigational/DownButton';
 
 import { shouldUpdate } from '../../../Lib';
 
-import Theme from '../../../Theme';
-
 type Props = {
 	item: Object,
 	tileWidth: number,

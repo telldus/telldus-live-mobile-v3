@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Animated, Easing, StyleSheet } from 'react-native';
+import { Animated, Easing } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import {
@@ -35,7 +35,6 @@ import {
 	PropsThemedComponent,
 } from '../../HOC/withTheme';
 
-import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 const INDETERMINATE_WIDTH_FACTOR = 0.3;

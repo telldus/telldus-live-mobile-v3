@@ -34,7 +34,6 @@ import {
 } from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
-import Theme from '../../../Theme';
 
 import {
 	deployStore,

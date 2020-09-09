@@ -37,7 +37,7 @@ type Props = PropsThemedComponent & {
 	appLayout: Object,
 };
 
-class Title extends View<DefaultProps, Props, null> {
+class Title extends View<Props, null> {
 
 	render(): React$Element<any> {
 		const { children, style, appLayout, ...props } = this.props;
