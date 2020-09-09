@@ -324,7 +324,10 @@ render(): Object {
 							<View
 								level={2}
 								style={infoContainer}>
-								<IconTelldus icon={'info'} style={infoIconStyle}/>
+								<IconTelldus
+									level={23}
+									icon={'info'}
+									style={infoIconStyle}/>
 								<Text
 									level={5}
 									style={infoTextStyle}>
@@ -352,7 +355,9 @@ render(): Object {
 						<View
 							level={2}
 							style={infoContainer}>
-							<IconTelldus icon={'info'} style={statusIconStyle}/>
+							<IconTelldus
+								level={23}
+								icon={'info'} style={statusIconStyle}/>
 							<Text
 								level={5}
 								style={infoTextStyle}>
@@ -378,7 +383,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
+	const { paddingFactor, editBoxPaddingFactor, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -411,14 +416,12 @@ getStyles(): Object {
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.12,
 			marginHorizontal: editBoxPadding,
-			color: brandSecondary,
 		},
 		boxContainerStyle: {
 			marginTop: padding / 2,
 		},
 		infoIconStyle: {
 			fontSize: deviceWidth * 0.08,
-			color: brandSecondary,
 			marginHorizontal: editBoxPadding,
 		},
 		infoTextStyle: {

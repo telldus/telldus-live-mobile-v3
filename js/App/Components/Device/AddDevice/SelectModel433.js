@@ -176,14 +176,18 @@ render(): Object {
 					<View
 						level={2}
 						style={shortCutInfoCover}>
-						<Text style={clickTextStyle}>
+						<Text
+							level={23}
+							style={clickTextStyle}>
 							{formatMessage(i18n.addDeviceAnotherBrand)}
 						</Text>
 						<Image source={{uri: 'right_arrow_key'}} style={imageStyle}/>
 					</View>
 				</TouchableOpacity>
 				}
-				<Text style={labelTextStyle}>
+				<Text
+					level={23}
+					style={labelTextStyle}>
 					{`${this.deviceBrand}:`}
 				</Text>
 				<View style={shortCutDevicesCover}>
@@ -203,7 +207,6 @@ getStyles(): Object {
 	const {
 		shadow,
 		paddingFactor,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -221,7 +224,6 @@ getStyles(): Object {
 		clickTextStyle: {
 			flex: 1,
 			fontSize,
-			color: brandSecondary,
 			textAlign: 'center',
 			flexWrap: 'wrap',
 			marginLeft: padding,
@@ -251,7 +253,6 @@ getStyles(): Object {
 		},
 		labelTextStyle: {
 			marginBottom: padding / 2,
-			color: brandSecondary,
 			fontSize: fontSize * 1.4,
 			marginTop: padding,
 			marginLeft: padding,

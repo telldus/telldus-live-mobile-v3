@@ -40,6 +40,10 @@ import {
 } from '../../../../../BaseComponents';
 
 import {
+	withTheme,
+} from '../../../HOC/withTheme';
+
+import {
 	getAllModels,
 	prepare433ModelName,
 } from '../../../../Lib/DeviceUtils';
@@ -54,7 +58,12 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 
 	const {
 		onSelectModel,
+		colors,
 	} = props;
+
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	const intl = useIntl();
 	const ddRef = useRef(null);
@@ -84,7 +93,6 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 		sectionHeaderStyle,
 		sectionRowStyle,
 		pickerBaseCoverStyle,
-		brandSecondary,
 		itemSize,
 	} = getStyles(layout);
 
@@ -141,7 +149,7 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 				justifyContent: 'center',
 			}]} onPress={onPress}>
 				<Text style={[sectionRowStyle, {
-					color: modelC === _model ? brandSecondary : '#000',
+					color: modelC === _model ? inAppBrandSecondary : '#000',
 				}]}>
 					{prepare433ModelName(locale, lang, modelName)}
 				</Text>
@@ -237,7 +245,6 @@ const getStyles = (appLayout: Object): Object => {
 		shadow,
 		rowTextColor,
 		eulaContentColor,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -245,7 +252,6 @@ const getStyles = (appLayout: Object): Object => {
 	const itemSize = Math.ceil(fontSize * 1.61 + 8 * 2);
 
 	return {
-		brandSecondary,
 		rowTextColor,
 		itemSize,
 		dropDownContainerStyle: {
@@ -308,4 +314,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(forwardRef<Object, Object>(Device433EditModel));
+export default memo<Object>(withTheme(forwardRef<Object, Object>(Device433EditModel)));

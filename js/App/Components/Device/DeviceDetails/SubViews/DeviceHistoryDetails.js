@@ -268,6 +268,7 @@ class DeviceHistoryDetails extends View {
 						style={closeIconCoverStyle}
 						onPress={closeHistoryDetailsModal}>
 						<IconTelldus
+							level={23}
 							icon="statusx"
 							style={closeIconStyle}/>
 					</TouchableOpacity>
@@ -391,7 +392,6 @@ class DeviceHistoryDetails extends View {
 		const deviceWidth = isPortrait ? width : height;
 
 		const {
-			brandSecondary,
 			shadow,
 			paddingFactor,
 		} = Theme.Core;
@@ -441,7 +441,6 @@ class DeviceHistoryDetails extends View {
 			},
 			closeIconStyle: {
 				fontSize: closeIconSize,
-				color: brandSecondary,
 				backgroundColor: 'transparent',
 			},
 			detailsContainer: {

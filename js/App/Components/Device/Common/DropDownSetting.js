@@ -114,7 +114,10 @@ const DropDownSetting = (props: Object): Object => {
 					{label}
 				</Text>
 				<TouchableOpacity onPress={onPressInfo}>
-					<IconTelldus icon={'help'} style={infoIconStyle}/>
+					<IconTelldus
+						level={23}
+						icon={'help'}
+						style={infoIconStyle}/>
 				</TouchableOpacity>
 			</View>
 			<DropDown
@@ -157,7 +160,6 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 	const {
 		paddingFactor,
 		shadow,
-		brandSecondary,
 		inactiveTintColor,
 		locationOnline,
 	} = Theme.Core;
@@ -211,7 +213,6 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		infoIconStyle: {
 			marginLeft: 3,
 			fontSize: fontSizeText,
-			color: brandSecondary,
 		},
 		throbberContainerStyle: {
 			backgroundColor: 'transparent',
