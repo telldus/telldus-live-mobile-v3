@@ -1138,4 +1138,6 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(withTheme(SettingsTab));
+const ThemedSettingsTab = withTheme(SettingsTab);
+ThemedSettingsTab.displayName = 'SettingsTab';
+module.exports = connect(mapStateToProps, mapDispatchToProps)(ThemedSettingsTab);
