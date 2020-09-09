@@ -343,7 +343,7 @@ export class GeoFenceContainer extends View<Props, State> {
 				style={helpIconCoverStyle}>
 				<BlockIcon
 					backgroundMaskStyle={backgroundMaskStyle}
-					iconLevel={15}
+					iconLevel={23}
 					backgroundMask
 					icon={'help'}
 					style={helpIconStyle}/>
@@ -382,9 +382,9 @@ export class GeoFenceContainer extends View<Props, State> {
 
 		return (
 			<View
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}>
 				<NavigationHeaderPoster
 					h1={h1} h2={h2}

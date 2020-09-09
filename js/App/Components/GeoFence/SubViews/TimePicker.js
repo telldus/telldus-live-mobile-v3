@@ -219,8 +219,12 @@ class TimePicker extends View<Props, State> {
 
 		return (
 			<View style={styles.container}>
-				<View style={[styles.switchHeader, rowStyle]}>
-					<Text style={[styles.switchLabel, labelStyle]}>{formatMessage(i18n.alwaysActive)}</Text>
+				<View
+					level={2}
+					style={[styles.switchHeader, rowStyle]}>
+					<Text
+						level={27}
+						style={[styles.switchLabel, labelStyle]}>{formatMessage(i18n.alwaysActive)}</Text>
 					<Switch
 						value={this.state.alwaysActive}
 						onValueChange={this.onSwitch}/>
@@ -286,7 +290,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -300,21 +303,18 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			alignItems: 'center',
 			paddingHorizontal: padding * 1.5,
-			backgroundColor: '#FFF',
 			borderColor: Theme.Core.angledRowBorderColor,
 			borderBottomWidth: StyleSheet.hairlineWidth,
 		},
 		switchLabel: {
 			flex: 1,
 			fontSize,
-			color: eulaContentColor,
 		},
 		body: {
 			padding: padding * 1.5,
 		},
 		labelTextStyle: {
 			fontSize,
-			color: '#000',
 			justifyContent: 'center',
 		},
 		touchableStyle: {

@@ -29,6 +29,10 @@ import {
 	View,
 } from '../../../../BaseComponents';
 
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
+
 import Theme from '../../../Theme';
 
 type Props = {
@@ -51,11 +55,18 @@ const CurrentPositionMarker = (props: Props): Object => {
 		currentLocMarkerOuterStyle,
 	} = getStyles(appLayout);
 
+	const {
+		colors,
+	} = useAppTheme();
+	const {
+		inAppBrandSecondary,
+	} = colors;
+
 	return (
 		<MapView.Marker
 			title="Current Location"
 			coordinate={{ latitude: latitude, longitude: longitude }}
-			pinColor={Theme.Core.brandSecondary}
+			pinColor={inAppBrandSecondary}
 			tracksViewChanges={tracksViewChanges}>
 			<View style={currentLocMarkerOuterStyle}>
 				<View style={currentLocMarkerStyle}/>
