@@ -271,6 +271,9 @@ export default {
 		get dialogueBoxNegativeTextColor() {
 			return '#6B6969';
 		},
+		get lightDrandSecDarkWhite() {
+			return Core.brandSecondary;
+		},
 	},
 
 	dark: {
@@ -435,10 +438,10 @@ export default {
 			return '#000';
 		},
 		get ShadeTwo() {
-			return this.screenBackground;
+			return Core.screenBGDark;
 		},
 		get ShadeThree() {
-			return this.textTwo;
+			return Core.textColorValue;
 		},
 		get posterBG() {
 			return Core.brandSecondaryShadeOne;
@@ -492,7 +495,7 @@ export default {
 			return '#ef5350'; // TODO: Confirm with Johannes
 		},
 		get timeColor() {
-			return this.inAppBrandSecondary;
+			return '#FFA450';
 		},
 		get drawerBg() {
 			return '#424242';
@@ -502,6 +505,9 @@ export default {
 		},
 		get dialogueBoxNegativeTextColor() {
 			return '#6B6969';
+		},
+		get lightDrandSecDarkWhite() {
+			return '#FFFFFF';
 		},
 	},
 };
