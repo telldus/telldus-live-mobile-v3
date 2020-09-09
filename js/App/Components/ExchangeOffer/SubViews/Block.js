@@ -70,7 +70,9 @@ const Block = (props: Object): Object => {
 				(
 					<View style={priceInfoCover}>
 						<View style={priceInfoInnerCover}>
-							<Text style={priceInfoOne}>
+							<Text
+								level={23}
+								style={priceInfoOne}>
 							799 SEK
 							</Text>
 							<Text style={priceInfoTwo}>
@@ -93,7 +95,9 @@ const Block = (props: Object): Object => {
 					{h1}
 				</Text>
 				}
-				{!!h2 && <Text style={h2Style}>
+				{!!h2 && <Text
+					level={23}
+					style={h2Style}>
 					{h2}
 				</Text>
 				}
@@ -114,7 +118,6 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		paddingFactor,
 		shadow,
 		eulaContentColor,
-		brandSecondary,
 		rowTextColor,
 		brandPrimary,
 	} = Theme.Core;
@@ -154,7 +157,6 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		},
 		h2Style: {
 			fontSize: Math.floor(deviceWidth * 0.042),
-			color: brandSecondary,
 			marginTop: 8,
 			textAlign: 'center',
 		},
@@ -175,7 +177,6 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		},
 		priceInfoOne: {
 			fontSize: Math.floor(deviceWidth * 0.066),
-			color: brandSecondary,
 			fontWeight: 'bold',
 		},
 		priceInfoTwo: {
