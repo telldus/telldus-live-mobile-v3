@@ -108,15 +108,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	itemIconContainerOn: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	itemIconContainerOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
-	},
 });
 
 module.exports = NavigationalDashboardTile;

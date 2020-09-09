@@ -407,11 +407,11 @@ class SensorRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
-			brandSecondary,
 		} = Theme.Core;
 
 		const {
 			colorOffActiveBg,
+			inAppBrandSecondary,
 		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -460,7 +460,7 @@ class SensorRow extends View<Props, State> {
 				borderRadius: 2,
 				...Theme.Core.shadow,
 				borderWidth: isNew ? 2 : 0,
-				borderColor: isNew ? brandSecondary : 'transparent',
+				borderColor: isNew ? inAppBrandSecondary : 'transparent',
 			},
 			hiddenRow: {
 				flexDirection: 'row',

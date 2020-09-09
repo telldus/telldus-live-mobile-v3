@@ -331,7 +331,10 @@ class SensorsTab extends View {
 			<View
 				level={3}
 				style={style.noItemsContainer}>
-				<IconTelldus icon={'sensor'} style={style.sensorIconStyle}/>
+				<IconTelldus
+					level={23}
+					icon={'sensor'}
+					style={style.sensorIconStyle}/>
 				<Text
 					level={4}
 					style={style.noItemsTitle}>
@@ -640,7 +643,6 @@ class SensorsTab extends View {
 			},
 			sensorIconStyle: {
 				fontSize: Math.floor(deviceWidth * 0.12),
-				color: Theme.Core.brandSecondary,
 			},
 		};
 	}

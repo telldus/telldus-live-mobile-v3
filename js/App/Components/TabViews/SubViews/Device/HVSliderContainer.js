@@ -445,15 +445,6 @@ class HVSliderContainer extends View {
 }
 
 const styles = StyleSheet.create({
-	enabledBackground: {
-		backgroundColor: '#fff',
-	},
-	enabled: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	enabledOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
 	disabled: {
 		backgroundColor: '#eeeeee',
 	},

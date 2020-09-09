@@ -396,7 +396,7 @@ class JobRow extends View<null, Props, null> {
 				);
 			}
 			if (action.name === 'Rgb') {
-				const color = methodValue.toLowerCase() === '#ffffff' ? Theme.Core.brandSecondary : methodValue;
+				const color = methodValue.toLowerCase() === '#ffffff' ? colors.inAppBrandSecondary : methodValue;
 				return (
 					{
 						triangleColor: !active ? inactiveGray : expired ? '#999999' : color,

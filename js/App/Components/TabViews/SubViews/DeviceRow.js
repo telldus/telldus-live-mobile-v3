@@ -576,7 +576,6 @@ class DeviceRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
-			brandSecondary,
 			shadow,
 			paddingFactor,
 			offlineColor,
@@ -586,6 +585,7 @@ class DeviceRow extends View<Props, State> {
 			colorOnActiveBg,
 			colorOffActiveBg,
 			buttonSeparatorColor,
+			inAppBrandSecondary,
 		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -614,7 +614,7 @@ class DeviceRow extends View<Props, State> {
 				borderRadius: 2,
 				...shadow,
 				borderWidth: isNew ? 2 : 0,
-				borderColor: isNew ? brandSecondary : 'transparent',
+				borderColor: isNew ? inAppBrandSecondary : 'transparent',
 			},
 			hiddenRow: {
 				flexDirection: 'row',
