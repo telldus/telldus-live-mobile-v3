@@ -277,6 +277,7 @@ class Time extends View<null, Props & PropsThemedComponent, State> {
 						mode="time"
 						style={{ flex: 1 }}
 						textColor={textColorDateTimePicker}
+						display={'spinner'}
 						onChange={this._onDateChange}
 					/>
 				</View>
