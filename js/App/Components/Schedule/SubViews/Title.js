@@ -22,32 +22,22 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Text, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 
-type DefaultProps = {
-	color: string,
-};
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	children: string,
 	style?: Object,
 	color?: string,
 	appLayout: Object,
 };
 
-export default class Title extends View<DefaultProps, Props, null> {
-
-	static propTypes = {
-		children: PropTypes.string.isRequired,
-		style: PropTypes.object,
-		color: PropTypes.string,
-	};
-
-	static defaultProps = {
-		color: Theme.Core.brandSecondary,
-	};
+class Title extends View<DefaultProps, Props, null> {
 
 	render(): React$Element<any> {
 		const { children, style, appLayout, ...props } = this.props;
@@ -63,9 +53,15 @@ export default class Title extends View<DefaultProps, Props, null> {
 	_getDefaultStyle = (appLayout: Object): Object => {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+
+		const {
+			colors,
+			color,
+		} = this.props;
+
 		const deviceWidth = isPortrait ? width : height;
 		return {
-			color: this.props.color,
+			color: color || colors.inAppBrandSecondary,
 			fontFamily: Theme.Core.fonts.robotoRegular,
 			fontSize: deviceWidth * 0.053333333,
 			marginBottom: deviceWidth * 0.008,
@@ -73,3 +69,5 @@ export default class Title extends View<DefaultProps, Props, null> {
 	};
 
 }
+
+export default withTheme(Title);

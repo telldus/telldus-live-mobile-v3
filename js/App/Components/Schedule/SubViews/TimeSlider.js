@@ -80,20 +80,6 @@ class TimeSlider extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		const sliderColor = Theme.Core.brandSecondary;
-
-		this.sliderConfig = {
-			minimumValue: props.minimumValue,
-			maximumValue: props.maximumValue,
-			minDisplayValue: '00h 00min',
-			maxDisplayValue: '24h 00min',
-			minimumTrackTintColor: sliderColor,
-			maximumTrackTintColor: sliderColor,
-			onValueChange: this.onValueChange,
-			showValue: true,
-			step: 1,
-		};
-
 		this.state = {
 			value: typeof props.value === 'number' ? props.value : props.minimumValue,
 			isEditing: false,
