@@ -40,9 +40,14 @@ import shouldUpdate from '../../../Lib/shouldUpdate';
 
 import Theme from '../../../Theme';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	appLayout: Object,
 	location: Object,
 	email: string,
@@ -214,6 +219,7 @@ render(testData: Object): Object {
 	const {
 		appLayout,
 		intl,
+		colors,
 	} = this.props;
 	const {
 		value,
@@ -227,12 +233,15 @@ render(testData: Object): Object {
 		body,
 		label,
 		textField,
-		brandSecondary,
+		inAppBrandSecondary,
 		button,
 		infoContainer,
 		statusIconStyle,
 		infoTextStyle,
-	} = this.getStyles(appLayout);
+	} = this.getStyles({
+		appLayout,
+		colors,
+	});
 	const { formatMessage } = intl;
 
 	const descLen = value.trim().length;
@@ -261,8 +270,8 @@ render(testData: Object): Object {
 					autoCapitalize="sentences"
 					autoCorrect={false}
 					autoFocus={true}
-					baseColor={brandSecondary}
-					tintColor={brandSecondary}
+					baseColor={inAppBrandSecondary}
+					tintColor={inAppBrandSecondary}
 					returnKeyType={'done'}
 					multiline={true}
 				/>
@@ -276,8 +285,8 @@ render(testData: Object): Object {
 					autoCapitalize="sentences"
 					autoCorrect={false}
 					autoFocus={false}
-					baseColor={brandSecondary}
-					tintColor={brandSecondary}
+					baseColor={inAppBrandSecondary}
+					tintColor={inAppBrandSecondary}
 					returnKeyType={'done'}
 				/>
 				<Text style={label}>
@@ -290,8 +299,8 @@ render(testData: Object): Object {
 					autoCapitalize="none"
 					autoCorrect={false}
 					autoFocus={false}
-					baseColor={brandSecondary}
-					tintColor={brandSecondary}
+					baseColor={inAppBrandSecondary}
+					tintColor={inAppBrandSecondary}
 					returnKeyType={'done'}
 				/>
 			</View>
@@ -316,12 +325,15 @@ render(testData: Object): Object {
 	);
 }
 
-getStyles(appLayout: Object): Object {
+getStyles({
+	appLayout,
+	colors,
+}: Object): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary } = Theme.Core;
+	const { shadow, paddingFactor } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -330,15 +342,19 @@ getStyles(appLayout: Object): Object {
 	const fontSizeBody = deviceWidth * 0.035;
 	const fontSizeLabel = deviceWidth * 0.038;
 
+	const {
+		inAppBrandSecondary,
+	} = colors;
+
 	return {
-		brandSecondary,
+		inAppBrandSecondary,
 		container: {
 			...shadow,
 			marginVertical: padding,
 			padding: padding * 2,
 		},
 		title: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize: fontSizeTitle,
 		},
 		body: {
@@ -346,7 +362,7 @@ getStyles(appLayout: Object): Object {
 			marginTop: 10,
 		},
 		label: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize: fontSizeLabel,
 			marginTop: 22,
 		},
@@ -371,7 +387,7 @@ getStyles(appLayout: Object): Object {
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		infoTextStyle: {
 			flex: 1,
@@ -383,4 +399,4 @@ getStyles(appLayout: Object): Object {
 }
 }
 
-export default RequestSupport;
+export default withTheme(RequestSupport);
