@@ -331,7 +331,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 				{premAboutExpire && <View
 					level={2}
 					style={expireNotifCover}>
-					<Text style={expireNotifHeader}>
+					<Text
+						level={23}
+						style={expireNotifHeader}>
 						{formatMessage(i18n.premExpireNofifHeader)}!
 					</Text>
 					<Text
@@ -350,7 +352,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 						<IconTelldus icon={'premium'} style={iconStyle}/>
 						{header}
 					</View>
-					<Text style={pMonthTextStyle}>
+					<Text
+						level={23}
+						style={pMonthTextStyle}>
 						{`${pricePerMon}/${formatMessage(i18n.month)}`}
 					</Text>
 					{cPerMonth !== newTotal && <Text
@@ -425,7 +429,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 	const {
 		shadow,
 		paddingFactor,
-		brandSecondary,
 	} = Theme.Core;
 	const padding = deviceWidth * paddingFactor;
 
@@ -469,7 +472,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		},
 		pMonthTextStyle: {
 			fontSize: fontSize * 2.6,
-			color: brandSecondary,
 			marginTop: 20,
 			fontWeight: 'bold',
 			textAlign: 'center',
@@ -539,7 +541,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		},
 		expireNotifHeader: {
 			fontSize: fontSize * 1.7,
-			color: brandSecondary,
 			textAlign: 'center',
 		},
 		expireNotifContent: {

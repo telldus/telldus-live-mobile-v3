@@ -205,8 +205,13 @@ const SMSHistoryScreen = (props: Object): Object => {
 				{...screenProps}/>
 			{(!isLoading && listData.length === 0 ) ?
 				<View style={emptyCover}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
-					<Text style={emptyInfo}>{formatMessage(i18n.noSMSHistory)}</Text>
+					<IconTelldus
+						level={23}
+						icon={'info'}
+						style={statusIconStyle}/>
+					<Text
+						level={23}
+						style={emptyInfo}>{formatMessage(i18n.noSMSHistory)}</Text>
 				</View>
 				:
 				<SectionList
@@ -258,13 +263,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		emptyInfo: {
 			fontSize: fontSizeRow,
-			color: Theme.Core.brandSecondary,
 			alignSelf: 'center',
 			textAlign: 'center',
 		},
 		statusIconStyle: {
 			fontSize: fontSizeRow * 1.7,
-			color: Theme.Core.brandSecondary,
 			marginRight: 5,
 		},
 		sectionStyle: {

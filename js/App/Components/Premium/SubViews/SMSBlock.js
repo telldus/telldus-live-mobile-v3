@@ -96,7 +96,9 @@ const SMSBlock = (props: Object): Object => {
 					appLayout={layout}
 					iconValueRight={
 						(enablePurchase && !isIos) ?
-							<Text style={buyCreditsStyle}>
+							<Text
+								level={23}
+								style={buyCreditsStyle}>
 								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}
 							</Text>
 							:
@@ -139,7 +141,6 @@ const getStyle = (appLayout: Object): Object => {
 			padding: 5,
 		},
 		buyCreditsStyle: {
-			color: Theme.Core.brandSecondary,
 			fontSize: deviceWidth * 0.04,
 		},
 	};

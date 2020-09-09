@@ -146,10 +146,6 @@ const getStyle = (appLayout: Object): Object => {
 		upgradeSyle: {
 			fontSize: deviceWidth * 0.04,
 		},
-		cartIconStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045) * 1.3,
-			color: Theme.Core.brandSecondary,
-		},
 	};
 };
 

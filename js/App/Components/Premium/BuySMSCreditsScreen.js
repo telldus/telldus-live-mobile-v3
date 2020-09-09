@@ -41,6 +41,9 @@ import {
 import {
 	PaymentProvidersBlock,
 } from './SubViews';
+import {
+	withTheme,
+} from '../HOC/withTheme';
 
 import {
 	getSMSPlans,
@@ -61,7 +64,7 @@ import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const BuySMSCreditsScreen = (props: Object): Object => {
-	const { navigation, screenProps } = props;
+	const { navigation, screenProps, colors } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
@@ -104,7 +107,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 					style={[contentCover,
 						selectedIndex === index ? {
 							borderWidth: 3,
-							borderColor: Theme.Core.brandSecondary,
+							borderColor: colors.inAppBrandSecondary,
 						} : undefined,
 					]}>
 					<View style={headerCover}>
@@ -116,7 +119,9 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 						</Text>
 					</View>
 					<View style={bottomCover}>
-						<Text style={pMonthTextStyle}>
+						<Text
+							level={23}
+							style={pMonthTextStyle}>
 							{`€${formatNumber(price)}`}
 						</Text>
 						<View style={saveTextCoverStyle}>
@@ -250,7 +255,6 @@ const getStyles = (appLayout: Object): Object => {
 		pMonthTextStyle: {
 			flex: 1,
 			fontSize: fontSize * 2,
-			color: Theme.Core.brandSecondary,
 			fontWeight: 'bold',
 			textAlign: 'right',
 			alignSelf: 'center',
@@ -279,10 +283,6 @@ const getStyles = (appLayout: Object): Object => {
 			color: '#fff',
 			marginRight: 7,
 		},
-		textStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.brandSecondary,
-		},
 		bottomCover: {
 			width: '100%',
 			flexDirection: 'row',
@@ -293,4 +293,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(BuySMSCreditsScreen);
+export default React.memo<Object>(withTheme(BuySMSCreditsScreen));

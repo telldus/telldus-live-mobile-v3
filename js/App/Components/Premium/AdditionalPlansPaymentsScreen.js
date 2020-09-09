@@ -74,11 +74,15 @@ import {
 	useIAPSuccessFailureHandle,
 } from '../../Hooks/IAP';
 
+import {
+	withTheme,
+} from '../HOC/withTheme';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const AdditionalPlansPaymentsScreen = (props: Object): Object => {
-	const { navigation, screenProps } = props;
+	const { navigation, screenProps, colors } = props;
 	const {
 		layout,
 	} = useSelector((state: Object): Object => state.app);
@@ -120,7 +124,11 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		infoTextStyle,
 		statusIconStyle,
 		footerHeight,
-	} = getStyles(layout);
+		inAppBrandSecondary,
+	} = getStyles({
+		layout,
+		colors,
+	});
 	const intl = useIntl();
 	const {
 		formatMessage,
@@ -156,7 +164,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					style={[contentCover,
 						selectedIndex === index ? {
 							borderWidth: 3,
-							borderColor: Theme.Core.brandSecondary,
+							borderColor: inAppBrandSecondary,
 						} : undefined,
 					]}>
 					<View style={headerCover}>
@@ -328,19 +336,21 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					iconStyle={recurring ?
 						{
 							color: '#fff',
-							backgroundColor: Theme.Core.brandSecondary,
-							borderColor: Theme.Core.brandSecondary,
+							backgroundColor: inAppBrandSecondary,
+							borderColor: inAppBrandSecondary,
 						}
 						:
 						{
 							color: 'transparent',
 							backgroundColor: 'transparent',
-							borderColor: Theme.Core.brandSecondary,
+							borderColor: inAppBrandSecondary,
 						}
 					}
 				/>
 				}
-				{showInfo && <View style={infoContainer}>
+				{showInfo && <View
+					level={2}
+					style={infoContainer}>
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
 					<Text style={infoTextStyle}>
 						{!supportAutoRenew ?
@@ -369,8 +379,11 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
+const getStyles = ({
+	layout,
+	colors,
+}: Object): Object => {
+	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
@@ -380,8 +393,13 @@ const getStyles = (appLayout: Object): Object => {
 	let footerHeight = Math.floor(deviceWidth * 0.26);
 	footerHeight = footerHeight > 100 ? 100 : footerHeight;
 
+	const {
+		inAppBrandSecondary,
+	} = colors;
+
 	return {
 		footerHeight,
+		inAppBrandSecondary,
 		container: {
 			flex: 1,
 		},
@@ -468,7 +486,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		textStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		checkButtonStyle: {
 			marginVertical: padding,
@@ -476,7 +494,7 @@ const getStyles = (appLayout: Object): Object => {
 		backLinkStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
 			alignSelf: 'center',
-			color: Theme.Core.brandSecondary,
+			color: inAppBrandSecondary,
 			padding: 10,
 			marginVertical: padding,
 		},
@@ -487,7 +505,6 @@ const getStyles = (appLayout: Object): Object => {
 			marginHorizontal: padding,
 			marginBottom: padding,
 			padding,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -495,7 +512,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
-			color: Theme.Core.brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		infoTextStyle: {
 			flex: 1,
@@ -507,4 +524,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(AdditionalPlansPaymentsScreen);
+export default React.memo<Object>(withTheme(AdditionalPlansPaymentsScreen));

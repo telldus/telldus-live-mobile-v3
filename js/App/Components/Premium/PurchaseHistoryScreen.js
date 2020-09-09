@@ -223,8 +223,12 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 				<View
 					level={2}
 					style={emptyCover}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
+					<IconTelldus
+						level={23}
+						icon={'info'}
+						style={statusIconStyle}/>
 					<Text
+						level={23}
 						style={emptyInfo}>{formatMessage(i18n.noPurchaseHistory)}</Text>
 				</View>
 				:
@@ -276,13 +280,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		emptyInfo: {
 			fontSize: fontSizeRow,
-			color: Theme.Core.brandSecondary,
 			alignSelf: 'center',
 			textAlign: 'center',
 		},
 		statusIconStyle: {
 			fontSize: fontSizeRow * 1.7,
-			color: Theme.Core.brandSecondary,
 			marginRight: 5,
 		},
 		sectionStyle: {

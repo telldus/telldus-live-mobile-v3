@@ -72,7 +72,10 @@ const ViewPremiumBenefitsButton = (props: Object): Object => {
 				style={buttonStyle}
 			/>
 				:
-				<Text onPress={onPress} style={[textStyle, linkTextStyle]}>
+				<Text
+					level={23}
+					onPress={onPress}
+					style={[textStyle, linkTextStyle]}>
 					{formatMessage(i18n.viewBenefitsPremiumTwo)}
 				</Text>
 			}
@@ -96,7 +99,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		textStyle: {
 			fontSize,
-			color: Theme.Core.brandSecondary,
 			padding: 5,
 			alignSelf: 'center',
 			textAlign: 'center',
