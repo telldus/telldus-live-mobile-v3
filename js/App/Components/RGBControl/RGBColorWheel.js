@@ -254,7 +254,7 @@ render(): Object {
 				level={colorWheelCoverLevel}
 				style={colorWheelCover}>
 				{(showActionIndicator && controlSource === 'wheel' && methodRequested === 'RGB') ?
-					<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
+					<ButtonLoadingIndicator style={dot}/>
 					: null
 				}
 				<ColorWheel
@@ -271,7 +271,7 @@ render(): Object {
 				level={swatchesCoverLevel}
 				style={swatchesCover}>
 				{(showActionIndicator && controlSource === 'swatch' && methodRequested === 'RGB') ?
-					<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
+					<ButtonLoadingIndicator style={dot}/>
 					: null
 				}
 				{colorSwatches}
