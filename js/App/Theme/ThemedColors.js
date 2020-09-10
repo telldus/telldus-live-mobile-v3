@@ -277,6 +277,15 @@ export default {
 		get badgeColor() {
 			return '#ED1727';
 		},
+		get statusGreen() {
+			return '#9CCC65';
+		},
+		get statusOrange() {
+			return '#FF9800';
+		},
+		get statusRed() {
+			return '#F44336';
+		},
 	},
 
 	dark: {
@@ -517,6 +526,15 @@ export default {
 		},
 		get badgeColor() {
 			return '#ED1727';
+		},
+		get statusGreen() {
+			return '#C5E1A5';
+		},
+		get statusOrange() {
+			return '#FFA450';
+		},
+		get statusRed() {
+			return '#EF5350';
 		},
 	},
 };
