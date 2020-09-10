@@ -37,15 +37,11 @@ import {
 	RippleButton,
 	Text,
 	IconTelldus,
-	FormattedMessage,
 	PosterWithText,
 	View,
 	ThemedMaterialIcon,
 } from '../../../BaseComponents';
 
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
 import {
 	useCampaignAction,
@@ -110,7 +106,7 @@ const MoreOptionsTab = (props: Props): Object => {
 		const settingsItems = [
 			{
 				icon: 'phone',
-				textIntl: i18n.appSettigs,
+				text: capitalize(formatMessage(i18n.appSettigs)),
 				onPress: () => {
 					onOpenSetting('AppTab');
 				},
@@ -118,7 +114,7 @@ const MoreOptionsTab = (props: Props): Object => {
 			},
 			{
 				icon: 'user',
-				textIntl: i18n.userProfile,
+				text: capitalize(formatMessage(i18n.userProfile)),
 				onPress: () => {
 					onOpenSetting('ProfileTab');
 				},
@@ -129,13 +125,13 @@ const MoreOptionsTab = (props: Props): Object => {
 					style={iconStyle}
 					name={'group-add'}
 					level={7}/>,
-				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.switchOrAddAccount)),
+				text: capitalize(formatMessage(i18n.switchOrAddAccount)),
 				onPress: performAddOrSwitch,
 				enable: true,
 			},
 			{
 				icon: 'location',
-				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.manageGateways)),
+				text: capitalize(formatMessage(i18n.manageGateways)),
 				onPress: () => {
 					navigation.navigate('Gateways');
 				},
@@ -143,7 +139,7 @@ const MoreOptionsTab = (props: Props): Object => {
 			},
 			{
 				icon: 'campaign',
-				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelExclusiveOffers)),
+				text: capitalize(formatMessage(i18n.labelExclusiveOffers)),
 				onPress: navigateToCampaign,
 				enable: true,
 			},
@@ -152,7 +148,7 @@ const MoreOptionsTab = (props: Props): Object => {
 					style={iconStyle}
 					name={'location-on'}
 					level={7}/>,
-				textIntl: i18n.Geofencing,
+				text: capitalize(formatMessage(i18n.Geofencing)),
 				onPress: () => {
 					navigation.navigate('GeoFenceNavigator');
 				},
@@ -160,7 +156,7 @@ const MoreOptionsTab = (props: Props): Object => {
 			},
 			{
 				icon: 'faq',
-				textIntl: i18n.labelHelpAndSupport,
+				text: capitalize(formatMessage(i18n.labelHelpAndSupport)),
 				onPress: () => {
 					onOpenSetting('SupportTab');
 				},
@@ -173,7 +169,6 @@ const MoreOptionsTab = (props: Props): Object => {
 			icon,
 			iconComponent,
 			text,
-			textIntl,
 			onPress,
 			enable,
 		}: Object, i: number): Object => {
@@ -191,7 +186,6 @@ const MoreOptionsTab = (props: Props): Object => {
 							level={7}
 							style={labelStyle}>
 							{!!text && text}
-							{!!textIntl && <FormattedMessage {...textIntl} style={labelStyle}/>}
 						</Text>
 					</RippleButton>
 				);
