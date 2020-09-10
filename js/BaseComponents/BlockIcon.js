@@ -68,7 +68,7 @@ export default class BlockIcon extends Component<Props, null> {
 
 		return (
 			<View
-				level={blockLevel || 8}
+				level={blockLevel || 13}
 				style={[defaultStyle, containerStyle]}>
 				{backgroundMask && (<View style={backgroundMaskStyle}/>)}
 				<IconTelldus
