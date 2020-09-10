@@ -45,11 +45,15 @@ const changeSensorDisplayTypeDB = (id?: number): ThunkAction => (dispatch: Funct
 	if (dbCarousel) {
 		sensorIdsInCurrentDb.forEach((sensorId: number) => {
 			const sensor = sensors.byId[sensorId];
-			dispatch(prepareAndUpdate(sensorId, sensor.data, defaultSensorSettings));
+			if (sensor) {
+				dispatch(prepareAndUpdate(sensorId, sensor.data, defaultSensorSettings));
+			}
 		});
 	} else if (id) {
 		const sensor = sensors.byId[id];
-		dispatch(prepareAndUpdate(id, sensor.data, defaultSensorSettings));
+		if (sensor) {
+			dispatch(prepareAndUpdate(id, sensor.data, defaultSensorSettings));
+		}
 	}
 };
 
