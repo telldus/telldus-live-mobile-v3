@@ -230,7 +230,9 @@ class DialogueBox extends Component<Props, null> {
 
 		return (
 			<View style={styles.notificationModalBody} accessible={true} importantForAccessibility={'yes'} accessibilityLabel={text}>
-				<Text style={styles.notificationModalBodyText}>{text}</Text>
+				<Text
+					level={18}
+					style={styles.notificationModalBodyText}>{text}</Text>
 			</View>
 		);
 	}
@@ -431,7 +433,6 @@ class DialogueBox extends Component<Props, null> {
 			},
 			notificationModalBodyText: {
 				fontSize,
-				color: '#6B6969',
 			},
 			notificationModalFooterDef: {
 				alignItems: 'center',
