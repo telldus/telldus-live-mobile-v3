@@ -44,9 +44,6 @@ import {
 import shouldUpdate from '../../Lib/shouldUpdate';
 import capitalize from '../../Lib/capitalize';
 import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
-import {
 	createSupportTicketGeneral,
 } from '../../Actions/App';
 import {
@@ -292,7 +289,7 @@ render(testData: Object): Object {
 					level={2}
 					style={container}>
 					<Text style={title}>
-						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelCreateSupportTicket))}
+						{capitalize(formatMessage(i18n.labelCreateSupportTicket))}
 					</Text>
 					<Text
 						level={25}

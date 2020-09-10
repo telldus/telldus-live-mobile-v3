@@ -27,8 +27,8 @@ import {
 import { View, Text, IconTelldus } from '../../../../BaseComponents';
 
 import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../../Lib/appUtils';
+	capitalize,
+} from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 
@@ -59,7 +59,7 @@ const TellStickExchangeLink = (props: Object): Object => {
 				<Text
 					level={23}
 					style={[textStyleDef, textStyle]}>
-					{capitalizeFirstLetterOfEachWord(intl.formatMessage(i18n.tellStickExchangeProgram)).trim()}!
+					{capitalize(intl.formatMessage(i18n.tellStickExchangeProgram)).trim()}!
 				</Text>
 			</View>
 		</TouchableOpacity>

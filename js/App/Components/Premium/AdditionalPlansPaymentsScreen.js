@@ -55,7 +55,6 @@ import {
 import {
 	getSubscriptionPlans,
 	getPaymentOptions,
-	capitalizeFirstLetterOfEachWord,
 	premiumAboutToExpire,
 } from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
@@ -370,7 +369,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					style={buttonStyle}
 					disabled={onGoing}
 				/>
-				<Text style={backLinkStyle} onPress={onGoBack}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.backLabel))}</Text>
+				<Text style={backLinkStyle} onPress={onGoBack}>{capitalize(formatMessage(i18n.backLabel))}</Text>
 			</ScrollView>
 			{isHeadsUp && <Footer
 				navigation={navigation}

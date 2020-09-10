@@ -39,7 +39,6 @@ import {
 
 import {
 	LayoutAnimations,
-	capitalizeFirstLetterOfEachWord,
 	getScanButtonLabel,
 } from '../../../Lib';
 
@@ -106,7 +105,7 @@ const ScanButton = (props: Object): Object => {
 		}
 	}
 
-	const text = isScanning ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.stopScan)) :
+	const text = isScanning ? formatMessage(i18n.stopScan) :
 		getScanButtonLabel(devicetype, formatMessage);
 
 	return (

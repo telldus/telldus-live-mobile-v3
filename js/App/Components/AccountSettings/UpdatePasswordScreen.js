@@ -40,9 +40,6 @@ import {
 import {
 	showToast,
 } from '../../Actions/App';
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
 import {
 	useAppTheme,
@@ -168,7 +165,7 @@ const UpdatePasswordScreen = (props: Object): Object => {
 			<ScrollView style={container}>
 				<View style={body}>
 					<Text style={titleStyle}>
-						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.changePassword))}
+						{capitalize(formatMessage(i18n.changePassword))}
 					</Text>
 					<Text style={bodyStyle}>
 						{formatMessage(i18n.changePassDescription)}
