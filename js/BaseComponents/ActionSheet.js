@@ -154,6 +154,7 @@ type Props = {
 	disabledButtonIndexes?: Array<number>,
 	extraData?: Object,
 	colors: Object,
+	containerStyle?: Object,
 };
 
 type State = {
@@ -311,6 +312,7 @@ _renderOptions(): Array<Object> {
 render(): Object {
 	const {
 		colors,
+		containerStyle,
 	} = this.props;
 	const styles = prepareStyles(this.props.styles);
 	const {
@@ -346,6 +348,7 @@ render(): Object {
 						animated
 						style={[
 							styles.body,
+							containerStyle,
 							{ height: translateY, transform: [{ translateY: sheetAnim }] },
 						]}
 					>
