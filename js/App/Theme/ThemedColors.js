@@ -136,6 +136,9 @@ export default {
 		get iconTwoColorBlock() {
 			return '#A59F9A90';
 		},
+		get iconTwoColorBlockDisabled() {
+			return '#ffffff';
+		},
 		get infoOneColorBlockEnabled() {
 			return Core.rowTextColor;
 		},
@@ -354,31 +357,34 @@ export default {
 			return '#fff';
 		},
 		get colorBlockDisabled() {
-			return '#f5f5f5';
+			return '#202020';
 		},
 		get headerOneColorBlockEnabled() {
 			return Core.brandSecondaryShadeOne;
 		},
 		get headerOneColorBlockDisabled() {
-			return '#999999';
+			return '#666666';
 		},
 		get iconOneColorBlockEnabled() {
-			return '#ffffff';
+			return '#ABABAB';
 		},
 		get iconOneColorBlockDisabled() {
-			return '#bdbdbd';
+			return '#666666';
 		},
 		get iconOneSubColorBlock() {
 			return '#ffffff';
 		},
 		get iconTwoColorBlock() {
-			return '#ffffff';
+			return '#ABABAB';
+		},
+		get iconTwoColorBlockDisabled() {
+			return '#666666';
 		},
 		get infoOneColorBlockEnabled() {
-			return '#fff';
+			return '#ABABAB';
 		},
 		get infoOneColorBlockDisabled() {
-			return Core.rowTextColor;
+			return '#666666';
 		},
 		get headerIconColorBlock() {
 			return Core.brandSecondaryShadeOne;
@@ -510,7 +516,7 @@ export default {
 			return '#FFFFFF';
 		},
 		get badgeColor() {
-			return '#EF9A9A';
+			return '#ED1727';
 		},
 	},
 };
