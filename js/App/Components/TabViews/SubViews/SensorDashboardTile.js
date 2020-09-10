@@ -174,12 +174,12 @@ class SensorDashboardTile extends View<Props, null> {
 						updateIntervalInSeconds={60}
 						gatewayTimezone={gatewayTimezone}
 						timestamp={lastUpdated}
+						level={minutesAgo < 1440 ? 25 : 8}
 						textStyle={{
 							textAlign: 'center',
 							textAlignVertical: 'center',
 							fontSize: Math.floor(this.props.tileWidth / 12),
 							opacity: minutesAgo < 1440 ? 1 : 0.5,
-							color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
 						}} />
 					:
 					<Text style={{
