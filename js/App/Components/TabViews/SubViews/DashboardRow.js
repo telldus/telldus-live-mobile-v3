@@ -37,7 +37,6 @@ import ThermostatButtonDB from './Thermostat/ThermostatButtonDB';
 
 import {
 	withTheme,
-	PropsThemedComponent,
 } from '../../HOC/withTheme';
 
 import {
@@ -54,7 +53,7 @@ import {
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
-type Props = PropsThemedComponent & {
+type Props = {
     item: Object,
     tileWidth: number,
     intl: Object,
@@ -63,6 +62,11 @@ type Props = PropsThemedComponent & {
 	currentTemp?: number,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
+
+	colors: Object,
+	themeInApp: string,
+	colorScheme: string,
+	dark: boolean,
 
     style: Object,
 	setScrollEnabled: (boolean) => void,
