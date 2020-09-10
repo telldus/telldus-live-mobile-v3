@@ -169,6 +169,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		throbberStyle,
 		actionSheetButtonAccEmailText,
 		actionSheetTextCover,
+		containerStyle,
 	} = getStyles(layout, {
 		showAddNewAccount,
 		isLoggingOut,
@@ -349,6 +350,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 	return (
 		<ActionSheet
 			ref={actionSheetRef}
+			containerStyle={containerStyle}
 			extraData={{
 				showAddNewAccount,
 				items: actionSheetItems,
@@ -441,6 +443,9 @@ const getStyles = (appLayout: Object, {
 		rbOuterSize,
 		rbSize,
 		inAppBrandSecondary,
+		containerStyle: {
+			backgroundColor: card,
+		},
 		actionSheetOverlay: {
 			borderTopLeftRadius: 8,
 			borderTopRightRadius: 8,
