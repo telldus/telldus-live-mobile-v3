@@ -295,7 +295,6 @@ class HistoryTab extends View {
 		let { screenProps, device, currentScreen } = this.props;
 		let { hasLoaded, refreshing, rowsAndSections, historyDetails } = this.state;
 		let { intl, appLayout } = screenProps;
-		let { brandPrimary } = Theme.Core;
 
 		if (!device.id) {
 			return null;
@@ -318,7 +317,7 @@ class HistoryTab extends View {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-						<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+						<Icon name="exclamation-circle" size={iconSize} level={23}/>
 						<Text style={textWhenNoData}>
 							<FormattedMessage {...i18n.noRecentActivity} style={textWhenNoData}/>...
 						</Text>

@@ -305,7 +305,10 @@ class SchedulerTab extends View<null, Props, State> {
 					key={key}>
 					{isEmpty ?
 						<View style={containerWhenNoData}>
-							<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+							<Icon
+								level={23}
+								name="exclamation-circle"
+								size={iconSize}/>
 							<Text style={textWhenNoData}>
 								{this.noScheduleMessage}
 							</Text>
