@@ -84,9 +84,16 @@ class GatewayRow extends PureComponent<Props, State> {
 		}
 	}
 
-	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
+	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object, {
+		textStyle,
+	}: Object): Object {
 		return (
-			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} localKey={localKey}/>
+			<Status
+				online={online}
+				websocketOnline={websocketOnline}
+				intl={this.props.intl}
+				localKey={localKey}
+				textStyle={textStyle} />
 		);
 	}
 
@@ -118,9 +125,11 @@ class GatewayRow extends PureComponent<Props, State> {
 		} = this.props;
 		let { name, type, online, websocketOnline, localKey = {} } = location;
 
-		let info = this.getLocationStatus(online, websocketOnline, localKey);
-
 		let styles = this.getStyles(appLayout);
+
+		let info = this.getLocationStatus(online, websocketOnline, localKey, {
+			textStyle: styles.textStyle,
+		});
 
 		let locationImageUrl = getLocationImageUrl(type);
 		let locationData = {
@@ -187,7 +196,9 @@ class GatewayRow extends PureComponent<Props, State> {
 			headerOneColorBlockEnabled,
 			headerOneColorBlockDisabled,
 			iconTwoColorBlock,
-			iconOneColorBlockDisabled,
+			iconTwoColorBlockDisabled,
+			infoOneColorBlockDisabled,
+			infoOneColorBlockEnabled,
 		} = colors;
 
 		const padding = deviceWidth * paddingFactor;
@@ -196,6 +207,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		const colorBackground = disabled ? colorBlockDisabled : card;
 		const colorHeaderOneText = disabled ? headerOneColorBlockDisabled : headerOneColorBlockEnabled;
+		const colorIconTwo = disabled ? iconTwoColorBlockDisabled : iconTwoColorBlock;
 
 		return {
 			rowItemsCover: {
@@ -216,7 +228,7 @@ class GatewayRow extends PureComponent<Props, State> {
 				top: '50%',
 			},
 			arrow: {
-				tintColor: iconTwoColorBlock,
+				tintColor: colorIconTwo,
 				height: rowHeight * 0.25,
 				width: rowHeight * 0.2,
 			},
@@ -231,7 +243,10 @@ class GatewayRow extends PureComponent<Props, State> {
 			},
 			notAvailableIcon: {
 				fontSize: rowHeight * 0.25,
-				color: iconOneColorBlockDisabled,
+				color: colorIconTwo,
+			},
+			textStyle: {
+				color: disabled ? infoOneColorBlockDisabled : infoOneColorBlockEnabled,
 			},
 		};
 	}

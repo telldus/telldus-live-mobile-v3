@@ -174,6 +174,7 @@ getStyles(): Object {
 		iconOneColorBlockEnabled,
 		iconOneColorBlockDisabled,
 		iconTwoColorBlock,
+		iconTwoColorBlockDisabled,
 		infoOneColorBlockEnabled,
 		infoOneColorBlockDisabled,
 		inAppBrandSecondary,
@@ -182,6 +183,7 @@ getStyles(): Object {
 	const colorBackground = enabled ? card : colorBlockDisabled;
 	const colorHeaderOneText = enabled ? inAppBrandSecondary : headerOneColorBlockDisabled;
 	const colorIcon = enabled ? iconOneColorBlockEnabled : iconOneColorBlockDisabled;
+	const colorIconTwo = enabled ? iconTwoColorBlock : iconTwoColorBlockDisabled;
 
 	const imageComponentWidth = deviceWidth * 0.16;
 	const imageComponentHeight = deviceWidth * 0.22;
@@ -211,7 +213,7 @@ getStyles(): Object {
 			top: '40%',
 		},
 		arrow: {
-			tintColor: iconTwoColorBlock,
+			tintColor: colorIconTwo,
 			height: rowHeight * 0.25,
 			width: rowHeight * 0.2,
 		},
@@ -239,7 +241,7 @@ getStyles(): Object {
 		},
 		notAvailableIcon: {
 			fontSize: rowHeight * 0.25,
-			color: iconOneColorBlockDisabled,
+			color: colorIconTwo,
 		},
 		imageComponentStyle: {
 			color: colorIcon,
