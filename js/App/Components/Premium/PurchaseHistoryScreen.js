@@ -45,9 +45,6 @@ import {
 	getUserTransactions,
 } from '../../Actions/User';
 
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import capitalize from '../../Lib/capitalize';
@@ -214,7 +211,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 			level={3}
 			style={container}>
 			<NavigationHeaderPoster
-				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.purchaseHistory))} h2={formatMessage(i18n.yourTransactions)}
+				h1={capitalize(formatMessage(i18n.purchaseHistory))} h2={formatMessage(i18n.yourTransactions)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}

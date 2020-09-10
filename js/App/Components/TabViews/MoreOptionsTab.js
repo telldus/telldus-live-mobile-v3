@@ -46,6 +46,7 @@ import {
 import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
 import {
 	useCampaignAction,
 	useSwitchOrAddAccountAction,
@@ -211,7 +212,7 @@ const MoreOptionsTab = (props: Props): Object => {
 				align={'right'}
 				showBackButton={false}
 				h1={formatMessage(i18n.more)}
-				h2={formatMessage(i18n.featuresAndSettings)}/>
+				h2={capitalize(formatMessage(i18n.featuresAndSettings))}/>
 			<ScrollView
 				style={outerCoverStyle}
 				contentContainerStyle={contentContainerStyle}>
