@@ -158,7 +158,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 			level={3}
 			style={container}>
 			<NavigationHeaderPoster
-				h1={voucher ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.redeemCard)) : capitalizeFirstLetterOfEachWord('Premium access')}
+				h1={voucher ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.redeemCard)) : capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
 				h2={voucher ? formatMessage(i18n.codeAccepted) : formatMessage(i18n.getMoreFeaturesAndBenefits)}
 				align={'right'}
 				showLeftIcon={!success}
