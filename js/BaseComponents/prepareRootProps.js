@@ -247,6 +247,9 @@ const getTextColor = (props: Object): ?string => {
 		case 31: {
 			return colors.statusGreen;
 		}
+		case 32: {
+			return colors.statusRed;
+		}
 		default:
 			return;
 	}

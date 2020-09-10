@@ -134,13 +134,13 @@ const SMSHistoryScreen = (props: Object): Object => {
 					case 1:
 						return {
 							t: formatMessage(i18n.statusDelivered),
-							l: 30,
+							l: 31,
 							icon: 'arrow-forward',
 						};
 					case 2:
 						return {
 							t: formatMessage(i18n.failed),
-							l: 29,
+							l: 32,
 							icon: 'close',
 						};
 					default:
