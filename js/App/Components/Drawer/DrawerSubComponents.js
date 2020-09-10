@@ -116,15 +116,6 @@ const SettingsLink = ({styles, textIntl, text, iconName, iconComponent, onPressL
 	</RippleButton>
 );
 
-const SettingsButton = ({ onPress, styles }: Object): Object => (
-	<RippleButton
-		style={styles.settingsCover}
-		onPress={onPress}>
-		<IconTelldus icon={'settings'} size={styles.settingsIconSize} accessible={false} importantForAccessibility={'no'} level={9} style={styles.settingsIconStyle}/>
-		<Text style={styles.settingsText}><FormattedMessage {...i18n.settingsHeader} style={styles.settingsText} /></Text>
-	</RippleButton>
-);
-
 const TestIapLink = ({styles, appDrawerBanner}: Object): Object => {
 	const {
 		image,
@@ -162,7 +153,6 @@ const TestIapLink = ({styles, appDrawerBanner}: Object): Object => {
 };
 
 module.exports = {
-	SettingsButton,
 	DrawerSubHeader,
 	NavigationHeader,
 	SettingsLink,
