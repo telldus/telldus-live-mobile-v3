@@ -295,7 +295,7 @@ render(): Object | null {
 					style={styles.contentContainerStyle}>
 					<IconTelldus
 						icon={icon}
-						level={9}
+						level={23}
 						style={styles.iconStyle}/>
 					<Text
 						level={5}
