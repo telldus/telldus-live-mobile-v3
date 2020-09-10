@@ -108,6 +108,7 @@ import ThemedImage from './ThemedImage';
 import ThemedTextInput from './ThemedTextInput';
 import ThemedMaterialIcon from './ThemedMaterialIcon';
 import ThemedSwitch from './ThemedSwitch';
+import ThemedRefreshControl from './ThemedRefreshControl';
 
 import {
 	AppState,
@@ -217,4 +218,5 @@ module.exports = {
 	ThemedTextInput,
 	ThemedMaterialIcon,
 	ThemedSwitch,
+	ThemedRefreshControl,
 };
