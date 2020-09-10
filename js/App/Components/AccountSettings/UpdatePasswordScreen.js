@@ -23,7 +23,6 @@
 'use strict';
 
 import React, { useState, useCallback } from 'react';
-import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -33,6 +32,7 @@ import {
 	Text,
 	TouchableButton,
 	MaterialTextInput,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	changePassword,
@@ -162,8 +162,12 @@ const UpdatePasswordScreen = (props: Object): Object => {
 				leftIcon={'close'}
 				navigation={navigation}
 				{...others}/>
-			<ScrollView style={container}>
-				<View style={body}>
+			<ThemedScrollView
+				level={3}
+				style={container}>
+				<View
+					level={2}
+					style={body}>
 					<Text style={titleStyle}>
 						{capitalize(formatMessage(i18n.changePassword))}
 					</Text>
@@ -218,7 +222,7 @@ const UpdatePasswordScreen = (props: Object): Object => {
 					accessible={true}
 					style={buttonStyle}
 				/>
-			</ScrollView>
+			</ThemedScrollView>
 		</>
 	);
 };
@@ -237,7 +241,6 @@ const getStyles = ({
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 0,
@@ -247,7 +250,6 @@ const getStyles = ({
 			...Theme.Core.shadow,
 			marginHorizontal: padding,
 			marginVertical: padding * 2,
-			backgroundColor: '#fff',
 		},
 		titleStyle: {
 			fontSize: fontSize * 1.6,
