@@ -186,6 +186,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			showNegative: true,
 			positiveText: formatMessage(i18n.upgrade).toUpperCase(),
 			onPressPositive: () => {
+				this.props.closeDrawer();
 				navigate('PremiumUpgradeScreen');
 			},
 			closeOnPressPositive: true,
