@@ -28,8 +28,11 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 
-import ThemedColors from '../Theme/ThemedColors';
-const DEVICE_THEME_KEY = 'OS';
+import ThemedColors, {
+	DEVICE_THEME_KEY,
+	DARK_THEME_KEY,
+} from '../Theme/ThemedColors';
+
 import i18n from '../Translations/common';
 
 const useAppTheme = (): Object => {
@@ -42,14 +45,14 @@ const useAppTheme = (): Object => {
 		if (themeInApp === DEVICE_THEME_KEY) {
 			return {
 				colorScheme,
-				dark: colorScheme === 'dark',
+				dark: colorScheme === DARK_THEME_KEY,
 				themeInApp,
 				...getThemeData(colorScheme),
 			};
 		}
 		return {
 			colorScheme,
-			dark: false,
+			dark: themeInApp === DARK_THEME_KEY,
 			themeInApp,
 			...getThemeData(themeInApp),
 		};

@@ -19,6 +19,10 @@
 
 import Core from './Core';
 
+export const LIGHT_THEME_KEY = 'light';
+export const DARK_THEME_KEY = 'dark';
+export const DEVICE_THEME_KEY = 'OS';
+
 const common = {
 	get primary() {
 		return Core.brandPrimary;
@@ -38,7 +42,7 @@ const common = {
 };
 
 export default {
-	light: {
+	[LIGHT_THEME_KEY]: {
 		...common,
 		get safeAreaBG() {
 			return Core.brandPrimary;
@@ -288,7 +292,7 @@ export default {
 		},
 	},
 
-	dark: {
+	[DARK_THEME_KEY]: {
 		...common,
 		get safeAreaBG() {
 			return Core.grayPrimary;
