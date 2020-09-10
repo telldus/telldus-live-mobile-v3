@@ -26,7 +26,6 @@ import { createSelector } from 'reselect';
 import {
 	Dimensions,
 	FlatList,
-	RefreshControl,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
@@ -37,6 +36,7 @@ import {
 	View,
 	EmptyView,
 	Icon,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
@@ -442,7 +442,7 @@ class DashboardTab extends View {
 					data={rows}
 					renderItem={this._renderRow}
 					refreshControl={
-						<RefreshControl
+						<ThemedRefreshControl
 							enabled={showRefresh}
 							refreshing={isRefreshing}
 							onRefresh={this.onRefresh}

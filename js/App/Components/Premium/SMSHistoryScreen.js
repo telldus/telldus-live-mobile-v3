@@ -40,6 +40,7 @@ import {
 	Text,
 	IconTelldus,
 	ThemedMaterialIcon,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import {
 	getUserSMSHistory,
@@ -220,8 +221,12 @@ const SMSHistoryScreen = (props: Object): Object => {
 					sections={listData}
 					keyExtractor={keyExtractor}
 					contentContainerStyle={contentContainerStyle}
-					refreshing={isLoading}
-					onRefresh={getData}
+					refreshControl={
+						<ThemedRefreshControl
+							refreshing={isLoading}
+							onRefresh={getData}
+						/>
+					}
 				/>
 			}
 		</View>

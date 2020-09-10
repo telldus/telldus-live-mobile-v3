@@ -65,7 +65,6 @@ class SelectModel433 extends View<Props, State> {
 props: Props;
 state: State;
 
-onRefresh: () => void;
 onChooseLocation: (Object) => void;
 constructor(props: Props) {
 	super(props);

@@ -23,11 +23,18 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, SectionList, RefreshControl } from 'react-native';
+import { StyleSheet, SectionList } from 'react-native';
 import reduce from 'lodash/reduce';
 import groupBy from 'lodash/groupBy';
 
-import { FormattedMessage, Text, View, Icon, FormattedDate } from '../../../../BaseComponents';
+import {
+	FormattedMessage,
+	Text,
+	View,
+	Icon,
+	FormattedDate,
+	ThemedRefreshControl,
+} from '../../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
 import { getDeviceHistory } from '../../../Actions/Devices';
 import { getHistory, storeHistory, getLatestTimestamp } from '../../../Actions/LocalStorage';
@@ -333,10 +340,9 @@ class HistoryTab extends View {
 					initialNumToRender={10}
 					stickySectionHeadersEnabled={true}
 					refreshControl={
-						<RefreshControl
+						<ThemedRefreshControl
 						  refreshing={this.state.refreshing}
 						  onRefresh={this._onRefresh}
-						  colors={[brandPrimary]}
 						/>
 					  }
 				/>

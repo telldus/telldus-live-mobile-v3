@@ -39,6 +39,7 @@ import {
 	NavigationHeaderPoster,
 	Text,
 	IconTelldus,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import {
 	getUserTransactions,
@@ -238,8 +239,12 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 					sections={listData}
 					keyExtractor={keyExtractor}
 					contentContainerStyle={contentContainerStyle}
-					refreshing={isLoading}
-					onRefresh={getData}
+					refreshControl={
+						<ThemedRefreshControl
+							refreshing={isLoading}
+							onRefresh={getData}
+						/>
+					}
 				/>
 			}
 		</View>

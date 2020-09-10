@@ -25,7 +25,6 @@ import React from 'react';
 import {
 	TouchableOpacity,
 	SectionList,
-	RefreshControl,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
@@ -37,6 +36,7 @@ import {
 	Text,
 	View,
 	IconTelldus,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { DeviceRow, DeviceHeader } from './SubViews';
 import { DimmerControlInfo } from './SubViews/Device';
@@ -755,7 +755,7 @@ class DevicesTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					stickySectionHeadersEnabled={true}
 					refreshControl={
-						<RefreshControl
+						<ThemedRefreshControl
 							enabled={showRefresh}
 							refreshing={isRefreshing}
 							onRefresh={this.onRefresh}

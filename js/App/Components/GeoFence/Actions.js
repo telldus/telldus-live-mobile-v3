@@ -27,7 +27,6 @@ import React, {
 } from 'react';
 import {
 	SectionList,
-	RefreshControl,
 	LayoutAnimation,
 } from 'react-native';
 import {
@@ -40,6 +39,7 @@ let uuid = require('react-native-uuid');
 import {
 	View,
 	FloatingButton,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import {
 	ActionSectionHeader,
@@ -485,7 +485,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 				renderSectionHeader={renderSectionHeader}
 				stickySectionHeadersEnabled={true}
 				refreshControl={
-					<RefreshControl
+					<ThemedRefreshControl
 						enabled={showRefresh}
 						refreshing={isRefreshing}
 						onRefresh={onRefresh}

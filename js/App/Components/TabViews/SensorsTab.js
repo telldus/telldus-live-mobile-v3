@@ -25,7 +25,6 @@ import React from 'react';
 import {
 	SectionList,
 	TouchableOpacity,
-	RefreshControl,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
@@ -33,7 +32,12 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
 
-import { View, IconTelldus, Text } from '../../../BaseComponents';
+import {
+	View,
+	IconTelldus,
+	Text,
+	ThemedRefreshControl,
+} from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
 import {
 	NoSensors,
@@ -421,7 +425,7 @@ class SensorsTab extends View {
 					extraData={extraData}
 					stickySectionHeadersEnabled={true}
 					refreshControl={
-						<RefreshControl
+						<ThemedRefreshControl
 							refreshing={isRefreshing}
 							onRefresh={this.onRefresh}
 						/>}

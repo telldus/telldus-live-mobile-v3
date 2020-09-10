@@ -36,6 +36,7 @@ import {
 	View,
 	Text,
 	Icon,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { JobRow, JobsPoster } from './SubViews';
 import {
@@ -317,15 +318,19 @@ class SchedulerTab extends View<null, Props, State> {
 							<FlatList
 								data={schedules}
 								renderItem={this._renderRow}
-								onRefresh={this.onRefresh}
 								keyExtractor={this.keyExtractor}
-								refreshing={this.state.isRefreshing}
 								// To re-render the list to update row style on different weekdays(today screen will have different row design
 								// if there is any expired schedule)
 								extraData={{
 									todayIndex,
 									appLayout,
 								}}
+								refreshControl={
+									<ThemedRefreshControl
+										onRefresh={this.onRefresh}
+										refreshing={this.state.isRefreshing}
+									/>
+								}
 							/>
 						</View>
 					}

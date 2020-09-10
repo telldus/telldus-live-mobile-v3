@@ -32,6 +32,7 @@ import {
 	Header,
 	Image,
 	Throbber,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
 import {
@@ -233,12 +234,15 @@ class GatewaysScreen extends View {
 					<FlatList
 						data={rows}
 						renderItem={this.renderRow}
-						onRefresh={this.onRefresh}
-						refreshing={this.state.isRefreshing}
 						keyExtractor={this.keyExtractor}
 						contentContainerStyle={{
 							marginVertical: padding - (padding / 4),
 						}}
+						refreshControl={
+							<ThemedRefreshControl
+								refreshing={this.state.isRefreshing}
+								onRefresh={this.onRefresh}
+							/>}
 					/>
 				}
 			</View>
