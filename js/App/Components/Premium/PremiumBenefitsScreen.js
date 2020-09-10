@@ -129,7 +129,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 			_screens.push(
 				<View style={cover} pointerEvents="box-none" key={`${i}`}>
 					<IconTelldus
-						level={9}
+						level={23}
 						icon={screen.icon}
 						style={iconStyle}/>
 					<Text
@@ -238,7 +238,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 						{screenLabels}
 					</View>
 					<Text
-						level={9}
+						level={23}
 						style={moreText} onPress={onPressMore}>...{formatMessage(i18n.labelMuchMore)}</Text>
 				</View>
 				<UpgradePremiumButton

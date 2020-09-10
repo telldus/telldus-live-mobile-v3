@@ -176,7 +176,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 						</Text>
 					</View>
 					<Text
-						level={9}
+						level={23}
 						style={pMonthTextStyle}>
 						{`€${formatNumber(cPerMonth, {
 							minimumFractionDigits: cPerMonth === 3 ? 0 : 2,
