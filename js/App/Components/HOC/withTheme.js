@@ -37,6 +37,7 @@ export interface PropsThemedComponent {
 	colorScheme?: string,
 	colors: Object,
 	style?: Object,
+	dark: boolean,
 }
 
 // NOTE: Try not to wrap functional components. Especially if they already use forwardRef
