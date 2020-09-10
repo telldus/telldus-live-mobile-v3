@@ -26,7 +26,6 @@ import React from 'react';
 import { ScrollView, Image } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { connect } from 'react-redux';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createSelector } from 'reselect';
 const isEqual = require('react-fast-compare');
 
@@ -35,6 +34,7 @@ import {
 	RippleButton,
 	Text,
 	Icon,
+	ThemedMaterialIcon,
 } from '../../../BaseComponents';
 import Gateway from './Gateway';
 import {
@@ -295,13 +295,14 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 							styles={drawerSubHeader}/>
 						{settingLinks}
 					</View>
-					{enableGeoFenceFeature && (
+					{true && (
 						<View style={styles.settingsLinkCover}>
 							<DrawerSubHeader
 								textIntl={i18n.geoFence}
 								styles={drawerSubHeader}/>
 							<RippleButton style={styles.linkCoverStyle} onPress={this.onPressGeoFence}>
-								<MaterialIcons
+								<ThemedMaterialIcon
+									level={23}
 									style={{
 										...styles.linkIconStyle,
 										paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
@@ -339,6 +340,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 						}}
 						text={capitalize(formatMessage(i18n.addNewGatway))}
 						iconComponent={<Icon
+							level={23}
 							style={{
 								...styles.linkIconStyle,
 								paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
