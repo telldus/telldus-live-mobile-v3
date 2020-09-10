@@ -45,6 +45,7 @@ import MultiActionModal from './Device/MultiActionModal';
 
 import {
 	withTheme,
+	PropsThemedComponent,
 } from '../../HOC/withTheme';
 
 import {
@@ -63,7 +64,7 @@ import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 
-type Props = {
+type Props = PropsThemedComponent & {
 	device: Object,
 	setScrollEnabled: boolean,
 	intl: Object,
@@ -78,10 +79,6 @@ type Props = {
 	propsSwipeRow: Object,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
-
-	colors: Object,
-	colorScheme: string,
-	themeInApp: string,
 
 	onBell: (number) => void,
 	onDown: (number) => void,
@@ -185,6 +182,7 @@ class DeviceRow extends View<Props, State> {
 				'onColorMultiplier',
 				'themeInApp',
 				'colorScheme',
+				'dark',
 			]);
 			if (propsChange) {
 				return true;
@@ -299,6 +297,8 @@ class DeviceRow extends View<Props, State> {
 			currentTemp,
 			offColorMultiplier,
 			onColorMultiplier,
+			dark,
+			colors,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -336,10 +336,15 @@ class DeviceRow extends View<Props, State> {
 		if (typeof rgbValue !== 'undefined' && isGatewayActive) {
 			let mainColorRGB = getMainColorRGB(rgbValue);
 
-			offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
+			offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier, {
+				isDarkMode: dark,
+			});
 			iconOffColor = offColorRGB;
 
-			preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier);
+			preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier, {
+				isDarkMode: dark,
+				colorWhenWhite: colors.inAppBrandSecondary,
+			});
 			colorDeviceIconBack = preparedMainColorRgb;
 			iconOnColor = colorDeviceIconBack;
 			iconOnBGColor = colorDeviceIconBack;

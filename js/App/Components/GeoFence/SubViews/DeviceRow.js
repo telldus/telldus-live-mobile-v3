@@ -81,6 +81,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		isChecked,
 		checkBoxId,
 		isLast,
+		dark,
 	} = props;
 	const {
 		supportedMethods = {},
@@ -96,6 +97,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 	} = useAppTheme();
 	const {
 		colorOnInActiveIcon,
+		inAppBrandSecondary,
 	} = colors;
 
 	const {
@@ -156,10 +158,15 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 	if (typeof rgbValue !== 'undefined') {
 		let mainColorRGB = isValidHexColorCode(rgbValue) ? rgbValue : getMainColorRGB(rgbValue);
 
-		offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
+		offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier, {
+			isDarkMode: dark,
+		});
 		iconOffColor = offColorRGB;
 
-		preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier);
+		preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier, {
+			isDarkMode: dark,
+			colorWhenWhite: inAppBrandSecondary,
+		});
 		colorDeviceIconBack = preparedMainColorRgb;
 		iconOnColor = colorDeviceIconBack;
 		iconOnBGColor = colorDeviceIconBack;

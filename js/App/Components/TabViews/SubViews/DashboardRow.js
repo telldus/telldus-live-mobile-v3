@@ -37,6 +37,7 @@ import ThermostatButtonDB from './Thermostat/ThermostatButtonDB';
 
 import {
 	withTheme,
+	PropsThemedComponent,
 } from '../../HOC/withTheme';
 
 import {
@@ -53,7 +54,7 @@ import {
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
     item: Object,
     tileWidth: number,
     intl: Object,
@@ -62,9 +63,6 @@ type Props = {
 	currentTemp?: number,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
-	colors: Object,
-	colorScheme: string,
-	themeInApp: string,
 
     style: Object,
 	setScrollEnabled: (boolean) => void,
@@ -117,6 +115,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'onColorMultiplier',
 		'themeInApp',
 		'colorScheme',
+		'dark',
 	]);
 	if (propsChange) {
 		return true;
@@ -147,6 +146,8 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		onPressDimButton,
 		offColorMultiplier,
 		onColorMultiplier,
+		dark,
+		colors,
 	} = this.props;
 	const {
 		TURNON,
@@ -171,10 +172,15 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	if (typeof rgbValue !== 'undefined' && isOnline) {
 		let mainColorRGB = getMainColorRGB(rgbValue);
 
-		offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
+		offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier, {
+			isDarkMode: dark,
+		});
 		iconOffColor = offColorRGB;
 
-		preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier);
+		preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier, {
+			isDarkMode: dark,
+			colorWhenWhite: colors.inAppBrandSecondary,
+		});
 		colorDeviceIconBack = preparedMainColorRgb;
 		iconOnColor = colorDeviceIconBack;
 
