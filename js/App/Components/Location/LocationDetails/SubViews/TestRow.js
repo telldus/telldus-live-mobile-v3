@@ -115,14 +115,20 @@ getStyles(appLayout: Object): Object {
 		inAppBrandSecondary,
 	} = colors;
 
-	const { rowTextColor, brandSuccess, sunsetColor } = Theme.Core;
+	const { rowTextColor } = Theme.Core;
 
 	const iconSize = Math.floor(deviceWidth * 0.09);
 	const h1Size = Math.floor(deviceWidth * 0.05);
 	const h2Size = Math.floor(deviceWidth * 0.035);
 
-	const iconColor = status === 'ok' ? brandSuccess :
-		status === 'fail' ? sunsetColor : inAppBrandSecondary;
+	const {
+		statusGreen,
+		statusOrange,
+		statusRed,
+	} = colors;
+
+	const iconColor = status === 'ok' ? statusGreen :
+		status === 'fail' ? statusRed : statusOrange;
 
 	return {
 		testRowCover: {
