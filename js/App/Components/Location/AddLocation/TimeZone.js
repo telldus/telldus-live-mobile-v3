@@ -170,7 +170,9 @@ class TimeZone extends View<void, Props, State> {
 					</Text>
 					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 1}} accessibilityLabel={accessibilityLabel}>
 						<View style={styles.timeZoneContainer}>
-							<Text style={styles.timeZone}>
+							<Text
+								level={18}
+								style={styles.timeZone}>
 								{timeZone}
 							</Text>
 							<Icon name="pencil" size={styles.iconSize} color="#A59F9A" style={styles.iconStyle}/>
@@ -210,7 +212,6 @@ class TimeZone extends View<void, Props, State> {
 				marginBottom: fontSizeTZHint * 0.15,
 			},
 			timeZone: {
-				color: '#00000099',
 				fontSize: fontSizeTZ,
 				marginRight: fontSizeTZ * 0.5,
 			},

@@ -184,13 +184,25 @@ class Success extends View<void, Props, State> {
 				flex: 1,
 				alignItems: 'stretch',
 			}}>
-				<View style={styles.itemsContainer}>
+				<View
+					level={2}
+					style={styles.itemsContainer}>
 					<View style={styles.imageTitleContainer}>
 						<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
-						<View style={styles.iconBackMask}/>
-						<Icon name="check-circle" size={styles.iconCheckSize} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
+						<View style={styles.iconCheckCover}>
+							<View
+								level={2}
+								style={styles.iconBackMask}/>
+							<Icon
+								level={31}
+								name="check-circle"
+								size={styles.iconCheckSize}
+								style={styles.iconCheck}/>
+						</View>
 						<View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-							<Text style={styles.messageTitle}>
+							<Text
+								level={18}
+								style={styles.messageTitle}>
 								{this.title}
 							</Text>
 						</View>
@@ -228,7 +240,6 @@ class Success extends View<void, Props, State> {
 		return {
 			iconCheckSize: iconCheckSize,
 			itemsContainer: {
-				backgroundColor: '#fff',
 				flexDirection: 'column',
 				marginTop: 20,
 				paddingVertical: 20,
@@ -246,23 +257,24 @@ class Success extends View<void, Props, State> {
 				alignItems: 'center',
 				justifyContent: 'flex-start',
 			},
-			iconBackMask: {
+			iconCheckCover: {
+				flex: 0,
 				position: 'absolute',
 				top: 22,
-				left: deviceWidth * 0.185,
-				width: iconContCheckSize,
-				height: iconContCheckSize,
-				borderRadius: iconContCheckSize / 2,
-				backgroundColor: '#fff',
+				left: deviceWidth * 0.18,
+			},
+			iconBackMask: {
+				top: iconContCheckSize * 0.09,
+				position: 'absolute',
+				width: iconContCheckSize * 0.9,
+				height: iconContCheckSize * 0.9,
+				borderRadius: iconContCheckSize * 0.45,
 			},
 			iconCheck: {
 				position: 'absolute',
-				top: 20,
-				left: deviceWidth * 0.18,
 				backgroundColor: 'transparent',
 			},
 			messageTitle: {
-				color: '#00000099',
 				fontSize: Math.floor(deviceWidth * 0.068),
 				flexWrap: 'wrap',
 			},
