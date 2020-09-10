@@ -153,7 +153,9 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 	}, [ignoreExpand, isActions, rowValue, val, isCpoints]);
 
 	return (
-		<View style={rowCover}>
+		<View
+			level={2}
+			style={rowCover}>
 			<TouchableOpacity
 				onPress={toggle}
 				style={{
@@ -196,7 +198,6 @@ const getStyles = ({
 
 	return {
 		rowCover: {
-			backgroundColor: '#fff',
 			flexDirection: column ? 'column' : 'row',
 			marginHorizontal: padding,
 			padding,

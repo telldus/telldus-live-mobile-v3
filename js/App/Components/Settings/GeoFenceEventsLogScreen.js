@@ -292,10 +292,11 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 	}, [sQLite, getGeoFenceEventsSQLite, formatDate, formatTime, _listData]);
 
 	return (
-		<View style={{
-			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
-		}}>
+		<View
+			level={3}
+			style={{
+				flex: 1,
+			}}>
 			<NavigationHeader
 				showLeftIcon={true}
 				leftIcon={'close'}
@@ -329,7 +330,9 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 					}
 					navigation={navigation}/>
 				{listData.length === 0 ?
-					<Text style={emptyTextStyle}>
+					<Text
+						level={2}
+						style={emptyTextStyle}>
                 Empty
 					</Text>
 					:
@@ -360,9 +363,7 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		subHeader,
 		paddingFactor,
-		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -383,11 +384,6 @@ const getStyles = (appLayout: Object): Object => {
 			paddingBottom: padding,
 			paddingTop: padding * 1.5,
 		},
-		headerMainStyle: {
-			marginBottom: 5,
-			color: subHeader,
-			fontSize,
-		},
 		touchableStyle: {
 			height: fontSize * 3.1,
 		},
@@ -400,7 +396,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		emptyTextStyle: {
 			marginTop: 10,
-			color: rowTextColor,
 			fontSize,
 			alignSelf: 'center',
 		},

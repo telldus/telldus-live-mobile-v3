@@ -254,10 +254,11 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 	}, [onUpdateGeoFenceConfig]);
 
 	return (
-		<View style={{
-			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
-		}}>
+		<View
+			level={3}
+			style={{
+				flex: 1,
+			}}>
 			<NavigationHeader
 				showLeftIcon={true}
 				leftIcon={'close'}
@@ -281,7 +282,9 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 						h2={'Advanced settings'}
 						navigation={navigation}/>
 					<View style={itemsContainer}>
-						<Text style={headerMainStyle}>
+						<Text
+							level={2}
+							style={headerMainStyle}>
 							GeoFence
 						</Text>
 						<SettingsRow
@@ -296,6 +299,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							intl={intl}
 							type={'text'}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -313,6 +317,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							intl={intl}
 							type={'text'}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -347,6 +352,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							intl={intl}
 							type={'text'}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -359,6 +365,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							appLayout={layout}
 							intl={intl}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -371,6 +378,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							appLayout={layout}
 							intl={intl}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -383,6 +391,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							appLayout={layout}
 							intl={intl}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -395,6 +404,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							appLayout={layout}
 							intl={intl}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -408,6 +418,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							appLayout={layout}
 							intl={intl}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -421,6 +432,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							appLayout={layout}
 							intl={intl}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -434,6 +446,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							appLayout={layout}
 							intl={intl}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -446,6 +459,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							intl={intl}
 							type={'text'}
 							labelTextStyle={labelTextStyle}
+							level={18}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
@@ -463,7 +477,6 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		subHeader,
 		paddingFactor,
 	} = Theme.Core;
 
@@ -480,12 +493,10 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		headerMainStyle: {
 			marginBottom: 5,
-			color: subHeader,
 			fontSize,
 		},
 		labelTextStyle: {
 			fontSize,
-			color: '#000',
 			justifyContent: 'center',
 			width: '80%',
 		},
