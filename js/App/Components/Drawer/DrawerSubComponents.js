@@ -38,8 +38,6 @@ import {
 	EmptyView,
 } from '../../../BaseComponents';
 
-import i18n from '../../Translations/common';
-
 const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwitchAccount }: Object): Object => {
 
 	let options = {
