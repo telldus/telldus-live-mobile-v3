@@ -147,6 +147,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 		if (this.timeoutCloseDrawer) {
 			clearTimeout(this.timeoutCloseDrawer);
 		}
+		if (this.backHandler && this.backHandler.remove) {
+			this.backHandler.remove();
+		}
 	}
 
 	addNewLocation = () => {
