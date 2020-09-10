@@ -295,7 +295,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 							styles={drawerSubHeader}/>
 						{settingLinks}
 					</View>
-					{true && (
+					{enableGeoFenceFeature && (
 						<View style={styles.settingsLinkCover}>
 							<DrawerSubHeader
 								textIntl={i18n.geoFence}
