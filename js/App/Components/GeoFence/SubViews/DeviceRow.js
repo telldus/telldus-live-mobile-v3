@@ -111,6 +111,13 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 	} = supportedMethods;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const { firebaseRemoteConfig = {} } = useSelector((state: Object): Object => state.user);
+
+	const { rgb = JSON.stringify({}) } = firebaseRemoteConfig;
+	const {
+		onColorMultiplier,
+		offColorMultiplier,
+	} = JSON.parse(rgb);
 
 	const intl = useIntl();
 
@@ -145,14 +152,15 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 	let { RGB: rgbValue } = stateValues;
 	let colorDeviceIconBack = iconContainerStyle.backgroundColor;
 	// eslint-disable-next-line no-unused-vars
-	let offColorRGB, iconOffColor, iconOnColor, iconOnBGColor;
+	let offColorRGB, iconOffColor, iconOnColor, iconOnBGColor, preparedMainColorRgb;
 	if (typeof rgbValue !== 'undefined') {
 		let mainColorRGB = isValidHexColorCode(rgbValue) ? rgbValue : getMainColorRGB(rgbValue);
 
-		offColorRGB = getOffColorRGB(mainColorRGB);
+		offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
 		iconOffColor = offColorRGB;
 
-		colorDeviceIconBack = prepareMainColor(mainColorRGB);
+		preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier);
+		colorDeviceIconBack = preparedMainColorRgb;
 		iconOnColor = colorDeviceIconBack;
 		iconOnBGColor = colorDeviceIconBack;
 
@@ -239,6 +247,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 				onButtonColor={isInState === 'TURNON' ? iconOnBGColor : undefined}
 				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
+				preparedMainColorRgb={preparedMainColorRgb}
 			/>
 		);
 	}

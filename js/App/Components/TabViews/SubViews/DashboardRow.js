@@ -167,15 +167,18 @@ getButtonsInfo(item: Object, styles: Object): Object {
 
 	let { RGB: rgbValue } = stateValues;
 	let colorDeviceIconBack = styles.itemIconContainerOn.backgroundColor;
-	let offColorRGB, iconOffColor, iconOnColor;
+	let offColorRGB, iconOffColor, iconOnColor, preparedMainColorRgb;
 	if (typeof rgbValue !== 'undefined' && isOnline) {
 		let mainColorRGB = getMainColorRGB(rgbValue);
 
 		offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
 		iconOffColor = offColorRGB;
 
-		colorDeviceIconBack = prepareMainColor(mainColorRGB, onColorMultiplier);
+		preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier);
+		colorDeviceIconBack = preparedMainColorRgb;
 		iconOnColor = colorDeviceIconBack;
+
+		colorDeviceIconBack = isInState === 'TURNOFF' ? iconOffColor : colorDeviceIconBack;
 	}
 	colorDeviceIconBack = colorDeviceIconBack ? colorDeviceIconBack : styles.iconContainerStyle.backgroundColor;
 
@@ -256,6 +259,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 				onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
 				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
+				preparedMainColorRgb={preparedMainColorRgb}
 				containerStyle={[styles.buttonsContainerStyle, {width}]}
 			/>);
 		buttonsInfo.unshift({

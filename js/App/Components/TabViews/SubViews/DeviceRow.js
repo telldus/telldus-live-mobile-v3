@@ -332,14 +332,15 @@ class DeviceRow extends View<Props, State> {
 
 		let { RGB: rgbValue } = stateValues;
 		let colorDeviceIconBack = styles.iconContainerStyle.backgroundColor;
-		let offColorRGB, iconOffColor, iconOnColor, iconOnBGColor;
+		let offColorRGB, iconOffColor, iconOnColor, iconOnBGColor, preparedMainColorRgb;
 		if (typeof rgbValue !== 'undefined' && isGatewayActive) {
 			let mainColorRGB = getMainColorRGB(rgbValue);
 
 			offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
 			iconOffColor = offColorRGB;
 
-			colorDeviceIconBack = prepareMainColor(mainColorRGB, onColorMultiplier);
+			preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier);
+			colorDeviceIconBack = preparedMainColorRgb;
 			iconOnColor = colorDeviceIconBack;
 			iconOnBGColor = colorDeviceIconBack;
 
@@ -408,6 +409,7 @@ class DeviceRow extends View<Props, State> {
 					onButtonColor={isInState === 'TURNON' ? iconOnBGColor : undefined}
 					iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 					iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
+					preparedMainColorRgb={preparedMainColorRgb}
 				/>
 			);
 		}

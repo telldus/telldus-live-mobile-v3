@@ -32,11 +32,6 @@ import {
 	withTheme,
 } from '../../HOC/withTheme';
 
-import {
-	getMainColorRGB,
-	prepareMainColor,
-} from '../../../Lib/rgbUtils';
-
 type Props = {
 	displayedValue: string,
 	isGatewayActive: boolean,
@@ -48,6 +43,7 @@ type Props = {
 	onColorMultiplier: number,
 	methodRequested: string,
 	disableActionIndicator?: boolean,
+	preparedMainColorRgb: string,
 
 	colors: Object,
 	colorScheme: string,
@@ -76,23 +72,22 @@ class RGBPalette extends View<Props, null> {
 	render(): Object {
 		const {
 			displayedValue,
-			rgb,
 			isInState,
 			fontSize,
 			fontSizeIcon,
 			isGatewayActive,
-			onColorMultiplier,
 			methodRequested,
 			disableActionIndicator,
 			colors,
+			preparedMainColorRgb,
 		} = this.props;
 
 		const {
 			colorOnInActiveBg,
 		} = colors;
 
-		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? prepareMainColor(getMainColorRGB(rgb), onColorMultiplier) : colorOnInActiveBg;
-		let iconColor = isInState === 'DIM' || isInState === 'RGB' ? '#FFF' : prepareMainColor(getMainColorRGB(rgb), onColorMultiplier);
+		let mainColor = (isInState === 'DIM' || isInState === 'RGB') ? preparedMainColorRgb : colorOnInActiveBg;
+		let iconColor = (isInState === 'DIM' || isInState === 'RGB') ? '#FFF' : preparedMainColorRgb;
 
 		mainColor = isGatewayActive ? mainColor : colorOnInActiveBg;
 		iconColor = isGatewayActive ? iconColor : '#a2a2a2';
