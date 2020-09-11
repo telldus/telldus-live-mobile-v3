@@ -184,6 +184,9 @@ render(): Object {
 }
 
 getStyles(appLayout: Object): Object {
+	const {
+		colors,
+	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -199,7 +202,7 @@ getStyles(appLayout: Object): Object {
 		inputStyle: {
 			fontSize: inputFontSize,
 			paddingLeft: 5 + (inputFontSize * 2.5),
-			color: '#000000',
+			color: colors.textSix,
 		},
 		iconStyle: {
 			fontSize: iconFontSize,
