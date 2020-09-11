@@ -49,6 +49,12 @@ import Subtitle from './Subtitle';
 import AttentionCatcher from './AttentionCatcher';
 import _ from 'lodash';
 
+import {
+	useAppTheme,
+} from '../App/Hooks/Theme';
+
+import TelldusLogo from '../App/Components/TabViews/img/telldus_logo.svg';
+
 import { hasStatusBar as hasStatusBarMeth } from '../App/Lib';
 
 import i18n from '../App/Translations/common';
@@ -97,6 +103,10 @@ const HeaderComponent = (props: Props): Object => {
 
 	const intl = useIntl();
 
+	const {
+		colors,
+	} = useAppTheme();
+
 	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
 	const {
 		height,
@@ -104,7 +114,7 @@ const HeaderComponent = (props: Props): Object => {
 	} = appLayout;
 	const {
 		navbar,
-		logoImage,
+		logoImage = {},
 		iosToolbarSearch,
 		toolbarButton,
 		androidToolbarSearch,
@@ -121,10 +131,11 @@ const HeaderComponent = (props: Props): Object => {
 				<TouchableOpacity
 					disabled={!onPressLogo}
 					onPress={onPressLogo}>
-					<Image
-						source={{uri: 'telldus_logo'}}
+					<TelldusLogo
+						fill={colors.inAppBrandSecondary}
 						style={[logoImage, logoStyle]}
-					/>
+						height={logoImage.height || logoStyle.height}
+						width={logoImage.width || logoStyle.width}/>
 				</TouchableOpacity>
 			);
 		} else if (!Array.isArray(children)) {
@@ -294,12 +305,7 @@ const HeaderComponent = (props: Props): Object => {
 			}
 			return newChildren;
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		children,
-		searchBar,
-		appLayout,
-	]);
+	}, [children, onPressLogo, colors.inAppBrandSecondary, logoImage, logoStyle, searchBar, iosToolbarSearch, iosToolbarBtnColor, toolbarButton, androidToolbarSearch, toolbarTextColor]);
 
 	const renderButtonContent = useCallback((button: Object): ?Object => {
 		if (button.image) {
