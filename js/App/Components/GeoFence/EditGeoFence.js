@@ -26,7 +26,6 @@ import {
 	StyleSheet,
 	ScrollView,
 	TextInput,
-	TouchableOpacity,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import {
@@ -40,6 +39,7 @@ import {
 	Text,
 	TouchableButton,
 	EmptyView,
+	TouchableOpacity,
 } from '../../../BaseComponents';
 
 import {
@@ -228,8 +228,8 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 			style={container}
 			contentContainerStyle={contentContainerStyle}>
 			<View style={rowContainer}>
-
 				<TouchableOpacity
+					level={2}
 					onPress={onEditName}
 					disabled={editName}
 					style={rowStyle}>
@@ -350,7 +350,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		rowStyle: {
 			padding: padding * 1.5,
-			backgroundColor: '#fff',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			borderColor: angledRowBorderColor,
