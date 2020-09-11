@@ -344,10 +344,8 @@ class GraphValuesDropDown extends View<Props, State> {
 			},
 			pickerContainerStyle: {
 				width: pickerItemsWidth,
-				...shadow,
 				marginLeft: padding / 2,
 				marginBottom: padding / 2,
-				backgroundColor: '#fff',
 			},
 			pickerBaseCoverStyle: {
 				width: pickerItemsWidth,

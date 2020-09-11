@@ -303,7 +303,7 @@ getStyle(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { eulaContentColor, offlineColor } = Theme.Core;
+	const { offlineColor } = Theme.Core;
 
 	const adjustCelendar = !this.isTablet && !isPortrait;
 
@@ -316,6 +316,8 @@ getStyle(appLayout: Object): Object {
 
 	const {
 		inAppBrandSecondary,
+		card,
+		textFour,
 	} = colors;
 
 	return {
@@ -347,11 +349,13 @@ getStyle(appLayout: Object): Object {
 			fontFamily: 'Roboto-Regular',
 		},
 		calendarTheme: {
+			backgroundColor: card,
+			calendarBackground: card,
 			textSectionTitleColor: offlineColor,
 			selectedDayBackgroundColor: inAppBrandSecondary,
 			todayTextColor: '#00adf5',
-			arrowColor: '#000',
-			monthTextColor: '#000',
+			arrowColor: textFour,
+			monthTextColor: textFour,
 			'stylesheet.calendar.main': {
 				week: {
 				  marginTop: 0,
@@ -363,7 +367,7 @@ getStyle(appLayout: Object): Object {
 		},
 		footerStyle: {
 			flexDirection: 'row',
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			justifyContent: 'flex-end',
 			paddingVertical: footerPadding,
 			paddingRight: adjustCelendar ? 10 : 0,
@@ -375,7 +379,7 @@ getStyle(appLayout: Object): Object {
 			marginRight: 15,
 		},
 		negativeLabelStyle: {
-			color: eulaContentColor,
+			color: textFour,
 			fontSize: fontSizeFooterText,
 		},
 	};
