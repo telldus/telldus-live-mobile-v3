@@ -86,7 +86,9 @@ class LocationDetails extends View {
 		} = this.getStyle(appLayout);
 
 		return (
-			<View style={[styles.shadow, styles.container, style]}>
+			<View
+				level={2}
+				style={[styles.shadow, styles.container, style]}>
 				{!!title && (
 					<Text style={[textLocation, {marginLeft: 10}]}>
 						{title}
@@ -162,7 +164,6 @@ class LocationDetails extends View {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'column',
-		backgroundColor: '#fff',
 		paddingHorizontal: 10,
 		paddingVertical: 10,
 		marginVertical: 10,
