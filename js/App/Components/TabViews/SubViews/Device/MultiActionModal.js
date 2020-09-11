@@ -113,7 +113,9 @@ render(): Object {
 			onBackdropPress={this.closeModal}
 			onBackButtonPress={this.closeModal}
 			supportedOrientations={['portrait', 'landscape']}>
-			<View style={styles.modalCover}>
+			<View
+				level={2}
+				style={styles.modalCover}>
 				<DialogueHeader
 					headerText={name}
 					showIcon={true}
@@ -127,6 +129,11 @@ render(): Object {
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
 							let newStyle = {}, newProps = {}, { newButtonStyle, containerStyle } = styles;
+							if (child.key === '8') {
+								newStyle = {
+									style: newButtonStyle,
+								};
+							}
 							if (child.key === '7') {
 								newStyle = {
 									onButtonStyle: newButtonStyle,
@@ -202,7 +209,6 @@ const styles = StyleSheet.create({
 		flex: 0,
 		alignItems: 'flex-start',
 		justifyContent: 'center',
-		backgroundColor: '#fff',
 		borderRadius: 5,
 		overflow: 'hidden',
 	},
