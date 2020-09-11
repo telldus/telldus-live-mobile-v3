@@ -84,22 +84,10 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
       }
     }
   >
-    <Image
-      source={
-        Object {
-          "uri": "telldus_logo",
-        }
-      }
-      style={
-        Array [
-          Object {
-            "height": 35.00000025,
-            "resizeMode": "contain",
-            "width": 230.49999975,
-          },
-          undefined,
-        ]
-      }
+    <View
+      fill="#e26901"
+      height={35.00000025}
+      width={230.49999975}
     />
   </View>
 </View>
@@ -189,22 +177,10 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
       }
     }
   >
-    <Image
-      source={
-        Object {
-          "uri": "telldus_logo",
-        }
-      }
-      style={
-        Array [
-          Object {
-            "height": 35.00000025,
-            "resizeMode": "contain",
-            "width": 230.49999975,
-          },
-          undefined,
-        ]
-      }
+    <View
+      fill="#e26901"
+      height={35.00000025}
+      width={230.49999975}
     />
   </View>
 </View>

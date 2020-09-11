@@ -72,22 +72,10 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
           }
         }
       >
-        <Image
-          source={
-            Object {
-              "uri": "telldus_logo",
-            }
-          }
-          style={
-            Array [
-              Object {
-                "height": 35.00000025,
-                "resizeMode": "contain",
-                "width": 230.49999975,
-              },
-              undefined,
-            ]
-          }
+        <View
+          fill="#e26901"
+          height={35.00000025}
+          width={230.49999975}
         />
       </View>
     </View>
@@ -346,22 +334,10 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
           }
         }
       >
-        <Image
-          source={
-            Object {
-              "uri": "telldus_logo",
-            }
-          }
-          style={
-            Array [
-              Object {
-                "height": 35.00000025,
-                "resizeMode": "contain",
-                "width": 230.49999975,
-              },
-              undefined,
-            ]
-          }
+        <View
+          fill="#e26901"
+          height={35.00000025}
+          width={230.49999975}
         />
       </View>
     </View>
@@ -643,6 +619,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     },
                   ]
                 }
+                themeInApp="OS"
               >
                 <View
                   style={
@@ -820,22 +797,10 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
           }
         }
       >
-        <Image
-          source={
-            Object {
-              "uri": "telldus_logo",
-            }
-          }
-          style={
-            Array [
-              Object {
-                "height": 35.00000025,
-                "resizeMode": "contain",
-                "width": 230.49999975,
-              },
-              undefined,
-            ]
-          }
+        <View
+          fill="#e26901"
+          height={35.00000025}
+          width={230.49999975}
         />
       </View>
     </View>
