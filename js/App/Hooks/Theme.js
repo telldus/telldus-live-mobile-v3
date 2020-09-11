@@ -27,12 +27,13 @@ import {
 	useSelector,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
-
-import ThemedColors, {
+import { CONSTANTS } from 'live-shared-data';
+const {
 	DEVICE_THEME_KEY,
 	DARK_THEME_KEY,
-} from '../Theme/ThemedColors';
+} = CONSTANTS;
 
+import ThemedColors from '../Theme/ThemedColors';
 import i18n from '../Translations/common';
 
 const useAppTheme = (): Object => {

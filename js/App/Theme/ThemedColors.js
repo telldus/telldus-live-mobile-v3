@@ -19,9 +19,11 @@
 
 import Core from './Core';
 
-export const LIGHT_THEME_KEY = 'light';
-export const DARK_THEME_KEY = 'dark';
-export const DEVICE_THEME_KEY = 'OS';
+import { CONSTANTS } from 'live-shared-data';
+const {
+	LIGHT_THEME_KEY,
+	DARK_THEME_KEY,
+} = CONSTANTS;
 
 const common = {
 	get primary() {
