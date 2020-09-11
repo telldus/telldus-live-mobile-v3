@@ -208,7 +208,9 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 	}, []);
 
 	return (
-		<View style={coverStyle}>
+		<View
+			level={2}
+			style={coverStyle}>
 			<Text style={labelStyle} numberOfLine={1}>
 				{formatMessage(i18n.brandModel)}
 			</Text>
@@ -281,7 +283,6 @@ const getStyles = (appLayout: Object): Object => {
 			width: width - (padding * 2),
 			justifyContent: 'space-between',
 			...shadow,
-			backgroundColor: '#fff',
 			marginBottom: padding / 2,
 			paddingRight: padding,
 			paddingVertical: padding + (deviceWidth * 0.02),

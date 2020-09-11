@@ -105,7 +105,9 @@ const DropDownSetting = (props: Object): Object => {
 			style={statuscheckStyle}/> : undefined;
 
 	return (
-		<View style={optionInputCover}>
+		<View
+			level={2}
+			style={optionInputCover}>
 			<View style={{
 				flexDirection: 'row',
 				alignItems: 'center',
@@ -202,7 +204,6 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 			justifyContent: 'space-between',
 			paddingLeft: padding,
 			borderRadius: 2,
-			backgroundColor: '#fff',
 			...shadow,
 			marginBottom: padding / 2,
 		},
