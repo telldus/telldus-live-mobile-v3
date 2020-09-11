@@ -112,7 +112,9 @@ const DropDownSetting = (props: Object): Object => {
 				flexDirection: 'row',
 				alignItems: 'center',
 			}}>
-				<Text style={[optionInputLabelStyle, labelStyle]}>
+				<Text
+					level={3}
+					style={[optionInputLabelStyle, labelStyle]}>
 					{label}
 				</Text>
 				<TouchableOpacity onPress={onPressInfo}>
@@ -209,7 +211,6 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		},
 		optionInputLabelStyle: {
 			fontSize: fontSizeText,
-			color: '#000',
 		},
 		infoIconStyle: {
 			marginLeft: 3,

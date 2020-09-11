@@ -312,7 +312,9 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 					level={2}
 					style={uSettingsCover}
 					key={setting}>
-					<Text style={[optionInputLabelStyle, labelStyle]}>
+					<Text
+						level={3}
+						style={[optionInputLabelStyle, labelStyle]}>
 						{formatMessage(i18n.units)}
 					</Text>
 					<View style={{
@@ -596,7 +598,9 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 					level={2}
 					style={optionInputCover}
 					key={setting}>
-					<Text style={[optionInputLabelStyle, labelStyle]}>
+					<Text
+						level={3}
+						style={[optionInputLabelStyle, labelStyle]}>
 						{formatMessage(i18n.fade)}
 					</Text>
 					<View style={fadeSettingsCover}>
@@ -670,7 +674,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		optionInputLabelStyle: {
 			fontSize: fontSizeText,
-			color: '#000',
 		},
 		optionInputCover: {
 			flexDirection: 'row',

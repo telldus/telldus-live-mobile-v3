@@ -238,6 +238,11 @@ const getStyles = ({
 
 	const fontSize = Math.floor(deviceWidth * 0.04);
 
+	const {
+		textThree,
+		inAppBrandSecondary,
+	} = colors;
+
 	return {
 		container: {
 			flex: 1,
@@ -253,7 +258,7 @@ const getStyles = ({
 		},
 		titleStyle: {
 			fontSize: fontSize * 1.6,
-			color: colors.inAppBrandSecondary,
+			color: inAppBrandSecondary,
 		},
 		bodyStyle: {
 			fontSize,
@@ -264,11 +269,11 @@ const getStyles = ({
 			fontSize: fontSize * 1.3,
 			marginTop: 16,
 			width: '100%',
-			color: '#000',
+			color: textThree,
 		},
 		currentLabelStyle: {
 			alignSelf: 'flex-start',
-			color: colors.inAppBrandSecondary,
+			color: inAppBrandSecondary,
 			fontSize,
 			marginTop: 20,
 		},

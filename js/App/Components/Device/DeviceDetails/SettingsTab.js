@@ -1077,7 +1077,6 @@ class SettingsTab extends View {
 				marginHorizontal: 0,
 			},
 			labelStyleDeviceSettings433: {
-				color: '#000',
 				fontSize,
 			},
 			labelStyle: {

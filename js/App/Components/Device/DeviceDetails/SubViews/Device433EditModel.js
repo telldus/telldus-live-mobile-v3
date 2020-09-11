@@ -63,6 +63,7 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 
 	const {
 		inAppBrandSecondary,
+		textThree,
 	} = colors;
 
 	const intl = useIntl();
@@ -149,16 +150,20 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 				justifyContent: 'center',
 			}]} onPress={onPress}>
 				<Text style={[sectionRowStyle, {
-					color: modelC === _model ? inAppBrandSecondary : '#000',
+					color: modelC === _model ? inAppBrandSecondary : textThree,
 				}]}>
 					{prepare433ModelName(locale, lang, modelName)}
 				</Text>
 			</RippleButton>
 		);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
+		inAppBrandSecondary,
 		locale,
-		widgetParams433Device,
+		modelC,
+		onValueChange,
+		sectionHeaderStyle,
+		sectionRowStyle,
+		textThree,
 	]);
 
 	const valueExtractor = useCallback((data: Object, index: number): string => {
@@ -211,7 +216,10 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 		<View
 			level={2}
 			style={coverStyle}>
-			<Text style={labelStyle} numberOfLine={1}>
+			<Text
+				level={3}
+				style={labelStyle}
+				numberOfLine={1}>
 				{formatMessage(i18n.brandModel)}
 			</Text>
 			<DropDown
@@ -289,7 +297,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		labelStyle: {
 			flex: 0,
-			color: '#000',
 			fontSize,
 			flexWrap: 'wrap',
 			marginLeft: padding,
@@ -298,7 +305,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		eulaContentColor,
 		sectionRowStyle: {
-			color: '#000',
 			fontSize: fontSize * 0.9,
 			textAlignVertical: 'center',
 		},

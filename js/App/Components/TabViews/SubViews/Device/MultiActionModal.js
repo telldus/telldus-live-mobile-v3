@@ -221,9 +221,6 @@ const styles = StyleSheet.create({
 		paddingLeft: bodyPadding - 10,
 		paddingRight: bodyPadding,
 	},
-	headerText: {
-		color: '#000',
-	},
 	newButtonStyle: {
 		flex: 0,
 		marginLeft: buttonPadding,
