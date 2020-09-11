@@ -146,6 +146,7 @@ class DimmerPopup extends Component<Props, State> {
 		}
 		return (
 			<View
+				level={2}
 				onLayout={this.handleLayout}
 				ref={this.setRefs}
 				style={{
@@ -154,16 +155,15 @@ class DimmerPopup extends Component<Props, State> {
 					position: 'absolute',
 					width: deviceWidth - 16,
 					height: 56,
-					backgroundColor: '#fff',
 					borderRadius: 7,
 					alignItems: 'center',
 					justifyContent: 'center',
 					...Theme.Core.shadow,
 				}}>
 				<Text
+					level={24}
 					ellipsizeMode="middle"
-					allowFontScaling={false}
-				    style={{ color: '#1a355b' }}>
+					allowFontScaling={false}>
 					{this.props.name}
 				</Text>
 				<DimmerProgressBar

@@ -386,9 +386,6 @@ class HorizontalSlider extends View {
 
 		return {
 			inAppBrandSecondary,
-			enabledBackground: {
-				backgroundColor: '#fff',
-			},
 			enabled: {
 				backgroundColor: colorOnActiveBg,
 			},

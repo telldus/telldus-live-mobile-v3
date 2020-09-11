@@ -93,6 +93,7 @@ class DimmerControlInfo extends View<Props, null> {
 			buttonStyle,
 			iconStyle,
 			iconSize,
+			dialogueBodyTextStyle,
 		} = this.getStyles(appLayout);
 
 		return (
@@ -105,7 +106,9 @@ class DimmerControlInfo extends View<Props, null> {
 					headerWidth={style.headerWidth}
 					headerHeight={style.headerHeight}/>
 				<View style={style.dialogueBodyStyle}>
-					<Text style={style.dialogueBodyTextStyle}>
+					<Text
+						level={18}
+						style={dialogueBodyTextStyle}>
 						{intl.formatMessage(i18n.dimInstruction)}
 					</Text>
 					<View style={{
@@ -143,10 +146,6 @@ class DimmerControlInfo extends View<Props, null> {
 		fButtonSize = fButtonSize > maxSizeFloatingButton ? maxSizeFloatingButton : fButtonSize;
 
 		return {
-			dialogueBodyDimTextStyle: {
-				color: '#000',
-				fontSize: 12,
-			},
 			iconSize: deviceWidth * 0.050666667,
 			buttonStyle: {
 				elevation: 4,
@@ -170,21 +169,12 @@ class DimmerControlInfo extends View<Props, null> {
 				width: 12,
 				borderRadius: 6,
 			},
-			dialogueBoxStyle: {
-				borderRadius: 8,
-				elevation: 2,
-				shadowColor: '#000',
-				shadowRadius: 8,
-				shadowOpacity: 0.23,
-				shadowOffset: {
-					width: 0,
-					height: 1,
-				},
-				backgroundColor: '#fff',
-			},
 			dimInfoDialogueContainer: {
 				borderRadius: 8,
 				overflow: 'hidden',
+			},
+			dialogueBodyTextStyle: {
+				fontSize: 13,
 			},
 		};
 	}

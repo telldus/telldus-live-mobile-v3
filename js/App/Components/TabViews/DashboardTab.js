@@ -593,10 +593,6 @@ class DashboardTab extends View {
 				paddingVertical: 10,
 				width: deviceWidth * 0.75,
 			},
-			dialogueBodyTextStyle: {
-				fontSize: 13,
-				color: '#6B6969',
-			},
 			dialogueBoxStyle: {
 				borderRadius: 8,
 				elevation: 2,
@@ -607,7 +603,6 @@ class DashboardTab extends View {
 					width: 0,
 					height: 1,
 				},
-				backgroundColor: '#fff',
 				overflow: 'visible',
 			},
 		};
