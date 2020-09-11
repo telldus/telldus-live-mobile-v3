@@ -53,11 +53,13 @@ const Block = (props: Object): Object => {
 	} = getStyles(appLayout, index);
 
 	return (
-		<View style={[contentContainerStyle, {
-			paddingTop: index === 0 ? padding * 1.5 : 0,
-			marginTop: index === 0 ? padding * 1.5 : padding / 2,
-			marginBottom: index === 3 ? padding * 1.5 : 0,
-		}]}>
+		<View
+			level={2}
+			style={[contentContainerStyle, {
+				paddingTop: index === 0 ? padding * 1.5 : 0,
+				marginTop: index === 0 ? padding * 1.5 : padding / 2,
+				marginBottom: index === 3 ? padding * 1.5 : 0,
+			}]}>
 			{!!img && <View style={imageCover}>
 				<Image source={img} style={{
 					flex: 1,
@@ -133,7 +135,6 @@ const getStyles = (appLayout: Object, index: number): Object => {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...shadow,
 			borderRadius: 2,
 			width: widthIMG,
