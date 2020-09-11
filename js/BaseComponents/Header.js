@@ -114,12 +114,13 @@ const HeaderComponent = (props: Props): Object => {
 	} = appLayout;
 	const {
 		navbar,
-		logoImage = {},
 		iosToolbarSearch,
 		toolbarButton,
 		androidToolbarSearch,
 		headerButton,
 		statusBar,
+		logoWidth,
+		logoHeight,
 	} = getStyles(appLayout, {
 		rounded,
 		children,
@@ -133,9 +134,9 @@ const HeaderComponent = (props: Props): Object => {
 					onPress={onPressLogo}>
 					<TelldusLogo
 						fill={colors.inAppBrandSecondary}
-						style={[logoImage, logoStyle]}
-						height={logoImage.height || logoStyle.height}
-						width={logoImage.width || logoStyle.width}/>
+						style={logoStyle}
+						height={logoHeight}
+						width={logoWidth}/>
 				</TouchableOpacity>
 			);
 		} else if (!Array.isArray(children)) {
@@ -305,7 +306,7 @@ const HeaderComponent = (props: Props): Object => {
 			}
 			return newChildren;
 		}
-	}, [children, onPressLogo, colors.inAppBrandSecondary, logoImage, logoStyle, searchBar, iosToolbarSearch, iosToolbarBtnColor, toolbarButton, androidToolbarSearch, toolbarTextColor]);
+	}, [children, onPressLogo, colors.inAppBrandSecondary, logoStyle, logoHeight, logoWidth, searchBar, iosToolbarSearch, iosToolbarBtnColor, toolbarButton, androidToolbarSearch, toolbarTextColor]);
 
 	const renderButtonContent = useCallback((button: Object): ?Object => {
 		if (button.image) {
@@ -445,6 +446,8 @@ const getStyles = (appLayout: Object, {
 	const paddingHorizontal = headerButtonHorizontalPadding;
 
 	return {
+		logoWidth: deviceWidth * 0.307333333,
+		logoHeight: deviceWidth * 0.046666667,
 		navbar: {
 			justifyContent: (!Array.isArray(children)) ? 'center' : 'space-between',
 			flexDirection: 'row',
@@ -456,11 +459,6 @@ const getStyles = (appLayout: Object, {
 		},
 		statusBar: {
 			height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-		},
-		logoImage: {
-			width: deviceWidth * 0.307333333,
-			height: deviceWidth * 0.046666667,
-			resizeMode: 'contain',
 		},
 		iosToolbarSearch: {
 			backgroundColor: toolbarInputColor,
