@@ -281,35 +281,6 @@ const styles = StyleSheet.create({
 		marginTop: 12,
 		marginLeft: 8,
 	},
-	toggleContainer: {
-		flexDirection: 'row',
-		height: 36,
-		marginHorizontal: 8,
-		marginVertical: 16,
-	},
-	turnOff: {
-		flex: 1,
-		alignItems: 'stretch',
-		justifyContent: 'center',
-		borderTopLeftRadius: 7,
-		borderBottomLeftRadius: 7,
-	},
-	turnOn: {
-		flex: 1,
-		alignItems: 'stretch',
-		justifyContent: 'center',
-		borderTopRightRadius: 7,
-		borderBottomRightRadius: 7,
-	},
-	dimmerContainer: {
-		marginTop: 20,
-		height: (deviceHeight * 0.28),
-		backgroundColor: '#fff',
-	},
-	shadow: {
-		borderRadius: 2,
-		...Theme.Core.shadow,
-	},
 });
 
 function mapDispatchToProps(dispatch: Function): Object {
