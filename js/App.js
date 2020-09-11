@@ -58,7 +58,7 @@ import {
 } from './App/Components/HOC/withTheme';
 
 import Theme from './App/Theme';
-const changeLogVersion = '3.14';
+const changeLogVersion = '3.15';
 
 type Props = {
 	dispatch: Function,

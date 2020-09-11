@@ -28,6 +28,7 @@ import { intlShape } from 'react-intl';
 import {
 	Text,
 	View,
+	// ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
@@ -51,15 +52,21 @@ export default class WizardOne extends PureComponent<Props, null> {
 	titleWTwo: string;
 	descriptionWTwo: string;
 
+	titleWThree: string;
+	descriptionWThree: string;
+
 	constructor(props: Props) {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.wizardOneHeader314);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription314);
+		this.titleWOne = formatMessage(i18n.wizardOneHeader315);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription315);
 
-		this.titleWTwo = formatMessage(i18n.wizardTwoHeader314);
-		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription314);
+		this.titleWTwo = formatMessage(i18n.wizardTwoHeader315);
+		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription315);
+
+		this.titleWThree = formatMessage(i18n.wizardThreeHeader315);
+		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription315);
 	}
 
 	getScreenData(currentScreen: number, styles: Object): Object {
@@ -80,22 +87,31 @@ export default class WizardOne extends PureComponent<Props, null> {
 		};
 
 		switch (currentScreen) {
+			// case 1:
+			// 	return {
+			// 		...screenData,
+			// 		icon: <ThemedMaterialIcon
+			// 			style={iconStyle}
+			// 			size={iconSize}
+			// 			name={'location-on'}
+			// 			level={23}/>,
+			// 		title: this.titleWOne,
+			// 		description: this.descriptionWOne,
+			// 	};
 			case 1:
-				return {
-					...screenData,
-					icon: 'outlet',
-					title: this.titleWOne,
-					description: this.descriptionWOne,
-				};
-
-			case 2:
 				return {
 					...screenData,
 					icon: 'palette',
 					title: this.titleWTwo,
 					description: this.descriptionWTwo,
 				};
-
+			case 2:
+				return {
+					...screenData,
+					icon: 'user',
+					title: this.titleWThree,
+					description: this.descriptionWThree,
+				};
 			default:
 				return screenData;
 		}
