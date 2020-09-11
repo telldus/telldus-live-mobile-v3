@@ -24,11 +24,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Slider from 'react-native-slider';
 import throttle from 'lodash/throttle';
-
-const deviceHeight = Dimensions.get('window').height;
 
 import { setDimmerValue, saveDimmerInitialState } from '../../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
@@ -39,7 +37,6 @@ import {
 	getDimmerValue,
 	toSliderValue,
 } from '../../../../Lib';
-import Theme from '../../../../Theme';
 
 import {
 	withTheme,

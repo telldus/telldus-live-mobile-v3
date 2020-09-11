@@ -310,7 +310,7 @@ class GraphValuesDropDown extends View<Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { shadow, paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
+		const { paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;

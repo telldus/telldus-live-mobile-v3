@@ -591,13 +591,10 @@ getStyles(appLayout: Object): Object {
 	const {
 		shadow,
 		paddingFactor,
-		eulaContentColor,
 		brandDanger,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-
-	const fSize = Math.floor(deviceWidth * 0.035);
 
 	return {
 		LocationDetail: {

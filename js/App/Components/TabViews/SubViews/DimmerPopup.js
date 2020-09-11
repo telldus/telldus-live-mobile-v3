@@ -22,7 +22,11 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Dimensions, Text } from 'react-native';
+import { Dimensions } from 'react-native';
+
+import {
+	Text,
+} from '../../../../BaseComponents';
 import DimmerProgressBar from './DimmerProgressBar';
 import { View, initializeRegistryWithDefinitions } from 'react-native-animatable';
 import * as ANIMATION_DEFINITIONS from 'react-native-animatable/definitions';
