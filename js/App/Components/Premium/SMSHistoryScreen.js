@@ -205,13 +205,15 @@ const SMSHistoryScreen = (props: Object): Object => {
 				navigation={navigation}
 				{...screenProps}/>
 			{(!isLoading && listData.length === 0 ) ?
-				<View style={emptyCover}>
+				<View
+					level={2}
+					style={emptyCover}>
 					<IconTelldus
 						level={23}
 						icon={'info'}
 						style={statusIconStyle}/>
 					<Text
-						level={23}
+						level={5}
 						style={emptyInfo}>{formatMessage(i18n.noSMSHistory)}</Text>
 				</View>
 				:
@@ -260,7 +262,6 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			marginTop: padding,
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			padding: padding * 2,
 			justifyContent: 'center',
