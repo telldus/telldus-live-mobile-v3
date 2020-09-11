@@ -400,8 +400,7 @@ const HeaderComponent = (props: Props): Object => {
 	}, [appLayout]);
 
 	return (
-		<View
-			style={{ flex: 0 }}>
+		<>
 			{
 				(!forceHideStatus && Platform.OS === 'android' && hasStatusBar) ? (
 					<View
@@ -417,7 +416,7 @@ const HeaderComponent = (props: Props): Object => {
 				{showAttentionCapture && renderRightButtonAttentionCapture()}
 				{!!rightButton && renderRightButton(rightButton)}
 			</View>
-		</View>
+		</>
 	);
 };
 

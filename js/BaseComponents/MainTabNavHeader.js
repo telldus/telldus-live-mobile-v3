@@ -257,6 +257,7 @@ const getStyles = (appLayout: Object): Object => {
 					} : {
 						transform: [{rotateZ: '-90deg'}],
 						position: 'absolute',
+						zIndex: 1,
 						left: -(deviceHeight * 0.459931204),
 						top: deviceHeight * 0.459,
 						width: deviceHeight,
