@@ -66,7 +66,9 @@ const RowWithAngle: Object = React.memo<Object>((props: Props): Object => {
 
 	return (
 		<TouchableOpacity onPress={onPress} disabled={!onPress}>
-			<View style={[rowCoverStyleDef, rowCoverStyle]}>
+			<View
+				level={2}
+				style={[rowCoverStyleDef, rowCoverStyle]}>
 				{!!labelText &&
                 typeof labelText === 'string' ?
 					<Text style={[labelStyleDef, labelStyle]}>
@@ -107,7 +109,6 @@ const getStyles = (appLayout: Object): Object => {
 			padding: padding * 1.5,
 			borderColor: angledRowBorderColor,
 			borderBottomWidth: StyleSheet.hairlineWidth,
-			backgroundColor: '#fff',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 		},
