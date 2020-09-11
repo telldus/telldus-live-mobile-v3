@@ -40,7 +40,7 @@ const useAppTheme = (): Object => {
 	const colorScheme = useColorScheme();
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const {
-		themeInApp,
+		themeInApp = DEVICE_THEME_KEY,
 	} = defaultSettings;
 	return React.useMemo((): Object => {
 		if (themeInApp === DEVICE_THEME_KEY) {
