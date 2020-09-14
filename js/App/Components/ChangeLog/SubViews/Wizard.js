@@ -101,7 +101,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 			case 1:
 				return {
 					...screenData,
-					icon: 'palette',
+					icon: 'darkmode',
 					title: this.titleWTwo,
 					description: this.descriptionWTwo,
 				};
