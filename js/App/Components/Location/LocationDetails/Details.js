@@ -433,6 +433,7 @@ class Details extends View<Props, State> {
 				const tokenExpired = hasTokenExpired(ttl);
 				const deviceName = await DeviceInfo.getDeviceName();
 				const deviceUniqueID = DeviceInfo.getUniqueId();
+				const deviceManufacturer = await DeviceInfo.getManufacturer();
 
 				const debugData = {
 					online,
@@ -453,6 +454,9 @@ class Details extends View<Props, State> {
 					RSAKeysAreGenerated: this.RSAKeysAreGenerated,
 					RSAKeysRetrievableFromLocal: this.RSAKeysRetrievableFromLocal,
 					firebaseRemoteConfig,
+					deviceModel: DeviceInfo.getModel(),
+					deviceManufacturer,
+					systemVersion: DeviceInfo.getSystemVersion(),
 				};
 				const dialogueData = {
 					show: true,
