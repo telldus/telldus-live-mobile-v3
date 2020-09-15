@@ -307,7 +307,7 @@ const HeaderComponent = (props: Props): Object => {
 			}
 			return newChildren;
 		}
-	}, [children, onPressLogo, colors.inAppBrandSecondary, logoStyle, logoHeight, logoWidth, searchBar, iosToolbarSearch, iosToolbarBtnColor, toolbarButton, androidToolbarSearch, toolbarTextColor]);
+	}, [children, onPressLogo, colors.inAppBrandSecondary, colors.headerIconColor, logoStyle, logoHeight, logoWidth, searchBar, iosToolbarSearch, iosToolbarBtnColor, toolbarButton, androidToolbarSearch, toolbarTextColor]);
 
 	const renderButtonContent = useCallback((button: Object): ?Object => {
 		if (button.image) {
