@@ -140,7 +140,7 @@ export default {
 			return Core.brandPrimary;
 		},
 		get iconTwoColorBlock() {
-			return '#A59F9A90';
+			return '#BDBDBD';
 		},
 		get iconTwoColorBlockDisabled() {
 			return '#ffffff';
