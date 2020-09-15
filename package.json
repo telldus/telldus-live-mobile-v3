@@ -54,7 +54,7 @@
     "lodash": "~4.17.11",
     "moment": "~2.27.0",
     "moment-timezone": "~0.5.31",
-    "node-forge": "~0.9.1",
+    "node-forge": "~0.10.0",
     "react": "16.11.0",
     "react-dom": "^16.13.0",
     "react-fast-compare": "~3.2.0",
