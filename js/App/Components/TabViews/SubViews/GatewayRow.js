@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 
 import {
 	View,
-	Image,
+	ThemedMaterialIcon,
 	LocationDetails,
 	IconTelldus,
 } from '../../../../BaseComponents';
@@ -109,7 +109,7 @@ class GatewayRow extends PureComponent<Props, State> {
 					disabled ?
 						<IconTelldus icon={'notavailable'} style={styles.notAvailableIcon}/>
 						:
-						<Image source={{uri: 'right_arrow_key'}} style={styles.arrow}/>
+						<ThemedMaterialIcon name={'keyboard-arrow-right'} style={styles.arrow}/>
 				}
 			</View>
 		);
@@ -224,13 +224,12 @@ class GatewayRow extends PureComponent<Props, State> {
 				flex: 0,
 				position: 'absolute',
 				zIndex: 1,
-				right: padding * 2,
+				right: 0,
 				top: '50%',
 			},
 			arrow: {
-				tintColor: colorIconTwo,
-				height: rowHeight * 0.25,
-				width: rowHeight * 0.2,
+				color: colorIconTwo,
+				fontSize: rowHeight * 0.5,
 			},
 			coverStyle: {
 				paddingVertical: 5,
@@ -244,6 +243,7 @@ class GatewayRow extends PureComponent<Props, State> {
 			notAvailableIcon: {
 				fontSize: rowHeight * 0.25,
 				color: colorIconTwo,
+				right: padding * 2,
 			},
 			textStyle: {
 				color: disabled ? infoOneColorBlockDisabled : infoOneColorBlockEnabled,
