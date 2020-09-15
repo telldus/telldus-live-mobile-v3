@@ -133,7 +133,8 @@ const HeaderComponent = (props: Props): Object => {
 					disabled={!onPressLogo}
 					onPress={onPressLogo}>
 					<TelldusLogo
-						fill={colors.inAppBrandSecondary}
+						colorHomeLogo={colors.inAppBrandSecondary}
+						colorTextLogo={colors.headerIconColor}
 						style={logoStyle}
 						height={logoHeight}
 						width={logoWidth}/>
