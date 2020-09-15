@@ -114,6 +114,9 @@ const getBGColor = (props: Object): ?string => {
 		case 17: {
 			return colors.drawerBottomBg;
 		}
+		case 18: {
+			return colors.textInsidePoster;
+		}
 		default:
 			return 'transparent';
 	}
@@ -249,6 +252,9 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 32: {
 			return colors.statusRed;
+		}
+		case 33: {
+			return colors.textInsidePoster;
 		}
 		default:
 			return;

@@ -217,6 +217,9 @@ export default {
 		get posterBG() {
 			return Core.brandSecondary;
 		},
+		get textInsidePoster() {
+			return '#ffffff';
+		},
 		get headerIconColor() {
 			return '#ffffff';
 		},
@@ -336,7 +339,7 @@ export default {
 			return '#fff';
 		},
 		get border() {
-			return '#C9C9CE';
+			return Core.grayPrimary;
 		},
 		get background() {
 			return '#000';
@@ -466,6 +469,9 @@ export default {
 		},
 		get posterBG() {
 			return Core.brandSecondaryShadeOne;
+		},
+		get textInsidePoster() {
+			return '#424242';
 		},
 		get headerIconColor() {
 			return Core.textColorLabel;
