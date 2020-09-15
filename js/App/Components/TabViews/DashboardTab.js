@@ -291,14 +291,14 @@ class DashboardTab extends View {
 				<Icon
 					name={'star'}
 					size={style.starIconSize}
-					level={7}/>
+					level={23}/>
 				<Text
 					level={4}
 					style={style.noItemsTitle}>
 					{this.noItemsTitle}
 				</Text>
 				<Text
-					level={5}
+					level={26}
 					style={style.noItemsContent}>
 					{'\n'}
 					{this.noItemsContent}

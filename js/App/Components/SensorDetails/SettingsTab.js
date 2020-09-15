@@ -818,7 +818,7 @@ class SettingsTab extends View {
 										accessible={true}/>
 								}
 								<Text
-									level={5}
+									level={26}
 									style={clearCacheHintStyle}>
 									{formatMessage(i18n.hintHistoryCache)}.
 								</Text>

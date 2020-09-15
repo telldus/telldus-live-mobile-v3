@@ -155,7 +155,7 @@ render(): Object {
 				:
 				<View style={pushDisabledContentStyle}>
 					<Text
-						level={5}
+						level={26}
 						style={pushDisabledTextStyle}>
 						{isHuaweiBuild ? formatMessage(i18n.labelPushDisabledInfoHuawei) : formatMessage(i18n.labelPushDisabled)}
 					</Text>

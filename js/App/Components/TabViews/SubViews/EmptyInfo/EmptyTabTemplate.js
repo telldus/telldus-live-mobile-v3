@@ -75,7 +75,7 @@ const EmptyTabTemplate = (props: Props): Object => {
 				flex: 1,
 			}}>
 			{!!icon && <IconTelldus
-				level={7}
+				level={23}
 				icon={icon}
 				style={iconStyle}/>}
 			{!!headerText && <Text
@@ -85,7 +85,7 @@ const EmptyTabTemplate = (props: Props): Object => {
 			</Text>
 			}
 			{!!bodyText && <Text
-				level={5}
+				level={26}
 				style={bodyStyle}>
 				{bodyText}
 			</Text>

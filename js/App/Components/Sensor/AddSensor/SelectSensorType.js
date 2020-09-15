@@ -205,7 +205,7 @@ render(): Object {
 					level={2}
 					style={no433Cover}>
 					<Text
-						level={7}
+						level={23}
 						style={no433Header}>
 						{formatMessage(i18n.gatewayNoSupport433Header)}
 					</Text>

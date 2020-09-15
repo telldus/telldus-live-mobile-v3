@@ -310,7 +310,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 									}}
 									name={'location-on'}/>
 								<Text
-									level={5}
+									level={27}
 									style={styles.linkLabelStyle}>
 									{formatMessage(i18n.Geofencing)}
 								</Text>
