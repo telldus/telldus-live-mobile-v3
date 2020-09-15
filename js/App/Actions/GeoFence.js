@@ -130,7 +130,7 @@ function setupGeoFence(intl: Object): ThunkAction {
 			geofenceProximityRadius = 400,
 		} = geoFence.config || {};
 
-		BackgroundGeolocation.onGeofence((geofence: Object) => {
+		BackgroundGeolocation.onGeofence(async (geofence: Object) => {
 			const event = {
 				...geofence,
 				inAppTime: Date.now(),
@@ -141,7 +141,11 @@ function setupGeoFence(intl: Object): ThunkAction {
 				BackgroundTimer.start();
 				backgroundTimerStartedIniOS = true;
 			}
-			dispatch(handleFence(geofence));
+			await dispatch(handleFence(geofence));
+			if (Platform.OS === 'ios') {
+				backgroundTimerStartedIniOS = false;
+				BackgroundTimer.stop();
+			}
 		});
 
 		return BackgroundGeolocation.ready({
