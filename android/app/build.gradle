@@ -166,6 +166,7 @@ android {
             pushSenderId: PUSH_SENDER_ID,
             geolocationApplicationKey: GEOLOCATION_APPLICATION_KEY
         ]
+        resConfigs "cs", "de", "en", "fr", "nb", "sv"
     }
     signingConfigs {
         debug {
