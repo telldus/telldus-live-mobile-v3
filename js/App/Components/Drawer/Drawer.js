@@ -59,6 +59,10 @@ import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
+import {
+	deployStore,
+} from '../../../Config';
+
 type Props = {
 	gateways: Array<Object>,
 	appLayout: Object,
@@ -87,6 +91,8 @@ type State = {
 class Drawer extends View<Props, State> {
 props: Props;
 state: State;
+
+isHuaweiBuild: boolean;
 
 constructor(props: Props) {
 	super(props);
@@ -126,6 +132,8 @@ constructor(props: Props) {
 	];
 
 	this._hasStatusBar();
+
+	this.isHuaweiBuild = deployStore === 'huawei';
 }
 
 _hasStatusBar = async () => {
@@ -296,7 +304,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 							styles={drawerSubHeader}/>
 						{settingLinks}
 					</View>
-					{enableGeoFenceFeature && (
+					{(enableGeoFenceFeature && !this.isHuaweiBuild) && (
 						<View style={styles.settingsLinkCover}>
 							<DrawerSubHeader
 								textIntl={i18n.geoFence}
