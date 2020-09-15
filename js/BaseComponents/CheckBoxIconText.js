@@ -43,6 +43,7 @@ type Props = PropsThemedComponent & {
     isChecked: boolean,
     text?: string,
 	intl: Object,
+	level?: number,
 };
 
 const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
@@ -56,6 +57,8 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 		isChecked,
 		intl,
 		colors,
+		level,
+		dark,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -109,7 +112,24 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 			checkBoxIconBorderActiveOne,
 			checkBoxIconBorderInactiveOne,
 			checkBoxTextActiveOne,
+			textInsidePoster,
 		} = colors;
+		let _checkBoxIconActiveOne = checkBoxIconActiveOne,
+			_checkBoxIconInactiveOne = checkBoxIconInactiveOne,
+			_checkBoxIconBGActiveOne = checkBoxIconBGActiveOne,
+			_checkBoxIconBGInactiveOne = checkBoxIconBGInactiveOne,
+			_checkBoxIconBorderActiveOne = checkBoxIconBorderActiveOne,
+			_checkBoxIconBorderInactiveOne = checkBoxIconBorderInactiveOne,
+			_checkBoxTextActiveOne = checkBoxTextActiveOne;
+		if (level === 1 && dark) {
+			_checkBoxIconActiveOne = checkBoxIconActiveOne;
+			_checkBoxIconInactiveOne = checkBoxIconInactiveOne;
+			_checkBoxIconBGActiveOne = textInsidePoster;
+			_checkBoxIconBGInactiveOne = checkBoxIconBGInactiveOne;
+			_checkBoxIconBorderActiveOne = checkBoxIconBorderActiveOne;
+			_checkBoxIconBorderInactiveOne = textInsidePoster;
+			_checkBoxTextActiveOne = textInsidePoster;
+		}
 
 		const fontSize = Math.floor(deviceWidth * 0.035);
 		const fontSizeIcon = Math.floor(deviceWidth * 0.038);
@@ -126,7 +146,7 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 			textDefaultStyle: {
 				marginLeft: 5 + (fontSize * 0.4),
 				fontSize: fontSize,
-				color: checkBoxTextActiveOne,
+				color: _checkBoxTextActiveOne,
 				fontFamily: Theme.Core.fonts.robotoLight,
 			},
 			checkIconCommon: {
@@ -139,14 +159,14 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 				overflow: 'hidden',
 			},
 			checkIconStyleActive: {
-				color: checkBoxIconActiveOne,
-				backgroundColor: checkBoxIconBGActiveOne,
-				borderColor: checkBoxIconBorderActiveOne,
+				color: _checkBoxIconActiveOne,
+				backgroundColor: _checkBoxIconBGActiveOne,
+				borderColor: _checkBoxIconBorderActiveOne,
 			},
 			checkIconStyleInactive: {
-				color: checkBoxIconInactiveOne,
-				backgroundColor: checkBoxIconBGInactiveOne,
-				borderColor: checkBoxIconBorderInactiveOne,
+				color: _checkBoxIconInactiveOne,
+				backgroundColor: _checkBoxIconBGInactiveOne,
+				borderColor: _checkBoxIconBorderInactiveOne,
 			},
 		};
 	}

@@ -218,6 +218,7 @@ render(): Object {
 						{!!icon && (
 							<BlockIcon
 								iconLevel={23}
+								blockLevel={18}
 								icon={icon}
 								style={iconStyle}
 								containerStyle={iconBackground}/>
@@ -232,7 +233,7 @@ render(): Object {
 									style={scolllViewStyle}
 									contentContainerStyle={scolllViewCCStyle}>
 									<Text
-										level={16}
+										level={33}
 										style={[h1StyleDef, h1Style]}
 										onLayout={this.onLayoutHeaderOne}>
 										{h1}
@@ -240,7 +241,7 @@ render(): Object {
 								</ScrollView>
 								:
 								<Text
-									level={16}
+									level={33}
 									style={[h1StyleDef, h1Style]}
 									onLayout={this.onLayoutHeaderOne}>
 									{h1}
@@ -248,7 +249,7 @@ render(): Object {
 						)}
 						{!!h2 && (
 							<Text
-								level={16}
+								level={33}
 								style={h2StyleDef} onLayout={this.onLayoutHeaderTwo}>
 								{h2}
 							</Text>
@@ -335,7 +336,6 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 				flexDirection: 'column',
 			},
 		iconBackground: {
-			backgroundColor: '#fff',
 			alignItems: 'center',
 			justifyContent: 'center',
 			width: iconBackgroundSize,
