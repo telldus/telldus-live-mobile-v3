@@ -434,8 +434,7 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 
 	const fontSize = Math.floor(deviceWidth * 0.036);
 
-	let footerHeight = Math.floor(deviceWidth * 0.26);
-	footerHeight = footerHeight > 100 ? 100 : footerHeight;
+	const footerHeight = Theme.Core.getFooterHeight(deviceWidth);
 
 	return {
 		footerHeight,
