@@ -361,6 +361,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			flex: 0,
 			fontSize: fontSizeH1,
 			fontWeight: '500',
+			textAlign: align === 'center' ? 'center' : 'left',
 		},
 		h2StyleDef: {
 			fontSize: fontSizeH2,
