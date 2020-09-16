@@ -352,9 +352,6 @@ class ActionRow extends View<DefaultProps, Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const {
-			colors,
-		} = this.props;
 		const { borderRadiusRow } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;

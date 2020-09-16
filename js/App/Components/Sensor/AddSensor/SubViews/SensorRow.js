@@ -187,7 +187,6 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 	const {
 		shadow,
 		paddingFactor,
-		brandPrimary,
 		buttonWidth,
 		rowHeight,
 		maxSizeRowTextOne,
