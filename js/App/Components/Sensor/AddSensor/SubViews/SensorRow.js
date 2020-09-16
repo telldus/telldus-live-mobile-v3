@@ -142,14 +142,14 @@ const SensorRow = (props: Object): Object => {
 				style={cover}>
 				<View style={iconAndBlockStyle}>
 					<IconTelldus
-						level={5}
+						level={26}
 						icon={'sensor'}
 						style={iconStyle}/>
 					<View style={[blockOneStyle, {
 						alignItems: 'flex-start',
 					}]}>
 						<Text
-							level={6}
+							level={25}
 							style={textOneStyle}>
 							{textOne.toUpperCase()}
 						</Text>
@@ -158,7 +158,7 @@ const SensorRow = (props: Object): Object => {
 							numeric="auto"
 							updateIntervalInSeconds={60}
 							timestamp={lastUpdated}
-							level={minutesAgo < 1440 ? 6 : 8}
+							level={minutesAgo < 1440 ? 25 : 8}
 							textStyle={[
 								textTwoStyle, {
 									opacity: minutesAgo < 1440 ? 1 : 0.5,
@@ -236,7 +236,6 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 		},
 		blockTwoStyle: {
 			width: widthValueBlock,
-			backgroundColor: brandPrimary,
 			height: '100%',
 			alignItems: 'flex-start',
 			justifyContent: 'center',

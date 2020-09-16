@@ -322,7 +322,7 @@ class Details extends View<Props, State> {
 				}}
 				key={index}>
 					<Text
-						level={5}
+						level={26}
 						style={{
 							fontSize: 10,
 							flexWrap: 'wrap',
@@ -330,7 +330,7 @@ class Details extends View<Props, State> {
 						{`${d}: `}
 					</Text>
 					<Text
-						level={6}
+						level={25}
 						style={{
 							fontSize: 10,
 							flexWrap: 'wrap',

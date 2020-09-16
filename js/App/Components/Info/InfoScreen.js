@@ -298,12 +298,12 @@ render(): Object | null {
 						level={23}
 						style={styles.iconStyle}/>
 					<Text
-						level={5}
+						level={26}
 						style={styles.h1Style}>
 						{h1}
 					</Text>
 					<Text
-						level={6}
+						level={25}
 						style={styles.bodyStyle}>
 						{body}
 					</Text>

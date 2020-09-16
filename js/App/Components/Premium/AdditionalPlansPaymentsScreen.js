@@ -169,7 +169,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={premiumIconStyle}/>
 						<Text
-							level={5}
+							level={26}
 							style={validityTextStyle}>
 							{validity === 1 ? `${validity} ${formatMessage(i18n.month)}` : `${formatMessage(i18n.months, {value: validity})}`}
 						</Text>
@@ -184,7 +184,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
 						<IconTelldus icon={'sms'} style={smsIconStyle}/>
 						<Text
-							level={5}
+							level={26}
 							style={smsCreditTextStyle}>
 							{formatMessage(i18n.includingSMS, {
 								value: smsCredit,
@@ -199,7 +199,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 							{`€${formatNumber(prevTotal)}`}
 						</Text>}
 						<Text
-							level={5}
+							level={26}
 							style={newChargeTextStyle}>
 							{`€${formatNumber(newTotal)} ${formatMessage(i18n.total)}`}
 						</Text>

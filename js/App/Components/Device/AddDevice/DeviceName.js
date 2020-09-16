@@ -329,7 +329,7 @@ render(): Object {
 									icon={'info'}
 									style={infoIconStyle}/>
 								<Text
-									level={5}
+									level={26}
 									style={infoTextStyle}>
 									{intl.formatMessage(i18n.setNameMultichannelInfo)}
 								</Text>
@@ -345,7 +345,7 @@ render(): Object {
 								color: statusIcon === 'security' ? '#9CCC65' : '#F44336',
 							}]}/>
 							<Text
-								level={5}
+								level={26}
 								style={infoTextStyle}>
 								{statusMessage}
 							</Text>
@@ -359,7 +359,7 @@ render(): Object {
 								level={23}
 								icon={'info'} style={statusIconStyle}/>
 							<Text
-								level={5}
+								level={26}
 								style={infoTextStyle}>
 								{hintMessage}
 							</Text>

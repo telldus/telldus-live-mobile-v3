@@ -133,10 +133,10 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 						icon={screen.icon}
 						style={iconStyle}/>
 					<Text
-						level={5}
+						level={26}
 						style={title}>{screen.title}</Text>
 					<Text
-						level={5}
+						level={26}
 						style={bodyText}>{screen.body}</Text>
 				</View>
 			);
@@ -147,7 +147,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 				}
 			}
 
-			const level = selectedIndex === i ? 9 : 6;
+			const level = selectedIndex === i ? 9 : 25;
 
 			_screenLabels.push(
 				<TouchableOpacity onPress={onChangeSelection} key={`${i}`}>

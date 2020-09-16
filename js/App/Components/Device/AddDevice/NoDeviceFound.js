@@ -111,7 +111,7 @@ render(): Object {
 						icon={'info'}
 						style={statusIconStyle}/>
 					<Text
-						level={5}
+						level={26}
 						style={infoTextStyle}>
 						{formatMessage(i18n.noDeviceFoundMessageInclude)}
 					</Text>

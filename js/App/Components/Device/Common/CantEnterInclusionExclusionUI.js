@@ -85,7 +85,7 @@ render(): Object {
 						icon={'info'}
 						style={statusIconStyle}/>
 					<Text
-						level={5}
+						level={26}
 						style={infoTextStyle}>
 						{infoMessage}
 					</Text>

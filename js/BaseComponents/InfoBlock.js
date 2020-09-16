@@ -60,7 +60,7 @@ const InfoBlock = (props: Object): Object => {
 				flexWrap: 'wrap',
 			}}>
 				<Text
-					level={5}
+					level={26}
 					style={[textStyleDef, textStyle]}>
 					{text}
 				</Text>

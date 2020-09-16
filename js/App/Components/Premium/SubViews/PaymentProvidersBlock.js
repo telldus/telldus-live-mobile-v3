@@ -107,7 +107,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 					<View style={innerCoverStyle}>
 						<View style={nameCoverStyle}>
 							<Text
-								level={5}
+								level={26}
 								style={nameStyle}
 								numberOfLines={1}>
 								{name.toUpperCase()}

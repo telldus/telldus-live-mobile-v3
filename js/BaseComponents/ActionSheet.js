@@ -256,7 +256,7 @@ _renderTitle(): Object | null {
 			style={styles.titleBox}>
 			{React.isValidElement(title) ? title : (
 				<Text
-					level={5}
+					level={26}
 					style={styles.titleText}>{title}</Text>
 			)}
 		</View>

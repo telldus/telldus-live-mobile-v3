@@ -321,12 +321,12 @@ const RegisterForPushScreen = (props: Object): Object => {
 						level={23}
 						style={phoneIconStyle}/>
 					<Text
-						level={5}
+						level={26}
 						style={contentTitleStyle}>
 						{formatMessage(i18n.replaceAnOldPhone)}
 					</Text>
 					<Text
-						level={6}
+						level={25}
 						style={contentTextStyle}>
 						{formatMessage(i18n.replaceOldDeviceAndRegisterPush)}
 					</Text>

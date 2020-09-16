@@ -70,7 +70,7 @@ const Row = (props: Object): Object => {
 				style={coverStyle}>
 				<Image source={img} style={imgStyle} resizeMode={'contain'}/>
 				<Text
-					level={5}
+					level={26}
 					style={textStyle}>
 					{name}
 				</Text>

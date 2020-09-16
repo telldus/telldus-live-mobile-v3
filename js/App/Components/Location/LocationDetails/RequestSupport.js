@@ -309,7 +309,7 @@ render(testData: Object): Object {
 				style={infoContainer}>
 				<IconTelldus icon={'info'} style={statusIconStyle}/>
 				<Text
-					level={5}
+					level={26}
 					style={infoTextStyle}>
 					{formatMessage(i18n.supportTicketDescriptionInfo)}
 				</Text>

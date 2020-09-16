@@ -128,12 +128,12 @@ export default class WizardOne extends PureComponent<Props, null> {
 			<>
 				<WizardIcon {...iconProps}/>
 				<Text
-					level={5}
+					level={26}
 					style={titleStyle}>
 					{title}
 				</Text>
 				<Text
-					level={6}
+					level={25}
 					style={descriptionStyle}>
 					{description}
 				</Text>

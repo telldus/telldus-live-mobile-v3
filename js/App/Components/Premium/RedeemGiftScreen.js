@@ -130,7 +130,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 			if (word.includes('%')) {
 				return (
 					<Text
-						level={5}
+						level={26}
 						style={titleStyleTwo}>
 						{` ${word.replace(/%/g, '').toUpperCase()}`}
 					</Text>
@@ -138,7 +138,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 			}
 			return (
 				<Text
-					level={5}
+					level={26}
 					style={titleStyleOne}>
 					{word.toUpperCase()}
 				</Text>
@@ -170,7 +170,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 						{header}
 					</View>
 					<Text
-						level={5}
+						level={26}
 						style={bodyStyle}>
 						{formatMessage(i18n.infoVoucherCode)}
 					</Text>

@@ -113,7 +113,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 					<View style={headerCover}>
 						<IconTelldus icon={'sms'} style={premiumIconStyle}/>
 						<Text
-							level={5}
+							level={26}
 							style={validityTextStyle}>
 							{`${count} ${formatMessage(i18n.smsCredits).toUpperCase()}`}
 						</Text>

@@ -172,12 +172,12 @@ const PostPurchaseScreen = (props: Object): Object => {
 						 success ? { color: Theme.Core.twine } : { color: Theme.Core.brandDanger },
 					]}/>
 					<Text
-						level={5}
+						level={26}
 						style={titleStyleOne}>
 						{title}
 					</Text>
 					<Text
-						level={5}
+						level={26}
 						style={bodyStyle}>
 						{bodyText}
 					</Text>
@@ -186,7 +186,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 						{product !== 'credits' && <View style={purchaseInfoCover}>
 							<IconTelldus icon={'premium'} style={purchaseInfoIcon}/>
 							<Text
-								level={5}
+								level={26}
 								style={purchaseInfoText}>
 								{getInfo().toUpperCase()}
 							</Text>
@@ -195,7 +195,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 						{!!credits && <View style={purchaseInfoCover}>
 							<IconTelldus icon={'sms'} style={purchaseInfoIcon}/>
 							<Text
-								level={5}
+								level={26}
 								style={purchaseInfoText}>
 								{`${credits} `}{formatMessage(i18n.smsCredits).toUpperCase()}
 							</Text>
