@@ -245,7 +245,7 @@ const getStyles = ({
 			marginBottom: footerHeight,
 		},
 		contentContainerStyle: {
-			marginHorizontal: padding,
+			marginHorizontal: padding * 2,
 			marginTop: padding * 2,
 		},
 		footersCoverStyle: {
