@@ -69,6 +69,7 @@ type Props = {
 	isOpen: boolean,
 	hasAPremAccount: boolean,
 	enableGeoFenceFeature: boolean,
+	consentLocationData: boolean,
 
 	userProfile: Function,
 	onOpenSetting: Function,
@@ -156,6 +157,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'hasAPremAccount',
 		'enableGeoFenceFeature',
 		'appDrawerBanner',
+		'consentLocationData',
 	]);
 }
 
@@ -168,10 +170,17 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 	onPressGeoFence = () => {
 		const {
 			closeDrawer,
+			consentLocationData,
 		} = this.props;
 
 		closeDrawer();
-		navigate('GeoFenceNavigator');
+		let screen = 'AddEditGeoFence';
+		if (!consentLocationData) {
+			screen = 'InAppDisclosureScreen';
+		}
+		navigate('GeoFenceNavigator', {
+			screen,
+		});
 	}
 
 	showPurchacePremiumDialogue = () => {
@@ -520,12 +529,18 @@ function mapStateToProps(store: Object): Object {
 
 	const { enable } = JSON.parse(geoFenceFeature);
 
+	const { defaultSettings = {} } = store.user;
+	const {
+		consentLocationData = false,
+	} = defaultSettings;
+
 	return {
 		gateways: getRows(store),
 		userProfile: getUserProfileSelector(store),
 		hasAPremAccount,
 		enableGeoFenceFeature: enable,
 		appDrawerBanner: appDrawerBanner === '' ? {} : JSON.parse(appDrawerBanner),
+		consentLocationData,
 	};
 }
 

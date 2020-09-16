@@ -77,6 +77,7 @@ const MoreOptionsTab = (props: Props): Object => {
 
 	const {
 		themeInApp,
+		consentLocationData = false,
 	} = defaultSettings;
 
 	const {
@@ -150,7 +151,13 @@ const MoreOptionsTab = (props: Props): Object => {
 					level={23}/>,
 				text: capitalize(formatMessage(i18n.Geofencing)),
 				onPress: () => {
-					navigation.navigate('GeoFenceNavigator');
+					let screen = 'AddEditGeoFence';
+					if (!consentLocationData) {
+						screen = 'InAppDisclosureScreen';
+					}
+					navigation.navigate('GeoFenceNavigator', {
+						screen,
+					});
 				},
 				enable: enableGeoFenceFeature,
 			},
@@ -197,6 +204,7 @@ const MoreOptionsTab = (props: Props): Object => {
 		layout,
 		enableGeoFenceFeature,
 		themeInApp,
+		consentLocationData,
 	]);
 
 	return (
