@@ -190,7 +190,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 				{...screenProps}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
 				<Text
-					level={6}
+					level={25}
 					style={labelStyle}>{formatMessage(i18n.selectAmountOfCredits)}</Text>
 				{plans}
 				<PaymentProvidersBlock onSelect={onSelect}/>

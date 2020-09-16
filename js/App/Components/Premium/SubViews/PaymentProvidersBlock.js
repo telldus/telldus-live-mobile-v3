@@ -127,7 +127,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 	return (
 		<View style={[coverStyle, style]}>
 			<Text
-				level={6}
+				level={25}
 				style={labelStyle}>
 				{formatMessage(i18n.selectPaymentProvider)}
 			</Text>

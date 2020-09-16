@@ -375,7 +375,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 					}
 					<View style={locationCover}>
 						<Text
-							level={6}
+							level={25}
 							style={originTextStyle} numberOfLines={1}>{originText}</Text>
 					</View>
 				</ListRow>

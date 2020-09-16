@@ -321,7 +321,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 				paddingBottom: 20,
 			}}>
 				<Text
-					level={6}
+					level={25}
 					style={labelStyle}>{formatMessage(i18n.selectSubscriptionPlan)}</Text>
 				{plans}
 				<PaymentProvidersBlock onSelect={onSelect}/>

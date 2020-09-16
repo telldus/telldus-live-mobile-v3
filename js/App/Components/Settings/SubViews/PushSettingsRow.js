@@ -276,7 +276,7 @@ render(): Object {
 					}
 				</View>
 				<Text
-					level={6}
+					level={25}
 					style={h2Style}>
 					{model}
 				</Text>

@@ -253,14 +253,14 @@ class JobRow extends View<null, Props, null> {
 							</TextRowWrapper>
 							{!!offset && (
 								<IconTelldus
-									level={6}
+									level={25}
 									icon="offset"
 									style={iconOffset}
 								/>
 							)}
 							{!!randomInterval && (
 								<IconTelldus
-									level={6}
+									level={25}
 									icon="random"
 									style={iconRandom}
 								/>

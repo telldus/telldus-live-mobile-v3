@@ -275,7 +275,7 @@ _renderMessage(): Object | null {
 			style={styles.messageBox}>
 			{React.isValidElement(message) ? message : (
 				<Text
-					level={6}
+					level={25}
 					style={styles.messageText}>{message}</Text>
 			)}
 		</View>

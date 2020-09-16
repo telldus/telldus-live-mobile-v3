@@ -80,7 +80,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 		if (ignoreExpand) {
 			return (
 				<Text
-					level={6}
+					level={25}
 					style={rowValue}>
 					{val}
 				</Text>
@@ -113,7 +113,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 											{uuid}
 										</Text>
 										<Text
-											level={6}
+											level={25}
 											style={rowValue}>
 											{JSON.stringify(others)}
 										</Text>
@@ -137,7 +137,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 							{items}
 						</Text>
 						<Text
-							level={6}
+							level={25}
 							style={rowValue}>
 							{JSON.stringify(val2)}
 						</Text>
@@ -146,7 +146,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 			});
 		}
 		return <Text
-			level={6}
+			level={25}
 			style={rowValue}>
 			{JSON.stringify(val)}
 		</Text>;

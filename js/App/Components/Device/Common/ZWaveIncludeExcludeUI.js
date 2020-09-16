@@ -201,13 +201,13 @@ render(): Object {
 						<Text key={'1'}/>]
 					)}
 					<Text
-						level={6}
+						level={25}
 						style={textStyle}>
 						{this.messageOne}
 					</Text>
 					<Text/>
 					<Text
-						level={6}
+						level={25}
 						style={textStyle}>
 						{this.messageTwo}
 					</Text>
@@ -234,7 +234,7 @@ render(): Object {
 								}
 							</View>
 							<Text
-								level={6}
+								level={25}
 								style={statusStyle} key={'1'}>
 								{status}
 							</Text>
@@ -261,7 +261,7 @@ render(): Object {
 					flexWrap: 'wrap',
 				}}>
 					<Text
-						level={6}
+						level={25}
 						style={textStyle}>
 						{infoText}
 					</Text>

@@ -194,7 +194,7 @@ class EditTimeZoneContinent extends View {
 					onPress={this.onPressAutodetect}
 					style={styles.rowItems}>
 					<Text
-						level={6}
+						level={25}
 						style={styles.text}>
 						{this.labelAutodetect}
 					</Text>
@@ -205,7 +205,7 @@ class EditTimeZoneContinent extends View {
 						onPress={this.onPressAutodetected}
 						style={styles.rowItems}>
 						<Text
-							level={6}
+							level={25}
 							style={styles.text}>
 							{autodetectedTimezone}
 						</Text>

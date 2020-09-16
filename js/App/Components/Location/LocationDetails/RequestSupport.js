@@ -255,7 +255,7 @@ render(testData: Object): Object {
 					{capitalise(formatMessage(i18n.labelCreateSupportTicket))}
 				</Text>
 				<Text
-					level={6}
+					level={25}
 					style={body}>
 					{formatMessage(i18n.messageCreateSupportTicket)}
 				</Text>

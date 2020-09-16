@@ -374,7 +374,6 @@ class ActionRow extends View<DefaultProps, Props, null> {
 				width: iconContainerWidth,
 			},
 			description: {
-				color: colors.textSix,
 				fontSize: deviceWidth * 0.032,
 				opacity: 1,
 			},

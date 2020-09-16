@@ -357,7 +357,7 @@ render(): Object {
 									position: 'relative',
 								}}/>
 							<Text
-								level={6}
+								level={25}
 								style={[statusStyle, {
 									marginLeft: 5,
 								}]}>
@@ -366,7 +366,7 @@ render(): Object {
 						</View>
 						:
 						<Text
-							level={6}
+							level={25}
 							style={statusStyle}>
 							{statusText}
 						</Text>

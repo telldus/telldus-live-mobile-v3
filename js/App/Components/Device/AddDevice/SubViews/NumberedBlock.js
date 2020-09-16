@@ -98,7 +98,7 @@ const NumberedBlock = (props: Object): Object => {
 				</View>
 				<View style={blockRight}>
 					<Text
-						level={6}
+						level={25}
 						style={infoText}>
 						{text}
 					</Text>

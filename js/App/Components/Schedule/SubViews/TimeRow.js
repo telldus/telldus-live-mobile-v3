@@ -168,7 +168,7 @@ class TimeRow extends View<null, Props, State> {
 					{!!offset && (
 						<View style={iconRow}>
 							<IconTelldus
-								level={6}
+								level={25}
 								icon={offsetIcon}
 								style={icon}/>
 							<Description style={description} appLayout={appLayout}>
@@ -179,7 +179,7 @@ class TimeRow extends View<null, Props, State> {
 					{!!randomInterval && (
 						<View style={iconRow}>
 							<IconTelldus
-								level={6}
+								level={25}
 								icon={randomIcon}
 								style={icon}/>
 							<Description style={description} appLayout={appLayout}>
