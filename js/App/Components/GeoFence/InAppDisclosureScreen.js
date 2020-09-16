@@ -181,6 +181,10 @@ const InAppDisclosureScreen = memo<Object>((props: Object): Object => {
 		);
 	}, [formatMessage, subHeaderTextStyle, contentStyle]);
 
+	const handleBackPress = useCallback((): boolean => {
+		return true;
+	}, []);
+
 	return (
 		<View
 			level={3}
@@ -191,7 +195,8 @@ const InAppDisclosureScreen = memo<Object>((props: Object): Object => {
 				scrollableH1={false}
 				navigation={navigation}
 				showLeftIcon={false}
-				appLayout={layout}/>
+				appLayout={layout}
+				handleBackPress={handleBackPress}/>
 			<ThemedScrollView
 				style={scrollViewStyle}
 				contentContainerStyle={contentContainerStyle}
