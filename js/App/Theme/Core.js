@@ -17,6 +17,10 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
+'use strict';
+
 import Color from 'color';
 
 import { Platform } from 'react-native';
@@ -34,7 +38,7 @@ export default {
 	iPhoneXbg: '#eae7f0',
 	iconFamily: 'Ionicons',
 	twine: '#C4A362',
-	get fonts() {
+	get fonts(): Object {
 		return {
 			telldusIconFont: 'telldusicons',
 			robotoLight: 'Roboto-Light',
@@ -55,12 +59,16 @@ export default {
 
 	sunriseColor: '#ffa726',
 	sunsetColor: '#ef5350',
-	get timeColor() {
+	get timeColor(): string {
 		return this.brandSecondary;
 	},
 
-	get navBarTopPadding() {
+	get navBarTopPadding(): number {
 		return (Platform.OS === 'ios') ? 0 : 10;
+	},
+	getFooterHeight: (deviceWidth: number): number => {
+		let footerHeight = Math.floor(deviceWidth * 0.26);
+		return footerHeight > 100 ? 100 : footerHeight;
 	},
 
 	grayPrimary: '#2E2E2E',
@@ -120,28 +128,28 @@ export default {
 	darkRed: '#990000',
 	red: '#D32F2E',
 
-	get fontSizeH1() {
+	get fontSizeH1(): number {
 		return this.fontSizeBase * 1.8;
 	},
-	get fontSizeH2() {
+	get fontSizeH2(): number {
 		return this.fontSizeBase * 1.6;
 	},
-	get fontSizeH3() {
+	get fontSizeH3(): number {
 		return this.fontSizeBase * 1.4;
 	},
-	get btnTextSize() {
+	get btnTextSize(): number {
 		return this.fontSizeBase * 1.1;
 	},
-	get btnTextSizeLarge() {
+	get btnTextSizeLarge(): number {
 		return this.fontSizeBase * 1.5;
 	},
-	get btnTextSizeSmall() {
+	get btnTextSizeSmall(): number {
 		return this.fontSizeBase * 0.8;
 	},
-	get iconSizeLarge() {
+	get iconSizeLarge(): number {
 		return this.iconFontSize * 1.5;
 	},
-	get iconSizeSmall() {
+	get iconSizeSmall(): number {
 		return this.iconFontSize * 0.6;
 	},
 
@@ -152,25 +160,25 @@ export default {
 	 * Screen margin in the app is calculated by multiplying the 'paddingFactor' with 'width'(portrait) and
 	 * height(landscape) from 'appLayout'.
 	 */
-	get paddingFactor() {
+	get paddingFactor(): number {
 		return 0.027777;
 	},
 
-	get headerHeightFactor() {
+	get headerHeightFactor(): Object {
 		return {
 			port: 0.05,
 			land: 0.08,
 		};
 	},
 
-	get androidLandMarginLeftFactor() {
+	get androidLandMarginLeftFactor(): number {
 		return 0.0635;
 	},
-	get androidLandTabbarHeightFactor() {
+	get androidLandTabbarHeightFactor(): number {
 		return 0.13;
 	},
 
-	get editBoxPaddingFactor() {
+	get editBoxPaddingFactor(): number {
 		return 0.05;
 	},
 
@@ -179,13 +187,13 @@ export default {
 	borderRadiusBase: 2,
 	borderRadiusRow: 3,
 
-	get borderRadiusLarge() {
+	get borderRadiusLarge(): number {
 		return this.fontSizeBase * 3.8;
 	},
 
 	footerHeight: 55,
 	toolbarHeight: (Platform.OS === 'ios' ) ? 64 : 56,
-	get toolbarDefaultBg() {
+	get toolbarDefaultBg(): string {
 		return this.brandPrimary;
 	},
 	toolbarInverseBg: '#222',
@@ -210,57 +218,57 @@ export default {
 
 	cardDefaultBg: '#fff',
 
-	get darkenHeader() {
+	get darkenHeader(): string {
 		return Color(this.tabBgColor).darken(0.03).hexString();
 	},
-	get btnPrimaryBg() {
+	get btnPrimaryBg(): string {
 		return this.brandSecondary;
 	},
-	get btnSecondaryBg() {
+	get btnSecondaryBg(): string {
 		return this.brandTertiary;
 	},
-	get btnPrimaryColor() {
+	get btnPrimaryColor(): string {
 		return this.inverseTextColor;
 	},
-	get btnSuccessBg() {
+	get btnSuccessBg(): string {
 		return this.brandSuccess;
 	},
-	get btnSuccessColor() {
+	get btnSuccessColor(): string {
 		return this.inverseTextColor;
 	},
-	get btnDangerBg() {
+	get btnDangerBg(): string {
 		return this.brandDanger;
 	},
-	get btnDangerColor() {
+	get btnDangerColor(): string {
 		return this.inverseTextColor;
 	},
-	get btnInfoBg() {
+	get btnInfoBg(): string {
 		return this.brandInfo;
 	},
-	get btnInfoColor() {
+	get btnInfoColor(): string {
 		return this.inverseTextColor;
 	},
-	get btnWarningBg() {
+	get btnWarningBg(): string {
 		return this.brandWarning;
 	},
-	get btnWarningColor() {
+	get btnWarningColor(): string {
 		return this.inverseTextColor;
 	},
 
 	borderWidth: 0,
 	iconMargin: 7,
 
-	get inputColor() {
+	get inputColor(): string {
 		return this.textColor;
 	},
-	get inputColorPlaceholder() {
+	get inputColorPlaceholder(): string {
 		return '#575757';
 	},
 	inputBorderColor: '#D9D5DC',
 	inputHeightBase: 40,
 	inputGroupMarginBottom: 10,
 	inputPaddingLeft: 5,
-	get inputPaddingLeftIcon() {
+	get inputPaddingLeftIcon(): number {
 		return this.inputPaddingLeft * 8;
 	},
 
@@ -278,7 +286,7 @@ export default {
 	listNoteColor: '#808080',
 	listNoteSize: 13,
 
-	get iconFontSize() {
+	get iconFontSize(): number {
 		return this.fontSizeBase;
 	},
 
@@ -295,7 +303,7 @@ export default {
 	defaultProgressColor: '#E4202D',
 	inverseProgressColor: '#1A191B',
 
-	get shadow() {
+	get shadow(): Object {
 		return {
 			elevation: 2,
 			shadowColor: '#000',
@@ -308,16 +316,16 @@ export default {
 		};
 	},
 
-	get headerButtonHorizontalPadding() {
+	get headerButtonHorizontalPadding(): number {
 		return 15;
 	},
-	get headerButtonIconSizeFactor() {
+	get headerButtonIconSizeFactor(): number {
 		return 0.06;
 	},
-	get floatingButtonSizefactor() {
+	get floatingButtonSizefactor(): number {
 		return 0.134666667;
 	},
-	get floatingButtonOffsetfactor() {
+	get floatingButtonOffsetfactor(): Object {
 		return {
 			right: 0.034666667,
 			bottom: 0.046666667,
