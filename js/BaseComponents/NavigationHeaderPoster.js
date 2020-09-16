@@ -54,6 +54,7 @@ type Props = {
 	showLeftIcon?: boolean,
 	leftIcon: string,
 	onPressPoster?: Function,
+	scrollableH1?: boolean,
 
 	navigation: Object,
     handleBackPress: () => boolean,
@@ -118,6 +119,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'appLayout',
 		'showPoster',
 		'extraData',
+		'scrollableH1',
 	]);
 }
 
@@ -151,6 +153,7 @@ render(): Object {
 		onPressPoster,
 		rightButton,
 		onPressLogo,
+		scrollableH1,
 	} = this.props;
 
 	return (
@@ -178,7 +181,8 @@ render(): Object {
 						navigation={navigation}
 						infoButton={infoButton}
 						leftIcon={leftIcon}
-						posterCoverStyle={posterCoverStyle}/>
+						posterCoverStyle={posterCoverStyle}
+						scrollableH1={scrollableH1}/>
 				</TouchableOpacity>
 			)}
 		</View>
