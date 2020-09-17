@@ -87,6 +87,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
     <View
       colorHomeLogo="#e26901"
       colorTextLogo="#ffffff"
+      colorWaveLogo="#ffffff"
       height={35.00000025}
       width={230.49999975}
     />
@@ -181,6 +182,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
     <View
       colorHomeLogo="#e26901"
       colorTextLogo="#ffffff"
+      colorWaveLogo="#ffffff"
       height={35.00000025}
       width={230.49999975}
     />
