@@ -29,6 +29,7 @@ import {
 	IconTelldus,
 	View,
 	RippleButton,
+	EmptyView,
 } from '../../../BaseComponents';
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
@@ -72,6 +73,12 @@ class Gateway extends PureComponent<Props, null> {
 
 	render(): Object {
 		const { gateway, appLayout } = this.props;
+
+		if (!gateway) {
+			return <EmptyView/>;
+		}
+
+
 		const { name, online, websocketOnline, type, localKey = {} } = gateway;
 		const { width, height } = appLayout;
 		const deviceWidth = height > width ? width : height;

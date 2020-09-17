@@ -198,7 +198,7 @@ class DevicesTab extends View {
 		const { route } = this.props;
 		const {
 			newDevices = {},
-			gateway = {},
+			gateway,
 		} = route.params || {};
 		if (gateway && newDevices && !isEmpty(newDevices) && !this.calledOnNewlyAddedDidMount) {
 			Object.keys(newDevices).map((id: string) => {

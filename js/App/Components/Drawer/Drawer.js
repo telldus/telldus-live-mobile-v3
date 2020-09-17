@@ -343,7 +343,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 								marginBottom: 0,
 							},
 						}}/>
-					{gateways.map((gateway: number, index: number): Object => {
+					{gateways.map((gateway: Object, index: number): Object => {
 						return <Gateway
 							gateway={gateway}
 							key={index}

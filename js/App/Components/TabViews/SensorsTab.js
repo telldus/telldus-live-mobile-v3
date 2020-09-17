@@ -160,7 +160,7 @@ class SensorsTab extends View {
 		const { route } = this.props;
 		const {
 			newSensors = {},
-			gateway = {},
+			gateway,
 		} = route.params || {};
 		if (gateway && newSensors && !isEmpty(newSensors) && !this.calledOnNewlyAddedDidMount) {
 			Object.keys(newSensors).map((id: string) => {
