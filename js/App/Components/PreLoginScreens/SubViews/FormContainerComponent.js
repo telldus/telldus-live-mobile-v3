@@ -26,7 +26,8 @@ import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
-import { BackgroundImage, View, Image } from '../../../../BaseComponents';
+import { BackgroundImage, View } from '../../../../BaseComponents';
+import TelldusLogo from '../../TabViews/img/telldus_logo.svg';
 
 import {
 	withTheme,
@@ -49,15 +50,11 @@ class FormContainerComponent extends View<Props, null> {
 	props: Props;
 
 	isTablet: boolean;
-	logoDarkMode: any;
-	logo: any;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.isTablet = DeviceInfo.isTablet();
-		this.logo = require('./../img/telldusLogoBlack.png');
-		this.logoDarkMode = require('./../img/telldusLogoBlack.png');
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -73,6 +70,7 @@ class FormContainerComponent extends View<Props, null> {
 			appLayout,
 			screen,
 			dark,
+			colors,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
@@ -88,10 +86,13 @@ class FormContainerComponent extends View<Props, null> {
 							behavior="position"
 							style={{ justifyContent: 'center', alignItems: 'center' }}
 							contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
-							<Image
-								source={dark ? this.logoDarkMode : this.logo}
+							<TelldusLogo
+								colorHomeLogo={colors.inAppBrandSecondary}
+								colorTextLogo={dark ? '#ffffff' : '#000000'}
+								colorWaveLogo={'#ffffff'}
 								style={styles.logoStyle}
-							/>
+								height={styles.logoHeight}
+								width={styles.logoWidth}/>
 							<View style={styles.formContainer}>
 								{React.cloneElement(
 									children,
@@ -135,6 +136,8 @@ class FormContainerComponent extends View<Props, null> {
 		textFieldFontSize = textFieldFontSize > maxTextFieldFontSize ? maxTextFieldFontSize : textFieldFontSize;
 
 		return {
+			logoHeight: Math.floor(deviceWidth * 0.3),
+			logoWidth: Math.floor(deviceWidth * 0.7),
 			container: {
 				flex: 1,
 				alignItems: 'center',
