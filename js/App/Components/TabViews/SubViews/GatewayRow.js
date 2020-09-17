@@ -29,6 +29,7 @@ import {
 	ThemedMaterialIcon,
 	LocationDetails,
 	IconTelldus,
+	EmptyView,
 } from '../../../../BaseComponents';
 
 import { hasTokenExpired } from '../../../Lib/LocalControl';
@@ -123,6 +124,11 @@ class GatewayRow extends PureComponent<Props, State> {
 			screenReaderEnabled,
 			disabled,
 		} = this.props;
+
+		if (!location) {
+			return <EmptyView/>;
+		}
+
 		let { name, type, online, websocketOnline, localKey = {} } = location;
 
 		let styles = this.getStyles(appLayout);
