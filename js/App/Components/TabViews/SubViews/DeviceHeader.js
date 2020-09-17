@@ -40,7 +40,7 @@ import {
 import i18n from '../../../Translations/common';
 
 type Props = PropsThemedComponent & {
-	gateway: Object,
+	gateway: string,
 	appLayout: Object,
 	supportLocalControl: boolean,
 	isOnline: boolean,
@@ -54,6 +54,7 @@ class DeviceHeader extends View<Props, null> {
 	constructor(props: Props) {
 		super(props);
 	}
+
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return shouldUpdate(nextProps, this.props, [
 			'appLayout',
@@ -63,6 +64,7 @@ class DeviceHeader extends View<Props, null> {
 			'accessible',
 			'themeInApp',
 			'colorScheme',
+			'gateway',
 		]);
 	}
 
