@@ -28,9 +28,14 @@ import DeviceInfo from 'react-native-device-info';
 
 import { BackgroundImage, View, Image } from '../../../../BaseComponents';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import Theme from '../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	children: any,
 	appLayout: Object,
 	navigation: Object,
@@ -44,12 +49,15 @@ class FormContainerComponent extends View<Props, null> {
 	props: Props;
 
 	isTablet: boolean;
+	logoDarkMode: any;
+	logo: any;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.isTablet = DeviceInfo.isTablet();
 		this.logo = require('./../img/telldusLogoBlack.png');
+		this.logoDarkMode = require('./../img/telldusLogoBlack.png');
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -64,12 +72,13 @@ class FormContainerComponent extends View<Props, null> {
 			children,
 			appLayout,
 			screen,
+			dark,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<BackgroundImage source={{uri: 'telldusliveapp_launchscreen'}} style={styles.container}>
+			<BackgroundImage source={{uri: dark ? 'telldusliveapp_launchscreen_darkmode' : 'telldusliveapp_launchscreen'}} style={styles.container}>
 				{!!appLayout.width && (
 					<ScrollView
 						keyboardShouldPersistTaps={'always'}
@@ -80,7 +89,7 @@ class FormContainerComponent extends View<Props, null> {
 							style={{ justifyContent: 'center', alignItems: 'center' }}
 							contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
 							<Image
-								source={this.logo}
+								source={dark ? this.logoDarkMode : this.logo}
 								style={styles.logoStyle}
 							/>
 							<View style={styles.formContainer}>
@@ -243,5 +252,5 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(FormContainerComponent);
+export default connect(mapStateToProps, null)(withTheme(FormContainerComponent));
 
