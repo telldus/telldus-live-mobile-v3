@@ -135,6 +135,7 @@ const HeaderComponent = (props: Props): Object => {
 					<TelldusLogo
 						colorHomeLogo={colors.inAppBrandSecondary}
 						colorTextLogo={colors.headerIconColor}
+						colorWaveLogo={colors.headerIconColor}
 						style={logoStyle}
 						height={logoHeight}
 						width={logoWidth}/>
