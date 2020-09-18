@@ -41,6 +41,7 @@ import {
 	View,
 	ThemedMaterialIcon,
 } from '../../../BaseComponents';
+import Banner from './SubViews/Banner';
 
 import capitalize from '../../Lib/capitalize';
 import {
@@ -219,6 +220,7 @@ const MoreOptionsTab = (props: Props): Object => {
 				style={outerCoverStyle}
 				contentContainerStyle={contentContainerStyle}>
 				{settings}
+				<Banner/>
 			</ScrollView>
 		</View>
 	);
