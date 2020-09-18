@@ -46,7 +46,7 @@ const fetchRemoteConfig = (): ThunkAction => {
 
 		if (__DEV__) {
 			await remoteConfig().setConfigSettings({
-				isDeveloperModeEnabled: true,
+				minimumFetchIntervalMillis: 1000,
 			});
 		}
 
@@ -79,7 +79,7 @@ const fetchRemoteConfig = (): ThunkAction => {
 					const parameters = remoteConfig().getAll();
 					let data = {};
 					Object.entries(parameters).forEach(([key, parameter]: [string, any]) => {
-						data[key] = parameter.value;
+						data[key] = parameter.asString();
 					});
 					dispatch(setRemoteConfigs(data));
 				})
