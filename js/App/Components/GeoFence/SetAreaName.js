@@ -90,7 +90,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				text: 'Please enter a unique name for the fence.', // TODO: Translate
+				text: formatMessage(i18n.errorNameFieldEmpty),
 				showPositive: true,
 			});
 			return;
