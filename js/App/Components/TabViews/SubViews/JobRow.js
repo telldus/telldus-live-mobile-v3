@@ -27,7 +27,6 @@ import {
 	Platform,
 } from 'react-native';
 import { intlShape } from 'react-intl';
-import _ from 'lodash';
 const isEqual = require('react-fast-compare');
 
 import {
