@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, Image } from 'react-native';
+import { ScrollView } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -41,8 +41,8 @@ import {
 	DrawerSubHeader,
 	NavigationHeader,
 	SettingsLink,
-	TestIapLink,
 } from './DrawerSubComponents';
+import Banner from '../TabViews/SubViews/Banner';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
@@ -80,12 +80,9 @@ type Props = {
 	showSwitchAccountActionSheet: () => void,
 	intl: Object,
 	toggleDialogueBox: (Object) => void,
-	appDrawerBanner?: Object,
 };
 
 type State = {
-	iapTestImageWidth: number,
-	iapTestImageheight: number,
 	hasStatusBar: boolean,
 };
 
@@ -99,8 +96,6 @@ constructor(props: Props) {
 	super(props);
 
 	this.state = {
-		iapTestImageWidth: 0,
-		iapTestImageheight: 0,
 		hasStatusBar: false,
 	};
 
@@ -144,10 +139,6 @@ _hasStatusBar = async () => {
 	});
 }
 
-componentDidMount() {
-	this.setBannerImageDimensions();
-}
-
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return !isEqual(this.state, nextState) || shouldUpdate(this.props, nextProps, [
 		'gateways',
@@ -156,15 +147,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'appLayout',
 		'hasAPremAccount',
 		'enableGeoFenceFeature',
-		'appDrawerBanner',
 		'consentLocationData',
 	]);
-}
-
-componentDidUpdate(prevProps: Object, prevState: Object) {
-	if (!isEqual(this.props.appDrawerBanner, prevProps.appDrawerBanner)) {
-		this.setBannerImageDimensions();
-	}
 }
 
 	onPressGeoFence = () => {
@@ -224,42 +208,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		}
 	}
 
-	setBannerImageDimensions = () => {
-		const {
-			appLayout,
-		} = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
-		const drawerWidth = getDrawerWidth(deviceWidth);
-
-		let iapTestImageWidth = drawerWidth - 25;
-		let iapTestImageheight = iapTestImageWidth * 0.3;
-		const {
-			appDrawerBanner,
-		} = this.props;
-		const {
-			image,
-		} = appDrawerBanner ? appDrawerBanner : {};
-		if (image) {
-			Image.getSize(image, (w: number, h: number) => {
-				if (w && h) {
-					const ratio = w / h;
-					iapTestImageheight = iapTestImageWidth / ratio;
-				}
-				this.setState({
-					iapTestImageWidth,
-					iapTestImageheight,
-				});
-			}, () => {
-				this.setState({
-					iapTestImageWidth,
-					iapTestImageheight,
-				});
-			});
-		}
-	}
-
 	render(): Object {
 		const {
 			gateways,
@@ -269,7 +217,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			onPressGateway,
 			dispatch,
 			enableGeoFenceFeature,
-			appDrawerBanner,
 			intl,
 		} = this.props;
 		const {
@@ -365,9 +312,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 							}}
 							name={'plus-circle'}/>}
 						onPressLink={addNewLocation}/>
-					<TestIapLink
-						appDrawerBanner={appDrawerBanner}
-						styles={styles}/>
+					<Banner/>
 				</View>
 			</ScrollView>
 		);
@@ -500,10 +445,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				marginLeft: 15,
 				alignItems: 'center',
 			},
-			iapTestImageStyle: {
-				width: this.state.iapTestImageWidth,
-				height: this.state.iapTestImageheight,
-			},
 		};
 	}
 }
@@ -524,7 +465,6 @@ function mapStateToProps(store: Object): Object {
 
 	const {
 		geoFenceFeature = JSON.stringify({enable: false}),
-		appDrawerBanner = JSON.stringify({}),
 	} = firebaseRemoteConfig;
 
 	const { enable } = JSON.parse(geoFenceFeature);
@@ -539,7 +479,6 @@ function mapStateToProps(store: Object): Object {
 		userProfile: getUserProfileSelector(store),
 		hasAPremAccount,
 		enableGeoFenceFeature: enable,
-		appDrawerBanner: appDrawerBanner === '' ? {} : JSON.parse(appDrawerBanner),
 		consentLocationData,
 	};
 }
