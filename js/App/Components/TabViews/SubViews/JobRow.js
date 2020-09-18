@@ -42,13 +42,9 @@ import NowRow from './Jobs/NowRow';
 import Theme from '../../../Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from '../../Schedule/SubViews';
 import {
-	capitalize,
-	getSelectedDays,
-	getWeekdays,
-	getWeekends,
-	getTranslatableDays,
 	getDeviceActionIcon,
 	getKnownModes,
+	getRepeatDescription,
 } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 import {
@@ -436,36 +432,10 @@ class JobRow extends View<null, Props, null> {
 
 	_getRepeatDescription = (): string => {
 		const { type, weekdays, intl } = this.props;
-		const { formatMessage, formatDate } = intl;
-		const selectedDays: string[] = getSelectedDays(weekdays, formatDate);
-		const repeatTime: string = (type === 'time') ? '' : this.getRepeatTime(type);
-		const DAYS = getTranslatableDays(formatDate);
-
-		let repeatDays: string = '';
-		if (selectedDays.length === DAYS.length) {
-			repeatDays = formatMessage(i18n.repeatDays, { value: repeatTime });
-		} else if (_.isEqual(selectedDays, getWeekdays(formatDate))) {
-			repeatDays = formatMessage(i18n.repeatWeekday, { value: repeatTime });
-		} else if (_.isEqual(selectedDays, getWeekends(formatDate))) {
-			repeatDays = formatMessage(i18n.repeatWeekend, { value: repeatTime });
-		} else {
-			for (let day of selectedDays) {
-				repeatDays += `${day.slice(0, 3).toLowerCase()}, `;
-			}
-			repeatDays = capitalize(repeatDays.slice(0, -2));
-		}
-		return repeatDays.trim();
+		return getRepeatDescription({
+			type, weekdays, intl,
+		});
 	};
-
-	getRepeatTime(type: string): string {
-		let { formatMessage } = this.props.intl;
-		if (type === 'sunrise') {
-			return formatMessage(i18n.sunrise);
-		} else if (type === 'sunset') {
-			return formatMessage(i18n.sunset);
-		}
-		return formatMessage(i18n.time);
-	}
 
 	_getStyle = (appLayout: Object): Object => {
 		let {
