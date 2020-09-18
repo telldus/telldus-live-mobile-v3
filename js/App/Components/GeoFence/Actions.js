@@ -158,10 +158,15 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	}
 
 	const listData = GeoFenceUtils.prepareDataForListGeoFenceActions(
-		showDevices ? devices : {},
+		devices,
 		gatewaysById,
-		showEvents ? events : {},
-		showJobs ? jobs : {},
+		events,
+		jobs,
+		{
+			showJobs,
+			showDevices,
+			showEvents,
+		}
 	);
 
 	const [ confOnSetScroll, setConfOnSetScroll ] = useState({
