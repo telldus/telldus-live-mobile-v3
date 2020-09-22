@@ -326,6 +326,7 @@ export class GeoFenceContainer extends View<Props, State> {
 			helpIconStyle,
 			backgroundMaskStyle,
 			switchCircleSize,
+			helpIconContainerStyle,
 		} = this.getStyles(appLayout);
 
 		const throbber = <Throbber
@@ -346,6 +347,7 @@ export class GeoFenceContainer extends View<Props, State> {
 					iconLevel={23}
 					backgroundMask
 					icon={'help'}
+					containerStyle={helpIconContainerStyle}
 					style={helpIconStyle}/>
 			</TouchableOpacity>
 		);
@@ -459,6 +461,9 @@ export class GeoFenceContainer extends View<Props, State> {
 				height: maskSize,
 				width: maskSize,
 				borderRadius: maskSize / 2,
+			},
+			helpIconContainerStyle: {
+				backgroundColor: 'transparent',
 			},
 		};
 	}
