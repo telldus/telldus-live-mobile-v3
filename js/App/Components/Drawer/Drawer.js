@@ -469,7 +469,7 @@ function mapStateToProps(store: Object): Object {
 
 	const { enable } = JSON.parse(geoFenceFeature);
 
-	const { defaultSettings = {} } = store.user;
+	const { defaultSettings = {} } = store.app;
 	const {
 		consentLocationData = false,
 	} = defaultSettings;
