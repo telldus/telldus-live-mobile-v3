@@ -162,4 +162,4 @@ s3:
   script:
     - echo "${S3CFG}" > ~/.s3cfg
     - s3cmd put android/sourcemap.js android/app/build/outputs/apk/release/app-* android/app/build/outputs/bundle/release/app-* android/universal.apks s3://download.telldus.com/app/${CI_COMMIT_TAG}/telldus-app-v3_android_${CI_COMMIT_TAG}/
-    - s3cmd put ios/main.jsbundle.map TelldusLiveApp.ipa s3://download.telldus.com/app/${CI_COMMIT_TAG}/telldus-app-v3_ios_${CI_COMMIT_TAG}.ipa
+    - s3cmd put ios/main.jsbundle.map TelldusLiveApp.ipa s3://download.telldus.com/app/${CI_COMMIT_TAG}/telldus-app-v3_ios_${CI_COMMIT_TAG}/
