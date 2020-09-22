@@ -260,6 +260,7 @@ class TimePicker extends View<Props, State> {
 									(showTimePicker && Platform.OS === 'ios' && editingValue === 'from') && (
 										<DateTimePicker
 											mode="time"
+											display={'spinner'}
 											value={editingValue === 'from' ? timeFrom : timeTo}
 											onChange={this._onDateChange}
 											textColor={colors.textThree}
@@ -284,8 +285,10 @@ class TimePicker extends View<Props, State> {
 					(showTimePicker && (Platform.OS === 'android' || editingValue === 'to')) && (
 						<DateTimePicker
 							mode="time"
+							display={'spinner'}
 							value={editingValue === 'from' ? timeFrom : timeTo}
 							onChange={this._onDateChange}
+							textColor={colors.textThree}
 							style={styles.timePickerStyle}/>
 					)
 				}
