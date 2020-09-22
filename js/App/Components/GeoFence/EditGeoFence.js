@@ -366,11 +366,10 @@ const getStyles = ({
 			padding: padding * 1.5,
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			borderColor: colors.headerOneColorBlockDisabled,
-			borderBottomWidth: StyleSheet.hairlineWidth,
 			height: undefined,
 			marginHorizontal: padding,
 			borderRadius: 2,
+			marginBottom: padding / 2,
 		},
 		leftItemStyle: {
 			fontSize,

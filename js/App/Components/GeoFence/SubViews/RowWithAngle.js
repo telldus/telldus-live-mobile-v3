@@ -25,14 +25,13 @@
 import React from 'react';
 import {
 	TouchableOpacity,
-	StyleSheet,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import {
 	View,
-	Image,
 	Text,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 
 import {
@@ -46,7 +45,7 @@ type Props = {
     showAngleRight?: boolean,
     rowCoverStyle?: Array<any> | Object,
     labelStyle?: Array<any> | Object,
-    imgStyle?: Array<any> | Object,
+    iconStyle?: Array<any> | Object,
     onPress?: Function,
 };
 
@@ -56,7 +55,7 @@ const RowWithAngle: Object = React.memo<Object>((props: Props): Object => {
 		showAngleRight,
 		rowCoverStyle,
 		labelStyle,
-		imgStyle,
+		iconStyle,
 		onPress,
 	} = props;
 
@@ -68,7 +67,7 @@ const RowWithAngle: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		rowCoverStyleDef,
 		labelStyleDef,
-		imgStyleDef,
+		iconStyleDef,
 	} = getStyles({
 		layout,
 		colors,
@@ -90,7 +89,10 @@ const RowWithAngle: Object = React.memo<Object>((props: Props): Object => {
 					labelText
 				}
 				{!!showAngleRight &&
-                <Image source={{uri: 'right_arrow_key'}} style={[imgStyleDef, imgStyle]}/>
+				<ThemedMaterialIcon
+					level={3}
+					name={'keyboard-arrow-right'}
+					style={[iconStyleDef, iconStyle]}/>
 				}
 			</View>
 		</TouchableOpacity>
@@ -111,7 +113,6 @@ const getStyles = ({
 
 	const {
 		paddingFactor,
-		angleTintColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -120,20 +121,17 @@ const getStyles = ({
 	return {
 		rowCoverStyleDef: {
 			padding: padding * 1.5,
-			borderColor: colors.headerOneColorBlockDisabled,
-			borderBottomWidth: StyleSheet.hairlineWidth,
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			marginHorizontal: padding,
 			borderRadius: 2,
+			marginBottom: padding / 2,
 		},
 		labelStyleDef: {
 			fontSize,
 		},
-		imgStyleDef: {
-			tintColor: angleTintColor,
-			height: fontSize,
-			width: fontSize,
+		iconStyleDef: {
+			fontSize: fontSize * 1.5,
 		},
 	};
 };

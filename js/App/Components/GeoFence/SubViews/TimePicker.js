@@ -25,7 +25,6 @@
 
 import React from 'react';
 import {
-	StyleSheet,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
@@ -321,10 +320,9 @@ const getStyles = ({
 			flexDirection: 'row',
 			alignItems: 'center',
 			paddingHorizontal: padding * 1.5,
-			borderColor: colors.headerOneColorBlockDisabled,
-			borderBottomWidth: StyleSheet.hairlineWidth,
 			marginHorizontal: padding,
 			borderRadius: 2,
+			marginBottom: padding / 2,
 		},
 		switchLabel: {
 			flex: 1,
