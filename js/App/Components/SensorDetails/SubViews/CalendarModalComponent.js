@@ -261,13 +261,15 @@ render(): Object {
 						<FormattedDate
 							value={posterDate}
 							year="numeric"
-							style={posterTextOneStyle}/>
+							style={posterTextOneStyle}
+							level={33}/>
 						<FormattedDate
 							value={posterDate}
 							day="numeric"
 							month="short"
 							weekday="short"
-							style={posterTextTwoStyle}/>
+							style={posterTextTwoStyle}
+							level={33}/>
 					</View>
 				</Poster>
 				<Calendar
@@ -307,10 +309,10 @@ getStyle(appLayout: Object): Object {
 
 	const adjustCelendar = !this.isTablet && !isPortrait;
 
-	const posterHeight = adjustCelendar ? deviceWidth * 0.12 : deviceWidth * 0.333;
+	const posterHeight = adjustCelendar ? deviceWidth * 0.12 : deviceWidth * 0.25;
 
 	const fontSizePosterTextOne = posterHeight * 0.2;
-	const fontSizePosterTextTwo = posterHeight * 0.3;
+	const fontSizePosterTextTwo = posterHeight * 0.25;
 	const fontSizeFooterText = adjustCelendar ? deviceWidth * 0.03 : deviceWidth * 0.05;
 	const footerPadding = adjustCelendar ? fontSizeFooterText * 0.5 : fontSizeFooterText;
 
@@ -340,13 +342,10 @@ getStyle(appLayout: Object): Object {
 		},
 		posterTextOneStyle: {
 			fontSize: fontSizePosterTextOne,
-			color: '#fff',
 		},
 		posterTextTwoStyle: {
 			fontSize: fontSizePosterTextTwo,
-			color: '#fff',
-			fontWeight: 'bold',
-			fontFamily: 'Roboto-Regular',
+			fontWeight: '500',
 		},
 		calendarTheme: {
 			backgroundColor: card,
