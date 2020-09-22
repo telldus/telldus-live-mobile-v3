@@ -62,6 +62,9 @@ import {
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import GeoFenceUtils from '../../Lib/GeoFenceUtils';
 
@@ -96,6 +99,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		formatMessage,
 	} = intl;
 
+	const {
+		colors,
+	} = useAppTheme();
+
 	useEffect(() => {
 		onDidMount(formatMessage(i18n.editValue, {
 			value: title,
@@ -116,7 +123,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		labelStyle,
 		textFieldStyle,
 		overlayWidth,
-	} = getStyles(appLayout);
+	} = getStyles({
+		appLayout,
+		colors,
+	});
 
 	const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(latitude, longitude, radius);
 	const region = {
@@ -233,7 +243,9 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 					onPress={onEditName}
 					disabled={editName}
 					style={rowStyle}>
-					<Text style={leftItemStyle}>
+					<Text
+						level={3}
+						style={leftItemStyle}>
 						{formatMessage(i18n.name)}
 					</Text>
 					{editName ?
@@ -304,7 +316,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -314,7 +329,6 @@ const getStyles = (appLayout: Object): Object => {
 		eulaContentColor,
 		rowTextColor,
 		shadow,
-		angledRowBorderColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -352,12 +366,13 @@ const getStyles = (appLayout: Object): Object => {
 			padding: padding * 1.5,
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			borderColor: angledRowBorderColor,
+			borderColor: colors.headerOneColorBlockDisabled,
 			borderBottomWidth: StyleSheet.hairlineWidth,
 			height: undefined,
+			marginHorizontal: padding,
+			borderRadius: 2,
 		},
 		leftItemStyle: {
-			color: eulaContentColor,
 			fontSize,
 		},
 		rightTextItemStyle: {

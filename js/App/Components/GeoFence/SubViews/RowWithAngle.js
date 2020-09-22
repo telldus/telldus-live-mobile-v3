@@ -35,6 +35,10 @@ import {
 	Text,
 } from '../../../../BaseComponents';
 
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
+
 import Theme from '../../../Theme';
 
 type Props = {
@@ -57,12 +61,18 @@ const RowWithAngle: Object = React.memo<Object>((props: Props): Object => {
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		colors,
+	} = useAppTheme();
 
 	const {
 		rowCoverStyleDef,
 		labelStyleDef,
 		imgStyleDef,
-	} = getStyles(layout);
+	} = getStyles({
+		layout,
+		colors,
+	});
 
 	return (
 		<TouchableOpacity onPress={onPress} disabled={!onPress}>
@@ -71,7 +81,9 @@ const RowWithAngle: Object = React.memo<Object>((props: Props): Object => {
 				style={[rowCoverStyleDef, rowCoverStyle]}>
 				{!!labelText &&
                 typeof labelText === 'string' ?
-					<Text style={[labelStyleDef, labelStyle]}>
+					<Text
+						level={3}
+						style={[labelStyleDef, labelStyle]}>
 						{labelText}
 					</Text>
 					:
@@ -89,16 +101,17 @@ RowWithAngle.defaultProps = {
 	showAngleRight: true,
 };
 
-const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
+const getStyles = ({
+	layout,
+	colors,
+}: Object): Object => {
+	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
 		paddingFactor,
-		eulaContentColor,
 		angleTintColor,
-		angledRowBorderColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -107,13 +120,14 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		rowCoverStyleDef: {
 			padding: padding * 1.5,
-			borderColor: angledRowBorderColor,
+			borderColor: colors.headerOneColorBlockDisabled,
 			borderBottomWidth: StyleSheet.hairlineWidth,
 			flexDirection: 'row',
 			justifyContent: 'space-between',
+			marginHorizontal: padding,
+			borderRadius: 2,
 		},
 		labelStyleDef: {
-			color: eulaContentColor,
 			fontSize,
 		},
 		imgStyleDef: {

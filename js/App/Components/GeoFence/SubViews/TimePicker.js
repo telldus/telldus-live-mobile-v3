@@ -39,6 +39,11 @@ import {
 	SettingsRow,
 } from '../../../../BaseComponents';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import Theme from '../../../Theme';
 
 import {
@@ -47,7 +52,7 @@ import {
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	value: Object,
 	appLayout: Object,
 
@@ -201,6 +206,7 @@ class TimePicker extends View<Props, State> {
 			rowStyle,
 			appLayout,
 			intl,
+			colors,
 		} = this.props;
 
 		const {
@@ -215,7 +221,10 @@ class TimePicker extends View<Props, State> {
 			formatTime,
 		} = intl;
 
-		const styles = getStyles(appLayout);
+		const styles = getStyles({
+			appLayout,
+			colors,
+		});
 
 		return (
 			<View style={styles.container}>
@@ -223,7 +232,7 @@ class TimePicker extends View<Props, State> {
 					level={2}
 					style={[styles.switchHeader, rowStyle]}>
 					<Text
-						level={27}
+						level={3}
 						style={[styles.switchLabel, labelStyle]}>{formatMessage(i18n.alwaysActive)}</Text>
 					<Switch
 						value={this.state.alwaysActive}
@@ -252,7 +261,9 @@ class TimePicker extends View<Props, State> {
 										<DateTimePicker
 											mode="time"
 											value={editingValue === 'from' ? timeFrom : timeTo}
-											onChange={this._onDateChange}/>
+											onChange={this._onDateChange}
+											textColor={colors.textThree}
+											style={styles.timePickerStyle}/>
 									)
 								}
 								<SettingsRow
@@ -274,7 +285,8 @@ class TimePicker extends View<Props, State> {
 						<DateTimePicker
 							mode="time"
 							value={editingValue === 'from' ? timeFrom : timeTo}
-							onChange={this._onDateChange}/>
+							onChange={this._onDateChange}
+							style={styles.timePickerStyle}/>
 					)
 				}
 			</View>
@@ -282,7 +294,10 @@ class TimePicker extends View<Props, State> {
 	}
 }
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	colors,
+}: Object): Object => {
 
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -303,15 +318,17 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			alignItems: 'center',
 			paddingHorizontal: padding * 1.5,
-			borderColor: Theme.Core.angledRowBorderColor,
+			borderColor: colors.headerOneColorBlockDisabled,
 			borderBottomWidth: StyleSheet.hairlineWidth,
+			marginHorizontal: padding,
+			borderRadius: 2,
 		},
 		switchLabel: {
 			flex: 1,
 			fontSize,
 		},
 		body: {
-			padding: padding * 1.5,
+			marginHorizontal: padding,
 		},
 		labelTextStyle: {
 			fontSize,
@@ -324,7 +341,11 @@ const getStyles = (appLayout: Object): Object => {
 			marginBottom: padding / 2,
 			marginTop: 0,
 		},
+		timePickerStyle: {
+			flex: 1,
+			marginBottom: padding / 2,
+		},
 	};
 };
 
-module.exports = TimePicker;
+module.exports = withTheme(TimePicker);
