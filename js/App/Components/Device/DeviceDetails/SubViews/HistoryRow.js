@@ -178,10 +178,26 @@ class HistoryRow extends React.PureComponent<Props, null> {
 		return accessibilityLabel;
 	}
 
-	getBGColor = (item: Object, deviceState: string): string => {
-		return deviceState === 'RGB' ? getMainColorRGB(item.stateValue) :
+	getColorSet = (item: Object, deviceState: string): Object => {
+		const {
+			colorOnActiveBg,
+			colorOffActiveBg,
+			colorOffActiveIcon,
+			colorOnActiveIcon,
+		} = this.props.colors;
+
+		return deviceState === 'RGB' ? {
+			bGColor: getMainColorRGB(item.stateValue),
+			iconColor: colorOnActiveIcon,
+		} :
 			this.BGPrimaryActions.indexOf(item.state) !== -1 || (deviceState === 'DIM' && item.stateValue === 0)
-				? '#1b365d' : '#F06F0C';
+				? {
+					bGColor: colorOffActiveBg,
+					iconColor: colorOffActiveIcon,
+				 } : {
+					bGColor: colorOnActiveBg,
+					iconColor: colorOnActiveIcon,
+				 };
 	}
 
 	render(): Object {
@@ -194,6 +210,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			appLayout,
 			gatewayTimezone,
 			item,
+			colors,
 		} = this.props;
 
 		let {
@@ -247,7 +264,10 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			originInfo = `${this.labelOrigin}, ${origin}`;
 		}
 
-		let bGColor = this.getBGColor(item, deviceState);
+		let {
+			bGColor,
+			iconColor,
+		} = this.getColorSet(item, deviceState);
 
 		let Icon, currentModeLabel = '', stateValSec;
 		if (deviceState === 'THERMOSTAT') {
@@ -288,12 +308,11 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			}
 
 			if (mode && mode === 'off') {
-				bGColor = '#1b365d';
+				bGColor = colors.colorOffActiveBg;
+				iconColor = colors.colorOffActiveIcon;
 				icon = 'off';
 			}
 		}
-
-		console.log('TEST bGColor', bGColor);
 
 		let accessibilityLabel = this.accessibilityLabel(deviceState);
 		accessibilityLabel = `${accessibilityLabel}. ${currentModeLabel}, ${originInfo}`;
@@ -326,8 +345,8 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				>
 
 					{(deviceState === 'DIM' && item.stateValue === 0) ?
-						<View style={[statusView, { backgroundColor: '#1b365d' }]}>
-							<IconTelldus icon={'off'} size={statusIconSize} color="#ffffff" />
+						<View style={[statusView, { backgroundColor: colors.colorOffActiveBg }]}>
+							<IconTelldus icon={'off'} size={statusIconSize} color={colors.colorOffActiveIcon} />
 						</View>
 						:
 						<View style={[statusView, { backgroundColor: bGColor }]}>
@@ -342,7 +361,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 										/>
 										:
 										<>
-											{!!icon && <IconTelldus icon={icon} size={statusIconSize} color="#ffffff" />}
+											{!!icon && <IconTelldus icon={icon} size={statusIconSize} color={iconColor} />}
 										</>
 									}
 									{typeof stateValSec !== 'undefined' &&
@@ -356,7 +375,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 					}
 					<View style={locationCover}>
 						<Text
-							level={6}
+							level={25}
 							style={originTextStyle} numberOfLines={1}>{originText}</Text>
 					</View>
 				</ListRow>

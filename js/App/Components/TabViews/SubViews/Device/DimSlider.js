@@ -128,7 +128,9 @@ static defaultProps: DefaultProps = {
 
 		return (
 			<View style={sliderContainerStyle}>
-				{!!showTitle && <Text style={[headerStyleDef, headerStyle]}>
+				{!!showTitle && <Text
+					level={18}
+					style={[headerStyleDef, headerStyle]}>
 					{prefix}{sliderValue}%
 				</Text>
 				}
@@ -157,7 +159,6 @@ static defaultProps: DefaultProps = {
 	getStyles(appLayout: Object): Object {
 		return {
 			headerStyleDef: {
-				color: '#000',
 				fontSize: 12,
 			},
 			thumbStyleDef: {

@@ -47,12 +47,16 @@ import {
 } from '../../Actions/Login';
 import capitalize from '../../Lib/capitalize';
 
+import {
+	withTheme,
+} from '../HOC/withTheme';
+
 import i18n from '../../Translations/common';
 
 import Theme from '../../Theme';
 
 const RedeemGiftScreen = (props: Object): Object => {
-	const { navigation, screenProps } = props;
+	const { navigation, screenProps, colors } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
@@ -66,8 +70,14 @@ const RedeemGiftScreen = (props: Object): Object => {
 		titleStyleTwo,
 		buttonStyle,
 		textFieldCoverStyle,
-		brandSecondary,
-	} = getStyles(layout);
+	} = getStyles({
+		layout,
+		colors,
+	});
+
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	const {
 		toggleDialogueBox,
@@ -120,7 +130,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 			if (word.includes('%')) {
 				return (
 					<Text
-						level={5}
+						level={26}
 						style={titleStyleTwo}>
 						{` ${word.replace(/%/g, '').toUpperCase()}`}
 					</Text>
@@ -128,7 +138,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 			}
 			return (
 				<Text
-					level={5}
+					level={26}
 					style={titleStyleOne}>
 					{word.toUpperCase()}
 				</Text>
@@ -160,7 +170,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 						{header}
 					</View>
 					<Text
-						level={5}
+						level={26}
 						style={bodyStyle}>
 						{formatMessage(i18n.infoVoucherCode)}
 					</Text>
@@ -168,8 +178,8 @@ const RedeemGiftScreen = (props: Object): Object => {
 						value={code}
 						label={formatMessage(i18n.labelVoucherCode)}
 						labelTextStyle={labelStyle}
-						baseColor={brandSecondary}
-						tintColor={brandSecondary}
+						baseColor={inAppBrandSecondary}
+						tintColor={inAppBrandSecondary}
 						style={textFieldStyle}
 						containerStyle={textFieldCoverStyle}
 						onChangeText={onChangeText}
@@ -191,8 +201,11 @@ const RedeemGiftScreen = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
+const getStyles = ({
+	layout,
+	colors,
+}: Object): Object => {
+	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
@@ -200,7 +213,6 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	return {
-		brandSecondary: Theme.Core.brandSecondary,
 		container: {
 			flex: 1,
 		},
@@ -246,7 +258,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		labelStyle: {
 			fontSize: fontSize,
-			color: Theme.Core.brandSecondary,
+			color: colors.inAppBrandSecondary,
 		},
 		buttonStyle: {
 			marginVertical: fontSize / 2,
@@ -255,4 +267,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(RedeemGiftScreen);
+export default React.memo<Object>(withTheme(RedeemGiftScreen));

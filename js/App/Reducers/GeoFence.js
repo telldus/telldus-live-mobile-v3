@@ -35,6 +35,8 @@ export const initialState = {
 		geofenceModeHighAccuracy: true,
 		preventSuspend: false,
 		showNotificationOnActionFail: true,
+		locationUpdateInterval: 1000,
+		geofenceProximityRadius: 400,
 	},
 };
 

@@ -26,10 +26,9 @@ import {
 } from 'react-native';
 import { View, Text, IconTelldus } from '../../../../BaseComponents';
 
-import Theme from '../../../Theme';
 import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../../Lib/appUtils';
+	capitalize,
+} from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 
@@ -53,9 +52,14 @@ const TellStickExchangeLink = (props: Object): Object => {
 	return (
 		<TouchableOpacity onPress={onPress} disabled={!onPress}>
 			<View style={[coverStyleDef, coverStyle]}>
-				<IconTelldus icon="gift" style={[iconStyleDef, iconStyle]}/>
-				<Text style={[textStyleDef, textStyle]}>
-					{capitalizeFirstLetterOfEachWord(intl.formatMessage(i18n.tellStickExchangeProgram)).trim()}!
+				<IconTelldus
+					level={23}
+					icon="gift"
+					style={[iconStyleDef, iconStyle]}/>
+				<Text
+					level={23}
+					style={[textStyleDef, textStyle]}>
+					{capitalize(intl.formatMessage(i18n.tellStickExchangeProgram)).trim()}!
 				</Text>
 			</View>
 		</TouchableOpacity>
@@ -66,8 +70,6 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-
-	const { brandSecondary } = Theme.Core;
 
 	let iconSize = Math.floor(deviceWidth * 0.06);
 	iconSize = iconSize > 32 ? 32 : iconSize;
@@ -82,13 +84,11 @@ const getStyles = (appLayout: Object): Object => {
 			alignItems: 'center',
 		},
 		iconStyleDef: {
-			color: brandSecondary,
 			fontSize: iconSize,
 		},
 		textStyleDef: {
 			marginLeft: 5,
 			textAlignVertical: 'center',
-			color: brandSecondary,
 			fontSize: textSize,
 		},
 	};

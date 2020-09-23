@@ -39,14 +39,12 @@ import {
 	NavigationHeaderPoster,
 	Text,
 	IconTelldus,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import {
 	getUserTransactions,
 } from '../../Actions/User';
 
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import capitalize from '../../Lib/capitalize';
@@ -197,7 +195,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 				style={sectionStyle}
 				key={key}>
 				<Text
-					level={6}
+					level={4}
 					style={sectionTextStyle}>{key}</Text>
 			</View>
 		))();
@@ -213,7 +211,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 			level={3}
 			style={container}>
 			<NavigationHeaderPoster
-				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.purchaseHistory))} h2={formatMessage(i18n.yourTransactions)}
+				h1={capitalize(formatMessage(i18n.purchaseHistory))} h2={formatMessage(i18n.yourTransactions)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
@@ -223,8 +221,12 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 				<View
 					level={2}
 					style={emptyCover}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
+					<IconTelldus
+						level={23}
+						icon={'info'}
+						style={statusIconStyle}/>
 					<Text
+						level={23}
 						style={emptyInfo}>{formatMessage(i18n.noPurchaseHistory)}</Text>
 				</View>
 				:
@@ -234,8 +236,12 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 					sections={listData}
 					keyExtractor={keyExtractor}
 					contentContainerStyle={contentContainerStyle}
-					refreshing={isLoading}
-					onRefresh={getData}
+					refreshControl={
+						<ThemedRefreshControl
+							refreshing={isLoading}
+							onRefresh={getData}
+						/>
+					}
 				/>
 			}
 		</View>
@@ -276,13 +282,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		emptyInfo: {
 			fontSize: fontSizeRow,
-			color: Theme.Core.brandSecondary,
 			alignSelf: 'center',
 			textAlign: 'center',
 		},
 		statusIconStyle: {
 			fontSize: fontSizeRow * 1.7,
-			color: Theme.Core.brandSecondary,
 			marginRight: 5,
 		},
 		sectionStyle: {

@@ -34,6 +34,11 @@ import {
 	ThemedScrollView,
 } from '../../../../BaseComponents';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import { LearnButton } from '../../TabViews/SubViews';
 import {
 	ExcludeDevice,
@@ -80,7 +85,7 @@ import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	isGatewayReachable: boolean,
 	device: Object,
 	inDashboard: boolean,
@@ -277,7 +282,7 @@ class SettingsTab extends View {
 	}
 
 	onPressMarkAsFailed() {
-		const { screenProps, device } = this.props;
+		const { screenProps, device, colors } = this.props;
 		const { formatMessage } = screenProps.intl;
 		const { clientId, clientDeviceId } = device;
 		this.setState({
@@ -320,7 +325,7 @@ class SettingsTab extends View {
 						negativeText: formatMessage(i18n.labelReplace).toUpperCase(),
 						onPressNegative: this.onPressReplaceFailedNode,
 						closeOnPressNegative: true,
-						negTextColor: Theme.Core.brandSecondary,
+						negTextColor: colors.inAppBrandSecondary,
 						showHeader: true,
 						header: formatMessage(i18n.messageMarkedFailedH),
 						imageHeader: true,
@@ -851,6 +856,7 @@ class SettingsTab extends View {
 			isGatewayReachable,
 			transports,
 			gatewaySupportEditModel,
+			colors,
 		} = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
@@ -877,7 +883,6 @@ class SettingsTab extends View {
 			btnDisabledBg,
 			coverStyleDeviceSettings433,
 			labelStyleDeviceSettings433,
-			brandSecondary,
 			learnButtonWithScan,
 			labelStyle,
 			editBoxStyle,
@@ -1003,7 +1008,7 @@ class SettingsTab extends View {
 											onPress={isSaving433MhzParams ? null : this.onPressSaveParams433MHz}
 											disabled={isSaving433MhzParams}
 											style={[touchableButtonCommon, {
-												backgroundColor: isSaving433MhzParams ? btnDisabledBg : brandSecondary,
+												backgroundColor: isSaving433MhzParams ? btnDisabledBg : colors.inAppBrandSecondary,
 											}]}
 											showThrobber={isSaving433MhzParams}/>
 								}
@@ -1080,7 +1085,6 @@ class SettingsTab extends View {
 			paddingFactor,
 			brandDanger,
 			btnDisabledBg,
-			brandSecondary,
 			subHeader,
 		} = Theme.Core;
 
@@ -1094,7 +1098,6 @@ class SettingsTab extends View {
 		return {
 			brandDanger,
 			btnDisabledBg,
-			brandSecondary,
 			padding,
 			container: {
 				flex: 0,
@@ -1125,7 +1128,6 @@ class SettingsTab extends View {
 				marginHorizontal: 0,
 			},
 			labelStyleDeviceSettings433: {
-				color: '#000',
 				fontSize,
 			},
 			labelStyle: {
@@ -1192,4 +1194,6 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SettingsTab);
+const ThemedSettingsTab = withTheme(SettingsTab);
+ThemedSettingsTab.displayName = 'SettingsTab';
+module.exports = connect(mapStateToProps, mapDispatchToProps)(ThemedSettingsTab);

@@ -591,13 +591,10 @@ getStyles(appLayout: Object): Object {
 	const {
 		shadow,
 		paddingFactor,
-		eulaContentColor,
 		brandDanger,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-
-	const fSize = Math.floor(deviceWidth * 0.035);
 
 	return {
 		LocationDetail: {
@@ -620,36 +617,6 @@ getStyles(appLayout: Object): Object {
 		},
 		infoIconStyle: {
 			color: brandDanger,
-		},
-		troubleShootHintsCover: {
-			flex: 0,
-			flexDirection: 'column',
-			marginTop: -(padding / 2),
-			marginBottom: padding,
-			padding: 10,
-			backgroundColor: '#fff',
-			...shadow,
-			justifyContent: 'center',
-		},
-		troubleShootItemStyle: {
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'flex-start',
-		},
-		troubleShootTextStyle: {
-			fontSize: fSize,
-			color: eulaContentColor,
-			marginLeft: 10,
-			textAlignVertical: 'center',
-		},
-		bulletinStyle: {
-			paddingTop: fSize * 0.5,
-			fontSize: fSize * 2,
-			color: brandDanger,
-			textAlignVertical: 'center',
-			alignItems: 'center',
-			justifyContent: 'center',
-			textAlign: 'center',
 		},
 	};
 }

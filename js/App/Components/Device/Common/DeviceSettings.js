@@ -276,7 +276,9 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 			});
 
 			Setting.push(
-				<View style={radioButtonsCover} key={setting}>
+				<View
+					level={2}
+					style={radioButtonsCover} key={setting}>
 					{vSetting}
 				</View>);
 		}
@@ -308,8 +310,13 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 			});
 
 			Setting.push(
-				<View style={uSettingsCover} key={setting}>
-					<Text style={[optionInputLabelStyle, labelStyle]}>
+				<View
+					level={2}
+					style={uSettingsCover}
+					key={setting}>
+					<Text
+						level={3}
+						style={[optionInputLabelStyle, labelStyle]}>
 						{formatMessage(i18n.units)}
 					</Text>
 					<View style={{
@@ -371,7 +378,9 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 			});
 
 			Setting.push(
-				<View style={radioButtonsCover} key={setting}>
+				<View
+					level={2}
+					style={radioButtonsCover} key={setting}>
 					{sSetting}
 				</View>);
 		}
@@ -587,8 +596,13 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 			});
 
 			Setting.push(
-				<View style={optionInputCover} key={setting}>
-					<Text style={[optionInputLabelStyle, labelStyle]}>
+				<View
+					level={2}
+					style={optionInputCover}
+					key={setting}>
+					<Text
+						level={3}
+						style={[optionInputLabelStyle, labelStyle]}>
 						{formatMessage(i18n.fade)}
 					</Text>
 					<View style={fadeSettingsCover}>
@@ -658,21 +672,18 @@ const getStyles = (appLayout: Object): Object => {
 			paddingRight: padding,
 			flexWrap: 'wrap',
 			paddingBottom: padding,
-			backgroundColor: '#fff',
 			...shadow,
 			marginBottom: padding / 2,
 			borderRadius: 2,
 		},
 		optionInputLabelStyle: {
 			fontSize: fontSizeText,
-			color: '#000',
 		},
 		optionInputCover: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'space-between',
 			padding: padding,
-			backgroundColor: '#fff',
 			...shadow,
 			marginBottom: padding / 2,
 			borderRadius: 2,
@@ -687,7 +698,6 @@ const getStyles = (appLayout: Object): Object => {
 			alignItems: 'stretch',
 			justifyContent: 'center',
 			padding,
-			backgroundColor: '#fff',
 			...shadow,
 			marginBottom: padding / 2,
 			borderRadius: 2,

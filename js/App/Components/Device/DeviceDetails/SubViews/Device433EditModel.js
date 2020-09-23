@@ -40,6 +40,10 @@ import {
 } from '../../../../../BaseComponents';
 
 import {
+	withTheme,
+} from '../../../HOC/withTheme';
+
+import {
 	getAllModels,
 	prepare433ModelName,
 } from '../../../../Lib/DeviceUtils';
@@ -54,7 +58,13 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 
 	const {
 		onSelectModel,
+		colors,
 	} = props;
+
+	const {
+		inAppBrandSecondary,
+		textThree,
+	} = colors;
 
 	const intl = useIntl();
 	const ddRef = useRef(null);
@@ -84,7 +94,6 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 		sectionHeaderStyle,
 		sectionRowStyle,
 		pickerBaseCoverStyle,
-		brandSecondary,
 		itemSize,
 	} = getStyles(layout);
 
@@ -141,16 +150,20 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 				justifyContent: 'center',
 			}]} onPress={onPress}>
 				<Text style={[sectionRowStyle, {
-					color: modelC === _model ? brandSecondary : '#000',
+					color: modelC === _model ? inAppBrandSecondary : textThree,
 				}]}>
 					{prepare433ModelName(locale, lang, modelName)}
 				</Text>
 			</RippleButton>
 		);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
+		inAppBrandSecondary,
 		locale,
-		widgetParams433Device,
+		modelC,
+		onValueChange,
+		sectionHeaderStyle,
+		sectionRowStyle,
+		textThree,
 	]);
 
 	const valueExtractor = useCallback((data: Object, index: number): string => {
@@ -200,8 +213,13 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 	}, []);
 
 	return (
-		<View style={coverStyle}>
-			<Text style={labelStyle} numberOfLine={1}>
+		<View
+			level={2}
+			style={coverStyle}>
+			<Text
+				level={3}
+				style={labelStyle}
+				numberOfLine={1}>
 				{formatMessage(i18n.brandModel)}
 			</Text>
 			<DropDown
@@ -237,7 +255,6 @@ const getStyles = (appLayout: Object): Object => {
 		shadow,
 		rowTextColor,
 		eulaContentColor,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -245,7 +262,6 @@ const getStyles = (appLayout: Object): Object => {
 	const itemSize = Math.ceil(fontSize * 1.61 + 8 * 2);
 
 	return {
-		brandSecondary,
 		rowTextColor,
 		itemSize,
 		dropDownContainerStyle: {
@@ -275,14 +291,12 @@ const getStyles = (appLayout: Object): Object => {
 			width: width - (padding * 2),
 			justifyContent: 'space-between',
 			...shadow,
-			backgroundColor: '#fff',
 			marginBottom: padding / 2,
 			paddingRight: padding,
 			paddingVertical: padding + (deviceWidth * 0.02),
 		},
 		labelStyle: {
 			flex: 0,
-			color: '#000',
 			fontSize,
 			flexWrap: 'wrap',
 			marginLeft: padding,
@@ -291,7 +305,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		eulaContentColor,
 		sectionRowStyle: {
-			color: '#000',
 			fontSize: fontSize * 0.9,
 			textAlignVertical: 'center',
 		},
@@ -308,4 +321,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(forwardRef<Object, Object>(Device433EditModel));
+export default memo<Object>(withTheme(forwardRef<Object, Object>(Device433EditModel)));

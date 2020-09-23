@@ -36,6 +36,8 @@ type Props = {
 	lastUpdated: number,
 	tileWidth: number,
 
+	extraData?: Object,
+
     style: Array<any> | Object,
 	valueCoverStyle: Array<any> | Object,
 	dotStyle: Object,
@@ -56,7 +58,7 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object): boolean {
-	return shouldUpdate(this.props, nextProps, ['defaultType', 'lastUpdated', 'tileWidth']);
+	return shouldUpdate(this.props, nextProps, ['defaultType', 'lastUpdated', 'tileWidth', 'extraData']);
 }
 
 changeDisplayType() {

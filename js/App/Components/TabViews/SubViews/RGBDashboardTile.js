@@ -60,6 +60,7 @@ type Props = {
 	iconOffColor?: string,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
+	preparedMainColorRgb: string,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -145,6 +146,7 @@ class RGBDashboardTile extends View<Props, null> {
 			'iconOnColor',
 			'offColorMultiplier',
 			'onColorMultiplier',
+			'preparedMainColorRgb',
 		]);
 		if (propsChange) {
 			return true;
@@ -239,6 +241,7 @@ class RGBDashboardTile extends View<Props, null> {
 			iconOffColor,
 			offColorMultiplier,
 			onColorMultiplier,
+			preparedMainColorRgb,
 		} = this.props;
 		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -320,7 +323,8 @@ class RGBDashboardTile extends View<Props, null> {
 					fontSize={7}
 					fontSizeIcon={22}
 					onColorMultiplier={onColorMultiplier}
-					offColorMultiplier={offColorMultiplier}/>
+					offColorMultiplier={offColorMultiplier}
+					preparedMainColorRgb={preparedMainColorRgb}/>
 			</HVSliderContainer>
 		) : null;
 
@@ -339,8 +343,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'stretch',
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	buttonStyle: {
 		flex: 1,
@@ -352,8 +354,6 @@ const styles = StyleSheet.create({
 		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderBottomLeftRadius: 2,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	iconStyle: {
 		fontSize: 22,

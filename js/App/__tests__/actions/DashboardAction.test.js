@@ -12,7 +12,7 @@ describe('(Dashboard) removeFromDashboard ', () => {
 			dashboardId,
 		}});
 		store.dispatch({type: 'RECEIVED_USER_PROFILE', payload: {
-			email: userId,
+			uuid: userId,
 		}});
 	});
 
@@ -40,7 +40,7 @@ describe('(Dashboard) addToDashboard ', () => {
 			dashboardId,
 		}});
 		store.dispatch({type: 'RECEIVED_USER_PROFILE', payload: {
-			email: userId,
+			uuid: userId,
 		}});
 	});
 

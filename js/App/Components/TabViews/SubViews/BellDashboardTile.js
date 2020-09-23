@@ -22,12 +22,16 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+
+import {
+	withTheme,
+} from '../../HOC/withTheme';
 
 import { shouldUpdate } from '../../../Lib';
 import i18n from '../../../Translations/common';
@@ -39,6 +43,11 @@ type Props = {
 
 	item: Object,
 	tileWidth: number,
+	local?: boolean,
+
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -80,7 +89,7 @@ class BellDashboardTile extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item']);
+		const propsChange = shouldUpdate(others, othersN, ['item', 'themeInApp', 'colorScheme', 'local']);
 		if (propsChange) {
 			return true;
 		}
@@ -93,12 +102,16 @@ class BellDashboardTile extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { item, isGatewayActive, containerStyle, bellButtonStyle } = this.props;
+		const { item, isGatewayActive, containerStyle, bellButtonStyle, colors, local } = this.props;
 		const { methodRequested, name } = item;
+
+		const styles = getStyles({colors});
 
 		const accessibilityLabelButton = `${this.labelBellButton}, ${name}`;
 
-		let iconColor = isGatewayActive ? Theme.Core.brandSecondary : Theme.Core.offlineColor;
+		let iconColor = isGatewayActive ? colors.colorOnInActiveIcon : Theme.Core.offlineColor;
+
+		let dotColor = local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity
@@ -110,7 +123,10 @@ class BellDashboardTile extends View<Props, null> {
 				</View>
 				{
 					methodRequested === 'BELL' ?
-						<ButtonLoadingIndicator style={styles.dot} />
+						<ButtonLoadingIndicator
+							style={styles.dot}
+							color={dotColor}
+						/>
 						:
 						null
 				}
@@ -119,31 +135,32 @@ class BellDashboardTile extends View<Props, null> {
 	}
 }
 
-const styles = StyleSheet.create({
-	container: {
-		justifyContent: 'center',
-	},
-	body: {
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#eeeeee',
-		borderBottomLeftRadius: 2,
-		borderBottomRightRadius: 2,
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-	itemIconContainerOn: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorOnInActiveBg,
+	} = colors;
+
+	return {
+		container: {
+			justifyContent: 'center',
+		},
+		body: {
+			flex: 1,
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+			borderBottomLeftRadius: 2,
+			borderBottomRightRadius: 2,
+			backgroundColor: colorOnInActiveBg,
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
@@ -153,4 +170,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(BellDashboardTile);
+module.exports = connect(null, mapDispatchToProps)(withTheme(BellDashboardTile));

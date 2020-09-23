@@ -79,6 +79,22 @@ let actions = {
 	}),
 };
 
+const initiate = () => {
+	setAppLayoutInStore();
+	setDeviceListInStore();
+	setGatewaysListInStore();
+	setDeviceInfoInStore();
+	store.dispatch({
+		type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+		gatewayId: DUMMY_CLIENT.id,
+		payload: {
+			address: 123,
+			instance: 123,
+			port: 123,
+		},
+	});
+};
+
 const customMapStateToProps = (_store, _ownProps) => {
 	return {
 		...mapStateToProps(_store, _ownProps),
@@ -96,26 +112,13 @@ describe('<Include433 />', () => {
 				return store.dispatch(Actions.initiateAdd433MHz(id, deviceInfo, formatMessage));
 			}),
 		};
-
-		setAppLayoutInStore();
-		setDeviceListInStore();
-		setGatewaysListInStore();
-		setDeviceInfoInStore();
-		store.dispatch({
-			type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
-			gatewayId: DUMMY_CLIENT.id,
-			payload: {
-				address: 123,
-				instance: 123,
-				port: 123,
-			},
-		});
 	});
 
 	it('Should initiateAdd433MHz and show activity indicator', () => {
 
 		let component;
 		act(() => {
+			initiate();
 			component = rendererWithIntlAndRedux(
 				<Include433
 					navigation={navigation}
@@ -173,22 +176,6 @@ describe('<Include433 /> with container component', () => {
 
 	const ConnectedAddDeviceContainer = connect(customMapStateToProps, customMapDispatchToProps)(UnConnectedAddDeviceContainer);
 
-	beforeAll(() => {
-		setAppLayoutInStore();
-		setDeviceListInStore();
-		setGatewaysListInStore();
-		setDeviceInfoInStore();
-		store.dispatch({
-			type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
-			gatewayId: DUMMY_CLIENT.id,
-			payload: {
-				address: 123,
-				instance: 123,
-				port: 123,
-			},
-		});
-	});
-
 	afterAll(() => {
 		initiateAdd433MHz.mockReset();
 		deleteSocketAndTimer.mockReset();
@@ -198,6 +185,7 @@ describe('<Include433 /> with container component', () => {
 
 		let component;
 		act(() => {
+			initiate();
 
 			store.dispatch(Actions.addDevice433Initiate());
 
@@ -255,22 +243,6 @@ describe('<Include433 /> on success with container component', () => {
 
 	const ConnectedAddDeviceContainer = connect(customMapStateToProps, customMapDispatchToProps2)(UnConnectedAddDeviceContainer);
 
-	beforeAll(() => {
-		setAppLayoutInStore();
-		setDeviceListInStore();
-		setGatewaysListInStore();
-		setDeviceInfoInStore();
-		store.dispatch({
-			type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
-			gatewayId: DUMMY_CLIENT.id,
-			payload: {
-				address: 123,
-				instance: 123,
-				port: 123,
-			},
-		});
-	});
-
 	afterAll(() => {
 		initiateAdd433MHz.mockReset();
 		deleteSocketAndTimer.mockReset();
@@ -280,6 +252,8 @@ describe('<Include433 /> on success with container component', () => {
 
 		let component;
 		act(() => {
+			initiate();
+
 			// Mocking the add device success here
 			store.dispatch(Actions.addDevice433Initiate());
 			store.dispatch(Actions.addDevice433Success(dummyDeviceId));
@@ -341,22 +315,6 @@ describe('<Include433 /> on error with container component', () => {
 
 	const ConnectedAddDeviceContainer = connect(customMapStateToProps, customMapDispatchToProps)(UnConnectedAddDeviceContainer);
 
-	beforeAll(() => {
-		setAppLayoutInStore();
-		setDeviceListInStore();
-		setGatewaysListInStore();
-		setDeviceInfoInStore();
-		store.dispatch({
-			type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
-			gatewayId: DUMMY_CLIENT.id,
-			payload: {
-				address: 123,
-				instance: 123,
-				port: 123,
-			},
-		});
-	});
-
 	afterAll(() => {
 		initiateAdd433MHz.mockReset();
 		deleteSocketAndTimer.mockReset();
@@ -366,6 +324,7 @@ describe('<Include433 /> on error with container component', () => {
 
 		let component;
 		act(() => {
+			initiate();
 
 			// Mocking the add device fail here
 			store.dispatch(Actions.addDevice433Initiate());

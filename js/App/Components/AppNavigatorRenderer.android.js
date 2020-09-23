@@ -22,7 +22,11 @@
 'use strict';
 
 import React from 'react';
-import { LayoutAnimation, DrawerLayoutAndroid } from 'react-native';
+import {
+	LayoutAnimation,
+	DrawerLayoutAndroid,
+	BackHandler,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
@@ -111,6 +115,19 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 
 		this.timeoutCloseDrawer = null;
+
+		this.backHandler = BackHandler.addEventListener(
+			'hardwareBackPress',
+			this.backAction
+		  );
+	}
+
+	backAction = (): boolean => {
+		if (this.state.drawer) {
+			this.closeDrawer();
+			return true;
+		}
+		return false;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -131,6 +148,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 	componentWillUnmount() {
 		if (this.timeoutCloseDrawer) {
 			clearTimeout(this.timeoutCloseDrawer);
+		}
+		if (this.backHandler && this.backHandler.remove) {
+			this.backHandler.remove();
 		}
 	}
 

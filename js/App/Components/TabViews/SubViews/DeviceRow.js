@@ -44,6 +44,11 @@ import ThermostatButton from './Thermostat/ThermostatButton';
 import MultiActionModal from './Device/MultiActionModal';
 
 import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
+import {
 	getLabelDevice,
 	shouldUpdate,
 	getPowerConsumed,
@@ -59,7 +64,7 @@ import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 
-type Props = {
+type Props = PropsThemedComponent & {
 	device: Object,
 	setScrollEnabled: boolean,
 	intl: Object,
@@ -164,10 +169,20 @@ class DeviceRow extends View<Props, State> {
 			}
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
-				'isNew', 'gatewayId', 'isLast', 'currentTemp',
+				'appLayout',
+				'device',
+				'setScrollEnabled',
+				'isGatewayActive',
+				'powerConsumed',
+				'isNew',
+				'gatewayId',
+				'isLast',
+				'currentTemp',
 				'offColorMultiplier',
 				'onColorMultiplier',
+				'themeInApp',
+				'colorScheme',
+				'dark',
 			]);
 			if (propsChange) {
 				return true;
@@ -178,6 +193,14 @@ class DeviceRow extends View<Props, State> {
 		}
 		// Force re-render once to gain/loose accessibility
 		if (currentScreenN !== 'Devices' && currentScreen === 'Devices' && nextProps.screenReaderEnabled) {
+			return true;
+		}
+
+		const themeHasChanged = shouldUpdate(otherProps, nextOtherProps, [
+			'themeInApp',
+			'colorScheme',
+		]);
+		if (themeHasChanged) {
 			return true;
 		}
 
@@ -274,6 +297,8 @@ class DeviceRow extends View<Props, State> {
 			currentTemp,
 			offColorMultiplier,
 			onColorMultiplier,
+			dark,
+			colors,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -307,14 +332,20 @@ class DeviceRow extends View<Props, State> {
 
 		let { RGB: rgbValue } = stateValues;
 		let colorDeviceIconBack = styles.iconContainerStyle.backgroundColor;
-		let offColorRGB, iconOffColor, iconOnColor, iconOnBGColor;
+		let offColorRGB, iconOffColor, iconOnColor, iconOnBGColor, preparedMainColorRgb;
 		if (typeof rgbValue !== 'undefined' && isGatewayActive) {
 			let mainColorRGB = getMainColorRGB(rgbValue);
 
-			offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
+			offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier, {
+				isDarkMode: dark,
+			});
 			iconOffColor = offColorRGB;
 
-			colorDeviceIconBack = prepareMainColor(mainColorRGB, onColorMultiplier);
+			preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier, {
+				isDarkMode: dark,
+				colorWhenWhite: colors.inAppBrandSecondary,
+			});
+			colorDeviceIconBack = preparedMainColorRgb;
 			iconOnColor = colorDeviceIconBack;
 			iconOnBGColor = colorDeviceIconBack;
 
@@ -383,6 +414,7 @@ class DeviceRow extends View<Props, State> {
 					onButtonColor={isInState === 'TURNON' ? iconOnBGColor : undefined}
 					iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 					iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
+					preparedMainColorRgb={preparedMainColorRgb}
 				/>
 			);
 		}
@@ -508,13 +540,13 @@ class DeviceRow extends View<Props, State> {
 		return (
 			<View style={coverStyle}>
 				<Text
-					level={6}
+					level={25}
 					style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1}>
 					{deviceName}
 				</Text>
 				{!!info && (
 					<Text
-						level={6}
+						level={25}
 						style = {textPowerStyle} numberOfLines={1}>
 						{info}
 					</Text>
@@ -541,7 +573,7 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
-		const { isNew, isLast } = this.props;
+		const { isNew, isLast, colors } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
@@ -551,12 +583,17 @@ class DeviceRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
-			brandPrimary,
-			brandSecondary,
 			shadow,
 			paddingFactor,
 			offlineColor,
 		} = Theme.Core;
+
+		const {
+			colorOnActiveBg,
+			colorOffActiveBg,
+			buttonSeparatorColor,
+			inAppBrandSecondary,
+		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
 		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
@@ -564,7 +601,7 @@ class DeviceRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? brandPrimary : brandSecondary;
+		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? colorOffActiveBg : colorOnActiveBg;
 		let backgroundColor = !isGatewayActive ? offlineColor : color;
 
 		const padding = deviceWidth * paddingFactor;
@@ -584,7 +621,7 @@ class DeviceRow extends View<Props, State> {
 				borderRadius: 2,
 				...shadow,
 				borderWidth: isNew ? 2 : 0,
-				borderColor: isNew ? brandSecondary : 'transparent',
+				borderColor: isNew ? inAppBrandSecondary : 'transparent',
 			},
 			hiddenRow: {
 				flexDirection: 'row',
@@ -633,7 +670,7 @@ class DeviceRow extends View<Props, State> {
 				color: '#fff',
 			},
 			iconContainerStyle: {
-				backgroundColor: backgroundColor,
+				backgroundColor,
 				borderRadius: 25,
 				width: 25,
 				height: 25,
@@ -654,10 +691,9 @@ class DeviceRow extends View<Props, State> {
 			bell: {
 				justifyContent: 'center',
 				alignItems: 'center',
-				backgroundColor: '#eeeeee',
 				width: buttonWidth * 2,
 				borderLeftWidth: 1,
-				borderLeftColor: '#ddd',
+				borderLeftColor: buttonSeparatorColor,
 				height: rowHeight,
 			},
 			navigation: {
@@ -704,4 +740,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(DeviceRow);
+module.exports = connect(mapStateToProps, null)(withTheme(DeviceRow));

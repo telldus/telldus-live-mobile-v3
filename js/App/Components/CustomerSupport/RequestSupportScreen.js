@@ -44,9 +44,6 @@ import {
 import shouldUpdate from '../../Lib/shouldUpdate';
 import capitalize from '../../Lib/capitalize';
 import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
-import {
 	createSupportTicketGeneral,
 } from '../../Actions/App';
 import {
@@ -240,7 +237,7 @@ render(testData: Object): Object {
 		body,
 		label,
 		textField,
-		brandSecondary,
+		inAppBrandSecondary,
 		button,
 		fontSizeText,
 		rowTextColor,
@@ -292,10 +289,10 @@ render(testData: Object): Object {
 					level={2}
 					style={container}>
 					<Text style={title}>
-						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelCreateSupportTicket))}
+						{capitalize(formatMessage(i18n.labelCreateSupportTicket))}
 					</Text>
 					<Text
-						level={6}
+						level={25}
 						style={body}>
 						{formatMessage(i18n.contactSupportDescription)}
 					</Text>
@@ -309,8 +306,8 @@ render(testData: Object): Object {
 						autoCapitalize="none"
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={brandSecondary}
-						tintColor={brandSecondary}
+						baseColor={inAppBrandSecondary}
+						tintColor={inAppBrandSecondary}
 						returnKeyType={'done'}
 					/>
 					<Text style={label}>
@@ -344,8 +341,8 @@ render(testData: Object): Object {
 							autoCapitalize="sentences"
 							autoCorrect={false}
 							autoFocus={false}
-							baseColor={brandSecondary}
-							tintColor={brandSecondary}
+							baseColor={inAppBrandSecondary}
+							tintColor={inAppBrandSecondary}
 							returnKeyType={'done'}
 							multiline={true}
 						/>
@@ -379,7 +376,7 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary, rowTextColor, eulaContentColor } = Theme.Core;
+	const { shadow, paddingFactor, rowTextColor, eulaContentColor } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -388,8 +385,12 @@ getStyles(appLayout: Object): Object {
 	const fontSizeBody = deviceWidth * 0.035;
 	const fontSizeLabel = deviceWidth * 0.038;
 
+	const {
+		inAppBrandSecondary,
+	} = colors;
+
 	return {
-		brandSecondary,
+		inAppBrandSecondary,
 		rowTextColor,
 		scrollView: {
 			flex: 1,
@@ -404,7 +405,7 @@ getStyles(appLayout: Object): Object {
 			borderRadius: 2,
 		},
 		title: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize: fontSizeTitle,
 			alignSelf: 'center',
 		},
@@ -413,7 +414,7 @@ getStyles(appLayout: Object): Object {
 			marginTop: 10,
 		},
 		label: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize: fontSizeLabel,
 			marginTop: 22,
 		},
@@ -471,7 +472,7 @@ getStyles(appLayout: Object): Object {
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		infoTextStyle: {
 			flex: 1,

@@ -49,6 +49,12 @@ import Subtitle from './Subtitle';
 import AttentionCatcher from './AttentionCatcher';
 import _ from 'lodash';
 
+import {
+	useAppTheme,
+} from '../App/Hooks/Theme';
+
+import TelldusLogo from '../App/Components/TabViews/img/telldus_logo.svg';
+
 import { hasStatusBar as hasStatusBarMeth } from '../App/Lib';
 
 import i18n from '../App/Translations/common';
@@ -97,6 +103,10 @@ const HeaderComponent = (props: Props): Object => {
 
 	const intl = useIntl();
 
+	const {
+		colors,
+	} = useAppTheme();
+
 	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
 	const {
 		height,
@@ -104,12 +114,13 @@ const HeaderComponent = (props: Props): Object => {
 	} = appLayout;
 	const {
 		navbar,
-		logoImage,
 		iosToolbarSearch,
 		toolbarButton,
 		androidToolbarSearch,
 		headerButton,
 		statusBar,
+		logoWidth,
+		logoHeight,
 	} = getStyles(appLayout, {
 		rounded,
 		children,
@@ -121,10 +132,13 @@ const HeaderComponent = (props: Props): Object => {
 				<TouchableOpacity
 					disabled={!onPressLogo}
 					onPress={onPressLogo}>
-					<Image
-						source={{uri: 'telldus_logo'}}
-						style={[logoImage, logoStyle]}
-					/>
+					<TelldusLogo
+						colorHomeLogo={colors.inAppBrandSecondary}
+						colorTextLogo={colors.headerIconColor}
+						colorWaveLogo={colors.headerIconColor}
+						style={logoStyle}
+						height={logoHeight}
+						width={logoWidth}/>
 				</TouchableOpacity>
 			);
 		} else if (!Array.isArray(children)) {
@@ -294,12 +308,7 @@ const HeaderComponent = (props: Props): Object => {
 			}
 			return newChildren;
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		children,
-		searchBar,
-		appLayout,
-	]);
+	}, [children, onPressLogo, colors.inAppBrandSecondary, colors.headerIconColor, logoStyle, logoHeight, logoWidth, searchBar, iosToolbarSearch, iosToolbarBtnColor, toolbarButton, androidToolbarSearch, toolbarTextColor]);
 
 	const renderButtonContent = useCallback((button: Object): ?Object => {
 		if (button.image) {
@@ -400,19 +409,23 @@ const HeaderComponent = (props: Props): Object => {
 	}, [appLayout]);
 
 	return (
-		<View style={{ flex: 0 }}>
+		<>
 			{
 				(!forceHideStatus && Platform.OS === 'android' && hasStatusBar) ? (
-					<View style={statusBar}/>
+					<View
+						level={11}
+						style={statusBar}/>
 				) : null
 			}
-			<View style={[navbar, style]}>
+			<View
+				level={11}
+				style={[navbar, style]}>
 				{!!leftButton && renderLeftButton(leftButton)}
 				{renderChildren()}
 				{showAttentionCapture && renderRightButtonAttentionCapture()}
 				{!!rightButton && renderRightButton(rightButton)}
 			</View>
-		</View>
+		</>
 	);
 };
 
@@ -427,7 +440,6 @@ const getStyles = (appLayout: Object, {
 
 	const {
 		navBarTopPadding: paddingTop,
-		toolbarDefaultBg,
 		toolbarHeight,
 		toolbarInputColor,
 		headerButtonHorizontalPadding,
@@ -436,8 +448,9 @@ const getStyles = (appLayout: Object, {
 	const paddingHorizontal = headerButtonHorizontalPadding;
 
 	return {
+		logoWidth: deviceWidth * 0.307333333,
+		logoHeight: deviceWidth * 0.046666667,
 		navbar: {
-			backgroundColor: toolbarDefaultBg,
 			justifyContent: (!Array.isArray(children)) ? 'center' : 'space-between',
 			flexDirection: 'row',
 			alignItems: 'center',
@@ -448,12 +461,6 @@ const getStyles = (appLayout: Object, {
 		},
 		statusBar: {
 			height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-			backgroundColor: toolbarDefaultBg,
-		},
-		logoImage: {
-			width: deviceWidth * 0.307333333,
-			height: deviceWidth * 0.046666667,
-			resizeMode: 'contain',
 		},
 		iosToolbarSearch: {
 			backgroundColor: toolbarInputColor,

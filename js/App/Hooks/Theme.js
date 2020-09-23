@@ -27,29 +27,33 @@ import {
 	useSelector,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
+import { CONSTANTS } from 'live-shared-data';
+const {
+	DEVICE_THEME_KEY,
+	DARK_THEME_KEY,
+} = CONSTANTS;
 
 import ThemedColors from '../Theme/ThemedColors';
-const DEVICE_THEME_KEY = 'OS';
 import i18n from '../Translations/common';
 
 const useAppTheme = (): Object => {
 	const colorScheme = useColorScheme();
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const {
-		themeInApp,
+		themeInApp = DEVICE_THEME_KEY,
 	} = defaultSettings;
 	return React.useMemo((): Object => {
 		if (themeInApp === DEVICE_THEME_KEY) {
 			return {
 				colorScheme,
-				dark: colorScheme === 'dark',
+				dark: colorScheme === DARK_THEME_KEY,
 				themeInApp,
 				...getThemeData(colorScheme),
 			};
 		}
 		return {
 			colorScheme,
-			dark: false,
+			dark: themeInApp === DARK_THEME_KEY,
 			themeInApp,
 			...getThemeData(themeInApp),
 		};
@@ -81,11 +85,6 @@ const useAppThemeOptions = (): Object => {
 		return {
 			value,
 			label,
-			shades: [
-				ThemedColors[value].ShadeOne,
-				ThemedColors[value].ShadeTwo,
-				ThemedColors[value].ShadeThree,
-			],
 		};
 	});
 	options.push({

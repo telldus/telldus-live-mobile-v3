@@ -94,7 +94,9 @@ class MainTabBarAndroid extends Component<Props, null> {
 		} = this.getStyles(appLayout);
 
 		return (
-			<View style={container}>
+			<View
+				style={container}
+				level={11}>
 				<ScrollView
 					ref="scrollView"
 					contentContainerStyle={contentContainer}
@@ -120,7 +122,6 @@ class MainTabBarAndroid extends Component<Props, null> {
 		return {
 			container: {
 				flex: 0,
-				backgroundColor: Theme.Core.brandPrimary,
 				...Theme.Core.shadow,
 				zIndex: 1,
 				top: 0,

@@ -28,7 +28,8 @@ import {
 	VictoryLine,
 	VictoryTheme,
 	VictoryScatter,
-	VictoryZoomContainer,
+	createContainer,
+	VictoryTooltip,
 } from 'victory-native';
 import moment from 'moment';
 const isEqual = require('react-fast-compare');
@@ -38,8 +39,11 @@ import { View } from '../../../../BaseComponents';
 import {
 	getTickConfigY,
 } from '../../../Lib/chartUtils';
+import capitalize from '../../../Lib/capitalize';
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 type Props = {
 	chartDataOne: Array<Object>,
@@ -58,6 +62,7 @@ type Props = {
 	min1: Object,
 	min2: Object,
 
+	intl: Object,
 	y2Tick: string,
 	setLargeYTick: (string) => void,
 };
@@ -80,6 +85,7 @@ class LineChart extends View<Props, null> {
 	getX: (Object) => number;
 	formatXTick: (number) => string;
 	renderAxis: (Array<Object>, number, Object, ?Array<number>) => Object;
+	VictoryZoomVoronoiContainer: Object;
 renderLine: (Array<Object>, number, Object) => Object;
 
 constructor(props: Props) {
@@ -92,6 +98,8 @@ constructor(props: Props) {
 	this.renderLine = this.renderLine.bind(this);
 
 	this.minyTickLength = 2;
+
+	this.VictoryZoomVoronoiContainer = createContainer('zoom', 'voronoi');
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -248,6 +256,21 @@ renderLine(d: Array<Object>, i: number, styles: Object): null | Object {
 	/>);
 }
 
+showToolTipLabel = (data: Object): string => {
+	const {
+		datum,
+	} = data;
+	const {
+		intl,
+	} = this.props;
+	const {
+		formatDate,
+		formatTime,
+		formatMessage,
+	} = intl;
+	return `${capitalize(formatMessage(i18n.date))}: ${formatDate(moment.unix(datum.ts))}\n${capitalize(formatMessage(i18n.time))}: ${formatTime(moment.unix(datum.ts))}\n${capitalize(formatMessage(i18n.labelValue))}: ${datum.value}`;
+}
+
 render(): Object | null {
 	const {
 		chartDataOne,
@@ -277,6 +300,10 @@ render(): Object | null {
 	const lineOne = this.renderLine(chartDataOne, 0, others);
 	const lineTwo = this.renderLine(chartDataTwo, 1, others);
 
+	const {
+		VictoryZoomVoronoiContainer,
+	} = this;
+
 	return (
 		<VictoryChart
 			theme={VictoryTheme.material}
@@ -284,7 +311,13 @@ render(): Object | null {
 			padding={chartPadding}
 			domainPadding={{ y: domainPadding, x: 20 }}
 			containerComponent={
-				<VictoryZoomContainer/>
+				<VictoryZoomVoronoiContainer
+					labelComponent={<VictoryTooltip
+						style={{
+							textAnchor: 'start',
+						}}
+					/>}
+					labels={this.showToolTipLabel}/>
 			}
 		>
 			<VictoryAxis

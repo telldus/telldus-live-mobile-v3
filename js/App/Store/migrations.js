@@ -85,9 +85,9 @@ export default function migrations(state: Object = {}): Promise<any> {
 	let { userId, userProfile = {} } = user || {};
 	if (!userId) {
 		const {
-			email = '', // TODO: Replace with real userId once available from the API.
+			uuid,
 		} = userProfile;
-		userId = email;
+		userId = uuid;
 	}
 
 	if (dashboard && userId) {

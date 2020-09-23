@@ -25,12 +25,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { IconTelldus, View } from '../../../../../BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
 import { deviceSetState } from '../../../../Actions/Devices';
-import Theme from '../../../../Theme';
+
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
 
 type Props = {
 	commandUp: number,
@@ -50,6 +53,9 @@ type Props = {
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class UpButton extends View {
@@ -95,23 +101,35 @@ class UpButton extends View {
 		const noop = function () {
 		};
 
-		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style, local, disableActionIndicator } = this.props;
+		let {
+			isGatewayActive,
+			supportedMethod,
+			isInState,
+			name,
+			methodRequested,
+			iconSize,
+			style,
+			local,
+			disableActionIndicator,
+			colors,
+		} = this.props;
+
+		const styles = getStyles({colors});
 
 		let upButtonStyle = !isGatewayActive ?
 			(isInState === 'UP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'UP' ? styles.enabledBackground : styles.disabledBackground);
 		let upIconColor = !isGatewayActive ?
-			(isInState === 'UP' ? '#fff' : '#a2a2a2') : (isInState === 'UP' ? '#fff' : Theme.Core.brandSecondary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			(isInState === 'UP' ? colors.colorOnActiveIcon : '#a2a2a2') : (isInState === 'UP' ? colors.colorOnActiveIcon : colors.colorOnInActiveIcon);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity
-				style={[upButtonStyle, style]}
+				style={[styles.styleDef, upButtonStyle, style]}
 				onPress={supportedMethod ? this.onUp : noop}
 				accessibilityLabel={`${this.labelUpButton}, ${name}`}>
 				<IconTelldus icon="up" size={iconSize}
 		      style={{
-			      color: supportedMethod ? upIconColor : '#eeeeee',
+			      color: supportedMethod ? upIconColor : colors.colorOnInActiveBg,
 		      }}
 				/>
 				{
@@ -130,36 +148,41 @@ UpButton.defaultProps = {
 	disableActionIndicator: false,
 };
 
-const styles = StyleSheet.create({
-	navigationButton: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	enabled: {
-		color: '#1a355b',
-	},
-	enabledBackground: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	disabledBackground: {
-		backgroundColor: '#eeeeee',
-	},
-	enabledBackgroundStop: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	offlineBackground: {
-		backgroundColor: '#a2a2a2',
-	},
-	disabled: {
-		color: '#eeeeee',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorOnActiveBg,
+		colorOnInActiveBg,
+		buttonSeparatorColor,
+	} = colors;
+
+	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
+		enabled: {
+			color: '#1a355b',
+		},
+		enabledBackground: {
+			backgroundColor: colorOnActiveBg,
+		},
+		disabledBackground: {
+			backgroundColor: colorOnInActiveBg,
+		},
+		offlineBackground: {
+			backgroundColor: '#a2a2a2',
+		},
+		disabled: {
+			color: '#eeeeee',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
@@ -167,4 +190,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(UpButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(UpButton));

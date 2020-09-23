@@ -31,6 +31,9 @@ import Theme from '../Theme';
 import {
 	methods,
 } from '../../Constants';
+import {
+	getTempDay,
+} from './scheduleUtils';
 
 import i18n from '../Translations/common';
 
@@ -106,12 +109,31 @@ function parseEventsForListView(events: Object): Array<Object> {
 	return eventsList;
 }
 
-function parseJobsForListView(jobs: Object): Array<Object> {
+function parseJobsForListView(jobs: Object, gateways: Object, devices: Object): Array<Object> {
 	let jobsList = [], data = [];
 	let isJobsEmpty = isEmpty(jobs);
 	if (!isJobsEmpty) {
-		Object.keys(jobs).map((job: Object, i: number) => {
-			data.push(jobs[job]);
+		Object.keys(jobs).map((jobId: Object, i: number) => {
+			const job = jobs[jobId];
+			const device = devices[job.deviceId];
+			if (!device) {
+				return;
+			}
+			const gateway = gateways[device.clientId];
+			if (!gateway) {
+				return;
+			}
+			let tempDay = getTempDay(job, gateway);
+			if (!tempDay) {
+				return;
+			}
+			const effectiveHour = tempDay.format('HH');
+			const effectiveMinute = tempDay.format('mm');
+			data.push({
+				...job,
+				effectiveHour,
+				effectiveMinute,
+			});
 		});
 	}
 	const GeoFenceJobsHeaderRow = {
@@ -160,11 +182,15 @@ const GeoFenceUtils = {
 		let d = R * c; // Distance in km
 		return d;
 	},
-	prepareDataForListGeoFenceActions(devices: Object, gateways: Object, events: Object, jobs: Object): Array<Object> {
+	prepareDataForListGeoFenceActions(devices: Object, gateways: Object, events: Object, jobs: Object, {
+		showJobs,
+		showDevices,
+		showEvents,
+	}: Object): Array<Object> {
 		let listData = [];
-		listData.push(...parseDevicesForListView(devices, gateways));
-		listData.push(...parseEventsForListView(events));
-		listData.push(...parseJobsForListView(jobs));
+		listData.push(...parseDevicesForListView(showDevices ? devices : {}, gateways));
+		listData.push(...parseEventsForListView(showEvents ? events : {}));
+		listData.push(...parseJobsForListView(showJobs ? jobs : {}, gateways, devices));
 		return listData;
 	},
 	prepareDevicesWithNewStateValues(devices: Object, selectedDevices: Object = {}): Object {

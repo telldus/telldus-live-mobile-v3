@@ -171,8 +171,7 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 				type: 'USER_REGISTER',
 				accessToken: {
 					...responseData,
-					userId: email || undefined, // TODO: Should use user id, once it is available.
-					// https://code.telldus.com/telldus/live-api/issues/143
+					userId: responseData.uuid,
 				},
 			});
 			return responseData;
@@ -340,13 +339,13 @@ function updateAllAccountsInfo(): ThunkAction {
 		const {
 			user: {
 				accounts = {},
-				userId: activeUserId = '',
+				userId: activeUserId,
 			},
 		} = getState();
 
 		Object.keys(accounts).forEach((userId: string) => {
 			const { accessToken } = accounts[userId];
-			if (accessToken && (activeUserId.trim().toLowerCase() !== userId.trim().toLowerCase())) {
+			if (accessToken && (activeUserId !== userId)) {
 				dispatch(getUserProfile(accessToken, false, false));
 				dispatch(getUserSubscriptions(accessToken));
 			}

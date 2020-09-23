@@ -21,48 +21,41 @@
 // @flow
 
 'use strict';
-import Theme from '../Theme';
 import i18n from '../Translations/common';
 
 import { utils } from 'live-shared-data';
 const { gatewayUtils } = utils;
 
-function getControlIconColorLabel(isOnline: boolean, websocketOnline: boolean, supportLocalControl: boolean, formatMessage: Function): Object {
-	const { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
+function getControlIconColorLabel(isOnline: boolean, websocketOnline: boolean, supportLocalControl: boolean, formatMessage: Function, {
+	colors,
+}: Object): Object {
+	const {
+		statusGreen,
+		statusOrange,
+		statusRed,
+	} = colors;
 
 	if (isOnline && websocketOnline) {
 		return {
-			color: locationOnline,
+			color: statusGreen,
 			label: formatMessage(i18n.online),
 		};
 	}
 	if (supportLocalControl && (!isOnline || !websocketOnline)) {
 		return {
-			color: locationNoLiveUpdates,
+			color: statusOrange,
 			label: formatMessage(i18n.noLiveUpdates),
 		};
 	}
 	if (!supportLocalControl && isOnline && !websocketOnline) {
 		return {
-			color: locationNoLiveUpdates,
+			color: statusOrange,
 			label: formatMessage(i18n.noLiveUpdates),
 		};
 	}
 
-	if (!supportLocalControl && !isOnline && websocketOnline) {
-		return {
-			color: locationOffline,
-			label: formatMessage(i18n.offline),
-		};
-	}
-	if (!supportLocalControl && !isOnline && !websocketOnline) {
-		return {
-			color: locationOffline,
-			label: formatMessage(i18n.offline),
-		};
-	}
 	return {
-		color: locationOffline,
+		color: statusRed,
 		label: formatMessage(i18n.offline),
 	};
 }

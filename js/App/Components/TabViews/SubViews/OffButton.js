@@ -26,6 +26,10 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
@@ -48,6 +52,9 @@ type Props = {
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class OffButton extends View {
@@ -100,13 +107,17 @@ class OffButton extends View {
 			local,
 			actionIcon,
 			disableActionIndicator,
+			colors,
 		} = this.props;
+
+		const styles = getStyles({colors});
+
 		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) : (isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
-			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			(isInState === 'TURNOFF' ? colors.colorOffActiveIcon : '#a2a2a2') : (isInState === 'TURNOFF' ? colors.colorOffActiveIcon : colors.colorOffInActiveIcon);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		const iconName = actionIcon ? actionIcon : 'off';
 
@@ -114,7 +125,7 @@ class OffButton extends View {
 			<TouchableOpacity
 				disabled={!enabled}
 				onPress={this.onPress}
-				style={[this.props.style, buttonStyle]}
+				style={[styles.styleDef, this.props.style, buttonStyle]}
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon={iconName} style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
@@ -128,37 +139,44 @@ class OffButton extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	enabled: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	disabled: {
-		backgroundColor: '#eeeeee',
-	},
-	offline: {
-		backgroundColor: '#a2a2a2',
-	},
-	textEnabled: {
-		color: '#fff',
-	},
-	textDisabled: {
-		color: Theme.Core.brandPrimary,
-	},
-	button: {
-		justifyContent: 'center',
-		alignItems: 'stretch',
-	},
-	buttonText: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	dot: {
-		zIndex: 3,
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorOffActiveBg,
+		colorOffInActiveBg,
+		buttonSeparatorColor,
+	} = colors;
+
+	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
+		enabled: {
+			backgroundColor: colorOffActiveBg,
+		},
+		disabled: {
+			backgroundColor: colorOffInActiveBg,
+		},
+		offline: {
+			backgroundColor: '#a2a2a2',
+		},
+		button: {
+			justifyContent: 'center',
+			alignItems: 'stretch',
+		},
+		buttonText: {
+			textAlign: 'center',
+			textAlignVertical: 'center',
+		},
+		dot: {
+			zIndex: 3,
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 OffButton.defaultProps = {
 	enabled: true,
@@ -175,4 +193,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(OffButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(OffButton));

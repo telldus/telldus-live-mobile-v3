@@ -36,6 +36,10 @@ import {
 	Switch,
 } from '../../../../BaseComponents';
 
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -53,6 +57,10 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 	const {
 		description,
 	} = event;
+
+	const {
+		colors,
+	} = useAppTheme();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -72,6 +80,7 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 		switchTextStyle,
 	} = getStyles(layout, {
 		isLast,
+		colors,
 	});
 
 	function noOp() {}
@@ -151,6 +160,7 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 
 const getStyles = (appLayout: Object, {
 	isLast,
+	colors,
 }: Object): Object => {
 	let { height, width } = appLayout;
 	let isPortrait = height > width;
@@ -159,11 +169,15 @@ const getStyles = (appLayout: Object, {
 	let {
 		rowHeight,
 		maxSizeRowTextOne,
-		brandSecondary,
 		shadow,
 		paddingFactor,
-		rowTextColor,
 	} = Theme.Core;
+
+	const {
+		card,
+		textSeven,
+		inAppBrandSecondary,
+	} = colors;
 
 	let nameFontSize = Math.floor(deviceWidth * 0.047);
 	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
@@ -181,7 +195,7 @@ const getStyles = (appLayout: Object, {
 			marginHorizontal: padding,
 			marginTop: padding / 2,
 			marginBottom: isLast ? padding : 0,
-			backgroundColor: '#FFFFFF',
+			backgroundColor: card,
 			height: rowHeight,
 			borderRadius: 2,
 			...shadow,
@@ -207,7 +221,7 @@ const getStyles = (appLayout: Object, {
 			flexDirection: 'row',
 		},
 		textStyle: {
-			color: rowTextColor,
+			color: textSeven,
 			fontSize: nameFontSize,
 			textAlignVertical: 'center',
 			textAlign: 'left',
@@ -217,12 +231,12 @@ const getStyles = (appLayout: Object, {
 			paddingHorizontal: padding,
 		},
 		checkIconActiveStyle: {
-			borderColor: brandSecondary,
-			backgroundColor: brandSecondary,
+			borderColor: inAppBrandSecondary,
+			backgroundColor: inAppBrandSecondary,
 			color: '#fff',
 		},
 		checkIconInActiveStyle: {
-			borderColor: rowTextColor,
+			borderColor: textSeven,
 			backgroundColor: 'transparent',
 			color: 'transparent',
 		},
@@ -230,7 +244,7 @@ const getStyles = (appLayout: Object, {
 			marginRight: padding,
 		},
 		switchTextStyle: {
-			color: rowTextColor,
+			color: textSeven,
 			fontSize: nameFontSize * 0.8,
 			textAlignVertical: 'center',
 			textAlign: 'right',

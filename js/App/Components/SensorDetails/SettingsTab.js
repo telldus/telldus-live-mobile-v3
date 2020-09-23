@@ -610,7 +610,7 @@ class SettingsTab extends View {
 						negativeText: formatMessage(i18n.labelReplace).toUpperCase(),
 						onPressNegative: this.onPressReplaceFailedNode,
 						closeOnPressNegative: true,
-						negTextColor: Theme.Core.brandSecondary,
+						negTextColorLevel: 23,
 						showHeader: true,
 						header: formatMessage(i18n.messageMarkedFailedH),
 						imageHeader: true,
@@ -818,7 +818,7 @@ class SettingsTab extends View {
 										accessible={true}/>
 								}
 								<Text
-									level={5}
+									level={26}
 									style={clearCacheHintStyle}>
 									{formatMessage(i18n.hintHistoryCache)}.
 								</Text>

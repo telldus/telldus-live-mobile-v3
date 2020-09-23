@@ -34,10 +34,13 @@ import DialogueHeader from './DialogueHeader';
 
 import capitalize from '../App/Lib/capitalize';
 import i18n from '../App/Translations/common';
-import Theme from '../App/Theme';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	showDialogue?: boolean,
 	appLayout: Object,
 
@@ -66,6 +69,8 @@ type Props = {
 	posTextColor?: string,
 	notificationModalFooterPositiveTextCoverStyle: Object | Array<any>,
 	notificationModalFooterStyle: Array<any> | Object,
+	negTextColorLevel?: number,
+	posTextColorLevel?: number,
 };
 
 type defaultProps = {
@@ -77,8 +82,6 @@ type defaultProps = {
 	backdropOpacity: number,
 	showHeader: boolean,
 	capitalizeHeader: boolean,
-	negTextColor: string,
-	posTextColor: string,
 };
 
 class DialogueBox extends Component<Props, null> {
@@ -95,8 +98,6 @@ class DialogueBox extends Component<Props, null> {
 		backdropOpacity: 0.60,
 		showHeader: true,
 		capitalizeHeader: true,
-		negTextColor: '#6B6969',
-		posTextColor: Theme.Core.brandSecondary,
 	}
 
 	renderHeader: (Object) => void;
@@ -229,7 +230,9 @@ class DialogueBox extends Component<Props, null> {
 
 		return (
 			<View style={styles.notificationModalBody} accessible={true} importantForAccessibility={'yes'} accessibilityLabel={text}>
-				<Text style={styles.notificationModalBodyText}>{text}</Text>
+				<Text
+					level={18}
+					style={styles.notificationModalBodyText}>{text}</Text>
 			</View>
 		);
 	}
@@ -242,6 +245,8 @@ class DialogueBox extends Component<Props, null> {
 			showPositive,
 			notificationModalFooterStyle,
 			notificationModalFooterPositiveTextCoverStyle,
+			negTextColorLevel,
+			posTextColorLevel,
 		} = this.props;
 		if (!showNegative && !showPositive) {
 			return null;
@@ -263,7 +268,9 @@ class DialogueBox extends Component<Props, null> {
 					}]}
 					onPress={this.onPressNegative}
 					accessibilityLabel={accessibilityLabelNegative}>
-						<Text style={styles.notificationModalFooterNegativeText}>{nText}</Text>
+						<Text
+							level={negTextColorLevel}
+							style={styles.notificationModalFooterNegativeText}>{nText}</Text>
 					</TouchableOpacity>
 					:
 					null
@@ -274,7 +281,9 @@ class DialogueBox extends Component<Props, null> {
 					}, notificationModalFooterPositiveTextCoverStyle]}
 					onPress={this.onPressPositive}
 					accessibilityLabel={accessibilityLabelPositive}>
-						<Text style={styles.notificationModalFooterPositiveText}>{pText}</Text>
+						<Text
+							level={posTextColorLevel}
+							style={styles.notificationModalFooterPositiveText}>{pText}</Text>
 					</TouchableOpacity>
 					:
 					null
@@ -364,7 +373,14 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	getStyles(): Object {
-		const { appLayout, negTextColor, posTextColor } = this.props;
+		const {
+			appLayout,
+			negTextColor,
+			posTextColor,
+			colors,
+			negTextColorLevel,
+			posTextColorLevel,
+		} = this.props;
 		const { width, height } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -375,6 +391,14 @@ class DialogueBox extends Component<Props, null> {
 		const headerWidth = Math.ceil(deviceWidth * 0.75);
 		const headerHeight = Math.ceil(deviceWidth * 0.12);
 		const borderRadi = 5;
+
+		const {
+			inAppBrandSecondary,
+			dialogueBoxNegativeTextColor,
+		} = colors;
+
+		const _negTextColor = negTextColor || dialogueBoxNegativeTextColor;
+		const _posTextColor = posTextColor || inAppBrandSecondary;
 
 		return {
 			modal: {
@@ -388,14 +412,6 @@ class DialogueBox extends Component<Props, null> {
 				justifyContent: 'space-between',
 				borderRadius: borderRadi,
 				overflow: 'hidden',
-			},
-			notificationModalHeader: {
-				justifyContent: 'center',
-				alignItems: 'flex-start',
-				paddingVertical: fontSize,
-				paddingHorizontal: 5 + fontSize,
-				width: deviceWidth * 0.75,
-				backgroundColor: '#e26901',
 			},
 			headerWidth,
 			headerHeight,
@@ -417,7 +433,6 @@ class DialogueBox extends Component<Props, null> {
 			},
 			notificationModalBodyText: {
 				fontSize,
-				color: '#6B6969',
 			},
 			notificationModalFooterDef: {
 				alignItems: 'center',
@@ -432,13 +447,13 @@ class DialogueBox extends Component<Props, null> {
 				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterNegativeText: {
-				color: negTextColor,
+				color: negTextColorLevel ? undefined : _negTextColor,
 				fontSize,
 				fontWeight: 'bold',
 				fontFamily: 'Roboto-Regular',
 			},
 			notificationModalFooterPositiveText: {
-				color: posTextColor,
+				color: posTextColorLevel ? undefined : _posTextColor,
 				fontSize,
 				fontWeight: 'bold',
 				fontFamily: 'Roboto-Regular',
@@ -453,4 +468,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(injectIntl(DialogueBox));
+export default connect(mapStateToProps, null)(withTheme(injectIntl(DialogueBox)));

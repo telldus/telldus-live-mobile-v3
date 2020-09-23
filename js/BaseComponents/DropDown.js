@@ -274,16 +274,14 @@ static defaultProps: DefaultProps = {
 				accessibilityLabel={accessibilityLabel}
 				disabled={disabled}>
 				{React.isValidElement(iconLeftPickerBase) && iconLeftPickerBase}
-				<Text style={[pickerBaseTextStyleDef, {
-					color: colors.textFour,
-				}, pickerBaseTextStyle]} numberOfLines={1}>
+				<Text style={[pickerBaseTextStyleDef, pickerBaseTextStyle]} numberOfLines={1}>
 					{title}
 				</Text>
 				{React.isValidElement(baseLeftIcon) ?
 					baseLeftIcon
 					:
 					<IconTelldus
-						level={6}
+						level={4}
 						icon={baseLeftIcon}
 						accessible={false}
 						style={rightIconStyle}/>
@@ -400,6 +398,7 @@ static defaultProps: DefaultProps = {
 
 		const {
 			card,
+			textFour,
 		} = colors;
 
 		const { shadow, paddingFactor } = Theme.Core;
@@ -447,6 +446,7 @@ static defaultProps: DefaultProps = {
 				fontSize: fontSizeText,
 				marginRight: fontSizeText,
 				textAlignVertical: 'center',
+				color: textFour,
 			},
 			rightIconStyle: {
 				fontSize: fontSizeRightIcon,

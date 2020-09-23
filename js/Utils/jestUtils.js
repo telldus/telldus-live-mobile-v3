@@ -23,9 +23,6 @@ jest.mock('react-dom');
 import renderer from 'react-test-renderer';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
-import {
-	Dimensions,
-} from 'react-native';
 
 import { configureStore } from '../App/Store/ConfigureStore';
 const store = configureStore().store;
@@ -33,8 +30,6 @@ import {
 	setAppLayout,
 	deviceInfoSuccess,
 } from '../App/Actions';
-
-let {height, width} = Dimensions.get('window');
 
 const messages = require('../App/Translations');
 
@@ -126,8 +121,8 @@ const DUMMY_CLIENT = {
 
 const setAppLayoutInStore = () => {
 	store.dispatch(setAppLayout({
-		height,
-		width,
+		height: 313,
+		width: 750,
 	}));
 };
 

@@ -40,7 +40,7 @@ import {
 	FullPageActivityIndicator,
 	SafeAreaView,
 } from '../../../BaseComponents';
-import Theme from '../../Theme';
+
 import i18n from '../../Translations/common';
 import {
 	getEULA,
@@ -216,7 +216,9 @@ class UserAgreement extends View<Props, State> {
 							</View>
 						}
 					</ScrollView>
-					{!visibilityEula && <View style={styles.footer}>
+					{!visibilityEula && <View
+						level={2}
+						style={styles.footer}>
 						<TouchableOpacity style={styles.footerItem} onPress={this.onAgree}>
 							<Text style={styles.footerText}>
 								{this.footer}
@@ -238,6 +240,11 @@ class UserAgreement extends View<Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const footerHeight = Math.floor(deviceWidth * 0.13);
+
+		const {
+			textFive,
+			inAppBrandSecondary,
+		} = colors;
 
 		return {
 			posterCover: {
@@ -265,7 +272,6 @@ class UserAgreement extends View<Props, State> {
 				width: '100%',
 				borderTopWidth: StyleSheet.hairlineWidth,
 				borderTopColor: '#00000040',
-				backgroundColor: '#FAFAFA',
 				height: footerHeight,
 				maxHeight: 100,
 				bottom: 0,
@@ -277,16 +283,16 @@ class UserAgreement extends View<Props, State> {
 			},
 			footerText: {
 				fontSize: Math.floor(deviceWidth * 0.04),
-				color: Theme.Core.brandSecondary,
+				color: inAppBrandSecondary,
 				fontWeight: 'bold',
 				fontFamily: 'Roboto-Regular',
 			},
 			markupStyle: {
 				heading: {
-					color: colors.textFive,
+					color: textFive,
 				},
 				text: {
-					color: colors.textFive,
+					color: textFive,
 				},
 				heading1: {
 					fontSize: 28,

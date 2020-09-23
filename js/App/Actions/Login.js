@@ -88,8 +88,8 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
 				setBoolean('Password', 'true');
 				dispatch(updateAccessToken({
 					...response.data,
-					userId: credential.username || undefined, // TODO: Should use user id, once it is available.
-				})); // https://code.telldus.com/telldus/live-api/issues/143
+					userId: response.data.uuid,
+				}));
 				return response;
 			}
 			throw response;

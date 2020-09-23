@@ -27,7 +27,6 @@ import {
 	Platform,
 } from 'react-native';
 import { intlShape } from 'react-intl';
-import _ from 'lodash';
 const isEqual = require('react-fast-compare');
 
 import {
@@ -42,13 +41,9 @@ import NowRow from './Jobs/NowRow';
 import Theme from '../../../Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from '../../Schedule/SubViews';
 import {
-	capitalize,
-	getSelectedDays,
-	getWeekdays,
-	getWeekends,
-	getTranslatableDays,
 	getDeviceActionIcon,
 	getKnownModes,
+	getRepeatDescription,
 } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 import {
@@ -177,6 +172,7 @@ class JobRow extends View<null, Props, null> {
 			currentScreen,
 			ScreenName,
 			showName,
+			colors,
 		} = this.props;
 
 		const {
@@ -261,14 +257,14 @@ class JobRow extends View<null, Props, null> {
 							</TextRowWrapper>
 							{!!offset && (
 								<IconTelldus
-									level={6}
+									level={25}
 									icon="offset"
 									style={iconOffset}
 								/>
 							)}
 							{!!randomInterval && (
 								<IconTelldus
-									level={6}
+									level={25}
 									icon="random"
 									style={iconRandom}
 								/>
@@ -282,7 +278,11 @@ class JobRow extends View<null, Props, null> {
 					>
 						<NowRow
 							text={formatMessage(i18n.now)}
-							roundIconContainerStyle={roundIconContainer}
+							roundIconContainerStyle={[
+								roundIconContainer, {
+									backgroundColor: colors.colorOffActiveBg,
+								},
+							]}
 							rowWithTriangleContainerStyle={rowWithTriangleContainerNow}
 							textStyle={time}
 							lineStyle={lineStyle}
@@ -295,7 +295,17 @@ class JobRow extends View<null, Props, null> {
 	}
 
 	_renderActionIcon = (): Object => {
-		const { intl, method, appLayout, methodValue, expired, active, deviceSupportedMethods, deviceType } = this.props;
+		const {
+			intl,
+			method,
+			appLayout,
+			methodValue,
+			expired,
+			active,
+			deviceSupportedMethods,
+			deviceType,
+			colors,
+		} = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 
@@ -390,7 +400,7 @@ class JobRow extends View<null, Props, null> {
 				);
 			}
 			if (action.name === 'Rgb') {
-				const color = methodValue.toLowerCase() === '#ffffff' ? Theme.Core.brandSecondary : methodValue;
+				const color = methodValue.toLowerCase() === '#ffffff' ? colors.inAppBrandSecondary : methodValue;
 				return (
 					{
 						triangleColor: !active ? inactiveGray : expired ? '#999999' : color,
@@ -416,7 +426,7 @@ class JobRow extends View<null, Props, null> {
 						containerStyle={[
 							methodIconContainer,
 							{
-								backgroundColor: !active ? inactiveGray : expired ? '#999999' : action.bgColor,
+								backgroundColor: !active ? inactiveGray : expired ? '#999999' : colors[action.bgColor],
 							}]}
 						style={methodIcon}
 					/>,
@@ -430,36 +440,10 @@ class JobRow extends View<null, Props, null> {
 
 	_getRepeatDescription = (): string => {
 		const { type, weekdays, intl } = this.props;
-		const { formatMessage, formatDate } = intl;
-		const selectedDays: string[] = getSelectedDays(weekdays, formatDate);
-		const repeatTime: string = (type === 'time') ? '' : this.getRepeatTime(type);
-		const DAYS = getTranslatableDays(formatDate);
-
-		let repeatDays: string = '';
-		if (selectedDays.length === DAYS.length) {
-			repeatDays = formatMessage(i18n.repeatDays, { value: repeatTime });
-		} else if (_.isEqual(selectedDays, getWeekdays(formatDate))) {
-			repeatDays = formatMessage(i18n.repeatWeekday, { value: repeatTime });
-		} else if (_.isEqual(selectedDays, getWeekends(formatDate))) {
-			repeatDays = formatMessage(i18n.repeatWeekend, { value: repeatTime });
-		} else {
-			for (let day of selectedDays) {
-				repeatDays += `${day.slice(0, 3).toLowerCase()}, `;
-			}
-			repeatDays = capitalize(repeatDays.slice(0, -2));
-		}
-		return repeatDays.trim();
+		return getRepeatDescription({
+			type, weekdays, intl,
+		});
 	};
-
-	getRepeatTime(type: string): string {
-		let { formatMessage } = this.props.intl;
-		if (type === 'sunrise') {
-			return formatMessage(i18n.sunrise);
-		} else if (type === 'sunset') {
-			return formatMessage(i18n.sunset);
-		}
-		return formatMessage(i18n.time);
-	}
 
 	_getStyle = (appLayout: Object): Object => {
 		let {
@@ -480,6 +464,7 @@ class JobRow extends View<null, Props, null> {
 
 		const {
 			textTwo,
+			colorOffActiveBg,
 		} = colors;
 
 		const { land } = Theme.Core.headerHeightFactor;
@@ -498,7 +483,7 @@ class JobRow extends View<null, Props, null> {
 				let roundVal = Math.round(methodValue / 255 * 100);
 				showDarkBG = roundVal >= 50 && roundVal < 100;
 			}
-			backgroundColor = !active ? inactiveGray : (expired ? '#999999' : (showDarkBG ? action.bgColorDark : action.bgColor));
+			backgroundColor = !active ? inactiveGray : (expired ? '#999999' : (showDarkBG ? colors[action.bgColorDark] : colors[action.bgColor]));
 		}
 
 		return {
@@ -581,7 +566,7 @@ class JobRow extends View<null, Props, null> {
 			lineStyle: {
 				height: 1 + (deviceWidth * 0.005),
 				width: '100%',
-				backgroundColor: Theme.Core.brandPrimary,
+				backgroundColor: colorOffActiveBg,
 			},
 			rowWithTriangleContainerNow: {
 				width: rowWithTriangleWidth + timeWidth,

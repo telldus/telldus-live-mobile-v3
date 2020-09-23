@@ -61,6 +61,7 @@ const ContactSupportBlock = (props: Object): Object => {
 				level={2}
 				style={coverOneStyle}>
 				<Text
+					level={23}
 					style={titleStyle}>
 					{formatMessage(i18n.titleContactSupportBlock)}
 				</Text>
@@ -83,7 +84,6 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		shadow,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -104,7 +104,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			fontSize: fontSize * 1.2,
-			color: brandSecondary,
 			textAlign: 'center',
 		},
 		bodyStyle: {

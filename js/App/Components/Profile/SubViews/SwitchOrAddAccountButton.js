@@ -75,7 +75,6 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	const {
 		paddingFactor,
@@ -84,14 +83,6 @@ const getStyles = (appLayout: Object): Object => {
 	const padding = deviceWidth * paddingFactor;
 
 	return {
-		textStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.brandSecondary,
-			alignSelf: 'center',
-			paddingVertical: 5,
-			marginBottom: fontSize / 2,
-			marginTop: fontSize / 2,
-		},
 		buttonStyle: {
 			marginTop: padding,
 			width: deviceWidth * 0.9,

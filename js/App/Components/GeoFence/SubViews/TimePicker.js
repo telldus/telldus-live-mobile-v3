@@ -25,7 +25,6 @@
 
 import React from 'react';
 import {
-	StyleSheet,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
@@ -39,6 +38,11 @@ import {
 	SettingsRow,
 } from '../../../../BaseComponents';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import Theme from '../../../Theme';
 
 import {
@@ -47,7 +51,7 @@ import {
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	value: Object,
 	appLayout: Object,
 
@@ -201,6 +205,7 @@ class TimePicker extends View<Props, State> {
 			rowStyle,
 			appLayout,
 			intl,
+			colors,
 		} = this.props;
 
 		const {
@@ -215,12 +220,19 @@ class TimePicker extends View<Props, State> {
 			formatTime,
 		} = intl;
 
-		const styles = getStyles(appLayout);
+		const styles = getStyles({
+			appLayout,
+			colors,
+		});
 
 		return (
 			<View style={styles.container}>
-				<View style={[styles.switchHeader, rowStyle]}>
-					<Text style={[styles.switchLabel, labelStyle]}>{formatMessage(i18n.alwaysActive)}</Text>
+				<View
+					level={2}
+					style={[styles.switchHeader, rowStyle]}>
+					<Text
+						level={3}
+						style={[styles.switchLabel, labelStyle]}>{formatMessage(i18n.alwaysActive)}</Text>
 					<Switch
 						value={this.state.alwaysActive}
 						onValueChange={this.onSwitch}/>
@@ -247,8 +259,11 @@ class TimePicker extends View<Props, State> {
 									(showTimePicker && Platform.OS === 'ios' && editingValue === 'from') && (
 										<DateTimePicker
 											mode="time"
+											display={'spinner'}
 											value={editingValue === 'from' ? timeFrom : timeTo}
-											onChange={this._onDateChange}/>
+											onChange={this._onDateChange}
+											textColor={colors.textThree}
+											style={styles.timePickerStyle}/>
 									)
 								}
 								<SettingsRow
@@ -269,8 +284,11 @@ class TimePicker extends View<Props, State> {
 					(showTimePicker && (Platform.OS === 'android' || editingValue === 'to')) && (
 						<DateTimePicker
 							mode="time"
+							display={'spinner'}
 							value={editingValue === 'from' ? timeFrom : timeTo}
-							onChange={this._onDateChange}/>
+							onChange={this._onDateChange}
+							textColor={colors.textThree}
+							style={styles.timePickerStyle}/>
 					)
 				}
 			</View>
@@ -278,7 +296,10 @@ class TimePicker extends View<Props, State> {
 	}
 }
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	colors,
+}: Object): Object => {
 
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -286,7 +307,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -300,21 +320,19 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			alignItems: 'center',
 			paddingHorizontal: padding * 1.5,
-			backgroundColor: '#FFF',
-			borderColor: Theme.Core.angledRowBorderColor,
-			borderBottomWidth: StyleSheet.hairlineWidth,
+			marginHorizontal: padding,
+			borderRadius: 2,
+			marginBottom: padding / 2,
 		},
 		switchLabel: {
 			flex: 1,
 			fontSize,
-			color: eulaContentColor,
 		},
 		body: {
-			padding: padding * 1.5,
+			marginHorizontal: padding,
 		},
 		labelTextStyle: {
 			fontSize,
-			color: '#000',
 			justifyContent: 'center',
 		},
 		touchableStyle: {
@@ -324,7 +342,11 @@ const getStyles = (appLayout: Object): Object => {
 			marginBottom: padding / 2,
 			marginTop: 0,
 		},
+		timePickerStyle: {
+			flex: 1,
+			marginBottom: padding / 2,
+		},
 	};
 };
 
-module.exports = TimePicker;
+module.exports = withTheme(TimePicker);

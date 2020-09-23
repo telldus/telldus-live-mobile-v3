@@ -226,7 +226,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -243,13 +242,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		rowStyle: {
 			padding: padding * 1.5,
-			backgroundColor: '#fff',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			height: undefined,
 		},
 		leftItemStyle: {
-			color: eulaContentColor,
 			fontSize,
 		},
 		iconStyle: {

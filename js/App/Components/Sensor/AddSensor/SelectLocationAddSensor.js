@@ -29,6 +29,7 @@ import { createSelector } from 'reselect';
 
 import {
 	View,
+	ThemedRefreshControl,
 } from '../../../../BaseComponents';
 import { GatewayRow } from '../../TabViews/SubViews';
 
@@ -143,8 +144,12 @@ render(): Object {
 		<FlatList
 			data={rows}
 			renderItem={this.renderRow}
-			onRefresh={this.onRefresh}
-			refreshing={this.state.isRefreshing}
+			refreshControl={
+				<ThemedRefreshControl
+					onRefresh={this.onRefresh}
+					refreshing={this.state.isRefreshing}
+				/>
+			}
 			keyExtractor={this.keyExtractor}
 			contentContainerStyle={{
 				paddingTop: padding - (padding / 4),

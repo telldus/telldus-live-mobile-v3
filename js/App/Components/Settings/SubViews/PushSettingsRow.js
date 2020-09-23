@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { TextInput, LayoutAnimation } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 const isEqual = require('react-fast-compare');
 
 import {
@@ -32,10 +31,9 @@ import {
 	Row,
 	IconTelldus,
 	Throbber,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 import { LayoutAnimations, shouldUpdate } from '../../../Lib';
-
-import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
@@ -223,7 +221,6 @@ render(): Object {
 		h2Style,
 		closeIconSize,
 		closeIconStyle,
-		editIconColor,
 		editIconSize,
 		textFieldStyle,
 		throbberStyle,
@@ -258,31 +255,34 @@ render(): Object {
 							returnKeyType={'done'}
 						/>
 						:
-						<Text style={h1Style}>
+						<Text
+							level={23}
+							style={h1Style}>
 							{name}
 						</Text>
 					}
 					{isPushSubmitLoading && <Throbber
+						level={23}
 						style={throbberStyle}
 						throbberContainerStyle={{
 							position: 'relative',
 						}}/>}
 					{(!isPushSubmitLoading && editName && !isHuaweiBuild) &&
-							<Icon
+							<ThemedMaterialIcon
 								name={editNameAcive ? 'done' : 'edit'}
 								size={editIconSize}
-								color={editIconColor}
+								level={23}
 								onPress={editNameAcive ? this.onSubmitEditing : this.onPressEditName}/>
 					}
 				</View>
 				<Text
-					level={6}
+					level={25}
 					style={h2Style}>
 					{model}
 				</Text>
 			</View>
 			{(!isDeleteTokenLoading && !editNameAcive && !isHuaweiBuild) && (
-				<Icon
+				<ThemedMaterialIcon
 					name={'close'}
 					size={closeIconSize}
 					color={'#8e8e93'}
@@ -308,14 +308,11 @@ getStyles(appLayout: Object): Object {
 	const closeIconSize = Math.floor(deviceWidth * 0.052);
 	const editIconSize = fontSizeH1 * 0.9;
 
-	const { brandSecondary } = Theme.Core;
-
 	const innerPadding = fontSizeH1 * 0.5;
 
 	return {
 		closeIconSize,
 		editIconSize,
-		editIconColor: brandSecondary,
 		rowContainerStyle: {
 			height: undefined,
 			padding: innerPadding,
@@ -338,7 +335,6 @@ getStyles(appLayout: Object): Object {
 		},
 		h1Style: {
 			fontSize: fontSizeH1,
-			color: brandSecondary,
 			maxWidth: '90%',
 			marginRight: 5,
 		},
@@ -357,7 +353,6 @@ getStyles(appLayout: Object): Object {
 			fontSize: fontSizeH1,
 		},
 		throbberStyle: {
-			color: brandSecondary,
 			fontSize: editIconSize,
 		},
 	};

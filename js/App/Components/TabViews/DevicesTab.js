@@ -25,7 +25,6 @@ import React from 'react';
 import {
 	TouchableOpacity,
 	SectionList,
-	RefreshControl,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
@@ -37,6 +36,7 @@ import {
 	Text,
 	View,
 	IconTelldus,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { DeviceRow, DeviceHeader } from './SubViews';
 import { DimmerControlInfo } from './SubViews/Device';
@@ -198,7 +198,7 @@ class DevicesTab extends View {
 		const { route } = this.props;
 		const {
 			newDevices = {},
-			gateway = {},
+			gateway,
 		} = route.params || {};
 		if (gateway && newDevices && !isEmpty(newDevices) && !this.calledOnNewlyAddedDidMount) {
 			Object.keys(newDevices).map((id: string) => {
@@ -755,7 +755,7 @@ class DevicesTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					stickySectionHeadersEnabled={true}
 					refreshControl={
-						<RefreshControl
+						<ThemedRefreshControl
 							enabled={showRefresh}
 							refreshing={isRefreshing}
 							onRefresh={this.onRefresh}
@@ -822,10 +822,6 @@ class DevicesTab extends View {
 				paddingVertical: 10,
 				width: deviceWidth * 0.75,
 			},
-			dialogueBodyTextStyle: {
-				fontSize: 13,
-				color: '#6B6969',
-			},
 			dialogueBoxStyle: {
 				borderRadius: 8,
 				elevation: 2,
@@ -836,7 +832,6 @@ class DevicesTab extends View {
 					width: 0,
 					height: 1,
 				},
-				backgroundColor: '#fff',
 				overflow: 'visible',
 			},
 		};

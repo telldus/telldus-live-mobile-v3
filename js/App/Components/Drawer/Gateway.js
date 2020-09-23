@@ -29,6 +29,7 @@ import {
 	IconTelldus,
 	View,
 	RippleButton,
+	EmptyView,
 } from '../../../BaseComponents';
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
@@ -72,6 +73,12 @@ class Gateway extends PureComponent<Props, null> {
 
 	render(): Object {
 		const { gateway, appLayout } = this.props;
+
+		if (!gateway) {
+			return <EmptyView/>;
+		}
+
+
 		const { name, online, websocketOnline, type, localKey = {} } = gateway;
 		const { width, height } = appLayout;
 		const deviceWidth = height > width ? width : height;
@@ -109,7 +116,7 @@ class Gateway extends PureComponent<Props, null> {
 					onPress={this.onPress}
 					resizeMode={'stretch'}/>
 				<View style={iconSettingsContainer} pointerEvents="none">
-					<IconTelldus icon={'settings'} size={iconSize} level={6}/>
+					<IconTelldus icon={'settings'} size={iconSize} level={25}/>
 				</View>
 			</RippleButton>
 		);
@@ -121,8 +128,9 @@ class Gateway extends PureComponent<Props, null> {
 		} = this.props;
 
 		const {
-			headerOneColorBlockEnabled,
 			textSix,
+			inAppBrandSecondary,
+			textSeven,
 		} = colors;
 
 		const fontSizeH1 = Math.floor(drawerWidth * 0.048);
@@ -175,7 +183,7 @@ class Gateway extends PureComponent<Props, null> {
 				marginRight: iconContainerWidth * 2,
 				width: drawerWidth - (iconContainerWidth + (drawerWidth * 0.22)),
 				flexWrap: 'wrap',
-				color: headerOneColorBlockEnabled,
+				color: inAppBrandSecondary,
 			},
 			h2Style: {
 				fontSize: fontSizeH2,
@@ -183,7 +191,7 @@ class Gateway extends PureComponent<Props, null> {
 			},
 			statusStyle: {
 				fontSize: fontSizeH3,
-				color: textSix,
+				color: textSeven,
 			},
 			statusInfoStyle: {
 				fontSize: fontSizeH3 * 2,

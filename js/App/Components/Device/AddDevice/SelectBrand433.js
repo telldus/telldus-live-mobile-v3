@@ -56,7 +56,6 @@ props: Props;
 state: State;
 
 renderRow: (Object) => Object;
-onRefresh: () => void;
 onChooseLocation: (Object) => void;
 constructor(props: Props) {
 	super(props);

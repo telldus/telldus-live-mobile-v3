@@ -28,10 +28,14 @@ import {
 	IconTelldus,
 	MaterialTextInput,
 } from '../../../../BaseComponents';
-import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
     appLayout: Object,
     intl: Object,
     icon: string,
@@ -50,7 +54,7 @@ type State = {
     value: string,
 };
 
-export default class TimeField extends View<Props, State> {
+class TimeField extends View<Props, State> {
 props: Props
 onEdit: (string) => void;
 setRef: (any) => void;
@@ -134,8 +138,16 @@ onSubmitEditing = () => {
 }
 
 render(): Object {
-	const { appLayout, icon } = this.props;
+	const {
+		appLayout,
+		icon,
+		colors,
+	} = this.props;
 	const { value } = this.state;
+
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	const {
 		container,
@@ -148,8 +160,8 @@ render(): Object {
 			<MaterialTextInput
 				label={this.minutes}
 				style={inputStyle}
-				baseColor={Theme.Core.brandSecondary}
-				tintColor={Theme.Core.brandSecondary}
+				baseColor={inAppBrandSecondary}
+				tintColor={inAppBrandSecondary}
 				autoFocus={false}
 				value={value}
 				onChangeText={this.onEdit}
@@ -172,12 +184,14 @@ render(): Object {
 }
 
 getStyles(appLayout: Object): Object {
+	const {
+		colors,
+	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const inputFontSize = deviceWidth * 0.04;
-	const labelFontSize = deviceWidth * 0.035;
 	const iconFontSize = deviceWidth * 0.054;
 
 	return {
@@ -188,16 +202,13 @@ getStyles(appLayout: Object): Object {
 		inputStyle: {
 			fontSize: inputFontSize,
 			paddingLeft: 5 + (inputFontSize * 2.5),
-			color: '#000000',
+			color: colors.textSix,
 		},
 		iconStyle: {
 			fontSize: iconFontSize,
 		},
-		labelStyle: {
-			fontSize: labelFontSize,
-			color: Theme.Core.brandSecondary,
-			marginBottom: Platform.OS === 'android' ? 0 : inputFontSize,
-		},
 	};
 }
 }
+
+export default withTheme(TimeField);

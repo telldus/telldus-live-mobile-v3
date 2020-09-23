@@ -96,7 +96,9 @@ const SMSBlock = (props: Object): Object => {
 					appLayout={layout}
 					iconValueRight={
 						(enablePurchase && !isIos) ?
-							<Text style={buyCreditsStyle}>
+							<Text
+								level={23}
+								style={buyCreditsStyle}>
 								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}
 							</Text>
 							:
@@ -111,7 +113,10 @@ const SMSBlock = (props: Object): Object => {
 					textFieldStyle={textFieldStyle}
 					labelTextStyle={labelTextStyle}/>
 			</View>
-			<Text style={linkTextStyle} onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
+			<Text
+				level={23}
+				style={linkTextStyle}
+				onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
 		</>
 	);
 };
@@ -131,13 +136,11 @@ const getStyle = (appLayout: Object): Object => {
 			marginTop: padding / 2,
 			alignSelf: 'center',
 			fontSize: fontSize * 0.9,
-			color: Theme.Core.brandSecondary,
 			textAlignVertical: 'center',
 			textAlign: 'center',
 			padding: 5,
 		},
 		buyCreditsStyle: {
-			color: Theme.Core.brandSecondary,
 			fontSize: deviceWidth * 0.04,
 		},
 	};

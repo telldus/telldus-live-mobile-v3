@@ -43,7 +43,9 @@ class LabelBox extends View {
 				level={2}
 				style={[styles.container, containerStyle]}>
 				{!!label &&
-					<Text style={styles.label}>
+					<Text
+						level={23}
+						style={styles.label}>
 						{label}
 					</Text>
 				}
@@ -75,7 +77,6 @@ class LabelBox extends View {
 			},
 			label: {
 				position: 'absolute',
-				color: '#e26901',
 				fontSize,
 				top: deviceWidth * 0.04,
 				left: 18 + (fontSize * 0.5),

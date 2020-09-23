@@ -25,7 +25,6 @@ import React from 'react';
 import {
 	SectionList,
 	TouchableOpacity,
-	RefreshControl,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
@@ -33,7 +32,12 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
 
-import { View, IconTelldus, Text } from '../../../BaseComponents';
+import {
+	View,
+	IconTelldus,
+	Text,
+	ThemedRefreshControl,
+} from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
 import {
 	NoSensors,
@@ -156,7 +160,7 @@ class SensorsTab extends View {
 		const { route } = this.props;
 		const {
 			newSensors = {},
-			gateway = {},
+			gateway,
 		} = route.params || {};
 		if (gateway && newSensors && !isEmpty(newSensors) && !this.calledOnNewlyAddedDidMount) {
 			Object.keys(newSensors).map((id: string) => {
@@ -331,7 +335,10 @@ class SensorsTab extends View {
 			<View
 				level={3}
 				style={style.noItemsContainer}>
-				<IconTelldus icon={'sensor'} style={style.sensorIconStyle}/>
+				<IconTelldus
+					level={23}
+					icon={'sensor'}
+					style={style.sensorIconStyle}/>
 				<Text
 					level={4}
 					style={style.noItemsTitle}>
@@ -418,7 +425,7 @@ class SensorsTab extends View {
 					extraData={extraData}
 					stickySectionHeadersEnabled={true}
 					refreshControl={
-						<RefreshControl
+						<ThemedRefreshControl
 							refreshing={isRefreshing}
 							onRefresh={this.onRefresh}
 						/>}
@@ -640,7 +647,6 @@ class SensorsTab extends View {
 			},
 			sensorIconStyle: {
 				fontSize: Math.floor(deviceWidth * 0.12),
-				color: Theme.Core.brandSecondary,
 			},
 		};
 	}

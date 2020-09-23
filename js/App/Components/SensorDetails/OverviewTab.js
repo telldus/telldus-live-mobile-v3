@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import { RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
@@ -30,6 +29,7 @@ import {
 	View,
 	LocationDetails,
 	ThemedScrollView,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { SensorTypes, BatteryInfo } from './SubViews';
 
@@ -175,7 +175,7 @@ class OverviewTab extends View<Props, State> {
 				}}
 				contentContainerStyle={contentContainerStyle}
 				refreshControl={
-					<RefreshControl
+					<ThemedRefreshControl
 						refreshing={isRefreshing}
 						onRefresh={this.onRefresh}
 					/>

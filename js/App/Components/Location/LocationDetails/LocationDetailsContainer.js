@@ -228,10 +228,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
-			posterIcon: {
-				fontSize: posterHeight * 0.35,
-				color: Theme.Core.brandSecondary,
-			},
 		};
 	}
 }

@@ -291,7 +291,10 @@ class ChangeLogNavigator extends View {
 							animatedOpacity={animatedOpacity}
 							appLayout={appLayout}/>
 						<View style={styles.buttonCover}>
-							<Text style={textSkip} onPress={this.onPressSkip}>
+							<Text
+								level={23}
+								style={textSkip}
+								onPress={this.onPressSkip}>
 								{this.skipButton}
 							</Text>
 						</View>
@@ -302,15 +305,17 @@ class ChangeLogNavigator extends View {
 								buttonStyle={[floatingButtonLeft, floatingCommon]}
 								iconStyle={styles.buttonIconStyle}
 								innerContainer={innerContainer}
-								accessibilityLabel={this.prevLabel}/>
+								accessibilityLabel={this.prevLabel}
+								buttonInnerViewLevel={13}/>
 							)}
 							{Screens.length > 1 && Screens.map((screen: number, index: number): Object => {
-								let backgroundColor = Screens[index] === currentScreen ?
-									Theme.Core.brandSecondary : '#00000080';
-								return <View style={[stepIndicator, {
-									backgroundColor,
-									marginLeft: !index ? 0 : stepIndicatorSize * 0.7,
-								}]} key={index}/>;
+								let level = Screens[index] === currentScreen ?
+									13 : 14;
+								return <View
+									level={level}
+									style={[stepIndicator, {
+										marginLeft: !index ? 0 : stepIndicatorSize * 0.7,
+									}]} key={index}/>;
 							})
 							}
 							<FloatingButton
@@ -320,7 +325,8 @@ class ChangeLogNavigator extends View {
 								onPress={this.onPressNext}
 								buttonStyle={[floatingCommon, floatingButtonRight]}
 								innerContainer={innerContainer}
-								accessibilityLabel={this.nextLabel}/>
+								accessibilityLabel={this.nextLabel}
+								buttonInnerViewLevel={13}/>
 						</View>
 					</ScrollView>
 				</SafeAreaView>
@@ -336,7 +342,6 @@ class ChangeLogNavigator extends View {
 		const maxIconSize = 40;
 
 		const {
-			brandSecondary,
 			maxSizeFloatingButton,
 			shadow: themeShadow,
 			paddingFactor,
@@ -406,7 +411,6 @@ class ChangeLogNavigator extends View {
 				height: buttonSize,
 				width: buttonSize,
 				borderRadius: buttonSize / 2,
-				backgroundColor: brandSecondary,
 				...shadow,
 			},
 			checkIconStyle: {
@@ -415,7 +419,6 @@ class ChangeLogNavigator extends View {
 			},
 			textSkip: {
 				paddingVertical: 10,
-				color: brandSecondary,
 				textAlign: 'center',
 				fontSize: Math.floor(deviceWidth * 0.039),
 			},

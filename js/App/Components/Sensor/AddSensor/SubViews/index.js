@@ -22,10 +22,8 @@
 
 'use strict';
 
-import SensorTypeBlock from './SensorTypeBlock';
 import SensorRow from './SensorRow';
 
 module.exports = {
-	SensorTypeBlock,
 	SensorRow,
 };

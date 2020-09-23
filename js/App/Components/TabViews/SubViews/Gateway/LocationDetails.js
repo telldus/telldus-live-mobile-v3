@@ -86,7 +86,9 @@ class LocationDetails extends View {
 		} = this.getStyle(appLayout);
 
 		return (
-			<View style={[styles.shadow, styles.container, style]}>
+			<View
+				level={2}
+				style={[styles.shadow, styles.container, style]}>
 				{!!title && (
 					<Text style={[textLocation, {marginLeft: 10}]}>
 						{title}
@@ -100,10 +102,14 @@ class LocationDetails extends View {
 					/>
 					<TouchableOpacity disabled={!onPress} onPress={this.onPress} accessible={accessible}>
 						<View style={[locationTextContainer, descriptionContainerStyle]}>
-							<Text numberOfLines={1} style={[textHSH, h1Style]}>
+							<Text
+								level={23}
+								numberOfLines={1} style={[textHSH, h1Style]}>
 								{!!H1 && H1}
 							</Text>
-							<Text numberOfLines={1} style={[textLocation, h2Style]}>
+							<Text
+								level={1}
+								numberOfLines={1} style={[textLocation, h2Style]}>
 								{!!H2 && H2}
 							</Text>
 							{!!info && (
@@ -146,11 +152,9 @@ class LocationDetails extends View {
 				resizeMode: 'contain',
 			},
 			textLocation: {
-				color: '#A59F9A',
 				fontSize: textLocationSize,
 			},
 			textHSH: {
-				color: '#F06F0C',
 				fontSize: textHSHSize,
 			},
 		};
@@ -160,7 +164,6 @@ class LocationDetails extends View {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'column',
-		backgroundColor: '#fff',
 		paddingHorizontal: 10,
 		paddingVertical: 10,
 		marginVertical: 10,

@@ -44,7 +44,12 @@ import {
 	getNextSetPoint,
 } from '../../Lib';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
     appLayout: Object,
     label: string,
     edit: boolean,
@@ -153,19 +158,17 @@ render(): Object {
 		Icon,
 		initialValue,
 		hideTemperatureControl,
+		colors,
 	} = this.props;
 
 	const {
 		cover,
 		labelStyle,
 		leftBlock,
-		brandSecondary,
-		brandPrimary,
 		controlBlockStyle,
 		valueStyle,
 		unitStyle,
 		iconBlockStyle,
-		appBackground,
 		textCoverStyle,
 		rowTextColor,
 		iconSize,
@@ -173,12 +176,25 @@ render(): Object {
 		addRemoveIconCover,
 	} = this.getStyles();
 
-	let iconBGColor = active ? brandSecondary : appBackground;
-	let iconColor = active ? '#fff' : brandSecondary;
-	let textColor = active ? brandSecondary : rowTextColor;
+	const {
+		colorOnActiveBg,
+		colorOnInActiveBg,
+		colorOffActiveBg,
+		colorOffInActiveBg,
+		colorOffActiveIcon,
+		colorOnActiveIcon,
+		colorOnInActiveIcon,
+		colorOffInActiveIcon,
+		inAppBrandSecondary,
+		inAppBrandPrimary,
+	} = colors;
+
+	let iconBGColor = active ? colorOnActiveBg : colorOnInActiveBg;
+	let iconColor = active ? colorOnActiveIcon : colorOnInActiveIcon;
+	let textColor = active ? colorOnActiveBg : rowTextColor;
 	if (mode === 'off') {
-		iconBGColor = active ? brandPrimary : appBackground;
-		iconColor = active ? '#fff' : brandPrimary;
+		iconBGColor = active ? colorOffActiveBg : colorOffInActiveBg;
+		iconColor = active ? colorOffActiveIcon : colorOffInActiveIcon;
 		textColor = rowTextColor;
 	}
 
@@ -203,7 +219,7 @@ render(): Object {
 							<TouchableOpacity onPress={this.onPressDown} style={addRemoveIconCover}>
 								<MaterialIcons
 									name="remove"
-									color={Theme.Core.brandPrimary}
+									color={inAppBrandPrimary}
 									size={iconSizeAddRemove}/>
 							</TouchableOpacity>
 						</View>
@@ -221,7 +237,7 @@ render(): Object {
 							<TouchableOpacity onPress={this.onPressUp} style={addRemoveIconCover}>
 								<MaterialIcons
 									name="add"
-									color={Theme.Core.brandSecondary}
+									color={inAppBrandSecondary}
 									size={iconSizeAddRemove}/>
 							</TouchableOpacity>
 						</View>
@@ -254,8 +270,6 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		rowTextColor,
-		brandSecondary,
-		brandPrimary,
 		appBackground,
 	} = Theme.Core;
 
@@ -290,9 +304,6 @@ getStyles(): Object {
 			textAlignVertical: 'center',
 			flex: 1,
 		},
-		brandSecondary,
-		brandPrimary,
-		appBackground,
 		rowTextColor,
 		controlBlockStyle: {
 			flexDirection: 'row',
@@ -333,4 +344,4 @@ getStyles(): Object {
 }
 }
 
-module.exports = ModeBlock;
+module.exports = withTheme(ModeBlock);

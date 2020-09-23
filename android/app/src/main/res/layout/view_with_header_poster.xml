@@ -55,7 +55,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
-                android:background="@drawable/telldushome"
+                android:background="@drawable/telldus_geometric_bg"
                 android:gravity="center"
                 android:layout_gravity="center">
                 <LinearLayout

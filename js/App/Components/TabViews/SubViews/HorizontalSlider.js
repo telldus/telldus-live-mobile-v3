@@ -22,19 +22,23 @@
 'use strict';
 
 import React from 'react';
-import { PanResponder, Animated, StyleSheet, Vibration, Platform, TouchableOpacity } from 'react-native';
+import { PanResponder, Animated, Vibration, Platform, TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { Text, View } from '../../../../BaseComponents';
 
-import Theme from '../../../Theme';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 
 function getSliderLabel(value: number, intl: intlShape): string {
 	return value.toString();
 }
 
-type Props = {
+type Props = PropsThemedComponent & {
 	setScrollEnabled: boolean => void,
 	thumbHeight: number,
 	thumbWidth: number,
@@ -317,9 +321,11 @@ class HorizontalSlider extends View {
 			outputRange: [0, scaleWidth - thumbWidth],
 		});
 
+		const styles = this._getStyle();
+
 		let thumbStyle = !isGatewayActive ? styles.offline : styles.enabled;
 		let scaleStyle = !isGatewayActive ? styles.offline : styles.enabled;
-		let valueColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
+		let valueColor = !isGatewayActive ? '#a2a2a2' : styles.inAppBrandSecondary;
 		let styleBackground = styles.disabled;
 		let bottomValue = (containerHeight / 2) - 15;
 
@@ -366,41 +372,48 @@ class HorizontalSlider extends View {
 			</Parent>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	enabledBackground: {
-		backgroundColor: '#fff',
-	},
-	enabled: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	enabledOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	disabled: {
-		backgroundColor: '#eeeeee',
-	},
-	offline: {
-		backgroundColor: '#a2a2a2',
-	},
-	thumb: {
-		flex: 1,
-		position: 'absolute',
-		justifyContent: 'center',
-		elevation: 2,
-	},
-	sliderScale: {
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	thumbText: {
-		position: 'absolute',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		alignSelf: 'center',
-	},
-});
+	_getStyle = (): Object => {
+		const {
+			colors,
+		} = this.props;
+
+		const {
+			colorOnActiveBg,
+			colorOnInActiveBg,
+			inAppBrandSecondary,
+		} = colors;
+
+		return {
+			inAppBrandSecondary,
+			enabled: {
+				backgroundColor: colorOnActiveBg,
+			},
+			disabled: {
+				backgroundColor: colorOnInActiveBg,
+			},
+			offline: {
+				backgroundColor: '#a2a2a2',
+			},
+			thumb: {
+				flex: 1,
+				position: 'absolute',
+				justifyContent: 'center',
+				elevation: 2,
+			},
+			sliderScale: {
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			thumbText: {
+				position: 'absolute',
+				textAlign: 'center',
+				textAlignVertical: 'center',
+				alignSelf: 'center',
+			},
+		};
+	};
+}
 
 HorizontalSlider.defaultProps = {
 	thumbHeight: 12,
@@ -410,4 +423,4 @@ HorizontalSlider.defaultProps = {
 	value: 0,
 };
 
-module.exports = injectIntl(HorizontalSlider);
+module.exports = withTheme(injectIntl(HorizontalSlider));

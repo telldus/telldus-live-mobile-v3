@@ -175,7 +175,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 		if (Platform.OS === 'ios' && leftIcon !== 'close') {
 			return (
 				<Icon
-					level={17}
+					level={22}
 					name={leftIcon}
 					size={size}
 					style={styles.iconLeft}/>
@@ -184,7 +184,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 
 		return (
 			<ThemedMaterialIcon
-				level={17}
+				level={22}
 				name={leftIcon}
 				size={size}
 				style={styles.iconLeft}/>

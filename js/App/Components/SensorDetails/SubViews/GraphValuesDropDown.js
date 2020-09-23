@@ -310,7 +310,7 @@ class GraphValuesDropDown extends View<Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { shadow, paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
+		const { paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
@@ -344,10 +344,8 @@ class GraphValuesDropDown extends View<Props, State> {
 			},
 			pickerContainerStyle: {
 				width: pickerItemsWidth,
-				...shadow,
 				marginLeft: padding / 2,
 				marginBottom: padding / 2,
-				backgroundColor: '#fff',
 			},
 			pickerBaseCoverStyle: {
 				width: pickerItemsWidth,

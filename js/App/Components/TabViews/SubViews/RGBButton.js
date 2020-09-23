@@ -60,6 +60,7 @@ type Props = {
 	iconOffColor?: string,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
+	preparedMainColorRgb: string,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -151,6 +152,7 @@ class RGBButton extends View<Props, null> {
 			'offColorMultiplier',
 			'onColorMultiplier',
 			'onPressOverride',
+			'preparedMainColorRgb',
 		]);
 		if (propsChange) {
 			return true;
@@ -285,6 +287,7 @@ class RGBButton extends View<Props, null> {
 			offColorMultiplier,
 			onColorMultiplier,
 			disableActionIndicator,
+			preparedMainColorRgb,
 		} = this.props;
 		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -360,6 +363,7 @@ class RGBButton extends View<Props, null> {
 				<RGBPalette
 					{...sharedProps}
 					rgb={stateValues.RGB}
+					preparedMainColorRgb={preparedMainColorRgb}
 					onColorMultiplier={onColorMultiplier}
 					offColorMultiplier={offColorMultiplier}/>
 			</HVSliderContainer>
@@ -388,8 +392,6 @@ const styles = StyleSheet.create({
 		alignItems: 'stretch',
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	buttonStyle: {
 		flex: 1,
@@ -399,8 +401,6 @@ const styles = StyleSheet.create({
 	buttonContainerStyle: {
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 });
 

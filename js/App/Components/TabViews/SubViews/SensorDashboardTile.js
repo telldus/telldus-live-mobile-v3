@@ -46,11 +46,18 @@ import {
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 type Props = {
 	item: Object,
 	tileWidth: number,
 	displayType: string,
 	sensorTypesInCurrentDb: Object | null,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	style: Object,
 	onPress: (number, string) => void,
@@ -108,7 +115,7 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item', 'sensorTypesInCurrentDb']);
+		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item', 'sensorTypesInCurrentDb', 'themeInApp', 'colorScheme']);
 	}
 
 	getSlideList(item: Object): Object {
@@ -172,12 +179,12 @@ class SensorDashboardTile extends View<Props, null> {
 						updateIntervalInSeconds={60}
 						gatewayTimezone={gatewayTimezone}
 						timestamp={lastUpdated}
+						level={minutesAgo < 1440 ? 25 : 8}
 						textStyle={{
 							textAlign: 'center',
 							textAlignVertical: 'center',
 							fontSize: Math.floor(this.props.tileWidth / 12),
 							opacity: minutesAgo < 1440 ? 1 : 0.5,
-							color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
 						}} />
 					:
 					<Text style={{
@@ -199,24 +206,35 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, isGatewayActive, intl } = this.props;
+		const {
+			item,
+			tileWidth,
+			isGatewayActive,
+			intl,
+			colors,
+			themeInApp,
+			colorScheme,
+		} = this.props;
 		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
 		const { lastUpdated, gatewayTimezone } = item;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 		const lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 
-		const info = this.getLastUpdated(lastUpdated, minutesAgo, gatewayTimezone);
-
-		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
-
-		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerActive;
-		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
 		const {
 			sensorValueCover,
 			dotCoverStyle,
 			dotStyle,
+			itemIconContainerOffline,
+			itemIconContainerActive,
 		} = this.getStyles();
+
+		const info = this.getLastUpdated(lastUpdated, minutesAgo, gatewayTimezone);
+
+		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
+
+		let iconContainerStyle = !isGatewayActive ? itemIconContainerOffline : itemIconContainerActive;
+		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? colors.colorOffActiveBg : Theme.Core.offlineColor) : 'transparent';
 
 		return (
 			<DashboardShadowTile
@@ -262,18 +280,26 @@ class SensorDashboardTile extends View<Props, null> {
 					}]}
 					valueCoverStyle={sensorValueCover}
 					dotCoverStyle={dotCoverStyle}
-					dotStyle={dotStyle}/>
+					dotStyle={dotStyle}
+					extraData={{
+						themeInApp,
+						colorScheme,
+					}}/>
 			</DashboardShadowTile>
 		);
 	}
 
 	getStyles(): Object {
-		const { tileWidth, isGatewayActive, item } = this.props;
+		const { tileWidth, isGatewayActive, item, colors } = this.props;
 		const { data = {}} = item;
 
-		const backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
-
 		const dotSize = tileWidth * 0.045;
+
+		const {
+			colorOffActiveBg,
+		} = colors;
+
+		const backgroundColor = isGatewayActive ? colorOffActiveBg : Theme.Core.offlineColor;
 
 		return {
 			iconStyle: {
@@ -300,7 +326,7 @@ class SensorDashboardTile extends View<Props, null> {
 			sensorValueCover: {
 				height: '100%',
 				width: tileWidth,
-				backgroundColor: backgroundColor,
+				backgroundColor,
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 			},
@@ -318,6 +344,12 @@ class SensorDashboardTile extends View<Props, null> {
 				borderRadius: dotSize / 2,
 				marginLeft: 2 + (dotSize * 0.2),
 			},
+			itemIconContainerActive: {
+				backgroundColor: colorOffActiveBg,
+			},
+			itemIconContainerOffline: {
+				backgroundColor: Theme.Core.offlineColor,
+			},
 		};
 	}
 }
@@ -333,12 +365,6 @@ const styles = StyleSheet.create({
 		borderBottomRightRadius: 2,
 		justifyContent: 'flex-start',
 		alignItems: 'center',
-	},
-	itemIconContainerActive: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 
@@ -361,4 +387,4 @@ function mapStateToProps(state: Object, props: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(SensorDashboardTile);
+module.exports = connect(mapStateToProps, null)(withTheme(SensorDashboardTile, true));

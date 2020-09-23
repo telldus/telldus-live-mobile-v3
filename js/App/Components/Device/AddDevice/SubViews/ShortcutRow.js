@@ -70,7 +70,7 @@ const ShortcutRow = (props: Object): Object => {
 				<Image source={img} style={imgStyle} resizeMode={'contain'}/>
 				<View style={textCoverStyle}>
 					<Text
-						level={5}
+						level={26}
 						style={textStyle}
 						numberOfLines={2}>
 						{name}

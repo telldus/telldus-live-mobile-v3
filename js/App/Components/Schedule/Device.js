@@ -29,7 +29,11 @@ import isEmpty from 'lodash/isEmpty';
 import groupBy from 'lodash/groupBy';
 import reduce from 'lodash/reduce';
 
-import { View, Text } from '../../../BaseComponents';
+import {
+	View,
+	Text,
+	ThemedRefreshControl,
+} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { DeviceRow } from './SubViews';
 import i18n from '../../Translations/common';
@@ -144,8 +148,12 @@ export default class Device extends View<void, Props, State> {
 				renderItem={this._renderRow}
 				renderSectionHeader={this._renderSectionHeader}
 				keyExtractor={this._keyExtractor}
-				onRefresh={this.onRefresh}
-				refreshing={refreshing}
+				refreshControl={
+					<ThemedRefreshControl
+						onRefresh={this.onRefresh}
+						refreshing={refreshing}
+					/>
+				}
 				contentContainerStyle={{
 					flexGrow: 1,
 					paddingTop: padding,

@@ -64,8 +64,9 @@ import {
 import {
 	useNoPremiumDialogue,
 } from '../../Hooks/Dialoguebox';
-
-import Theme from '../../Theme';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import i18n from '../../Translations/common';
 
@@ -109,6 +110,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		latitudeDelta: 0.1,
 		longitudeDelta: 0.1,
 	};
+
+	const {
+		colors,
+	} = useAppTheme();
 
 	const [ pointCurrentLocation, setPointCurrentLocation ] = useState({});
 
@@ -227,7 +232,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					}}
 					radius={extras.radius}
 					fillColor="rgba(226, 105, 1, 0.3)"
-					strokeColor={Theme.Core.brandSecondary}/>
+					strokeColor={colors.inAppBrandSecondary}/>
 			</React.Fragment>
 		);
 	}
@@ -327,7 +332,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'icon_plus'}}
-				disabled={!enableGeoFence}/>
+				disabled={!true}/>
 			<HelpOverlay
 				closeHelp={closeHelp}
 				isVisible={isHelpVisible}

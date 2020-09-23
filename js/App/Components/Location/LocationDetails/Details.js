@@ -322,7 +322,7 @@ class Details extends View<Props, State> {
 				}}
 				key={index}>
 					<Text
-						level={5}
+						level={26}
 						style={{
 							fontSize: 10,
 							flexWrap: 'wrap',
@@ -330,7 +330,7 @@ class Details extends View<Props, State> {
 						{`${d}: `}
 					</Text>
 					<Text
-						level={6}
+						level={25}
 						style={{
 							fontSize: 10,
 							flexWrap: 'wrap',
@@ -433,6 +433,7 @@ class Details extends View<Props, State> {
 				const tokenExpired = hasTokenExpired(ttl);
 				const deviceName = await DeviceInfo.getDeviceName();
 				const deviceUniqueID = DeviceInfo.getUniqueId();
+				const deviceManufacturer = await DeviceInfo.getManufacturer();
 
 				const debugData = {
 					online,
@@ -453,6 +454,9 @@ class Details extends View<Props, State> {
 					RSAKeysAreGenerated: this.RSAKeysAreGenerated,
 					RSAKeysRetrievableFromLocal: this.RSAKeysRetrievableFromLocal,
 					firebaseRemoteConfig,
+					deviceModel: DeviceInfo.getModel(),
+					deviceManufacturer,
+					systemVersion: DeviceInfo.getSystemVersion(),
 				};
 				const dialogueData = {
 					show: true,
@@ -593,7 +597,9 @@ class Details extends View<Props, State> {
 						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
 						<TouchableWithoutFeedback onPress={this.onPressGatewayInfo}>
 							<View style={boxItemsCover}>
-								<Text style={[textName]}>
+								<Text
+									level={23}
+									style={textName}>
 									{type}
 								</Text>
 								<Text style={locationInfo}>
@@ -704,7 +710,6 @@ class Details extends View<Props, State> {
 			inactiveSwitchBackground,
 			btnPrimaryBg,
 			paddingFactor,
-			brandSecondary,
 		} = Theme.Core;
 
 		const fontSizeName = Math.floor(deviceWidth * 0.053333333);
@@ -740,7 +745,6 @@ class Details extends View<Props, State> {
 				height: deviceHeight * 0.12,
 			},
 			textName: {
-				color: brandSecondary,
 				fontSize: fontSizeName,
 			},
 			locationInfo: {

@@ -217,7 +217,7 @@ class DeviceActionDetails extends View {
 					<>
 						{
 							(methodRequested === 'RGB' || methodRequested === 'DIM') ?
-								<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
+								<ButtonLoadingIndicator style={dot}/>
 								: null
 						}
 						<RGBColorWheel

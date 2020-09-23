@@ -30,9 +30,14 @@ import IconTelldus from './IconTelldus';
 import View from './View';
 import MaterialTextInput from './MaterialTextInput';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
+
 import Theme from '../App/Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
     value: string,
 	appLayout: Object,
 	extraData?: string | number,
@@ -147,8 +152,8 @@ render(): Object {
 					autoCapitalize={autoCapitalize}
 					autoCorrect={false}
 					autoFocus={autoFocus}
-					baseColor={Theme.Core.brandSecondary}
-					tintColor={Theme.Core.brandSecondary}
+					baseColor={styles.inAppBrandSecondary}
+					tintColor={styles.inAppBrandSecondary}
 					returnKeyType={'done'}
 					placeholder={placeholder}
 					placeholderTextColor={placeholderTextColor}
@@ -170,10 +175,16 @@ render(): Object {
 }
 
 getStyle(appLayout: Object): Object {
+	const {
+		colors,
+	} = this.props;
+	const {
+		inAppBrandSecondary,
+	} = colors;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { shadow, brandSecondary, editBoxPaddingFactor } = Theme.Core;
+	const { shadow, editBoxPaddingFactor } = Theme.Core;
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
 	const iconSize = Math.floor(deviceWidth * 0.09);
@@ -182,6 +193,7 @@ getStyle(appLayout: Object): Object {
 	const padding = deviceWidth * editBoxPaddingFactor;
 
 	return {
+		inAppBrandSecondary,
 		container: {
 			width: '100%',
 			flexDirection: 'column',
@@ -198,7 +210,7 @@ getStyle(appLayout: Object): Object {
 			marginTop: Platform.OS === 'ios' ? 10 : 0,
 		},
 		label: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize,
 		},
 		icon: {
@@ -215,4 +227,4 @@ getStyle(appLayout: Object): Object {
 }
 }
 
-export default EditBox;
+export default withTheme(EditBox);

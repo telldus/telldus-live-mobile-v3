@@ -37,11 +37,20 @@ import {
 	RippleButton,
 } from '../../../../BaseComponents';
 import Weekdays from './Jobs/Weekdays';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+import {
+	shouldUpdate,
+} from '../../../Lib';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	days: Object[],
 	todayIndex: number,
 	appLayout: Object,
@@ -61,7 +70,7 @@ type State = {
 	daysLayout: Object,
 };
 
-export default class JobsPoster extends View<null, Props, State> {
+class JobsPoster extends View<null, Props, State> {
 
 	onLayout: (number, number, string) => void;
 	_panResponder: Object;
@@ -301,7 +310,18 @@ export default class JobsPoster extends View<null, Props, State> {
 			const newDays = nextProps.days.length !== this.props.days.length;
 			const onDragChange = nextState.dragDir !== this.state.dragDir;
 			const showInactiveChange = nextState.showInactive !== this.state.showInactive;
-			return newDays || onDragChange || showInactiveChange;
+
+			return newDays || onDragChange || showInactiveChange || shouldUpdate(this.props, nextProps, [
+				'themeInApp',
+				'colorScheme',
+			]);
+		}
+		const themeHasChanged = shouldUpdate(this.props, nextProps, [
+			'themeInApp',
+			'colorScheme',
+		]);
+		if (themeHasChanged) {
+			return true;
 		}
 		return false;
 	}
@@ -360,6 +380,7 @@ export default class JobsPoster extends View<null, Props, State> {
 						isChecked={showInactive}
 						text={this.checkBoxText}
 						intl={intl}
+						level={1}
 					/>
 					{showLeftButton && (
 						<RippleButton
@@ -498,7 +519,10 @@ export default class JobsPoster extends View<null, Props, State> {
 	};
 
 	_getDayAnimatedStyle = (index: number, weekday: string): Object => {
-		const { appLayout } = this.props;
+		const {
+			appLayout,
+			colors,
+		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -517,6 +541,10 @@ export default class JobsPoster extends View<null, Props, State> {
 		const dayFontSize = Math.floor(deviceWidth * 0.037333333);
 		const todayFontSize = Math.floor(deviceWidth * 0.084);
 
+		const {
+			textInsidePoster,
+		} = colors;
+
 		const day = {
 			container: {
 				position: 'absolute',
@@ -530,7 +558,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			},
 			text: {
 				backgroundColor: 'transparent',
-				color: '#fff',
+				color: textInsidePoster,
 				fontSize: dayFontSize,
 				fontFamily: Theme.Core.fonts.robotoLight,
 				textAlign: 'center',
@@ -609,16 +637,23 @@ export default class JobsPoster extends View<null, Props, State> {
 	};
 
 	_getDateAnimatedStyle = (): Object => {
-		const { appLayout } = this.props;
+		const {
+			appLayout,
+			colors,
+		} = this.props;
 		const { width } = appLayout;
 		const isPortrait = appLayout.height > width;
 		const deviceWidth = isPortrait ? width : appLayout.height;
+
+		const {
+			textInsidePoster,
+		} = colors;
 
 		const height = deviceWidth * 0.064;
 
 		const date = {
 			backgroundColor: 'transparent',
-			color: '#fff',
+			color: textInsidePoster,
 			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: Math.floor(deviceWidth * 0.052),
 			height,
@@ -659,7 +694,7 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	_getStyle = (): Object => {
 		const { todayIndex } = this.state;
-		const { appLayout, days } = this.props;
+		const { appLayout, days, colors } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -697,10 +732,10 @@ export default class JobsPoster extends View<null, Props, State> {
 				alignItems: 'center',
 				justifyContent: 'center',
 				height: deviceWidth * 0.064,
-				width: (width - headerHeight) * 0.44,
+				width: (width - headerHeight) * 0.5,
 				overflow: 'hidden',
 				position: 'absolute',
-				left: (width - headerHeight) * 0.205333333,
+				left: (width - headerHeight) * 0.190333333,
 				top: deviceWidth * 0.17,
 			},
 			checkButtonStyle: {
@@ -726,6 +761,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			arrow: {
 				height: deviceWidth * 0.036,
 				width: deviceWidth * 0.022666667,
+				tintColor: colors.textInsidePoster,
 			},
 		};
 	};
@@ -749,3 +785,5 @@ export default class JobsPoster extends View<null, Props, State> {
 	}
 
 }
+
+export default withTheme(JobsPoster);

@@ -34,7 +34,6 @@ import {
 } from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
-import Theme from '../../../Theme';
 
 import {
 	deployStore,
@@ -75,7 +74,10 @@ const PushInfoBlock = (props: Object): Object => {
 				onPress={onPressPushSettings}
 			/>
 			{(!(phones > 0) && !isHuaweiBuild) && (
-				<Text onPress={submitPushToken} style={buttonResubmit}>
+				<Text
+					level={23}
+					onPress={submitPushToken}
+					style={buttonResubmit}>
 					{submitButText}
 				</Text>
 			)}
@@ -93,7 +95,6 @@ const getStyles = (appLayout: Object): Object => {
 		fontSize,
 		buttonResubmit: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.brandSecondary,
 			alignSelf: 'center',
 			paddingVertical: 5,
 			marginBottom: fontSize / 2,
