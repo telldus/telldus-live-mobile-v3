@@ -73,6 +73,7 @@ const SelectForecastTimeDD = (props: Object): Object => {
 				items={items}
 				value={value}
 				itemCount={6}
+				dropdownOffsetTopCount={2}
 				dropDownPosition={'bottom'}
 				onValueChange={onValueChange}
 				appLayout={layout}

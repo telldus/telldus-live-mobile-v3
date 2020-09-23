@@ -122,6 +122,7 @@ const SelectCoordinatesDD = (props: Object): Object => {
 				items={items}
 				value={value}
 				dropDownPosition={'bottom'}
+				dropdownOffsetTopCount={2}
 				onValueChange={_onValueChange}
 				appLayout={layout}
 				intl={intl}
