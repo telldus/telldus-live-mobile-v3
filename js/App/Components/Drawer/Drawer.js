@@ -276,7 +276,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 								<Text
 									level={27}
 									style={styles.linkLabelStyle}>
-									{formatMessage(i18n.manageGeoFence)}
+									{`${formatMessage(i18n.manageGeoFence)} (beta)`}
 								</Text>
 							</RippleButton>
 						</View>
