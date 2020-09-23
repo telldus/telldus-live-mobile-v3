@@ -370,6 +370,7 @@ const getStyles = ({
 			marginHorizontal: padding,
 			borderRadius: 2,
 			marginBottom: padding / 2,
+			...shadow,
 		},
 		leftItemStyle: {
 			fontSize,
