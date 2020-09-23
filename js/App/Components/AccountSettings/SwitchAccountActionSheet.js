@@ -77,7 +77,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		accounts: _accounts = {},
-		userId = '',
+		userId,
 		pushToken,
 		switchAccountConf = {},
 	} = useSelector((state: Object): Object => state.user);
@@ -211,7 +211,6 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 						accessToken,
 					} = account;
 					let { userId: _userId } = accessToken;
-					_userId = _userId.trim().toLowerCase();
 					setSwitchingId(_userId);
 
 					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
@@ -285,8 +284,8 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		};
 		let avatar = gravatar.imageUrl(options);
 
-		const uid = accessToken.userId || '';
-		const isSelected = uid.trim().toLowerCase() === userId.trim().toLowerCase();
+		const uid = accessToken.userId;
+		const isSelected = uid === userId;
 
 		function onPressRB() {
 			if (isSelected) {
@@ -313,7 +312,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 					</Text>
 				</View>
 				{
-					switchingId === uid.trim().toLowerCase() ?
+					switchingId === uid ?
 						<Throbber
 							throbberContainerStyle={throbberContainerStyle}
 							throbberStyle={throbberStyle}/>

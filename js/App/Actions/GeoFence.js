@@ -348,7 +348,7 @@ function handleActions(actions: Object, userId: string, eventUUID: string, extra
 		}
 
 		const { user: { accounts = {} } } = getState();
-		const { accessToken } = accounts[userId.trim().toLowerCase()];
+		const { accessToken } = accounts[userId];
 		dispatch(debugGFSetCheckpoint({
 			checkpoint: 'handleActions-1',
 			eventUUID,
@@ -952,7 +952,7 @@ function getCurrentAccountsFences(): ThunkAction {
 
 		const {
 			user: {
-				userId: userIdC = '',
+				userId: userIdC,
 			},
 		} = getState();
 

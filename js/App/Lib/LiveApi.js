@@ -49,7 +49,7 @@ import { apiServer, publicKey, privateKey } from '../../Config';
 
 export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = false }: {url: string, requestParams: Object, _accessToken?: Object, cancelAllPending?: boolean }): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
-		let { user: { accessToken, userId = '' } } = getState();
+		let { user: { accessToken, userId } } = getState();
 
 		// NOTE: userId is not yet(v3.14) available while logging in.
 		// So user's who upgrade from old app version will not have
@@ -108,8 +108,8 @@ export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = f
 			if (axios.isCancel(error)) {// DO not throw axios cancel
 				return error;
 			} else if (data && (data.error === 'invalid_token' || data.error === 'expired_token')) {
-				const { userId: userIdRequest = '' } = accessTokenFinal;
-				const isRequestMadeByTheActiveAccount = userIdRequest.trim().toLowerCase() === userId.trim().toLowerCase();
+				const { userId: userIdRequest } = accessTokenFinal;
+				const isRequestMadeByTheActiveAccount = userIdRequest === userId;
 				if (isRequestMadeByTheActiveAccount) {
 					return dispatch({
 						type: 'LOCK_SESSION',
@@ -194,9 +194,9 @@ export function refreshAccessToken(url?: string = '', requestParams?: Object = {
 		})
 			.then((response: Object): any => response.json())
 			.then((response: Object): any => {
-				const { userId = '' } = accessToken;
-				const { user: { userId: userIdActive = '' } } = getState();
-				const isRequestMadeByTheActiveAccount = userIdActive.trim().toLowerCase() === userId.trim().toLowerCase();
+				const { userId } = accessToken;
+				const { user: { userId: userIdActive } } = getState();
+				const isRequestMadeByTheActiveAccount = userIdActive === userId;
 				if (response.error) {
 					if (isRequestMadeByTheActiveAccount) {
 					// We couldn't get a new access token with the refresh_token, so we lock the session.

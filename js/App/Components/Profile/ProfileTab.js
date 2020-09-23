@@ -89,7 +89,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		userProfile = {},
 		subscriptions = {},
 		accounts = {},
-		userId = '',
+		userId,
 		firebaseRemoteConfig = {},
 		pushToken,
 		switchAccountConf = {},
@@ -152,8 +152,8 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				}));
 				let otherUserId;
 				Object.keys(accounts).forEach((uid: string) => {
-					const check1 = uid.trim().toLowerCase();
-					if (check1 !== userId.trim().toLowerCase()) {
+					const check1 = uid;
+					if (check1 !== userId) {
 						otherUserId = check1;
 					}
 				});
@@ -207,7 +207,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				proceedWithLogout();
 			} else {
 				const userIdOfOnlyPremAcc = Object.keys(premAccounts)[0];
-				if (userIdOfOnlyPremAcc.trim().toLowerCase() === userId.trim().toLowerCase()) {
+				if (userIdOfOnlyPremAcc === userId) {
 					toggleDialogueBoxState({
 						show: true,
 						showHeader: true,

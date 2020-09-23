@@ -484,7 +484,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 	}
 
 	// Account switched
-	if (userId && prevProps.userId && (userId.trim().toLowerCase() !== prevProps.userId.trim().toLowerCase())) {
+	if (userId && prevProps.userId && (userId !== prevProps.userId)) {
 		this.actionsToPerformOnStart();
 	}
 	this._askIfAddNewLocation();
