@@ -26,6 +26,7 @@ import React, {
 	memo,
 	useMemo,
 	useCallback,
+	Fragment,
 } from 'react';
 import {
 	Platform,
@@ -168,7 +169,8 @@ const InAppDisclosureScreen = memo<Object>((props: Object): Object => {
 			},
 		];
 		return data.map(({h, b}: Object, index: number): Object =>
-			<>
+			<Fragment
+				key={`${index}`}>
 				<SubHeaderText
 					text={`${index + 1}. ${formatMessage(h)}`}
 					textStyle={subHeaderTextStyle}/>
@@ -177,7 +179,7 @@ const InAppDisclosureScreen = memo<Object>((props: Object): Object => {
 					style={contentStyle}>
 					{formatMessage(b)}
 				</Text>
-			</>
+			</Fragment>
 		);
 	}, [formatMessage, subHeaderTextStyle, contentStyle]);
 
