@@ -168,12 +168,12 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 						value={name}
 						autoFocus={false}
 						icon={'sensor'}
-						label={'Name'}
+						label={'Name'} // TODO: Translate
 						onChangeText={_onChangeText}
 						appLayout={layout}/>
 				</View>
 				<TouchableButton
-					text={'EXIT'}
+					text={'EXIT'} // TODO: Translate
 					buttonLevel={isLoading ? 7 : 10}
 					onPress={goBack}/>
 			</ThemedScrollView>
