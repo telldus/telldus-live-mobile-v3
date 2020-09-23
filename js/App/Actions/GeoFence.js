@@ -22,11 +22,19 @@
 
 'use strict';
 const colorsys = require('colorsys');
+import {
+	NativeModules,
+} from 'react-native';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {
 	Platform,
 } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
+
+
+const {
+	NativeUtilitiesModule,
+} = NativeModules;
 
 // import {
 // 	deviceSetState,
@@ -1037,6 +1045,36 @@ const showNotificationOnErrorExecutingAction = ({
 	};
 };
 
+const requestIgnoreBatteryOptimizations = (): ThunkAction => {
+	return async (dispatch: Function, getState: Function) => {
+		if (Platform.OS === 'ios') {
+			return;
+		}
+
+		const flag = await dispatch(isIgnoringBatteryOptimizations());
+		if (!flag) {
+			NativeUtilitiesModule.requestIgnoreBatteryOptimizations();
+		}
+	};
+};
+
+const isIgnoringBatteryOptimizations = (): ThunkAction => {
+	return async (dispatch: Function, getState: Function): Promise<any> => {
+		if (Platform.OS === 'ios') {
+			return Promise.resolve(true);
+		}
+
+		let flag = false;
+		try {
+			flag = await NativeUtilitiesModule.isIgnoringBatteryOptimizations();
+		} catch (e) {
+			// Ignore
+		} finally {
+			return flag;
+		}
+	};
+};
+
 module.exports = {
 	setupGeoFence,
 	addGeofence,
@@ -1055,4 +1093,7 @@ module.exports = {
 	debugGFOnGeofence,
 	clearAllOnGeoFencesLog,
 	debugGFSetCheckpoint,
+
+	isIgnoringBatteryOptimizations,
+	requestIgnoreBatteryOptimizations,
 };

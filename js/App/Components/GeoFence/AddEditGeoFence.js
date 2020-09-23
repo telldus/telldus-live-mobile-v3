@@ -60,6 +60,7 @@ import {
 import {
 	getCurrentAccountsFences,
 	getCurrentLocation,
+	requestIgnoreBatteryOptimizations,
 } from '../../Actions/GeoFence';
 import {
 	useNoPremiumDialogue,
@@ -114,6 +115,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const {
 		colors,
 	} = useAppTheme();
+
+	useEffect(() => {
+		dispatch(requestIgnoreBatteryOptimizations());
+	}, [dispatch]);
 
 	const [ pointCurrentLocation, setPointCurrentLocation ] = useState({});
 
