@@ -105,7 +105,11 @@ const Title = memo<Object>(({
 					textAlign: 'center',
 					alignSelf: 'center',
 				}}/>)}
-			{!!icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
+			{!!icon && (<BlockIcon
+				blockLevel={15}
+				icon={icon}
+				containerStyle={iconContainerStyle}
+				style={iconStyle}/>)}
 			<View style={styles.textCover}>
 				{NameInfo}
 				{!!info &&
