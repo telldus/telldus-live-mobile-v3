@@ -49,9 +49,7 @@ import {
 	SubHeaderText,
 	NavigationHeaderPoster,
 } from '../../../BaseComponents';
-import {
-	ScreenConfigs,
-} from './GeoFenceNavigator';
+import GeoFenceScreenConfigs from './GeoFenceScreenConfigs';
 
 import {
 	changeConsentLocationData,
@@ -138,7 +136,7 @@ const InAppDisclosureScreen = memo<Object>((props: Object): Object => {
 				name: 'GeoFenceNavigator',
 				state: {
 					index: 0,
-					routes: ScreenConfigs.map(({name}: Object): string => name),
+					routes: GeoFenceScreenConfigs.map(({name}: Object): string => name),
 				},
 			},
 		];
