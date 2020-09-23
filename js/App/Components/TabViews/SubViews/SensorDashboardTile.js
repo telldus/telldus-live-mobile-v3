@@ -229,7 +229,11 @@ class SensorDashboardTile extends View<Props, null> {
 		} = this.props;
 		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
-		const { lastUpdated, gatewayTimezone } = item;
+		const {
+			lastUpdated,
+			gatewayTimezone,
+			keepHistory,
+		} = item;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 		const lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 
@@ -269,7 +273,7 @@ class SensorDashboardTile extends View<Props, null> {
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}
-				iconRight={'sensorhistory'}
+				iconRight={keepHistory ? 'sensorhistory' : undefined}
 				onPressIconRight={this.onPressIconRight}
 				type={'sensor'}
 				tileWidth={tileWidth}
