@@ -63,6 +63,7 @@ type Props = {
 	onPress: (number, string) => void,
 	intl: Object,
 	isGatewayActive: boolean,
+	navigation: Object,
 };
 
 class SensorDashboardTile extends View<Props, null> {
@@ -205,6 +206,17 @@ class SensorDashboardTile extends View<Props, null> {
 		onPress(item.id, SENSOR_KEY);
 	}
 
+	onPressIconRight = () => {
+		const { navigation, item } = this.props;
+		navigation.navigate('SensorDetails', {
+			screen: 'SHistory',
+			params: {
+				id: item.id,
+			},
+			id: item.id,
+		});
+	}
+
 	render(): Object {
 		const {
 			item,
@@ -257,6 +269,8 @@ class SensorDashboardTile extends View<Props, null> {
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}
+				iconRight={'sensorhistory'}
+				onPressIconRight={this.onPressIconRight}
 				type={'sensor'}
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}

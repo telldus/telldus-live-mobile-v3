@@ -539,7 +539,7 @@ class DashboardTab extends View {
 			moveEnd,
 		} = row;
 
-		const { screenProps } = this.props;
+		const { screenProps, navigation } = this.props;
 		const { intl } = screenProps;
 		let { tileWidth } = this.state;
 		const { data, objectType } = row.item;
@@ -562,6 +562,16 @@ class DashboardTab extends View {
 			borderRadius: 2,
 		};
 
+		const sharedProps = {
+			key: id,
+			item: data,
+			style: tileStyle,
+			tileWidth,
+			intl,
+			navigation,
+			isGatewayActive: isOnline || supportLocalControl,
+		};
+
 		let rowItem = <EmptyView/>;
 		if (objectType !== SENSOR_KEY && objectType !== DEVICE_KEY && objectType !== MET_ID) {
 			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
@@ -569,22 +579,13 @@ class DashboardTab extends View {
 			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		} else if (objectType === SENSOR_KEY) {
 			rowItem = <SensorDashboardTile
-				key={id}
-				item={data}
+				{...sharedProps}
 				isGatewayActive={isOnline || supportLocalControl}
-				style={tileStyle}
-				tileWidth={tileWidth}
-				intl={screenProps.intl}
 				onPress={this.changeDisplayType}
 			/>;
 		} else if (objectType === DEVICE_KEY) {
 			rowItem = <DashboardRow
-				key={id}
-				item={data}
-				isGatewayActive={isOnline || supportLocalControl}
-				style={tileStyle}
-				tileWidth={tileWidth}
-				intl={screenProps.intl}
+				{...sharedProps}
 				setScrollEnabled={this.setScrollEnabled}
 				onPressDimButton={this.showDimInfo}
 				openRGBControl={this.openRGBControl}
@@ -592,11 +593,7 @@ class DashboardTab extends View {
 			/>;
 		} else if (objectType === MET_ID) {
 			rowItem = <MetWeatherDbTile
-				key={id}
-				item={data}
-				style={tileStyle}
-				tileWidth={tileWidth}
-				intl={screenProps.intl}
+				{...sharedProps}
 				onPress={this.changeDisplayType}/>;
 		}
 

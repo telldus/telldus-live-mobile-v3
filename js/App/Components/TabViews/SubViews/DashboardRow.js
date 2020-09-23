@@ -73,6 +73,7 @@ type Props = {
 	onPressDimButton: (Object) => void,
 	openRGBControl: (number) => void,
 	openThermostatControl: (number) => void,
+	navigation: Object,
 };
 
 type State = {
@@ -140,6 +141,17 @@ openRGBControl = () => {
 	} else {
 		openRGBControl(item.id);
 	}
+}
+
+onPressIconRight = () => {
+	const { navigation, item } = this.props;
+	navigation.navigate('DeviceDetails', {
+		screen: 'History',
+		params: {
+			id: item.id,
+		},
+		id: item.id,
+	});
 }
 
 getButtonsInfo(item: Object, styles: Object): Object {
@@ -349,6 +361,8 @@ render(): Object {
 				alignItems: 'center',
 				justifyContent: 'center',
 			}]}
+			iconRight={'history'}
+			onPressIconRight={this.onPressIconRight}
 			type={'device'}
 			tileWidth={tileWidth}
 			accessibilityLabel={accessibilityLabel}

@@ -37,7 +37,19 @@ import { View, Text, BlockIcon, StyleSheet } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
-const Title = memo<Object>(({ name, tileWidth, icon, iconContainerStyle, iconStyle, info, formatMessage }: Object): Object => {
+const Title = memo<Object>(({
+	name,
+	tileWidth,
+	icon,
+	iconContainerStyle,
+	iconRightContainerStyle,
+	iconStyle,
+	info,
+	formatMessage,
+	iconRight,
+	iconRightStyle,
+	onPressIconRight,
+}: Object): Object => {
 
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { tileNameDisplayMode } = defaultSettings;
@@ -73,6 +85,26 @@ const Title = memo<Object>(({ name, tileWidth, icon, iconContainerStyle, iconSty
 				paddingHorizontal: tileWidth * 0.06,
 				paddingVertical: tileWidth * 0.06,
 			}]}>
+			{!!iconRight && (<BlockIcon
+				onPress={onPressIconRight}
+				blockLevel={13}
+				icon={iconRight}
+				containerStyle={{
+					position: 'absolute',
+					right: 5,
+					top: 5,
+					width: Math.floor(tileWidth / 6),
+					height: Math.floor(tileWidth / 6),
+					borderRadius: 5,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}} style={{
+					color: '#fff',
+					fontSize: Math.floor(tileWidth / 8),
+					borderRadius: 5,
+					textAlign: 'center',
+					alignSelf: 'center',
+				}}/>)}
 			{!!icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 			<View style={styles.textCover}>
 				{NameInfo}
