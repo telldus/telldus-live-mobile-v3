@@ -160,7 +160,9 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 	}, [initialSelectedScales, hasSelected]);
 
 	return (
-		<View style={{flex: 1}}>
+		<View
+			level={3}
+			style={{flex: 1}}>
 			<ThemedScrollView
 				contentContainerStyle={contentContainerStyle}
 				level={3}>

@@ -50,9 +50,11 @@ const EditDbListSection = memo<Object>((props: Object): Object => {
 	} = useIntl();
 
 	return (
-		<View style={coverStyle}>
+		<View
+			level={2}
+			style={coverStyle}>
 			<Text
-				level={6}
+				level={2}
 				style={textStyle}>
 				{header || formatMessage(i18n.noName)}
 			</Text>
@@ -80,7 +82,6 @@ const getStyles = ({layout}: Object): Object => {
 		coverStyle: {
 			marginTop: padding,
 			marginBottom: padding / 2,
-			backgroundColor: '#fff',
 			...shadow,
 			paddingVertical: padding / 2,
 		},

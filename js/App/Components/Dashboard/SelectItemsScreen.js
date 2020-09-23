@@ -228,7 +228,9 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	}, [preAddToDb]);
 
 	return (
-		<View style={{flex: 1}}>
+		<View
+			level={3}
+			style={{flex: 1}}>
 			<SectionList
 				sections={dataSource}
 				renderItem={_renderRow}

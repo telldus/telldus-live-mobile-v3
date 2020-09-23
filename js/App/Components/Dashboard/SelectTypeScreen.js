@@ -135,7 +135,9 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 	}, [formatMessage, onPress]);
 
 	return (
-		<View style={{flex: 1}}>
+		<View
+			level={3}
+			style={{flex: 1}}>
 			<ThemedScrollView
 				level={3}>
 				<View
