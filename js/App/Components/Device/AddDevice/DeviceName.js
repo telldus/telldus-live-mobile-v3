@@ -324,9 +324,12 @@ render(): Object {
 							<View
 								level={2}
 								style={infoContainer}>
-								<IconTelldus icon={'info'} style={infoIconStyle}/>
+								<IconTelldus
+									level={23}
+									icon={'info'}
+									style={infoIconStyle}/>
 								<Text
-									level={5}
+									level={26}
 									style={infoTextStyle}>
 									{intl.formatMessage(i18n.setNameMultichannelInfo)}
 								</Text>
@@ -342,7 +345,7 @@ render(): Object {
 								color: statusIcon === 'security' ? '#9CCC65' : '#F44336',
 							}]}/>
 							<Text
-								level={5}
+								level={26}
 								style={infoTextStyle}>
 								{statusMessage}
 							</Text>
@@ -352,9 +355,11 @@ render(): Object {
 						<View
 							level={2}
 							style={infoContainer}>
-							<IconTelldus icon={'info'} style={statusIconStyle}/>
+							<IconTelldus
+								level={23}
+								icon={'info'} style={statusIconStyle}/>
 							<Text
-								level={5}
+								level={26}
 								style={infoTextStyle}>
 								{hintMessage}
 							</Text>
@@ -378,7 +383,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
+	const { paddingFactor, editBoxPaddingFactor, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -411,14 +416,12 @@ getStyles(): Object {
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.12,
 			marginHorizontal: editBoxPadding,
-			color: brandSecondary,
 		},
 		boxContainerStyle: {
 			marginTop: padding / 2,
 		},
 		infoIconStyle: {
 			fontSize: deviceWidth * 0.08,
-			color: brandSecondary,
 			marginHorizontal: editBoxPadding,
 		},
 		infoTextStyle: {

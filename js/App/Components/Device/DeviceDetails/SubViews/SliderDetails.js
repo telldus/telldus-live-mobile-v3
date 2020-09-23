@@ -24,11 +24,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Slider from 'react-native-slider';
 import throttle from 'lodash/throttle';
-
-const deviceHeight = Dimensions.get('window').height;
 
 import { setDimmerValue, saveDimmerInitialState } from '../../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
@@ -39,9 +37,13 @@ import {
 	getDimmerValue,
 	toSliderValue,
 } from '../../../../Lib';
-import Theme from '../../../../Theme';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
@@ -202,12 +204,24 @@ class SliderDetails extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, style, appLayout } = this.props;
+		const {
+			device,
+			intl,
+			isGatewayActive,
+			style,
+			appLayout,
+			colors,
+		} = this.props;
+
+		const {
+			inAppBrandSecondary,
+		} = colors;
+
 		const { supportedMethods = {} } = device;
 		const { DIM } = supportedMethods;
-		const minimumTrackTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';
+		const minimumTrackTintColor = isGatewayActive ? inAppBrandSecondary : '#cccccc';
 		const maximumTrackTintColor = isGatewayActive ? 'rgba(219, 219, 219, 255)' : '#e5e5e5';
-		const thumbTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';
+		const thumbTintColor = isGatewayActive ? inAppBrandSecondary : '#cccccc';
 
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -264,35 +278,6 @@ const styles = StyleSheet.create({
 		marginTop: 12,
 		marginLeft: 8,
 	},
-	toggleContainer: {
-		flexDirection: 'row',
-		height: 36,
-		marginHorizontal: 8,
-		marginVertical: 16,
-	},
-	turnOff: {
-		flex: 1,
-		alignItems: 'stretch',
-		justifyContent: 'center',
-		borderTopLeftRadius: 7,
-		borderBottomLeftRadius: 7,
-	},
-	turnOn: {
-		flex: 1,
-		alignItems: 'stretch',
-		justifyContent: 'center',
-		borderTopRightRadius: 7,
-		borderBottomRightRadius: 7,
-	},
-	dimmerContainer: {
-		marginTop: 20,
-		height: (deviceHeight * 0.28),
-		backgroundColor: '#fff',
-	},
-	shadow: {
-		borderRadius: 2,
-		...Theme.Core.shadow,
-	},
 });
 
 function mapDispatchToProps(dispatch: Function): Object {
@@ -306,4 +291,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(SliderDetails);
+module.exports = connect(null, mapDispatchToProps)(withTheme(SliderDetails));

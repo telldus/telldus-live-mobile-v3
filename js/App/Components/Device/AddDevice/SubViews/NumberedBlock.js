@@ -34,6 +34,9 @@ import {
 	Image,
 	EmptyView,
 } from '../../../../../BaseComponents';
+import {
+	useAppTheme,
+} from '../../../../Hooks/Theme';
 
 import Theme from '../../../../Theme';
 
@@ -48,6 +51,10 @@ const NumberedBlock = (props: Object): Object => {
 		progress,
 	} = props;
 
+	const {
+		colors,
+	} = useAppTheme();
+
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
@@ -59,7 +66,10 @@ const NumberedBlock = (props: Object): Object => {
 		blockRight,
 		infoText,
 		imageType,
-	} = getStyles(layout);
+	} = getStyles({
+		layout,
+		colors,
+	});
 
 	return (
 		<View
@@ -88,7 +98,7 @@ const NumberedBlock = (props: Object): Object => {
 				</View>
 				<View style={blockRight}>
 					<Text
-						level={6}
+						level={25}
 						style={infoText}>
 						{text}
 					</Text>
@@ -100,16 +110,22 @@ const NumberedBlock = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
+const getStyles = ({
+	layout,
+	colors,
+}: Object): Object => {
+	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
 		paddingFactor,
 		shadow,
-		brandPrimary,
 	} = Theme.Core;
+
+	const {
+		inAppBrandPrimary,
+	} = colors;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -150,7 +166,7 @@ const getStyles = (appLayout: Object): Object => {
 			borderRightWidth: deviceWidth * 0.05,
 			borderTopWidth: markerH,
 			borderRightColor: 'transparent',
-			borderTopColor: brandPrimary,
+			borderTopColor: inAppBrandPrimary,
 			borderTopLeftRadius: 2,
 		},
 		markerText: {

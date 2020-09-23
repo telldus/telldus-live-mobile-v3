@@ -28,6 +28,10 @@ import filter from 'lodash/filter';
 import range from 'lodash/range';
 import mapValues from 'lodash/mapValues';
 
+import {
+	getTempDay,
+} from '../Lib/scheduleUtils';
+
 export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}, userOptions: Object): {sections: Object, sectionIds: Array<Object>} {
 	if (!jobs || !jobs.length) {
 		return {
@@ -44,7 +48,6 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 	}), {});
 
 	jobs.forEach((job: Object): any => {
-		let tempDay;
 		const device = devices.byId[job.deviceId];
 		if (!device) {
 			return;
@@ -54,27 +57,13 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 			return;
 		}
 
-		const { timezone, sunrise, sunset } = gateway;
-		let gatewayTimezone = timezone;
-
-		if (job.type === 'sunrise') {
-			const sunriseInMs = sunrise * 1000;
-			const offsetInMs = job.offset * 60 * 1000;
-			tempDay = moment(sunriseInMs + offsetInMs).tz(timezone);
-		} else if (job.type === 'sunset') {
-			const sunsetInMs = sunset * 1000;
-			const offsetInMs = job.offset * 60 * 1000;
-			tempDay = moment(sunsetInMs + offsetInMs).tz(timezone);
-		} else {
-			tempDay = moment();
-			tempDay.hours(job.hour);
-			tempDay.minutes(job.minute);
-		}
+		let tempDay = getTempDay(job, gateway);
 		if (!tempDay) {
 			return;
 		}
 
-		job.gatewayTimezone = gatewayTimezone;
+		const { timezone } = gateway;
+		job.gatewayTimezone = timezone;
 
 		job.effectiveHour = tempDay.format('HH');
 		job.effectiveMinute = tempDay.format('mm');

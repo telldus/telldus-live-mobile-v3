@@ -25,12 +25,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { IconTelldus, View } from '../../../../../BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
 import { deviceSetState } from '../../../../Actions/Devices';
-import Theme from '../../../../Theme';
+
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
 
 type Props = {
 	device: Object,
@@ -51,6 +54,9 @@ type Props = {
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class StopButton extends View {
@@ -96,23 +102,35 @@ class StopButton extends View {
 		const noop = function () {
 		};
 
-		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style, local, disableActionIndicator } = this.props;
+		let {
+			isGatewayActive,
+			supportedMethod,
+			isInState,
+			name,
+			methodRequested,
+			iconSize,
+			style,
+			local,
+			disableActionIndicator,
+			colors,
+		} = this.props;
+
+		const styles = getStyles({colors});
 
 		let stopButtonStyle = !isGatewayActive ?
 			(isInState === 'STOP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'STOP' ? styles.enabledBackgroundStop : styles.disabledBackground);
 		let stopIconColor = !isGatewayActive ?
-			(isInState === 'STOP' ? '#fff' : '#a2a2a2') : (isInState === 'STOP' ? '#fff' : Theme.Core.brandPrimary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			(isInState === 'STOP' ? colors.colorOffActiveIcon : '#a2a2a2') : (isInState === 'STOP' ? colors.colorOffActiveIcon : colors.colorOffInActiveIcon);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity
-				style={[stopButtonStyle, style]}
+				style={[styles.styleDef, stopButtonStyle, style]}
 				onPress={supportedMethod ? this.onStop : noop}
 				accessibilityLabel={`${this.labelStopButton}, ${name}`}>
 				<IconTelldus icon="stop" size={iconSize}
 					style={{
-						color: supportedMethod ? stopIconColor : '#eeeeee',
+						color: supportedMethod ? stopIconColor : colors.colorOffInActiveBg,
 					}}
 				/>
 				{
@@ -133,36 +151,41 @@ StopButton.defaultProps = {
 	disableActionIndicator: false,
 };
 
-const styles = StyleSheet.create({
-	navigationButton: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	enabled: {
-		color: '#1a355b',
-	},
-	enabledBackground: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	disabledBackground: {
-		backgroundColor: '#eeeeee',
-	},
-	enabledBackgroundStop: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	offlineBackground: {
-		backgroundColor: '#a2a2a2',
-	},
-	disabled: {
-		color: '#eeeeee',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorOffActiveBg,
+		colorOffInActiveBg,
+		buttonSeparatorColor,
+	} = colors;
+
+	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
+		enabled: {
+			color: '#1a355b',
+		},
+		disabledBackground: {
+			backgroundColor: colorOffInActiveBg,
+		},
+		enabledBackgroundStop: {
+			backgroundColor: colorOffActiveBg,
+		},
+		offlineBackground: {
+			backgroundColor: '#a2a2a2',
+		},
+		disabled: {
+			color: '#eeeeee',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
@@ -170,4 +193,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(StopButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(StopButton));

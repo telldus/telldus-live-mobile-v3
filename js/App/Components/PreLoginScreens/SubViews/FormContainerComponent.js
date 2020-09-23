@@ -26,11 +26,17 @@ import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
-import { BackgroundImage, View, Image } from '../../../../BaseComponents';
+import { BackgroundImage, View } from '../../../../BaseComponents';
+import TelldusLogo from '../../TabViews/img/telldus_logo.svg';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 
 import Theme from '../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	children: any,
 	appLayout: Object,
 	navigation: Object,
@@ -49,7 +55,6 @@ class FormContainerComponent extends View<Props, null> {
 		super(props);
 
 		this.isTablet = DeviceInfo.isTablet();
-		this.logo = require('./../img/telldusLogoBlack.png');
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -64,12 +69,14 @@ class FormContainerComponent extends View<Props, null> {
 			children,
 			appLayout,
 			screen,
+			dark,
+			colors,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<BackgroundImage source={{uri: 'telldusliveapp_launchscreen'}} style={styles.container}>
+			<BackgroundImage source={{uri: dark ? 'telldusliveapp_launchscreen_darkmode' : 'telldusliveapp_launchscreen'}} style={styles.container}>
 				{!!appLayout.width && (
 					<ScrollView
 						keyboardShouldPersistTaps={'always'}
@@ -79,10 +86,13 @@ class FormContainerComponent extends View<Props, null> {
 							behavior="position"
 							style={{ justifyContent: 'center', alignItems: 'center' }}
 							contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
-							<Image
-								source={this.logo}
+							<TelldusLogo
+								colorHomeLogo={colors.inAppBrandSecondary}
+								colorTextLogo={dark ? '#ffffff' : '#000000'}
+								colorWaveLogo={'#ffffff'}
 								style={styles.logoStyle}
-							/>
+								height={styles.logoHeight}
+								width={styles.logoWidth}/>
 							<View style={styles.formContainer}>
 								{React.cloneElement(
 									children,
@@ -126,6 +136,8 @@ class FormContainerComponent extends View<Props, null> {
 		textFieldFontSize = textFieldFontSize > maxTextFieldFontSize ? maxTextFieldFontSize : textFieldFontSize;
 
 		return {
+			logoHeight: Math.floor(deviceWidth * 0.3),
+			logoWidth: Math.floor(deviceWidth * 0.7),
 			container: {
 				flex: 1,
 				alignItems: 'center',
@@ -243,5 +255,5 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(FormContainerComponent);
+export default connect(mapStateToProps, null)(withTheme(FormContainerComponent));
 

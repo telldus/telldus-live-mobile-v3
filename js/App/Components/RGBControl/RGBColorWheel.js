@@ -31,7 +31,6 @@ import {
 
 import { deviceSetStateRGB, requestDeviceAction } from '../../Actions/Devices';
 import { getMainColorRGB } from '../../Lib/rgbUtils';
-import Theme from '../../Theme';
 
 type Props = {
 	device: Object,
@@ -232,8 +231,8 @@ render(): Object {
 		swatchWheelCover,
 		device,
 		showActionIndicator,
-		colorWheelCoverLevel,
-		swatchesCoverLevel,
+		colorWheelCoverLevel = 2,
+		swatchesCoverLevel = 2,
 	} = this.props;
 
 	const colorSwatches = this.COLOR_SWATCHES.map((color: string, i: number): any => {
@@ -254,7 +253,7 @@ render(): Object {
 				level={colorWheelCoverLevel}
 				style={colorWheelCover}>
 				{(showActionIndicator && controlSource === 'wheel' && methodRequested === 'RGB') ?
-					<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
+					<ButtonLoadingIndicator style={dot}/>
 					: null
 				}
 				<ColorWheel
@@ -271,7 +270,7 @@ render(): Object {
 				level={swatchesCoverLevel}
 				style={swatchesCover}>
 				{(showActionIndicator && controlSource === 'swatch' && methodRequested === 'RGB') ?
-					<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
+					<ButtonLoadingIndicator style={dot}/>
 					: null
 				}
 				{colorSwatches}

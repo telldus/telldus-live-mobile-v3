@@ -114,7 +114,7 @@ const TitledInfoBlock = (props: Props): Object => {
 				</View>
 				{!!icon && (
 					<Icon
-						level={21}
+						level={4}
 						name={icon}
 						size={iconSize}
 						color={iconColor}

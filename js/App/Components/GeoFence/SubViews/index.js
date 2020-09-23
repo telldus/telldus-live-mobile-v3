@@ -29,7 +29,6 @@ import JobRow from './JobRow';
 import EventRow from './EventRow';
 import TimePicker from './TimePicker';
 import RowWithAngle from './RowWithAngle';
-import CurrentPositionMarker from './CurrentPositionMarker';
 import MyLocation from './MyLocation';
 
 module.exports = {
@@ -41,6 +40,5 @@ module.exports = {
 	EventRow,
 	TimePicker,
 	RowWithAngle,
-	CurrentPositionMarker,
 	MyLocation,
 };

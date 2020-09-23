@@ -22,7 +22,11 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Dimensions, Text } from 'react-native';
+import { Dimensions } from 'react-native';
+
+import {
+	Text,
+} from '../../../../BaseComponents';
 import DimmerProgressBar from './DimmerProgressBar';
 import { View, initializeRegistryWithDefinitions } from 'react-native-animatable';
 import * as ANIMATION_DEFINITIONS from 'react-native-animatable/definitions';
@@ -146,6 +150,7 @@ class DimmerPopup extends Component<Props, State> {
 		}
 		return (
 			<View
+				level={2}
 				onLayout={this.handleLayout}
 				ref={this.setRefs}
 				style={{
@@ -154,16 +159,15 @@ class DimmerPopup extends Component<Props, State> {
 					position: 'absolute',
 					width: deviceWidth - 16,
 					height: 56,
-					backgroundColor: '#fff',
 					borderRadius: 7,
 					alignItems: 'center',
 					justifyContent: 'center',
 					...Theme.Core.shadow,
 				}}>
 				<Text
+					level={24}
 					ellipsizeMode="middle"
-					allowFontScaling={false}
-				    style={{ color: '#1a355b' }}>
+					allowFontScaling={false}>
 					{this.props.name}
 				</Text>
 				<DimmerProgressBar

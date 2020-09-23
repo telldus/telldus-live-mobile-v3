@@ -51,7 +51,7 @@ const InfoBlock = (props: Object): Object => {
 			style={[infoContainerDef, infoContainer]}>
 			<BlockIcon
 				icon={'info'}
-				iconLevel={15}
+				iconLevel={23}
 				style={[infoIconStyleDef, infoIconStyle]}
 				containerStyle={blockIconContainerStyle}/>
 			<View style={{
@@ -60,7 +60,7 @@ const InfoBlock = (props: Object): Object => {
 				flexWrap: 'wrap',
 			}}>
 				<Text
-					level={5}
+					level={26}
 					style={[textStyleDef, textStyle]}>
 					{text}
 				</Text>

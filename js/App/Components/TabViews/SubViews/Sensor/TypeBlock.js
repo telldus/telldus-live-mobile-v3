@@ -31,6 +31,10 @@ import {
 const AnimatedTouchable = Animated.createAnimatedComponent(Ripple);
 import Theme from '../../../../Theme';
 
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
+
 type Props = {
     style: Array<any> | Object,
 	valueCoverStyle: Array<any> | Object,
@@ -41,11 +45,28 @@ type Props = {
     onLayout?: Function,
     changeDisplayType: Function,
     totalTypes: Array<string>,
-    defaultSensor?: Object | null,
+	defaultSensor?: Object | null,
+	colors: Object,
 };
 
-const TypeBlock = ({ style, valueCoverStyle, dotStyle, dotCoverStyle, onLayout, changeDisplayType, totalTypes, defaultSensor, defaultType }: Props): Object => {
+const TypeBlock = ({
+	style,
+	valueCoverStyle,
+	dotStyle,
+	dotCoverStyle,
+	onLayout,
+	changeDisplayType,
+	totalTypes,
+	defaultSensor,
+	defaultType,
+	colors,
+}: Props): Object => {
 	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
+
+	const {
+		inAppBrandSecondary,
+	} = colors;
+
 	return (
 		<AnimatedTouchable
 			onPress={changeDisplayType}
@@ -60,6 +81,7 @@ const TypeBlock = ({ style, valueCoverStyle, dotStyle, dotCoverStyle, onLayout, 
 			rippleDuration={rippleDuration}
 			rippleCentered={true}>
 			<View
+				level={15}
 				style={valueCoverStyle}
 				importantForAccessibility="no-hide-descendants"
 				accessibilityElementsHidden={true}>
@@ -71,7 +93,7 @@ const TypeBlock = ({ style, valueCoverStyle, dotStyle, dotCoverStyle, onLayout, 
 								const { backgroundColor: BG = '#fff', marginLeft: PL = 0, ...otherStyles } = dotStyle;
 								let backgroundColor = BG, marginLeft = PL;
 								if (key === defaultType) {
-									backgroundColor = Theme.Core.brandSecondary;
+									backgroundColor = inAppBrandSecondary;
 								}
 								if (index === 0) {
 									marginLeft = 0;
@@ -90,4 +112,4 @@ const TypeBlock = ({ style, valueCoverStyle, dotStyle, dotCoverStyle, onLayout, 
 	);
 };
 
-export default TypeBlock;
+export default withTheme(TypeBlock);

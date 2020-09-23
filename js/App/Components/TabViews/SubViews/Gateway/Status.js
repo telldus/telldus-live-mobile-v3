@@ -28,7 +28,12 @@ import { hasTokenExpired, getControlIconColorLabel } from '../../../../Lib';
 
 import i18n from '../../../../Translations/common';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
     online: boolean,
     websocketOnline: boolean,
 	intl: Object,
@@ -56,7 +61,16 @@ constructor(props: Props) {
 }
 
 render(): Object {
-	let { online, websocketOnline, textStyle, appLayout, statusInfoStyle, localKey = {}, intl} = this.props;
+	let {
+		online,
+		websocketOnline,
+		textStyle,
+		appLayout,
+		statusInfoStyle,
+		localKey = {},
+		intl,
+		colors,
+	} = this.props;
 	let { address, key, ttl, supportLocal } = localKey;
 	let tokenExpired = hasTokenExpired(ttl);
 	let supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
@@ -65,7 +79,9 @@ render(): Object {
 		statusText,
 		statusInfo,
 	} = this.getStyles(appLayout, supportLocalControl);
-	const {color: controlIconColor} = getControlIconColorLabel(online, websocketOnline, supportLocalControl, intl.formatMessage);
+	const {color: controlIconColor} = getControlIconColorLabel(online, websocketOnline, supportLocalControl, intl.formatMessage, {
+		colors,
+	});
 
 	if (!online) {
 		return (
@@ -135,4 +151,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(GatewayStatus);
+export default connect(mapStateToProps, null)(withTheme(GatewayStatus));

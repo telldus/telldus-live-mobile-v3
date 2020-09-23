@@ -93,6 +93,30 @@ const getBGColor = (props: Object): ?string => {
 		case 10: {
 			return colors.danger;
 		}
+		case 11: {
+			return colors.safeAreaBG;
+		}
+		case 12: {
+			return colors.headerIconColor;
+		}
+		case 13: {
+			return colors.inAppBrandSecondary;
+		}
+		case 14: {
+			return colors.inActiveTintTwo;
+		}
+		case 15: {
+			return colors.inAppBrandPrimary;
+		}
+		case 16: {
+			return colors.drawerBg;
+		}
+		case 17: {
+			return colors.drawerBottomBg;
+		}
+		case 18: {
+			return colors.textInsidePoster;
+		}
 		default:
 			return 'transparent';
 	}
@@ -160,9 +184,6 @@ const getTextColor = (props: Object): ?string => {
 		case 9: {
 			return colors.headerIconColorBlock;
 		}
-		case 9: {
-			return colors.activeTintOne;
-		}
 		case 10: {
 			return colors.footerPrimary;
 		}
@@ -198,6 +219,42 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 21: {
 			return colors.iconTwoColorBlock;
+		}
+		case 22: {
+			return colors.headerIconColor;
+		}
+		case 23: {
+			return colors.inAppBrandSecondary;
+		}
+		case 24: {
+			return colors.inAppBrandPrimary;
+		}
+		case 25: {
+			return colors.textSeven;
+		}
+		case 26: {
+			return colors.textEight;
+		}
+		case 27: {
+			return colors.textNine;
+		}
+		case 28: {
+			return colors.textTen;
+		}
+		case 29: {
+			return colors.danger;
+		}
+		case 30: {
+			return colors.success;
+		}
+		case 31: {
+			return colors.statusGreen;
+		}
+		case 32: {
+			return colors.statusRed;
+		}
+		case 33: {
+			return colors.textInsidePoster;
 		}
 		default:
 			return;
@@ -249,6 +306,12 @@ const getTintColor = (props: Object): ?string => {
 		}
 		case 3: {
 			return colors.iconTwoColorBlock;
+		}
+		case 4: {
+			return colors.headerIconColor;
+		}
+		case 5: {
+			return colors.inAppBrandSecondary;
 		}
 		default:
 			return;

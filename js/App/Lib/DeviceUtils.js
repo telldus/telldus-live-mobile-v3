@@ -27,7 +27,6 @@ import { Linking } from 'react-native';
 import { utils } from 'live-shared-data';
 const { deviceUtils, addDeviceUtils, addDevice433MHz } = utils;
 import i18n from '../Translations/common';
-import Theme from '../Theme';
 
 function prepareNoZWaveSupportDialogueData(formatMessage: (Object) => string = (): string => '', locale: string): Object {
 	return {
@@ -43,7 +42,7 @@ function prepareNoZWaveSupportDialogueData(formatMessage: (Object) => string = (
 		onPressNegative: () => {
 			goToWebShop(locale);
 		},
-		negTextColor: Theme.Core.brandSecondary,
+		negTextColorLevel: 23,
 	};
 }
 
@@ -61,7 +60,7 @@ function prepareNo433MHzSupportDialogueData(formatMessage: (Object) => string = 
 		onPressNegative: () => {
 			goToWebShop(locale);
 		},
-		negTextColor: Theme.Core.brandSecondary,
+		negTextColorLevel: 23,
 	};
 }
 

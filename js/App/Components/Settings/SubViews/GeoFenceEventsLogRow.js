@@ -30,7 +30,6 @@ import React, {
 	useCallback,
 	useMemo,
 } from 'react';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
 	useSelector,
 } from 'react-redux';
@@ -38,6 +37,7 @@ import {
 import {
 	View,
 	Text,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -80,7 +80,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 		if (ignoreExpand) {
 			return (
 				<Text
-					level={6}
+					level={25}
 					style={rowValue}>
 					{val}
 				</Text>
@@ -113,7 +113,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 											{uuid}
 										</Text>
 										<Text
-											level={6}
+											level={25}
 											style={rowValue}>
 											{JSON.stringify(others)}
 										</Text>
@@ -137,7 +137,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 							{items}
 						</Text>
 						<Text
-							level={6}
+							level={25}
 							style={rowValue}>
 							{JSON.stringify(val2)}
 						</Text>
@@ -146,14 +146,16 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 			});
 		}
 		return <Text
-			level={6}
+			level={25}
 			style={rowValue}>
 			{JSON.stringify(val)}
 		</Text>;
 	}, [ignoreExpand, isActions, rowValue, val, isCpoints]);
 
 	return (
-		<View style={rowCover}>
+		<View
+			level={2}
+			style={rowCover}>
 			<TouchableOpacity
 				onPress={toggle}
 				style={{
@@ -165,10 +167,10 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 					style={rowLabel}>
 					{label} :
 				</Text>
-				{!ignoreExpand && <MaterialIcons
+				{!ignoreExpand && <ThemedMaterialIcon
 					name={expand ? 'expand-less' : 'expand-more'}
 					size={22}
-					color={Theme.Core.brandSecondary}/>
+					level={23}/>
 				}
 			</TouchableOpacity>
 			{(expand && !!val && !!content) &&
@@ -196,7 +198,6 @@ const getStyles = ({
 
 	return {
 		rowCover: {
-			backgroundColor: '#fff',
 			flexDirection: column ? 'column' : 'row',
 			marginHorizontal: padding,
 			padding,

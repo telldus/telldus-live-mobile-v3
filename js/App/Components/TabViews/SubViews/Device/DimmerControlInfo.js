@@ -31,12 +31,17 @@ import {
 } from '../../../../../BaseComponents';
 import DimSlider from './DimSlider';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../../HOC/withTheme';
+
 import shouldUpdate from '../../../../Lib/shouldUpdate';
 
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
     name: string,
     id: number,
 	style: Object,
@@ -53,7 +58,12 @@ class DimmerControlInfo extends View<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return shouldUpdate(this.props, nextProps, ['appLayout', 'isOnline']);
+		return shouldUpdate(this.props, nextProps, [
+			'appLayout',
+			'isOnline',
+			'themeInApp',
+			'colorScheme',
+		]);
 	}
 
 	render(): Object {
@@ -65,11 +75,16 @@ class DimmerControlInfo extends View<Props, null> {
 			isOnline,
 			appLayout,
 			intl,
+			colors,
 		} = this.props;
 
-		const minimumTrackTintColor = isOnline ? Theme.Core.brandSecondary : '#cccccc';
+		const {
+			inAppBrandSecondary,
+		} = colors;
+
+		const minimumTrackTintColor = isOnline ? inAppBrandSecondary : '#cccccc';
 		const maximumTrackTintColor = isOnline ? 'rgba(219, 219, 219, 255)' : '#e5e5e5';
-		const thumbTintColor = isOnline ? Theme.Core.brandSecondary : '#cccccc';
+		const thumbTintColor = isOnline ? inAppBrandSecondary : '#cccccc';
 
 		const {
 			dimInfoDialogueContainer,
@@ -78,6 +93,7 @@ class DimmerControlInfo extends View<Props, null> {
 			buttonStyle,
 			iconStyle,
 			iconSize,
+			dialogueBodyTextStyle,
 		} = this.getStyles(appLayout);
 
 		return (
@@ -90,7 +106,9 @@ class DimmerControlInfo extends View<Props, null> {
 					headerWidth={style.headerWidth}
 					headerHeight={style.headerHeight}/>
 				<View style={style.dialogueBodyStyle}>
-					<Text style={style.dialogueBodyTextStyle}>
+					<Text
+						level={18}
+						style={dialogueBodyTextStyle}>
 						{intl.formatMessage(i18n.dimInstruction)}
 					</Text>
 					<View style={{
@@ -128,10 +146,6 @@ class DimmerControlInfo extends View<Props, null> {
 		fButtonSize = fButtonSize > maxSizeFloatingButton ? maxSizeFloatingButton : fButtonSize;
 
 		return {
-			dialogueBodyDimTextStyle: {
-				color: '#000',
-				fontSize: 12,
-			},
 			iconSize: deviceWidth * 0.050666667,
 			buttonStyle: {
 				elevation: 4,
@@ -155,24 +169,15 @@ class DimmerControlInfo extends View<Props, null> {
 				width: 12,
 				borderRadius: 6,
 			},
-			dialogueBoxStyle: {
-				borderRadius: 8,
-				elevation: 2,
-				shadowColor: '#000',
-				shadowRadius: 8,
-				shadowOpacity: 0.23,
-				shadowOffset: {
-					width: 0,
-					height: 1,
-				},
-				backgroundColor: '#fff',
-			},
 			dimInfoDialogueContainer: {
 				borderRadius: 8,
 				overflow: 'hidden',
+			},
+			dialogueBodyTextStyle: {
+				fontSize: 13,
 			},
 		};
 	}
 }
 
-export default DimmerControlInfo;
+export default withTheme(DimmerControlInfo);

@@ -22,16 +22,25 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Animated, Easing, View, Text, StyleSheet } from 'react-native';
+import { Animated, Easing } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
-import Theme from '../../../Theme';
+import {
+	View,
+	Text,
+} from '../../../../BaseComponents';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
 const BAR_WIDTH_ZERO_POSITION = INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
 
-type Props = {
+type Props = PropsThemedComponent & {
 	progress: number,
 	indeterminate: boolean,
 	animated: boolean,
@@ -50,7 +59,6 @@ type DefaultProps = {
 	animated: boolean,
 	borderRadius: number,
 	borderWidth: number,
-	color: string,
 	height: number,
 	indeterminate: boolean,
 	progress: number,
@@ -166,8 +174,11 @@ class DimmerProgressBar extends Component<Props, State> {
 			alignItems: 'center',
 		};
 
+		const styles = this._getStyle();
+		const _color = color || styles.inAppBrandSecondary;
+
 		const progressStyle = {
-			backgroundColor: color,
+			backgroundColor: _color,
 			height,
 			width: innerWidth,
 			transform: [
@@ -217,30 +228,41 @@ class DimmerProgressBar extends Component<Props, State> {
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	textContainer: {
-		position: 'absolute',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	text: {
-		color: '#1b365d',
-		backgroundColor: 'transparent',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-});
+	_getStyle = (): Object => {
+		const {
+			colors,
+		} = this.props;
+
+		const {
+			inAppBrandSecondary,
+			inAppBrandPrimary,
+		} = colors;
+
+		return {
+			inAppBrandSecondary,
+			textContainer: {
+				position: 'absolute',
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			text: {
+				color: inAppBrandPrimary,
+				backgroundColor: 'transparent',
+				textAlign: 'center',
+				textAlignVertical: 'center',
+			},
+		};
+	};
+}
 
 DimmerProgressBar.defaultProps = {
 	animated: true,
 	borderRadius: 4,
 	borderWidth: 1,
-	color: Theme.Core.brandSecondary,
 	height: 6,
 	indeterminate: false,
 	progress: 0,
 	width: 150,
 };
-module.exports = injectIntl(DimmerProgressBar);
+module.exports = withTheme(injectIntl(DimmerProgressBar));

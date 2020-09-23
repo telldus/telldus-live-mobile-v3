@@ -64,3 +64,19 @@ export function closeDatabase() {
 	let localStorage = new TelldusLocalStorage();
 	localStorage.closeDatabase();
 }
+
+export function storeGeoFenceEvent(data: Object): Promise<any> | any {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.storeGeoFenceEvent(data);
+}
+
+export function getGeoFenceEvents(): Promise<any> | any {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.queryGeoFenceEvents();
+}
+
+export function clearGeoFenceEvents(): Promise<any> | any {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.dropTableGeoFenceEvents();
+}
+

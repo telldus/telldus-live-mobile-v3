@@ -25,12 +25,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { IconTelldus, View } from '../../../../../BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
 import { deviceSetState } from '../../../../Actions/Devices';
-import Theme from '../../../../Theme';
+
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
 
 type Props = {
 	commandDown: number,
@@ -50,6 +53,9 @@ type Props = {
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class DownButton extends View {
@@ -95,24 +101,35 @@ class DownButton extends View {
 		const noop = function () {
 		};
 
-		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style, local, disableActionIndicator } = this.props;
+		let {
+			isGatewayActive,
+			supportedMethod,
+			isInState,
+			name,
+			methodRequested,
+			iconSize,
+			style,
+			local,
+			disableActionIndicator,
+			colors,
+		} = this.props;
 
+		const styles = getStyles({colors});
 
 		let downButtonStyle = !isGatewayActive ?
 			(isInState === 'DOWN' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'DOWN' ? styles.enabledBackground : styles.disabledBackground);
 		let downIconColor = !isGatewayActive ?
-			(isInState === 'DOWN' ? '#fff' : '#a2a2a2') : (isInState === 'DOWN' ? '#fff' : Theme.Core.brandSecondary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			(isInState === 'DOWN' ? colors.colorOnActiveIcon : '#a2a2a2') : (isInState === 'DOWN' ? colors.colorOnActiveIcon : colors.colorOnInActiveIcon);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity
-				style={[downButtonStyle, style]}
+				style={[styles.styleDef, downButtonStyle, style]}
 				onPress={supportedMethod ? this.onDown : noop}
 				accessibilityLabel={`${this.labelDownButton}, ${name}`}>
 				<IconTelldus icon="down" size={iconSize}
 					style={{
-						color: supportedMethod ? downIconColor : '#eeeeee',
+						color: supportedMethod ? downIconColor : colors.colorOnInActiveBg,
 					}}
 				/>
 				{
@@ -131,31 +148,38 @@ DownButton.defaultProps = {
 	disableActionIndicator: false,
 };
 
-const styles = StyleSheet.create({
-	enabled: {
-		color: '#1a355b',
-	},
-	enabledBackground: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	disabledBackground: {
-		backgroundColor: '#eeeeee',
-	},
-	enabledBackgroundStop: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	offlineBackground: {
-		backgroundColor: '#a2a2a2',
-	},
-	disabled: {
-		color: '#eeeeee',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorOnActiveBg,
+		colorOnInActiveBg,
+		buttonSeparatorColor,
+	} = colors;
+
+	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
+		enabled: {
+			color: '#1a355b',
+		},
+		enabledBackground: {
+			backgroundColor: colorOnActiveBg,
+		},
+		disabledBackground: {
+			backgroundColor: colorOnInActiveBg,
+		},
+		offlineBackground: {
+			backgroundColor: '#a2a2a2',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
@@ -163,4 +187,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(DownButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(DownButton));

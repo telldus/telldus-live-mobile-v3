@@ -78,8 +78,6 @@ const SensorBlock = React.memo<Object>((props: Props): Object => {
 		formatTime,
 	} = useRelativeIntl(gatewayTimezone);
 
-	const { brandSecondary } = Theme.Core;
-
 	const {
 		containerStyle,
 		iconStyle,
@@ -96,19 +94,27 @@ const SensorBlock = React.memo<Object>((props: Props): Object => {
 			style={containerStyle}
 			accessible={true}
 			importantForAccessibility={'yes'}>
-			<IconTelldus icon={icon} style={iconStyle}/>
+			<IconTelldus
+				icon={icon}
+				style={iconStyle}
+				level={23}/>
 			<View style={textContainer}>
-				<Text style={labelStyle}>
+				<Text
+					level={23}
+					style={labelStyle}>
 					{label}
 				</Text>
 				{name === 'wdir' ?
-					<Text style={valueStyle}>
+					<Text
+						level={23}
+						style={valueStyle}>
 						{value}
 					</Text>
 					:
 					<FormattedNumber
 						value={value}
 						{...formatOptions}
+						level={23}
 						style={valueStyle}
 						suffix={unit}
 						suffixStyle={valueStyle}/>
@@ -130,7 +136,10 @@ const SensorBlock = React.memo<Object>((props: Props): Object => {
 					<Text
 						level={3}
 						style={updatedInfoStyle}>
-						<Icon name={'angle-up'} color={brandSecondary} size={icSize}/>
+						<Icon
+							name={'angle-up'}
+							level={23}
+							size={icSize}/>
 						<Text style={Theme.Styles.hiddenText}>
 							{' '}
 						</Text>
@@ -151,7 +160,10 @@ const SensorBlock = React.memo<Object>((props: Props): Object => {
 					<Text
 						level={3}
 						style={updatedInfoStyle}>
-						<Icon name={'angle-down'} color={brandSecondary} size={icSize}/>
+						<Icon
+							name={'angle-down'}
+							level={23}
+							size={icSize}/>
 						<Text style={Theme.Styles.hiddenText}>
 							{' '}
 						</Text>
@@ -202,7 +214,6 @@ const SensorBlock = React.memo<Object>((props: Props): Object => {
 			},
 			iconStyle: {
 				fontSize: iconSize,
-				color: brandSecondary,
 				marginRight: 5 + (labelFontSize * 0.4),
 			},
 			textContainer: {
@@ -210,11 +221,9 @@ const SensorBlock = React.memo<Object>((props: Props): Object => {
 			},
 			labelStyle: {
 				fontSize: labelFontSize,
-				color: brandSecondary,
 			},
 			valueStyle: {
 				fontSize: valueFontSize,
-				color: brandSecondary,
 				textShadowColor: 'rgba(0,0,0,0)',
 				backgroundColor: 'rgba(0,0,0,0)',
 			},

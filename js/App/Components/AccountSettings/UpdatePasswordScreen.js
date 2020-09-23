@@ -23,7 +23,6 @@
 'use strict';
 
 import React, { useState, useCallback } from 'react';
-import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -33,6 +32,7 @@ import {
 	Text,
 	TouchableButton,
 	MaterialTextInput,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	changePassword,
@@ -40,10 +40,10 @@ import {
 import {
 	showToast,
 } from '../../Actions/App';
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -57,6 +57,13 @@ const UpdatePasswordScreen = (props: Object): Object => {
 		textFieldStyleConfirm,
 	} = props;
 	const { app: {layout} } = useSelector((state: Object): Object => state);
+
+	const {
+		colors,
+	} = useAppTheme();
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	const { formatMessage } = useIntl();
 
@@ -79,7 +86,10 @@ const UpdatePasswordScreen = (props: Object): Object => {
 		bodyStyle,
 		currentLabelStyle,
 		buttonStyle,
-	} = getStyles(layout);
+	} = getStyles({
+		colors,
+		layout,
+	});
 
 	const dispatch = useDispatch();
 	const onSubmit = useCallback((): Function => {
@@ -152,10 +162,14 @@ const UpdatePasswordScreen = (props: Object): Object => {
 				leftIcon={'close'}
 				navigation={navigation}
 				{...others}/>
-			<ScrollView style={container}>
-				<View style={body}>
+			<ThemedScrollView
+				level={3}
+				style={container}>
+				<View
+					level={2}
+					style={body}>
 					<Text style={titleStyle}>
-						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.changePassword))}
+						{capitalize(formatMessage(i18n.changePassword))}
 					</Text>
 					<Text style={bodyStyle}>
 						{formatMessage(i18n.changePassDescription)}
@@ -169,8 +183,8 @@ const UpdatePasswordScreen = (props: Object): Object => {
 						onChangeText={onChangeTextCurrent}
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={Theme.Core.brandSecondary}
-						tintColor={Theme.Core.brandSecondary}
+						baseColor={inAppBrandSecondary}
+						tintColor={inAppBrandSecondary}
 						returnKeyType={'done'}
 						secureTextEntry={true}
 					/>
@@ -208,23 +222,30 @@ const UpdatePasswordScreen = (props: Object): Object => {
 					accessible={true}
 					style={buttonStyle}
 				/>
-			</ScrollView>
+			</ThemedScrollView>
 		</>
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
+const getStyles = ({
+	layout,
+	colors,
+}: Object): Object => {
+	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.04);
 
+	const {
+		textThree,
+		inAppBrandSecondary,
+	} = colors;
+
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 0,
@@ -234,11 +255,10 @@ const getStyles = (appLayout: Object): Object => {
 			...Theme.Core.shadow,
 			marginHorizontal: padding,
 			marginVertical: padding * 2,
-			backgroundColor: '#fff',
 		},
 		titleStyle: {
 			fontSize: fontSize * 1.6,
-			color: Theme.Core.brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		bodyStyle: {
 			fontSize,
@@ -249,11 +269,11 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: fontSize * 1.3,
 			marginTop: 16,
 			width: '100%',
-			color: '#000',
+			color: textThree,
 		},
 		currentLabelStyle: {
 			alignSelf: 'flex-start',
-			color: Theme.Core.brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize,
 			marginTop: 20,
 		},

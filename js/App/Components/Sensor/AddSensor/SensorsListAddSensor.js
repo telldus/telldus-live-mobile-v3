@@ -30,6 +30,7 @@ import { createSelector } from 'reselect';
 import {
 	View,
 	InfoBlock,
+	ThemedRefreshControl,
 } from '../../../../BaseComponents';
 import {
 	SensorRow,
@@ -155,8 +156,12 @@ render(): Object {
 		<FlatList
 			data={rows}
 			renderItem={this.renderRow}
-			onRefresh={this.onRefresh}
-			refreshing={this.state.isRefreshing}
+			refreshControl={
+				<ThemedRefreshControl
+					onRefresh={this.onRefresh}
+					refreshing={this.state.isRefreshing}
+				/>
+			}
 			keyExtractor={this.keyExtractor}
 			contentContainerStyle={{
 				paddingVertical: padding,

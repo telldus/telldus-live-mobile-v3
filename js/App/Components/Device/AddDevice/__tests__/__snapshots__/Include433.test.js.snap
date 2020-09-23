@@ -41,65 +41,12 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
       style={
         Object {
           "backgroundColor": "transparent",
-          "flex": 0,
+          "height": 0,
+          "marginTop": 0,
+          "width": 0,
         }
       }
-    >
-      <View
-        style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "#1b365d",
-              "flexDirection": "row",
-              "height": 64,
-              "justifyContent": "center",
-              "paddingHorizontal": 15,
-              "paddingTop": 0,
-              "position": "relative",
-            },
-            Object {
-              "height": 106.72,
-            },
-          ]
-        }
-      >
-        <View
-          accessible={true}
-          focusable={false}
-          onClick={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          style={
-            Object {
-              "opacity": 1,
-            }
-          }
-        >
-          <Image
-            source={
-              Object {
-                "uri": "telldus_logo",
-              }
-            }
-            style={
-              Array [
-                Object {
-                  "height": 35.00000025,
-                  "resizeMode": "contain",
-                  "width": 230.49999975,
-                },
-                undefined,
-              ]
-            }
-          />
-        </View>
-      </View>
-    </View>
+    />
     <View
       accessible={true}
       focusable={false}
@@ -324,65 +271,12 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
       style={
         Object {
           "backgroundColor": "transparent",
-          "flex": 0,
+          "height": 0,
+          "marginTop": 0,
+          "width": 0,
         }
       }
-    >
-      <View
-        style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "#1b365d",
-              "flexDirection": "row",
-              "height": 64,
-              "justifyContent": "center",
-              "paddingHorizontal": 15,
-              "paddingTop": 0,
-              "position": "relative",
-            },
-            Object {
-              "height": 106.72,
-            },
-          ]
-        }
-      >
-        <View
-          accessible={true}
-          focusable={false}
-          onClick={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          style={
-            Object {
-              "opacity": 1,
-            }
-          }
-        >
-          <Image
-            source={
-              Object {
-                "uri": "telldus_logo",
-              }
-            }
-            style={
-              Array [
-                Object {
-                  "height": 35.00000025,
-                  "resizeMode": "contain",
-                  "width": 230.49999975,
-                },
-                undefined,
-              ]
-            }
-          />
-        </View>
-      </View>
-    </View>
+    />
     <View
       accessible={true}
       focusable={false}
@@ -511,8 +405,8 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   "backgroundColor": "#fff",
                   "borderRadius": 2,
                   "elevation": 2,
-                  "marginBottom": 10.416375,
-                  "marginHorizontal": 20.83275,
+                  "marginBottom": 4.3471005,
+                  "marginHorizontal": 8.694201,
                   "shadowColor": "#000",
                   "shadowOffset": Object {
                     "height": 1,
@@ -520,7 +414,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   },
                   "shadowOpacity": 0.23,
                   "shadowRadius": 2,
-                  "width": 708.3345,
+                  "width": 732.611598,
                 },
                 undefined,
               ]
@@ -547,7 +441,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     "flex": 1,
                     "flexDirection": "column",
                     "justifyContent": "center",
-                    "paddingVertical": 72,
+                    "paddingVertical": 30.048,
                   }
                 }
               >
@@ -556,16 +450,16 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     Object {
                       "backgroundColor": "transparent",
                       "borderRightColor": "transparent",
-                      "borderRightWidth": 37.5,
+                      "borderRightWidth": 15.65,
                       "borderStyle": "solid",
                       "borderTopColor": "#1b365d",
                       "borderTopLeftRadius": 2,
-                      "borderTopWidth": 120,
+                      "borderTopWidth": 50.08,
                       "height": 0,
                       "left": 0,
                       "position": "absolute",
                       "top": 0,
-                      "width": 150,
+                      "width": 62.6,
                     }
                   }
                 />
@@ -575,10 +469,10 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     Object {
                       "backgroundColor": "transparent",
                       "color": "#fff",
-                      "fontSize": 37.5,
-                      "left": 45,
+                      "fontSize": 15.65,
+                      "left": 18.779999999999998,
                       "position": "absolute",
-                      "top": 7.5,
+                      "top": 3.13,
                     }
                   }
                 >
@@ -600,8 +494,8 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     "alignItems": "flex-start",
                     "backgroundColor": "transparent",
                     "justifyContent": "center",
-                    "paddingHorizontal": 20.83275,
-                    "paddingVertical": 41.6655,
+                    "paddingHorizontal": 8.694201,
+                    "paddingVertical": 17.388402,
                     "width": 555,
                   }
                 }
@@ -613,7 +507,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                       "backgroundColor": "transparent",
                       "color": "#8e8e93",
                       "flexWrap": "wrap",
-                      "fontSize": 26.250000000000004,
+                      "fontSize": 10.955000000000002,
                     }
                   }
                 >
@@ -642,6 +536,8 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 (0% )
               </Text>
               <View
+                colorScheme="light"
+                dark={false}
                 style={
                   Array [
                     Object {
@@ -659,6 +555,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     },
                   ]
                 }
+                themeInApp="OS"
               >
                 <View
                   style={
@@ -805,65 +702,12 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
       style={
         Object {
           "backgroundColor": "transparent",
-          "flex": 0,
+          "height": 0,
+          "marginTop": 0,
+          "width": 0,
         }
       }
-    >
-      <View
-        style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "#1b365d",
-              "flexDirection": "row",
-              "height": 64,
-              "justifyContent": "center",
-              "paddingHorizontal": 15,
-              "paddingTop": 0,
-              "position": "relative",
-            },
-            Object {
-              "height": 106.72,
-            },
-          ]
-        }
-      >
-        <View
-          accessible={true}
-          focusable={false}
-          onClick={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          style={
-            Object {
-              "opacity": 1,
-            }
-          }
-        >
-          <Image
-            source={
-              Object {
-                "uri": "telldus_logo",
-              }
-            }
-            style={
-              Array [
-                Object {
-                  "height": 35.00000025,
-                  "resizeMode": "contain",
-                  "width": 230.49999975,
-                },
-                undefined,
-              ]
-            }
-          />
-        </View>
-      </View>
-    </View>
+    />
     <View
       accessible={true}
       focusable={false}

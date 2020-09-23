@@ -247,7 +247,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			if (word.includes('%')) {
 				return (
 					<Text
-						level={5}
+						level={26}
 						style={titleStyleTwo} key={`${i}`}>
 						{` ${word.replace(/%/g, '').toUpperCase()}`}
 					</Text>
@@ -255,7 +255,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			}
 			return (
 				<Text
-					level={5}
+					level={26}
 					style={titleStyleOne} key={`${i}`}>
 					{word.toUpperCase()}
 				</Text>
@@ -331,11 +331,13 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 				{premAboutExpire && <View
 					level={2}
 					style={expireNotifCover}>
-					<Text style={expireNotifHeader}>
+					<Text
+						level={23}
+						style={expireNotifHeader}>
 						{formatMessage(i18n.premExpireNofifHeader)}!
 					</Text>
 					<Text
-						level={5}
+						level={26}
 						style={expireNotifContent}>
 						{formatMessage(i18n.premExpireNofifContent, {
 							expDate: formatDate(moment.unix(pro)),
@@ -350,11 +352,13 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 						<IconTelldus icon={'premium'} style={iconStyle}/>
 						{header}
 					</View>
-					<Text style={pMonthTextStyle}>
+					<Text
+						level={23}
+						style={pMonthTextStyle}>
 						{`${pricePerMon}/${formatMessage(i18n.month)}`}
 					</Text>
 					{cPerMonth !== newTotal && <Text
-						level={5}
+						level={26}
 						style={annualChargeTextStyle}>
 						{formatMessage(i18n.billedAnnually, {
 							value: `€${formatNumber(newTotal)}`,
@@ -364,7 +368,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
 						<IconTelldus icon={'sms'} style={smsIconStyle}/>
 						<Text
-							level={5}
+							level={26}
 							style={smsCreditTextStyle}>
 							{smsCreditText}
 						</Text>
@@ -374,7 +378,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 							{`€${formatNumber(prevTotal)}`}
 						</Text>}
 						{cPerMonth !== newTotal && <Text
-							level={5}
+							level={26}
 							style={newChargeTextStyle}>
 							{`€${formatNumber(newTotal)} ${formatMessage(i18n.total)}`}
 						</Text>
@@ -384,7 +388,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 						{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
 					</Text>}
 					<Text
-						level={5}
+						level={26}
 						style={autoRenewInfoStyle}>
 						{renewalText}
 					</Text>
@@ -425,14 +429,12 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 	const {
 		shadow,
 		paddingFactor,
-		brandSecondary,
 	} = Theme.Core;
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.036);
 
-	let footerHeight = Math.floor(deviceWidth * 0.26);
-	footerHeight = footerHeight > 100 ? 100 : footerHeight;
+	const footerHeight = Theme.Core.getFooterHeight(deviceWidth);
 
 	return {
 		footerHeight,
@@ -469,7 +471,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		},
 		pMonthTextStyle: {
 			fontSize: fontSize * 2.6,
-			color: brandSecondary,
 			marginTop: 20,
 			fontWeight: 'bold',
 			textAlign: 'center',
@@ -539,7 +540,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		},
 		expireNotifHeader: {
 			fontSize: fontSize * 1.7,
-			color: brandSecondary,
 			textAlign: 'center',
 		},
 		expireNotifContent: {

@@ -61,23 +61,23 @@ const changeSensorDisplayTypeDB = (id?: number, kind?: string = SENSOR_KEY): Thu
 
 	if (dbCarousel) {
 		sensorIdsInCurrentDb.forEach((sensorId: number) => {
-			const sensor = sensors.byId[sensorId];
+			const sensor = sensors.byId[sensorId] || {};
 			const sensorInCurrentDb = sensorsByIdInCurrentDb[sensorId];
 			const data = getSensorScalesOnDb(sensorInCurrentDb) || sensor.data;
 			dispatch(prepareAndUpdate(sensorId, data, defaultSensorSettings));
 		});
 		Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
-			const metWeather = metWeatherByIdInCurrentDb[key];
+			const metWeather = metWeatherByIdInCurrentDb[key] || {};
 			const data = metWeather.selectedAttributes;
 			dispatch(prepareAndUpdate(parseInt(key, 10), data, defaultSensorSettings));
 		});
 	} else if (id) {
 		if (kind === MET_ID) {
-			const metWeather = metWeatherByIdInCurrentDb[id];
+			const metWeather = metWeatherByIdInCurrentDb[id] || {};
 			const data = metWeather.selectedAttributes;
 			dispatch(prepareAndUpdate(id, data, defaultSensorSettings));
 		} else {
-			const sensor = sensors.byId[id];
+			const sensor = sensors.byId[id] || {};
 			const sensorInCurrentDb = sensorsByIdInCurrentDb[id];
 			const data = getSensorScalesOnDb(sensorInCurrentDb) || sensor.data;
 			dispatch(prepareAndUpdate(id, data, defaultSensorSettings));
@@ -86,6 +86,9 @@ const changeSensorDisplayTypeDB = (id?: number, kind?: string = SENSOR_KEY): Thu
 };
 
 const prepareAndUpdate = (sensorId: number, sensorData: Object, defaultSensorSettings: Object): ThunkAction => (dispatch: Function, getState: Function) => {
+	if (!sensorData) {
+		return;
+	}
 	const supportedDisplayTypes = getSupportedDisplayTypes(sensorData);
 	const { displayTypeDB = supportedDisplayTypes[0] } = defaultSensorSettings[sensorId] ? defaultSensorSettings[sensorId] : {};
 

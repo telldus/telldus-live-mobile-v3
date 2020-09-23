@@ -36,9 +36,6 @@ import {
 	TouchableButton,
 } from '../../../BaseComponents';
 
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
 
 import Theme from '../../Theme';
@@ -158,7 +155,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 			level={3}
 			style={container}>
 			<NavigationHeaderPoster
-				h1={voucher ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.redeemCard)) : capitalizeFirstLetterOfEachWord('Premium access')}
+				h1={voucher ? capitalize(formatMessage(i18n.redeemCard)) : capitalize(formatMessage(i18n.premiumAccess))}
 				h2={voucher ? formatMessage(i18n.codeAccepted) : formatMessage(i18n.getMoreFeaturesAndBenefits)}
 				align={'right'}
 				showLeftIcon={!success}
@@ -175,12 +172,12 @@ const PostPurchaseScreen = (props: Object): Object => {
 						 success ? { color: Theme.Core.twine } : { color: Theme.Core.brandDanger },
 					]}/>
 					<Text
-						level={5}
+						level={26}
 						style={titleStyleOne}>
 						{title}
 					</Text>
 					<Text
-						level={5}
+						level={26}
 						style={bodyStyle}>
 						{bodyText}
 					</Text>
@@ -189,7 +186,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 						{product !== 'credits' && <View style={purchaseInfoCover}>
 							<IconTelldus icon={'premium'} style={purchaseInfoIcon}/>
 							<Text
-								level={5}
+								level={26}
 								style={purchaseInfoText}>
 								{getInfo().toUpperCase()}
 							</Text>
@@ -198,7 +195,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 						{!!credits && <View style={purchaseInfoCover}>
 							<IconTelldus icon={'sms'} style={purchaseInfoIcon}/>
 							<Text
-								level={5}
+								level={26}
 								style={purchaseInfoText}>
 								{`${credits} `}{formatMessage(i18n.smsCredits).toUpperCase()}
 							</Text>

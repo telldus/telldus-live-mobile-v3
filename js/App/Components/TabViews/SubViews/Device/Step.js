@@ -22,8 +22,12 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { View, Text, StyleSheet } from '../../../../../BaseComponents';
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+} from '../../../../../BaseComponents';
 
 import i18n from '../../../../Translations/common';
 
@@ -61,7 +65,10 @@ render(): Object {
 	let accessibilityLabel = `${value}%, ${this.defaultDescriptionButton}`;
 
 	return (
-		<TouchableOpacity onPress={this.onPressDim} style={styles.button}
+		<TouchableOpacity
+			level={13}
+			onPress={this.onPressDim}
+			style={styles.button}
 			accessibilityLabel={accessibilityLabel} importantForAccessibility={importantForAccessibility}>
 			<Text style={styles.value}>
 				{`${value}%`}
@@ -74,7 +81,6 @@ render(): Object {
 const styles = StyleSheet.create({
 	button: {
 		borderRadius: 2,
-		backgroundColor: '#e26901',
 		marginVertical: 5,
 		marginHorizontal: 5,
 	},

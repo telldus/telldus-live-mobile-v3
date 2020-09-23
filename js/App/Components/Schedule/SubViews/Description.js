@@ -45,7 +45,7 @@ export default class Description extends View<null, Props, null> {
 
 		return (
 			<Text
-				level={6}
+				level={25}
 				{...props}
 				style={[defaultStyle, style]}>
 				{children}

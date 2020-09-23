@@ -35,6 +35,7 @@ import ActiveTime from './ActiveTime';
 import SetAreaName from './SetAreaName';
 import EditGeoFence from './EditGeoFence';
 import EditGeoFenceAreaFull from './EditGeoFenceAreaFull';
+import InAppDisclosureScreen from './InAppDisclosureScreen';
 
 const initialRouteName = 'AddEditGeoFence';
 
@@ -43,7 +44,7 @@ import {
 	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
 
-const ScreenConfigs = [
+export const ScreenConfigs = [
 	{
 		name: 'AddEditGeoFence',
 		Component: AddEditGeoFence,
@@ -104,6 +105,13 @@ const ScreenConfigs = [
 		name: 'EditGeoFenceAreaFull',
 		Component: EditGeoFenceAreaFull,
 		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'InAppDisclosureScreen',
+		Component: InAppDisclosureScreen,
 		options: {
 			headerShown: false,
 		},

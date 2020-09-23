@@ -36,6 +36,7 @@ import {
 	View,
 	Text,
 	Icon,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { JobRow, JobsPoster } from './SubViews';
 import {
@@ -304,7 +305,10 @@ class SchedulerTab extends View<null, Props, State> {
 					key={key}>
 					{isEmpty ?
 						<View style={containerWhenNoData}>
-							<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+							<Icon
+								level={23}
+								name="exclamation-circle"
+								size={iconSize}/>
 							<Text style={textWhenNoData}>
 								{this.noScheduleMessage}
 							</Text>
@@ -317,15 +321,19 @@ class SchedulerTab extends View<null, Props, State> {
 							<FlatList
 								data={schedules}
 								renderItem={this._renderRow}
-								onRefresh={this.onRefresh}
 								keyExtractor={this.keyExtractor}
-								refreshing={this.state.isRefreshing}
 								// To re-render the list to update row style on different weekdays(today screen will have different row design
 								// if there is any expired schedule)
 								extraData={{
 									todayIndex,
 									appLayout,
 								}}
+								refreshControl={
+									<ThemedRefreshControl
+										onRefresh={this.onRefresh}
+										refreshing={this.state.isRefreshing}
+									/>
+								}
 							/>
 						</View>
 					}

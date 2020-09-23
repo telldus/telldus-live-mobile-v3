@@ -32,6 +32,8 @@ import View from './View';
 import Text from './Text';
 import IconTelldus from './IconTelldus';
 
+import Theme from '../App/Theme';
+
 const TwoStepFooter = (props: Object): Object => {
 	const {
 		f1,
@@ -41,12 +43,15 @@ const TwoStepFooter = (props: Object): Object => {
 		onPressF1,
 		onPressF2,
 		onPressF3,
+		footersCoverStyle,
+		f2Style,
+		f3Style,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
-		footersCover,
+		footersCoverDef,
 		footerOne,
 		footerItem,
 		footerText,
@@ -55,12 +60,12 @@ const TwoStepFooter = (props: Object): Object => {
 	} = getStyles(layout);
 
 	return (
-		<View style={footersCover}>
-			<View
+		<View style={[footersCoverDef, footersCoverStyle]}>
+			{f1 && <View
 				level={4}
 				style={footerOne}>
 				<TouchableOpacity style={footerItem} onPress={onPressF1}>
-					{f1Icon && <IconTelldus
+					{!!f1Icon && <IconTelldus
 						level={11}
 						icon={f1Icon}
 						style={f1IconStyle}/>}
@@ -71,20 +76,21 @@ const TwoStepFooter = (props: Object): Object => {
 					</Text>
 				</TouchableOpacity>
 			</View>
+			}
 			<View
-				level={5}
+				level={2}
 				style={footerTwo}>
 				<TouchableOpacity style={footerItem} onPress={onPressF2}>
 					<Text
 						level={10}
-						style={footerText}>
+						style={[footerText, f2Style]}>
 						{f2}
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity style={footerItem} onPress={onPressF3}>
 					<Text
 						level={10}
-						style={footerText}>
+						style={[footerText, f3Style]}>
 						{f3}
 					</Text>
 				</TouchableOpacity>
@@ -97,14 +103,15 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const footerHeight = Math.floor(deviceWidth * 0.26);
+
+	const footerHeight = Theme.Core.getFooterHeight(deviceWidth);
 
 	return {
 		footerHeight,
-		footersCover: {
+		footersCoverDef: {
 			position: 'absolute',
 			alignItems: 'flex-end',
-			justifyContent: 'center',
+			justifyContent: 'flex-end',
 			width: '100%',
 			borderTopWidth: StyleSheet.hairlineWidth,
 			borderTopColor: '#00000040',

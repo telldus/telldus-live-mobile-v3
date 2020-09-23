@@ -25,15 +25,18 @@
 import React from 'react';
 import {
 	TouchableOpacity,
-	StyleSheet,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import {
 	View,
-	Image,
 	Text,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
+
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
 
 import Theme from '../../../Theme';
 
@@ -42,7 +45,7 @@ type Props = {
     showAngleRight?: boolean,
     rowCoverStyle?: Array<any> | Object,
     labelStyle?: Array<any> | Object,
-    imgStyle?: Array<any> | Object,
+    iconStyle?: Array<any> | Object,
     onPress?: Function,
 };
 
@@ -52,31 +55,44 @@ const RowWithAngle: Object = React.memo<Object>((props: Props): Object => {
 		showAngleRight,
 		rowCoverStyle,
 		labelStyle,
-		imgStyle,
+		iconStyle,
 		onPress,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		colors,
+	} = useAppTheme();
 
 	const {
 		rowCoverStyleDef,
 		labelStyleDef,
-		imgStyleDef,
-	} = getStyles(layout);
+		iconStyleDef,
+	} = getStyles({
+		layout,
+		colors,
+	});
 
 	return (
 		<TouchableOpacity onPress={onPress} disabled={!onPress}>
-			<View style={[rowCoverStyleDef, rowCoverStyle]}>
+			<View
+				level={2}
+				style={[rowCoverStyleDef, rowCoverStyle]}>
 				{!!labelText &&
                 typeof labelText === 'string' ?
-					<Text style={[labelStyleDef, labelStyle]}>
+					<Text
+						level={3}
+						style={[labelStyleDef, labelStyle]}>
 						{labelText}
 					</Text>
 					:
 					labelText
 				}
 				{!!showAngleRight &&
-                <Image source={{uri: 'right_arrow_key'}} style={[imgStyleDef, imgStyle]}/>
+				<ThemedMaterialIcon
+					level={3}
+					name={'keyboard-arrow-right'}
+					style={[iconStyleDef, iconStyle]}/>
 				}
 			</View>
 		</TouchableOpacity>
@@ -87,16 +103,16 @@ RowWithAngle.defaultProps = {
 	showAngleRight: true,
 };
 
-const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
+const getStyles = ({
+	layout,
+	colors,
+}: Object): Object => {
+	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
 		paddingFactor,
-		eulaContentColor,
-		angleTintColor,
-		angledRowBorderColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -105,20 +121,17 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		rowCoverStyleDef: {
 			padding: padding * 1.5,
-			borderColor: angledRowBorderColor,
-			borderBottomWidth: StyleSheet.hairlineWidth,
-			backgroundColor: '#fff',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
+			marginHorizontal: padding,
+			borderRadius: 2,
+			marginBottom: padding / 2,
 		},
 		labelStyleDef: {
-			color: eulaContentColor,
 			fontSize,
 		},
-		imgStyleDef: {
-			tintColor: angleTintColor,
-			height: fontSize,
-			width: fontSize,
+		iconStyleDef: {
+			fontSize: fontSize * 1.5,
 		},
 	};
 };

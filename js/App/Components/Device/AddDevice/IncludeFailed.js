@@ -100,9 +100,12 @@ render(): Object {
 				<View
 					level={2}
 					style={infoContainer}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
+					<IconTelldus
+						level={23}
+						icon={'info'}
+						style={statusIconStyle}/>
 					<Text
-						level={5}
+						level={26}
 						style={infoTextStyle}>
 						{formatMessage(i18n.includeFailedMessage)}
 					</Text>
@@ -127,7 +130,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, brandSecondary, shadow, brandDanger } = Theme.Core;
+	const { paddingFactor, shadow, brandDanger } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const innerPadding = 5 + padding;
@@ -153,7 +156,6 @@ getStyles(): Object {
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
-			color: brandSecondary,
 		},
 		infoTextStyle: {
 			flex: 1,

@@ -26,9 +26,10 @@ import { connect } from 'react-redux';
 
 import {
 	View,
-	Image,
+	ThemedMaterialIcon,
 	LocationDetails,
 	IconTelldus,
+	EmptyView,
 } from '../../../../BaseComponents';
 
 import { hasTokenExpired } from '../../../Lib/LocalControl';
@@ -84,9 +85,34 @@ class GatewayRow extends PureComponent<Props, State> {
 		}
 	}
 
-	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
+	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object, {
+		textStyle,
+	}: Object): Object {
 		return (
-			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} localKey={localKey}/>
+			<Status
+				online={online}
+				websocketOnline={websocketOnline}
+				intl={this.props.intl}
+				localKey={localKey}
+				textStyle={textStyle} />
+		);
+	}
+
+	renderCustomComponent = (): Object => {
+		let {
+			appLayout,
+			disabled,
+		} = this.props;
+		let styles = this.getStyles(appLayout);
+		return (
+			<View style={styles.arrowCover} pointerEvents={'none'}>
+				{
+					disabled ?
+						<IconTelldus icon={'notavailable'} style={styles.notAvailableIcon}/>
+						:
+						<ThemedMaterialIcon name={'keyboard-arrow-right'} style={styles.arrow}/>
+				}
+			</View>
 		);
 	}
 
@@ -98,11 +124,18 @@ class GatewayRow extends PureComponent<Props, State> {
 			screenReaderEnabled,
 			disabled,
 		} = this.props;
+
+		if (!location) {
+			return <EmptyView/>;
+		}
+
 		let { name, type, online, websocketOnline, localKey = {} } = location;
 
-		let info = this.getLocationStatus(online, websocketOnline, localKey);
-
 		let styles = this.getStyles(appLayout);
+
+		let info = this.getLocationStatus(online, websocketOnline, localKey, {
+			textStyle: styles.textStyle,
+		});
 
 		let locationImageUrl = getLocationImageUrl(type);
 		let locationData = {
@@ -144,15 +177,8 @@ class GatewayRow extends PureComponent<Props, State> {
 					style={styles.locationDetails}
 					h1Style={styles.h1Style}
 					h2Style={styles.h2Style}
-					onPress={disabled ? undefined : this.onPressGateway}/>
-				<View style={styles.arrowCover} pointerEvents={'none'}>
-					{
-						disabled ?
-							<IconTelldus icon={'notavailable'} style={styles.notAvailableIcon}/>
-							:
-							<Image source={{uri: 'right_arrow_key'}} style={styles.arrow}/>
-					}
-				</View>
+					onPress={disabled ? undefined : this.onPressGateway}
+					renderCustomComponent={this.renderCustomComponent}/>
 			</View>
 		);
 	}
@@ -176,7 +202,9 @@ class GatewayRow extends PureComponent<Props, State> {
 			headerOneColorBlockEnabled,
 			headerOneColorBlockDisabled,
 			iconTwoColorBlock,
-			iconOneColorBlockDisabled,
+			iconTwoColorBlockDisabled,
+			infoOneColorBlockDisabled,
+			infoOneColorBlockEnabled,
 		} = colors;
 
 		const padding = deviceWidth * paddingFactor;
@@ -185,6 +213,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		const colorBackground = disabled ? colorBlockDisabled : card;
 		const colorHeaderOneText = disabled ? headerOneColorBlockDisabled : headerOneColorBlockEnabled;
+		const colorIconTwo = disabled ? iconTwoColorBlockDisabled : iconTwoColorBlock;
 
 		return {
 			rowItemsCover: {
@@ -192,22 +221,21 @@ class GatewayRow extends PureComponent<Props, State> {
 				alignItems: 'center',
 			},
 			locationDetails: {
-				width: rowWidth,
-				height: rowHeight,
 				marginVertical: padding / 4,
 				backgroundColor: colorBackground,
+				width: rowWidth,
+				height: rowHeight,
 			},
 			arrowCover: {
 				flex: 0,
 				position: 'absolute',
 				zIndex: 1,
-				right: padding * 2,
-				top: '40%',
+				right: 0,
+				top: '50%',
 			},
 			arrow: {
-				tintColor: iconTwoColorBlock,
-				height: rowHeight * 0.25,
-				width: rowHeight * 0.2,
+				color: colorIconTwo,
+				fontSize: rowHeight * 0.5,
 			},
 			coverStyle: {
 				paddingVertical: 5,
@@ -220,7 +248,11 @@ class GatewayRow extends PureComponent<Props, State> {
 			},
 			notAvailableIcon: {
 				fontSize: rowHeight * 0.25,
-				color: iconOneColorBlockDisabled,
+				color: colorIconTwo,
+				right: padding * 2,
+			},
+			textStyle: {
+				color: disabled ? infoOneColorBlockDisabled : infoOneColorBlockEnabled,
 			},
 		};
 	}

@@ -105,7 +105,12 @@ class TimeBlock extends View<null, Props, null> {
 			type,
 			colors,
 		} = this.props;
-		const { brandSecondary } = Theme.Core;
+
+		const {
+			card,
+			textFive,
+			inAppBrandSecondary,
+		} = colors;
 
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -113,9 +118,9 @@ class TimeBlock extends View<null, Props, null> {
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const size = (deviceWidth - (padding * 3)) * 0.3333;
 
-		const backgroundColor = isSelected ? brandSecondary : colors.card;
-		const iconColor = isSelected ? '#fff' : Theme.Core[`${type}Color`];
-		const textColor = isSelected ? '#fff' : colors.textFive;
+		const backgroundColor = isSelected ? inAppBrandSecondary : card;
+		const iconColor = isSelected ? '#fff' : colors[`${type}Color`];
+		const textColor = isSelected ? '#fff' : textFive;
 
 		return {
 			container: {

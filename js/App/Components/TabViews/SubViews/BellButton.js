@@ -25,13 +25,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { View, IconTelldus } from '../../../../BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 import { shouldUpdate } from '../../../Lib';
 import i18n from '../../../Translations/common';
-import Theme from '../../../Theme';
 
 type Props = {
 	command: number,
@@ -39,6 +42,10 @@ type Props = {
 	device: Object,
 	isOpen: boolean,
 	iconColor?: string,
+
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	isGatewayActive: boolean,
 	intl: Object,
@@ -75,6 +82,8 @@ class BellButton extends View {
 			'device',
 			'onPressOverride',
 			'iconColor',
+			'colorScheme',
+			'themeInApp',
 		]);
 		if (propsChange) {
 			return true;
@@ -110,11 +119,14 @@ class BellButton extends View {
 	}
 
 	render(): Object {
-		let { device, isGatewayActive, bellButtonStyle, disableActionIndicator = false, iconColor } = this.props;
+		let { device, isGatewayActive, bellButtonStyle, disableActionIndicator = false, iconColor, colors } = this.props;
 		let { methodRequested, name, local } = device;
+
+		const styles = getStyles({colors});
+
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
-		let _iconColor = iconColor || (!isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary);
-		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+		let _iconColor = iconColor || (!isGatewayActive ? '#a2a2a2' : colors.colorOnInActiveIcon);
+		let dotColor = local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity onPress={this.onBell} style={[styles.bell, this.props.style, bellButtonStyle]} accessibilityLabel={accessibilityLabel}>
@@ -136,18 +148,25 @@ BellButton.defaultProps = {
 	disableActionIndicator: false,
 };
 
-const styles = StyleSheet.create({
-	bell: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#eeeeee',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorOnInActiveBg,
+	} = colors;
+
+	return {
+		bell: {
+			justifyContent: 'center',
+			alignItems: 'center',
+			backgroundColor: colorOnInActiveBg,
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
@@ -157,4 +176,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(BellButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(BellButton));

@@ -122,7 +122,7 @@ public class NewAppWidget extends AppWidgetProvider {
         int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
         int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
         int fontSizeFour = (int) (fontSize * 0.9);
-        int fontSizeFive = (int) (fontSize * 0.6);
+        int fontSizeFive = (int) (fontSize * 0.4);
         fontSizeFour = fontSizeFour > Constants.widgetTitleMaxSize ? Constants.widgetTitleMaxSize : fontSizeFour;
         int fontSizeSix = (int) (fontSize * 0.7);
         fontSizeSix = fontSizeSix > 14 ? 14 : fontSizeSix;

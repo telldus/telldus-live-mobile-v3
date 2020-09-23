@@ -32,10 +32,15 @@ import {
 } from '../../../Lib';
 import Theme from '../../../Theme';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 
-type Props = {
-	gateway: Object,
+type Props = PropsThemedComponent & {
+	gateway: string,
 	appLayout: Object,
 	supportLocalControl: boolean,
 	isOnline: boolean,
@@ -44,11 +49,12 @@ type Props = {
 	intl: Object,
 };
 
-export default class DeviceHeader extends View<Props, null> {
+class DeviceHeader extends View<Props, null> {
 	props: Props;
 	constructor(props: Props) {
 		super(props);
 	}
+
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return shouldUpdate(nextProps, this.props, [
 			'appLayout',
@@ -56,6 +62,9 @@ export default class DeviceHeader extends View<Props, null> {
 			'isOnline',
 			'websocketOnline',
 			'accessible',
+			'themeInApp',
+			'colorScheme',
+			'gateway',
 		]);
 	}
 
@@ -68,6 +77,7 @@ export default class DeviceHeader extends View<Props, null> {
 			websocketOnline,
 			accessible,
 			intl,
+			colors,
 		} = this.props;
 
 		const icon = supportLocalControl ? 'localcontrol' : 'cloudcontrol';
@@ -76,7 +86,9 @@ export default class DeviceHeader extends View<Props, null> {
 			nameFontSize,
 			sectionHeader,
 		} = this.getStyles(appLayout, supportLocalControl);
-		const {color: controlIconColor, label} = getControlIconColorLabel(isOnline, websocketOnline, supportLocalControl, intl.formatMessage);
+		const {color: controlIconColor, label} = getControlIconColorLabel(isOnline, websocketOnline, supportLocalControl, intl.formatMessage, {
+			colors,
+		});
 
 		const control = supportLocalControl ? intl.formatMessage(i18n.labelLocal) : intl.formatMessage(i18n.labelCloud);
 		const accessibilityLabel = intl.formatMessage(i18n.accessibilityLabelListHeader, {
@@ -134,3 +146,5 @@ export default class DeviceHeader extends View<Props, null> {
 		};
 	}
 }
+
+export default withTheme(DeviceHeader);

@@ -39,6 +39,9 @@ import {
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 
@@ -56,6 +59,13 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		appLayout,
 		onDidMount,
 	} = props;
+
+	const {
+		colors,
+	} = useAppTheme();
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	const intl = useIntl();
 	const {
@@ -80,7 +90,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				text: 'Please enter a unique name for the fence.', // TODO: Translate
+				text: formatMessage(i18n.errorNameFieldEmpty),
 				showPositive: true,
 			});
 			return;
@@ -94,8 +104,10 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		container,
 		textField,
 		containerStyleTF,
-		brandSecondary,
-	} = getStyles(appLayout);
+	} = getStyles({
+		appLayout,
+		colors,
+	});
 
 	function onChangeText(value: string) {
 		setName(value);
@@ -107,8 +119,8 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 				label={formatMessage(i18n.name)}
 				containerStyle={containerStyleTF}
 				style={textField}
-				baseColor={brandSecondary}
-				tintColor={brandSecondary}
+				baseColor={inAppBrandSecondary}
+				tintColor={inAppBrandSecondary}
 				onChangeText={onChangeText}
 				autoCapitalize="sentences"
 				autoCorrect={false}
@@ -121,7 +133,10 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -129,7 +144,6 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		rowTextColor,
-		brandSecondary,
 		shadow,
 	} = Theme.Core;
 
@@ -137,7 +151,6 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSize = deviceWidth * 0.045;
 
 	return {
-		brandSecondary,
 		container: {
 			flex: 1,
 		},
@@ -145,7 +158,7 @@ const getStyles = (appLayout: Object): Object => {
 			marginVertical: padding * 2,
 			width: width - (padding * 2),
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
+			backgroundColor: colors.card,
 			...shadow,
 			paddingVertical: padding * 2,
 			paddingHorizontal: padding,

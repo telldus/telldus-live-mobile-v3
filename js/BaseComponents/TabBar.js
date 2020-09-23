@@ -33,9 +33,10 @@ import IconTelldus from './IconTelldus';
 
 type Props = {
 	icon: string,
-	tintColor: string,
+	tintColor?: string,
 	label: any,
 	accessibilityLabel?: Object,
+	focused?: boolean,
 };
 
 const TabBar = (props: Props): Object => {
@@ -45,6 +46,7 @@ const TabBar = (props: Props): Object => {
 		tintColor,
 		label = '',
 		accessibilityLabel,
+		focused,
 	} = props;
 
 	const intl = useIntl();
@@ -56,22 +58,36 @@ const TabBar = (props: Props): Object => {
 		iconSize,
 		container,
 		labelStyle,
-	} = getStyles(layout);
+	} = getStyles({
+		layout,
+		tintColor,
+	});
 
 	label = typeof label === 'string' ? label : intl.formatMessage(label);
 
+	const level = focused ? 9 : 1;
+
 	return (
 		<View style={container} accessibilityLabel={accessibilityLabel}>
-			<IconTelldus icon={icon} size={iconSize} color={tintColor}/>
-			<Text style={[labelStyle, {color: tintColor}]}>
+			<IconTelldus
+				icon={icon}
+				size={iconSize}
+				color={tintColor}
+				level={level}/>
+			<Text
+				level={level}
+				style={labelStyle}>
 				{label}
 			</Text>
 		</View>
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
-	const { width, height } = appLayout;
+const getStyles = ({
+	layout,
+	tintColor,
+}: Object): Object => {
+	const { width, height } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
@@ -87,6 +103,7 @@ const getStyles = (appLayout: Object): Object => {
 		labelStyle: {
 			fontSize,
 			paddingLeft: 5 + (fontSize * 0.2),
+			color: tintColor,
 		},
 	};
 };

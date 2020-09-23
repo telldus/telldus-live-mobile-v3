@@ -45,6 +45,9 @@ import {
 	getEventOptions,
 	setEvent,
 } from './Events';
+import {
+	storeGeoFenceEvent,
+} from './LocalStorage';
 
 import type { ThunkAction } from './Types';
 import {
@@ -123,18 +126,26 @@ function setupGeoFence(intl: Object): ThunkAction {
 			geofenceModeHighAccuracy = true,
 			preventSuspend = false,
 			geofenceInitialTriggerEntry = false,
+			locationUpdateInterval = 1000,
+			geofenceProximityRadius = 400,
 		} = geoFence.config || {};
 
-		BackgroundGeolocation.onGeofence((geofence: Object) => {
-			dispatch(debugGFOnGeofence({
+		BackgroundGeolocation.onGeofence(async (geofence: Object) => {
+			const event = {
 				...geofence,
 				inAppTime: Date.now(),
-			}));
+			};
+			storeGeoFenceEvent(event);
+			dispatch(debugGFOnGeofence(event));
 			if (Platform.OS === 'ios' && !backgroundTimerStartedIniOS) {
 				BackgroundTimer.start();
 				backgroundTimerStartedIniOS = true;
 			}
-			dispatch(handleFence(geofence));
+			await dispatch(handleFence(geofence));
+			if (Platform.OS === 'ios') {
+				backgroundTimerStartedIniOS = false;
+				BackgroundTimer.stop();
+			}
 		});
 
 		return BackgroundGeolocation.ready({
@@ -142,6 +153,8 @@ function setupGeoFence(intl: Object): ThunkAction {
 			desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
 			geofenceInitialTriggerEntry,
 			distanceFilter,
+			locationUpdateInterval,
+			fastestLocationUpdateInterval: locationUpdateInterval,
 			// Activity Recognition
 			stopTimeout,
 			// Application config
@@ -155,6 +168,8 @@ function setupGeoFence(intl: Object): ThunkAction {
 			// Android
 			enableHeadless,
 			geofenceModeHighAccuracy,
+			geofenceProximityRadius,
+			foregroundService: true,
 			notification: {
 				smallIcon: 'drawable/icon_notif', // <-- defaults to app icon
 				largeIcon: 'drawable/icon_notif',
@@ -225,6 +240,12 @@ const GeoFenceHeadlessTask = async (store: Object, event: Object): Promise<any> 
 		const {
 			uuid,
 		} = location;
+
+		const _event = {
+			...params,
+			inAppTime: Date.now(),
+		};
+		storeGeoFenceEvent(_event);
 
 		queue[uuid] = true;
 
@@ -327,7 +348,7 @@ function handleActions(actions: Object, userId: string, eventUUID: string, extra
 		}
 
 		const { user: { accounts = {} } } = getState();
-		const { accessToken } = accounts[userId.trim().toLowerCase()];
+		const { accessToken } = accounts[userId];
 		dispatch(debugGFSetCheckpoint({
 			checkpoint: 'handleActions-1',
 			eventUUID,
@@ -931,7 +952,7 @@ function getCurrentAccountsFences(): ThunkAction {
 
 		const {
 			user: {
-				userId: userIdC = '',
+				userId: userIdC,
 			},
 		} = getState();
 

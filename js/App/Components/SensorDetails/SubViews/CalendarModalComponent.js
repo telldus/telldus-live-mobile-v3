@@ -37,10 +37,15 @@ import {
 } from '../../../../BaseComponents';
 import CalendarDay from './CalendarDay';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	isVisible: boolean,
 	current: any,
 	onPressPositive: (any) => void,
@@ -57,7 +62,7 @@ type DefaultProps = {
 	isVisible: boolean,
 };
 
-export default class CalendarModalComponent extends View<Props, null> {
+class CalendarModalComponent extends View<Props, null> {
 props: Props;
 static defaultProps: DefaultProps = {
 	isVisible: false,
@@ -256,13 +261,15 @@ render(): Object {
 						<FormattedDate
 							value={posterDate}
 							year="numeric"
-							style={posterTextOneStyle}/>
+							style={posterTextOneStyle}
+							level={33}/>
 						<FormattedDate
 							value={posterDate}
 							day="numeric"
 							month="short"
 							weekday="short"
-							style={posterTextTwoStyle}/>
+							style={posterTextTwoStyle}
+							level={33}/>
 					</View>
 				</Poster>
 				<Calendar
@@ -291,20 +298,29 @@ render(): Object {
 }
 
 getStyle(appLayout: Object): Object {
+	const {
+		colors,
+	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { brandSecondary, eulaContentColor, offlineColor } = Theme.Core;
+	const { offlineColor } = Theme.Core;
 
 	const adjustCelendar = !this.isTablet && !isPortrait;
 
-	const posterHeight = adjustCelendar ? deviceWidth * 0.12 : deviceWidth * 0.333;
+	const posterHeight = adjustCelendar ? deviceWidth * 0.12 : deviceWidth * 0.25;
 
 	const fontSizePosterTextOne = posterHeight * 0.2;
-	const fontSizePosterTextTwo = posterHeight * 0.3;
+	const fontSizePosterTextTwo = posterHeight * 0.25;
 	const fontSizeFooterText = adjustCelendar ? deviceWidth * 0.03 : deviceWidth * 0.05;
 	const footerPadding = adjustCelendar ? fontSizeFooterText * 0.5 : fontSizeFooterText;
+
+	const {
+		inAppBrandSecondary,
+		card,
+		textFour,
+	} = colors;
 
 	return {
 		containerStyle: {
@@ -326,20 +342,19 @@ getStyle(appLayout: Object): Object {
 		},
 		posterTextOneStyle: {
 			fontSize: fontSizePosterTextOne,
-			color: '#fff',
 		},
 		posterTextTwoStyle: {
 			fontSize: fontSizePosterTextTwo,
-			color: '#fff',
-			fontWeight: 'bold',
-			fontFamily: 'Roboto-Regular',
+			fontWeight: '500',
 		},
 		calendarTheme: {
+			backgroundColor: card,
+			calendarBackground: card,
 			textSectionTitleColor: offlineColor,
-			selectedDayBackgroundColor: brandSecondary,
+			selectedDayBackgroundColor: inAppBrandSecondary,
 			todayTextColor: '#00adf5',
-			arrowColor: '#000',
-			monthTextColor: '#000',
+			arrowColor: textFour,
+			monthTextColor: textFour,
 			'stylesheet.calendar.main': {
 				week: {
 				  marginTop: 0,
@@ -351,21 +366,23 @@ getStyle(appLayout: Object): Object {
 		},
 		footerStyle: {
 			flexDirection: 'row',
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			justifyContent: 'flex-end',
 			paddingVertical: footerPadding,
 			paddingRight: adjustCelendar ? 10 : 0,
 		},
 		positiveLabelStyle: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize: fontSizeFooterText,
 			marginLeft: 20,
 			marginRight: 15,
 		},
 		negativeLabelStyle: {
-			color: eulaContentColor,
+			color: textFour,
 			fontSize: fontSizeFooterText,
 		},
 	};
 }
 }
+
+export default withTheme(CalendarModalComponent);

@@ -316,14 +316,17 @@ const RegisterForPushScreen = (props: Object): Object => {
 				<View
 					level={2}
 					style={contentCover}>
-					<IconTelldus icon={'phone'} style={phoneIconStyle}/>
+					<IconTelldus
+						icon={'phone'}
+						level={23}
+						style={phoneIconStyle}/>
 					<Text
-						level={5}
+						level={26}
 						style={contentTitleStyle}>
 						{formatMessage(i18n.replaceAnOldPhone)}
 					</Text>
 					<Text
-						level={6}
+						level={25}
 						style={contentTextStyle}>
 						{formatMessage(i18n.replaceOldDeviceAndRegisterPush)}
 					</Text>
@@ -380,7 +383,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		phoneIconStyle: {
 			fontSize: fontSize * 4,
-			color: Theme.Core.brandSecondary,
 		},
 		valueTextStyle: {
 			marginRight: 15,

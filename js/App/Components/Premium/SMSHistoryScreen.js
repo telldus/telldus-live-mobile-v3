@@ -33,13 +33,14 @@ import groupBy from 'lodash/groupBy';
 import reduce from 'lodash/reduce';
 import { useIntl } from 'react-intl';
 import moment from 'moment';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
 	NavigationHeaderPoster,
 	Text,
 	IconTelldus,
+	ThemedMaterialIcon,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import {
 	getUserSMSHistory,
@@ -126,40 +127,49 @@ const SMSHistoryScreen = (props: Object): Object => {
 					case 0:
 						return {
 							t: formatMessage(i18n.statusPending),
-							c: Theme.Core.brandSecondary,
+							l: 23,
 							icon: 'arrow-forward',
 						}
 						;
 					case 1:
 						return {
 							t: formatMessage(i18n.statusDelivered),
-							c: Theme.Core.brandSuccess,
+							l: 31,
 							icon: 'arrow-forward',
 						};
 					case 2:
 						return {
 							t: formatMessage(i18n.failed),
-							c: Theme.Core.brandDanger,
+							l: 32,
 							icon: 'close',
 						};
 					default:
 						return {
 							t: formatMessage(i18n.statusPending),
-							c: Theme.Core.brandSecondary,
+							l: 23,
 							icon: 'arrow-forward',
 						};
 				}
 			}
 
-			const { t, c, icon } = getStatus(item.status);
+			const { t, l, icon } = getStatus(item.status);
 			return (
-				<View style={rowStyle} key={index}>
-					<Text style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
+				<View
+					level={2}
+					style={rowStyle}
+					key={index}>
+					<Text
+						level={3}
+						style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
 					<View style={toBlock}>
-						<Icon name={icon} size={toIconSize} color={c}/>
-						<Text style={rowTextStyle2}>{item.to}</Text>
+						<ThemedMaterialIcon name={icon} size={toIconSize} level={l}/>
+						<Text
+							level={4}
+							style={rowTextStyle2}>{item.to}</Text>
 					</View>
-					<Text style={[rowTextStyle3, {color: c}]}>{t}</Text>
+					<Text
+						style={rowTextStyle3}
+						level={l}>{t}</Text>
 				</View>);
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -167,8 +177,13 @@ const SMSHistoryScreen = (props: Object): Object => {
 
 	const renderSectionHeader = useCallback(({section: {key}}: Object): Object => {
 		return ((): Object => (
-			<View style={sectionStyle} key={key}>
-				<Text style={sectionTextStyle}>{key}</Text>
+			<View
+				level={2}
+				style={sectionStyle}
+				key={key}>
+				<Text
+					level={4}
+					style={sectionTextStyle}>{key}</Text>
 			</View>
 		))();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,7 +194,9 @@ const SMSHistoryScreen = (props: Object): Object => {
 	}
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.smsHistory))} h2={formatMessage(i18n.labelSentSMS)}
 				align={'right'}
@@ -188,9 +205,16 @@ const SMSHistoryScreen = (props: Object): Object => {
 				navigation={navigation}
 				{...screenProps}/>
 			{(!isLoading && listData.length === 0 ) ?
-				<View style={emptyCover}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
-					<Text style={emptyInfo}>{formatMessage(i18n.noSMSHistory)}</Text>
+				<View
+					level={2}
+					style={emptyCover}>
+					<IconTelldus
+						level={23}
+						icon={'info'}
+						style={statusIconStyle}/>
+					<Text
+						level={26}
+						style={emptyInfo}>{formatMessage(i18n.noSMSHistory)}</Text>
 				</View>
 				:
 				<SectionList
@@ -199,8 +223,12 @@ const SMSHistoryScreen = (props: Object): Object => {
 					sections={listData}
 					keyExtractor={keyExtractor}
 					contentContainerStyle={contentContainerStyle}
-					refreshing={isLoading}
-					onRefresh={getData}
+					refreshControl={
+						<ThemedRefreshControl
+							refreshing={isLoading}
+							onRefresh={getData}
+						/>
+					}
 				/>
 			}
 		</View>
@@ -220,14 +248,12 @@ const getStyles = (appLayout: Object): Object => {
 		toIconSize: fontSizeRow * 1.2,
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		rowStyle: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			padding: 10,
 			marginBottom: padding / 2,
@@ -236,7 +262,6 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			marginTop: padding,
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			padding: padding * 2,
 			justifyContent: 'center',
@@ -244,18 +269,15 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		emptyInfo: {
 			fontSize: fontSizeRow,
-			color: Theme.Core.brandSecondary,
 			alignSelf: 'center',
 			textAlign: 'center',
 		},
 		statusIconStyle: {
 			fontSize: fontSizeRow * 1.7,
-			color: Theme.Core.brandSecondary,
 			marginRight: 5,
 		},
 		sectionStyle: {
 			paddingHorizontal: padding,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			paddingVertical: 5,
 			marginTop: padding / 2,
@@ -263,7 +285,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		rowTextStyle1: {
 			fontSize: fontSizeRow,
-			color: '#000',
 			width: '25%',
 			textAlign: 'left',
 		},
@@ -275,19 +296,16 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		rowTextStyle2: {
 			fontSize: fontSizeRow,
-			color: '#000',
 			marginLeft: 3,
 			textAlign: 'left',
 		},
 		rowTextStyle3: {
 			fontSize: fontSizeRow,
-			color: '#000',
 			textAlign: 'right',
 			width: '30%',
 		},
 		sectionTextStyle: {
 			fontSize: fontSizeSection,
-			color: Theme.Core.rowTextColor,
 		},
 		contentContainerStyle: {
 			marginTop: padding,

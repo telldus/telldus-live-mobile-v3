@@ -67,7 +67,8 @@ import FullPageActivityIndicator from './FullPageActivityIndicator';
 import Throbber from './Throbber';
 import DialogueBox from './DialogueBox';
 import RoundedInfoButton from './RoundedInfoButton';
-import HeaderTitle from './HeaderTitle';
+import HeaderText from './HeaderText';
+import SubHeaderText from './SubHeaderText';
 import TabBar from './TabBar';
 import SafeAreaViewComponent from './SafeAreaView';
 import DialogueHeader from './DialogueHeader';
@@ -109,6 +110,7 @@ import ThemedTextInput from './ThemedTextInput';
 import ThemedMaterialIcon from './ThemedMaterialIcon';
 import ThemedSwitch from './ThemedSwitch';
 import IconedSelectableBlock from './IconedSelectableBlock';
+import ThemedRefreshControl from './ThemedRefreshControl';
 
 import {
 	AppState,
@@ -167,7 +169,7 @@ module.exports = {
 	Throbber,
 	DialogueBox,
 	RoundedInfoButton: RoundedInfoButton,
-	HeaderTitle: HeaderTitle,
+	HeaderText: HeaderText,
 	SafeAreaView: SafeAreaViewComponent,
 	TabBar,
 	DialogueHeader,
@@ -203,6 +205,7 @@ module.exports = {
 	MainTabBarIOS,
 	MainTabNavHeader,
 	IconedSelectableBlock,
+	SubHeaderText,
 
 	AppState,
 	Dimensions,
@@ -219,4 +222,5 @@ module.exports = {
 	ThemedTextInput,
 	ThemedMaterialIcon,
 	ThemedSwitch,
+	ThemedRefreshControl,
 };

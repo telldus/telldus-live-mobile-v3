@@ -34,7 +34,9 @@ import ProfileTab from './ProfileTab';
 import SupportTab from './SupportTab';
 import ProfileHeaderPoster from './SubViews/ProfileHeaderPoster';
 
-import Theme from '../../Theme';
+import {
+	withTheme,
+} from '../../Components/HOC/withTheme';
 
 import {
 	prepareNavigator,
@@ -48,12 +50,12 @@ const ScreenConfigs = [
 		name: 'AppTab',
 		Component: AppTab,
 		options: {
-			tabBarLabel: ({color}: Object): Object => {
+			tabBarLabel: ({focused}: Object): Object => {
 				return (
 					<TabBar
 						icon="phone"
-						tintColor={color}
 						label={i18n.labelApp}
+						focused={focused}
 						accessibilityLabel={i18n.labelAccessibleAppTab}/>
 				);
 			},
@@ -63,12 +65,12 @@ const ScreenConfigs = [
 		name: 'ProfileTab',
 		Component: ProfileTab,
 		options: {
-			tabBarLabel: ({color}: Object): Object => {
+			tabBarLabel: ({focused}: Object): Object => {
 				return (
 					<TabBar
 						icon="user"
-						tintColor={color}
 						label={i18n.labelProfile}
+						focused={focused}
 						accessibilityLabel={i18n.labelAccessibleProfileTab}/>
 				);
 			},
@@ -78,18 +80,42 @@ const ScreenConfigs = [
 		name: 'SupportTab',
 		Component: SupportTab,
 		options: {
-			tabBarLabel: ({color}: Object): Object => {
+			tabBarLabel: ({focused}: Object): Object => {
 				return (
 					<TabBar
 						icon="faq"
-						tintColor={color}
 						label={i18n.userHelp}
+						focused={focused}
 						accessibilityLabel={i18n.labelAccessibleSupportTab}/>
 				);
 			},
 		},
 	},
 ];
+
+const ThemedTabBar = withTheme(React.memo<Object>((props: Object): Object => {
+	const {
+		posterProps,
+		tabBarProps,
+		colors,
+	} = props;
+
+	const {
+		headerIconColor,
+	} = colors;
+
+	return (
+		<View style={{flex: 0}}>
+			<ProfileHeaderPoster {...posterProps}/>
+			<MaterialTopTabBar
+				{...tabBarProps}
+				indicatorStyle={{
+					backgroundColor: headerIconColor,
+				}}
+			/>
+		</View>
+	);
+}));
 
 const NavigatorConfigs = {
 	initialRouteName: 'AppTab',
@@ -110,27 +136,26 @@ const NavigatorConfigs = {
 			fontSize = deviceWidth * 0.03;
 			paddingVertical = 10 + (fontSize * 0.5);
 		}
+
 		return (
-			<View style={{flex: 0}}>
-				<ProfileHeaderPoster {...rest}/>
-				<MaterialTopTabBar {...rest}
-					tabStyle={{
+			<ThemedTabBar
+				tabBarProps={{
+					...rest,
+					tabStyle: {
 						...tabStyle,
 						width: tabWidth,
 						paddingVertical,
-					}}
-					labelStyle={{
+					},
+					labelStyle: {
 						...labelStyle,
 						fontSize,
-					}}
-				/>
-			</View>
+					},
+				}}
+				posterProps={{...rest}}
+			/>
 		);
 	},
 	tabBarOptions: {
-		indicatorStyle: {
-			backgroundColor: '#fff',
-		},
 		style: {
 			justifyContent: 'center',
 		},
@@ -140,8 +165,6 @@ const NavigatorConfigs = {
 		},
 		upperCaseLabel: false,
 		scrollEnabled: true,
-		activeTintColor: Theme.Core.brandSecondary,
-		inactiveTintColor: Theme.Core.inactiveTintColor,
 		showIcon: false,
 		allowFontScaling: false,
 	},

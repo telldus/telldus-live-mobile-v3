@@ -39,7 +39,6 @@ import {
 
 import {
 	LayoutAnimations,
-	capitalizeFirstLetterOfEachWord,
 	getScanButtonLabel,
 } from '../../../Lib';
 
@@ -94,6 +93,7 @@ const ScanButton = (props: Object): Object => {
 		scanButtonCoverDef,
 		scanButtonTextDefStyle,
 		touchableStyleDef,
+		level,
 	} = getStyles(layout, disabled);
 
 	function onPress() {
@@ -105,12 +105,14 @@ const ScanButton = (props: Object): Object => {
 		}
 	}
 
-	const text = isScanning ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.stopScan)) :
+	const text = isScanning ? formatMessage(i18n.stopScan) :
 		getScanButtonLabel(devicetype, formatMessage);
 
 	return (
 		<TouchableOpacity onPress={onPress} style={touchableStyleDef} disabled={disabled}>
-			<View style={[scanButtonCoverDef, scanButtonCover]}>
+			<View
+				level={level}
+				style={[scanButtonCoverDef, scanButtonCover]}>
 				<Text style={[scanButtonTextDefStyle, scanButtonTextStyle]}>
 					{text.toUpperCase()}
 				</Text>
@@ -126,9 +128,7 @@ const getStyles = (appLayout: Object, disabled: boolean): Object => {
 
 	const {
 		paddingFactor,
-		brandSecondary,
 		shadow,
-		btnDisabledBg,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -136,9 +136,11 @@ const getStyles = (appLayout: Object, disabled: boolean): Object => {
 	const fontSize = Math.floor(deviceWidth * 0.03);
 	const heightCover = fontSize * 2.8;
 
+	const level = disabled ? 7 : 13;
+
 	return {
+		level,
 		scanButtonCoverDef: {
-			backgroundColor: disabled ? btnDisabledBg : brandSecondary,
 			height: heightCover,
 			...shadow,
 			borderRadius: heightCover / 2,

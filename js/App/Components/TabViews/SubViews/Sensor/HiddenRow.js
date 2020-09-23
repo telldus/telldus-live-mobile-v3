@@ -128,21 +128,30 @@ class SensorHiddenRow extends View {
 					onPress={this.onSetIgnoreSensor}
 					accessible={isOpen}
 					accessibilityLabel={accessibilityLabelSetIgnore}>
-					<IconTelldus icon={iconHide} style={styles.favoriteIcon}/>
+					<IconTelldus
+						icon={iconHide}
+						style={styles.favoriteIcon}
+						level={23}/>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onStarSelected}
 					accessible={isOpen}
 					accessibilityLabel={accessibilityLabelFavorite}>
-					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
+					<IconTelldus
+						icon={icon}
+						style={styles.favoriteIcon}
+						level={23}/>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onPressSettings}
 					accessible={isOpen}
 					accessibilityLabel={accessibilityLabelSettings}>
-					<IconTelldus icon={'settings'} style={styles.favoriteIcon}/>
+					<IconTelldus
+						icon={'settings'}
+						style={styles.favoriteIcon}
+						level={23}/>
 				</TouchableOpacity>
 			</View>
 		);
@@ -178,7 +187,6 @@ function mapStateToProps(store: Object): Object {
 const styles = StyleSheet.create({
 	favoriteIcon: {
 		fontSize: 28,
-		color: Theme.Core.brandSecondary,
 	},
 });
 

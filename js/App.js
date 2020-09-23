@@ -31,6 +31,7 @@ import { connect } from 'react-redux';
 import { LocaleConfig } from 'react-native-calendars';
 import { injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
+const isEqual = require('react-fast-compare');
 
 import {
 	PreLoginNavigator,
@@ -52,8 +53,12 @@ import {
 	setGAUserProperty,
 } from './App/Lib';
 
+import {
+	withTheme,
+} from './App/Components/HOC/withTheme';
+
 import Theme from './App/Theme';
-const changeLogVersion = '3.14';
+const changeLogVersion = '3.15';
 
 type Props = {
 	dispatch: Function,
@@ -68,6 +73,9 @@ type Props = {
 	dialogueData: Object,
 	cachedLayout: Object,
 	preventLayoutUpdate: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class App extends React.Component<Props> {
@@ -108,7 +116,7 @@ class App extends React.Component<Props> {
 	}
 
 	componentDidMount() {
-		let { dispatch, deviceId } = this.props;
+		let { dispatch, deviceId, colors } = this.props;
 		AccessibilityInfo.isScreenReaderEnabled().then((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
@@ -117,7 +125,7 @@ class App extends React.Component<Props> {
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
 		if (Platform.OS === 'android' && StatusBar) {
 			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
+			StatusBar.setBackgroundColor(colors.safeAreaBG);
 		}
 
 		this.clearListenerNetWorkInfo = dispatch(networkConnection());
@@ -137,14 +145,28 @@ class App extends React.Component<Props> {
 	}
 
 	componentDidUpdate(prevProps: Object) {
-		const { dispatch, accessToken } = this.props;
-		const { accessToken: accessTokenPrev = {} } = prevProps;
+		const {
+			dispatch,
+			accessToken,
+			colorScheme,
+			themeInApp,
+			colors,
+		} = this.props;
+		const {
+			accessToken: accessTokenPrev = {},
+			colorScheme: colorSchemePrev,
+			themeInApp: themeInAppPrev,
+	 } = prevProps;
 		if (accessToken) {
 			// Update accesstoken at the widget side, when ever it is refreshed at the App.
 			if (accessTokenPrev.access_token !== accessToken.access_token) {
 				dispatch(widgetAndroidConfigure());// Android.
 				// TODO: Do for iOS once widget is implemented.
 			}
+		}
+		if ((!isEqual(colorSchemePrev, colorScheme) || !isEqual(themeInAppPrev, themeInApp)) && Platform.OS === 'android' && StatusBar) {
+			StatusBar.setTranslucent(true);
+			StatusBar.setBackgroundColor(colors.safeAreaBG);
 		}
 	}
 
@@ -331,4 +353,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(App));
+module.exports = connect(mapStateToProps, mapDispatchToProps)(withTheme((injectIntl(App))));

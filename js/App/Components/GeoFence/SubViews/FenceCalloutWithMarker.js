@@ -89,6 +89,7 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 				onPress={_onPress}>
 				<View style={container}>
 					<Text
+						level={23}
 						style={titleStyle}>
 						{extras.title}
 					</Text>
@@ -110,7 +111,6 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		brandSecondary,
 		eulaContentColor,
 	} = Theme.Core;
 
@@ -124,7 +124,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			fontSize,
-			color: brandSecondary,
 		},
 		editBtn: {
 			marginLeft: 8,

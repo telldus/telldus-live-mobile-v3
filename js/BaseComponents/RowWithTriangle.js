@@ -26,9 +26,13 @@ import { Image } from 'react-native';
 import { connect } from 'react-redux';
 import View from './View';
 import Row from './Row';
-import Theme from '../App/Theme';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
+
+type Props = PropsThemedComponent & {
 	children?: any,
 	layout: 'row' | 'column',
 	containerStyle: any,
@@ -42,7 +46,6 @@ type Props = {
 
 type DefaultProps = {
 	layout: 'row',
-	triangleColor: string,
 };
 
 class RowWithTriangle extends Component<Props, null> {
@@ -50,7 +53,6 @@ class RowWithTriangle extends Component<Props, null> {
 
 	static defaultProps: DefaultProps = {
 		layout: 'row',
-		triangleColor: Theme.Core.brandSecondary,
 	};
 
 	render(): Object {
@@ -90,8 +92,10 @@ class RowWithTriangle extends Component<Props, null> {
 	}
 
 	_getStyle = (): Object => {
-		const { triangleColor } = this.props;
+		const { triangleColor, colors } = this.props;
 		const deviceWidth = this.props.appLayout.width;
+
+		const _triangleColor = triangleColor || colors.inAppBrandSecondary;
 
 		const triangleWidth = deviceWidth * 0.022666667;
 		const triangleHeight = deviceWidth * 0.025333334;
@@ -120,7 +124,7 @@ class RowWithTriangle extends Component<Props, null> {
 			},
 			triangle: {
 				zIndex: 1,
-				tintColor: triangleColor,
+				tintColor: _triangleColor,
 			},
 			rowContainer: {
 				height: null,
@@ -140,4 +144,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(RowWithTriangle);
+module.exports = connect(mapStateToProps, null)(withTheme(RowWithTriangle));

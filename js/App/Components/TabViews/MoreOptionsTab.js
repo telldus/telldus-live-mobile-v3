@@ -32,20 +32,18 @@ import {
 	useSelector,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	RippleButton,
 	Text,
 	IconTelldus,
-	FormattedMessage,
 	PosterWithText,
 	View,
+	ThemedMaterialIcon,
 } from '../../../BaseComponents';
+import Banner from './SubViews/Banner';
 
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
 import {
 	useCampaignAction,
 	useSwitchOrAddAccountAction,
@@ -80,6 +78,7 @@ const MoreOptionsTab = (props: Props): Object => {
 
 	const {
 		themeInApp,
+		consentLocationData = false,
 	} = defaultSettings;
 
 	const {
@@ -109,7 +108,7 @@ const MoreOptionsTab = (props: Props): Object => {
 		const settingsItems = [
 			{
 				icon: 'phone',
-				textIntl: i18n.appSettigs,
+				text: capitalize(formatMessage(i18n.appSettigs)),
 				onPress: () => {
 					onOpenSetting('AppTab');
 				},
@@ -117,23 +116,24 @@ const MoreOptionsTab = (props: Props): Object => {
 			},
 			{
 				icon: 'user',
-				textIntl: i18n.userProfile,
+				text: capitalize(formatMessage(i18n.userProfile)),
 				onPress: () => {
 					onOpenSetting('ProfileTab');
 				},
 				enable: true,
 			},
 			{
-				iconComponent: <MaterialIcons
+				iconComponent: <ThemedMaterialIcon
 					style={iconStyle}
-					name={'group-add'}/>,
-				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.switchOrAddAccount)),
+					name={'group-add'}
+					level={23}/>,
+				text: capitalize(formatMessage(i18n.switchOrAddAccount)),
 				onPress: performAddOrSwitch,
 				enable: true,
 			},
 			{
 				icon: 'location',
-				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.manageGateways)),
+				text: capitalize(formatMessage(i18n.manageGateways)),
 				onPress: () => {
 					navigation.navigate('Gateways');
 				},
@@ -141,23 +141,30 @@ const MoreOptionsTab = (props: Props): Object => {
 			},
 			{
 				icon: 'campaign',
-				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelExclusiveOffers)),
+				text: capitalize(formatMessage(i18n.labelExclusiveOffers)),
 				onPress: navigateToCampaign,
 				enable: true,
 			},
 			{
-				iconComponent: <MaterialIcons
+				iconComponent: <ThemedMaterialIcon
 					style={iconStyle}
-					name={'location-on'}/>,
-				textIntl: i18n.Geofencing,
+					name={'location-on'}
+					level={23}/>,
+				text: `${capitalize(formatMessage(i18n.manageGeoFence))} (beta)`,
 				onPress: () => {
-					navigation.navigate('GeoFenceNavigator');
+					let screen = 'AddEditGeoFence';
+					if (!consentLocationData) {
+						screen = 'InAppDisclosureScreen';
+					}
+					navigation.navigate('GeoFenceNavigator', {
+						screen,
+					});
 				},
 				enable: enableGeoFenceFeature,
 			},
 			{
 				icon: 'faq',
-				textIntl: i18n.labelHelpAndSupport,
+				text: capitalize(formatMessage(i18n.labelHelpAndSupport)),
 				onPress: () => {
 					onOpenSetting('SupportTab');
 				},
@@ -170,7 +177,6 @@ const MoreOptionsTab = (props: Props): Object => {
 			icon,
 			iconComponent,
 			text,
-			textIntl,
 			onPress,
 			enable,
 		}: Object, i: number): Object => {
@@ -179,11 +185,15 @@ const MoreOptionsTab = (props: Props): Object => {
 					<RippleButton
 						level={2}
 						style={rowCoverStyle} onPress={onPress} key={`${i}`}>
-						{!!icon && <IconTelldus style={iconStyle} icon={icon}/>}
+						{!!icon && <IconTelldus
+							level={23}
+							style={iconStyle}
+							icon={icon}/>}
 						{!!iconComponent && iconComponent}
-						<Text style={labelStyle}>
+						<Text
+							level={23}
+							style={labelStyle}>
 							{!!text && text}
-							{!!textIntl && <FormattedMessage {...textIntl} style={labelStyle}/>}
 						</Text>
 					</RippleButton>
 				);
@@ -195,6 +205,7 @@ const MoreOptionsTab = (props: Props): Object => {
 		layout,
 		enableGeoFenceFeature,
 		themeInApp,
+		consentLocationData,
 	]);
 
 	return (
@@ -204,11 +215,12 @@ const MoreOptionsTab = (props: Props): Object => {
 				align={'right'}
 				showBackButton={false}
 				h1={formatMessage(i18n.more)}
-				h2={formatMessage(i18n.featuresAndSettings)}/>
+				h2={capitalize(formatMessage(i18n.featuresAndSettings))}/>
 			<ScrollView
 				style={outerCoverStyle}
 				contentContainerStyle={contentContainerStyle}>
 				{settings}
+				<Banner/>
 			</ScrollView>
 		</View>
 	);
@@ -221,7 +233,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		brandSecondary,
 		shadow,
 	} = Theme.Core;
 
@@ -249,13 +260,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		iconStyle: {
 			fontSize: fontSizeText * 1.2,
-			color: brandSecondary,
 			marginRight: 15,
 			textAlign: 'left',
 		},
 		labelStyle: {
 			fontSize: fontSizeText,
-			color: brandSecondary,
 		},
 	};
 };

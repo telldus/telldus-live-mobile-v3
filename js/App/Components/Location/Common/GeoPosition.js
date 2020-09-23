@@ -370,6 +370,12 @@ class GeoPosition extends View {
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const labelBoxPadding = deviceWidth * 0.07;
 
+		const {
+			inAppBrandSecondary,
+			textFour,
+			card,
+		} = colors;
+
 		return {
 			container: {
 				flex: 1,
@@ -379,7 +385,7 @@ class GeoPosition extends View {
 			},
 			description: {
 				fontWeight: 'bold',
-				color: colors.textFour,
+				color: textFour,
 				fontFamily: 'Roboto-Regular',
 			},
 			mapViewCover: {
@@ -394,7 +400,7 @@ class GeoPosition extends View {
 			},
 			labelStyle: {
 				position: 'absolute',
-				color: '#e26901',
+				color: inAppBrandSecondary,
 				fontSize: fontSizeLabel,
 				top: labelBoxPadding,
 				left: labelBoxPadding,
@@ -402,7 +408,7 @@ class GeoPosition extends View {
 			},
 			searchBoxContainer: {
 				flex: 0,
-				backgroundColor: colors.card,
+				backgroundColor: card,
 				marginTop: deviceWidth * Theme.Core.paddingFactor,
 				padding: labelBoxPadding,
 				justifyContent: 'center',
@@ -413,7 +419,7 @@ class GeoPosition extends View {
 				width: '100%',
 				borderTopWidth: 0,
 				borderBottomWidth: 0,
-				backgroundColor: colors.card,
+				backgroundColor: card,
 				marginTop: labelBoxPadding * 0.8,
 			},
 			textInput: {
@@ -422,7 +428,7 @@ class GeoPosition extends View {
 				fontSize,
 
 				// override default styles.
-				backgroundColor: colors.card,
+				backgroundColor: card,
 				height: undefined,
 				borderRadius: 0,
 				paddingTop: 0,
@@ -432,7 +438,7 @@ class GeoPosition extends View {
 				marginLeft: 0,
 				marginRight: 0,
 				borderBottomWidth: 1,
-				borderBottomColor: Theme.Core.brandSecondary,
+				borderBottomColor: inAppBrandSecondary,
 			},
 			iconStyle: {
 				position: 'absolute',

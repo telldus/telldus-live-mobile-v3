@@ -1,0 +1,8 @@
+<resources>
+
+	<style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+		<item name="android:windowBackground">@layout/background_splash_darkmode</item>
+		<item name="android:editTextBackground">@android:color/transparent</item>
+	</style>
+
+</resources>

@@ -89,7 +89,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		userProfile = {},
 		subscriptions = {},
 		accounts = {},
-		userId = '',
+		userId,
 		firebaseRemoteConfig = {},
 		pushToken,
 		switchAccountConf = {},
@@ -152,8 +152,8 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				}));
 				let otherUserId;
 				Object.keys(accounts).forEach((uid: string) => {
-					const check1 = uid.trim().toLowerCase();
-					if (check1 !== userId.trim().toLowerCase()) {
+					const check1 = uid;
+					if (check1 !== userId) {
 						otherUserId = check1;
 					}
 				});
@@ -207,7 +207,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				proceedWithLogout();
 			} else {
 				const userIdOfOnlyPremAcc = Object.keys(premAccounts)[0];
-				if (userIdOfOnlyPremAcc.trim().toLowerCase() === userId.trim().toLowerCase()) {
+				if (userIdOfOnlyPremAcc === userId) {
 					toggleDialogueBoxState({
 						show: true,
 						showHeader: true,
@@ -282,7 +282,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					navigation={navigation}/>}
 				{enable && (
 					<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
-						<Text style={redeemTextSyle}>
+						<Text
+							level={23}
+							style={redeemTextSyle}>
 							{formatMessage(i18n.viewPurchaseHistory)}
 						</Text>
 					</TouchableOpacity>
@@ -290,8 +292,13 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				{enable && (
 					<TouchableOpacity onPress={onPressRedeemGift}>
 						<View style={redeemCoverStyle}>
-							<IconTelldus icon={'gift'} style={redeemIconStyle}/>
-							<Text style={redeemTextSyle}>
+							<IconTelldus
+								icon={'gift'}
+								style={redeemIconStyle}
+								level={23}/>
+							<Text
+								level={23}
+								style={redeemTextSyle}>
 								{capitalize(formatMessage(i18n.redeemCard))}
 							</Text>
 						</View>
@@ -384,11 +391,9 @@ const getStyles = (appLayout: Object, {
 		},
 		redeemTextSyle: {
 			fontSize: fontSize * 0.9,
-			color: Theme.Core.brandSecondary,
 		},
 		redeemIconStyle: {
 			fontSize: fontSize,
-			color: Theme.Core.brandSecondary,
 			marginRight: 5,
 		},
 	};

@@ -164,7 +164,9 @@ render(): Object | null {
 					{blocks}
 				</ScrollView>
 				<View style={styles.footersCover}>
-					<View style={styles.footerOne}>
+					<View
+						level={13}
+						style={styles.footerOne}>
 						<TouchableOpacity style={styles.footerItem} onPress={this.navigateToExchange}>
 							<Text style={[styles.footerText, {color: '#fff'}]}>
 								{this.f1}
@@ -173,12 +175,16 @@ render(): Object | null {
 					</View>
 					<View style={styles.footerTwo}>
 						<TouchableOpacity style={styles.footerItem} onPress={this.hidePerm}>
-							<Text style={styles.footerText}>
+							<Text
+								level={23}
+								style={styles.footerText}>
 								{this.f3}
 							</Text>
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.footerItem} onPress={this.hideTemp}>
-							<Text style={styles.footerText}>
+							<Text
+								level={23}
+								style={styles.footerText}>
 								{this.f2}
 							</Text>
 						</TouchableOpacity>
@@ -196,7 +202,6 @@ getStyles(appLayout: Object): Object {
 	const footerHeight = Math.floor(deviceWidth * 0.26);
 
 	const {
-		brandSecondary,
 		eulaContentColor,
 	} = Theme.Core;
 
@@ -243,7 +248,6 @@ getStyles(appLayout: Object): Object {
 			width: '100%',
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: brandSecondary,
 			height: footerHeight / 2,
 			maxHeight: 100,
 		},
@@ -263,7 +267,6 @@ getStyles(appLayout: Object): Object {
 		},
 		footerText: {
 			fontSize: Math.floor(deviceWidth * 0.04),
-			color: brandSecondary,
 			fontWeight: 'bold',
 			fontFamily: 'Roboto-Regular',
 		},

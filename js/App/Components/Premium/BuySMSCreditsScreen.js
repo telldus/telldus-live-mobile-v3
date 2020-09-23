@@ -41,6 +41,9 @@ import {
 import {
 	PaymentProvidersBlock,
 } from './SubViews';
+import {
+	withTheme,
+} from '../HOC/withTheme';
 
 import {
 	getSMSPlans,
@@ -61,7 +64,7 @@ import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const BuySMSCreditsScreen = (props: Object): Object => {
-	const { navigation, screenProps } = props;
+	const { navigation, screenProps, colors } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
@@ -104,19 +107,21 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 					style={[contentCover,
 						selectedIndex === index ? {
 							borderWidth: 3,
-							borderColor: Theme.Core.brandSecondary,
+							borderColor: colors.inAppBrandSecondary,
 						} : undefined,
 					]}>
 					<View style={headerCover}>
 						<IconTelldus icon={'sms'} style={premiumIconStyle}/>
 						<Text
-							level={5}
+							level={26}
 							style={validityTextStyle}>
 							{`${count} ${formatMessage(i18n.smsCredits).toUpperCase()}`}
 						</Text>
 					</View>
 					<View style={bottomCover}>
-						<Text style={pMonthTextStyle}>
+						<Text
+							level={23}
+							style={pMonthTextStyle}>
 							{`€${formatNumber(price)}`}
 						</Text>
 						<View style={saveTextCoverStyle}>
@@ -185,7 +190,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 				{...screenProps}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
 				<Text
-					level={6}
+					level={25}
 					style={labelStyle}>{formatMessage(i18n.selectAmountOfCredits)}</Text>
 				{plans}
 				<PaymentProvidersBlock onSelect={onSelect}/>
@@ -250,7 +255,6 @@ const getStyles = (appLayout: Object): Object => {
 		pMonthTextStyle: {
 			flex: 1,
 			fontSize: fontSize * 2,
-			color: Theme.Core.brandSecondary,
 			fontWeight: 'bold',
 			textAlign: 'right',
 			alignSelf: 'center',
@@ -279,10 +283,6 @@ const getStyles = (appLayout: Object): Object => {
 			color: '#fff',
 			marginRight: 7,
 		},
-		textStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.brandSecondary,
-		},
 		bottomCover: {
 			width: '100%',
 			flexDirection: 'row',
@@ -293,4 +293,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(BuySMSCreditsScreen);
+export default React.memo<Object>(withTheme(BuySMSCreditsScreen));

@@ -31,11 +31,14 @@ const CampaignIcon = (props: Object): Object => {
 	const {
 		style,
 		size,
+		level,
 	} = props;
 
 	const { hasVisitedCampaign } = useSelector((state: Object): Object => state.user);
 
 	const badgeSize = size * 0.4;
+
+	const _level = level || 22;
 
 	return (
 		<View>
@@ -43,7 +46,7 @@ const CampaignIcon = (props: Object): Object => {
 				icon="campaign"
 				size={size}
 				style={style}
-				level={17}/>
+				level={_level}/>
 			{!hasVisitedCampaign && <View
 				level={9}
 				style={{

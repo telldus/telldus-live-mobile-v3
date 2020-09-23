@@ -3,113 +3,94 @@
 exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftIcon is false 1`] = `
 <View
   style={
-    Object {
-      "backgroundColor": "transparent",
-      "flex": 0,
-    }
+    Array [
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#1b365d",
+        "flexDirection": "row",
+        "height": 64,
+        "justifyContent": "center",
+        "paddingHorizontal": 15,
+        "paddingTop": 0,
+        "position": "relative",
+      },
+      Object {
+        "height": 106.72,
+      },
+    ]
   }
 >
   <View
+    accessibilityLabel="navigational back button .Double tap to activate"
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
     style={
-      Array [
-        Object {
-          "alignItems": "center",
-          "backgroundColor": "#1b365d",
-          "flexDirection": "row",
-          "height": 64,
-          "justifyContent": "center",
-          "paddingHorizontal": 15,
-          "paddingTop": 0,
-          "position": "relative",
-        },
-        Object {
-          "height": 106.72,
-        },
-      ]
+      Object {
+        "alignItems": "flex-start",
+        "backgroundColor": "transparent",
+        "flex": 1,
+        "justifyContent": "center",
+        "left": 0,
+        "opacity": 1,
+        "paddingHorizontal": 15,
+        "paddingTop": 0,
+        "position": "absolute",
+      }
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        Array [
+          Object {
+            "color": "#ffffff",
+            "fontSize": 45,
+          },
+          Object {
+            "paddingVertical": 10,
+          },
+          Object {
+            "fontFamily": "FontAwesome",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          Object {},
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={false}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
     }
   >
     <View
-      accessibilityLabel="navigational back button .Double tap to activate"
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Object {
-          "alignItems": "flex-start",
-          "backgroundColor": "transparent",
-          "flex": 1,
-          "justifyContent": "center",
-          "left": 0,
-          "opacity": 1,
-          "paddingHorizontal": 15,
-          "paddingTop": 0,
-          "position": "absolute",
-        }
-      }
-    >
-      <Text
-        allowFontScaling={false}
-        style={
-          Array [
-            Object {
-              "color": "#fff",
-              "fontSize": 45,
-            },
-            Object {
-              "paddingVertical": 10,
-            },
-            Object {
-              "fontFamily": "FontAwesome",
-              "fontStyle": "normal",
-              "fontWeight": "normal",
-            },
-            Object {},
-          ]
-        }
-      >
-        
-      </Text>
-    </View>
-    <View
-      accessible={true}
-      focusable={false}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Object {
-          "opacity": 1,
-        }
-      }
-    >
-      <Image
-        source={
-          Object {
-            "uri": "telldus_logo",
-          }
-        }
-        style={
-          Array [
-            Object {
-              "height": 35.00000025,
-              "resizeMode": "contain",
-              "width": 230.49999975,
-            },
-            undefined,
-          ]
-        }
-      />
-    </View>
+      colorHomeLogo="#e26901"
+      colorTextLogo="#ffffff"
+      colorWaveLogo="#ffffff"
+      height={35.00000025}
+      width={230.49999975}
+    />
   </View>
 </View>
 `;
@@ -117,113 +98,94 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
 exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftIcon is true 1`] = `
 <View
   style={
-    Object {
-      "backgroundColor": "transparent",
-      "flex": 0,
-    }
+    Array [
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#1b365d",
+        "flexDirection": "row",
+        "height": 64,
+        "justifyContent": "center",
+        "paddingHorizontal": 15,
+        "paddingTop": 0,
+        "position": "relative",
+      },
+      Object {
+        "height": 106.72,
+      },
+    ]
   }
 >
   <View
+    accessibilityLabel="navigational back button .Double tap to activate"
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
     style={
-      Array [
-        Object {
-          "alignItems": "center",
-          "backgroundColor": "#1b365d",
-          "flexDirection": "row",
-          "height": 64,
-          "justifyContent": "center",
-          "paddingHorizontal": 15,
-          "paddingTop": 0,
-          "position": "relative",
-        },
-        Object {
-          "height": 106.72,
-        },
-      ]
+      Object {
+        "alignItems": "flex-start",
+        "backgroundColor": "transparent",
+        "flex": 1,
+        "justifyContent": "center",
+        "left": 0,
+        "opacity": 1,
+        "paddingHorizontal": 15,
+        "paddingTop": 0,
+        "position": "absolute",
+      }
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        Array [
+          Object {
+            "color": "#ffffff",
+            "fontSize": 45,
+          },
+          Object {
+            "paddingVertical": 10,
+          },
+          Object {
+            "fontFamily": "FontAwesome",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          Object {},
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={false}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
     }
   >
     <View
-      accessibilityLabel="navigational back button .Double tap to activate"
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Object {
-          "alignItems": "flex-start",
-          "backgroundColor": "transparent",
-          "flex": 1,
-          "justifyContent": "center",
-          "left": 0,
-          "opacity": 1,
-          "paddingHorizontal": 15,
-          "paddingTop": 0,
-          "position": "absolute",
-        }
-      }
-    >
-      <Text
-        allowFontScaling={false}
-        style={
-          Array [
-            Object {
-              "color": "#fff",
-              "fontSize": 45,
-            },
-            Object {
-              "paddingVertical": 10,
-            },
-            Object {
-              "fontFamily": "FontAwesome",
-              "fontStyle": "normal",
-              "fontWeight": "normal",
-            },
-            Object {},
-          ]
-        }
-      >
-        
-      </Text>
-    </View>
-    <View
-      accessible={true}
-      focusable={false}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Object {
-          "opacity": 1,
-        }
-      }
-    >
-      <Image
-        source={
-          Object {
-            "uri": "telldus_logo",
-          }
-        }
-        style={
-          Array [
-            Object {
-              "height": 35.00000025,
-              "resizeMode": "contain",
-              "width": 230.49999975,
-            },
-            undefined,
-          ]
-        }
-      />
-    </View>
+      colorHomeLogo="#e26901"
+      colorTextLogo="#ffffff"
+      colorWaveLogo="#ffffff"
+      height={35.00000025}
+      width={230.49999975}
+    />
   </View>
 </View>
 `;

@@ -94,7 +94,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 			optionCover,
 			iconStyle,
 			textStyle,
-			brandSecondary,
+			inAppBrandSecondary,
 		} = this._getStyle(appLayout);
 
 		const { changeMode, changeTemp } = methodValue || {};
@@ -116,7 +116,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 			<View style={optionsCover}>
 				<TouchableOpacity onPress={this.onPressOne}>
 					<View style={[optionCover, {
-						backgroundColor: changeBoth ? brandSecondary : card,
+						backgroundColor: changeBoth ? inAppBrandSecondary : card,
 					}]}>
 						<IconTelldus icon={'thermostatheatcool'} style={[iconStyle, {
 							color: oneItemsColor,
@@ -133,7 +133,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 				</TouchableOpacity>
 				<TouchableOpacity onPress={this.onPressTwo}>
 					<View style={[optionCover, {
-						backgroundColor: changeModeAlone ? brandSecondary : card,
+						backgroundColor: changeModeAlone ? inAppBrandSecondary : card,
 					}]}>
 						<IconTelldus icon={'thermostatheatcool'} style={[iconStyle, {
 							color: twoItemsColor,
@@ -147,7 +147,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 				</TouchableOpacity>
 				<TouchableOpacity onPress={this.onPressThree}>
 					<View style={[optionCover, {
-						backgroundColor: changeTempAlone ? brandSecondary : card,
+						backgroundColor: changeTempAlone ? inAppBrandSecondary : card,
 					}]}>
 						<IconTelldus icon={'temperature'} style={[iconStyle, {
 							color: threeItemsColor,
@@ -169,9 +169,15 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 		const deviceWidth = isPortrait ? width : height;
 
 		const {
+			colors,
+		} = this.props;
+		const {
+			inAppBrandSecondary,
+		} = colors;
+
+		const {
 			paddingFactor,
 			shadow,
-			brandSecondary,
 			eulaContentColor,
 			inactiveSwitchBackground,
 		} = Theme.Core;
@@ -183,7 +189,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 		return {
 			inactiveSwitchBackground,
 			outerPadding,
-			brandSecondary,
+			inAppBrandSecondary,
 			eulaContentColor,
 			optionsCover: {
 				justifyContent: 'center',

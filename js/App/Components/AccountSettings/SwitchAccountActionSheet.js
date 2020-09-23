@@ -55,9 +55,8 @@ import {
 	showToast,
 	toggleVisibilitySwitchAccountAS,
 } from '../../Actions';
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
+
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
@@ -78,7 +77,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		accounts: _accounts = {},
-		userId = '',
+		userId,
 		pushToken,
 		switchAccountConf = {},
 	} = useSelector((state: Object): Object => state.user);
@@ -167,13 +166,14 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		addIconStyle,
 		addIconCoverStyle,
 		gravatarStyle,
-		brandSecondary,
+		inAppBrandSecondary,
 		rbSize,
 		rbOuterSize,
 		throbberContainerStyle,
 		throbberStyle,
 		actionSheetButtonAccEmailText,
 		actionSheetTextCover,
+		containerStyle,
 	} = getStyles(layout, {
 		showAddNewAccount,
 		isLoggingOut,
@@ -215,7 +215,6 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 						accessToken,
 					} = account;
 					let { userId: _userId } = accessToken;
-					_userId = _userId.trim().toLowerCase();
 					setSwitchingId(_userId);
 
 					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
@@ -289,8 +288,8 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		};
 		let avatar = gravatar.imageUrl(options);
 
-		const uid = accessToken.userId || '';
-		const isSelected = uid.trim().toLowerCase() === userId.trim().toLowerCase();
+		const uid = accessToken.userId;
+		const isSelected = uid === userId;
 
 		function onPressRB() {
 			if (isSelected) {
@@ -317,7 +316,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 					</Text>
 				</View>
 				{
-					switchingId === uid.trim().toLowerCase() ?
+					switchingId === uid ?
 						<Throbber
 							throbberContainerStyle={throbberContainerStyle}
 							throbberStyle={throbberStyle}/>
@@ -330,8 +329,8 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 								buttonSize={rbSize}
 								buttonOuterSize={rbOuterSize}
 								borderWidth={3}
-								buttonInnerColor={brandSecondary}
-								buttonOuterColor={brandSecondary}
+								buttonInnerColor={inAppBrandSecondary}
+								buttonOuterColor={inAppBrandSecondary}
 								onPress={onPressRB}
 								obj={{userId: accessToken.userId}}
 								index={index}/>
@@ -347,13 +346,14 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
 			</View>
 			<Text style={actionSheetButtonAccText}>
-				{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
+				{capitalize(formatMessage(i18n.addAccount))}
 			</Text>
 		</View>];
 
 	return (
 		<ActionSheet
 			ref={actionSheetRef}
+			containerStyle={containerStyle}
 			extraData={{
 				showAddNewAccount,
 				items: actionSheetItems,
@@ -370,7 +370,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			title={showAddNewAccount ?
 				<View style={actionSheetTitleCover}>
 					<Text style={actionSheetTitle} onPress={closeActionSheet}>
-						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
+						{capitalize(formatMessage(i18n.addAccount))}
 					</Text>
 				</View>
 				:
@@ -387,12 +387,12 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				[
 					<View style={actionSheetButtonOneCover}>
 						<Text style={actionSheetButtonOne}>
-							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.logIntoExisting))}
+							{capitalize(formatMessage(i18n.logIntoExisting))}
 						</Text>
 					</View>,
 					<View style={actionSheetButtonTwoCover}>
 						<Text style={actionSheetButtonTwo}>
-							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.createNewAccount))}
+							{capitalize(formatMessage(i18n.createNewAccount))}
 						</Text>
 					</View>,
 				]
@@ -420,11 +420,12 @@ const getStyles = (appLayout: Object, {
 		textThree,
 		textFive,
 		textSix,
+		inAppBrandSecondary,
+		screenBackground,
 	} = colors;
 
 	const {
 		paddingFactor,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -444,7 +445,10 @@ const getStyles = (appLayout: Object, {
 	return {
 		rbOuterSize,
 		rbSize,
-		brandSecondary,
+		inAppBrandSecondary,
+		containerStyle: {
+			backgroundColor: card,
+		},
 		actionSheetOverlay: {
 			borderTopLeftRadius: 8,
 			borderTopRightRadius: 8,
@@ -469,12 +473,13 @@ const getStyles = (appLayout: Object, {
 		},
 		actionSheetTitleBox: {
 			height: titleBoxHeight,
-			marginBottom: StyleSheet.hairlineWidth,
+			borderBottomWidth: StyleSheet.hairlineWidth,
+			borderColor: screenBackground,
 			backgroundColor: card,
 		},
 		actionSheetButtonOneCover: {
 			flex: 1,
-			backgroundColor: brandSecondary,
+			backgroundColor: inAppBrandSecondary,
 			alignItems: 'center',
 			justifyContent: 'center',
 			borderRadius: 8,
@@ -493,7 +498,7 @@ const getStyles = (appLayout: Object, {
 		},
 		actionSheetButtonTwo: {
 			fontSize,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			textAlignVertical: 'center',
 			textAlign: 'center',
 		},
@@ -550,7 +555,7 @@ const getStyles = (appLayout: Object, {
 		},
 		throbberStyle: {
 			fontSize: rbOuterSize,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 		},
 	};
 };

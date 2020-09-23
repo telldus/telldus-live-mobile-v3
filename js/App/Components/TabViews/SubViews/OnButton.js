@@ -27,6 +27,10 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
@@ -50,6 +54,9 @@ type Props = {
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 class OnButton extends View {
@@ -101,13 +108,17 @@ class OnButton extends View {
 			local,
 			actionIcon,
 			disableActionIndicator,
+			colors,
 		} = this.props;
+
+		const styles = getStyles({colors});
+
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState !== 'TURNOFF' ? styles.offline : styles.disabled) : (isInState !== 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
-			(isInState !== 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState !== 'TURNOFF' ? '#fff' : Theme.Core.brandSecondary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			(isInState !== 'TURNOFF' ? colors.colorOnActiveIcon : '#a2a2a2') : (isInState !== 'TURNOFF' ? colors.colorOnActiveIcon : colors.colorOnInActiveIcon);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		const iconName = actionIcon ? actionIcon : 'on';
 
@@ -115,7 +126,7 @@ class OnButton extends View {
 			<TouchableOpacity
 				disabled={!enabled}
 				onPress={this.onPress}
-				style={[this.props.style, buttonStyle]}
+				style={[styles.styleDef, this.props.style, buttonStyle]}
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon={iconName} style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
@@ -129,36 +140,35 @@ class OnButton extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	enabled: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	disabled: {
-		backgroundColor: '#eeeeee',
-	},
-	offline: {
-		backgroundColor: '#a2a2a2',
-	},
-	textEnabled: {
-		color: '#fff',
-	},
-	textDisabled: {
-		color: Theme.Core.brandSecondary,
-	},
-	button: {
-		alignItems: 'stretch',
-		justifyContent: 'center',
-	},
-	buttonText: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+
+	const {
+		colorOnActiveBg,
+		colorOnInActiveBg,
+		buttonSeparatorColor,
+	} = colors;
+
+	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
+		enabled: {
+			backgroundColor: colorOnActiveBg,
+		},
+		disabled: {
+			backgroundColor: colorOnInActiveBg,
+		},
+		offline: {
+			backgroundColor: '#a2a2a2',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 OnButton.defaultProps = {
 	enabled: true,
 	command: 1,
@@ -173,4 +183,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(OnButton);
+module.exports = connect(null, mapDispatchToProps)(withTheme(OnButton));

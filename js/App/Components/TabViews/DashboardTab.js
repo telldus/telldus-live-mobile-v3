@@ -25,12 +25,10 @@ import React from 'react';
 import { createSelector } from 'reselect';
 import {
 	Dimensions,
-	RefreshControl,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import DragAndDropScrollView from 'react-native-drag-and-drop-scroll-view';
 
 import {
@@ -38,6 +36,8 @@ import {
 	View,
 	EmptyView,
 	TouchableOpacity,
+	Icon,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
@@ -308,14 +308,17 @@ class DashboardTab extends View {
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}>
-				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
+				<Icon
+					name={'star'}
+					size={style.starIconSize}
+					level={23}/>
 				<Text
 					level={4}
 					style={style.noItemsTitle}>
 					{this.noItemsTitle}
 				</Text>
 				<Text
-					level={5}
+					level={26}
 					style={style.noItemsContent}>
 					{'\n'}
 					{this.noItemsContent}
@@ -481,7 +484,7 @@ class DashboardTab extends View {
 					showBin
 					renderItem={this._renderRow}
 					refreshControl={
-						<RefreshControl
+						<ThemedRefreshControl
 							enabled={showRefresh}
 							refreshing={isRefreshing}
 							onRefresh={this.onRefresh}
@@ -655,10 +658,6 @@ class DashboardTab extends View {
 				paddingVertical: 10,
 				width: deviceWidth * 0.75,
 			},
-			dialogueBodyTextStyle: {
-				fontSize: 13,
-				color: '#6B6969',
-			},
 			dialogueBoxStyle: {
 				borderRadius: 8,
 				elevation: 2,
@@ -669,7 +668,6 @@ class DashboardTab extends View {
 					width: 0,
 					height: 1,
 				},
-				backgroundColor: '#fff',
 				overflow: 'visible',
 			},
 		};
