@@ -43,6 +43,9 @@ import {
 import {
 	ReplaceFailedNode,
 } from '../Device/DeviceDetails/SubViews';
+import {
+	AddToDashboardScale,
+} from './SubViews';
 
 import {
 	addToDashboard,
@@ -670,7 +673,9 @@ class SettingsTab extends View {
 			clientId,
 			id,
 			nodeInfo = {},
+			data = {},
 		} = sensor;
+		const showScales = Object.keys(data).length > 1;
 
 		if (!id && !excludeActive) {
 			return null;
@@ -754,6 +759,13 @@ class SettingsTab extends View {
 									appLayout={appLayout}
 									intl={intl}
 								/>
+								{showScales && inDashboard &&
+									<AddToDashboardScale
+										data={data}
+										sensorId={id}
+										appLayout={appLayout}
+										intl={intl}/>
+								}
 								<SettingsRow
 									label={formatMessage(i18n.hideFromListS)}
 									onValueChange={this.setIgnoreSensor}
