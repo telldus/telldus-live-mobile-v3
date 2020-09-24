@@ -26,6 +26,7 @@ import React, {
 	memo,
 	useMemo,
 	useCallback,
+	Fragment,
 } from 'react';
 import {
 	Platform,
@@ -48,9 +49,7 @@ import {
 	SubHeaderText,
 	NavigationHeaderPoster,
 } from '../../../BaseComponents';
-import {
-	ScreenConfigs,
-} from './GeoFenceNavigator';
+import GeoFenceScreenConfigs from './GeoFenceScreenConfigs';
 
 import {
 	changeConsentLocationData,
@@ -137,7 +136,7 @@ const InAppDisclosureScreen = memo<Object>((props: Object): Object => {
 				name: 'GeoFenceNavigator',
 				state: {
 					index: 0,
-					routes: ScreenConfigs.map(({name}: Object): string => name),
+					routes: GeoFenceScreenConfigs.map(({name}: Object): string => name),
 				},
 			},
 		];
@@ -168,7 +167,8 @@ const InAppDisclosureScreen = memo<Object>((props: Object): Object => {
 			},
 		];
 		return data.map(({h, b}: Object, index: number): Object =>
-			<>
+			<Fragment
+				key={`${index}`}>
 				<SubHeaderText
 					text={`${index + 1}. ${formatMessage(h)}`}
 					textStyle={subHeaderTextStyle}/>
@@ -177,7 +177,7 @@ const InAppDisclosureScreen = memo<Object>((props: Object): Object => {
 					style={contentStyle}>
 					{formatMessage(b)}
 				</Text>
-			</>
+			</Fragment>
 		);
 	}, [formatMessage, subHeaderTextStyle, contentStyle]);
 

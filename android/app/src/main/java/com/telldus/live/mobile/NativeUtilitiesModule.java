@@ -7,8 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -129,4 +132,24 @@ public class NativeUtilitiesModule  extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    public void isIgnoringBatteryOptimizations(Promise promise) {
+        String packageName = getReactApplicationContext().getPackageName();
+        PowerManager pm = (PowerManager) getReactApplicationContext().getSystemService(Context.POWER_SERVICE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            promise.resolve(pm.isIgnoringBatteryOptimizations(packageName));
+        } else {
+            promise.resolve(true);
+        }
+    }
+
+    @ReactMethod
+    public void requestIgnoreBatteryOptimizations() {
+        Context context = getReactApplicationContext();
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setData(Uri.parse("package:" + context.getPackageName()));
+        context.startActivity(intent);
+    }
 }
