@@ -28,7 +28,7 @@ import { intlShape } from 'react-intl';
 import {
 	Text,
 	View,
-	// ThemedMaterialIcon,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
@@ -59,14 +59,11 @@ export default class WizardOne extends PureComponent<Props, null> {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.wizardOneHeader315);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription315);
+		this.titleWOne = formatMessage(i18n.wizardOneHeader316);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription316);
 
-		this.titleWTwo = formatMessage(i18n.wizardTwoHeader315);
-		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription315);
-
-		this.titleWThree = formatMessage(i18n.wizardThreeHeader315);
-		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription315);
+		this.titleWTwo = formatMessage(i18n.wizardTwoHeader316);
+		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription316);
 	}
 
 	getScreenData(currentScreen: number, styles: Object): Object {
@@ -101,16 +98,20 @@ export default class WizardOne extends PureComponent<Props, null> {
 			case 1:
 				return {
 					...screenData,
-					icon: 'darkmode',
-					title: this.titleWTwo,
-					description: this.descriptionWTwo,
+					icon: 'favorite',
+					title: this.titleWOne,
+					description: this.descriptionWOne,
 				};
 			case 2:
 				return {
 					...screenData,
-					icon: 'user',
-					title: this.titleWThree,
-					description: this.descriptionWThree,
+					icon: <ThemedMaterialIcon
+						style={iconStyle}
+						size={iconSize}
+						name={'open-with'}
+						level={23}/>,
+					title: this.titleWTwo,
+					description: this.descriptionWTwo,
 				};
 			default:
 				return screenData;
