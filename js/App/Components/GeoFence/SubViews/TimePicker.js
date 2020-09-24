@@ -331,7 +331,7 @@ const getStyles = ({
 			fontSize,
 		},
 		body: {
-			marginHorizontal: padding,
+			marginHorizontal: padding * 2,
 		},
 		labelTextStyle: {
 			fontSize,
