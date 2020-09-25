@@ -191,7 +191,6 @@ export default class WizardOne extends PureComponent<Props, null> {
 			premIconStyle,
 			premTextStyle,
 		});
-		console.log('TEST animatedX', animatedX);
 
 		return (
 			<View
