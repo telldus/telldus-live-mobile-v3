@@ -29,6 +29,7 @@ import {
 	Text,
 	View,
 	ThemedMaterialIcon,
+	IconTelldus,
 } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
@@ -94,6 +95,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 			// 			level={23}/>,
 			// 		title: this.titleWOne,
 			// 		description: this.descriptionWOne,
+			// 		isPremiumFeature: true,
 			// 	};
 			case 1:
 				return {
@@ -112,6 +114,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 						level={23}/>,
 					title: this.titleWTwo,
 					description: this.descriptionWTwo,
+					isPremiumFeature: true,
 				};
 			default:
 				return screenData;
@@ -124,7 +127,14 @@ export default class WizardOne extends PureComponent<Props, null> {
 		title,
 		descriptionStyle,
 		description,
+		isPremiumFeature,
+		premiumCoverStyle,
+		premIconStyle,
+		premTextStyle,
 	}: Object): Object => {
+
+		let { formatMessage } = this.props.intl;
+
 		return (
 			<>
 				<WizardIcon {...iconProps}/>
@@ -138,6 +148,16 @@ export default class WizardOne extends PureComponent<Props, null> {
 					style={descriptionStyle}>
 					{description}
 				</Text>
+				{!!isPremiumFeature && (
+					<View style={premiumCoverStyle}>
+						<IconTelldus icon={'premium'} style={premIconStyle}/>
+						<Text
+							level={25}
+							style={premTextStyle}>
+							{formatMessage(i18n.premFeature)}
+						</Text>
+					</View>
+				)}
 			</>
 		);
 	}
@@ -145,8 +165,21 @@ export default class WizardOne extends PureComponent<Props, null> {
 	render(): Object {
 		const { currentScreen, animatedX, animatedOpacity, appLayout } = this.props;
 
-		const { container, titleStyle, descriptionStyle, ...otherStyles } = this.getStyles(appLayout);
-		const { title, description, ...iconProps } = this.getScreenData(currentScreen, otherStyles);
+		const {
+			container,
+			titleStyle,
+			descriptionStyle,
+			premiumCoverStyle,
+			premIconStyle,
+			premTextStyle,
+			...otherStyles
+		} = this.getStyles(appLayout);
+		const {
+			title,
+			description,
+			isPremiumFeature,
+			...iconProps
+		} = this.getScreenData(currentScreen, otherStyles);
 
 		const contents = this.getContents({
 			iconProps,
@@ -154,6 +187,10 @@ export default class WizardOne extends PureComponent<Props, null> {
 			title,
 			descriptionStyle,
 			description,
+			isPremiumFeature,
+			premiumCoverStyle,
+			premIconStyle,
+			premTextStyle,
 		});
 
 		return (
@@ -213,6 +250,20 @@ export default class WizardOne extends PureComponent<Props, null> {
 				fontSize: Math.floor(deviceWidth * 0.042),
 				textAlign: 'left',
 				marginBottom: 10,
+			},
+			premiumCoverStyle: {
+				justifyContent: 'center',
+				alignItems: 'center',
+				flexDirection: 'row',
+			},
+			premIconStyle: {
+				textAlign: 'center',
+				color: Theme.Core.twine,
+				fontSize: Math.floor(deviceWidth * 0.075),
+			},
+			premTextStyle: {
+				fontSize: Math.floor(deviceWidth * 0.048),
+				marginLeft: 10,
 			},
 		};
 	}
