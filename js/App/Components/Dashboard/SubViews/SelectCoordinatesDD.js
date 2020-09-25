@@ -24,11 +24,8 @@
 
 import React, {
 	useCallback,
-	useState,
-	useMemo,
 } from 'react';
 import {
-	// useDispatch,
 	useSelector,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -44,39 +41,13 @@ import Theme from '../../../Theme';
 const SelectCoordinatesDD = (props: Object): Object => {
 	const {
 		setConfig,
-		MANUAL_ID,
-		MANUAL_VALUE,
+		items,
+		value,
 	} = props;
 
 	const intl = useIntl();
 
-	const [ selected, setSelected ] = useState(MANUAL_ID);
-
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { byId = {} } = useSelector((state: Object): Object => state.gateways);
-
-	let {items, value} = useMemo((): Object => {
-		let _value = selected === MANUAL_ID ? MANUAL_VALUE : '';
-		let _items = [];
-		Object.keys(byId).forEach((id: string): Object => {
-			const _item = byId[id];
-			if (id === selected) {
-				_value = _item.name;
-			}
-			_items.push({
-				key: id,
-				value: _item.name,
-			});
-		});
-		_items.unshift({
-			key: MANUAL_ID,
-			value: MANUAL_VALUE,
-		});
-		return {
-			items: _items,
-			value: _value,
-		};
-	}, [MANUAL_ID, MANUAL_VALUE, byId, selected]);
 
 	const {
 		dropDownContainerStyleDef,
@@ -89,23 +60,8 @@ const SelectCoordinatesDD = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const _onValueChange = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
-		setSelected(data[itemIndex].key);
-		let _latitude = '', _longitude = '';
-		if (byId[data[itemIndex].key]) {
-			const {
-				latitude,
-				longitude,
-			} = byId[data[itemIndex].key];
-			_latitude = latitude;
-			_longitude = longitude;
-		}
-		setConfig({
-			manual: data[itemIndex].key === MANUAL_ID,
-			latitude: _latitude,
-			longitude: _longitude,
-			id: data[itemIndex].key,
-		});
-	}, [MANUAL_ID, byId, setConfig]);
+		setConfig(_value, itemIndex, data);
+	}, [setConfig]);
 
 	const labelSortingDB = 'Select coordinates';// TODO: Translate
 
