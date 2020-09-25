@@ -117,7 +117,7 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 			label: 'MET Weather', // TODO: translate
 			onPress,
 			typeId: MET_ID,
-			icon: 'sensor',
+			icon: 'rain',
 		},
 		];
 		return items.map((item: Object, index: number): Object => {
