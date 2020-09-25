@@ -107,13 +107,8 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 			return;
 		}
 		const {
-			id: pId,
 			url,
 		} = getSupportedWeatherProviders()[selectedType];
-		if (!url || !pId) { // TODO: translate
-			showDialogue('Data provider URL not found. Please try again later.');
-			return;
-		}
 		setIsLoading(true);
 		dispatch(getWeatherInfo(url, {
 			lon: longitude,
