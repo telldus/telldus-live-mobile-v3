@@ -30,6 +30,7 @@ import {
 	useSelector,
 	useDispatch,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -48,9 +49,12 @@ import {
 import {
 	getSupportedWeatherProviders,
 } from '../../Lib/thirdPartyUtils';
+import capitalize from '../../Lib/capitalize';
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+
+import i18n from '../../Translations/common';
 
 import Theme from '../../Theme';
 
@@ -60,6 +64,11 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 		navigation,
 		route,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		toggleDialogueBoxState,
@@ -163,12 +172,12 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 						value={name}
 						autoFocus={false}
 						icon={'sensor'}
-						label={'Name'} // TODO: Translate
+						label={capitalize(formatMessage(i18n.name))}
 						onChangeText={_onChangeText}
 						appLayout={layout}/>
 				</View>
 				<TouchableButton
-					text={'EXIT'} // TODO: Translate
+					text={formatMessage(i18n.exit)}
 					buttonLevel={isLoading ? 7 : 10}
 					onPress={goBack}/>
 			</ThemedScrollView>
