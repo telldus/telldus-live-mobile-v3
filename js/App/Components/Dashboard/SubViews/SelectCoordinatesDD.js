@@ -107,7 +107,7 @@ const SelectCoordinatesDD = (props: Object): Object => {
 		});
 	}, [MANUAL_ID, byId, setConfig]);
 
-	const labelSortingDB = 'Select coordinates';
+	const labelSortingDB = 'Select coordinates';// TODO: Translate
 
 	return (
 		<View
