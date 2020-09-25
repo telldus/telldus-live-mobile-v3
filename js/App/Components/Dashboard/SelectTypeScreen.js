@@ -139,7 +139,13 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 			level={3}
 			style={{flex: 1}}>
 			<ThemedScrollView
-				level={3}>
+				level={3}
+				style={{
+					flex: 1,
+				}}
+				contentContainerStyle={{
+					flexGrow: 1,
+				}}>
 				<View
 					style={containerStyle}>
 					{blocks}
