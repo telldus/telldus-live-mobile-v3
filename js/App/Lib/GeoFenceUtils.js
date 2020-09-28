@@ -297,6 +297,58 @@ const GeoFenceUtils = {
 
 		return action;
 	},
+	prepareActionsInitialState: (
+		currentScreen: 'ArrivingActions' | 'LeavingActions',
+		arrivingActions: Object = {}, leavingActions: Object = {},
+		action: 'devices' | 'events' | 'schedules',
+	): Object => {
+		if (currentScreen === 'ArrivingActions') {
+			return arrivingActions[action] || {};
+		} else if (action === 'devices') {
+			const arrivingDActions = arrivingActions.devices || {};
+			let _leavingDActions = leavingActions.devices || {};
+			Object.keys(arrivingDActions).forEach((did: string) => {
+				const {
+					method,
+					...others
+				} = arrivingDActions[did] || {};
+				if (method === '1') {
+					_leavingDActions = {
+						..._leavingDActions,
+						[did]: {
+							...others,
+							method: '2',
+						},
+					};
+				} else if (method === '2') {
+					_leavingDActions = {
+						..._leavingDActions,
+						[did]: {
+							...others,
+							method: '1',
+						},
+					};
+				}
+			});
+			return _leavingDActions;
+		}
+		const _arrivingActions = arrivingActions[action] || {};
+		let _leavingActions = leavingActions[action] || {};
+		Object.keys(_arrivingActions).forEach((id: string) => {
+			const {
+				active,
+				...others
+			} = _arrivingActions[id];
+			_leavingActions = {
+				..._leavingActions,
+				[id]: {
+					...others,
+					active: !active,
+				},
+			};
+		});
+		return _leavingActions;
+	},
 };
 
 

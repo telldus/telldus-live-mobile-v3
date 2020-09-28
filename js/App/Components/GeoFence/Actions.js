@@ -103,11 +103,10 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		arriving = {},
 		leaving = {},
 	} = fence;
-	const action = currentScreen === 'ArrivingActions' ? arriving : leaving;
 	const initialSelection = {
-		selectedDevices: action.devices || {},
-		selectedSchedules: action.schedules || {},
-		selectedEvents: action.events || {},
+		selectedDevices: GeoFenceUtils.prepareActionsInitialState(currentScreen, arriving, leaving, 'devices'),
+		selectedSchedules: GeoFenceUtils.prepareActionsInitialState(currentScreen, arriving, leaving, 'schedules'),
+		selectedEvents: GeoFenceUtils.prepareActionsInitialState(currentScreen, arriving, leaving, 'events'),
 	};
 	const [selectedItems, setSelectedItems] = useState(initialSelection);
 	const {
