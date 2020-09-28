@@ -86,9 +86,9 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
-	useEffect(() => {// TODO: translate
-		onDidMount('Set Name', 'Select a name for the dashboard tile');
-	}, [onDidMount]);
+	useEffect(() => {
+		onDidMount(formatMessage(i18n.setName), formatMessage(i18n.setNameForDbItem));
+	}, [formatMessage, onDidMount]);
 
 	const {
 		container,
@@ -111,8 +111,8 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 	}, [toggleDialogueBoxState]);
 
 	const onPressNext = useCallback((params: Object) => {
-		if (!name || !name.trim()) { // TODO: translate
-			showDialogue('Tile name cannot be empty. Please enter valid name for the dashboard tile.');
+		if (!name || !name.trim()) {
+			showDialogue(formatMessage(i18n.errorNameFieldEmpty));
 			return;
 		}
 		const {
@@ -141,12 +141,12 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 					},
 				}));
 				navigation.popToTop();
-			} else { // TODO: translate
-				showDialogue('Could not fetch weather data at the moment. Please try again later.');
+			} else {
+				showDialogue(formatMessage(i18n.messageCantFetchWeatherData));
 			}
 		}).catch(() => {
-			setIsLoading(false); // TODO: translate
-			showDialogue('Could not fetch weather data at the moment. Please try again later.');
+			setIsLoading(false);
+			showDialogue(formatMessage(i18n.messageCantFetchWeatherData));
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [name, selectedType, longitude, latitude, uniqueId, showDialogue, time, timeKey, selectedAttributes]);

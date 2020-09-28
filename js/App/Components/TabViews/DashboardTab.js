@@ -415,12 +415,13 @@ class DashboardTab extends View {
 		const {
 			sortingDB,
 			dispatch,
+			screenProps,
 		} = this.props;
 
 		if (sortingDB === 'Alphabetical') {
 			const settings = { sortingDB: 'Manual' };
 			dispatch(changeSortingDB(settings));
-			dispatch(showToast('Dashboard sorting has been changed to "Manual" mode.')); // TODO: Translate
+			dispatch(showToast(screenProps.intl.formatMessage(i18n.dBSortChangedToManual)));
 		}
 
 		dispatch(updateDashboardOrder(data));

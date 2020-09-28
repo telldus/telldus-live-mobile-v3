@@ -36,6 +36,7 @@ import {
 	StyleSheet,
 } from 'react-native';
 import MapView from 'react-native-maps';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -60,6 +61,8 @@ import {
 
 import Theme from '../../Theme';
 
+import i18n from '../../Translations/common';
+
 const SetCoordinates = memo<Object>((props: Object): Object => {
 	const {
 		onDidMount,
@@ -67,14 +70,17 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 		route,
 	} = props;
 
-	const deltaDef = 0.05;
-	const MANUAL_ID = 'manual';
-	const MANUAL_VALUE = 'Manual';
-
+	const {
+		formatMessage,
+	} = useIntl();
 	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
 	const dispatch = useDispatch();
+
+	const deltaDef = 0.05;
+	const MANUAL_ID = 'manual';
+	const MANUAL_VALUE = formatMessage(i18n.labelManual);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { byId = {} } = useSelector((state: Object): Object => state.gateways);
@@ -168,9 +174,9 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useEffect(() => {// TODO: translate
-		onDidMount('Set Coordinates', 'Select or manually enter Coordinates');
-	}, [onDidMount]);
+	useEffect(() => {
+		onDidMount(formatMessage(i18n.headerOnePosition), formatMessage(i18n.headerTwoPosition));
+	}, [formatMessage, onDidMount]);
 
 	const {
 		container,
@@ -189,7 +195,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	}, [toggleDialogueBoxState]);
 
 	const onPressNext = useCallback((params: Object) => {
-		const invalidMessage = 'Invalid Latitude and Longitud. Please enter valid latitude and longitude.'; // TODO: translate
+		const invalidMessage = formatMessage(i18n.messageInvalidCoordinates);
 
 		if (!latitude || !longitude) {
 			showDialogue(invalidMessage);
@@ -212,7 +218,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 			latitude,
 			longitude,
 		});
-	}, [latitude, longitude, navigation, selectedType, uniqueId, key, showDialogue]);
+	}, [formatMessage, latitude, longitude, navigation, selectedType, uniqueId, key, showDialogue]);
 
 	const _setConfig = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
 		setSelectedId(data[itemIndex].key);

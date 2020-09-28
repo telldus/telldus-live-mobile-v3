@@ -66,9 +66,9 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 	const { userId } = useSelector((state: Object): Object => state.user);
 	const { metWeatherIds = {} } = useSelector((state: Object): Object => state.dashboard);
 
-	useEffect(() => {// TODO: translate
-		onDidMount('Select Type', 'Select either device or sensor');
-	}, [onDidMount]);
+	useEffect(() => {
+		onDidMount(formatMessage(i18n.addToDb), formatMessage(i18n.selectTypeToAdd));
+	}, [formatMessage, onDidMount]);
 
 	const {
 		containerStyle,
@@ -114,7 +114,7 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 			icon: 'sensor',
 		},
 		{
-			label: 'MET Weather', // TODO: translate
+			label: formatMessage(i18n.labelWeather),
 			onPress,
 			typeId: MET_ID,
 			icon: 'rain',

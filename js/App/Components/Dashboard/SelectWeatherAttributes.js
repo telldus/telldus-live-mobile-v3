@@ -40,6 +40,7 @@ import {
 
 import {
 	getSupportedWeatherProviders,
+	capitalize,
 } from '../../Lib';
 
 import {
@@ -47,6 +48,8 @@ import {
 } from './SubViews';
 
 import Theme from '../../Theme';
+
+import i18n from '../../Translations/common';
 
 const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	const {
@@ -73,9 +76,9 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
-	useEffect(() => {// TODO: translate
-		onDidMount('Select Properties', 'Select one or more weather attributes');
-	}, [onDidMount]);
+	useEffect(() => {
+		onDidMount(formatMessage(i18n.selectSettings), formatMessage(i18n.selectOneOrMoreTypes));
+	}, [formatMessage, onDidMount]);
 
 	const listData = useMemo((): Array<Object> => {
 		const {
@@ -173,7 +176,7 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 						key={'-1'}
 						layout={layout}
 						onPress={onPressToggleAll}
-						label={sLength === 0 ? 'Select all' : 'Deselect all'}
+						label={sLength === 0 ? capitalize(formatMessage(i18n.selectAll)) : capitalize(formatMessage(i18n.deSelectAll))}
 						rowData={-1}
 						rightIcon={sLength === 0 ? 'favorite' : 'favorite-outline'}
 					/>

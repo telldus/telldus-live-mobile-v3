@@ -38,6 +38,8 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 const SelectCoordinatesDD = (props: Object): Object => {
 	const {
 		setConfig,
@@ -63,7 +65,7 @@ const SelectCoordinatesDD = (props: Object): Object => {
 		setConfig(_value, itemIndex, data);
 	}, [setConfig]);
 
-	const labelSortingDB = 'Select coordinates';// TODO: Translate
+	const labelSortingDB = intl.formatMessage(i18n.selectPosition);
 
 	return (
 		<View

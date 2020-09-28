@@ -34,6 +34,7 @@ import {
 import {
 	SectionList,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -59,6 +60,8 @@ import {
 
 import Theme from '../../Theme';
 
+import i18n from '../../Translations/common';
+
 const SelectItemsScreen = memo<Object>((props: Object): Object => {
 
 	const {
@@ -67,6 +70,9 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 		navigation,
 	} = props;
 
+	const {
+		formatMessage,
+	} = useIntl();
 	const dispatch = useDispatch();
 
 	const { selectedType } = route.params || {};
@@ -94,33 +100,40 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	const {
 		byId,
 		typeLabel,
+		typeLabelP,
 	} = useMemo((): Object => {
 		switch (selectedType) {
 			case DEVICE_KEY:
 				return {
 					type: DEVICE_KEY,
 					byId: dById,
-					typeLabel: 'device',
+					typeLabel: formatMessage(i18n.labelDevice).toLowerCase(),
+					typeLabelP: formatMessage(i18n.devices).toLowerCase(),
 				};
 			case MET_ID:
 				return {
 					type: MET_ID,
 					byId: weather,
-					typeLabel: 'weather',
+					typeLabel: formatMessage(i18n.labelWeather).toLowerCase(),
+					typeLabelP: formatMessage(i18n.labelWeather).toLowerCase(),
 				};
 			case SENSOR_KEY:
 			default:
 				return {
 					type: SENSOR_KEY,
 					byId: sById,
-					typeLabel: 'sensor',
+					typeLabel: formatMessage(i18n.labelSensor).toLowerCase(),
+					typeLabelP: formatMessage(i18n.sensors).toLowerCase(),
 				};
 		}
-	}, [selectedType, dById, sById, weather]);
+	}, [selectedType, dById, formatMessage, weather, sById]);
 
 	useEffect(() => {
-		onDidMount(`Select ${typeLabel}`);// TODO: translate
-	}, [onDidMount, typeLabel]);
+		onDidMount(
+			formatMessage(i18n.selectDValue, {value: typeLabel}),
+			formatMessage(i18n.selectOneOrMoreDValues, {values: typeLabelP})
+		);
+	}, [formatMessage, onDidMount, typeLabel, typeLabelP]);
 
 	const navigate = useCallback((screen: string, params: Object) => {
 		navigation.navigate(screen, params);
