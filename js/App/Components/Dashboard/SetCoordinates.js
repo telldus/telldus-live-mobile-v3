@@ -156,7 +156,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 			key: _key,
 			itemsObject: _itemsObject,
 		};
-	}, [byId, manualLocation, selectedId]);
+	}, [MANUAL_VALUE, byId, manualLocation.latitude, manualLocation.longitude, selectedId]);
 
 	const {
 		latitude,
