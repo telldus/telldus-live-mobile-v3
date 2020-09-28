@@ -20,6 +20,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       Object {
         "backgroundColor": "transparent",
         "color": "#777777",
+        "fontFamily": "Roboto-Regular",
         "fontSize": 33,
         "marginBottom": 5,
         "marginTop": 10.416375,
@@ -429,6 +430,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       Object {
         "backgroundColor": "transparent",
         "color": "#777777",
+        "fontFamily": "Roboto-Regular",
         "fontSize": 33,
         "marginBottom": 5,
         "marginTop": 10.416375,
