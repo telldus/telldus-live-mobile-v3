@@ -77,7 +77,6 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 		checkIconActiveStyle,
 		checkIconInActiveStyle,
 		switchStyle,
-		switchTextStyle,
 	} = getStyles(layout, {
 		isLast,
 		colors,
@@ -141,9 +140,6 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 				{
 					isChecked ? (
 						<>
-							<Text style={switchTextStyle}>
-								{intl.formatMessage(i18n.labelActive)}
-							</Text>
 							<Switch
 								style={switchStyle}
 								value={event.active}
@@ -242,13 +238,6 @@ const getStyles = (appLayout: Object, {
 		},
 		switchStyle: {
 			marginRight: padding,
-		},
-		switchTextStyle: {
-			color: textSeven,
-			fontSize: nameFontSize * 0.8,
-			textAlignVertical: 'center',
-			textAlign: 'right',
-			marginRight: 5,
 		},
 	};
 };

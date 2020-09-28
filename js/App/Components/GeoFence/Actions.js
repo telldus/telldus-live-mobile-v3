@@ -526,6 +526,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		contentContainerStyle: {
 			flexGrow: 1,
+			paddingTop: padding,
 			paddingBottom: padding * 6,
 		},
 	};

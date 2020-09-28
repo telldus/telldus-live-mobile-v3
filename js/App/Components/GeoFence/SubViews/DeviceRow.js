@@ -250,7 +250,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 				onSlideActive={onSlideActive}
 				onSlideComplete={onSlideComplete}
 				key={7}
-				offButtonColor={isInState === 'TURNOFF' ? Theme.Core.brandPrimary : undefined}
+				offButtonColor={isInState === 'TURNOFF' ? iconOffColor : undefined}
 				onButtonColor={isInState === 'TURNON' ? iconOnBGColor : undefined}
 				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
