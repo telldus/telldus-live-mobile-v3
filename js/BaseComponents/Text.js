@@ -34,6 +34,8 @@ import {
 	prepareRootPropsText,
 } from './prepareRootProps';
 
+import Theme from '../App/Theme';
+
 type Props = {
 	children: Object,
 	level?: number,
@@ -49,9 +51,20 @@ class TextComponent extends Base {
 			children,
 			...others
 		} = this.props;
+		const props = prepareRootPropsText(others, {
+			style: Array.isArray(others) ?
+				[
+					{
+						fontFamily: Theme.Core.fonts.robotoRegular,
+					},
+				] :
+				{
+					fontFamily: Theme.Core.fonts.robotoRegular,
+				},
+		});
 		return (
 			<Text
-				{...prepareRootPropsText(others)}
+				{...props}
 				allowFontScaling={false}
 			>{children}</Text>
 		);
