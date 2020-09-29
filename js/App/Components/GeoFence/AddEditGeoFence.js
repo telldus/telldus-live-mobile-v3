@@ -43,6 +43,7 @@ import {
 	FloatingButton,
 	View,
 	FullPageActivityIndicator,
+	InfoBlock,
 } from '../../../BaseComponents';
 import {
 	FenceCalloutWithMarker,
@@ -166,9 +167,13 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		container,
 		mapStyle,
 		contentContainerStyle,
+		infoContainer,
+		infoIconStyle,
+		infoTextStyle,
 	} = getStyles({
 		appLayout,
 		mapReady,
+		colors,
 	});
 
 	function onPressNext() {
@@ -228,7 +233,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				key={`${index}`}>
 				<FenceCalloutWithMarker
 					fence={fenceC}
-					enableGeoFence={enableGeoFence}
 					onPress={onEditFence}/>
 				<MapView.Circle
 					center={{
@@ -312,7 +316,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					style={mapStyle}
 					initialRegion={new AnimatedRegion(region)}
 					region={regionToReset ? new AnimatedRegion(regionToReset) : undefined}
-					scrollEnabled={enableGeoFence}
 					loadingEnabled={false}
 					showsTraffic={false}
 					showsUserLocation={true}
@@ -338,6 +341,13 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				onPress={onPressNext}
 				imageSource={{uri: 'icon_plus'}}
 				disabled={!true}/>
+			{!enableGeoFence && <InfoBlock
+				text={'Geofence is currently inactivated. Activate it using the toggle button in the top right.'}
+				appLayout={appLayout}
+				infoContainer={infoContainer}
+				infoIconStyle={infoIconStyle}
+				textStyle={infoTextStyle}/>
+			}
 			<HelpOverlay
 				closeHelp={closeHelp}
 				isVisible={isHelpVisible}
@@ -351,7 +361,15 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 const getStyles = ({
 	appLayout,
 	mapReady,
+	colors,
 }: Object): Object => {
+	const {
+		statusRed,
+	} = colors;
+
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
 
 	return {
 		container: {
@@ -362,6 +380,21 @@ const getStyles = ({
 		},
 		contentContainerStyle: {
 			flexGrow: 1,
+		},
+		infoContainer: {
+			flex: 0,
+			backgroundColor: statusRed,
+			opacity: 0.7,
+			position: 'absolute',
+			top: 0,
+			left: 0,
+		},
+		infoIconStyle: {
+			color: '#fff',
+			fontSize: Math.floor(deviceWidth * 0.09),
+		},
+		infoTextStyle: {
+			color: '#fff',
 		},
 	};
 };
