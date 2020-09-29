@@ -21,7 +21,11 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+	useCallback,
+} from 'react';
 import {
 	ScrollView,
 	Platform,
@@ -66,6 +70,7 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	actions: Object,
 };
 
 const ActiveTime = React.memo<Object>((props: Props): Object => {
@@ -73,6 +78,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		navigation,
 		appLayout,
 		onDidMount,
+		actions,
 	} = props;
 
 	const intl = useIntl();
@@ -111,11 +117,12 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
 
-	function onPressNext() {
+	const onPressNext = useCallback(() => {
 		setIsLoading(true);
 		dispatch(setFenceIdentifier(uuid.v1()));
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		dispatch(addGeofence()).then(() => {
+			actions.showToast(formatMessage(i18n.gFTurnedOn));
 			setIsLoading(false);
 			const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(fence.latitude, fence.longitude, fence.radius);
 			let _routes = [
@@ -170,7 +177,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 				showPositive: true,
 			});
 		});
-	}
+	}, [aA, actions, dispatch, fH, fM, fence.latitude, fence.longitude, fence.radius, formatMessage, navigation, tH, tM, toggleDialogueBoxState]);
 
 	const {
 		container,
