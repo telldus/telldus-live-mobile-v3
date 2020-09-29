@@ -181,7 +181,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 				showPositive: true,
 			});
 		});
-	}, [aA, actions, dispatch, fH, fM, fence.latitude, fence.longitude, fence.radius, formatMessage, navigation, tH, tM, toggleDialogueBoxState]);
+	}, [aA, actions, dispatch, enableGeoFence, fH, fM, fence.latitude, fence.longitude, fence.radius, formatMessage, navigation, tH, tM, toggleDialogueBoxState]);
 
 	const {
 		container,
