@@ -49,7 +49,6 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 	const {
 		onPress,
 		fence,
-		enableGeoFence,
 	} = props;
 
 	const intl = useIntl();
@@ -78,9 +77,6 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const _onPress = useCallback(() => {
-		if (!enableGeoFence) {
-			return;
-		}
 		const _fence = {
 			...extras,
 			...others,
@@ -90,7 +86,7 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 			markerRef.current.hideCallout();
 		}
 		onPress(_fence);
-	}, [enableGeoFence, extras, onPress, others, radius]);
+	}, [extras, onPress, others, radius]);
 
 	const dateT = `01/01/2017 ${toHr}:${toMin}`;
 	const timestampT = Date.parse(dateT);

@@ -878,14 +878,18 @@ function addGeofence(override?: boolean = false): ThunkAction {
 			}, 8000);
 
 			const {
-				fences:
-		{
-			fence,
-		},
+				fences: {
+					fence,
+				},
 				user: {
 					userId,
 				},
+				app: {
+					defaultSettings = {},
+				},
 			} = getState();
+
+			const enableGeoFence = typeof defaultSettings.enableGeoFence === 'undefined' ? true : defaultSettings.enableGeoFence;
 			const {
 				identifier,
 				radius,
@@ -928,7 +932,9 @@ function addGeofence(override?: boolean = false): ThunkAction {
 
 			BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
 				try {
-					dispatch(startGeofences());
+					if (enableGeoFence) {
+						dispatch(startGeofences());
+					}
 				} catch (e) {
 					// ignore
 				} finally {

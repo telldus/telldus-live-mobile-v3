@@ -71,6 +71,7 @@ type Props = {
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
 	actions: Object,
+	enableGeoFence: boolean,
 };
 
 const ActiveTime = React.memo<Object>((props: Props): Object => {
@@ -79,6 +80,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		appLayout,
 		onDidMount,
 		actions,
+		enableGeoFence,
 	} = props;
 
 	const intl = useIntl();
@@ -122,7 +124,9 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		dispatch(setFenceIdentifier(uuid.v1()));
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		dispatch(addGeofence()).then(() => {
-			actions.showToast(formatMessage(i18n.gFTurnedOn));
+			if (enableGeoFence) {
+				actions.showToast(formatMessage(i18n.gFTurnedOn));
+			}
 			setIsLoading(false);
 			const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(fence.latitude, fence.longitude, fence.radius);
 			let _routes = [
