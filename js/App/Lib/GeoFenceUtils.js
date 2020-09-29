@@ -312,20 +312,20 @@ const GeoFenceUtils = {
 					method,
 					...others
 				} = arrivingDActions[did] || {};
-				if (method === '1') {
+				if (parseInt(method, 10) === 1) {
 					_leavingDActions = {
 						..._leavingDActions,
 						[did]: {
 							...others,
-							method: '2',
+							method: 2,
 						},
 					};
-				} else if (method === '2') {
+				} else if (parseInt(method, 10) === 2) {
 					_leavingDActions = {
 						..._leavingDActions,
 						[did]: {
 							...others,
-							method: '1',
+							method: 1,
 						},
 					};
 				}
