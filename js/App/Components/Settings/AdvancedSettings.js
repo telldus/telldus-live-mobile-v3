@@ -36,6 +36,7 @@ import {
 	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import {
 	View,
@@ -49,6 +50,9 @@ import {
 	updateGeoFenceConfig,
 	setupGeoFence,
 } from '../../Actions/GeoFence';
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
 
 import Theme from '../../Theme';
 
@@ -65,6 +69,9 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 	const intl = useIntl();
 
 	const dispatch = useDispatch();
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -81,17 +88,20 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		geofenceInitialTriggerEntry = false,
 		locationUpdateInterval = 1000,
 		geofenceProximityRadius = 400,
+		debug = false,
 	} = config;
 
 	const [ inLineEditActiveDF, setInLineEditActiveDF ] = useState();
 	const [ inLineEditActiveST, setInLineEditActiveST ] = useState();
 	const [ inLineEditActiveUI, setInLineEditActiveUI ] = useState();
 	const [ inLineEditActiveFPR, setInLineEditActiveFPR ] = useState();
+	const [ inLineEditActiveEmail, setInLineEditActiveEmail ] = useState();
 
 	const [ df, setDf ] = useState(distanceFilter);
 	const [ st, setSt ] = useState(stopTimeout);
 	const [ ui, setUi ] = useState(locationUpdateInterval);
 	const [ fpr, setFpr ] = useState(geofenceProximityRadius);
+	const [ email, setEmail ] = useState('');
 
 	const {
 		itemsContainer,
@@ -195,6 +205,32 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		fpr,
 	]);
 
+	const onPressEditEmail = useCallback(() => {
+		if (inLineEditActiveEmail) {
+			if (!email) {
+				return;
+			}
+			BackgroundGeolocation.logger.emailLog(email).then((success: Object) => {
+				toggleDialogueBoxState({
+					show: true,
+					text: JSON.stringify(success),
+					showHeader: true,
+					imageHeader: true,
+					showPositive: true,
+				});
+			  }).catch((error: Object) => {
+				toggleDialogueBoxState({
+					show: true,
+					text: error.message || JSON.stringify(error),
+					showHeader: true,
+					imageHeader: true,
+					showPositive: true,
+				});
+			  });
+		}
+		setInLineEditActiveEmail(!inLineEditActiveEmail);
+	}, [email, inLineEditActiveEmail, toggleDialogueBoxState]);
+
 	const onChangeTextDF = useCallback((value: string) => {
 		setDf(value);
 	}, []);
@@ -252,6 +288,16 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 			showNotificationOnActionFail: value,
 		});
 	}, [onUpdateGeoFenceConfig]);
+
+	const onValueChangeDebug = useCallback((value: string) => {
+		onUpdateGeoFenceConfig({
+			debug: value,
+		});
+	}, [onUpdateGeoFenceConfig]);
+
+	const onChangeTextEmail = useCallback((value: string) => {
+		setEmail(value);
+	}, []);
 
 	return (
 		<View
@@ -447,6 +493,38 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							intl={intl}
 							labelTextStyle={labelTextStyle}
 							level={18}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						<SettingsRow
+							label={'Enable debug: '}
+							onValueChange={onValueChangeDebug}
+							value={debug}
+							appLayout={layout}
+							intl={intl}
+							labelTextStyle={labelTextStyle}
+							level={18}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						<SettingsRow
+							label={'Email log:'}
+							value={email}
+							iconValueRight={inLineEditActiveEmail ? 'done' : 'edit'}
+							inLineEditActive={inLineEditActiveEmail}
+							onPressIconValueRight={onPressEditEmail}
+							onChangeText={onChangeTextEmail}
+							onSubmitEditing={onPressEditEmail}
+							appLayout={layout}
+							intl={intl}
+							type={'text'}
+							labelTextStyle={[labelTextStyle, {
+								width: '50%',
+							}]}
 							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
