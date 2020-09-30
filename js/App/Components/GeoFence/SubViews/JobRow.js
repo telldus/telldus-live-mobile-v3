@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import {
 	useSelector,
 } from 'react-redux';
@@ -95,11 +97,11 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 		colors,
 	});
 
-	function noOp() {}
+	const noOp = useCallback(() => {}, []);
 
 	const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
-	function getNameInfo(): Object {
+	const getNameInfo = useCallback((): Object => {
 
 		let coverStyle = nameStyle;
 		if (DeviceInfo.isTablet()) {
@@ -131,20 +133,20 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 				</Text>
 			</View>
 		);
-	}
+	}, [deviceName, effectiveHour, effectiveMinute, intl, nameStyle, nameTabletStyle, textStyle, textTwoStyle, type, weekdays]);
 
 	const nameInfo = getNameInfo();
 
-	function _onChangeSelection() {
+	const _onChangeSelection = useCallback(() => {
 		onChangeSelection('schedule', checkBoxId, job);
-	}
+	}, [checkBoxId, job, onChangeSelection]);
 
-	function _toggleActiveState(_active: boolean) {
+	const _toggleActiveState = useCallback((_active: boolean) => {
 		toggleActiveState('schedule', checkBoxId, {
 			...job,
 			active: _active,
 		});
-	}
+	}, [checkBoxId, job, toggleActiveState]);
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
 
