@@ -143,7 +143,7 @@ one limitation is, the layout dimensions can be used only in inline style, not w
 [ThemedColors.js file](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Theme/ThemedColors.js#L46).
 - There are couple of ways to utilise the existing themed colors.
 
-#### 1. Using property "level"
+##### 1. Using property "level"
 - Selected [BaseComponents](https://code.telldus.com/telldus/live-app-v3/-/tree/master/js/BaseComponents) will accept a property named `level`
 (`blockLevel` and others in advanced base components) which takes care of setting `backgroundColor`, `color`(in the case of Text and Icon components) 
 or `tintColor`(Image) depending upon the theme/mode.
@@ -158,7 +158,7 @@ to the base components like [View](https://code.telldus.com/telldus/live-app-v3/
  - You may check the existing [ThemedColors combinations](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Theme/ThemedColors.js#L46) and
  see which `level` sets your desired color combination, supply it, you are done.
  
- ### 2. Using Hook [useAppTheme](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Hooks/Theme.js#L39)
+##### 2. Using Hook [useAppTheme](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Hooks/Theme.js#L39)
  - Sometimes you will need access to the entire ThemedColors set of the current mode/theme. Then you can call the hook `useAppTheme`.
  Returns few other useful data as well.
  - Above mentioned Base components that accepts `level` already uses this hook.
@@ -166,7 +166,7 @@ to the base components like [View](https://code.telldus.com/telldus/live-app-v3/
  use hooks, use the HOC [withTheme](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Components/HOC/withTheme.js). Now the class
  component will receive `colors` and some other useful data as prop.
  
- ### Add new color combination
+##### Add new color combination
  -  The existing ThemedColors should suffice during most of the cases, but incase if you cannot find the desired color combination, feel free to add colors
  for each theme/mode inside [ThemedColors.js file](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Theme/ThemedColors.js).
  - You now can see the newly added color inside `colors` returned by the hook `useAppTheme`.
