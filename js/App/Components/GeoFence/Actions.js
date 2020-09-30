@@ -25,6 +25,7 @@ import React, {
 	useState,
 	useEffect,
 	useMemo,
+	useCallback,
 } from 'react';
 import {
 	SectionList,
@@ -134,7 +135,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [devicesListLength]);
 
-	function onDeviceValueChange(args: Object) {
+	const onDeviceValueChange = useCallback((args: Object) => {
 		const {
 			deviceId,
 		} = args;
@@ -155,7 +156,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		};
 		setSelectedItems(newSelected);
 		setDevices(GeoFenceUtils.prepareDevicesWithNewStateValues(devices, newSelected.selectedDevices));
-	}
+	}, [devices, selectedDevices, selectedItems]);
 
 	const listData = useMemo((): Array<Object> => {
 		return GeoFenceUtils.prepareDataForListGeoFenceActions(
@@ -183,14 +184,14 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		scrollEnabled,
 		showRefresh,
 	} = confOnSetScroll;
-	function _setScrollEnabled(enable: boolean) {
+	const _setScrollEnabled = useCallback((enable: boolean) => {
 		setConfOnSetScroll({
 			scrollEnabled: enable,
 			showRefresh: enable,
 		});
-	}
+	}, []);
 
-	function openRGBControl(id: number) {
+	const openRGBControl = useCallback((id: number) => {
 		const isSelected = !!selectedDevices[id];
 		if (!isSelected) {
 			return;
@@ -199,9 +200,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			id,
 			onPressOverride: onDeviceValueChange,
 		});
-	}
+	}, [navigation, onDeviceValueChange, selectedDevices]);
 
-	function openThermostatControl(id: number) {
+	const openThermostatControl = useCallback((id: number) => {
 		const isSelected = !!selectedDevices[id];
 		if (!isSelected) {
 			return;
@@ -211,24 +212,24 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			onPressOverride: onDeviceValueChange,
 			timeoutPlusMinus: 0,
 		});
-	}
+	}, [navigation, onDeviceValueChange, selectedDevices]);
 
-	function toggleShowDevices() {
+	const toggleShowDevices = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		setShowDevices(!showDevices);
-	}
+	}, [showDevices]);
 
-	function toggleShowEvents() {
+	const toggleShowEvents = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		setShowEvents(!showEvents);
-	}
+	}, [showEvents]);
 
-	function toggleShowJobs() {
+	const toggleShowJobs = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		setShowJobs(!showJobs);
-	}
+	}, [showJobs]);
 
-	function onChangeSelection(type: 'device' | 'schedule' | 'event', id: string, data: Object) {
+	const onChangeSelection = useCallback((type: 'device' | 'schedule' | 'event', id: string, data: Object) => {
 		let newSelected = {...selectedItems};
 		if (type === 'device') {
 			if (selectedDevices[id]) {
@@ -278,9 +279,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		}
 
 		setSelectedItems(newSelected);
-	}
+	}, [selectedDevices, selectedEvents, selectedItems, selectedSchedules]);
 
-	function toggleActiveState(type: 'schedule' | 'event', id: string, data: Object) {
+	const toggleActiveState = useCallback((type: 'schedule' | 'event', id: string, data: Object) => {
 		let newSelected = {...selectedItems};
 		if (type === 'schedule') {
 			newSelected = {
@@ -306,9 +307,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			};
 		}
 		setSelectedItems(newSelected);
-	}
+	}, [selectedItems]);
 
-	function renderDevice({item, index, section}: Object): Object {
+	const renderDevice = useCallback(({item, index, section}: Object): Object => {
 		const checkBoxId = item.id;
 
 		const sectionLength = section.data.length;
@@ -327,9 +328,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 				isChecked={!!selectedDevices[checkBoxId]}
 				setScrollEnabled={_setScrollEnabled}/>
 		);
-	}
+	}, [_setScrollEnabled, onChangeSelection, onDeviceValueChange, openRGBControl, openThermostatControl, selectedDevices]);
 
-	function renderEvent({item, index, section}: Object): Object {
+	const renderEvent = useCallback(({item, index, section}: Object): Object => {
 		const { id } = item;
 
 		const sectionLength = section.data.length;
@@ -345,9 +346,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 				isChecked={!!selectedEvents[id]}
 				toggleActiveState={toggleActiveState}/>
 		);
-	}
+	}, [onChangeSelection, selectedEvents, toggleActiveState]);
 
-	function renderJob({item, index, section}: Object): Object {
+	const renderJob = useCallback(({item, index, section}: Object): Object => {
 		const { id } = item;
 
 		const sectionLength = section.data.length;
@@ -364,7 +365,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 				isChecked={!!selectedSchedules[id]}
 				toggleActiveState={toggleActiveState}/>
 		);
-	}
+	}, [devices, onChangeSelection, selectedSchedules, toggleActiveState]);
 
 	const [ isRefreshing, setIsRefreshing ] = useState(false);
 
@@ -386,7 +387,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	function renderRow(rowData: Object): Object {
+	const renderRow = useCallback((rowData: Object): Object => {
 		const isEHeader = rowData.section.header === Theme.Core.GeoFenceEventsHeaderKey;
 		const isJHeader = rowData.section.header === Theme.Core.GeoFenceJobsHeaderKey;
 
@@ -396,9 +397,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			return renderJob({...rowData});
 		}
 		return renderDevice({...rowData});
-	}
+	}, [renderDevice, renderEvent, renderJob]);
 
-	function renderSectionHeader(sectionData: Object): Object {
+	const renderSectionHeader = useCallback((sectionData: Object): Object => {
 
 		const isDHeader = sectionData.section.header === Theme.Core.GeoFenceDevicesHeaderKey;
 		const isEHeader = sectionData.section.header === Theme.Core.GeoFenceEventsHeaderKey;
@@ -427,9 +428,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 				websocketOnline={websocketOnline}
 			/>
 		);
-	}
+	}, [appLayout, gatewaysById, intl, showDevices, showEvents, showJobs, toggleShowDevices, toggleShowEvents, toggleShowJobs]);
 
-	function _onPressNext() {
+	const _onPressNext = useCallback(() => {
 		let deviceInvalidAction = null;
 		for (let i = 0; i < Object.keys(selectedDevices).length; i++) {
 			const key = Object.keys(selectedDevices)[i];
@@ -467,11 +468,11 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			}));
 		}
 		onPressNext();
-	}
+	}, [byId, currentScreen, dispatch, intl, onPressNext, selectedDevices, selectedEvents, selectedSchedules, toggleDialogueBoxState]);
 
-	function keyExtractor(item: Object, index: number): string {
+	const keyExtractor = useCallback((item: Object, index: number): string => {
 		return `${item.id}${index}`;
-	}
+	}, []);
 
 	let makeRowAccessible = 0;
 	if (screenReaderEnabled) {
