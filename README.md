@@ -50,6 +50,19 @@ All commands are assumed to be ran from project root.
 - use `adb logcat` to look at the Android log file
 - when the app launches on your (virtual) device, it will send you to the Settings screen for "Apps that can draw over other apps". Enable this for the Telldus app and launch the app again from your app drawer.
 
+### Huawei
+
+- On top of the above Android related setup, you need some additional changes.
+- First thing to do is, add `deployStore: 'huawei'` inside `config.local.js`. This variable is used at multiple places through out the app.
+- Then, add `DEPLOY_STORE="huawei"` inside `android/gradle.properties` file.
+- You will also need a `agconnect-services.json` inside `android/app/` directory.
+- Finally use `react-native-hms-map` instead of `react-native-maps`. To do that run the following command from the project root.
+(Until they make the hms repo public in some version control system, or at npm, we need to use our fork)
+```js
+    git -C ../ clone git@code.telldus.com:3rd-party/react-native-hms-map.git
+    yarn add react-native-maps@"file:./react-native-hms-map"
+```
+
 ## Development
 
 ### i18n
