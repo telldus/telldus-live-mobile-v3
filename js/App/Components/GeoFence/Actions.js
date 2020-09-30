@@ -277,7 +277,6 @@ const Actions = React.memo<Object>((props: Props): Object => {
 				};
 			}
 		}
-
 		setSelectedItems(newSelected);
 	}, [selectedDevices, selectedEvents, selectedItems, selectedSchedules]);
 
