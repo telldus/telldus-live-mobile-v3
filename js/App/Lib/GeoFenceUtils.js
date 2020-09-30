@@ -132,7 +132,7 @@ function parseEventsForListView(events: Object, {
 		const {
 			events: arrivingEvents,
 		} = arriving;
-		events.forEach(({id: eid}: string, i: number) => {
+		events.forEach(({id: eid}: Object, i: number) => {
 			if (currentScreen === 'LeavingActions' && arrivingEvents[eid] && selectedEvents[eid]) {
 				preFilledEvents[eid] = events[i];
 			} else {
