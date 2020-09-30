@@ -87,6 +87,10 @@ function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): O
 			name = typeof name !== 'string' ? '' : name;
 			return name.toLowerCase();
 		}], ['asc']);
+		orderedList = orderedList.filter((item: Object): boolean => {
+			const { supportedMethods = {}} = item;
+			return Object.keys(supportedMethods).length > 0;
+		});
 		devicesList.push(...prepareSectionRow(orderedList, gateways));
 	}
 	return devicesList;
