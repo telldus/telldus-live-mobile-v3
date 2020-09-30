@@ -24,6 +24,7 @@
 import React, {
 	useState,
 	useEffect,
+	useMemo,
 } from 'react';
 import {
 	SectionList,
@@ -121,9 +122,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	let events = useSelector((state: Object): Object => state.events) || [];
 	let { byId: gatewaysById } = useSelector((state: Object): Object => state.gateways) || [];
 
-	const [ showDevices, setShowDevices ] = useState(false);
-	const [ showEvents, setShowEvents ] = useState(false);
-	const [ showJobs, setShowJobs ] = useState(false);
+	const [ showDevices, setShowDevices ] = useState(Object.keys(selectedDevices).length > 0);
+	const [ showEvents, setShowEvents ] = useState(Object.keys(selectedEvents).length > 0);
+	const [ showJobs, setShowJobs ] = useState(Object.keys(selectedSchedules).length > 0);
 
 	const [ devices, setDevices ] = useState(GeoFenceUtils.prepareDevicesWithNewStateValues(byId, selectedDevices));
 
@@ -156,17 +157,23 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		setDevices(GeoFenceUtils.prepareDevicesWithNewStateValues(devices, newSelected.selectedDevices));
 	}
 
-	const listData = GeoFenceUtils.prepareDataForListGeoFenceActions(
-		devices,
-		gatewaysById,
-		events,
-		jobs,
-		{
-			showJobs,
-			showDevices,
-			showEvents,
-		}
-	);
+	const listData = useMemo((): Array<Object> => {
+		return GeoFenceUtils.prepareDataForListGeoFenceActions(
+			devices,
+			gatewaysById,
+			events,
+			jobs,
+			{
+				showJobs,
+				showDevices,
+				showEvents,
+				arriving,
+				selectedDevices,
+				selectedSchedules,
+				selectedEvents,
+				currentScreen,
+			});
+	}, [arriving, currentScreen, devices, events, gatewaysById, jobs, selectedDevices, selectedEvents, selectedSchedules, showDevices, showEvents, showJobs]);
 
 	const [ confOnSetScroll, setConfOnSetScroll ] = useState({
 		scrollEnabled: true,
@@ -206,19 +213,19 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		});
 	}
 
-	function toggleShowDevices(collapsed: boolean) {
+	function toggleShowDevices() {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
-		setShowDevices(collapsed);
+		setShowDevices(!showDevices);
 	}
 
-	function toggleShowEvents(collapsed: boolean) {
+	function toggleShowEvents() {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
-		setShowEvents(collapsed);
+		setShowEvents(!showEvents);
 	}
 
-	function toggleShowJobs(collapsed: boolean) {
+	function toggleShowJobs() {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
-		setShowJobs(collapsed);
+		setShowJobs(!showJobs);
 	}
 
 	function onChangeSelection(type: 'device' | 'schedule' | 'event', id: string, data: Object) {
@@ -401,6 +408,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			return (
 				<ActionSectionHeader
 					title={intl.formatMessage(sectionData.section.headerText)}
+					expanded={isDHeader ? showDevices : isEHeader ? showEvents : showJobs}
 					onToggle={isDHeader ? toggleShowDevices : isEHeader ? toggleShowEvents : toggleShowJobs}/>
 			);
 		}

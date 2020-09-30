@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	useSelector,
 } from 'react-redux';
@@ -38,9 +38,8 @@ const ActionSectionHeader = React.memo<Object>((props: Object): Object => {
 	const {
 		onToggle,
 		title,
+		expanded,
 	} = props;
-
-	const [expanded, setExpanded] = useState(false);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -50,20 +49,11 @@ const ActionSectionHeader = React.memo<Object>((props: Object): Object => {
 		arrow,
 	} = getStyles(layout);
 
-	function toggleHeader() {
-
-		if (onToggle) {
-			onToggle(!expanded);
-		}
-		setExpanded(!expanded);
-	}
-
-
 	return (
 		<TouchableOpacity
 			level={2}
 			style={container}
-			onPress={toggleHeader}>
+			onPress={onToggle}>
 			<Text
 				level={25}
 				style={label}>{title}</Text>

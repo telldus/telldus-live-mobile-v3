@@ -71,7 +71,11 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 	}], ['asc']);
 }
 
-function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
+function parseDevicesForListView(devices: Object = {}, gateways: Object = {}, {
+	arriving = {},
+	selectedDevices = {},
+	currentScreen,
+}: Object = {}): Object {
 	let devicesList = [];
 	const GeoFenceDevicesHeaderRow = {
 		header: Theme.Core.GeoFenceDevicesHeaderKey,
@@ -82,27 +86,70 @@ function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): O
 	let isGatwaysEmpty = isEmpty(gateways);
 	let isDevicesEmpty = isEmpty(devices);
 	if (!isGatwaysEmpty && !isDevicesEmpty) {
-		let orderedList = orderBy(devices, [(device: Object): any => {
+		const {
+			devices: arrivingDevices,
+		} = arriving;
+		let preFilledDevices = {}, otherDevices = {};
+		Object.keys(devices).forEach((did: string) => {
+			if (currentScreen === 'LeavingActions' && arrivingDevices[did] && selectedDevices[did]) {
+				preFilledDevices[did] = devices[did];
+			} else {
+				otherDevices[did] = devices[did];
+			}
+		});
+		let _preFilledDevices = orderBy(preFilledDevices, [(device: Object): any => {
 			let { name = '' } = device;
 			name = typeof name !== 'string' ? '' : name;
 			return name.toLowerCase();
 		}], ['asc']);
-		orderedList = orderedList.filter((item: Object): boolean => {
+		_preFilledDevices = _preFilledDevices.filter((item: Object): boolean => {
 			const { supportedMethods = {}} = item;
 			return Object.keys(supportedMethods).length > 0;
 		});
-		devicesList.push(...prepareSectionRow(orderedList, gateways));
+		let _otherDevices = orderBy(otherDevices, [(device: Object): any => {
+			let { name = '' } = device;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
+		}], ['asc']);
+		_otherDevices = _otherDevices.filter((item: Object): boolean => {
+			const { supportedMethods = {}} = item;
+			return Object.keys(supportedMethods).length > 0;
+		});
+		devicesList.push(...prepareSectionRow([..._preFilledDevices, ..._otherDevices], gateways));
 	}
 	return devicesList;
 }
 
-function parseEventsForListView(events: Object): Array<Object> {
+function parseEventsForListView(events: Object, {
+	arriving,
+	selectedEvents,
+	currentScreen,
+}: Object): Array<Object> {
 	let eventsList = [], data = [];
 	let isEventsEmpty = isEmpty(events);
 	if (!isEventsEmpty) {
-		Object.keys(events).map((event: Object, i: number) => {
-			data.push(events[event]);
+		let preFilledEvents = {}, otherEvents = {};
+		const {
+			events: arrivingEvents,
+		} = arriving;
+		events.forEach(({id: eid}: string, i: number) => {
+			if (currentScreen === 'LeavingActions' && arrivingEvents[eid] && selectedEvents[eid]) {
+				preFilledEvents[eid] = events[i];
+			} else {
+				otherEvents[eid] = events[i];
+			}
 		});
+		let _preFilledEvents = orderBy(preFilledEvents, [(ev: Object): any => {
+			let { description = '' } = ev;
+			description = typeof description !== 'string' ? '' : description;
+			return description.toLowerCase();
+		}], ['asc']);
+		let _otherEvents = orderBy(otherEvents, [(ev: Object): any => {
+			let { description = '' } = ev;
+			description = typeof description !== 'string' ? '' : description;
+			return description.toLowerCase();
+		}], ['asc']);
+		data = [..._preFilledEvents, ..._otherEvents];
 	}
 	const GeoFenceEventsHeaderRow = {
 		header: Theme.Core.GeoFenceEventsHeaderKey,
@@ -113,12 +160,20 @@ function parseEventsForListView(events: Object): Array<Object> {
 	return eventsList;
 }
 
-function parseJobsForListView(jobs: Object, gateways: Object, devices: Object): Array<Object> {
+function parseJobsForListView(jobs: Object, gateways: Object, devices: Object, {
+	arriving,
+	selectedSchedules,
+	currentScreen,
+}: Object): Array<Object> {
 	let jobsList = [], data = [];
 	let isJobsEmpty = isEmpty(jobs);
 	if (!isJobsEmpty) {
-		Object.keys(jobs).map((jobId: Object, i: number) => {
-			const job = jobs[jobId];
+		let preFilledJobs = [], otherJobs = [];
+		const {
+			schedules: arrivingJobs,
+		} = arriving;
+		jobs.forEach(({id: jobId}: Object, i: number) => {
+			const job = jobs[i];
 			const device = devices[job.deviceId];
 			if (!device) {
 				return;
@@ -133,12 +188,21 @@ function parseJobsForListView(jobs: Object, gateways: Object, devices: Object): 
 			}
 			const effectiveHour = tempDay.format('HH');
 			const effectiveMinute = tempDay.format('mm');
-			data.push({
-				...job,
-				effectiveHour,
-				effectiveMinute,
-			});
+			if (currentScreen === 'LeavingActions' && arrivingJobs[jobId] && selectedSchedules[jobId]) {
+				preFilledJobs.push({
+					...job,
+					effectiveHour,
+					effectiveMinute,
+				});
+			} else {
+				otherJobs.push({
+					...job,
+					effectiveHour,
+					effectiveMinute,
+				});
+			}
 		});
+		data = [...preFilledJobs, ...otherJobs];
 	}
 	const GeoFenceJobsHeaderRow = {
 		header: Theme.Core.GeoFenceJobsHeaderKey,
@@ -190,11 +254,28 @@ const GeoFenceUtils = {
 		showJobs,
 		showDevices,
 		showEvents,
+		arriving,
+		selectedDevices,
+		selectedSchedules,
+		selectedEvents,
+		currentScreen,
 	}: Object): Array<Object> {
 		let listData = [];
-		listData.push(...parseDevicesForListView(showDevices ? devices : {}, gateways));
-		listData.push(...parseEventsForListView(showEvents ? events : {}));
-		listData.push(...parseJobsForListView(showJobs ? jobs : {}, gateways, devices));
+		listData.push(...parseDevicesForListView(showDevices ? devices : {}, gateways, {
+			arriving,
+			selectedDevices,
+			currentScreen,
+		}));
+		listData.push(...parseEventsForListView(showEvents ? events : {}, {
+			arriving,
+			selectedEvents,
+			currentScreen,
+		}));
+		listData.push(...parseJobsForListView(showJobs ? jobs : {}, gateways, devices, {
+			arriving,
+			selectedSchedules,
+			currentScreen,
+		}));
 		return listData;
 	},
 	prepareDevicesWithNewStateValues(devices: Object, selectedDevices: Object = {}): Object {
