@@ -87,6 +87,7 @@ render(): Object {
 getStyles = (): Object => {
 	const {
 		colorOnInActiveBg,
+		buttonSeparatorColor,
 	} = this.props.colors;
 
 	return {
@@ -97,7 +98,7 @@ getStyles = (): Object => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			borderLeftWidth: 1,
-			borderLeftColor: '#ddd',
+			borderLeftColor: buttonSeparatorColor,
 			backgroundColor: colorOnInActiveBg,
 		},
 		moreButtons: {
