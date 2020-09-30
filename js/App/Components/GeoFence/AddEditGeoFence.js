@@ -38,6 +38,7 @@ import {
 import MapView, {
 	AnimatedRegion,
 } from 'react-native-maps';
+import { useIntl } from 'react-intl';
 
 import {
 	FloatingButton,
@@ -99,7 +100,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	} = route;
 
 	const mapRef: Object = useRef({});
-
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 	const dispatch = useDispatch();
 
 	const {
@@ -342,7 +346,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				imageSource={{uri: 'icon_plus'}}
 				disabled={!true}/>
 			{!enableGeoFence && <InfoBlock
-				text={'Geofence is currently inactivated. Activate it using the toggle button in the top right.'}
+				text={formatMessage(i18n.messageGFInActive)}
 				appLayout={appLayout}
 				infoContainer={infoContainer}
 				infoIconStyle={infoIconStyle}
