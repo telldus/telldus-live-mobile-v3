@@ -74,7 +74,7 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 function parseDevicesForListView(devices: Object = {}, gateways: Object = {}, {
 	arriving = {},
 	selectedDevices = {},
-	currentScreen,
+	showPreFilledOnTop,
 }: Object = {}): Object {
 	let devicesList = [];
 	const GeoFenceDevicesHeaderRow = {
@@ -91,7 +91,7 @@ function parseDevicesForListView(devices: Object = {}, gateways: Object = {}, {
 		} = arriving;
 		let preFilledDevices = {}, otherDevices = {};
 		Object.keys(devices).forEach((did: string) => {
-			if (currentScreen === 'LeavingActions' && arrivingDevices[did] && selectedDevices[did]) {
+			if (showPreFilledOnTop && arrivingDevices[did] && selectedDevices[did]) {
 				preFilledDevices[did] = devices[did];
 			} else {
 				otherDevices[did] = devices[did];
@@ -123,7 +123,7 @@ function parseDevicesForListView(devices: Object = {}, gateways: Object = {}, {
 function parseEventsForListView(events: Object, {
 	arriving,
 	selectedEvents,
-	currentScreen,
+	showPreFilledOnTop,
 }: Object): Array<Object> {
 	let eventsList = [], data = [];
 	let isEventsEmpty = isEmpty(events);
@@ -133,7 +133,7 @@ function parseEventsForListView(events: Object, {
 			events: arrivingEvents,
 		} = arriving;
 		events.forEach(({id: eid}: Object, i: number) => {
-			if (currentScreen === 'LeavingActions' && arrivingEvents[eid] && selectedEvents[eid]) {
+			if (showPreFilledOnTop && arrivingEvents[eid] && selectedEvents[eid]) {
 				preFilledEvents[eid] = events[i];
 			} else {
 				otherEvents[eid] = events[i];
@@ -163,7 +163,7 @@ function parseEventsForListView(events: Object, {
 function parseJobsForListView(jobs: Object, gateways: Object, devices: Object, {
 	arriving,
 	selectedSchedules,
-	currentScreen,
+	showPreFilledOnTop,
 }: Object): Array<Object> {
 	let jobsList = [], data = [];
 	let isJobsEmpty = isEmpty(jobs);
@@ -188,7 +188,7 @@ function parseJobsForListView(jobs: Object, gateways: Object, devices: Object, {
 			}
 			const effectiveHour = tempDay.format('HH');
 			const effectiveMinute = tempDay.format('mm');
-			if (currentScreen === 'LeavingActions' && arrivingJobs[jobId] && selectedSchedules[jobId]) {
+			if (showPreFilledOnTop && arrivingJobs[jobId] && selectedSchedules[jobId]) {
 				preFilledJobs.push({
 					...job,
 					effectiveHour,
@@ -258,23 +258,23 @@ const GeoFenceUtils = {
 		selectedDevices,
 		selectedSchedules,
 		selectedEvents,
-		currentScreen,
+		showPreFilledOnTop,
 	}: Object): Array<Object> {
 		let listData = [];
 		listData.push(...parseDevicesForListView(showDevices ? devices : {}, gateways, {
 			arriving,
 			selectedDevices,
-			currentScreen,
+			showPreFilledOnTop,
 		}));
 		listData.push(...parseEventsForListView(showEvents ? events : {}, {
 			arriving,
 			selectedEvents,
-			currentScreen,
+			showPreFilledOnTop,
 		}));
 		listData.push(...parseJobsForListView(showJobs ? jobs : {}, gateways, devices, {
 			arriving,
 			selectedSchedules,
-			currentScreen,
+			showPreFilledOnTop,
 		}));
 		return listData;
 	},
@@ -386,9 +386,12 @@ const GeoFenceUtils = {
 		currentScreen: 'ArrivingActions' | 'LeavingActions',
 		arrivingActions: Object = {}, leavingActions: Object = {},
 		action: 'devices' | 'events' | 'schedules',
+		isEdit: boolean,
 	): Object => {
 		if (currentScreen === 'ArrivingActions') {
 			return arrivingActions[action] || {};
+		} else if (currentScreen === 'LeavingActions' && isEdit) {
+			return leavingActions[action] || {};
 		} else if (action === 'devices') {
 			const arrivingDActions = arrivingActions.devices || {};
 			let _leavingDActions = leavingActions.devices || {};

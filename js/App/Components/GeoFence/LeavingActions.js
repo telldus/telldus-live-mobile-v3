@@ -72,6 +72,7 @@ const LeavingActions = React.memo<Object>((props: Props): Object => {
 			onPressNext={onPressNext}
 			iconName={isEdit ? 'checkmark' : undefined}
 			currentScreen={'LeavingActions'}
+			isEdit={isEdit}
 			imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}/>
 	);
 });

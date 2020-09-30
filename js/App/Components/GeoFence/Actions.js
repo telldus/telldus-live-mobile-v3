@@ -81,6 +81,7 @@ type Props = {
 	iconName?: string,
 	imageSource?: Object,
 	currentScreen: string,
+	isEdit: boolean,
 };
 
 const Actions = React.memo<Object>((props: Props): Object => {
@@ -90,6 +91,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		iconName,
 		imageSource,
 		currentScreen,
+		isEdit,
 	} = props;
 
 	const intl = useIntl();
@@ -106,9 +108,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		leaving = {},
 	} = fence;
 	const initialSelection = {
-		selectedDevices: GeoFenceUtils.prepareActionsInitialState(currentScreen, arriving, leaving, 'devices'),
-		selectedSchedules: GeoFenceUtils.prepareActionsInitialState(currentScreen, arriving, leaving, 'schedules'),
-		selectedEvents: GeoFenceUtils.prepareActionsInitialState(currentScreen, arriving, leaving, 'events'),
+		selectedDevices: GeoFenceUtils.prepareActionsInitialState(currentScreen, arriving, leaving, 'devices', isEdit),
+		selectedSchedules: GeoFenceUtils.prepareActionsInitialState(currentScreen, arriving, leaving, 'schedules', isEdit),
+		selectedEvents: GeoFenceUtils.prepareActionsInitialState(currentScreen, arriving, leaving, 'events', isEdit),
 	};
 	const [selectedItems, setSelectedItems] = useState(initialSelection);
 	const {
@@ -168,13 +170,13 @@ const Actions = React.memo<Object>((props: Props): Object => {
 				showJobs,
 				showDevices,
 				showEvents,
-				arriving,
+				arriving: isEdit ? (currentScreen === 'LeavingActions' ? leaving : arriving) : arriving,
 				selectedDevices,
 				selectedSchedules,
 				selectedEvents,
-				currentScreen,
+				showPreFilledOnTop: currentScreen === 'LeavingActions' || isEdit,
 			});
-	}, [arriving, currentScreen, devices, events, gatewaysById, jobs, selectedDevices, selectedEvents, selectedSchedules, showDevices, showEvents, showJobs]);
+	}, [arriving, currentScreen, devices, events, gatewaysById, isEdit, jobs, leaving, selectedDevices, selectedEvents, selectedSchedules, showDevices, showEvents, showJobs]);
 
 	const [ confOnSetScroll, setConfOnSetScroll ] = useState({
 		scrollEnabled: true,

@@ -72,7 +72,8 @@ const ArrivingActions = React.memo<Object>((props: Props): Object => {
 			onPressNext={onPressNext}
 			iconName={isEdit ? 'checkmark' : undefined}
 			currentScreen={'ArrivingActions'}
-			imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}/>
+			imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}
+			isEdit={isEdit}/>
 	);
 });
 
