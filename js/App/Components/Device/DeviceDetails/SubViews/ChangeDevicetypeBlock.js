@@ -120,7 +120,7 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 		}
 	}, [onValueChange]);
 
-	const labelSortingDB = 'Device type';
+	const labelDeviceType = 'Device type';
 
 	const renderItem = useCallback((_props: Object): Object | null => {
 		const {
@@ -150,7 +150,7 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 				}]}>
 				<IconTelldus
 					icon={icon}
-					level={key === vKey ? 19 : 15}
+					level={key === vKey ? 19 : 23}
 					style={ddItemStyle}/>
 				<Text
 					level={key === vKey ? 19 : 3}
@@ -190,7 +190,7 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 				}]}>
 				<IconTelldus
 					icon={selectedItem.icon}
-					level={15}
+					level={23}
 					style={ddItemStyle}/>
 				<Text
 					level={3}
@@ -213,7 +213,7 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 			<Text
 				level={3}
 				style={labelStyle} numberOfLine={1}>
-				{labelSortingDB}
+				{labelDeviceType}
 			</Text>
 			<DropDown
 				items={items}
@@ -224,7 +224,7 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 				dropDownContainerStyle={[dropDownContainerStyleDef, dropDownContainerStyle]}
 				dropDownHeaderStyle={dropDownHeaderStyle}
 				fontSize={fontSize}
-				accessibilityLabelPrefix={labelSortingDB}
+				accessibilityLabelPrefix={labelDeviceType}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerBaseTextStyle={pickerBaseTextStyle}
 				renderItem={renderItem}
