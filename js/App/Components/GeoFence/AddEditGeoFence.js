@@ -180,7 +180,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		colors,
 	});
 
-	function onPressNext() {
+	const onPressNext = useCallback(() => {
 		if (!hasAPremAccount) {
 			showDialogue(i18n.upgradeToPremium);
 			return;
@@ -189,7 +189,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		navigation.navigate('SelectArea', {
 			region,
 		});
-	}
+	}, [dispatch, hasAPremAccount, navigation, region, showDialogue]);
 
 	const onEditFence = useCallback((fenceToEdit: Object) => {
 		if (!hasAPremAccount) {
@@ -223,7 +223,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		setMapReady(true);
 	}, []);
 
-	function renderMarker(fenceC: Object, index: number): Object {
+	const renderMarker = useCallback((fenceC: Object, index: number): Object => {
 		if (!fenceC) {
 			return;
 		}
@@ -248,7 +248,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					strokeColor={colors.inAppBrandSecondary}/>
 			</React.Fragment>
 		);
-	}
+	}, [colors.inAppBrandSecondary, onEditFence]);
 
 	const closeHelp = useCallback(() => {
 		setIsHelpVisible(false);

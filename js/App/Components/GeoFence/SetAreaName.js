@@ -21,7 +21,11 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+	useCallback,
+} from 'react';
 import {
 	useDispatch,
 } from 'react-redux';
@@ -84,7 +88,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	const dispatch = useDispatch();
 	const [ name, setName ] = useState('');
 
-	function onPressNext() {
+	const onPressNext = useCallback(() => {
 		if (!name || name.trim() === '') {
 			toggleDialogueBoxState({
 				show: true,
@@ -98,7 +102,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 
 		dispatch(setFenceTitle(name));
 		navigation.navigate('ArrivingActions');
-	}
+	}, [dispatch, formatMessage, name, navigation, toggleDialogueBoxState]);
 
 	const {
 		container,
@@ -109,9 +113,9 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		colors,
 	});
 
-	function onChangeText(value: string) {
+	const onChangeText = useCallback((value: string) => {
 		setName(value);
-	}
+	}, []);
 
 	return (
 		<View style={container}>

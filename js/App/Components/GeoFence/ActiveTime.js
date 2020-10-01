@@ -191,13 +191,13 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		iconStyle,
 	} = getStyles(appLayout);
 
-	function onChangeTime(
+	const onChangeTime = useCallback((
 		alwaysActive: boolean,
 		fromHr: number,
 		fromMin: number,
 		toHr: number,
 		toMin: number,
-	) {
+	) => {
 		setTimeInfo({
 			alwaysActive,
 			fromHr,
@@ -205,7 +205,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 			toHr,
 			toMin,
 		});
-	}
+	}, []);
 
 	return (
 		<View style={{flex: 1}}>
