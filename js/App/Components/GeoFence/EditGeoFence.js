@@ -21,7 +21,11 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+	useCallback,
+} from 'react';
 import {
 	StyleSheet,
 	ScrollView,
@@ -136,9 +140,9 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		longitudeDelta: lngDelta,
 	};
 
-	function onPress(reg: Object) {
+	const onPress = useCallback((reg: Object) => {
 		navigation.navigate('EditGeoFenceAreaFull');
-	}
+	}, [navigation]);
 
 	const [ timeInfo, setTimeInfo ] = useState({
 		alwaysActive: true,
@@ -163,7 +167,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
 
-	function onSave() {
+	const onSave = useCallback(() => {
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		dispatch(setFenceTitle(areaName));
 		dispatch(addGeofence(true)).then(() => {
@@ -181,33 +185,33 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 				showPositive: true,
 			});
 		});
-	}
+	}, [aA, areaName, dispatch, fH, fM, formatMessage, navigation, tH, tM, toggleDialogueBoxState]);
 
-	function onDelete() {
+	const onDelete = (() => {
 		dispatch(removeGeofence(identifier));
 		dispatch(setEditFence({}));
 		navigation.goBack();
-	}
+	}, []);
 
-	function onEditArriving() {
+	const onEditArriving = useCallback(() => {
 		navigation.navigate('ArrivingActions', {
 			isEditMode: true,
 		});
-	}
+	}, [navigation]);
 
-	function onEditLeaving() {
+	const onEditLeaving = useCallback(() => {
 		navigation.navigate('LeavingActions', {
 			isEditMode: true,
 		});
-	}
+	}, [navigation]);
 
-	function onChangeTime(
+	const onChangeTime = useCallback((
 		alwaysActive: boolean,
 		fromHr: number,
 		fromMin: number,
 		toHr: number,
 		toMin: number,
-	) {
+	) => {
 		setTimeInfo({
 			alwaysActive,
 			fromHr,
@@ -215,19 +219,19 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 			toHr,
 			toMin,
 		});
-	}
+	}, []);
 
-	function onEditName() {
+	const onEditName = useCallback(() => {
 		setEditName(true);
-	}
+	}, []);
 
-	function onSubmitEditing() {
+	const onSubmitEditing = useCallback(() => {
 		setEditName(false);
-	}
+	}, []);
 
-	function onChangeText(value: string) {
+	const onChangeText = useCallback((value: string) => {
 		setAreaName(value);
-	}
+	}, []);
 
 	if (typeof fence.latitude === 'undefined') {
 		return <EmptyView/>;

@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import {
 	useSelector,
 } from 'react-redux';
@@ -77,17 +79,16 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 		checkIconActiveStyle,
 		checkIconInActiveStyle,
 		switchStyle,
-		switchTextStyle,
 	} = getStyles(layout, {
 		isLast,
 		colors,
 	});
 
-	function noOp() {}
+	const noOp = useCallback(() => {}, []);
 
 	const text = description ? description : intl.formatMessage(i18n.unknown);
 
-	function getNameInfo(): Object {
+	const getNameInfo = useCallback((): Object => {
 
 		let coverStyle = nameStyle;
 		if (DeviceInfo.isTablet()) {
@@ -101,20 +102,20 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 				</Text>
 			</View>
 		);
-	}
+	}, [nameStyle, nameTabletStyle, text, textStyle]);
 
 	const nameInfo = getNameInfo();
 
-	function _onChangeSelection() {
+	const _onChangeSelection = useCallback(() => {
 		onChangeSelection('event', checkBoxId, event);
-	}
+	}, [checkBoxId, event, onChangeSelection]);
 
-	function _toggleActiveState(active: boolean) {
+	const _toggleActiveState = ((active: boolean) => {
 		toggleActiveState('event', checkBoxId, {
 			...event,
 			active,
 		});
-	}
+	}, []);
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
 
@@ -141,9 +142,6 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 				{
 					isChecked ? (
 						<>
-							<Text style={switchTextStyle}>
-								{intl.formatMessage(i18n.labelActive)}
-							</Text>
 							<Switch
 								style={switchStyle}
 								value={event.active}
@@ -242,13 +240,6 @@ const getStyles = (appLayout: Object, {
 		},
 		switchStyle: {
 			marginRight: padding,
-		},
-		switchTextStyle: {
-			color: textSeven,
-			fontSize: nameFontSize * 0.8,
-			textAlignVertical: 'center',
-			textAlign: 'right',
-			marginRight: 5,
 		},
 	};
 };

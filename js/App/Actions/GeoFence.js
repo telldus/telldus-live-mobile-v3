@@ -136,6 +136,7 @@ function setupGeoFence(intl: Object): ThunkAction {
 			geofenceInitialTriggerEntry = false,
 			locationUpdateInterval = 1000,
 			geofenceProximityRadius = 400,
+			debug = false,
 		} = geoFence.config || {};
 
 		BackgroundGeolocation.onGeofence(async (geofence: Object) => {
@@ -166,8 +167,9 @@ function setupGeoFence(intl: Object): ThunkAction {
 			// Activity Recognition
 			stopTimeout,
 			// Application config
-			debug: __DEV__, // <-- enable this hear sounds for background-geolocation life-cycle.
+			debug, // <-- enable this hear sounds for background-geolocation life-cycle.
 			logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+			logMaxDays: 15,
 			stopOnTerminate, // <-- Allow the background-service to continue tracking when user closes the app.
 			startOnBoot, // <-- Auto start tracking when device is powered-up.
 			// HTTP / SQLite config
@@ -876,14 +878,18 @@ function addGeofence(override?: boolean = false): ThunkAction {
 			}, 8000);
 
 			const {
-				fences:
-		{
-			fence,
-		},
+				fences: {
+					fence,
+				},
 				user: {
 					userId,
 				},
+				app: {
+					defaultSettings = {},
+				},
 			} = getState();
+
+			const enableGeoFence = typeof defaultSettings.enableGeoFence === 'undefined' ? true : defaultSettings.enableGeoFence;
 			const {
 				identifier,
 				radius,
@@ -926,7 +932,9 @@ function addGeofence(override?: boolean = false): ThunkAction {
 
 			BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
 				try {
-					dispatch(startGeofences());
+					if (enableGeoFence) {
+						dispatch(startGeofences());
+					}
 				} catch (e) {
 					// ignore
 				} finally {

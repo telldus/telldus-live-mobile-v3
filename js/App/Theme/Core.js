@@ -21,8 +21,6 @@
 
 'use strict';
 
-import Color from 'color';
-
 import { Platform } from 'react-native';
 
 export default {
@@ -218,9 +216,6 @@ export default {
 
 	cardDefaultBg: '#fff',
 
-	get darkenHeader(): string {
-		return Color(this.tabBgColor).darken(0.03).hexString();
-	},
 	get btnPrimaryBg(): string {
 		return this.brandSecondary;
 	},

@@ -50,6 +50,19 @@ All commands are assumed to be ran from project root.
 - use `adb logcat` to look at the Android log file
 - when the app launches on your (virtual) device, it will send you to the Settings screen for "Apps that can draw over other apps". Enable this for the Telldus app and launch the app again from your app drawer.
 
+### Huawei
+
+- On top of the above Android related setup, you need some additional changes.
+- First thing to do is, add `deployStore: 'huawei'` inside `config.local.js`. This variable is used at multiple places through out the app.
+- Then, add `DEPLOY_STORE="huawei"` inside `android/gradle.properties` file.
+- You will also need a `agconnect-services.json` inside `android/app/` directory.
+- Finally use `react-native-hms-map` instead of `react-native-maps`. To do that run the following command from the project root.
+(Until they make the hms repo public in some version control system, or at npm, we need to use our fork)
+```js
+    git -C ../ clone git@code.telldus.com:3rd-party/react-native-hms-map.git
+    yarn add react-native-maps@"file:./react-native-hms-map"
+```
+
 ## Development
 
 ### i18n
@@ -121,6 +134,44 @@ const {height, width} = layout;
 ```
 
 one limitation is, the layout dimensions can be used only in inline style, not while creating style sheet object using 'StyleSheet' API.
+
+### Theme
+
+- We support dark theme in both iOS and Android.
+- Make sure you get all the screen mock ups done and approved in both light and dark theme from the designer.
+- App already has a set of predefined color sets organised based on theme/mode. The color combinations for each theme/mode can be found inside 
+[ThemedColors.js file](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Theme/ThemedColors.js#L46).
+- There are couple of ways to utilise the existing themed colors.
+
+##### 1. Using property "level"
+- Selected [BaseComponents](https://code.telldus.com/telldus/live-app-v3/-/tree/master/js/BaseComponents) will accept a property named `level`
+(`blockLevel` and others in advanced base components) which takes care of setting `backgroundColor`, `color`(in the case of Text and Icon components) 
+or `tintColor`(Image) depending upon the theme/mode.
+- The method [getBGColor](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/BaseComponents/prepareRootProps.js#L56) sets desired `backgroundColor`
+to the base components like [View](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/BaseComponents/View.js) and
+ [TouchableOpacity](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/BaseComponents/TouchableOpacity.js) from `ThemedColors` with respect to the
+ prop `level`.
+ - Method [getTextColor](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/BaseComponents/prepareRootProps.js#L151) sets `color` for
+ [Text](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/BaseComponents/Text.js) and few other components as well.
+ - Method [getTintColor](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/BaseComponents/prepareRootProps.js#L291) sets tintColor on
+ [ThemedImage](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/BaseComponents/ThemedImage.js).
+ - You may check the existing [ThemedColors combinations](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Theme/ThemedColors.js#L46) and
+ see which `level` sets your desired color combination, supply it, you are done.
+ 
+##### 2. Using Hook [useAppTheme](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Hooks/Theme.js#L39)
+ - Sometimes you will need access to the entire ThemedColors set of the current mode/theme. Then you can call the hook `useAppTheme`.
+ Returns few other useful data as well.
+ - Above mentioned Base components that accepts `level` already uses this hook.
+ - Try to write functional components until you have uncompromisable reason for using class component, and for class components since you cannot
+ use hooks, use the HOC [withTheme](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Components/HOC/withTheme.js). Now the class
+ component will receive `colors` and some other useful data as prop.
+ 
+##### Add new color combination
+ -  The existing ThemedColors should suffice during most of the cases, but incase if you cannot find the desired color combination, feel free to add colors
+ for each theme/mode inside [ThemedColors.js file](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/App/Theme/ThemedColors.js).
+ - You now can see the newly added color inside `colors` returned by the hook `useAppTheme`.
+ - If you wish to handle the newly added color combination via `level`, you can do so inside [prepareRootProps](https://code.telldus.com/telldus/live-app-v3/-/blob/master/js/BaseComponents/prepareRootProps.js).
+
 
 ### Shared Code
 

@@ -474,6 +474,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     Object {
                       "backgroundColor": "transparent",
                       "color": "#fff",
+                      "fontFamily": "Roboto-Regular",
                       "fontSize": 15.65,
                       "left": 18.779999999999998,
                       "position": "absolute",
@@ -512,6 +513,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                       "backgroundColor": "transparent",
                       "color": "#8e8e93",
                       "flexWrap": "wrap",
+                      "fontFamily": "Roboto-Regular",
                       "fontSize": 10.955000000000002,
                     }
                   }
@@ -533,6 +535,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   Object {
                     "backgroundColor": "transparent",
                     "color": "#8e8e93",
+                    "fontFamily": "Roboto-Regular",
                     "fontSize": 3,
                     "marginBottom": 4,
                   }
