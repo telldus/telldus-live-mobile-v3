@@ -14,6 +14,7 @@
 fastlane_version "2.160.0"
 
 ENV["APP_VERSION"] = JSON.parse(IO.read("../package.json"))["version"]
+ENV["IN_APP_UPDATE_PRIORITY"] = JSON.parse(IO.read("./metadata/android/release_configs.json"))["inAppUpdatePriority"]
 
 default_platform :android
 
@@ -30,7 +31,8 @@ platform :android do
   lane :alpha do
     supply(
       track: "alpha",
-      aab: "android/app/build/outputs/bundle/release/app-release.aab"
+      aab: "android/app/build/outputs/bundle/release/app-release.aab",
+      in_app_update_priority: ENV["IN_APP_UPDATE_PRIORITY"]
     )
     slack(
       message: "Successfully deployed new App Update.",
