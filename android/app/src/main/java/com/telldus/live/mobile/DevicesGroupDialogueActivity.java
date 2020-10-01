@@ -659,8 +659,6 @@ public class DevicesGroupDialogueActivity extends Activity {
                                 updateUI(widgetId);
                                 if (widgetKey.equals("NewOnOffWidget")) {
                                     NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
-                                } else if (widgetKey.equals("NewDimmerSingle")) {
-                                    NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 } else if (!_hasRGB) {
                                     NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 } else {
@@ -994,8 +992,6 @@ public class DevicesGroupDialogueActivity extends Activity {
 
                 if (widgetKey.equals("NewOnOffWidget")) {
                     NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
-                } else if (widgetKey.equals("NewDimmerSingle")) {
-                    NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 } else if (hasRGB) {
                     String primarySetting = widgetInfo.getPrimarySetting();
                     if (primarySetting.equalsIgnoreCase("full")) {
@@ -1016,8 +1012,6 @@ public class DevicesGroupDialogueActivity extends Activity {
 
                 if (widgetKey.equals("NewOnOffWidget")) {
                     NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
-                } else if (widgetKey.equals("NewDimmerSingle")) {
-                    NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 } else if (hasRGB) {
                     String primarySetting = widgetInfo.getPrimarySetting();
                     if (primarySetting.equalsIgnoreCase("full")) {
@@ -1101,8 +1095,6 @@ public class DevicesGroupDialogueActivity extends Activity {
                     Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
                     if (widgetKey.equals("NewOnOffWidget")) {
                         NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
-                    } else if (widgetKey.equals("NewDimmerSingle")) {
-                        NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                     } else if (hasRGB) {
                         String primarySetting = widgetInfo.getPrimarySetting();
                         if (primarySetting.equalsIgnoreCase("full")) {

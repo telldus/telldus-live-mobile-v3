@@ -48,10 +48,6 @@ public class WidgetsUpdater  {
         return AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewRGBWidget.class));
     }
 
-    public int[] getAllDimmer1by1Widgets(Context context) {
-        return AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewDimmerSingle.class));
-    }
-
     public void updateUIWidgetSensor(int widgetId, Context context, Map extraArgs) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
         NewSensorWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
@@ -77,11 +73,6 @@ public class WidgetsUpdater  {
         NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
     }
 
-    public void updateUIWidgetDimmer1By1(int widgetId, Context context, Map extraArgs) {
-        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-        NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, extraArgs);
-    }
-
     public void updateAllWidgets(Context context, Map extraArgs) {
         int widgetIdsSensor[] = getAllWidgetsSensor(context);
         for (int widgetId : widgetIdsSensor) {
@@ -102,10 +93,6 @@ public class WidgetsUpdater  {
         int widgetIdsDeviceRGB[] = getAllRGBWidgets(context);
         for (int widgetId : widgetIdsDeviceRGB) {
             updateUIWidgetDeviceRGB(widgetId, context, extraArgs);
-        }
-        int widgetIdsDeviceDimmer1by1[] = getAllDimmer1by1Widgets(context);
-        for (int widgetId : widgetIdsDeviceDimmer1by1) {
-            updateUIWidgetDimmer1By1(widgetId, context, extraArgs);
         }
     }
 }
