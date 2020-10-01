@@ -34,6 +34,7 @@ import HistoryNotStored from './HistoryNotStored';
 import NoHistory from './NoHistory';
 import SmoothingDropDown from './SmoothingDropDown';
 import GraphViewDropDown from './GraphViewDropDown';
+import AddToDashboardScale from './AddToDashboardScale';
 
 module.exports = {
 	BatteryInfo,
@@ -49,4 +50,5 @@ module.exports = {
 	NoHistory,
 	SmoothingDropDown,
 	GraphViewDropDown,
+	AddToDashboardScale,
 };

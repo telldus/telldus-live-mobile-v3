@@ -30,6 +30,7 @@ import {
 	useSelector,
 	useDispatch,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -48,9 +49,12 @@ import {
 import {
 	getSupportedWeatherProviders,
 } from '../../Lib/thirdPartyUtils';
+import capitalize from '../../Lib/capitalize';
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+
+import i18n from '../../Translations/common';
 
 import Theme from '../../Theme';
 
@@ -60,6 +64,11 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 		navigation,
 		route,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		toggleDialogueBoxState,
@@ -77,9 +86,9 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
-	useEffect(() => {// TODO: translate
-		onDidMount('Set Name', 'Select a name for the dashboard tile');
-	}, [onDidMount]);
+	useEffect(() => {
+		onDidMount(formatMessage(i18n.setName));
+	}, [formatMessage, onDidMount]);
 
 	const {
 		container,
@@ -102,18 +111,13 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 	}, [toggleDialogueBoxState]);
 
 	const onPressNext = useCallback((params: Object) => {
-		if (!name || !name.trim()) { // TODO: translate
-			showDialogue('Tile name cannot be empty. Please enter valid name for the dashboard tile.');
+		if (!name || !name.trim()) {
+			showDialogue(formatMessage(i18n.errorNameFieldEmpty));
 			return;
 		}
 		const {
-			id: pId,
 			url,
 		} = getSupportedWeatherProviders()[selectedType];
-		if (!url || !pId) { // TODO: translate
-			showDialogue('Data provider URL not found. Please try again later.');
-			return;
-		}
 		setIsLoading(true);
 		dispatch(getWeatherInfo(url, {
 			lon: longitude,
@@ -137,12 +141,12 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 					},
 				}));
 				navigation.popToTop();
-			} else { // TODO: translate
-				showDialogue('Could not fetch weather data at the moment. Please try again later.');
+			} else {
+				showDialogue(formatMessage(i18n.messageCantFetchWeatherData));
 			}
 		}).catch(() => {
-			setIsLoading(false); // TODO: translate
-			showDialogue('Could not fetch weather data at the moment. Please try again later.');
+			setIsLoading(false);
+			showDialogue(formatMessage(i18n.messageCantFetchWeatherData));
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [name, selectedType, longitude, latitude, uniqueId, showDialogue, time, timeKey, selectedAttributes]);
@@ -168,12 +172,12 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 						value={name}
 						autoFocus={false}
 						icon={'sensor'}
-						label={'Name'}
+						label={capitalize(formatMessage(i18n.name))}
 						onChangeText={_onChangeText}
 						appLayout={layout}/>
 				</View>
 				<TouchableButton
-					text={'EXIT'}
+					text={formatMessage(i18n.exit)}
 					buttonLevel={isLoading ? 7 : 10}
 					onPress={goBack}/>
 			</ThemedScrollView>

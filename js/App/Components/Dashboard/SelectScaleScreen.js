@@ -47,9 +47,12 @@ import {
 } from '../../Actions/Dashboard';
 import {
 	getSensorInfo,
+	capitalize,
 } from '../../Lib';
 
 import Theme from '../../Theme';
+
+import i18n from '../../Translations/common';
 
 const SelectScaleScreen = memo<Object>((props: Object): Object => {
 	const {
@@ -90,9 +93,9 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 	const { preAddToDb = {} } = dbExtras;
 	const currentItemInPreDb = preAddToDb[id] || {};
 
-	useEffect(() => {// TODO: translate
-		onDidMount('Select Scale', 'Select one or more scale');
-	}, [onDidMount]);
+	useEffect(() => {
+		onDidMount(formatMessage(i18n.selectScale), formatMessage(i18n.selectOneOrMoreScale));
+	}, [formatMessage, onDidMount]);
 
 	const {
 		contentContainerStyle,
@@ -160,7 +163,9 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 	}, [initialSelectedScales, hasSelected]);
 
 	return (
-		<View style={{flex: 1}}>
+		<View
+			level={3}
+			style={{flex: 1}}>
 			<ThemedScrollView
 				contentContainerStyle={contentContainerStyle}
 				level={3}>
@@ -168,7 +173,7 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 					key={'-1'}
 					layout={layout}
 					onPress={onPressToggleAll}
-					label={hasSelected ? 'Deselect all' : 'Select all'}
+					label={hasSelected ? capitalize(formatMessage(i18n.deSelectAll)) : capitalize(formatMessage(i18n.selectAll))}
 					rowData={-1}
 					rightIcon={hasSelected ? 'favorite-outline' : 'favorite'}
 				/>

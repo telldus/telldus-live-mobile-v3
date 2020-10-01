@@ -31,8 +31,9 @@ import ListRow from './ListRow';
 import {
 	getDeviceIcons,
 } from '../../../Lib';
-
-import Theme from '../../../Theme';
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
 
 import i18n from '../../../Translations/common';
 
@@ -50,9 +51,8 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 	} = useIntl();
 
 	const {
-		brandPrimary,
-		brandSecondary,
-	} = getStyles({layout});
+		colors,
+	} = useAppTheme();
 
 	const {
 		name,
@@ -77,23 +77,12 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 			onPress={_onPress}
 			label={name || formatMessage(i18n.noName)}
 			iconContainerStyle={{
-				backgroundColor: selectedType === 'sensor' ? brandPrimary : brandSecondary,
+				backgroundColor: selectedType === 'sensor' ? colors.inAppBrandPrimary : colors.inAppBrandSecondary,
 			}}
 			rowData={item}
 			leftIcon={icon}
 			rightIcon={iconFav}/>
 	);
 });
-
-const getStyles = ({layout}: Object): Object => {
-	const {
-		brandSecondary,
-		brandPrimary,
-	} = Theme.Core;
-	return {
-		brandSecondary,
-		brandPrimary,
-	};
-};
 
 export default EditDbListRow;

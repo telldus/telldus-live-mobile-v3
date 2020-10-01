@@ -292,12 +292,14 @@ class ActionRow extends View<DefaultProps, Props, null> {
 						alignItems: 'center',
 						justifyContent: 'center',
 					}}>
-						{showModeIcon && (<Icon
-							height={fontSize}
-							width={fontSize}
-							style={{
-								...others,
-							}}/>
+						{showModeIcon && (
+							// $FlowFixMe
+							<Icon
+								height={fontSize}
+								width={fontSize}
+								style={{
+									...others,
+								}}/>
 						)}
 						{!!changeMode &&
 								(

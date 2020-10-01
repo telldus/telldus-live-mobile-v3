@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import {
 	PixelRatio,
 } from 'react-native';
@@ -145,9 +147,9 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		colors,
 	});
 
-	function setScrollEnabled() {}
-	function onSlideActive() {}
-	function onSlideComplete() {}
+	const setScrollEnabled = useCallback(() => {}, []);
+	const onSlideActive = useCallback(() => {}, []);
+	const onSlideComplete = useCallback(() => {}, []);
 
 	const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 
@@ -175,13 +177,13 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 	}
 	colorDeviceIconBack = colorDeviceIconBack ? colorDeviceIconBack : iconContainerStyle.backgroundColor;
 
-	function onPressOverride(args: Object) {
+	const onPressOverride = useCallback((args: Object) => {
 		onDeviceValueChange({
 			checkBoxId,
 			deviceId: id,
 			...args,
 		});
-	}
+	}, [checkBoxId, id, onDeviceValueChange]);
 
 
 	const sharedProps = {
@@ -214,8 +216,8 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 			/>
 		);
 	}
+	const onPressDimButton = useCallback(() => {}, []);
 	if (DIM && !RGB && !THERMOSTAT) {
-		function onPressDimButton() {}
 		button.unshift(
 			<DimmerButton
 				{...sharedProps}
@@ -237,10 +239,10 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 			/>
 		);
 	}
+	const _openRGBControl = useCallback(() => {
+		openRGBControl(id);
+	}, [id, openRGBControl]);
 	if (RGB) {
-		function _openRGBControl() {
-			openRGBControl(id);
-		}
 		button.unshift(
 			<RGBButton
 				{...sharedProps}
@@ -250,7 +252,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 				onSlideActive={onSlideActive}
 				onSlideComplete={onSlideComplete}
 				key={7}
-				offButtonColor={isInState === 'TURNOFF' ? Theme.Core.brandPrimary : undefined}
+				offButtonColor={isInState === 'TURNOFF' ? iconOffColor : undefined}
 				onButtonColor={isInState === 'TURNON' ? iconOnBGColor : undefined}
 				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
@@ -278,13 +280,13 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		);
 	}
 
-	function noOp() {}
+	const noOp = useCallback(() => {}, []);
 
 	const showDeviceIcon = PixelRatio.getPixelSizeForLayoutSize(layout.width) >= 750;
 	const icon = getDeviceIcons(deviceType);
 
 	const deviceName = name ? name : intl.formatMessage(i18n.noName);
-	function getNameInfo(): Object {
+	const getNameInfo = useCallback((): Object => {
 
 		let coverStyle = nameStyle;
 		if (DeviceInfo.isTablet()) {
@@ -300,21 +302,21 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 				</Text>
 			</View>
 		);
-	}
+	}, [deviceName, name, nameStyle, nameTabletStyle, textStyle]);
 
 	const nameInfo = getNameInfo();
 
-	function onPressMore() {
-	}
+	const onPressMore = useCallback(() => {
+	}, []);
 
-	function _onChangeSelection() {
+	const _onChangeSelection = useCallback(() => {
 		const data = {
 			checkBoxId,
 			deviceId: id,
 			...GeoFenceUtils.prepareInitialActionFromDeviceState(device),
 		};
 		onChangeSelection('device', checkBoxId, data);
-	}
+	}, [checkBoxId, device, id, onChangeSelection]);
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
 
@@ -344,10 +346,12 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 						}]}/>}
 					{nameInfo}
 				</View>
-				{button.length === 1 ?
-					button[0]
-					:
-					button.length > 0 &&
+				{isChecked &&
+					<>
+						{button.length === 1 ?
+							button[0]
+							:
+							button.length > 0 &&
 					<>
 						{button[0]}
 						<ShowMoreButton
@@ -356,6 +360,8 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 							buttons={button}
 							key={6}
 							intl={intl}/>
+					</>
+						}
 					</>
 				}
 			</View>

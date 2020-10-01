@@ -37,6 +37,7 @@ export const initialState = {
 		showNotificationOnActionFail: true,
 		locationUpdateInterval: 1000,
 		geofenceProximityRadius: 400,
+		debug: false,
 	},
 };
 

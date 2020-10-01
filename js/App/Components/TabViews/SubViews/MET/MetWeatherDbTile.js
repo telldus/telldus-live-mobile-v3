@@ -166,7 +166,6 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 				alignSelf: 'center',
 			}}
 			iconContainerStyle={{
-				backgroundColor: Theme.Core.brandPrimary,
 				width: Math.floor(tileWidth / 4),
 				height: Math.floor(tileWidth / 4),
 				borderRadius: Math.floor(tileWidth / 8),
@@ -212,8 +211,6 @@ const getStyles = ({
 }: Object): Object => {
 	const { data = []} = item;
 
-	const backgroundColor = Theme.Core.brandPrimary;
-
 	const dotSize = tileWidth * 0.045;
 
 	return {
@@ -241,7 +238,6 @@ const getStyles = ({
 		sensorValueCover: {
 			height: '100%',
 			width: tileWidth,
-			backgroundColor: backgroundColor,
 			alignItems: 'flex-start',
 			justifyContent: 'center',
 		},

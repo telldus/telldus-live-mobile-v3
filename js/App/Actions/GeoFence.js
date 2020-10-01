@@ -22,11 +22,19 @@
 
 'use strict';
 const colorsys = require('colorsys');
+import {
+	NativeModules,
+} from 'react-native';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {
 	Platform,
 } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
+
+
+const {
+	NativeUtilitiesModule,
+} = NativeModules;
 
 // import {
 // 	deviceSetState,
@@ -128,6 +136,7 @@ function setupGeoFence(intl: Object): ThunkAction {
 			geofenceInitialTriggerEntry = false,
 			locationUpdateInterval = 1000,
 			geofenceProximityRadius = 400,
+			debug = false,
 		} = geoFence.config || {};
 
 		BackgroundGeolocation.onGeofence(async (geofence: Object) => {
@@ -158,8 +167,9 @@ function setupGeoFence(intl: Object): ThunkAction {
 			// Activity Recognition
 			stopTimeout,
 			// Application config
-			debug: __DEV__, // <-- enable this hear sounds for background-geolocation life-cycle.
+			debug, // <-- enable this hear sounds for background-geolocation life-cycle.
 			logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+			logMaxDays: 15,
 			stopOnTerminate, // <-- Allow the background-service to continue tracking when user closes the app.
 			startOnBoot, // <-- Auto start tracking when device is powered-up.
 			// HTTP / SQLite config
@@ -868,14 +878,18 @@ function addGeofence(override?: boolean = false): ThunkAction {
 			}, 8000);
 
 			const {
-				fences:
-		{
-			fence,
-		},
+				fences: {
+					fence,
+				},
 				user: {
 					userId,
 				},
+				app: {
+					defaultSettings = {},
+				},
 			} = getState();
+
+			const enableGeoFence = typeof defaultSettings.enableGeoFence === 'undefined' ? true : defaultSettings.enableGeoFence;
 			const {
 				identifier,
 				radius,
@@ -918,7 +932,9 @@ function addGeofence(override?: boolean = false): ThunkAction {
 
 			BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
 				try {
-					dispatch(startGeofences());
+					if (enableGeoFence) {
+						dispatch(startGeofences());
+					}
 				} catch (e) {
 					// ignore
 				} finally {
@@ -1037,6 +1053,36 @@ const showNotificationOnErrorExecutingAction = ({
 	};
 };
 
+const requestIgnoreBatteryOptimizations = (): ThunkAction => {
+	return async (dispatch: Function, getState: Function) => {
+		if (Platform.OS === 'ios') {
+			return;
+		}
+
+		const flag = await dispatch(isIgnoringBatteryOptimizations());
+		if (!flag) {
+			NativeUtilitiesModule.requestIgnoreBatteryOptimizations();
+		}
+	};
+};
+
+const isIgnoringBatteryOptimizations = (): ThunkAction => {
+	return async (dispatch: Function, getState: Function): Promise<any> => {
+		if (Platform.OS === 'ios') {
+			return Promise.resolve(true);
+		}
+
+		let flag = false;
+		try {
+			flag = await NativeUtilitiesModule.isIgnoringBatteryOptimizations();
+		} catch (e) {
+			// Ignore
+		} finally {
+			return flag;
+		}
+	};
+};
+
 module.exports = {
 	setupGeoFence,
 	addGeofence,
@@ -1055,4 +1101,7 @@ module.exports = {
 	debugGFOnGeofence,
 	clearAllOnGeoFencesLog,
 	debugGFSetCheckpoint,
+
+	isIgnoringBatteryOptimizations,
+	requestIgnoreBatteryOptimizations,
 };

@@ -66,9 +66,9 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 	const { userId } = useSelector((state: Object): Object => state.user);
 	const { metWeatherIds = {} } = useSelector((state: Object): Object => state.dashboard);
 
-	useEffect(() => {// TODO: translate
-		onDidMount('Select Type', 'Select either device or sensor');
-	}, [onDidMount]);
+	useEffect(() => {
+		onDidMount(formatMessage(i18n.addToDb), formatMessage(i18n.selectTypeToAdd));
+	}, [formatMessage, onDidMount]);
 
 	const {
 		containerStyle,
@@ -114,10 +114,10 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 			icon: 'sensor',
 		},
 		{
-			label: 'MET Weather', // TODO: translate
+			label: formatMessage(i18n.labelWeather),
 			onPress,
 			typeId: MET_ID,
-			icon: 'sensor',
+			icon: 'rain',
 		},
 		];
 		return items.map((item: Object, index: number): Object => {
@@ -135,9 +135,17 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 	}, [formatMessage, onPress]);
 
 	return (
-		<View style={{flex: 1}}>
+		<View
+			level={3}
+			style={{flex: 1}}>
 			<ThemedScrollView
-				level={3}>
+				level={3}
+				style={{
+					flex: 1,
+				}}
+				contentContainerStyle={{
+					flexGrow: 1,
+				}}>
 				<View
 					style={containerStyle}>
 					{blocks}

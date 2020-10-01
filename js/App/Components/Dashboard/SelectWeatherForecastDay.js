@@ -48,6 +48,8 @@ import {
 
 import Theme from '../../Theme';
 
+import i18n from '../../Translations/common';
+
 const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 	const {
 		onDidMount,
@@ -71,9 +73,9 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
-	useEffect(() => {// TODO: translate
-		onDidMount('Select Day', 'Select any day');
-	}, [onDidMount]);
+	useEffect(() => {
+		onDidMount(formatMessage(i18n.selectForecast), formatMessage(i18n.selectForecastToDisp));
+	}, [formatMessage, onDidMount]);
 
 	let items = useMemo((): Object => {
 		const {

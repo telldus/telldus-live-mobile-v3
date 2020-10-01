@@ -21,7 +21,11 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+	useCallback,
+} from 'react';
 import {
 	StyleSheet,
 	ScrollView,
@@ -100,14 +104,14 @@ const EditGeoFenceAreaFull = React.memo<Object>((props: Props): Object => {
 	};
 	const [initialRegion, setInitialRegion] = useState(region);
 
-	function onRegionChangeComplete(reg: Object) {
+	const onRegionChangeComplete = useCallback((reg: Object) => {
 		setInitialRegion(reg);
-	}
+	}, []);
 
 	const dispatch = useDispatch();
 	const { userId } = useSelector((state: Object): Object => state.user);
 
-	function onPressNext() {
+	const onPressNext = useCallback(() => {
 		const {
 			latitude: lat,
 			longitude: long,
@@ -119,7 +123,7 @@ const EditGeoFenceAreaFull = React.memo<Object>((props: Props): Object => {
 			userId,
 		));
 		navigation.goBack();
-	}
+	}, [dispatch, initialRegion, navigation, userId]);
 
 	return (
 		<View style={{

@@ -43,6 +43,9 @@ import {
 import {
 	ReplaceFailedNode,
 } from '../Device/DeviceDetails/SubViews';
+import {
+	AddToDashboardScale,
+} from './SubViews';
 
 import {
 	addToDashboard,
@@ -353,11 +356,20 @@ class SettingsTab extends View {
 		this.setState({
 			isHidden: value,
 		});
-		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
+		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then(async (res: Object) => {
 			const message = !value ?
 				this.removedFromHiddenList : this.addedToHiddenList;
-			this.props.dispatch(getSensorInfo(sensor.id));
-			this.props.dispatch(showToast(message));
+			try {
+				await this.props.dispatch(getSensorInfo(sensor.id));
+			} catch (e) {
+			// Ignore
+			} finally {
+				const { sensor: _sensor } = this.props;
+				this.setState({
+					isHidden: _sensor.ignored,
+				});
+				this.props.dispatch(showToast(message));
+			}
 		}).catch((err: Object) => {
 			const	message = err.message ? err.message : null;
 			this.setState({
@@ -377,17 +389,26 @@ class SettingsTab extends View {
 				source: 'keepHistory',
 			},
 		});
-		this.props.dispatch(setKeepHistory(sensor.id, keepHistory)).then((res: Object) => {
+		this.props.dispatch(setKeepHistory(sensor.id, keepHistory)).then(async (res: Object) => {
 			const message = !value ?
 				this.toastStoreNotHistory : this.toastStoreHistory;
-			this.props.dispatch(getSensorInfo(sensor.id));
-			this.props.dispatch(showToast(message));
-			this.setState({
-				switchConf: {
-					transition: false,
-					source: '',
-				},
-			});
+			try {
+				await this.props.dispatch(getSensorInfo(sensor.id));
+			} catch (e) {
+				// Ignore
+			} finally {
+				this.props.dispatch(showToast(message));
+				const { sensor: _sensor } = this.props;
+				this.setState({
+					keepHistory: _sensor.keepHistory,
+					switchConf: {
+						transition: false,
+						source: '',
+					},
+				});
+			}
+
+
 		}).catch((err: Object) => {
 			const	message = err.message ? err.message : null;
 			this.setState({
@@ -652,7 +673,9 @@ class SettingsTab extends View {
 			clientId,
 			id,
 			nodeInfo = {},
+			data = {},
 		} = sensor;
+		const showScales = Object.keys(data).length > 1;
 
 		if (!id && !excludeActive) {
 			return null;
@@ -736,6 +759,13 @@ class SettingsTab extends View {
 									appLayout={appLayout}
 									intl={intl}
 								/>
+								{showScales && inDashboard &&
+									<AddToDashboardScale
+										data={data}
+										sensorId={id}
+										appLayout={appLayout}
+										intl={intl}/>
+								}
 								<SettingsRow
 									label={formatMessage(i18n.hideFromListS)}
 									onValueChange={this.setIgnoreSensor}

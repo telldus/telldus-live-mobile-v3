@@ -25,16 +25,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import GeoFenceContainer from './GeoFenceContainer';
-
-import AddEditGeoFence from './AddEditGeoFence';
-import SelectArea from './SelectArea';
-import ArrivingActions from './ArrivingActions';
-import LeavingActions from './LeavingActions';
-import ActiveTime from './ActiveTime';
-import SetAreaName from './SetAreaName';
-import EditGeoFence from './EditGeoFence';
-import EditGeoFenceAreaFull from './EditGeoFenceAreaFull';
+import GeoFenceScreenConfigs from './GeoFenceScreenConfigs';
 import InAppDisclosureScreen from './InAppDisclosureScreen';
 
 const initialRouteName = 'AddEditGeoFence';
@@ -43,80 +34,6 @@ import {
 	prepareNavigator,
 	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
-
-export const ScreenConfigs = [
-	{
-		name: 'AddEditGeoFence',
-		Component: AddEditGeoFence,
-		ContainerComponent: GeoFenceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'SelectArea',
-		Component: SelectArea,
-		ContainerComponent: GeoFenceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'SetAreaName',
-		Component: SetAreaName,
-		ContainerComponent: GeoFenceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'ArrivingActions',
-		Component: ArrivingActions,
-		ContainerComponent: GeoFenceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'LeavingActions',
-		Component: LeavingActions,
-		ContainerComponent: GeoFenceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'ActiveTime',
-		Component: ActiveTime,
-		ContainerComponent: GeoFenceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'EditGeoFence',
-		Component: EditGeoFence,
-		ContainerComponent: GeoFenceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'EditGeoFenceAreaFull',
-		Component: EditGeoFenceAreaFull,
-		ContainerComponent: GeoFenceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'InAppDisclosureScreen',
-		Component: InAppDisclosureScreen,
-		options: {
-			headerShown: false,
-		},
-	},
-];
 
 const NavigatorConfigs = {
 	initialRouteName,
@@ -130,6 +47,16 @@ const NavigatorConfigs = {
 };
 
 const Stack = createStackNavigator();
+const ScreenConfigs = [
+	...GeoFenceScreenConfigs,
+	{
+		name: 'InAppDisclosureScreen',
+		Component: InAppDisclosureScreen,
+		options: {
+			headerShown: false,
+		},
+	},
+];
 
 const GeoFenceNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);

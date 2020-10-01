@@ -37,6 +37,8 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 const SelectForecastTimeDD = (props: Object): Object => {
 	const {
 		items,
@@ -58,7 +60,7 @@ const SelectForecastTimeDD = (props: Object): Object => {
 		pickerBaseTextStyle,
 	} = getStyles(layout);
 
-	const labelSortingDB = 'Select time';
+	const labelSortingDB = intl.formatMessage(i18n.selectForecast);
 
 	return (
 		<View
@@ -73,6 +75,7 @@ const SelectForecastTimeDD = (props: Object): Object => {
 				items={items}
 				value={value}
 				itemCount={6}
+				dropdownOffsetTopCount={2}
 				dropDownPosition={'bottom'}
 				onValueChange={onValueChange}
 				appLayout={layout}

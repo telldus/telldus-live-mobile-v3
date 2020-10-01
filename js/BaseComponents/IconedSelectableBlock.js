@@ -26,14 +26,12 @@ import React, {
 import {
 	useSelector,
 } from 'react-redux';
-import {
-	Image,
-} from 'react-native';
 
 import RippleButton from './RippleButton';
 import View from './View';
 import Text from './Text';
 import IconTelldus from './IconTelldus';
+import ThemedMaterialIcon from './ThemedMaterialIcon';
 
 import {
 	useAppTheme,
@@ -51,7 +49,7 @@ type Props = {
     coverStyle?: Object,
     h1CoverStyle?: Object,
     h2CoverStyle?: Object,
-    rightImageStyle?: Object,
+    arrowStyle?: Object,
 };
 
 const IconedSelectableBlock = (props: Props): Object => {
@@ -66,7 +64,7 @@ const IconedSelectableBlock = (props: Props): Object => {
 		coverStyle,
 		h1CoverStyle,
 		h2CoverStyle,
-		rightImageStyle,
+		arrowStyle,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -80,8 +78,8 @@ const IconedSelectableBlock = (props: Props): Object => {
 		headersCoverStyle,
 		h1CoverStyleDef,
 		h2CoverStyleDef,
-		rightImageStyleDef,
 		leftBlockCoverStyle,
+		arrowStyleDef,
 	} = getStyles({
 		layout,
 		colors,
@@ -119,9 +117,9 @@ const IconedSelectableBlock = (props: Props): Object => {
 						</Text>
 					)}
 				</View>
-				<Image
-					source={{uri: 'right_arrow_key'}}
-					style={[rightImageStyleDef, rightImageStyle]}/>
+				<ThemedMaterialIcon
+					name={'keyboard-arrow-right'}
+					style={[arrowStyleDef, arrowStyle]}/>
 			</View>
 		</RippleButton>
 	);
@@ -152,6 +150,7 @@ const getStyles = ({
 		headerOneColorBlockDisabled,
 		infoOneColorBlockEnabled,
 		infoOneColorBlockDisabled,
+		iconTwoColorBlockDisabled,
 	} = colors;
 
 	const padding = deviceWidth * paddingFactor;
@@ -160,6 +159,7 @@ const getStyles = ({
 	const colorBackground = enabled ? card : colorBlockDisabled;
 	const colorHeaderOneText = enabled ? headerOneColorBlockEnabled : headerOneColorBlockDisabled;
 	const colorIcon = enabled ? iconOneColorBlockEnabled : iconOneColorBlockDisabled;
+	const colorIconTwo = enabled ? iconTwoColorBlock : iconTwoColorBlockDisabled;
 
 	const iconSize = rowHeight * 0.5;
 	const h1FontSize = deviceWidth * 0.065;
@@ -200,10 +200,9 @@ const getStyles = ({
 			fontSize: h2FontSize,
 			color: enabled ? infoOneColorBlockEnabled : infoOneColorBlockDisabled,
 		},
-		rightImageStyleDef: {
-			tintColor: iconTwoColorBlock,
-			height: rowHeight * 0.25,
-			width: rowHeight * 0.2,
+		arrowStyleDef: {
+			color: colorIconTwo,
+			fontSize: rowHeight * 0.5,
 		},
 	};
 };

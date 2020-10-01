@@ -23,6 +23,8 @@
 
 import moment from 'moment';
 
+import i18n from '../Translations/common';
+
 import { utils } from 'live-shared-data';
 const { thirdPartyUtils } = utils;
 
@@ -73,21 +75,21 @@ const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId
 				if (isNow) {
 					timeAndInfoListData.push({
 						time,
-						timeLabel: 'Now', // TODO: Translate
+						timeLabel: formatMessage(i18n.now),
 						key: NOW_KEY,
 						data: __data,
 					});
 				} else if (isTomorrow) {
 					timeAndInfoListData.push({
 						time,
-						timeLabel: 'Tomorrow', // TODO: Translate
+						timeLabel: formatMessage(i18n.tomorrow),
 						key: TOMORROW_KEY,
 						data: __data,
 					});
 				} else if (isDFTomorrow) {
 					timeAndInfoListData.push({
 						time,
-						timeLabel: 'Day after tomorrow', // TODO: Translate
+						timeLabel: formatMessage(i18n.dAfterTomorrow),
 						key: DAY_AFTER_TOMORROW_KEY,
 						data: __data,
 					});

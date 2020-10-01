@@ -307,6 +307,7 @@ const getStyles = ({
 
 	const {
 		paddingFactor,
+		shadow,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -323,13 +324,14 @@ const getStyles = ({
 			marginHorizontal: padding,
 			borderRadius: 2,
 			marginBottom: padding / 2,
+			...shadow,
 		},
 		switchLabel: {
 			flex: 1,
 			fontSize,
 		},
 		body: {
-			marginHorizontal: padding,
+			marginHorizontal: padding * 2,
 		},
 		labelTextStyle: {
 			fontSize,

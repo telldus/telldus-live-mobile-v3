@@ -21,7 +21,10 @@
 
 'use strict';
 
-import React, { useEffect } from 'react';
+import React, {
+	useEffect,
+	useCallback,
+} from 'react';
 import { useIntl } from 'react-intl';
 
 import Actions from './Actions';
@@ -58,13 +61,13 @@ const ArrivingActions = React.memo<Object>((props: Props): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isEdit]);
 
-	function onPressNext() {
+	const onPressNext = useCallback(() => {
 		if (isEdit) {
 			navigation.goBack();
 		} else {
 			navigation.navigate('LeavingActions');
 		}
-	}
+	}, [isEdit, navigation]);
 
 	return (
 		<Actions
@@ -72,7 +75,8 @@ const ArrivingActions = React.memo<Object>((props: Props): Object => {
 			onPressNext={onPressNext}
 			iconName={isEdit ? 'checkmark' : undefined}
 			currentScreen={'ArrivingActions'}
-			imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}/>
+			imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}
+			isEdit={isEdit}/>
 	);
 });
 

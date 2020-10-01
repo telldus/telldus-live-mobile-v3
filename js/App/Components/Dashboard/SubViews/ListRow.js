@@ -79,18 +79,21 @@ const ListRow = memo<Object>((props: Props): Object => {
 
 	return (
 		<TouchableOpacity
+			level={2}
 			onPress={_onPress}
 			style={[coverStyleDef, coverStyle]}>
 			{!!leftIcon && <BlockIcon
+				blockLevel={15}
 				icon={leftIcon}
 				style={[leftIconStyleDef, leftIconStyle]}
 				containerStyle={[iconContainerStyleDef, iconContainerStyle]}/>}
 			{!!label && <Text
-				level={6}
+				level={25}
 				style={[textStyleDef, textStyle]}>
 				{label}
 			</Text>}
 			{!!rightIcon && <IconTelldus
+				level={23}
 				icon={rightIcon}
 				style={[rightIconStyleDef, rightIconStyle]}/>}
 		</TouchableOpacity>
@@ -106,7 +109,6 @@ const getStyles = ({layout}: Object): Object => {
 	const {
 		paddingFactor,
 		shadow,
-		brandSecondary,
 		maxSizeRowTextOne,
 	} = Theme.Core;
 
@@ -121,7 +123,6 @@ const getStyles = ({layout}: Object): Object => {
 			justifyContent: 'space-between',
 			alignItems: 'center',
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
 			marginBottom: padding / 2,
 			padding,
 			...shadow,
@@ -146,7 +147,6 @@ const getStyles = ({layout}: Object): Object => {
 		},
 		rightIconStyleDef: {
 			fontSize: 25,
-			color: brandSecondary,
 			alignSelf: 'flex-end',
 		},
 	};

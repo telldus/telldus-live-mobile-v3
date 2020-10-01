@@ -22,6 +22,8 @@
 'use strict';
 
 import React, { Component } from 'react';
+
+import TouchableOpacity from './TouchableOpacity';
 import View from './View';
 import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
@@ -42,6 +44,7 @@ type Props = {
 	backgroundMaskStyle?: Array<any> | Object,
 	iconLevel?: number,
 	blockLevel?: number,
+	onPress?: Function,
 };
 
 export default class BlockIcon extends Component<Props, null> {
@@ -63,11 +66,14 @@ export default class BlockIcon extends Component<Props, null> {
 			backgroundMaskStyle,
 			iconLevel,
 			blockLevel,
+			onPress,
 		} = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<View
+			<TouchableOpacity
+				disabled={!onPress}
+				onPress={onPress}
 				level={blockLevel || 13}
 				style={[defaultStyle, containerStyle]}>
 				{backgroundMask && (<View style={backgroundMaskStyle}/>)}
@@ -77,7 +83,7 @@ export default class BlockIcon extends Component<Props, null> {
 					size={size}
 					color={typeof iconLevel === 'undefined' ? color : undefined}
 					style={style}/>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 

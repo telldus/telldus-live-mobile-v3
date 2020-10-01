@@ -25,6 +25,7 @@ import React, {
 	useCallback,
 	useEffect,
 	useState,
+	useMemo,
 } from 'react';
 import {
 	useSelector,
@@ -33,9 +34,9 @@ import {
 import {
 	LayoutAnimation,
 	StyleSheet,
-	RefreshControl,
 } from 'react-native';
 import MapView from 'react-native-maps';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -60,6 +61,8 @@ import {
 
 import Theme from '../../Theme';
 
+import i18n from '../../Translations/common';
+
 const SetCoordinates = memo<Object>((props: Object): Object => {
 	const {
 		onDidMount,
@@ -68,65 +71,112 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	} = props;
 
 	const {
+		formatMessage,
+	} = useIntl();
+	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
+	const dispatch = useDispatch();
 
-	const { location: _location = {} } = useSelector((state: Object): Object => state.fences);
-	let location: {longitude: number, latitude: number} = _location || {};
+	const deltaDef = 0.05;
 	const MANUAL_ID = 'manual';
-	const MANUAL_VALUE = 'Manual';
+	const MANUAL_VALUE = formatMessage(i18n.labelManual);
+
+	const { layout } = useSelector((state: Object): Object => state.app);
+	const { byId = {} } = useSelector((state: Object): Object => state.gateways);
+	const { location: _location = {} } = useSelector((state: Object): Object => state.fences);
+
+	let location: {longitude: number, latitude: number} = _location || {};
 
 	const {
 		selectedType,
 		uniqueId,
 	} = route.params || {};
 
-	const [ config, setConfig ] = useState({
-		...location,
-		isRefreshing: !location || (!location.longitude && !location.latitude),
-		manual: true,
-		id: MANUAL_ID,
-	});
+	const [
+		manualLocation,
+		setManualLocation,
+	] = useState(location);
+	const [
+		selectedId,
+		setSelectedId,
+	] = useState();
+	let {
+		items,
+		itemsObject,
+		value,
+		key,
+	} = useMemo((): Object => {
+		let _value = selectedId === MANUAL_ID ? MANUAL_VALUE : '',
+			_key = selectedId === MANUAL_ID ? MANUAL_ID : '';
+		let _items = [], _itemsObject = {
+			[MANUAL_ID]: {
+				key: MANUAL_ID,
+				value: MANUAL_VALUE,
+				longitude: manualLocation.longitude,
+				latitude: manualLocation.latitude,
+			},
+		};
+		const byIdKeys = Object.keys(byId);
+		if (byIdKeys.length === 0) {
+			_value = MANUAL_VALUE;
+			_key = MANUAL_ID;
+		}
+		byIdKeys.forEach((_id: string): Object => {
+			const _item = byId[_id];
+			if (_id === selectedId || !_value) {
+				_value = _item.name;
+				_key = _id;
+			}
+			_items.push({
+				key: _id,
+				value: _item.name,
+				longitude: _item.longitude,
+				latitude: _item.latitude,
+			});
+			_itemsObject = {
+				..._itemsObject,
+				[_id]: {
+					key: _id,
+					value: _item.name,
+					longitude: _item.longitude,
+					latitude: _item.latitude,
+				},
+			};
+		});
+		_items.push({
+			key: MANUAL_ID,
+			value: MANUAL_VALUE,
+			longitude: manualLocation.longitude,
+			latitude: manualLocation.latitude,
+		});
+		return {
+			items: _items,
+			value: _value,
+			key: _key,
+			itemsObject: _itemsObject,
+		};
+	}, [MANUAL_VALUE, byId, manualLocation.latitude, manualLocation.longitude, selectedId]);
+
 	const {
-		isRefreshing,
-		manual,
 		latitude,
 		longitude,
-		id,
-	} = config;
+	} = itemsObject[key];
+	const manual = key === MANUAL_ID;
 
-	const deltaDef = 0.05;
-
-	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(getCurrentLocation()).then((res: Object) => {
 			const {
 				coords = {},
 			} = res;
-			const {
-				latitude: lat,
-				longitude: lon,
-			} = coords;
-			setConfig({
-				...config,
-				longitude: lon,
-				latitude: lat,
-				isRefreshing: false,
-			});
-		}).catch(() => {
-			setConfig({
-				...config,
-				isRefreshing: false,
-			});
+			setManualLocation(coords);
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const { layout } = useSelector((state: Object): Object => state.app);
-
-	useEffect(() => {// TODO: translate
-		onDidMount('Set Coordinates', 'Select or manually enter Coordinates');
-	}, [onDidMount]);
+	useEffect(() => {
+		onDidMount(formatMessage(i18n.headerOnePosition), formatMessage(i18n.headerTwoPosition));
+	}, [formatMessage, onDidMount]);
 
 	const {
 		container,
@@ -145,7 +195,8 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	}, [toggleDialogueBoxState]);
 
 	const onPressNext = useCallback((params: Object) => {
-		const invalidMessage = 'Invalid Latitude and Longitud. Please enter valid latitude and longitude.'; // TODO: translate
+		const invalidMessage = formatMessage(i18n.messageInvalidCoordinates);
+
 		if (!latitude || !longitude) {
 			showDialogue(invalidMessage);
 			return;
@@ -163,37 +214,22 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 		navigation.navigate('SelectWeatherForecastDay', {
 			selectedType,
 			uniqueId,
-			id,
+			id: key,
 			latitude,
 			longitude,
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [latitude, longitude, selectedType, uniqueId, id, showDialogue]);
+	}, [formatMessage, latitude, longitude, navigation, selectedType, uniqueId, key, showDialogue]);
 
-	const _setConfig = useCallback((_config: Object) => {
-		if (_config.latitude && _config.longitude) {
-			setConfig({
-				...config,
-				..._config,
-				isRefreshing: false,
-			});
-		} else {
-			setConfig({
-				...config,
-				..._config,
-				...location,
-				isRefreshing: false,
-			});
-		}
+	const _setConfig = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
+		setSelectedId(data[itemIndex].key);
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
-	}, [config, location]);
+	}, []);
 
 	const onRegionChangeComplete = useCallback((reg: Object) => {
-		setConfig({
-			...config,
-			...reg,
-		});
-	}, [config]);
+		if (manual) {
+			setManualLocation(reg);
+		}
+	}, [manual]);
 
 	const hasCoords = !!longitude && !!latitude;
 	const region = hasCoords ? new MapView.AnimatedRegion({
@@ -208,18 +244,12 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 			<ThemedScrollView
 				level={3}
 				style={container}
-				contentContainerStyle={{flexGrow: 1}}
-				refreshControl={
-					<RefreshControl
-						enabled={false}
-						refreshing={isRefreshing}
-					/>
-				}>
+				contentContainerStyle={{flexGrow: 1}}>
 				<View style={body}>
 					<SelectCoordinatesDD
 						setConfig={_setConfig}
-						MANUAL_ID={MANUAL_ID}
-						MANUAL_VALUE={MANUAL_VALUE}/>
+						items={items}
+						value={value}/>
 					<View style={{
 						flex: 1,
 					}}>
@@ -232,7 +262,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 							onRegionChangeComplete={onRegionChangeComplete}
 							showsMyLocationButton={false}
 							followsUserLocation={false}
-							scrollEnabled={manual && !isRefreshing}>
+							scrollEnabled={manual}>
 							<MapView.Marker.Animated
 								image={{uri: 'marker'}}
 								coordinate={region}/>
