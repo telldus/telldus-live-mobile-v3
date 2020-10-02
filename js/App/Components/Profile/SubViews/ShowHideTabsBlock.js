@@ -85,9 +85,13 @@ const ShowHideTabsBlock = memo<Object>((props: Object): Object => {
 		containerStyle,
 	} = getStyles({layout});
 
-	const { hiddenTabs = {} } = useSelector((store: Object): Object => store.navigation);
+	const {
+		hiddenTabs = {},
+		defaultStartScreen = {},
+	} = useSelector((store: Object): Object => store.navigation);
 	const { userId } = useSelector((store: Object): Object => store.user);
 	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+	const defaultStartScreenCurrentUser = defaultStartScreen[userId] || {};
 
 	const dispatch = useDispatch();
 
@@ -122,6 +126,9 @@ const ShowHideTabsBlock = memo<Object>((props: Object): Object => {
 				if (count === (supportedTabs.length - 1)) {
 					return;
 				}
+			}
+			if (defaultStartScreenCurrentUser.screenKey === itemKey) {
+				return;
 			}
 			dispatch(tabHide(itemKey, userId));
 		} else {
@@ -160,7 +167,7 @@ const ShowHideTabsBlock = memo<Object>((props: Object): Object => {
 			<Text
 				level={2}
 				style={titleStyle}>
-				Menu tabs to display
+				Menu tabs to display{/* TODO: Translate */}
 			</Text>
 			{items}
 		</View>
