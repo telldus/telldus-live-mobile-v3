@@ -213,7 +213,11 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 					let { userId: _userId } = accessToken;
 					setSwitchingId(_userId);
 
-					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
+					dispatch(getUserProfile(accessToken, {
+						cancelAllPending: true,
+						activeAccount: false,
+						performPostSuccess: true,
+					})).then((res: Object = {}) => {
 						closeActionSheet(undefined, () => {
 							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
 							setTimeout(() => {
