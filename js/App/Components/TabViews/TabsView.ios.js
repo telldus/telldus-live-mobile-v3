@@ -87,15 +87,21 @@ const Tab = createBottomTabNavigator();
 const TabsView = React.memo<Object>((props: Object): Object => {
 	const {
 		hiddenTabsCurrentUser = [],
+		defaultStartScreenKey = 'Dashboard',
 	} = props.screenProps;
 	const _ScreenConfigs = ScreenConfigs.filter((sc: Object): boolean => hiddenTabsCurrentUser.indexOf(sc.name) === -1);
-	return prepareNavigator(Tab, {ScreenConfigs: _ScreenConfigs, NavigatorConfigs}, props);
+	const _NavigatorConfigs = {
+		...NavigatorConfigs,
+		initialRouteName: defaultStartScreenKey,
+	};
+	return prepareNavigator(Tab, {ScreenConfigs: _ScreenConfigs, NavigatorConfigs: _NavigatorConfigs}, props);
 }, (prevProps: Object, nextProps: Object): boolean => shouldNavigatorUpdate(prevProps, nextProps, [
 	'hideHeader',
 	'showAttentionCapture',
 	'showAttentionCaptureAddDevice',
 	'addingNewLocation',
 	'hiddenTabsCurrentUser',
+	'defaultStartScreenKey',
 ]));
 
 module.exports = TabsView;

@@ -525,6 +525,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		source,
 		addingNewLocation,
 		hiddenTabsCurrentUser,
+		defaultStartScreenKey,
 	} = props.screenProps;
 
 	const Navigator = React.useMemo((): Object => {
@@ -540,6 +541,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		source,
 		addingNewLocation,
 		hiddenTabsCurrentUser,
+		defaultStartScreenKey,
 	]);
 
 	return (
@@ -556,6 +558,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 	'showAttentionCaptureAddDevice',
 	'addingNewLocation',
 	'hiddenTabsCurrentUser',
+	'defaultStartScreenKey',
 ]));
 
 export default AppNavigator;

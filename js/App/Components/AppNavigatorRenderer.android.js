@@ -56,6 +56,7 @@ type Props = {
 	currentScreen: string,
 	hasGateways: boolean,
 	hiddenTabsCurrentUser: Array<string>,
+	defaultStartScreenKey: string,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -142,6 +143,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			'screenReaderEnabled',
 			'hasGateways',
 			'hiddenTabsCurrentUser',
+			'defaultStartScreenKey',
 		]);
 	}
 
@@ -274,6 +276,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			toggleDialogueBox,
 			currentScreen: CS,
 			hiddenTabsCurrentUser,
+			defaultStartScreenKey,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
@@ -305,6 +308,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			source: 'postlogin',
 			...MainNavHeaderProps,
 			hiddenTabsCurrentUser,
+			defaultStartScreenKey,
 		};
 
 		return (
@@ -364,15 +368,19 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	const {
 		hiddenTabs = {},
+		defaultStartScreen = {},
 	} = state.navigation;
 
 	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+
+	const defaultStartScreenCurrentUser = defaultStartScreen[userId] || {};
 
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
 		currentScreen: state.navigation.screen,
 		hiddenTabsCurrentUser,
+		defaultStartScreenKey: defaultStartScreenCurrentUser.screenKey,
 	};
 }
 

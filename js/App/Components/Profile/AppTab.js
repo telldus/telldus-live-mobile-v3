@@ -59,6 +59,7 @@ import {
 	WidgetFontSizeSetting,
 	ThemesBlock,
 	ShowHideTabsBlock,
+	SetDefaultStartScreenDropDown,
 } from './SubViews';
 
 import { LayoutAnimations } from '../../Lib';
@@ -241,6 +242,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 				<ShowHideTabsBlock
 					intl={intl}
 					layout={layout}/>
+				<SetDefaultStartScreenDropDown/>
 				<Text
 					level={2}
 					style={titleStyle}>
