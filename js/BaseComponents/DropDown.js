@@ -203,11 +203,12 @@ static defaultProps: DefaultProps = {
 				height: screenHeight,
 			} = appLayout;
 
-			const MARGIN = 50;
+			let MARGIN = 50;
 			const _itemSize = itemSize || Math.ceil(fontSize * 1.5 + itemPadding * 2);
 
 			let space = y;
 			if (dropDownPosition === 'bottom') {
+				MARGIN = 0;
 				space = screenHeight - (y + height);
 			}
 			space = space - MARGIN;
@@ -342,7 +343,7 @@ static defaultProps: DefaultProps = {
 		const iCount = itemCountOverride || (items.length < itemCount ? items.length : itemCount);
 
 		const _dropdownOffsetTopCount = typeof dropdownOffsetTopCount === 'number' ? dropdownOffsetTopCount : iCount;
-		let dropdownTop = dropDownPosition === 'bottom' ? ((_dropdownOffsetTopCount * _itemSize) - itemPadding) : -(_dropdownOffsetTopCount * _itemSize);
+		let dropdownTop = dropDownPosition === 'bottom' ? ((2 * _itemSize) - itemPadding) : -(_dropdownOffsetTopCount * _itemSize);
 
 		return (
 			<View
