@@ -43,4 +43,11 @@ module.exports = {
 			userId,
 		},
 	}),
+	changeDefaultStartScreen: (screenKey: string, userId: string): Action => ({
+		type: 'CHANGE_DEFAULT_START_SCREEN',
+		payload: {
+			screenKey,
+			userId,
+		},
+	}),
 };

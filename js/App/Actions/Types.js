@@ -55,6 +55,10 @@ export type Action =
 		tab: string,
 		userId: string,
 	} }
+	| { type: 'CHANGE_DEFAULT_START_SCREEN', payload: {
+		screenKey: string,
+		userId: string,
+	} }
 
 	| { type: 'ADD_TO_DASHBOARD', payload: {
 		kind: 'device' | 'sensor',

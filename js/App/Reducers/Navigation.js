@@ -28,11 +28,16 @@ import type { Action } from '../Actions/Types';
 type State = {
 	screen: string,
 	hiddenTabs: Object,
+	defaultStartScreen: Object,
 };
 
 const initialState: State = {
 	screen: 'Login',
 	hiddenTabs: {},
+	defaultStartScreen: {
+		screenKey: '',
+		screenName: '',
+	},
 };
 
 function navigation(state: State = initialState, action: Action): State {
@@ -88,6 +93,25 @@ function navigation(state: State = initialState, action: Action): State {
 			},
 		};
 
+	}
+	if (action.type === 'CHANGE_DEFAULT_START_SCREEN') {
+		const {
+			screenKey,
+			userId,
+		} = action.payload;
+		const _defaultStartScreen = state.defaultStartScreen || {};
+		let defaultStartScreenCurrentUser = _defaultStartScreen[userId] || {};
+
+		return {
+			...state,
+			defaultStartScreen: {
+				..._defaultStartScreen,
+				[userId]: {
+					...defaultStartScreenCurrentUser,
+					screenKey,
+				},
+			},
+		};
 	}
 	if (action.type === 'LOGGED_OUT_SELECTED') {
 		let { userId } = action.payload;
