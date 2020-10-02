@@ -83,14 +83,23 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
 			...credential,
 		},
 	  })
-		.then((response: Object): Object => {
+		.then(async (response: Object): Object => {
 			if (response.status === 200) {
-				setBoolean('Password', 'true');
-				dispatch(updateAccessToken({
-					...response.data,
-					userId: response.data.uuid,
-				}));
-				return response;
+				let responseUp;
+				try {
+					responseUp = await dispatch(getUserProfile(response.data, {
+						performPostSuccess: false,
+					}));
+				} catch (e) {
+					throw e;
+				} finally {
+					setBoolean('Password', 'true');
+					dispatch(updateAccessToken({
+						...response.data,
+						userId: responseUp.uuid,
+					}));
+					return response;
+				}
 			}
 			throw response;
 		})
