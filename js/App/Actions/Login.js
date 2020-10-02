@@ -85,7 +85,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
 	  })
 		.then(async (response: Object): Object => {
 			if (response.status === 200) {
-				let responseUp;
+				let responseUp = {};
 				try {
 					responseUp = await dispatch(getUserProfile(response.data, {
 						performPostSuccess: false,
