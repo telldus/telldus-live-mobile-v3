@@ -384,11 +384,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 if (transparent.equals("dark")) {
                     bgColor = Color.parseColor(cD);
 
-                    flashColor = settingColor;
+                    flashColor = Color.parseColor(cL);
                 } else if (transparent.equals("light") || transparent.equals("true")) {
                     bgColor = Color.parseColor(cL);
 
-                    flashColor = settingColor;
+                    flashColor = Color.parseColor(cD);
                 }
 
                 float d = context.getResources().getDisplayMetrics().density;
@@ -440,18 +440,18 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                 85,
                                 context));
                     }
+                    CommonUtilities. hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+                    views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
+                    CommonUtilities.handleBackgroundPostActionOne(
+                            "RGB",
+                            transparent,
+                            renderedButtonsCount,
+                            isLastButton,
+                            R.id.rgbActionCover,
+                            views,
+                            context
+                    );
                 }
-                CommonUtilities. hideFlashIndicator(views, R.id.flashing_indicator_rgb);
-                views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
-                CommonUtilities.handleBackgroundPostActionOne(
-                        "RGB",
-                        transparent,
-                        renderedButtonsCount,
-                        isLastButton,
-                        R.id.rgbActionCover,
-                        views,
-                        context
-                );
             }
 
             views.setOnClickPendingIntent(R.id.rgbActionCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
