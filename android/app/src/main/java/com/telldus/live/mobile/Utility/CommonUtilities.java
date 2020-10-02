@@ -203,7 +203,7 @@ public class CommonUtilities  {
                     R.drawable.shape_left_black_round,
                     R.drawable.shape_border_right_round_black,
                     R.drawable.shape_left_black,
-                    R.drawable.shape_border_round_black_fill,
+                    R.drawable.shape_border_round_black,
                     viewId,
                     views,
                     context
@@ -216,7 +216,7 @@ public class CommonUtilities  {
                     R.drawable.shape_left_white_round,
                     R.drawable.shape_border_right_round_white,
                     R.drawable.shape_left_white,
-                    R.drawable.shape_border_round_white_fill,
+                    R.drawable.shape_border_round_white,
                     viewId,
                     views,
                     context
