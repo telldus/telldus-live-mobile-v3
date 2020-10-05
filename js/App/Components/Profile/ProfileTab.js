@@ -159,7 +159,11 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				});
 				if (otherUserId) {
 					let { accessToken } = accounts[otherUserId];
-					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
+					dispatch(getUserProfile(accessToken, {
+						cancelAllPending: true,
+						activeAccount: false,
+						performPostSuccess: true,
+					})).then((res: Object = {}) => {
 						dispatch(onSwitchAccount({
 							userId: otherUserId,
 						}));

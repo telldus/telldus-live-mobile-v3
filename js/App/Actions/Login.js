@@ -83,14 +83,23 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
 			...credential,
 		},
 	  })
-		.then((response: Object): Object => {
+		.then(async (response: Object): Object => {
 			if (response.status === 200) {
-				setBoolean('Password', 'true');
-				dispatch(updateAccessToken({
-					...response.data,
-					userId: response.data.uuid,
-				}));
-				return response;
+				let responseUp = {};
+				try {
+					responseUp = await dispatch(getUserProfile(response.data, {
+						performPostSuccess: false,
+					}));
+				} catch (e) {
+					throw e;
+				} finally {
+					setBoolean('Password', 'true');
+					dispatch(updateAccessToken({
+						...response.data,
+						userId: responseUp.uuid,
+					}));
+					return response;
+				}
 			}
 			throw response;
 		})
@@ -106,8 +115,13 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
  * @param {boolean} cancelAllPending : If true, will cancel all pending API calls if any.
  * @param {boolean} activeAccount : If true, will update active accounts user profile, else the account that belongs to the received user id
  */
-function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: boolean = false, activeAccount?: boolean = true): ThunkAction {
+function getUserProfile(_accessToken?: Object = undefined, extras?: Object = {}): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
+		const {
+			cancelAllPending = false,
+			activeAccount = true,
+			performPostSuccess = true,
+		} = extras;
 		const payload = {
 			url: '/user/profile',
 			requestParams: {
@@ -118,6 +132,9 @@ function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: bo
 		};
 		return dispatch(LiveApi(payload)).then((response: Object): Object => {
 			if (response && response.email) {
+				if (!performPostSuccess) {
+					return response;
+				}
 				if (activeAccount) {
 					dispatch({
 						type: 'RECEIVED_USER_PROFILE',
