@@ -121,9 +121,11 @@ class App extends React.Component<Props> {
 	}
 
 	componentDidMount() {
-		let { dispatch, deviceId, colors } = this.props;
+		let { dispatch, deviceId, colors, intl } = this.props;
 
-		this.clearInAppStatusUpdateListener = dispatch(addInAppStatusUpdateListener());
+		this.clearInAppStatusUpdateListener = dispatch(addInAppStatusUpdateListener({
+			intl,
+		}));
 		dispatch(checkForInAppUpdates());
 
 		AccessibilityInfo.isScreenReaderEnabled().then((isEnabled: boolean) => {

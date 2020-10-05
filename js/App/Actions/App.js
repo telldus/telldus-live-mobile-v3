@@ -25,6 +25,7 @@
 import DeviceInfo from 'react-native-device-info';
 import axios from 'axios';
 import InAppUpdates from 'sp-react-native-in-app-updates';
+import Snackbar from 'react-native-snackbar';
 
 import type { ThunkAction, TicketData, Action } from './Types';
 
@@ -230,9 +231,28 @@ const checkForInAppUpdates = (): ThunkAction => {
 	};
 };
 
-const addInAppStatusUpdateListener = (): ThunkAction => {
+const addInAppStatusUpdateListener = ({intl}: Object): ThunkAction => {
 	return (dispatch: Function, getState: Function): Function => {
-		const callback = (data: Object) => {
+		const callback = (data: Object = {}) => {
+			// const {
+			// 	formatMessage,
+			// } = intl;
+			const {
+				status,
+			} = data;
+			if (status === InAppUpdates.UPDATE_STATUS.UPDATE_DOWNLOADED) {
+				Snackbar.show({
+					text: 'Telldus Live! just downloaded an update', // TODO : Translate
+					duration: Snackbar.LENGTH_INDEFINITE,
+					action: {
+						text: 'Reload', // TODO : Translate
+						textColor: 'green',
+						onPress: () => {
+							InAppUpdatesInstance.installUpdate();
+						},
+					},
+				});
+			}
 		};
 
 		InAppUpdatesInstance.addStatusUpdateListener(callback);
