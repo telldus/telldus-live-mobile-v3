@@ -346,7 +346,11 @@ function updateAllAccountsInfo(): ThunkAction {
 		Object.keys(accounts).forEach((userId: string) => {
 			const { accessToken } = accounts[userId];
 			if (accessToken && (activeUserId !== userId)) {
-				dispatch(getUserProfile(accessToken, false, false));
+				dispatch(getUserProfile(accessToken, {
+					cancelAllPending: false,
+					activeAccount: false,
+					performPostSuccess: true,
+				}));
 				dispatch(getUserSubscriptions(accessToken));
 			}
 		});

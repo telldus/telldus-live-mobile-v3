@@ -41,7 +41,7 @@ GEOLOCATION_APPLICATION_KEY=${GEOLOCATION_APPLICATION_KEY}
 android.useAndroidX=true
 android.enableJetifier=true
 org.gradle.jvmargs=-Xmx2048m
-FLIPPER_VERSION=0.37.0
+FLIPPER_VERSION=0.54.0
 EOF
 
 echo "${GOOGLE_SERVICES}" > app/google-services.json
