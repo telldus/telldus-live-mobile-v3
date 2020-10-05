@@ -176,7 +176,10 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 				listData,
 				meta: _meta,
 			},
-		} = getMetWeatherDataAttributes(weather, id, selectedType, false, {formatMessage: () => {}});
+		} = getMetWeatherDataAttributes(weather, id, selectedType, false, {
+			formatMessage: () => {},
+			timeKey,
+		});
 		let _data = {};
 		for (let i = 0; i < listData.length; i++) {
 			if (timeKey === listData[i].key) {
