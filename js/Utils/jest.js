@@ -154,3 +154,7 @@ jest.mock('sp-react-native-in-app-updates', (): Object => {
 		}
 	};
 });
+
+jest.mock('react-native-snackbar', (): Object => {
+	return {};
+});
