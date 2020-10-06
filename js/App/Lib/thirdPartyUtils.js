@@ -21,7 +21,9 @@
 
 'use strict';
 
-import moment from 'moment';
+let dayjs = require('dayjs');
+let dayOfYear = require('dayjs/plugin/dayOfYear');
+dayjs.extend(dayOfYear);
 
 import i18n from '../Translations/common';
 
@@ -55,10 +57,10 @@ const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId
 			for (let i = 0; i < timeseries.length; i++) {
 				const { time, data: __data } = timeseries[i];
 
-				const _moment = moment(time);
-				const _hour = _moment.hour();
+				const _time = dayjs(time);
+				const _hour = _time.hour();
 
-				const now = moment();
+				const now = dayjs();
 				const tom = now.add('1', 'd');
 
 				// NOTE : Reduce dayOfYear calls as much as possible. Causes lag in iOS.
@@ -67,9 +69,9 @@ const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId
 					if (hour !== _hour) {
 						continue;
 					}
-					const dayOfYear = now.dayOfYear();
-					const _dayOfYear = _moment.dayOfYear();
-					const isNow = dayOfYear === _dayOfYear;
+					const dayOfYearNow = now.dayOfYear();
+					const _dayOfYear = _time.dayOfYear();
+					const isNow = dayOfYearNow === _dayOfYear;
 					if (isNow) {
 						timeAndInfoListData.push({
 							time,
@@ -78,13 +80,14 @@ const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId
 							data: __data,
 						});
 					}
-				} else if (!timeKey || timeKey === NOW_KEY) {
+				}
+				if (!timeKey || timeKey === NOW_KEY) {
 					const hourTom = tom.hour();
 					if (hourTom !== _hour) {
 						continue;
 					}
 					const dayOfYearTom = tom.dayOfYear();
-					const _dayOfYear = _moment.dayOfYear();
+					const _dayOfYear = _time.dayOfYear();
 					const isTomorrow = dayOfYearTom === _dayOfYear;
 					if (isTomorrow) {
 						timeAndInfoListData.push({
@@ -94,14 +97,15 @@ const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId
 							data: __data,
 						});
 					}
-				} else if (!timeKey || timeKey === NOW_KEY) {
+				}
+				if (!timeKey || timeKey === NOW_KEY) {
 					const dFTom = tom.add('1', 'd');
 					const hourDFTom = dFTom.hour();
 					if (hourDFTom !== _hour) {
 						continue;
 					}
 					const dayOfYearDFTom = dFTom.dayOfYear();
-					const _dayOfYear = _moment.dayOfYear();
+					const _dayOfYear = _time.dayOfYear();
 					const isDFTomorrow = dayOfYearDFTom === _dayOfYear;
 					if (isDFTomorrow) {
 						timeAndInfoListData.push({
