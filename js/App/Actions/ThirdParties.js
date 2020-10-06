@@ -34,6 +34,7 @@ import type { ThunkAction } from './Types';
 import {
 	getSupportedWeatherProviders,
 	MET_ID,
+	MET_WEATHER_EXPIRE_TIME,
 } from '../Lib/thirdPartyUtils';
 
 const updateAllMetWeatherDbTiles = (): ThunkAction => {
@@ -42,6 +43,7 @@ const updateAllMetWeatherDbTiles = (): ThunkAction => {
 			app,
 			user,
 			dashboard,
+			thirdParties = {},
 		} = getState();
 		const { defaultSettings = {} } = app;
 		const { userId } = user;
@@ -52,19 +54,31 @@ const updateAllMetWeatherDbTiles = (): ThunkAction => {
 		const userDbsAndMetWeatherById = metWeatherById[userId] || {};
 		const metWeatherByIdInCurrentDb = userDbsAndMetWeatherById[activeDashboardId] || {};
 
+		const {
+			weather = {},
+		} = thirdParties;
+
 		const { url } = getSupportedWeatherProviders()[MET_ID];
 		Object.keys(metWeatherByIdInCurrentDb).map((metDbId: string) => {
 			const {
 				latitude,
 				longitude,
 			} = metWeatherByIdInCurrentDb[metDbId];
-			dispatch(getWeatherInfo(url, {
-				lon: latitude,
-				lat: longitude,
-			}, {
-				id: metDbId,
-				providerId: MET_ID,
-			}));
+
+			const currentDBIdWeatherData = weather[metDbId] || {};
+			if (currentDBIdWeatherData.providerId === MET_ID) {
+				const ts = new Date().getTime();
+				const diff = currentDBIdWeatherData.lastFetchTimestamp ? Math.floor((ts - currentDBIdWeatherData.lastFetchTimestamp) / 60000) : MET_WEATHER_EXPIRE_TIME + 1;
+				if (diff > MET_WEATHER_EXPIRE_TIME) {
+					dispatch(getWeatherInfo(url, {
+						lon: latitude,
+						lat: longitude,
+					}, {
+						id: metDbId,
+						providerId: MET_ID,
+					}));
+				}
+			}
 		});
 	};
 };
