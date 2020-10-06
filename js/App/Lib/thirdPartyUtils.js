@@ -21,7 +21,9 @@
 
 'use strict';
 
-import moment from 'moment';
+let dayjs = require('dayjs');
+let dayOfYear = require('dayjs/plugin/dayOfYear');
+dayjs.extend(dayOfYear);
 
 import i18n from '../Translations/common';
 
@@ -34,7 +36,10 @@ const {
 	DAY_AFTER_TOMORROW_KEY,
 } = thirdPartyUtils;
 
-const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId: string, onlyAttributes?: boolean = true, {formatMessage}: Object): Object => {
+const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId: string, onlyAttributes?: boolean = true, {
+	formatMessage,
+	timeKey,
+}: Object): Object => {
 	const weatherCurrentClient = weatherData[id];
 
 	let attributesListData = [], timeAndInfoListData = [];
@@ -52,47 +57,64 @@ const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId
 			for (let i = 0; i < timeseries.length; i++) {
 				const { time, data: __data } = timeseries[i];
 
-				const _moment = moment(time);
-				const _hour = _moment.hour();
-				const _dayOfYear = _moment.dayOfYear();
+				const _time = dayjs(time);
+				const _hour = _time.hour();
 
-				const now = moment();
-				const hour = now.hour();
-				const dayOfYear = now.dayOfYear();
-
+				const now = dayjs();
 				const tom = now.add('1', 'd');
-				const hourTom = tom.hour();
-				const dayOfYearTom = tom.dayOfYear();
 
-				const dFTom = tom.add('1', 'd');
-				const hourDFTom = dFTom.hour();
-				const dayOfYearDFTom = dFTom.dayOfYear();
-
-				const isNow = dayOfYear === _dayOfYear && hour === _hour;
-				const isTomorrow = dayOfYearTom === _dayOfYear && hourTom === _hour;
-				const isDFTomorrow = dayOfYearDFTom === _dayOfYear && hourDFTom === _hour;
-
-				if (isNow) {
-					timeAndInfoListData.push({
-						time,
-						timeLabel: formatMessage(i18n.now),
-						key: NOW_KEY,
-						data: __data,
-					});
-				} else if (isTomorrow) {
-					timeAndInfoListData.push({
-						time,
-						timeLabel: formatMessage(i18n.tomorrow),
-						key: TOMORROW_KEY,
-						data: __data,
-					});
-				} else if (isDFTomorrow) {
-					timeAndInfoListData.push({
-						time,
-						timeLabel: formatMessage(i18n.dAfterTomorrow),
-						key: DAY_AFTER_TOMORROW_KEY,
-						data: __data,
-					});
+				// NOTE : Reduce dayOfYear calls as much as possible. Causes lag in iOS.
+				if (!timeKey || timeKey === NOW_KEY) {
+					const hour = now.hour();
+					if (hour !== _hour) {
+						continue;
+					}
+					const dayOfYearNow = now.dayOfYear();
+					const _dayOfYear = _time.dayOfYear();
+					const isNow = dayOfYearNow === _dayOfYear;
+					if (isNow) {
+						timeAndInfoListData.push({
+							time,
+							timeLabel: formatMessage(i18n.now),
+							key: NOW_KEY,
+							data: __data,
+						});
+					}
+				}
+				if (!timeKey || timeKey === NOW_KEY) {
+					const hourTom = tom.hour();
+					if (hourTom !== _hour) {
+						continue;
+					}
+					const dayOfYearTom = tom.dayOfYear();
+					const _dayOfYear = _time.dayOfYear();
+					const isTomorrow = dayOfYearTom === _dayOfYear;
+					if (isTomorrow) {
+						timeAndInfoListData.push({
+							time,
+							timeLabel: formatMessage(i18n.tomorrow),
+							key: TOMORROW_KEY,
+							data: __data,
+						});
+					}
+				}
+				if (!timeKey || timeKey === NOW_KEY) {
+					const dFTom = tom.add('1', 'd');
+					const hourDFTom = dFTom.hour();
+					if (hourDFTom !== _hour) {
+						continue;
+					}
+					const dayOfYearDFTom = dFTom.dayOfYear();
+					const _dayOfYear = _time.dayOfYear();
+					const isDFTomorrow = dayOfYearDFTom === _dayOfYear;
+					if (isDFTomorrow) {
+						timeAndInfoListData.push({
+							time,
+							timeLabel: formatMessage(i18n.dAfterTomorrow),
+							key: DAY_AFTER_TOMORROW_KEY,
+							data: __data,
+						});
+					}
 				}
 			}
 		}
