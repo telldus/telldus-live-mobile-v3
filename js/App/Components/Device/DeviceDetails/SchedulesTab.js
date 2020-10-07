@@ -242,7 +242,7 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 			style={container}>
 			{isEmpty ?
 				<View style={containerWhenNoData}>
-					<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+					<Icon name="exclamation-circle" size={iconSize} level={23} />
 					<Text style={textWhenNoData}>
 						No schedules for this device
 					</Text>
