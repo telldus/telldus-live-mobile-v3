@@ -22,7 +22,11 @@
 
 'use strict';
 
-import moment from 'moment-timezone';
+let dayjs = require('dayjs');
+let utc = require('dayjs/plugin/utc');
+let _timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(_timezone);
 import { combineReducers } from 'redux';
 import filter from 'lodash/filter';
 import range from 'lodash/range';
@@ -40,7 +44,7 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		};
 	}
 
-	const todayInWeek = parseInt(moment().format('d'), 10);
+	const todayInWeek = parseInt(dayjs().format('d'), 10);
 	const sectionIds = range(0, 8);
 	let sections = sectionIds.reduce((memo: Object, day: number): Object => ({
 		...memo,
@@ -73,7 +77,7 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		job.deviceType = deviceType;
 		job.deviceSupportedMethods = supportedMethods;
 
-		const now = moment().tz(timezone);
+		const now = dayjs().tz(timezone);
 		if (!now) {
 			return;
 		}
