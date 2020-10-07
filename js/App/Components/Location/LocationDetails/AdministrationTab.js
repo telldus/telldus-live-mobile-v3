@@ -28,6 +28,7 @@ import React, {
 	useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	TouchableButton,
@@ -49,6 +50,8 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 type Props = {
 	screenProps: Object,
 	location: Object,
@@ -65,6 +68,13 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 	const {
 		location: {id},
 	} = route.params || {};
+
+	const {
+		intl,
+	} = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const { appLayout } = screenProps;
 
@@ -106,14 +116,15 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// TODO: Translate
-	const onPressExcludeDevice = useCallback(() => {
+	const onPressTransfer = useCallback(() => {
 		if (!targetEmail || !targetEmail.trim()) {
-			showDialogue('Email cannot be empty. Please enter a valid email address.');
+			showDialogue(formatMessage(i18n.emailEmptyBody));
 			return;
 		}
 		if (!validateEmail(targetEmail)) {
-			showDialogue('Email is invalid. Please enter a valid email address.'); // TODO: Translate
+			showDialogue(formatMessage(i18n.emailNotValidBody), {
+				header: formatMessage(i18n.emailNotValidHeader),
+			});
 			return;
 		}
 
@@ -153,7 +164,7 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 			<EditBox
 				value={targetEmail}
 				icon={'email'}
-				label={'Email'}
+				label={formatMessage(i18n.emailAddress)}
 				onChangeText={onChangeName}
 				appLayout={appLayout}
 				autoCapitalize={'none'}
@@ -166,7 +177,7 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 				textStyle={infoTextStyle}/>
 			<TouchableButton
 				text={'TRANSFER'}
-				onPress={onPressExcludeDevice}
+				onPress={onPressTransfer}
 				disabled={isLoading}
 				style={{
 					marginTop: padding * 1.5,
