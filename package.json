@@ -51,7 +51,7 @@
     "gravatar-api": "^1.5.0",
     "intl": "~1.2.5",
     "jwt-decode": "^2.2.0",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#49066aea6060d6c5476cae858f019d4b4ab56c5c",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#4db8c9555aca7a9743167e3009e597b2b00c5d17",
     "lodash": "~4.17.11",
     "node-forge": "~0.9.1",
     "react": "16.13.1",
