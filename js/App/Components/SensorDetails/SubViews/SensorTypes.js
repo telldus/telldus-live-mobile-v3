@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import { View } from '../../../../BaseComponents';
 import SensorBlock from './SensorBlock';
@@ -80,10 +80,10 @@ export default class SensorTypes extends View<Props, State> {
 				label,
 				max,
 				min,
-				maxTime: moment.unix(maxTime),
-				minTime: moment.unix(minTime),
+				maxTime: dayjs.unix(maxTime),
+				minTime: dayjs.unix(minTime),
 				appLayout,
-				lastUpdated: moment.unix(lastUpdated),
+				lastUpdated: dayjs.unix(lastUpdated),
 				formatOptions,
 				gatewayTimezone,
 				gatewayTimezoneOffset,
