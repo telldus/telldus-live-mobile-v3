@@ -22,7 +22,11 @@
 
 'use strict';
 
-import moment from 'moment-timezone';
+let dayjs = require('dayjs');
+let utc = require('dayjs/plugin/utc');
+let _timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(_timezone);
 import { reportException } from './Analytics';
 import * as RNLocalize from 'react-native-localize';
 
@@ -58,7 +62,7 @@ function formatLastUpdated(minutes: number, lastUpdated: number, formatMessage: 
 		return formatMessage(i18n.daysAgo, {value: days});
 	}
 	try {
-		return moment.unix(lastUpdated).format('MM-DD-YYYY');
+		return dayjs.unix(lastUpdated).format('MM-DD-YYYY');
 	} catch (exception) {
 		reportException(exception);
 		return `${formatMessage(i18n.unknown)}`;
@@ -311,14 +315,14 @@ const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, g
 	const { formatRelativeTime, formatTime, formatMessage, formatDate } = intl;
 
 	const timeAgo = time.replace(/[0-9]/g, '').trim();
-	moment.tz.setDefault(gatewayTimezone);
+	dayjs.tz.setDefault(gatewayTimezone);
 
-	const now = moment().unix();
+	const now = dayjs().unix();
 
-	const m = moment.unix(timestamp);
-	const diff = moment().diff(m, 'days', true);
+	const m = dayjs.unix(timestamp);
+	const diff = dayjs().diff(m, 'day', true);
 	if (diff > 7) {
-		moment.tz.setDefault();
+		dayjs.tz.setDefault();
 		return formatDate(m);
 	}
 
@@ -326,11 +330,11 @@ const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, g
 		return `${formatDate(m)} ${formatTime(m)}`;
 	}
 
-	// 'now' from 'FormattedRelative' matches only when 1 sec is added to moment.unix()
+	// 'now' from 'FormattedRelative' matches only when 1 sec is added to dayjs.unix()
 	// This prevent from showing 'in 1 second' which is illogic!
 	let futureTimes = [];
 	for (let i = 1; i < 5; i++) {
-		const secs = moment.unix(now).add(i, 'seconds').unix() - moment().unix();
+		const secs = dayjs.unix(now).add(i, 'second').unix() - dayjs().unix();
 		futureTimes.push(formatRelativeTime(secs, undefined, {numeric: 'auto'}).replace(/[0-9]/g, '').trim());// As a CAUTION
 	}
 
@@ -338,16 +342,16 @@ const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, g
 
 	let pastSeconds = [];
 	for (let i = 1; i < 4; i++) {
-		const secs = moment().unix() - moment.unix(now).subtract(i, 'seconds').unix();
+		const secs = dayjs().unix() - dayjs.unix(now).subtract(i, 'second').unix();
 		pastSeconds.push(formatRelativeTime(-secs).replace(/[0-9]/g, '').trim());
 	}
 
 	if (timeAgo === relNow || (futureTimes.indexOf(timeAgo) !== -1) || (pastSeconds.indexOf(timeAgo) !== -1)) {
-		moment.tz.setDefault();
+		dayjs.tz.setDefault();
 		return formatMessage(i18n.justNow);
 	}
 
-	moment.tz.setDefault();
+	dayjs.tz.setDefault();
 	return time;
 };
 
