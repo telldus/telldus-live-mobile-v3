@@ -26,7 +26,7 @@ import React, {
 	memo,
 	useCallback,
 } from 'react';
-import moment from 'moment';
+let dayjs = require('dayjs');
 import {
 	useDispatch,
 } from 'react-redux';
@@ -86,7 +86,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 		tileWidth,
 	});
 
-	const lastUpdated = moment(meta.updated_at).unix();
+	const lastUpdated = dayjs(meta.updated_at).unix();
 	const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
 	const info = useMemo((): Object => {
