@@ -20,7 +20,7 @@
 
 // @flow
 
-import moment from 'moment';
+let dayjs = require('dayjs');
 import { format } from 'url';
 
 import { LiveApi } from './LiveApi';
@@ -76,8 +76,8 @@ function hasTokenExpired(ttl: number): boolean {
 	if (!ttl) {
 		return true;
 	}
-	const now = moment();
-	const expDate = moment.unix(ttl);
+	const now = dayjs();
+	const expDate = dayjs.unix(ttl);
 	const hasExpired = now.isSameOrAfter(expDate);
 	return hasExpired;
 }
