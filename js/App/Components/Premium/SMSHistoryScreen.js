@@ -32,7 +32,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import reduce from 'lodash/reduce';
 import { useIntl } from 'react-intl';
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import {
 	View,
@@ -160,7 +160,7 @@ const SMSHistoryScreen = (props: Object): Object => {
 					key={index}>
 					<Text
 						level={3}
-						style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
+						style={rowTextStyle1}>{formatTime(dayjs.unix(item.date))}</Text>
 					<View style={toBlock}>
 						<ThemedMaterialIcon name={icon} size={toIconSize} level={l}/>
 						<Text
