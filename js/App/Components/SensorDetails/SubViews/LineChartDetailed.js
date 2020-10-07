@@ -31,7 +31,7 @@ import {
 	createContainer,
 	VictoryTooltip,
 } from 'victory-native';
-import moment from 'moment';
+let dayjs = require('dayjs');
 const isEqual = require('react-fast-compare');
 
 import { View } from '../../../../BaseComponents';
@@ -148,8 +148,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 getTickConfigX(): Object {
 	const { fromTimestamp, toTimestamp } = this.props.timestamp;
-	const from = moment.unix(fromTimestamp);
-	const to = moment.unix(toTimestamp);
+	const from = dayjs.unix(fromTimestamp);
+	const to = dayjs.unix(toTimestamp);
 	const domainX = Math.abs(from.diff(to, 'days'));
 
 	let ticks = [], day = from;
@@ -186,7 +186,7 @@ getX(data: Object): number {
 }
 
 formatXTick(tick: number): string {
-	return `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`;
+	return `${dayjs.unix(tick).format('D')}/${dayjs.unix(tick).format('M')}`;
 }
 
 formatYTickOne(tick: number): number {
@@ -341,7 +341,7 @@ showToolTipLabel = (data: Object): string => {
 		formatTime,
 		formatMessage,
 	} = intl;
-	return `${capitalize(formatMessage(i18n.date))}: ${formatDate(moment.unix(datum.ts))}\n${capitalize(formatMessage(i18n.time))}: ${formatTime(moment.unix(datum.ts))}\n${capitalize(formatMessage(i18n.labelValue))}: ${datum.value}`;
+	return `${capitalize(formatMessage(i18n.date))}: ${formatDate(dayjs.unix(datum.ts))}\n${capitalize(formatMessage(i18n.time))}: ${formatTime(dayjs.unix(datum.ts))}\n${capitalize(formatMessage(i18n.labelValue))}: ${datum.value}`;
 }
 
 render(): Object | null {

@@ -25,7 +25,11 @@ import React from 'react';
 import { TouchableOpacity, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Modal from 'react-native-modal';
-import moment from 'moment-timezone';
+let dayjs = require('dayjs');
+let utc = require('dayjs/plugin/utc');
+let timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 const isEqual = require('react-fast-compare');
 import DeviceInfo from 'react-native-device-info';
 
@@ -139,7 +143,7 @@ onDayPress(day: Object) {
 	const { propToUpdate, gatewayTimezone } = this.props;
 
 	if (gatewayTimezone) {
-		moment.tz.setDefault(gatewayTimezone);
+		dayjs.tz.setDefault(gatewayTimezone);
 	}
 
 	// The received timestamp is in GMT also start of the day timestamp in milliseconds
@@ -147,22 +151,22 @@ onDayPress(day: Object) {
 	timestamp = timestamp / 1000;
 
 	// Converting UTC start of the day[SOD] timestap to user's locale SOD
-	let selectedTimestamp = moment.unix(timestamp).startOf('day').unix();
+	let selectedTimestamp = dayjs.unix(timestamp).startOf('day').unix();
 
 	// While choosing 'to' date
 	if (propToUpdate === 2) {
-		const todayDate = moment().format('YYYY-MM-DD');
-		const timestampAsDate = moment.unix(timestamp).format('YYYY-MM-DD');
+		const todayDate = dayjs().format('YYYY-MM-DD');
+		const timestampAsDate = dayjs.unix(timestamp).format('YYYY-MM-DD');
 
-		// Use end of the day[EOD] timestamp, also moment converts UTC to user's locale
-		selectedTimestamp = moment.unix(timestamp).endOf('day').unix();
+		// Use end of the day[EOD] timestamp, also dayjs converts UTC to user's locale
+		selectedTimestamp = dayjs.unix(timestamp).endOf('day').unix();
 
 		// If 'to' date is today then use 'now/current time' timestamp
 		if (timestampAsDate === todayDate) {
-			selectedTimestamp = parseInt(moment().format('X'), 10);
+			selectedTimestamp = parseInt(dayjs().format('X'), 10);
 		}
 	}
-	moment.tz.setDefault();
+	dayjs.tz.setDefault();
 	this.setState({
 		current: selectedTimestamp,
 	});
@@ -183,29 +187,29 @@ renderDay({date, state, marking}: Object): Object {
 
 getMarkedDatesAndPosterDate(current: number, gatewayTimezone: string): Object {
 	if (gatewayTimezone) {
-		moment.tz.setDefault(gatewayTimezone);
+		dayjs.tz.setDefault(gatewayTimezone);
 	}
-	const posterDate = moment.unix(current);
-	let currentMark = moment.unix(current).format('YYYY-MM-DD');
+	const posterDate = dayjs.unix(current);
+	let currentMark = dayjs.unix(current).format('YYYY-MM-DD');
 	let { timestamp, propToUpdate } = this.props, markedDates = {};
 	let { fromTimestamp, toTimestamp } = timestamp;
-	let startDate = moment.unix(fromTimestamp).format('YYYY-MM-DD'), endDate = moment.unix(toTimestamp).format('YYYY-MM-DD');
+	let startDate = dayjs.unix(fromTimestamp).format('YYYY-MM-DD'), endDate = dayjs.unix(toTimestamp).format('YYYY-MM-DD');
 	if (propToUpdate === 1) {
-		startDate = moment.unix(current).format('YYYY-MM-DD');
+		startDate = dayjs.unix(current).format('YYYY-MM-DD');
 	} else {
-		endDate = moment.unix(current).format('YYYY-MM-DD');
+		endDate = dayjs.unix(current).format('YYYY-MM-DD');
 	}
 
 	markedDates[startDate] = {marked: true, startingDay: true, selected: currentMark === startDate};
-	const diff = moment(endDate).diff(moment(startDate), 'days');
+	const diff = dayjs(endDate).diff(dayjs(startDate), 'day');
 	if (diff <= 0) {
-		if (moment(currentMark).isBefore(startDate)) {
+		if (dayjs(currentMark).isBefore(startDate)) {
 			markedDates[currentMark] = {marked: true, selected: true, endingDay: true};
 		}
 		if (startDate === currentMark) {
 			markedDates[startDate] = {marked: true, startingDay: true, selected: true, endingDay: true};
 		}
-		moment.tz.setDefault();
+		dayjs.tz.setDefault();
 		return {
 			markedDates,
 			posterDate,
@@ -213,10 +217,10 @@ getMarkedDatesAndPosterDate(current: number, gatewayTimezone: string): Object {
 	}
 	let temp = startDate;
 	for (let i = 0; i < diff; i++) {
-		temp = moment(temp).add(1, 'd').format('YYYY-MM-DD');
+		temp = dayjs(temp).add(1, 'd').format('YYYY-MM-DD');
 		markedDates[temp] = {marked: true, endingDay: i === (diff - 1), selected: temp === currentMark};
 	}
-	moment.tz.setDefault();
+	dayjs.tz.setDefault();
 	return {
 		markedDates,
 		posterDate,

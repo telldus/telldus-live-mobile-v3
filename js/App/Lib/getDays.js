@@ -20,13 +20,15 @@
 // @flow
 
 import { DAYS } from '../../Constants';
-import moment from 'moment';
+let dayjs = require('dayjs');
+let _weekday = require('dayjs/plugin/weekday');
+dayjs.extend(_weekday);
 
 export const getWeekdays = (formatDate: Function): string[] => {
 	let weekDays = [];
 	if (formatDate) {
 		for (let i = 1; i < 6; i++) {
-			let day = moment().weekday(i);
+			let day = dayjs().weekday(i);
 			const weekday = formatDate(day, {weekday: 'long'});
 			weekDays.push(weekday);
 		}
@@ -39,7 +41,7 @@ export const getWeekends = (formatDate: Function): string[] => {
 	let weekends = [];
 	if (formatDate) {
 		for (let i = 6; i < 8; i++) {
-			let day = moment().weekday(i);
+			let day = dayjs().weekday(i);
 			const weekday = formatDate(day, {weekday: 'long'});
 			weekends.push(weekday);
 		}
@@ -54,7 +56,7 @@ export const getSelectedDays = (storedSelectedDays: number[], formatDate?: Funct
 		for (let i = 0; i < storedSelectedDays.length; i++) {
 			let item = DAYS[storedSelectedDays[i] - 1];
 			if (item) {
-				let day = moment().weekday(storedSelectedDays[i]);
+				let day = dayjs().weekday(storedSelectedDays[i]);
 				const weekday = formatDate(day, {weekday: 'long'});
 				selectedDays.push(weekday);
 			}
@@ -71,7 +73,7 @@ export const getSelectedDays = (storedSelectedDays: number[], formatDate?: Funct
 export const getTranslatableDays = (formatDate: Function): string[] => {
 	let weekDays = [];
 	for (let i = 1; i <= 7; i++) {
-		let day = moment().weekday(i);
+		let day = dayjs().weekday(i);
 		const weekday = formatDate(day, {weekday: 'long'});
 		weekDays.push(weekday);
 	}
@@ -81,7 +83,7 @@ export const getTranslatableDays = (formatDate: Function): string[] => {
 export const getTranslatableDayNames = (formatDate: Function, type: 'short' | 'long' = 'long'): string[] => {
 	let weekNames = [];
 	for (let i = 0; i < 7; i++) {
-		const day = moment().weekday(i);
+		const day = dayjs().weekday(i);
 		const weekname = formatDate(day, {weekday: type});
 		weekNames.push(weekname);
 	}
@@ -91,7 +93,7 @@ export const getTranslatableDayNames = (formatDate: Function, type: 'short' | 'l
 export const getTranslatableMonthNames = (formatDate: Function, type: 'short' | 'long' = 'long'): string[] => {
 	let monthNames = [];
 	for (let i = 0; i < 12; i++) {
-		const month = moment().month(i);
+		const month = dayjs().month(i);
 		const monthName = formatDate(month, {month: type});
 		monthNames.push(monthName);
 	}

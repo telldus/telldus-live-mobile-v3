@@ -24,7 +24,11 @@
 import { utils } from 'live-shared-data';
 const { scheduleUtils } = utils;
 import isEqual from 'lodash/isEqual';
-import moment from 'moment-timezone';
+let dayjs = require('dayjs');
+let utc = require('dayjs/plugin/utc');
+let _timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(_timezone);
 
 import i18n from '../Translations/common';
 import capitalize from './capitalize';
@@ -77,13 +81,13 @@ const getTempDay = (job: Object, gateway: Object): Object => {
 	if (job.type === 'sunrise') {
 		const sunriseInMs = sunrise * 1000;
 		const offsetInMs = job.offset * 60 * 1000;
-		tempDay = moment(sunriseInMs + offsetInMs).tz(timezone);
+		tempDay = dayjs(sunriseInMs + offsetInMs).tz(timezone);
 	} else if (job.type === 'sunset') {
 		const sunsetInMs = sunset * 1000;
 		const offsetInMs = job.offset * 60 * 1000;
-		tempDay = moment(sunsetInMs + offsetInMs).tz(timezone);
+		tempDay = dayjs(sunsetInMs + offsetInMs).tz(timezone);
 	} else {
-		tempDay = moment();
+		tempDay = dayjs();
 		tempDay.hours(job.hour);
 		tempDay.minutes(job.minute);
 	}
