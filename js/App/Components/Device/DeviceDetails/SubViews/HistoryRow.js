@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import { FormattedMessage, Text, View, ListRow, IconTelldus } from '../../../../../BaseComponents';
 import {
@@ -171,7 +171,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 		let date = section;
 		let dateInfo = `${this.labelDate} ${date}`;
 		let time = item.ts * 1000;
-		time = moment(time).format('HH:mm:ss');
+		time = dayjs(time).format('HH:mm:ss');
 
 		let accessibilityLabel = `${actionInfo}. ${statusInfo}. ${dateInfo}, ${time}`;
 
