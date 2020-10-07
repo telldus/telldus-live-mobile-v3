@@ -23,7 +23,11 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment-timezone';
+let dayjs = require('dayjs');
+let utc = require('dayjs/plugin/utc');
+let timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 import {
 	View,
@@ -316,8 +320,8 @@ class HistoryTab extends View {
 		} = this.props;
 		const { timestamp } = this.state;
 		const { toTimestamp: from, fromTimestamp } = timestamp;// get only those data from previous 'to' till new 'to'[Getting full data again is too slow]
-		moment.tz.setDefault(gatewayTimezone);
-		const to = moment().unix();
+		dayjs.tz.setDefault(gatewayTimezone);
+		const to = dayjs().unix();
 
 		// Do not update 'toTimestamp' here, instead introduce new variable 'liveDataToTimestamp'
 		let timestampNew = {
@@ -337,7 +341,7 @@ class HistoryTab extends View {
 			from,
 			to,
 		};
-		moment.tz.setDefault();
+		dayjs.tz.setDefault();
 		return Promise.all([
 			this.refreshFromLocal(params, true, false, 1, timestampNew),
 			this.refreshFromLocal(paramsTwo, true, false, 2, timestampNew),
@@ -543,14 +547,14 @@ class HistoryTab extends View {
 
 	getMaxDate(index: number, timestamp: Object): string {
 		const { toTimestamp } = timestamp;
-		moment.tz.setDefault(this.props.gatewayTimezone);
+		dayjs.tz.setDefault(this.props.gatewayTimezone);
 		let maxD;
 		if (index === 1) {
-			maxD = moment.unix(toTimestamp).format('YYYY-MM-DD');
+			maxD = dayjs.unix(toTimestamp).format('YYYY-MM-DD');
 		} else {
-			maxD = moment().format('YYYY-MM-DD');
+			maxD = dayjs().format('YYYY-MM-DD');
 		}
-		moment.tz.setDefault();
+		dayjs.tz.setDefault();
 		return maxD;
 	}
 
