@@ -180,7 +180,6 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     disableWidgetsOnLogout(widgetIdsDThermo, widgetDeviceThermo);
     int widgetIdsDRGB[] = wUpdater.getAllRGBWidgets(context);
     disableWidgetsOnLogout(widgetIdsDRGB, widgetDeviceRGB);
-
     // Clear token and other credentials from shared preference
     prefManager.clear();
   }
@@ -212,6 +211,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     refreshWidgetsDevices2By1(deviceIds, devicesData);
     refreshWidgetsDevices3By1(deviceIds, devicesData);
     refreshWidgetsDevicesThermo(deviceIds, devicesData);
+    refreshWidgetsDevicesRGB(deviceIds, devicesData);
     refreshWidgetsDevicesRGB(deviceIds, devicesData);
   }
 

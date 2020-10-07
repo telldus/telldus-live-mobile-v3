@@ -35,6 +35,7 @@ import TimeZoneCity from './TimeZoneCity';
 import TimeZone from './TimeZone';
 import Success from './Success';
 import Position from './Position';
+import CopyDevicesAndSchedules from './CopyDevicesAndSchedules';
 
 import {
 	prepareNavigator,
@@ -103,6 +104,14 @@ const ScreenConfigs = [
 	{
 		name: 'Success',
 		Component: Success,
+		ContainerComponent: AddLocationContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'CopyDevicesAndSchedules',
+		Component: CopyDevicesAndSchedules,
 		ContainerComponent: AddLocationContainer,
 		options: {
 			headerShown: false,

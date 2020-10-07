@@ -90,11 +90,14 @@ export default class ActionRGB extends View<null, Props, State> {
 		actions.selectAction(1024, methodValue);
 
 		if (isEditMode()) {
-			navigation.navigate(route.params.actionKey);
+			navigation.navigate(route.params.actionKey, {
+				...route.params,
+			});
 		} else {
 			navigation.navigate({
 				name: 'Time',
 				key: 'Time',
+				params: route.params,
 			});
 		}
 	};
@@ -193,7 +196,6 @@ export default class ActionRGB extends View<null, Props, State> {
 				flexDirection: 'row',
 				flexWrap: 'wrap',
 				...Theme.Core.shadow,
-				backgroundColor: '#fff',
 				borderRadius: 2,
 				paddingHorizontal: padding,
 				paddingTop: padding / 2,
@@ -209,23 +211,12 @@ export default class ActionRGB extends View<null, Props, State> {
 				marginTop: padding,
 			},
 			colorWheelCover: {
-				backgroundColor: '#fff',
 				...Theme.Core.shadow,
 				borderRadius: 2,
 				marginVertical: padding,
 				width: width - (padding * 2),
 				height: colorWheelSize * 1.1,
 				alignItems: 'center',
-			},
-			sliderCover: {
-				backgroundColor: '#fff',
-				...Theme.Core.shadow,
-				borderRadius: 2,
-				marginHorizontal: padding,
-				marginTop: -(padding / 2),
-				marginBottom: padding,
-				width: width - (padding * 2),
-				padding: padding,
 			},
 			wheelCover: {
 				flex: 1,

@@ -46,7 +46,8 @@ import {
 import {
 	get433DevicePostConfigScreenOptions,
 	getTelldusLearnImage,
-} from '../../../Lib/DeviceUtils';
+	prepareVisibleTabs,
+} from '../../../Lib';
 
 import Theme from '../../../Theme';
 
@@ -59,6 +60,7 @@ type Props = {
 	route: Object,
 	currentScreen: string,
 	ScreenName: string,
+	hiddenTabsCurrentUser: Array<string>,
 
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
@@ -219,7 +221,7 @@ onNext = async (handleLoading?: boolean = true) => {
 		});
 	}
 
-	const { navigation, addDevice, actions, route } = this.props;
+	const { navigation, addDevice, actions, route, hiddenTabsCurrentUser } = this.props;
 
 	try {
 		await actions.getDevices();
@@ -249,7 +251,11 @@ onNext = async (handleLoading?: boolean = true) => {
 			});
 		}
 
-		navigation.navigate('Devices', {
+		const {
+			tabToCheckOrVeryNext,
+		} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Devices');
+
+		navigation.navigate(tabToCheckOrVeryNext, {
 			gateway,
 			newDevices: rowData,
 		});
@@ -357,7 +363,7 @@ render(): Object {
 									position: 'relative',
 								}}/>
 							<Text
-								level={6}
+								level={25}
 								style={[statusStyle, {
 									marginLeft: 5,
 								}]}>
@@ -366,7 +372,7 @@ render(): Object {
 						</View>
 						:
 						<Text
-							level={6}
+							level={25}
 							style={statusStyle}>
 							{statusText}
 						</Text>

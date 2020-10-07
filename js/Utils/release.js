@@ -73,6 +73,26 @@ exec('git diff-index --quiet HEAD --')
 		[major, minor, patch] = version.split('.');
 	})
 	.then(() => {
+		console.log('Enter Android inAppUpdatePriority [0-5]:');
+		return new Promise((resolve, reject) => {
+			prompt.get(['inAppUpdatePriority'], (err, result) => {
+				if (err) {
+					reject();
+					return;
+				}
+				if (result.inAppUpdatePriority > 5 || result.inAppUpdatePriority < 0) {
+					console.log('inAppUpdatePriority value should be between 0 to 5');
+					return;
+				}
+				resolve(result.inAppUpdatePriority);
+			});
+		});
+	})
+	.then((inAppUpdatePriority) => {
+		let filename = 'fastlane/metadata/android/release_configs.json';
+		fs.writeFileSync(filename, `${'{' + '"inAppUpdatePriority"' + ':'}${inAppUpdatePriority}}`);
+	})
+	.then(() => {
 		// Let the user edit the changelog before commiting
 		changelog = edit(changelog);
 	})

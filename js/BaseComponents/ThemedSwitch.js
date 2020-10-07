@@ -43,13 +43,13 @@ const ThemedSwitch = (props: Object): Object => {
 		inActiveText = 'OFF',
 		circleSize,
 		barHeight,
-		outerCircleStyle,
+		outerCircleStyle = {},
 		backgroundActive,
 		backgroundInactive,
 		circleActiveColor,
 		circleInActiveColor,
 		circleBorderWidth = 0,
-		innerCircleStyle,
+		innerCircleStyle = {},
 		switchBorderRadius = 30,
 	} = props;
 
@@ -90,8 +90,8 @@ const ThemedSwitch = (props: Object): Object => {
 			circleActiveColor={circleActiveColor || thumbColorActiveSwitch}
 			circleInActiveColor={circleInActiveColor || thumbColorInActiveSwitch}
 			changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
-			innerCircleStyle={[innerCircleStyleDef, innerCircleStyle]} // style for inner animated circle for what you (may) be rendering inside the circle
-			outerCircleStyle={[outerCircleStyleDef, outerCircleStyle]} // style for outer animated circle
+			innerCircleStyle={{...innerCircleStyleDef, ...innerCircleStyle}} // style for inner animated circle for what you (may) be rendering inside the circle
+			outerCircleStyle={{...outerCircleStyleDef, ...outerCircleStyle}} // style for outer animated circle
 			renderActiveText={false}
 			renderInActiveText={false}
 			switchLeftPx={3} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider

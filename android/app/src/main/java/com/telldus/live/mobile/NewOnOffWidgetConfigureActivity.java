@@ -260,6 +260,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
+                    String requestedStateValue = null;
+                    String requestedSecStateValue = null;
 
                     Map<String, Object> dInfoMap = DeviceInfoMap.get(id);
 
@@ -280,7 +282,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         -1, // As of now required/handled only for thermostats
                         secondaryStateValue,  // As of now required/handled only for thermostats
                         "full", // As of now set only for RGB[control option]
-                            null // As of now set only for RGB[control option]
+                            null, // As of now set only for RGB[control option]
+                            requestedStateValue,
+                            requestedSecStateValue
                         );
                     db.addWidgetDevice(mInsert);
 
@@ -440,7 +444,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
                         Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
                         Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
-                        Boolean showDevice = ((sizeSuppMeth <= 2 && sizeSuppMeth > 0) && !hasThermo) || hasRGB;
+                        Boolean hasDIM = ((supportedMethods.get("DIM") != null) && supportedMethods.get("DIM"));
+                        Boolean showDevice = ((sizeSuppMeth <= 2 && sizeSuppMeth > 0) && !hasThermo) || hasRGB || hasDIM;
 
                         JSONArray stateValues = curObj.getJSONArray("stateValues");
                         String secondaryStateValueLoc = "", stateValue = "";

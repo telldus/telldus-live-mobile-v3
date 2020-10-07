@@ -52,6 +52,7 @@ import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.UserAPI;
+import com.telldus.live.mobile.Utility.WidgetUtilities;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 /**
@@ -129,39 +130,16 @@ public class NewAppWidget extends AppWidgetProvider {
 
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
-
-            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.logged_out);
-            String preScript = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_one);
-            String phraseTwo = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_two);
-            view.setTextViewText(R.id.loggedOutInfoOne, preScript + ": ");
-            view.setTextViewText(R.id.loggedOutInfoEmail, userId);
-            view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
-
-            view.setTextViewTextSize(R.id.loggedOutInfoOne, COMPLEX_UNIT_SP, fontSizeFive);
-            view.setTextViewTextSize(R.id.loggedOutInfoEmail, COMPLEX_UNIT_SP, fontSizeFive);
-            view.setTextViewTextSize(R.id.loggedOutInfoTwo, COMPLEX_UNIT_SP, fontSizeFive);
-
-            appWidgetManager.updateAppWidget(appWidgetId, view);
+            RemoteViews remoteViews = WidgetUtilities.setUIWhenDifferentAccount(context, fontSizeFive, userId);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
             return;
         }
 
         Integer deviceId = DeviceWidgetInfo.getDeviceId();
         if (deviceId.intValue() == -1) {
-            iconWidth = (int) iconWidth / 2;
-            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
-            view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_device_not_found));
-            view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
-                    "info",
-                    ContextCompat.getColor(context, R.color.brightRed),
-                    iconWidth,
-                    (int) (iconWidth * 0.8),
-                    (int) (iconWidth * 0.8),
-                    context));
-
-            view.setTextViewTextSize(R.id.widgetItemRemovedInfo, COMPLEX_UNIT_SP, fontSizeFive);
-
-            appWidgetManager.updateAppWidget(appWidgetId, view);
+            RemoteViews remoteViews = WidgetUtilities.setUIWhenItemNotFound(context, fontSizeFive, iconWidth / 2);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             return;
         }
 
@@ -183,16 +161,16 @@ public class NewAppWidget extends AppWidgetProvider {
 
         String onActionIcon = actionIconSet.get("TURNON");
         String offActionIcon = actionIconSet.get("TURNOFF");
-        Boolean hasBell = ((supportedMethods.get("BELL") != null) && supportedMethods.get("BELL"));
-        Boolean hasUp = ((supportedMethods.get("UP") != null) && supportedMethods.get("UP"));
-        Boolean hasDown = ((supportedMethods.get("DOWN") != null) && supportedMethods.get("DOWN"));
-        Boolean hasStop = ((supportedMethods.get("STOP") != null) && supportedMethods.get("STOP"));
-        Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
-        Boolean hasDim = ((supportedMethods.get("DIM") != null) && supportedMethods.get("DIM"));
-        Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
-        Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
+        Boolean hasBell = CommonUtilities.hasMethod(supportedMethods, "BELL");
+        Boolean hasUp = CommonUtilities.hasMethod(supportedMethods, "UP");
+        Boolean hasDown = CommonUtilities.hasMethod(supportedMethods, "DOWN");
+        Boolean hasStop = CommonUtilities.hasMethod(supportedMethods, "STOP");
+        Boolean hasOff = CommonUtilities.hasMethod(supportedMethods, "TURNOFF");
+        Boolean hasDim = CommonUtilities.hasMethod(supportedMethods, "DIM");
+        Boolean hasOn = CommonUtilities.hasMethod(supportedMethods, "TURNON");
+        Boolean hasRGB = CommonUtilities.hasMethod(supportedMethods, "RGB");
 
-        Boolean hasLearn = ((supportedMethods.get("LEARN") != null) && supportedMethods.get("LEARN"));
+        Boolean hasLearn = CommonUtilities.hasMethod(supportedMethods, "LEARN");
         if (hasLearn) {
             buttonsCount = buttonsCount - 1;
         }
@@ -226,7 +204,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.bellCover,View.VISIBLE);
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            int colorIdle = handleBackgroundWhenIdleOne(
+            int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
                                 "BELL",
                                 transparent,
                                 renderedButtonsCount,
@@ -246,7 +224,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_BELL)) {
-                int colorOnAction = handleBackgroundOnActionOne(
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
                                         "BELL",
                                         transparent,
                                         renderedButtonsCount,
@@ -283,8 +261,8 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
-                hideFlashIndicator(views, R.id.flashing_indicator_bell);
-                handleBackgroundPostActionOne(
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_bell);
+                CommonUtilities.handleBackgroundPostActionOne(
                     "BELL",
                     transparent,
                     renderedButtonsCount,
@@ -296,7 +274,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_bell);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_bell);
             }
 
             renderedButtonsCount++;
@@ -307,7 +285,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.upCover, View.VISIBLE);
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            int colorIdle = handleBackgroundWhenIdleOne(
+            int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
                                 "UP",
                                 transparent,
                                 renderedButtonsCount,
@@ -327,7 +305,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.upCover, getPendingSelf(context, ACTION_UP, appWidgetId));
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_UP)) {
-                int colorOnAction = handleBackgroundOnActionOne(
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
                                         "UP",
                                         transparent,
                                         renderedButtonsCount,
@@ -364,8 +342,8 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
-                hideFlashIndicator(views, R.id.flashing_indicator_up);
-                handleBackgroundPostActionOne(
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_up);
+                CommonUtilities.handleBackgroundPostActionOne(
                     "UP",
                     transparent,
                     renderedButtonsCount,
@@ -377,7 +355,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_up);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_up);
             }
 
             renderedButtonsCount++;
@@ -388,7 +366,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.downCover, View.VISIBLE);
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            int colorIdle = handleBackgroundWhenIdleOne(
+            int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
                                 "DOWN",
                                 transparent,
                                 renderedButtonsCount,
@@ -408,7 +386,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DOWN)) {
-                int colorOnAction = handleBackgroundOnActionOne(
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
                                         "DOWN",
                                         transparent,
                                         renderedButtonsCount,
@@ -445,8 +423,8 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
-                hideFlashIndicator(views, R.id.flashing_indicator_down);
-                handleBackgroundPostActionOne(
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_down);
+                CommonUtilities.handleBackgroundPostActionOne(
                     "DOWN",
                     transparent,
                     renderedButtonsCount,
@@ -458,7 +436,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_down);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_down);
             }
 
             renderedButtonsCount++;
@@ -469,7 +447,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.stopCover, View.VISIBLE);
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            int colorIdle = handleBackgroundWhenIdleOne(
+            int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
                                 "STOP",
                                 transparent,
                                 renderedButtonsCount,
@@ -490,7 +468,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_STOP)) {
-                int colorOnAction = handleBackgroundOnActionOne(
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
                                         "STOP",
                                         transparent,
                                         renderedButtonsCount,
@@ -527,8 +505,8 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
-                hideFlashIndicator(views, R.id.flashing_indicator_stop);
-                handleBackgroundPostActionOne(
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_stop);
+                CommonUtilities.handleBackgroundPostActionOne(
                     "STOP",
                     transparent,
                     renderedButtonsCount,
@@ -540,7 +518,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_stop);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_stop);
             }
 
             renderedButtonsCount++;
@@ -551,7 +529,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.offCover, View.VISIBLE);
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            int colorIdle = handleBackgroundWhenIdleOne(
+            int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
                                 "OFF",
                                 transparent,
                                 renderedButtonsCount,
@@ -573,7 +551,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_OFF)) {
 
-                int colorOnAction = handleBackgroundOnActionOne(
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
                                         "OFF",
                                         transparent,
                                         renderedButtonsCount,
@@ -611,8 +589,8 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
-                hideFlashIndicator(views, R.id.flashing_indicator_off);
-                handleBackgroundPostActionOne(
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_off);
+                CommonUtilities.handleBackgroundPostActionOne(
                     "OFF",
                     transparent,
                     renderedButtonsCount,
@@ -624,7 +602,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_off);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_off);
             }
 
             renderedButtonsCount++;
@@ -644,7 +622,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.dimmer25Cover, View.VISIBLE);
 
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-                int colorIdle = handleBackgroundWhenIdleOne(
+                int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
                                 "DIM25",
                                 transparent,
                                 renderedButtonsCount,
@@ -666,7 +644,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
-                    int colorOnAction = handleBackgroundOnActionOne(
+                    int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
                                             "DIM25",
                                             transparent,
                                             renderedButtonsCount,
@@ -715,8 +693,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                 65,
                                 context));
                         }
-                        hideFlashIndicator(views, R.id.flashing_indicator_dim25);
-                        handleBackgroundPostActionOne(
+                        CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim25);
+                        CommonUtilities.handleBackgroundPostActionOne(
                             "DIM25",
                             transparent,
                             renderedButtonsCount,
@@ -735,7 +713,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.dimmer50Cover, View.VISIBLE);
 
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-                int colorIdle = handleBackgroundWhenIdleOne(
+                int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
                                     "DIM50",
                                     transparent,
                                     renderedButtonsCount,
@@ -757,7 +735,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
-                    int colorOnAction = handleBackgroundOnActionOne(
+                    int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
                                             "DIM50",
                                             transparent,
                                             renderedButtonsCount,
@@ -805,8 +783,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                 65,
                                 context));
                         }
-                        hideFlashIndicator(views, R.id.flashing_indicator_dim50);
-                        handleBackgroundPostActionOne(
+                        CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim50);
+                        CommonUtilities.handleBackgroundPostActionOne(
                             "DIM50",
                             transparent,
                             renderedButtonsCount,
@@ -825,7 +803,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.dimmer75Cover, View.VISIBLE);
 
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-                int colorIdle = handleBackgroundWhenIdleOne(
+                int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
                                     "DIM75",
                                     transparent,
                                     renderedButtonsCount,
@@ -847,7 +825,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
-                    int colorOnAction = handleBackgroundOnActionOne(
+                    int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
                                             "DIM75",
                                             transparent,
                                             renderedButtonsCount,
@@ -895,8 +873,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                 65,
                                 context));
                         }
-                        hideFlashIndicator(views, R.id.flashing_indicator_dim75);
-                        handleBackgroundPostActionOne(
+                        CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim75);
+                        CommonUtilities.handleBackgroundPostActionOne(
                             "DIM75",
                             transparent,
                             renderedButtonsCount,
@@ -911,9 +889,9 @@ public class NewAppWidget extends AppWidgetProvider {
             }
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_dim25);
-                hideFlashIndicator(views, R.id.flashing_indicator_dim50);
-                hideFlashIndicator(views, R.id.flashing_indicator_dim75);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim25);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim50);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim75);
             }
         }
 
@@ -922,7 +900,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.onCover, View.VISIBLE);
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            int colorIdle = handleBackgroundWhenIdleOne(
+            int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
                                 "ON",
                                 transparent,
                                 renderedButtonsCount,
@@ -943,7 +921,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_ON)) {
-                int colorOnAction = handleBackgroundOnActionOne(
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
                                         "ON",
                                         transparent,
                                         renderedButtonsCount,
@@ -980,8 +958,8 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
-                hideFlashIndicator(views, R.id.flashing_indicator_on);
-                handleBackgroundPostActionOne(
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_on);
+                CommonUtilities.handleBackgroundPostActionOne(
                     "ON",
                     transparent,
                     renderedButtonsCount,
@@ -993,7 +971,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_on);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_on);
             }
 
             renderedButtonsCount++;
@@ -1050,212 +1028,6 @@ public class NewAppWidget extends AppWidgetProvider {
         }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
-
-    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
-        hideAllFlashIndicators(views);
-
-        views.setInt(visibleFlashId, "setBackgroundResource", drawable);
-        views.setViewVisibility(flashId, View.VISIBLE);
-    }
-
-    public static void hideFlashIndicator(RemoteViews views, int flashId) {
-        views.setViewVisibility(flashId, View.GONE);
-    }
-
-    public static void hideAllFlashIndicators(RemoteViews views) {
-        Integer[] primaryShadedButtons = new Integer[]{
-            R.id.flashing_indicator_on,
-            R.id.flashing_indicator_off,
-            R.id.flashing_indicator_bell,
-            R.id.flashing_indicator_up,
-            R.id.flashing_indicator_down,
-            R.id.flashing_indicator_stop,
-            R.id.flashing_indicator_dim25,
-            R.id.flashing_indicator_dim50,
-            R.id.flashing_indicator_dim75,
-            };
-
-        List<Integer> list = Arrays.asList(primaryShadedButtons);
-
-        for (int i = 0; i < list.size(); i++) {
-            int id = list.get(i);
-            views.setViewVisibility(id, View.GONE);
-        }
-    }
-
-    public static Boolean isPrimaryShade(String button) {
-        String[] primaryShadedButtons = new String[]{"OFF", "STOP"};
-
-        List<String> list = Arrays.asList(primaryShadedButtons);
-
-        return list.contains(button);
-    }
-
-    public static int handleBackgroundWhenIdleOne(
-        String button, String transparent,
-        int renderedButtonsCount, Boolean isLastButton,
-        int viewId, RemoteViews views, Context context) {
-
-            if (transparent.equals("dark")) {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_black_round,
-                    R.drawable.shape_border_right_round_black,
-                    R.drawable.shape_left_black,
-                    viewId,
-                    views,
-                    context
-                );
-                return ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light") || transparent.equals("true")) {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_white_round,
-                    R.drawable.shape_border_right_round_white,
-                    R.drawable.shape_left_white,
-                    viewId,
-                    views,
-                    context
-                );
-                return ContextCompat.getColor(context, R.color.white);
-            } else {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_rounded_corner,
-                    R.drawable.shape_right_rounded_corner,
-                    R.drawable.button_background_no_bordradi,
-                    viewId,
-                    views,
-                    context
-                );
-                if (isPrimaryShade(button)) {
-                    return ContextCompat.getColor(context, R.color.brandPrimary);
-                }
-                return ContextCompat.getColor(context, R.color.brandSecondary);
-            }
-    }
-
-    public static int handleBackgroundOnActionOne(
-        String button, String transparent,
-        int renderedButtonsCount, Boolean isLastButton,
-        int flashViewId, int flashCoverId,
-        int viewId, RemoteViews views, Context context) {
-
-        if (transparent.equals("dark")) {
-            setCoverBackground(
-                renderedButtonsCount,
-                isLastButton,
-                R.drawable.shape_left_black_round_fill,
-                R.drawable.shape_border_right_round_black_fill,
-                R.drawable.shape_left_black_fill,
-                viewId,
-                views,
-                context
-            );
-            showFlashIndicator(
-                views,
-                flashViewId,
-                flashCoverId,
-                R.drawable.shape_circle_white_fill
-            );
-            return ContextCompat.getColor(context, R.color.white);
-        } else if (transparent.equals("light") || transparent.equals("true")) {
-            setCoverBackground(
-                renderedButtonsCount,
-                isLastButton,
-                R.drawable.shape_left_white_round_fill,
-                R.drawable.shape_border_right_round_white_fill,
-                R.drawable.shape_left_white_fill,
-                viewId,
-                views,
-                context
-            );
-            showFlashIndicator(
-                views,
-                flashViewId,
-                flashCoverId,
-                R.drawable.shape_circle_black_fill
-            );
-            return ContextCompat.getColor(context, R.color.themeDark);
-        } else {
-            if (isPrimaryShade(button)) {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_rounded_corner_primary_fill,
-                    R.drawable.shape_right_rounded_corner_primary_fill,
-                    R.drawable.button_background_no_bordradi_primary_fill,
-                    viewId,
-                    views,
-                    context
-                );
-            } else {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_rounded_corner_secondary_fill,
-                    R.drawable.shape_right_rounded_corner_secondary_fill,
-                    R.drawable.button_background_no_bordradi_secondary_fill,
-                    viewId,
-                    views,
-                    context
-                );
-            }
-            showFlashIndicator(
-                views,
-                flashViewId,
-                flashCoverId,
-                R.drawable.shape_circle_white_fill
-            );
-            return ContextCompat.getColor(context, R.color.white);
-        }
-    }
-
-    public static void handleBackgroundPostActionOne(
-        String button, String transparent,
-        int renderedButtonsCount, Boolean isLastButton,
-        int viewId, RemoteViews views, Context context) {
-        if (transparent.equals("dark")) {
-            setCoverBackground(
-                renderedButtonsCount,
-                isLastButton,
-                R.drawable.shape_border_left_round_black_fill,
-                R.drawable.shape_border_right_round_black_fill,
-                R.drawable.shape_left_black_fill,
-                viewId,
-                views,
-                context
-            );
-        } else if (transparent.equals("light") || transparent.equals("true")) {
-            setCoverBackground(
-                renderedButtonsCount,
-                isLastButton,
-                R.drawable.shape_border_left_round_white_fill,
-                R.drawable.shape_border_right_round_white_fill,
-                R.drawable.shape_left_white_fill,
-                viewId,
-                views,
-                context
-            );
-        }
-    }
-
-    public static void setCoverBackground(
-        int renderedButtonsCount, Boolean isLastButton,
-        int drawableWhenFirst, int drawableWhenLast, int drawableWhenInMiddle,
-        int viewId, RemoteViews views, Context context
-        ) {
-        if (renderedButtonsCount == 0) {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenFirst);
-        } else if (isLastButton) {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenLast);
-        } else {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenInMiddle);
-        }
     }
 
     @Override
@@ -1323,7 +1095,7 @@ public class NewAppWidget extends AppWidgetProvider {
         String stateValue = widgetInfo.getDeviceStateValue();
 
         if (ACTION_BELL.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_BELL, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_BELL, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1332,7 +1104,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 4, 0, widgetId, context);
         }
         if (ACTION_UP.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_UP, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_UP, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1341,7 +1113,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 128, 0, widgetId, context);
         }
         if (ACTION_DOWN.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_DOWN, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_DOWN, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1350,7 +1122,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 256, 0, widgetId, context);
         }
         if (ACTION_STOP.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_STOP, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_STOP, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1359,7 +1131,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 512, 0, widgetId, context);
         }
         if (ACTION_OFF.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_OFF, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_OFF, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1368,7 +1140,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 2, 0, widgetId, context);
         }
         if (DIMMER_25.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_DIMMER_25, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_DIMMER_25, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1379,7 +1151,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 16, value, widgetId, context);
         }
         if (DIMMER_50.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_DIMMER_50, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_DIMMER_50, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1390,7 +1162,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 16, value, widgetId, context);
         }
         if (DIMMER_75.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_DIMMER_75, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_DIMMER_75, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1401,7 +1173,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 16, value, widgetId, context);
         }
         if (ACTION_ON.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_ON, null, stateValue, 0, secondaryStateValue, widgetId);
+            db.updateDeviceInfo(METHOD_ON, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -1477,7 +1249,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
                     String secondaryStateValue = widgetInfo.getSecondaryStateValue();
                     String stateValue = widgetInfo.getDeviceStateValue();
-                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }

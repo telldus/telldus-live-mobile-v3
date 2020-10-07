@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import {
 	View,
@@ -90,7 +90,9 @@ render(): Object {
 		<RippleButton
 			style={blockContainerStyle}
 			onPress={this.onPress}>
-			{align === 'left' && (<View style={iconContainerStyle}>
+			{align === 'left' && (<View
+				level={13}
+				style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
 			<View style={dateContainerStyle}>
@@ -101,10 +103,12 @@ render(): Object {
 				</Text>
 				<FormattedDate
 					level={3}
-					value={moment.unix(date)}
+					value={dayjs.unix(date)}
 					style={dateStyle}/>
 			</View>
-			{align === 'right' && (<View style={iconContainerStyle}>
+			{align === 'right' && (<View
+				level={13}
+				style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
 		</RippleButton>
@@ -116,7 +120,7 @@ getStyle(appLayout: Object, align: Align): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { paddingFactor, brandSecondary, shadow } = Theme.Core;
+	const { paddingFactor, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const outerPadding = padding * 2;
@@ -140,7 +144,6 @@ getStyle(appLayout: Object, align: Align): Object {
 			height: iconContainerSize,
 			width: iconContainerSize,
 			borderRadius: iconContainerSize / 2,
-			backgroundColor: brandSecondary,
 			justifyContent: 'center',
 			alignItems: 'center',
 			marginVertical: padding,

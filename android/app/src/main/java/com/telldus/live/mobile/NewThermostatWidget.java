@@ -59,6 +59,7 @@ import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.UserAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
+import com.telldus.live.mobile.Utility.WidgetUtilities;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
@@ -116,38 +117,17 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
             sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewThermostatWidget.class);
 
-            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.logged_out);
-            String preScript = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_one);
-            String phraseTwo = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_two);
-            view.setTextViewText(R.id.loggedOutInfoOne, preScript + ": ");
-            view.setTextViewText(R.id.loggedOutInfoEmail, userId);
-            view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
-
-            view.setTextViewTextSize(R.id.loggedOutInfoOne, COMPLEX_UNIT_SP, fontSizeFive);
-            view.setTextViewTextSize(R.id.loggedOutInfoEmail, COMPLEX_UNIT_SP, fontSizeFive);
-            view.setTextViewTextSize(R.id.loggedOutInfoTwo, COMPLEX_UNIT_SP, fontSizeFive);
-
-            appWidgetManager.updateAppWidget(appWidgetId, view);
+            RemoteViews remoteViews = WidgetUtilities.setUIWhenDifferentAccount(context, fontSizeFive, userId);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
             return;
         }
 
         Integer deviceId = DeviceWidgetInfo.getDeviceId();
         if (deviceId.intValue() == -1) {
-            iconWidth = (int) iconWidth / 2;
-            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
-            view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_device_not_found));
-            view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
-                "info",
-                ContextCompat.getColor(context, R.color.brightRed),
-                    iconWidth,
-                    (int) (iconWidth * 0.8),
-                    (int) (iconWidth * 0.8),
-                context));
+            RemoteViews remoteViews = WidgetUtilities.setUIWhenItemNotFound(context, fontSizeFive, iconWidth / 2);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
-            view.setTextViewTextSize(R.id.widgetItemRemovedInfo, COMPLEX_UNIT_SP, fontSizeFive);
-
-            appWidgetManager.updateAppWidget(appWidgetId, view);
             sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewThermostatWidget.class);
             return;
         }
@@ -362,25 +342,12 @@ public class NewThermostatWidget extends AppWidgetProvider {
     }
 
     public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
-        hideAllFlashIndicators(views);
-
         views.setInt(visibleFlashId, "setBackgroundResource", drawable);
         views.setViewVisibility(flashId, View.VISIBLE);
     }
 
     public static void hideFlashIndicator(RemoteViews views, int flashId) {
         views.setViewVisibility(flashId, View.GONE);
-    }
-
-    public static void hideAllFlashIndicators(RemoteViews views) {
-        Integer[] primaryShadedButtons = new Integer[]{R.id.flashing_indicator_on, R.id.flashing_indicator_off};
-
-        List<Integer> list = Arrays.asList(primaryShadedButtons);
-
-        for (int i = 0; i < list.size(); i++) {
-            int id = list.get(i);
-            views.setViewVisibility(id, View.GONE);
-        }
     }
 
     private static PendingIntent getPendingSelf(Context context, String action, int id) {
@@ -493,7 +460,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
             String stateValue = widgetInfo.getDeviceStateValue();
             String secStateValue = widgetInfo.getSecondaryStateValue();
 
-            db.updateDeviceInfo(methReq, state, stateValue, 1, secStateValue, widgetId);
+            db.updateDeviceInfo(methReq, state, stateValue, 1, secStateValue, widgetId, null, null);
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
@@ -607,22 +574,22 @@ public class NewThermostatWidget extends AppWidgetProvider {
                                             }
                                         }
                                         catch (Exception e) {
-                                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId);
+                                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId, null, null);
                                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                             updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                         }
                                     }
 
-                                    db.updateDeviceInfo(methReq, state2, stateValue2, 0, secStateValue2, widgetId);
+                                    db.updateDeviceInfo(methReq, state2, stateValue2, 0, secStateValue2, widgetId, null, null);
                                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                     updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 } else {
-                                    db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId);
+                                    db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId, null, null);
                                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                     updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 }
                             } catch (JSONException e) {
-                                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
+                                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId, null, null);
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                 updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
@@ -632,7 +599,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
                         @Override
                         public void onError(ANError result) {
-                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
+                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId, null, null);
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                             updateAppWidget(context, widgetManager, widgetId, new HashMap());
                         }
@@ -640,7 +607,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
             }
             @Override
             public void onError(ANError error) {
-                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
+                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId, null, null);
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }

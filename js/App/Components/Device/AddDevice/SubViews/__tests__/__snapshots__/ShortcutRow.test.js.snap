@@ -65,6 +65,7 @@ exports[`renders ShortcutRow using Snapshots 1`] = `
           Object {
             "backgroundColor": "transparent",
             "color": "#555555",
+            "fontFamily": "Roboto-Regular",
             "fontSize": 22.900000000000002,
             "textAlign": "center",
           }

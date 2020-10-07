@@ -35,12 +35,17 @@ import {
 import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
+import SchedulesTab from './SchedulesTab';
 import { DeviceDetailsHeaderPoster } from './SubViews';
 
 import {
 	prepareNavigator,
 	shouldNavigatorUpdate,
 } from '../../../Lib/NavigationService';
+
+import {
+	withTheme,
+} from '../../../Components/HOC/withTheme';
 
 import Theme from '../../../Theme';
 
@@ -51,10 +56,10 @@ const ScreenConfigs = [
 		name: 'Overview',
 		Component: Overview,
 		options: {
-			tabBarLabel: ({ color }: Object): Object => (
+			tabBarLabel: ({ focused }: Object): Object => (
 				<TabBar
 					icon="home"
-					tintColor={color}
+					focused={focused}
 					label={i18n.overviewHeader}
 					accessibilityLabel={i18n.deviceOverviewTab}/>
 			),
@@ -64,10 +69,10 @@ const ScreenConfigs = [
 		name: 'History',
 		Component: History,
 		options: {
-			tabBarLabel: ({ color }: Object): Object => (
+			tabBarLabel: ({ focused }: Object): Object => (
 				<TabBar
 					icon="history"
-					tintColor={color}
+					focused={focused}
 					label={i18n.historyHeader}
 					accessibilityLabel={i18n.deviceHistoryTab}/>
 			),
@@ -77,16 +82,54 @@ const ScreenConfigs = [
 		name: 'Settings',
 		Component: Settings,
 		options: {
-			tabBarLabel: ({ color }: Object): Object => (
+			tabBarLabel: ({ focused }: Object): Object => (
 				<TabBar
 					icon="settings"
-					tintColor={color}
+					focused={focused}
 					label={i18n.settingsHeader}
 					accessibilityLabel={i18n.deviceSettingsTab}/>
 			),
 		},
 	},
+	{
+		name: 'SchedulesTab',
+		Component: SchedulesTab,
+		options: {
+			tabBarLabel: ({ color }: Object): Object => (
+				<TabBar
+					icon="time"
+					tintColor={color}
+					label={i18n.schedules}
+					accessibilityLabel={i18n.schedules}/>
+			),
+		},
+	},
 ];
+
+const ThemedTabBar = withTheme(React.memo<Object>((props: Object): Object => {
+	const {
+		posterProps,
+		tabBarProps,
+		colors,
+	} = props;
+
+	const {
+		headerIconColor,
+	} = colors;
+
+	return (
+		<View style={{flex: 0}}>
+			<DeviceDetailsHeaderPoster {...posterProps}/>
+			<MaterialTopTabBar
+				{...tabBarProps}
+				indicatorStyle={{
+					backgroundColor: headerIconColor,
+				}}
+			/>
+		</View>
+	);
+}));
+
 const NavigatorConfigs = {
 	initialRouteName: 'Overview',
 	initialRouteKey: 'Overview',
@@ -102,31 +145,29 @@ const NavigatorConfigs = {
 			const isPortrait = height > width;
 			const deviceWidth = isPortrait ? width : height;
 
-			tabWidth = width / 3;
+			tabWidth = width / 4;
 			fontSize = deviceWidth * 0.03;
 			paddingVertical = 10 + (fontSize * 0.5);
 		}
 		return (
-			<View style={{flex: 0}}>
-				<DeviceDetailsHeaderPoster {...rest}/>
-				<MaterialTopTabBar {...rest}
-					tabStyle={{
+			<ThemedTabBar
+				tabBarProps={{
+					...rest,
+					tabStyle: {
 						...tabStyle,
 						width: tabWidth,
 						paddingVertical,
-					}}
-					labelStyle={{
+					},
+					labelStyle: {
 						...labelStyle,
 						fontSize,
-					}}
-				/>
-			</View>
+					},
+				}}
+				posterProps={{...rest}}
+			/>
 		);
 	},
 	tabBarOptions: {
-		indicatorStyle: {
-			backgroundColor: '#fff',
-		},
 		style: {
 			...Theme.Core.shadow,
 			justifyContent: 'center',
@@ -137,8 +178,6 @@ const NavigatorConfigs = {
 		},
 		upperCaseLabel: false,
 		scrollEnabled: true,
-		activeTintColor: Theme.Core.brandSecondary,
-		inactiveTintColor: Theme.Core.inactiveTintColor,
 		showIcon: false,
 		allowFontScaling: false,
 	},

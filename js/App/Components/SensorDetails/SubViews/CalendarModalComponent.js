@@ -25,7 +25,11 @@ import React from 'react';
 import { TouchableOpacity, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Modal from 'react-native-modal';
-import moment from 'moment-timezone';
+let dayjs = require('dayjs');
+let utc = require('dayjs/plugin/utc');
+let timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 const isEqual = require('react-fast-compare');
 import DeviceInfo from 'react-native-device-info';
 
@@ -37,10 +41,15 @@ import {
 } from '../../../../BaseComponents';
 import CalendarDay from './CalendarDay';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	isVisible: boolean,
 	current: any,
 	onPressPositive: (any) => void,
@@ -57,7 +66,7 @@ type DefaultProps = {
 	isVisible: boolean,
 };
 
-export default class CalendarModalComponent extends View<Props, null> {
+class CalendarModalComponent extends View<Props, null> {
 props: Props;
 static defaultProps: DefaultProps = {
 	isVisible: false,
@@ -134,7 +143,7 @@ onDayPress(day: Object) {
 	const { propToUpdate, gatewayTimezone } = this.props;
 
 	if (gatewayTimezone) {
-		moment.tz.setDefault(gatewayTimezone);
+		dayjs.tz.setDefault(gatewayTimezone);
 	}
 
 	// The received timestamp is in GMT also start of the day timestamp in milliseconds
@@ -142,22 +151,22 @@ onDayPress(day: Object) {
 	timestamp = timestamp / 1000;
 
 	// Converting UTC start of the day[SOD] timestap to user's locale SOD
-	let selectedTimestamp = moment.unix(timestamp).startOf('day').unix();
+	let selectedTimestamp = dayjs.unix(timestamp).startOf('day').unix();
 
 	// While choosing 'to' date
 	if (propToUpdate === 2) {
-		const todayDate = moment().format('YYYY-MM-DD');
-		const timestampAsDate = moment.unix(timestamp).format('YYYY-MM-DD');
+		const todayDate = dayjs().format('YYYY-MM-DD');
+		const timestampAsDate = dayjs.unix(timestamp).format('YYYY-MM-DD');
 
-		// Use end of the day[EOD] timestamp, also moment converts UTC to user's locale
-		selectedTimestamp = moment.unix(timestamp).endOf('day').unix();
+		// Use end of the day[EOD] timestamp, also dayjs converts UTC to user's locale
+		selectedTimestamp = dayjs.unix(timestamp).endOf('day').unix();
 
 		// If 'to' date is today then use 'now/current time' timestamp
 		if (timestampAsDate === todayDate) {
-			selectedTimestamp = parseInt(moment().format('X'), 10);
+			selectedTimestamp = parseInt(dayjs().format('X'), 10);
 		}
 	}
-	moment.tz.setDefault();
+	dayjs.tz.setDefault();
 	this.setState({
 		current: selectedTimestamp,
 	});
@@ -178,29 +187,29 @@ renderDay({date, state, marking}: Object): Object {
 
 getMarkedDatesAndPosterDate(current: number, gatewayTimezone: string): Object {
 	if (gatewayTimezone) {
-		moment.tz.setDefault(gatewayTimezone);
+		dayjs.tz.setDefault(gatewayTimezone);
 	}
-	const posterDate = moment.unix(current);
-	let currentMark = moment.unix(current).format('YYYY-MM-DD');
+	const posterDate = dayjs.unix(current);
+	let currentMark = dayjs.unix(current).format('YYYY-MM-DD');
 	let { timestamp, propToUpdate } = this.props, markedDates = {};
 	let { fromTimestamp, toTimestamp } = timestamp;
-	let startDate = moment.unix(fromTimestamp).format('YYYY-MM-DD'), endDate = moment.unix(toTimestamp).format('YYYY-MM-DD');
+	let startDate = dayjs.unix(fromTimestamp).format('YYYY-MM-DD'), endDate = dayjs.unix(toTimestamp).format('YYYY-MM-DD');
 	if (propToUpdate === 1) {
-		startDate = moment.unix(current).format('YYYY-MM-DD');
+		startDate = dayjs.unix(current).format('YYYY-MM-DD');
 	} else {
-		endDate = moment.unix(current).format('YYYY-MM-DD');
+		endDate = dayjs.unix(current).format('YYYY-MM-DD');
 	}
 
 	markedDates[startDate] = {marked: true, startingDay: true, selected: currentMark === startDate};
-	const diff = moment(endDate).diff(moment(startDate), 'days');
+	const diff = dayjs(endDate).diff(dayjs(startDate), 'day');
 	if (diff <= 0) {
-		if (moment(currentMark).isBefore(startDate)) {
+		if (dayjs(currentMark).isBefore(startDate)) {
 			markedDates[currentMark] = {marked: true, selected: true, endingDay: true};
 		}
 		if (startDate === currentMark) {
 			markedDates[startDate] = {marked: true, startingDay: true, selected: true, endingDay: true};
 		}
-		moment.tz.setDefault();
+		dayjs.tz.setDefault();
 		return {
 			markedDates,
 			posterDate,
@@ -208,10 +217,10 @@ getMarkedDatesAndPosterDate(current: number, gatewayTimezone: string): Object {
 	}
 	let temp = startDate;
 	for (let i = 0; i < diff; i++) {
-		temp = moment(temp).add(1, 'd').format('YYYY-MM-DD');
+		temp = dayjs(temp).add(1, 'd').format('YYYY-MM-DD');
 		markedDates[temp] = {marked: true, endingDay: i === (diff - 1), selected: temp === currentMark};
 	}
-	moment.tz.setDefault();
+	dayjs.tz.setDefault();
 	return {
 		markedDates,
 		posterDate,
@@ -256,13 +265,15 @@ render(): Object {
 						<FormattedDate
 							value={posterDate}
 							year="numeric"
-							style={posterTextOneStyle}/>
+							style={posterTextOneStyle}
+							level={33}/>
 						<FormattedDate
 							value={posterDate}
 							day="numeric"
 							month="short"
 							weekday="short"
-							style={posterTextTwoStyle}/>
+							style={posterTextTwoStyle}
+							level={33}/>
 					</View>
 				</Poster>
 				<Calendar
@@ -291,20 +302,29 @@ render(): Object {
 }
 
 getStyle(appLayout: Object): Object {
+	const {
+		colors,
+	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { brandSecondary, eulaContentColor, offlineColor } = Theme.Core;
+	const { offlineColor } = Theme.Core;
 
 	const adjustCelendar = !this.isTablet && !isPortrait;
 
-	const posterHeight = adjustCelendar ? deviceWidth * 0.12 : deviceWidth * 0.333;
+	const posterHeight = adjustCelendar ? deviceWidth * 0.12 : deviceWidth * 0.25;
 
 	const fontSizePosterTextOne = posterHeight * 0.2;
-	const fontSizePosterTextTwo = posterHeight * 0.3;
+	const fontSizePosterTextTwo = posterHeight * 0.25;
 	const fontSizeFooterText = adjustCelendar ? deviceWidth * 0.03 : deviceWidth * 0.05;
 	const footerPadding = adjustCelendar ? fontSizeFooterText * 0.5 : fontSizeFooterText;
+
+	const {
+		inAppBrandSecondary,
+		card,
+		textFour,
+	} = colors;
 
 	return {
 		containerStyle: {
@@ -326,20 +346,19 @@ getStyle(appLayout: Object): Object {
 		},
 		posterTextOneStyle: {
 			fontSize: fontSizePosterTextOne,
-			color: '#fff',
 		},
 		posterTextTwoStyle: {
 			fontSize: fontSizePosterTextTwo,
-			color: '#fff',
-			fontWeight: 'bold',
-			fontFamily: 'Roboto-Regular',
+			fontWeight: '500',
 		},
 		calendarTheme: {
+			backgroundColor: card,
+			calendarBackground: card,
 			textSectionTitleColor: offlineColor,
-			selectedDayBackgroundColor: brandSecondary,
+			selectedDayBackgroundColor: inAppBrandSecondary,
 			todayTextColor: '#00adf5',
-			arrowColor: '#000',
-			monthTextColor: '#000',
+			arrowColor: textFour,
+			monthTextColor: textFour,
 			'stylesheet.calendar.main': {
 				week: {
 				  marginTop: 0,
@@ -351,21 +370,23 @@ getStyle(appLayout: Object): Object {
 		},
 		footerStyle: {
 			flexDirection: 'row',
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			justifyContent: 'flex-end',
 			paddingVertical: footerPadding,
 			paddingRight: adjustCelendar ? 10 : 0,
 		},
 		positiveLabelStyle: {
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			fontSize: fontSizeFooterText,
 			marginLeft: 20,
 			marginRight: 15,
 		},
 		negativeLabelStyle: {
-			color: eulaContentColor,
+			color: textFour,
 			fontSize: fontSizeFooterText,
 		},
 	};
 }
 }
+
+export default withTheme(CalendarModalComponent);

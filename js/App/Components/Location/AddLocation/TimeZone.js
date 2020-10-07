@@ -163,12 +163,16 @@ class TimeZone extends View<void, Props, State> {
 				<LabelBox
 					showIcon={false}
 					appLayout={appLayout}>
-					<Text style={styles.label}>
+					<Text
+						level={23}
+						style={styles.label}>
 						{this.label}
 					</Text>
 					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 1}} accessibilityLabel={accessibilityLabel}>
 						<View style={styles.timeZoneContainer}>
-							<Text style={styles.timeZone}>
+							<Text
+								level={18}
+								style={styles.timeZone}>
 								{timeZone}
 							</Text>
 							<Icon name="pencil" size={styles.iconSize} color="#A59F9A" style={styles.iconStyle}/>
@@ -208,7 +212,6 @@ class TimeZone extends View<void, Props, State> {
 				marginBottom: fontSizeTZHint * 0.15,
 			},
 			timeZone: {
-				color: '#00000099',
 				fontSize: fontSizeTZ,
 				marginRight: fontSizeTZ * 0.5,
 			},
@@ -225,7 +228,6 @@ class TimeZone extends View<void, Props, State> {
 			},
 			iconSize: deviceWidth * 0.038,
 			label: {
-				color: '#e26901',
 				fontSize: fontSizeLabel,
 			},
 		};

@@ -22,7 +22,10 @@
 'use strict';
 
 import TelldusLocalStorage from '../Lib/LocalStorage';
-import type { SensorHistoryQueryParams } from '../Lib/LocalStorage';
+import type {
+	DeviceHistoryQueryParams,
+	SensorHistoryQueryParams,
+} from '../Lib/LocalStorage';
 
 
 export function storeHistory(type: string, data: Object): Promise<any> | any {
@@ -35,12 +38,14 @@ export function storeHistory(type: string, data: Object): Promise<any> | any {
 	}
 }
 // $FlowFixMe
-export function getHistory(type: string, queryParam: number | SensorHistoryQueryParams): Promise<any> | any {
+export function getHistory(type: string, queryParam: DeviceHistoryQueryParams | SensorHistoryQueryParams): Promise<any> | any {
 	let localStorage = new TelldusLocalStorage();
 	if (type === 'device') {
+		// $FlowFixMe
 		return localStorage.getDeviceHistory(queryParam);
 	}
 	if (type === 'sensor') {
+		// $FlowFixMe
 		return localStorage.getSensorHistory(queryParam);
 	}
 }
@@ -64,3 +69,19 @@ export function closeDatabase() {
 	let localStorage = new TelldusLocalStorage();
 	localStorage.closeDatabase();
 }
+
+export function storeGeoFenceEvent(data: Object): Promise<any> | any {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.storeGeoFenceEvent(data);
+}
+
+export function getGeoFenceEvents(): Promise<any> | any {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.queryGeoFenceEvents();
+}
+
+export function clearGeoFenceEvents(): Promise<any> | any {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.dropTableGeoFenceEvents();
+}
+

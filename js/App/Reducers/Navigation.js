@@ -21,14 +21,23 @@
 
 'use strict';
 
+import omit from 'lodash/omit';
+
 import type { Action } from '../Actions/Types';
 
 type State = {
 	screen: string,
+	hiddenTabs: Object,
+	defaultStartScreen: Object,
 };
 
 const initialState: State = {
 	screen: 'Login',
+	hiddenTabs: {},
+	defaultStartScreen: {
+		screenKey: '',
+		screenName: '',
+	},
 };
 
 function navigation(state: State = initialState, action: Action): State {
@@ -44,7 +53,73 @@ function navigation(state: State = initialState, action: Action): State {
 	if (action.type === 'APP_START') {
 		return {
 			...state,
-			screen: 'Dashboard',
+			screen: 'Dashboard', // TODO: Handle when tabs are hidden
+		};
+	}
+	if (action.type === 'HIDE_TAB') {
+		const {
+			userId,
+			tab,
+		} = action.payload;
+		const _hiddenTabs = state.hiddenTabs || {};
+		let hiddenTabCurrentUser = _hiddenTabs[userId] || [];
+		let _hiddenTabCurrentUser = [...hiddenTabCurrentUser, tab];
+		if (_hiddenTabCurrentUser.indexOf(tab) === -1) {
+			_hiddenTabCurrentUser = [...hiddenTabCurrentUser, tab];
+		}
+
+		return {
+			...state,
+			hiddenTabs: {
+				..._hiddenTabs,
+				[userId]: _hiddenTabCurrentUser,
+			},
+		};
+	}
+	if (action.type === 'UNHIDE_TAB') {
+		const {
+			userId,
+			tab,
+		} = action.payload;
+		const _hiddenTabs = state.hiddenTabs || {};
+		let hiddenTabCurrentUser = _hiddenTabs[userId] || [];
+		let _hiddenTabCurrentUser = hiddenTabCurrentUser.filter((_tab: string): boolean => _tab !== tab);
+
+		return {
+			...state,
+			hiddenTabs: {
+				..._hiddenTabs,
+				[userId]: _hiddenTabCurrentUser,
+			},
+		};
+
+	}
+	if (action.type === 'CHANGE_DEFAULT_START_SCREEN') {
+		const {
+			screenKey,
+			userId,
+		} = action.payload;
+		const _defaultStartScreen = state.defaultStartScreen || {};
+		let defaultStartScreenCurrentUser = _defaultStartScreen[userId] || {};
+
+		return {
+			...state,
+			defaultStartScreen: {
+				..._defaultStartScreen,
+				[userId]: {
+					...defaultStartScreenCurrentUser,
+					screenKey,
+				},
+			},
+		};
+	}
+	if (action.type === 'LOGGED_OUT_SELECTED') {
+		let { userId } = action.payload;
+		const { hiddenTabs = {} } = state;
+
+		return {
+			...state,
+			hiddenTabs: omit(hiddenTabs, userId),
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {

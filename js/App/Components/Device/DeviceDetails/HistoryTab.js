@@ -23,11 +23,18 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, SectionList, RefreshControl } from 'react-native';
+import { StyleSheet, SectionList } from 'react-native';
 import reduce from 'lodash/reduce';
 import groupBy from 'lodash/groupBy';
 
-import { FormattedMessage, Text, View, Icon, FormattedDate } from '../../../../BaseComponents';
+import {
+	FormattedMessage,
+	Text,
+	View,
+	Icon,
+	FormattedDate,
+	ThemedRefreshControl,
+} from '../../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
 import { getDeviceHistory } from '../../../Actions/Devices';
 import { getHistory, storeHistory, getLatestTimestamp } from '../../../Actions/LocalStorage';
@@ -288,7 +295,6 @@ class HistoryTab extends View {
 		let { screenProps, device, currentScreen } = this.props;
 		let { hasLoaded, refreshing, rowsAndSections, historyDetails } = this.state;
 		let { intl, appLayout } = screenProps;
-		let { brandPrimary } = Theme.Core;
 
 		if (!device.id) {
 			return null;
@@ -311,7 +317,7 @@ class HistoryTab extends View {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-						<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+						<Icon name="exclamation-circle" size={iconSize} level={23}/>
 						<Text style={textWhenNoData}>
 							<FormattedMessage {...i18n.noRecentActivity} style={textWhenNoData}/>...
 						</Text>
@@ -333,10 +339,9 @@ class HistoryTab extends View {
 					initialNumToRender={10}
 					stickySectionHeadersEnabled={true}
 					refreshControl={
-						<RefreshControl
+						<ThemedRefreshControl
 						  refreshing={this.state.refreshing}
 						  onRefresh={this._onRefresh}
-						  colors={[brandPrimary]}
 						/>
 					  }
 				/>

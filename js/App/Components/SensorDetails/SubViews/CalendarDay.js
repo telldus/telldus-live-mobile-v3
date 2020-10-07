@@ -74,13 +74,18 @@ render(): Object {
 		circularContainer,
 		periodCover,
 		dayText,
+		level,
 	} = this.getStyle(appLayout);
 	return (
 		<RippleButton
 			style={container}
 			onPress={this.onDayPress}>
-			<View style={periodCover}>
-				<View style={circularContainer}>
+			<View
+				level={level}
+				style={periodCover}>
+				<View
+					level={level}
+					style={circularContainer}>
 					<Text style={dayText}>
 						{day}
 					</Text>
@@ -96,7 +101,7 @@ getStyle(appLayout: Object): Object {
 
 	const { state, marking } = this.props;
 	const { selected, marked, startingDay, endingDay } = marking;
-	const { brandInfo, inactiveGray, brandSecondary } = Theme.Core;
+	const { brandInfo, inactiveGray } = Theme.Core;
 
 	const adjustDay = !this.isTablet && !isPortrait;
 
@@ -111,10 +116,11 @@ getStyle(appLayout: Object): Object {
 				'#2d4150')
 		);
 
-	const backgroundColor = selected || marked ? brandSecondary : 'transparent';
+	const level = (selected || marked) ? 13 : undefined;
 	const borderColor = selected ? '#fff' : 'transparent';
 
 	return {
+		level,
 		container: {
 			flex: 1,
 			alignItems: 'stretch',
@@ -125,7 +131,6 @@ getStyle(appLayout: Object): Object {
 			height: circularContainerSize,
 			width: circularContainerSize,
 			borderRadius: circularContainerSize / 2,
-			backgroundColor,
 			alignItems: 'center',
 			justifyContent: 'center',
 			overflow: 'hidden',
@@ -135,7 +140,6 @@ getStyle(appLayout: Object): Object {
 		periodCover: {
 			height: circularContainerSize,
 			width: '100%',
-			backgroundColor,
 			alignItems: 'center',
 			justifyContent: 'center',
 			overflow: 'hidden',

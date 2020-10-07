@@ -24,7 +24,9 @@
 import React, { Component } from 'react';
 import { Animated, Easing, View } from 'react-native';
 
-import Theme from '../App/Theme';
+import {
+	withTheme,
+} from '../App/Components/HOC/withTheme';
 
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
 const BAR_WIDTH_ZERO_POSITION = INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
@@ -41,13 +43,13 @@ type Props = {|
 	style: Object,
 	unfilledColor?: string,
 	width: number,
+	colors: Object,
 |};
 
 type DefaultProps = {
 	animated: boolean,
 	borderRadius: number,
 	borderWidth: number,
-	color: string,
 	height: number,
 	indeterminate: boolean,
 	progress: number,
@@ -143,16 +145,23 @@ class ProgressBarLinear extends Component<Props, State> {
 			style,
 			unfilledColor,
 			width,
+			colors,
 			// eslint-disable-next-line no-unused-vars
 			animated, indeterminate, progress,
 			...restProps
 		} = this.props;
 
+		const {
+			inAppBrandSecondary,
+		} = colors;
+
+		const _color = color || inAppBrandSecondary;
+
 		const innerWidth = width - (borderWidth * 2);
 		const containerStyle = {
 			width,
 			borderWidth,
-			borderColor: borderColor || color,
+			borderColor: borderColor || _color,
 			borderRadius,
 			overflow: 'hidden',
 			backgroundColor: unfilledColor,
@@ -161,7 +170,7 @@ class ProgressBarLinear extends Component<Props, State> {
 		};
 
 		const progressStyle = {
-			backgroundColor: color,
+			backgroundColor: _color,
 			height,
 			width: innerWidth,
 			transform: [
@@ -195,10 +204,9 @@ ProgressBarLinear.defaultProps = {
 	animated: true,
 	borderRadius: 4,
 	borderWidth: 1,
-	color: Theme.Core.brandSecondary,
 	height: 6,
 	indeterminate: false,
 	progress: 0,
 	width: 150,
 };
-module.exports = ProgressBarLinear;
+module.exports = withTheme(ProgressBarLinear);

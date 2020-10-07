@@ -295,15 +295,15 @@ render(): Object | null {
 					style={styles.contentContainerStyle}>
 					<IconTelldus
 						icon={icon}
-						level={9}
+						level={23}
 						style={styles.iconStyle}/>
 					<Text
-						level={5}
+						level={26}
 						style={styles.h1Style}>
 						{h1}
 					</Text>
 					<Text
-						level={6}
+						level={25}
 						style={styles.bodyStyle}>
 						{body}
 					</Text>
@@ -317,7 +317,9 @@ render(): Object | null {
 				<TouchableOpacity
 					onPress={cancelOnPress}
 					disabled={isLoading}>
-					<Text style={styles.cancelStyle}>
+					<Text
+						level={23}
+						style={styles.cancelStyle}>
 						{cancelLabel}
 					</Text>
 				</TouchableOpacity>
@@ -334,7 +336,6 @@ getStyles(appLayout: Object): Object {
 	const {
 		shadow,
 		paddingFactor,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -378,7 +379,6 @@ getStyles(appLayout: Object): Object {
 		cancelStyle: {
 			marginTop: padding * 2,
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: brandSecondary,
 			fontWeight: '500',
 		},
 	};

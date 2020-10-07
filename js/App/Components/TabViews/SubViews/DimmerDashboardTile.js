@@ -41,7 +41,6 @@ import {
 	shouldUpdate,
 } from '../../../Lib';
 
-import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -268,8 +267,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'stretch',
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	slider: {
 		justifyContent: 'center',
@@ -280,8 +277,6 @@ const styles = StyleSheet.create({
 		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderBottomLeftRadius: 2,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	turnOff: {
 		flex: 1,
@@ -294,15 +289,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderBottomRightRadius: 2,
-	},
-	itemIconContainerOn: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	itemIconContainerOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
 	},
 	iconStyle: {
 		fontSize: 22,

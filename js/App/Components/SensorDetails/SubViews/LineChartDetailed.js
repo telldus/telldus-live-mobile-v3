@@ -28,15 +28,19 @@ import {
 	VictoryLine,
 	VictoryTheme,
 	VictoryScatter,
-	VictoryZoomContainer,
+	createContainer,
+	VictoryTooltip,
 } from 'victory-native';
-import moment from 'moment';
+let dayjs = require('dayjs');
 const isEqual = require('react-fast-compare');
 
 import { View } from '../../../../BaseComponents';
 
+import capitalize from '../../../Lib/capitalize';
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 type Props = {
 	chartDataOne: Array<Object>,
@@ -57,6 +61,7 @@ type Props = {
 	min: Object,
 	max: Object,
 
+	intl: Object,
 	y2Tick: string,
 	setLargeYTick: (string) => void,
 };
@@ -85,6 +90,8 @@ getYTwo: (Object) => number;
 formatYTickOne: (number) => number;
 formatYTickTwo: (number) => number;
 
+VictoryZoomVoronoiContainer: Object;
+
 constructor(props: Props) {
 	super(props);
 
@@ -100,6 +107,8 @@ constructor(props: Props) {
 	this.formatYTickTwo = this.formatYTickTwo.bind(this);
 
 	this.minyTickLength = 2;
+
+	this.VictoryZoomVoronoiContainer = createContainer('zoom', 'voronoi');
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -139,8 +148,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 getTickConfigX(): Object {
 	const { fromTimestamp, toTimestamp } = this.props.timestamp;
-	const from = moment.unix(fromTimestamp);
-	const to = moment.unix(toTimestamp);
+	const from = dayjs.unix(fromTimestamp);
+	const to = dayjs.unix(toTimestamp);
 	const domainX = Math.abs(from.diff(to, 'days'));
 
 	let ticks = [], day = from;
@@ -177,7 +186,7 @@ getX(data: Object): number {
 }
 
 formatXTick(tick: number): string {
-	return `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`;
+	return `${dayjs.unix(tick).format('D')}/${dayjs.unix(tick).format('M')}`;
 }
 
 formatYTickOne(tick: number): number {
@@ -320,6 +329,21 @@ renderLine(d: Array<Object>, i: number, styles: Object): null | Object {
 	/>);
 }
 
+showToolTipLabel = (data: Object): string => {
+	const {
+		datum,
+	} = data;
+	const {
+		intl,
+	} = this.props;
+	const {
+		formatDate,
+		formatTime,
+		formatMessage,
+	} = intl;
+	return `${capitalize(formatMessage(i18n.date))}: ${formatDate(dayjs.unix(datum.ts))}\n${capitalize(formatMessage(i18n.time))}: ${formatTime(dayjs.unix(datum.ts))}\n${capitalize(formatMessage(i18n.labelValue))}: ${datum.value}`;
+}
+
 render(): Object | null {
 	const {
 		chartDataOne,
@@ -356,6 +380,10 @@ render(): Object | null {
 	const lineOne = this.renderLine(chartDataOne, 0, others);
 	const lineTwo = this.renderLine(chartDataTwo, 1, others);
 
+	const {
+		VictoryZoomVoronoiContainer,
+	} = this;
+
 	return (
 		<VictoryChart
 			theme={VictoryTheme.material}
@@ -363,7 +391,13 @@ render(): Object | null {
 			padding={chartPadding}
 			domainPadding={{ y: domainPadding, x: 20 }}
 			containerComponent={
-				<VictoryZoomContainer/>
+				<VictoryZoomVoronoiContainer
+					labelComponent={<VictoryTooltip
+						style={{
+							textAnchor: 'start',
+						}}
+					/>}
+					labels={this.showToolTipLabel}/>
 			}
 			{...dependentConfigs}
 		>

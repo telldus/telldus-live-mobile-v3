@@ -75,6 +75,9 @@ import {
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+import {
+	useNonHiddenMainTabs,
+} from '../../Hooks/Navigation';
 
 import i18n from '../../Translations/common';
 
@@ -89,7 +92,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		userProfile = {},
 		subscriptions = {},
 		accounts = {},
-		userId = '',
+		userId,
 		firebaseRemoteConfig = {},
 		pushToken,
 		switchAccountConf = {},
@@ -104,6 +107,10 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		premiumPurchase = JSON.stringify({enable: false}),
 	} = firebaseRemoteConfig;
 	const { enable } = JSON.parse(premiumPurchase);
+
+	const {
+		firstVisibleTab,
+	} = useNonHiddenMainTabs();
 
 	function onPressRedeemGift() {
 		navigation.navigate('RedeemGiftScreen');
@@ -152,14 +159,18 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				}));
 				let otherUserId;
 				Object.keys(accounts).forEach((uid: string) => {
-					const check1 = uid.trim().toLowerCase();
-					if (check1 !== userId.trim().toLowerCase()) {
+					const check1 = uid;
+					if (check1 !== userId) {
 						otherUserId = check1;
 					}
 				});
 				if (otherUserId) {
 					let { accessToken } = accounts[otherUserId];
-					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
+					dispatch(getUserProfile(accessToken, {
+						cancelAllPending: true,
+						activeAccount: false,
+						performPostSuccess: true,
+					})).then((res: Object = {}) => {
 						dispatch(onSwitchAccount({
 							userId: otherUserId,
 						}));
@@ -177,7 +188,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						});
 						dispatch(showToast(messageOnSuccesSwitch));
 						navigation.navigate('Tabs', {
-							screen: 'Dashboard',
+							screen: firstVisibleTab,
 						});
 					}).catch((err: Object) => {
 						dispatch(toggleVisibilitySwitchAccountAS({
@@ -207,7 +218,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				proceedWithLogout();
 			} else {
 				const userIdOfOnlyPremAcc = Object.keys(premAccounts)[0];
-				if (userIdOfOnlyPremAcc.trim().toLowerCase() === userId.trim().toLowerCase()) {
+				if (userIdOfOnlyPremAcc === userId) {
 					toggleDialogueBoxState({
 						show: true,
 						showHeader: true,
@@ -233,6 +244,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		premAccounts,
 		pushToken,
 		userId,
+		firstVisibleTab,
 	]);
 
 	const hasMultipleAccounts = Object.keys(accounts).length > 1;
@@ -282,7 +294,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					navigation={navigation}/>}
 				{enable && (
 					<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
-						<Text style={redeemTextSyle}>
+						<Text
+							level={23}
+							style={redeemTextSyle}>
 							{formatMessage(i18n.viewPurchaseHistory)}
 						</Text>
 					</TouchableOpacity>
@@ -290,8 +304,13 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				{enable && (
 					<TouchableOpacity onPress={onPressRedeemGift}>
 						<View style={redeemCoverStyle}>
-							<IconTelldus icon={'gift'} style={redeemIconStyle}/>
-							<Text style={redeemTextSyle}>
+							<IconTelldus
+								icon={'gift'}
+								style={redeemIconStyle}
+								level={23}/>
+							<Text
+								level={23}
+								style={redeemTextSyle}>
 								{capitalize(formatMessage(i18n.redeemCard))}
 							</Text>
 						</View>
@@ -384,11 +403,9 @@ const getStyles = (appLayout: Object, {
 		},
 		redeemTextSyle: {
 			fontSize: fontSize * 0.9,
-			color: Theme.Core.brandSecondary,
 		},
 		redeemIconStyle: {
 			fontSize: fontSize,
-			color: Theme.Core.brandSecondary,
 			marginRight: 5,
 		},
 	};

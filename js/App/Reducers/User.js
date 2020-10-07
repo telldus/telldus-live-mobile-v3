@@ -146,15 +146,13 @@ export default function reduceUser(state: State = initialState, action: Action):
 		let { userId } = accessToken;
 		if (userId) {
 			userIdN = userId;
-			userId = userId.trim().toLowerCase();
 
 			const existAccount = accounts[userId] || {};
 			newAccounts[userId] = {
 				...existAccount,
 				accessToken,
 			};
-		} else if (userIdN) { // Refreshing access token
-			userId = userIdN.trim().toLowerCase();
+		} else if (userIdN) {
 			const existAccount = accounts[userId] || {};
 			const uId = (existAccount.accessToken && existAccount.accessToken.userId) ? existAccount.accessToken.userId : userIdN;
 			newAccounts[userId] = {
@@ -186,8 +184,6 @@ export default function reduceUser(state: State = initialState, action: Action):
 		let userIdN = state.userId;
 		let { userId } = accessToken || {};
 		if (userId) {
-			userId = userId.trim().toLowerCase();
-
 			const existAccount = accounts[userId] || {};
 
 			if (!existAccount) {
@@ -204,7 +200,6 @@ export default function reduceUser(state: State = initialState, action: Action):
 				},
 			};
 		} else if (userIdN) { // Refreshing access token
-			userId = userIdN.trim().toLowerCase();
 			const existAccount = accounts[userId] || {accessToken: {}};
 
 			const uId = (existAccount.accessToken && existAccount.accessToken.userId) ? existAccount.accessToken.userId : userIdN;
@@ -283,21 +278,21 @@ export default function reduceUser(state: State = initialState, action: Action):
 			...accounts,
 		};
 
-		if (action.payload.email) { // TODO: Should use user id, once it is available.
-			const email = action.payload.email.trim().toLowerCase();
-			const existAccount = accounts[email] || {};
+		if (action.payload.uuid) {
+			const { uuid } = action.payload;
+			const existAccount = accounts[uuid] || {};
 
 			// Required while upgrading from older version, and already logged in
 			if (isEmpty(accounts)) {
-				newAccounts[email] = {
+				newAccounts[uuid] = {
 					accessToken: {
 						...state.accessToken,
-						userId: email, // TODO: Should use user id, once it is available.
+						userId: uuid,
 					},
 					...action.payload,
 				};
 			} else {
-				newAccounts[email] = {
+				newAccounts[uuid] = {
 					...existAccount,
 					...action.payload,
 				};
@@ -305,8 +300,8 @@ export default function reduceUser(state: State = initialState, action: Action):
 		}
 
 		let userIdN = state.userId;
-		if (action.payload.email) {
-			userIdN = action.payload.email.trim().toLowerCase(); // TODO: Should use user id, once it is available.
+		if (action.payload.uuid) {
+			userIdN = action.payload.uuid;
 		}
 
 		return {
@@ -324,13 +319,13 @@ export default function reduceUser(state: State = initialState, action: Action):
 		};
 
 		const {
-			email, // TODO: Should use user id, once it is available.
+			uuid,
 		} = action.payload;
-		if (!email) {
+		if (!uuid) {
 			return state;
 		}
 
-		const userId = email.trim().toLowerCase();
+		const userId = uuid;
 		const account = accounts[userId];
 		if (!account) {
 			return state;
@@ -413,14 +408,13 @@ export default function reduceUser(state: State = initialState, action: Action):
 	}
 	if (action.type === 'RECEIVED_USER_SUBSCRIPTIONS') {
 
-		let { accounts = {}, userId = '' } = state;
+		let { accounts = {}, userId } = state;
 		let newAccounts = {
 			...accounts,
 		};
 
 		const subscriptions = action.payload;
 
-		userId = userId.trim().toLowerCase();
 		const account = accounts[userId] || {};
 
 		const updatedAccount = {
@@ -441,7 +435,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 	}
 	if (action.type === 'RECEIVED_USER_SUBSCRIPTIONS_OTHER') {
 
-		const { accounts = {}, userId: activeAccUserId = '' } = state;
+		const { accounts = {}, userId: activeAccUserId } = state;
 		let newAccounts = {
 			...accounts,
 		};
@@ -454,7 +448,6 @@ export default function reduceUser(state: State = initialState, action: Action):
 			return state;
 		}
 
-		userId = userId.trim().toLowerCase();
 		const account = accounts[userId];
 		if (!account) {
 			return state;
@@ -472,7 +465,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 
 		// Update if the other account is the active one
 		let activeAccountSubscriptions = state.subscriptions;
-		if (userId === activeAccUserId.trim().toLowerCase()) {
+		if (userId === activeAccUserId) {
 			activeAccountSubscriptions = subscriptions;
 		}
 
@@ -533,14 +526,13 @@ export default function reduceUser(state: State = initialState, action: Action):
 	if (action.type === 'SELECT_DASHBOARD') {
 		const { payload: { dashboardId } } = action;
 
-		let { accounts = {}, userId = '' } = state;
+		let { accounts = {}, userId } = state;
 		let newAccounts = {
 			...accounts,
 		};
 
 		const subscriptions = action.payload;
 
-		userId = userId.trim().toLowerCase();
 		const account = accounts[userId] || {};
 
 		const updatedAccount = {

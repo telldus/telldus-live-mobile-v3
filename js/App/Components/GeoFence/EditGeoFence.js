@@ -21,12 +21,15 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+	useCallback,
+} from 'react';
 import {
 	StyleSheet,
 	ScrollView,
 	TextInput,
-	TouchableOpacity,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import {
@@ -40,6 +43,7 @@ import {
 	Text,
 	TouchableButton,
 	EmptyView,
+	TouchableOpacity,
 } from '../../../BaseComponents';
 
 import {
@@ -62,6 +66,9 @@ import {
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import GeoFenceUtils from '../../Lib/GeoFenceUtils';
 
@@ -96,6 +103,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		formatMessage,
 	} = intl;
 
+	const {
+		colors,
+	} = useAppTheme();
+
 	useEffect(() => {
 		onDidMount(formatMessage(i18n.editValue, {
 			value: title,
@@ -116,7 +127,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		labelStyle,
 		textFieldStyle,
 		overlayWidth,
-	} = getStyles(appLayout);
+	} = getStyles({
+		appLayout,
+		colors,
+	});
 
 	const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(latitude, longitude, radius);
 	const region = {
@@ -126,9 +140,9 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		longitudeDelta: lngDelta,
 	};
 
-	function onPress(reg: Object) {
+	const onPress = useCallback((reg: Object) => {
 		navigation.navigate('EditGeoFenceAreaFull');
-	}
+	}, [navigation]);
 
 	const [ timeInfo, setTimeInfo ] = useState({
 		alwaysActive: true,
@@ -153,7 +167,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
 
-	function onSave() {
+	const onSave = useCallback(() => {
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		dispatch(setFenceTitle(areaName));
 		dispatch(addGeofence(true)).then(() => {
@@ -171,33 +185,33 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 				showPositive: true,
 			});
 		});
-	}
+	}, [aA, areaName, dispatch, fH, fM, formatMessage, navigation, tH, tM, toggleDialogueBoxState]);
 
-	function onDelete() {
+	const onDelete = (() => {
 		dispatch(removeGeofence(identifier));
 		dispatch(setEditFence({}));
 		navigation.goBack();
-	}
+	}, []);
 
-	function onEditArriving() {
+	const onEditArriving = useCallback(() => {
 		navigation.navigate('ArrivingActions', {
 			isEditMode: true,
 		});
-	}
+	}, [navigation]);
 
-	function onEditLeaving() {
+	const onEditLeaving = useCallback(() => {
 		navigation.navigate('LeavingActions', {
 			isEditMode: true,
 		});
-	}
+	}, [navigation]);
 
-	function onChangeTime(
+	const onChangeTime = useCallback((
 		alwaysActive: boolean,
 		fromHr: number,
 		fromMin: number,
 		toHr: number,
 		toMin: number,
-	) {
+	) => {
 		setTimeInfo({
 			alwaysActive,
 			fromHr,
@@ -205,19 +219,19 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 			toHr,
 			toMin,
 		});
-	}
+	}, []);
 
-	function onEditName() {
+	const onEditName = useCallback(() => {
 		setEditName(true);
-	}
+	}, []);
 
-	function onSubmitEditing() {
+	const onSubmitEditing = useCallback(() => {
 		setEditName(false);
-	}
+	}, []);
 
-	function onChangeText(value: string) {
+	const onChangeText = useCallback((value: string) => {
 		setAreaName(value);
-	}
+	}, []);
 
 	if (typeof fence.latitude === 'undefined') {
 		return <EmptyView/>;
@@ -228,12 +242,14 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 			style={container}
 			contentContainerStyle={contentContainerStyle}>
 			<View style={rowContainer}>
-
 				<TouchableOpacity
+					level={2}
 					onPress={onEditName}
 					disabled={editName}
 					style={rowStyle}>
-					<Text style={leftItemStyle}>
+					<Text
+						level={3}
+						style={leftItemStyle}>
 						{formatMessage(i18n.name)}
 					</Text>
 					{editName ?
@@ -304,7 +320,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -314,7 +333,6 @@ const getStyles = (appLayout: Object): Object => {
 		eulaContentColor,
 		rowTextColor,
 		shadow,
-		angledRowBorderColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -350,15 +368,15 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		rowStyle: {
 			padding: padding * 1.5,
-			backgroundColor: '#fff',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			borderColor: angledRowBorderColor,
-			borderBottomWidth: StyleSheet.hairlineWidth,
 			height: undefined,
+			marginHorizontal: padding,
+			borderRadius: 2,
+			marginBottom: padding / 2,
+			...shadow,
 		},
 		leftItemStyle: {
-			color: eulaContentColor,
 			fontSize,
 		},
 		rightTextItemStyle: {

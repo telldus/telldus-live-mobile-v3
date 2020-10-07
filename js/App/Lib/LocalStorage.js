@@ -43,6 +43,9 @@ export type SensorHistoryQueryParams = {
 	from: string,
 	to: string,
 };
+
+export type DeviceHistoryQueryParams = number;
+
 export default class TelldusLocalStorage {
 
 	constructor() {
@@ -154,7 +157,7 @@ export default class TelldusLocalStorage {
 		return query;
 	}
 
-	getDeviceHistory(id: number): Promise<any> {
+	getDeviceHistory(id: DeviceHistoryQueryParams): Promise<any> {
 		return this.loadDatabase().then((DB: Object): Promise<any> => {
 			return this.queryDeviceHistory(id);
 		}).catch((error: Object) => {
@@ -346,6 +349,79 @@ export default class TelldusLocalStorage {
 			});
 		}).catch((error: Object) => {
 			throw error;
+		});
+	}
+
+	storeGeoFenceEvent(data: Object): Promise<any> {
+		return this.loadDatabase().then((DB: Object): any => {
+			const {
+				action,
+				extras = {},
+				identifier,
+				inAppTime,
+				location = {},
+			} = data;
+
+			const {
+				timestamp,
+			} = location;
+
+			const {
+				title,
+			} = extras;
+
+			const insertQuery = `${'REPLACE INTO GeoFenceEvents '
+			+ '( identifier, '
+			+ 'action,'
+			+ 'title, '
+			+ 'timestamp, '
+			+ 'inAppTime) '
+			+ 'VALUES ('}`
+			+ `"${identifier}", `
+			+ `"${action}", `
+			+ `"${title}", `
+			+ `"${timestamp}", `
+			+ `"${inAppTime}")`;
+
+			return db.sqlBatch([
+				'CREATE TABLE IF NOT EXISTS GeoFenceEvents( '
+				+ 'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+				+ 'identifier VARCHAR(100), '
+				+ 'action VARCHAR(30), '
+				+ 'title VARCHAR(150), '
+				+ 'timestamp VARCHAR(50), '
+				+ 'inAppTime VARCHAR(50)'
+				+ '); ',
+				['CREATE UNIQUE INDEX IF NOT EXISTS UIndexIdentifier ON GeoFenceEvents(identifier, timestamp, inAppTime);'],
+				['CREATE INDEX IF NOT EXISTS IndexIdentifier ON GeoFenceEvents(identifier);'],
+				insertQuery,
+			  ]);
+		}).catch((error: Object) => {
+			throw error;
+		});
+	}
+
+	queryGeoFenceEvents = (): Promise<any> => {
+		return this.loadDatabase().then((DB: Object): Promise<any> => {
+			return db.executeSql('SELECT * FROM GeoFenceEvents ORDER BY inAppTime DESC').then(([results]: Array<any>): Array<any> => {
+				let len = results.rows.length, data = [];
+				for (let i = 0; i < len; i++) {
+					let row = results.rows.item(i);
+					data.push(row);
+				}
+				return data;
+			}).catch((error: Object) => {
+				throw error;
+			});
+		}).catch((error: Object) => {
+			throw error;
+		});
+	}
+
+	dropTableGeoFenceEvents = (): Promise<any> => {
+		return this.loadDatabase().then((DB: Object): any => {
+			return db.executeSql('DROP TABLE IF EXISTS GeoFenceEvents');
+		}).catch((error: Object) => {
 		});
 	}
 

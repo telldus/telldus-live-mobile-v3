@@ -39,12 +39,17 @@ import {
 	Icon,
 } from '../../../../BaseComponents';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import Theme from '../../../Theme';
 import shouldUpdate from '../../../Lib/shouldUpdate';
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	appLayout: Object,
 	timer: number | null | string,
 	status: string | null,
@@ -101,7 +106,18 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	if (shouldUpdate(nextProps, this.props, ['showThrobber', 'progress', 'percent', 'status', 'timer', 'appLayout', 'deviceImage', 'infoText'])) {
+	if (shouldUpdate(nextProps, this.props, [
+		'showThrobber',
+		'progress',
+		'percent',
+		'status',
+		'timer',
+		'appLayout',
+		'deviceImage',
+		'infoText',
+		'themeInApp',
+		'colorScheme',
+	])) {
 		return true;
 	}
 	if (!isEqual(this.state, nextState)) {
@@ -185,19 +201,19 @@ render(): Object {
 						<Text key={'1'}/>]
 					)}
 					<Text
-						level={6}
+						level={25}
 						style={textStyle}>
 						{this.messageOne}
 					</Text>
 					<Text/>
 					<Text
-						level={6}
+						level={25}
 						style={textStyle}>
 						{this.messageTwo}
 					</Text>
 					<Text/>
 					{showThrobber ?
-						<Throbber throbberContainerStyle={throbberContainerStyle} thorbberStyle={timerStyle}/>
+						<Throbber throbberContainerStyle={throbberContainerStyle} throbberStyle={timerStyle}/>
 						:
 						<>
 							<View style={{
@@ -218,7 +234,7 @@ render(): Object {
 								}
 							</View>
 							<Text
-								level={6}
+								level={25}
 								style={statusStyle} key={'1'}>
 								{status}
 							</Text>
@@ -245,7 +261,7 @@ render(): Object {
 					flexWrap: 'wrap',
 				}}>
 					<Text
-						level={6}
+						level={25}
 						style={textStyle}>
 						{infoText}
 					</Text>
@@ -257,16 +273,19 @@ render(): Object {
 }
 
 getStyles(): Object {
-	const { appLayout } = this.props;
+	const { appLayout, colors } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
+		inAppBrandSecondary,
+		inAppBrandPrimary,
+	} = colors;
+
+	const {
 		paddingFactor,
 		shadow,
-		brandSecondary,
-		brandPrimary,
 		inactiveSwitchBackground,
 	} = Theme.Core;
 
@@ -318,7 +337,7 @@ getStyles(): Object {
 			borderRightWidth: deviceWidth * 0.05,
 			borderTopWidth: Platform.OS === 'ios' ? deviceWidth * 0.17 : deviceWidth * 0.1,
 			borderRightColor: 'transparent',
-			borderTopColor: brandPrimary,
+			borderTopColor: inAppBrandPrimary,
 			borderTopLeftRadius: 2,
 		},
 		markerText: {
@@ -335,7 +354,7 @@ getStyles(): Object {
 		},
 		headerTextStyle: {
 			fontSize: fontSizeText * 1.2,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		imageType: {
 			marginTop: markerHeight,
@@ -348,7 +367,7 @@ getStyles(): Object {
 		},
 		infoIconStyle: {
 			fontSize: blockIconContainerSize / 2,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		blockIcontainerStyle: {
 			width: blockIconContainerSize,
@@ -358,7 +377,7 @@ getStyles(): Object {
 		},
 		timerStyle: {
 			fontSize: deviceWidth * 0.045,
-			color: brandSecondary,
+			color: inAppBrandSecondary,
 			textAlignVertical: 'center',
 			marginRight: 5,
 		},
@@ -387,4 +406,4 @@ getStyles(): Object {
 }
 }
 
-export default ZWaveIncludeExcludeUI;
+export default withTheme(ZWaveIncludeExcludeUI);

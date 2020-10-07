@@ -38,6 +38,10 @@ import {
 } from '../../../../BaseComponents';
 import { NameRow, DeviceInfoBlock } from './SubViews';
 
+import {
+	prepareVisibleTabs,
+} from '../../../Lib/NavigationService';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -45,6 +49,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	appLayout: Object,
 	route: Object,
+	hiddenTabsCurrentUser: Array<string>,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,
@@ -103,11 +108,11 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	if (nextProps.currentScreen === 'DeviceName') {
+	if (nextProps.currentScreen === nextProps.ScreenName) {
 		if (!isEqual(this.state, nextState)) {
 			return true;
 		}
-		if (nextProps.appLayout.width !== this.props.appLayout.width) {
+		if (!isEqual(this.props, nextProps)) {
 			return true;
 		}
 		return false;
@@ -148,7 +153,7 @@ submitName() {
 }
 
 postSubmitName = async () => {
-	const { navigation, actions, route } = this.props;
+	const { navigation, actions, route, hiddenTabsCurrentUser } = this.props;
 	const { rowData } = this.state;
 
 	try {
@@ -191,7 +196,11 @@ postSubmitName = async () => {
 					}
 				}
 
-				navigation.navigate('Devices', {
+				const {
+					tabToCheckOrVeryNext,
+				} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Devices');
+
+				navigation.navigate(tabToCheckOrVeryNext, {
 					gateway,
 					newDevices: rowData,
 				});
@@ -324,9 +333,12 @@ render(): Object {
 							<View
 								level={2}
 								style={infoContainer}>
-								<IconTelldus icon={'info'} style={infoIconStyle}/>
+								<IconTelldus
+									level={23}
+									icon={'info'}
+									style={infoIconStyle}/>
 								<Text
-									level={5}
+									level={26}
 									style={infoTextStyle}>
 									{intl.formatMessage(i18n.setNameMultichannelInfo)}
 								</Text>
@@ -342,7 +354,7 @@ render(): Object {
 								color: statusIcon === 'security' ? '#9CCC65' : '#F44336',
 							}]}/>
 							<Text
-								level={5}
+								level={26}
 								style={infoTextStyle}>
 								{statusMessage}
 							</Text>
@@ -352,9 +364,11 @@ render(): Object {
 						<View
 							level={2}
 							style={infoContainer}>
-							<IconTelldus icon={'info'} style={statusIconStyle}/>
+							<IconTelldus
+								level={23}
+								icon={'info'} style={statusIconStyle}/>
 							<Text
-								level={5}
+								level={26}
 								style={infoTextStyle}>
 								{hintMessage}
 							</Text>
@@ -378,7 +392,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
+	const { paddingFactor, editBoxPaddingFactor, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -411,14 +425,12 @@ getStyles(): Object {
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.12,
 			marginHorizontal: editBoxPadding,
-			color: brandSecondary,
 		},
 		boxContainerStyle: {
 			marginTop: padding / 2,
 		},
 		infoIconStyle: {
 			fontSize: deviceWidth * 0.08,
-			color: brandSecondary,
 			marginHorizontal: editBoxPadding,
 		},
 		infoTextStyle: {

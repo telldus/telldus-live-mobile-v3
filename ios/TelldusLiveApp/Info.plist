@@ -51,6 +51,8 @@
 	<string>3.0.0.1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<string>itms-apps</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -67,13 +69,13 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
+	<string>Used for GeoFencing.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
+	<string>Used for GeoFencing.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
+	<string>Used for GeoFencing.</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Used for GeoFencing</string>
+	<string>Used for GeoFencing.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>telldusicons.ttf</string>

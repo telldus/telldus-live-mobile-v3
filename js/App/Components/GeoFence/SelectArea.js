@@ -108,14 +108,14 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	function onPressNext() {
+	const onPressNext = useCallback(() => {
 		const {
 			latitude: lat,
 			longitude: long,
 		} = initialRegion;
 		dispatch(setFenceArea(lat, long, GeoFenceUtils.getRadiusFromRegion(initialRegion), userId));
 		navigation.navigate('SetAreaName');
-	}
+	}, [dispatch, initialRegion, navigation, userId]);
 
 	const {
 		container,

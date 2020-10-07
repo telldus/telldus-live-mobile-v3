@@ -21,30 +21,42 @@
 
 'use strict';
 import orderBy from 'lodash/orderBy';
-import { hasTokenExpired } from '../Lib/LocalControl';
 import isEmpty from 'lodash/isEmpty';
 
-export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}): Array<Object> {
+import { hasTokenExpired } from '../Lib/LocalControl';
+
+import {
+	DEVICE_KEY,
+	SENSOR_KEY,
+} from '../Lib/dashboardUtils';
+import {
+	MET_ID,
+	getMetWeatherDataAttributes,
+} from '../Lib/thirdPartyUtils';
+
+export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}, thirdParties: Object = {}): Array<Object> {
 
 	const { defaultSettings } = app;
 	const { activeDashboardId } = defaultSettings;
 
 	const { userId } = user;
 
-	const { sensorIds = {}, deviceIds = {} } = dashboard;
-
-	const userDbsAndSensorIds = sensorIds[userId] || {};
-	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
-
-	const userDbsAndDeviceIds = deviceIds[userId] || {};
-	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+	const {
+		sensorIds = {},
+		deviceIds = {},
+		dbExtras = {},
+		metWeatherById = {},
+	} = dashboard;
 
 	const { byId = {} } = gateways;
 	if (isEmpty(byId)) {
 		return [];
 	}
 
-	let deviceItems = [];
+	const userDbsAndDeviceIds = deviceIds[userId] || {};
+	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+
+	let deviceItems = [], _deviceItems = {};
 	if (devices && !isEmpty(devices.byId)) {
 		deviceIdsInCurrentDb.map((deviceId: number) => {
 			let device = devices.byId[deviceId];
@@ -69,15 +81,26 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 				}
 
 				deviceItems.push({
-					objectType: 'device',
+					objectType: DEVICE_KEY,
 					key: deviceId,
 					data,
 				});
+				_deviceItems = {
+					..._deviceItems,
+					[`${deviceId}${DEVICE_KEY}`]: {
+						objectType: DEVICE_KEY,
+						key: deviceId,
+						data,
+					},
+				};
 			}
 		});
 	}
 
-	let sensorItems = [];
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+
+	let sensorItems = [], _sensorItems = {};
 	if (sensors && !isEmpty(sensors.byId)) {
 		sensorIdsInCurrentDb.map((sensorId: number) => {
 			let sensor = sensors.byId[sensorId] || {};
@@ -114,20 +137,121 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 				}
 
 				sensorItems.push({
-					objectType: 'sensor',
+					objectType: SENSOR_KEY,
 					key: sensorId,
 					data,
 				});
+				_sensorItems = {
+					..._sensorItems,
+					[`${sensorId}${SENSOR_KEY}`]: {
+						objectType: SENSOR_KEY,
+						key: sensorId,
+						data,
+					},
+				};
 			}
 		});
 	}
+
+	const {
+		weather = {},
+	} = thirdParties;
+
+	const userDbsAndMetWeatherById = metWeatherById[userId] || {};
+	const metWeatherByIdInCurrentDb = userDbsAndMetWeatherById[activeDashboardId] || {};
+
+	let metItems = [], _metItems = {};
+	Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
+		const {
+			id,
+			selectedAttributes = {},
+			name,
+			timeKey,
+			selectedType,
+			latitude,
+			longitude,
+		} = metWeatherByIdInCurrentDb[key] || {};
+		const {
+			timeAndInfo: {
+				listData,
+				meta: _meta,
+			},
+		} = getMetWeatherDataAttributes(weather, id, selectedType, false, {
+			formatMessage: () => {},
+			timeKey,
+		});
+		let _data = {};
+		for (let i = 0; i < listData.length; i++) {
+			if (timeKey === listData[i].key) {
+				_data = listData[i].data;
+				break;
+			}
+		}
+		if (_data.instant && _data.instant.details) {
+			const attributes = Object.keys(selectedAttributes).map((selectedAttribute: Object): Object => {
+				const {
+					property,
+					label,
+				} = selectedAttributes[selectedAttribute];
+				return {
+					property,
+					label,
+					value: _data.instant.details[property],
+					unit: _meta.units[property],
+				};
+			});
+			const data = {
+				id,
+				name,
+				data: attributes,
+				meta: _meta,
+				latitude,
+				longitude,
+			};
+			metItems.push({
+				objectType: MET_ID,
+				key: id,
+				data,
+			});
+			_metItems = {
+				..._metItems,
+				[`${id}${MET_ID}`]: {
+					objectType: MET_ID,
+					key: id,
+					data,
+				},
+			};
+		}
+	});
+
 	const { sortingDB } = defaultSettings;
-	let orderedList = [...deviceItems, ...sensorItems];
+	let orderedList = [...deviceItems, ...sensorItems, ...metItems];
 	if (sortingDB === 'Alphabetical') {
-		orderedList = orderBy(orderedList, [(item: Object): any => {
+		return orderBy(orderedList, [(item: Object): any => {
 			let { name } = item.data;
 			return name ? name.toLowerCase() : null;
 		}], ['asc']);
 	}
-	return orderedList;
+
+	const userDbExtras = dbExtras[userId] || {};
+	const { customOrder } = userDbExtras[activeDashboardId] || {};
+
+	if (!customOrder) {
+		return orderedList;
+	}
+
+	let _orderedList = [];
+	customOrder.forEach(({id}: Object, index: number) => {
+		const sItem = _sensorItems[`${id}${SENSOR_KEY}`];
+		const dItem = _deviceItems[`${id}${DEVICE_KEY}`];
+		const metItem = _metItems[`${id}${MET_ID}`];
+		if (sItem) {
+			_orderedList.push(sItem);
+		} else if (dItem) {
+			_orderedList.push(dItem);
+		} else if (metItem) {
+			_orderedList.push(metItem);
+		}
+	});
+	return _orderedList;
 }

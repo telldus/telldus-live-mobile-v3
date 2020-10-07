@@ -22,15 +22,18 @@
 'use strict';
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, Animated } from 'react-native';
 import View from './View';
 import Slider from 'react-native-slider';
 import Theme from '../App/Theme';
 import { getDeviceWidth } from '../App/Lib';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
+
 type DefaultProps = {
-	minimumTrackTintColor: string,
 	maximumTrackTintColor: string,
 	trackStyle: {},
 	thumbStyle: Object,
@@ -39,7 +42,7 @@ type DefaultProps = {
 	valueStyle: {},
 };
 
-type Props = {
+type Props = PropsThemedComponent & {
 	value: number,
 	methodFormatDisplayValue?: Function,
 	minimumValue: number,
@@ -62,26 +65,11 @@ type State = {
 	displayValue: any,
 };
 
-export default class SliderComponent extends Component<Props, State> {
+class SliderComponent extends Component<Props, State> {
 	props: Props;
 	state: State;
 
-	static propTypes = {
-		minimumValue: PropTypes.number.isRequired,
-		maximumValue: PropTypes.number.isRequired,
-		onValueChange: PropTypes.func.isRequired,
-		value: PropTypes.number,
-		minimumTrackTintColor: PropTypes.string,
-		maximumTrackTintColor: PropTypes.string,
-		step: PropTypes.number,
-		trackStyle: PropTypes.object,
-		thumbStyle: PropTypes.object,
-		showValue: PropTypes.bool,
-		valueStyle: PropTypes.object,
-	};
-
 	static defaultProps: DefaultProps = {
-		minimumTrackTintColor: Theme.Core.brandSecondary,
 		maximumTrackTintColor: Theme.Core.inactiveGray,
 		trackStyle: {},
 		thumbStyle: {
@@ -121,16 +109,24 @@ export default class SliderComponent extends Component<Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { showValue, ...sliderProps } = this.props;
+		const {
+			showValue,
+			minimumTrackTintColor,
+			colors,
+			...sliderProps
+		} = this.props;
 		const { height } = sliderProps.thumbStyle;
 
 		const { container } = this._getMainStyles();
+
+		const _minimumTrackTintColor = minimumTrackTintColor || colors.inAppBrandSecondary;
 
 		return (
 			<View style={container} onLayout={this._setTrackWidth}>
 				{this._renderValue(showValue, this.state.displayValue)}
 				<Slider
 					{...sliderProps}
+					minimumTrackTintColor={_minimumTrackTintColor}
 					onValueChange={this.onValueChange}
 					style={{
 						flex: 1,
@@ -249,3 +245,5 @@ export default class SliderComponent extends Component<Props, State> {
 		});
 	};
 }
+
+export default withTheme(SliderComponent);

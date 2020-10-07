@@ -24,7 +24,6 @@
 import React from 'react';
 
 import { ListRow, View, Text, StyleSheet } from '../../../../../BaseComponents';
-import Theme from '../../../../Theme';
 
 type Props = {
 	text: string,
@@ -49,9 +48,7 @@ export default class NowRow extends View<Props, null> {
 		return (
 			<ListRow
 				roundIcon={''}
-				roundIconContainerStyle={[roundIconContainerStyle, {
-					backgroundColor: Theme.Core.brandPrimary,
-				}]}
+				roundIconContainerStyle={roundIconContainerStyle}
 				time={null}
 				rowStyle={{
 					backgroundColor: 'transparent',

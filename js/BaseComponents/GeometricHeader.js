@@ -67,7 +67,7 @@ const GeometricHeader = (props: Props): Object => {
 
 	return (
 		<GeoHeader
-			fill={colors.posterBG}
+			fill={colors.inAppBrandSecondary}
 			style={style}
 			height={height}
 			width={width}/>

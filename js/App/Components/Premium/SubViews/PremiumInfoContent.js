@@ -55,12 +55,12 @@ const PremiumInfoContent = (props: Object): Object => {
 		<View style={coverStyle}>
 			<IconTelldus icon={'premium'} style={iconStyle}/>
 			<Text
-				level={5}
+				level={26}
 				style={titleSyle}>
 				{formatMessage(i18n.premiumInfoTitle)}
 			</Text>
 			<Text
-				level={6}
+				level={25}
 				style={contentStyle}>
 				{formatMessage(i18n.premiumInfoDescription)}
 			</Text>

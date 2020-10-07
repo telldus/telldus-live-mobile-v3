@@ -40,6 +40,10 @@ import LastUpdatedInfo from './Sensor/LastUpdatedInfo';
 import i18n from '../../../Translations/common';
 
 import {
+	withTheme,
+} from '../../HOC/withTheme';
+
+import {
 	formatLastUpdated,
 	checkIfLarge,
 	shouldUpdate,
@@ -62,6 +66,10 @@ type Props = {
 
 	isNew: boolean,
 	gatewayId: string,
+
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
@@ -144,8 +152,15 @@ class SensorRow extends View<Props, State> {
 			}
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-				'appLayout', 'sensor', 'isGatewayActive', 'defaultType', 'isLast',
-				'isNew', 'gatewayId',
+				'appLayout',
+				'sensor',
+				'isGatewayActive',
+				'defaultType',
+				'isLast',
+				'isNew',
+				'gatewayId',
+				'themeInApp',
+				'colorScheme',
 			]);
 			if (propsChange) {
 				return true;
@@ -155,6 +170,14 @@ class SensorRow extends View<Props, State> {
 		}
 		// Force re-render once to gain/loose accessibility
 		if (currentScreenN !== 'Sensors' && currentScreen === 'Sensors' && nextProps.screenReaderEnabled) {
+			return true;
+		}
+
+		const themeHasChanged = shouldUpdate(otherProps, nextOtherProps, [
+			'themeInApp',
+			'colorScheme',
+		]);
+		if (themeHasChanged) {
 			return true;
 		}
 
@@ -335,7 +358,7 @@ class SensorRow extends View<Props, State> {
 		return (
 			<View style={coverStyle}>
 				<Text
-					level={6}
+					level={25}
 					style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5 }]}
 					ellipsizeMode="middle"
 					numberOfLines={1}>
@@ -348,7 +371,7 @@ class SensorRow extends View<Props, State> {
 						updateIntervalInSeconds={60}
 						timestamp={lastUpdatedValue}
 						gatewayTimezone={sensor.gatewayTimezone}
-						level={minutesAgo < 1440 ? 6 : 8}
+						level={minutesAgo < 1440 ? 25 : 8}
 						textStyle={[
 							textInfoStyle, {
 								opacity: minutesAgo < 1440 ? 1 : 0.5,
@@ -356,7 +379,7 @@ class SensorRow extends View<Props, State> {
 						]} />
 					:
 					<Text
-						level={5}
+						level={26}
 						style={textInfoStyle}>
 						{this.offline}
 					</Text>
@@ -366,7 +389,14 @@ class SensorRow extends View<Props, State> {
 	}
 
 	getStyles(): Object {
-		const { appLayout, isGatewayActive, sensor = {}, isLast, isNew } = this.props;
+		const {
+			appLayout,
+			isGatewayActive,
+			sensor = {},
+			isLast,
+			isNew,
+			colors,
+		} = this.props;
 		const { data = {} } = sensor;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -377,8 +407,12 @@ class SensorRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
-			brandSecondary,
 		} = Theme.Core;
+
+		const {
+			colorOffActiveBg,
+			inAppBrandSecondary,
+		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
 		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
@@ -386,7 +420,7 @@ class SensorRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
+		let backgroundColor = isGatewayActive ? colorOffActiveBg : Theme.Core.offlineColor;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const widthValueBlock = (buttonWidth * 2) + 6;
@@ -404,12 +438,14 @@ class SensorRow extends View<Props, State> {
 				flex: 1,
 				justifyContent: 'center',
 				alignItems: 'flex-start',
+				marginLeft: 6,
 			},
 			nameTablet: {
 				flex: 1,
 				justifyContent: 'space-between',
 				alignItems: 'flex-start',
 				flexDirection: 'row',
+				marginLeft: 6,
 			},
 			nameText: {
 				fontSize: nameFontSize,
@@ -424,7 +460,7 @@ class SensorRow extends View<Props, State> {
 				borderRadius: 2,
 				...Theme.Core.shadow,
 				borderWidth: isNew ? 2 : 0,
-				borderColor: isNew ? brandSecondary : 'transparent',
+				borderColor: isNew ? inAppBrandSecondary : 'transparent',
 			},
 			hiddenRow: {
 				flexDirection: 'row',
@@ -452,7 +488,7 @@ class SensorRow extends View<Props, State> {
 				borderRadius: 25,
 				width: 25,
 				height: 25,
-				backgroundColor: backgroundColor,
+				backgroundColor,
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginHorizontal: 5,
@@ -518,4 +554,4 @@ class SensorRow extends View<Props, State> {
 	}
 }
 
-module.exports = SensorRow;
+module.exports = withTheme(SensorRow);

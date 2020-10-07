@@ -27,7 +27,6 @@ import React, {
 } from 'react';
 import {
 	Platform,
-	Image,
 } from 'react-native';
 import {
 	useSelector,
@@ -39,6 +38,7 @@ import Header from './Header';
 import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
 import CampaignIcon from './CampaignIcon';
 import Icon from './Icon';
+import ThemedImage from './ThemedImage';
 
 import {
 	resetSchedule,
@@ -83,7 +83,11 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
 	const { screen } = useSelector((state: Object): Object => state.navigation);
 	const { didFetch: gDidFetch, allIds: gAllIds } = useSelector((state: Object): Object => state.gateways);
+	const { didFetch: dDidFetch, allIds: dAllIds } = useSelector((state: Object): Object => state.devices);
+	const { didFetch: sDidFetch, allIds: sAllIds } = useSelector((state: Object): Object => state.sensors);
 	const hasGateways = gDidFetch && gAllIds.length > 0;
+	const hasDevices = dDidFetch && dAllIds.length > 0;
+	const hasSensors = sDidFetch && sAllIds.length > 0;
 
 	const {
 		style,
@@ -123,7 +127,7 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 						name="bars"
 						size={buttonSize > 22 ? buttonSize : 22}
 						style={menuIconStyle}
-						color={'#fff'}/>,
+						level={22}/>,
 				},
 				ios: {},
 			}),
@@ -133,7 +137,8 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 				onPress: navigateToCampaign,
 				iconComponent: <CampaignIcon
 					size={buttonSize > 22 ? buttonSize : 22}
-					style={campaingIconStyle}/>,
+					style={campaingIconStyle}
+					level={22}/>,
 			},
 		];
 
@@ -167,8 +172,16 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 			});
 		};
 
+		const editDb = () => {
+			navigate('SelectTypeScreen');
+		};
+
 		const AddButton = {
-			component: <Image source={{uri: 'icon_plus'}} style={addIconStyle}/>,
+			component: <ThemedImage
+				source={{uri: 'icon_plus'}}
+				style={addIconStyle}
+				level={4}
+			/>,
 			style: rightButtonStyle,
 			onPress: () => {},
 		};
@@ -200,6 +213,15 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 					...AddButton,
 					onPress: newSchedule,
 					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
+				};
+			case 'Dashboard':
+				if (!hasGateways || (!hasDevices && !hasSensors)) {
+					return null;
+				}
+				return {
+					...AddButton,
+					onPress: editDb,
+					accessibilityLabel: `${formatMessage(i18n.editDashboard)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			default:
 				return null;
@@ -252,6 +274,7 @@ const getStyles = (appLayout: Object): Object => {
 					} : {
 						transform: [{rotateZ: '-90deg'}],
 						position: 'absolute',
+						zIndex: 1,
 						left: -(deviceHeight * 0.459931204),
 						top: deviceHeight * 0.459,
 						width: deviceHeight,
@@ -262,13 +285,13 @@ const getStyles = (appLayout: Object): Object => {
 		logoStyle: {
 			...Platform.select({
 				android:
-					(!isPortrait) ? {
-						position: 'absolute',
-						left: deviceHeight * 0.6255,
-						top: deviceHeight * 0.0400,
-					}
+					isPortrait ? {}
 						:
-						{},
+						{
+							position: 'absolute',
+							left: (deviceHeight * 0.15),
+							top: -(deviceHeight * 0.009),
+						},
 			}),
 		},
 		settingsButtonStyle: {

@@ -21,19 +21,16 @@
 
 'use strict';
 
-import React, { useState } from 'react';
-import {
-	TouchableOpacity,
-} from 'react-native';
+import React from 'react';
 import {
 	useSelector,
 } from 'react-redux';
 
 import {
-	View,
+	TouchableOpacity,
 	Text,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import Theme from '../../../Theme';
 
@@ -41,9 +38,8 @@ const ActionSectionHeader = React.memo<Object>((props: Object): Object => {
 	const {
 		onToggle,
 		title,
+		expanded,
 	} = props;
-
-	const [collapsed, setCollapsed] = useState(false);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -53,23 +49,19 @@ const ActionSectionHeader = React.memo<Object>((props: Object): Object => {
 		arrow,
 	} = getStyles(layout);
 
-	function toggleHeader() {
-
-		if (onToggle) {
-			onToggle(!collapsed);
-		}
-		setCollapsed(!collapsed);
-	}
-
-
 	return (
-		<TouchableOpacity onPress={toggleHeader}>
-			<View style={container}>
-				<Text style={label}>{title}</Text>
-				<Icon
-					name={collapsed ? 'ios-arrow-down' : 'ios-arrow-forward'}
-					style={arrow}/>
-			</View>
+		<TouchableOpacity
+			level={2}
+			style={container}
+			onPress={onToggle}>
+			<Text
+				level={25}
+				style={label}>{title}</Text>
+			<ThemedMaterialIcon
+				level={21}
+				name={'keyboard-arrow-right'} style={[arrow, {
+					transform: [{rotateZ: expanded ? '90deg' : '0deg'}],
+				}]}/>
 		</TouchableOpacity>
 	);
 });
@@ -83,25 +75,29 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
+		shadow,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	return {
 		container: {
-			marginTop: padding,
 			flexDirection: 'row',
 			alignItems: 'center',
-			marginBottom: 3,
+			justifyContent: 'space-between',
+			marginBottom: padding / 2,
+			...shadow,
+			padding,
+			marginHorizontal: padding,
+			borderRadius: 2,
 		},
 		label: {
-			color: '#999',
 			fontSize,
 			marginLeft: padding,
 		},
 		arrow: {
+			fontSize: fontSize * 2,
 			marginLeft: 8,
-			color: '#999',
 		},
 	};
 };

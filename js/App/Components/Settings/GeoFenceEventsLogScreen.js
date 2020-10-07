@@ -24,6 +24,8 @@
 import React, {
 	memo,
 	useCallback,
+	useState,
+	useMemo,
 } from 'react';
 import {
 	KeyboardAvoidingView,
@@ -43,6 +45,7 @@ import {
 	PosterWithText,
 	Text,
 	TouchableButton,
+	ThemedSwitch,
 } from '../../../BaseComponents';
 import {
 	GeoFenceEventsLogRow,
@@ -54,6 +57,10 @@ import {
 import {
 	clearAllOnGeoFencesLog,
 } from '../../Actions/GeoFence';
+import {
+	getGeoFenceEvents,
+	clearGeoFenceEvents,
+} from '../../Actions/LocalStorage';
 
 import Theme from '../../Theme';
 
@@ -64,6 +71,7 @@ type Props = {
 function prepareListData(data: Array<Object>, {
 	formatDate,
 	formatTime,
+	sQLite,
 }: Object): Array<Object> {
 	let listData = [];
 	data.map((event: Object) => {
@@ -74,42 +82,15 @@ function prepareListData(data: Array<Object>, {
 			identifier,
 			inAppTime,
 			checkpoints,
-		} = event;
+		} = event || {};
 
-		const {
-			timestamp,
-			geofence = {},
-		} = location;
-		const {
-			// eslint-disable-next-line no-unused-vars
-			extras: extrasDup2,
-			...others
-		} = geofence;
-		const geofenceWithoutDupExtras = {
-			...others,
-		};
-
-		const {
-			arriving,
-			leaving,
-			title,
-			...otherExtras
-		} = extras;
-
-		if (timestamp) {
+		if (sQLite) {
 			listData.push({
-				header: timestamp,
+				header: event.timestamp,
 				data: [
 					{
-						key: 'location',
-						location: {
-							...location,
-							geofence: geofenceWithoutDupExtras,
-						},
-					},
-					{
 						key: 'in app time',
-						'in app time': `${formatDate(inAppTime)} ${formatTime(inAppTime)}`,
+						'in app time': `${formatDate(parseInt(inAppTime, 10))} ${formatTime(parseInt(inAppTime, 10))}`,
 					},
 					{
 						key: 'action',
@@ -117,31 +98,82 @@ function prepareListData(data: Array<Object>, {
 					},
 					{
 						key: 'fence name',
-						'fence name': title,
-					},
-					{
-						key: 'arriving actions',
-						'arriving actions': arriving,
-					},
-					{
-						key: 'leaving actions',
-						'leaving actions': leaving,
-					},
-					{
-						key: 'checkpoints',
-						'checkpoints': checkpoints,
-					},
-					{
-						key: 'extras',
-						extras: otherExtras,
+						'fence name': event.title,
 					},
 					{
 						key: 'identifier',
 						identifier,
 					}],
 			});
+		} else {
+			const {
+				timestamp,
+				geofence = {},
+			} = location;
+			const {
+				// eslint-disable-next-line no-unused-vars
+				extras: extrasDup2,
+				...others
+			} = geofence;
+			const geofenceWithoutDupExtras = {
+				...others,
+			};
+
+			const {
+				arriving,
+				leaving,
+				title,
+				...otherExtras
+			} = extras;
+
+			if (timestamp) {
+				listData.push({
+					header: timestamp,
+					data: [
+						{
+							key: 'location',
+							location: {
+								...location,
+								geofence: geofenceWithoutDupExtras,
+							},
+						},
+						{
+							key: 'in app time',
+							'in app time': `${formatDate(inAppTime)} ${formatTime(inAppTime)}`,
+						},
+						{
+							key: 'action',
+							action,
+						},
+						{
+							key: 'fence name',
+							'fence name': title,
+						},
+						{
+							key: 'arriving actions',
+							'arriving actions': arriving,
+						},
+						{
+							key: 'leaving actions',
+							'leaving actions': leaving,
+						},
+						{
+							key: 'checkpoints',
+							'checkpoints': checkpoints,
+						},
+						{
+							key: 'extras',
+							extras: otherExtras,
+						},
+						{
+							key: 'identifier',
+							identifier,
+						}],
+				});
+			}
 		}
 	});
+
 	return orderBy(listData, 'header', ['desc']);
 }
 
@@ -165,12 +197,26 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 		sectionLabel,
 		contentContainerStyle,
 		emptyTextStyle,
+		switchCircleSize,
+		switchContainerStyle,
+		switchTextStyle,
 	} = getStyles(layout);
 
-	const listData = prepareListData(onGeofence, {
-		formatDate,
-		formatTime,
-	});
+	const [ sQLite, setSQLite ] = useState(false);
+
+	const _listData = useMemo((): Array<Object> => {
+		return prepareListData(onGeofence, {
+			formatDate,
+			formatTime,
+			sQLite,
+		});
+	}, [formatDate, formatTime, onGeofence, sQLite]);
+	const [ listData, setListData ] = useState(_listData);
+
+	const getGeoFenceEventsSQLite = useCallback(async (): Promise<any> => {
+		const sQLiteData = await getGeoFenceEvents();
+		return sQLiteData;
+	}, []);
 
 	const renderRow = useCallback(({item, index}: Object): Object => {
 		const {
@@ -178,10 +224,9 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 			...others
 		} = item;
 		const val = others[key];
-
 		return (
 			<GeoFenceEventsLogRow
-				key={key}
+				key={`${key}-${index}`}
 				val={val}
 				label={key}/>
 		);
@@ -220,19 +265,38 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 			text: 'All logs will be lost forever!',
 			onPressPositive: () => {
 				dispatch(clearAllOnGeoFencesLog());
+				clearGeoFenceEvents();
 				toggleDialogueBoxState({
 					show: false,
 				});
+				setListData(_listData);
+				setSQLite(false);
 			},
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [_listData]);
+
+	const onValueChange = useCallback(async () => {
+		if (!sQLite) {
+			const listDataSQL = await getGeoFenceEventsSQLite();
+			const _listDataSQL = prepareListData(listDataSQL, {
+				formatDate,
+				formatTime,
+				sQLite: true,
+			});
+			setListData(_listDataSQL);
+		} else {
+			setListData(_listData);
+		}
+		setSQLite(!sQLite);
+	}, [sQLite, getGeoFenceEventsSQLite, formatDate, formatTime, _listData]);
 
 	return (
-		<View style={{
-			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
-		}}>
+		<View
+			level={3}
+			style={{
+				flex: 1,
+			}}>
 			<NavigationHeader
 				showLeftIcon={true}
 				leftIcon={'close'}
@@ -247,9 +311,28 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 					appLayout={layout}
 					align={'center'}
 					h2={'Events Log'}
+					extraData={{sQLite}}
+					customComponent={
+						<View style={switchContainerStyle}>
+							<Text
+								level={16}
+								style={switchTextStyle}>
+                Show SQLite Data:
+							</Text>
+							<ThemedSwitch
+								onValueChange={onValueChange}
+								backgroundActive={'#fff'}
+								backgroundInactive={'#fff'}
+								value={sQLite}
+								switchBorderRadius={30}
+								circleSize={switchCircleSize}/>
+						</View>
+					}
 					navigation={navigation}/>
 				{listData.length === 0 ?
-					<Text style={emptyTextStyle}>
+					<Text
+						level={2}
+						style={emptyTextStyle}>
                 Empty
 					</Text>
 					:
@@ -280,16 +363,17 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		subHeader,
 		paddingFactor,
-		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.04);
 
+	const switchCircleSize = deviceWidth * 0.06;
+
 	return {
+		switchCircleSize,
 		contentContainerStyle: {
 			flexGrow: 1,
 			paddingVertical: padding,
@@ -299,11 +383,6 @@ const getStyles = (appLayout: Object): Object => {
 			paddingHorizontal: padding,
 			paddingBottom: padding,
 			paddingTop: padding * 1.5,
-		},
-		headerMainStyle: {
-			marginBottom: 5,
-			color: subHeader,
-			fontSize,
 		},
 		touchableStyle: {
 			height: fontSize * 3.1,
@@ -317,7 +396,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		emptyTextStyle: {
 			marginTop: 10,
-			color: rowTextColor,
 			fontSize,
 			alignSelf: 'center',
 		},
@@ -326,6 +404,18 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'center',
 			marginRight: 5,
 			marginTop: 5,
+		},
+		switchTextStyle: {
+			fontSize,
+			marginRight: 5,
+		},
+		switchContainerStyle: {
+			position: 'absolute',
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignSelf: 'center',
+			right: padding,
+			bottom: padding,
 		},
 	};
 };

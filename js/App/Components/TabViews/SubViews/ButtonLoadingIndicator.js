@@ -26,21 +26,18 @@ import PropTypes from 'prop-types';
 import { View } from '../../../../BaseComponents';
 import { Animated } from 'react-native';
 
-import Theme from '../../../Theme';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	color?: string,
 	style?: Array<any> | Object,
 };
 
-type DefaultProps = {
-	color: string,
-};
 class ButtonLoadingIndicator extends View {
 	props: Props;
-	static defaultProps: DefaultProps = {
-		color: Theme.Core.brandSecondary,
-	};
 
 	blink: () => void;
 
@@ -62,14 +59,16 @@ class ButtonLoadingIndicator extends View {
 	}
 
 	render(): Object {
-		let { style, color } = this.props;
+		let { style, color, colors } = this.props;
+
+		const _color = color || colors.inAppBrandSecondary;
 
 		return (
 			<Animated.View style={[style, {
 				height: 8,
 				width: 8,
 				borderRadius: 4,
-				backgroundColor: color,
+				backgroundColor: _color,
 				opacity: this.state.fadeAnim,
 			}]} />
 		);
@@ -99,4 +98,4 @@ ButtonLoadingIndicator.propTypes = {
 	style: PropTypes.any,
 };
 
-module.exports = ButtonLoadingIndicator;
+module.exports = withTheme(ButtonLoadingIndicator);

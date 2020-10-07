@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import Slider from 'react-native-slider';
 
 import { FloatingButton, Text, View } from '../../../BaseComponents';
@@ -30,29 +29,25 @@ import { ScheduleProps } from './ScheduleScreen';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
+import {
+	withTheme,
+} from '../HOC/withTheme';
+
 interface Props extends ScheduleProps {
 	paddingRight: number,
+	colors: Object,
 }
 
 type State = {
 	methodValue: number,
 };
 
-export default class ActionDim extends View<null, Props, State> {
-
-	static propTypes = {
-		navigation: PropTypes.object,
-		actions: PropTypes.object,
-		onDidMount: PropTypes.func,
-		schedule: PropTypes.object,
-		paddingRight: PropTypes.number,
-		isEditMode: PropTypes.func,
-	};
+class ActionDim extends View<null, Props, State> {
 
 	constructor(props: Props) {
 		super(props);
 
-		const { isEditMode, intl, schedule } = this.props;
+		const { isEditMode, intl, schedule, colors } = this.props;
 		const { formatMessage } = intl;
 
 		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : formatMessage(i18n.labelAction);
@@ -63,7 +58,7 @@ export default class ActionDim extends View<null, Props, State> {
 		let finalMethodValue = parseInt(methodValue, 10);
 		finalMethodValue = isNaN(finalMethodValue) ? 0 : finalMethodValue;
 
-		this.sliderColor = Theme.Core.brandSecondary;
+		this.sliderColor = colors.inAppBrandSecondary;
 
 		this.sliderConfig = {
 			minimumValue: 0,
@@ -93,26 +88,31 @@ export default class ActionDim extends View<null, Props, State> {
 		actions.selectAction(16, Math.round(this.state.methodValue));
 
 		if (isEditMode()) {
-			navigation.navigate(route.params.actionKey);
+			navigation.navigate(route.params.actionKey, {
+				...route.params,
+			});
 		} else {
 			navigation.navigate({
 				name: 'Time',
 				key: 'Time',
+				params: route.params,
 			});
 		}
 	};
 
 	render(): React$Element<any> {
-		const { appLayout } = this.props;
+		const { appLayout, intl } = this.props;
 		const { container, row, caption, slider } = this._getStyle(appLayout);
 
 		const dimValue = this._getDimValue();
 
 		return (
 			<View style={container}>
-				<View style={row}>
+				<View
+					level={2}
+					style={row}>
 					<Text style={caption}>
-						{`Set Dim value (${dimValue}%)`}
+						{intl.formatMessage(i18n.setDimValue, {value: `(${dimValue}%)`})}
 					</Text>
 					<Slider
 						{...this.sliderConfig}
@@ -155,7 +155,6 @@ export default class ActionDim extends View<null, Props, State> {
 			},
 			row: {
 				flex: 1,
-				backgroundColor: '#fff',
 				borderRadius: 2,
 				elevation: 2,
 				shadowColor: '#000',
@@ -190,3 +189,5 @@ export default class ActionDim extends View<null, Props, State> {
 	};
 
 }
+
+export default withTheme(ActionDim);

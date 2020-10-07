@@ -21,7 +21,11 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+	useCallback,
+} from 'react';
 import {
 	useDispatch,
 } from 'react-redux';
@@ -39,6 +43,9 @@ import {
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 
@@ -57,6 +64,13 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		onDidMount,
 	} = props;
 
+	const {
+		colors,
+	} = useAppTheme();
+	const {
+		inAppBrandSecondary,
+	} = colors;
+
 	const intl = useIntl();
 	const {
 		formatMessage,
@@ -74,13 +88,13 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	const dispatch = useDispatch();
 	const [ name, setName ] = useState('');
 
-	function onPressNext() {
+	const onPressNext = useCallback(() => {
 		if (!name || name.trim() === '') {
 			toggleDialogueBoxState({
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				text: 'Please enter a unique name for the fence.', // TODO: Translate
+				text: formatMessage(i18n.errorNameFieldEmpty),
 				showPositive: true,
 			});
 			return;
@@ -88,18 +102,20 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 
 		dispatch(setFenceTitle(name));
 		navigation.navigate('ArrivingActions');
-	}
+	}, [dispatch, formatMessage, name, navigation, toggleDialogueBoxState]);
 
 	const {
 		container,
 		textField,
 		containerStyleTF,
-		brandSecondary,
-	} = getStyles(appLayout);
+	} = getStyles({
+		appLayout,
+		colors,
+	});
 
-	function onChangeText(value: string) {
+	const onChangeText = useCallback((value: string) => {
 		setName(value);
-	}
+	}, []);
 
 	return (
 		<View style={container}>
@@ -107,8 +123,8 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 				label={formatMessage(i18n.name)}
 				containerStyle={containerStyleTF}
 				style={textField}
-				baseColor={brandSecondary}
-				tintColor={brandSecondary}
+				baseColor={inAppBrandSecondary}
+				tintColor={inAppBrandSecondary}
 				onChangeText={onChangeText}
 				autoCapitalize="sentences"
 				autoCorrect={false}
@@ -121,7 +137,10 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -129,7 +148,6 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		rowTextColor,
-		brandSecondary,
 		shadow,
 	} = Theme.Core;
 
@@ -137,7 +155,6 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSize = deviceWidth * 0.045;
 
 	return {
-		brandSecondary,
 		container: {
 			flex: 1,
 		},
@@ -145,7 +162,7 @@ const getStyles = (appLayout: Object): Object => {
 			marginVertical: padding * 2,
 			width: width - (padding * 2),
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
+			backgroundColor: colors.card,
 			...shadow,
 			paddingVertical: padding * 2,
 			paddingHorizontal: padding,

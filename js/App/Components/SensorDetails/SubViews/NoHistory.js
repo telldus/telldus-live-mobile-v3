@@ -57,11 +57,11 @@ render(): Object {
 			level={3}
 			style={container}>
 			<FormattedMessage
-				level={5}
+				level={4}
 				{...i18n.noHistoryHeader}
 				style={headerStyle}/>
 			<FormattedMessage
-				level={5}
+				level={26}
 				{...i18n.noHistoryContent}
 				style={contentStyle}/>
 		</View>

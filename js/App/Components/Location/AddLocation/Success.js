@@ -27,6 +27,7 @@ import React from 'react';
 import { Linking, Platform } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
+import { connect } from 'react-redux';
 
 import {
 	CommonActions,
@@ -55,6 +56,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	route: Object,
+	allIds: Array<string>,
 };
 
 type State = {
@@ -69,7 +71,6 @@ class Success extends View<void, Props, State> {
 		super(props);
 		this.link = 'http://live.telldus.com/help/guides';
 		this.onPressHelp = this.onPressHelp.bind(this);
-		this.onPressContinue = this.onPressContinue.bind(this);
 
 		let { formatMessage } = props.intl;
 
@@ -104,7 +105,7 @@ class Success extends View<void, Props, State> {
 		return nextProps.currentScreen === 'Success';
 	}
 
-	onPressContinue() {
+	navigateToTabs = () => {
 		const { navigation, route } = this.props;
 		const { clientInfo } = route.params || {};
 
@@ -159,6 +160,28 @@ class Success extends View<void, Props, State> {
 		navigation.dispatch(resetAction);
 	}
 
+	navigateToCopy = () => {
+		const { navigation, route } = this.props;
+		navigation.navigate('CopyDevicesAndSchedules', {
+			...route.params,
+		});
+	}
+
+	navigate = () => {
+		const { allIds } = this.props;
+
+		if (allIds.length > 1) {
+			this.navigateToCopy();
+			return;
+		}
+
+		this.navigateToTabs();
+	}
+
+	onPressContinue = () => {
+		this.navigateToTabs();
+	}
+
 	onPressHelp() {
 		let url = this.link;
 		Linking.canOpenURL(url).then((supported: boolean): any => {
@@ -173,8 +196,14 @@ class Success extends View<void, Props, State> {
 	}
 
 	render(): Object {
-		const { appLayout, route } = this.props;
-		const styles = this.getStyle(appLayout);
+		const { appLayout, route, allIds, intl } = this.props;
+
+		const hasOtherGateways = allIds.length > 1;
+
+		const styles = this.getStyle({
+			appLayout,
+			hasOtherGateways,
+		});
 
 		const { clientInfo } = route.params || {};
 		const locationImageUrl = getLocationImageUrl(clientInfo.type);
@@ -184,13 +213,25 @@ class Success extends View<void, Props, State> {
 				flex: 1,
 				alignItems: 'stretch',
 			}}>
-				<View style={styles.itemsContainer}>
+				<View
+					level={2}
+					style={styles.itemsContainer}>
 					<View style={styles.imageTitleContainer}>
 						<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
-						<View style={styles.iconBackMask}/>
-						<Icon name="check-circle" size={styles.iconCheckSize} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
+						<View style={styles.iconCheckCover}>
+							<View
+								level={2}
+								style={styles.iconBackMask}/>
+							<Icon
+								level={31}
+								name="check-circle"
+								size={styles.iconCheckSize}
+								style={styles.iconCheck}/>
+						</View>
 						<View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-							<Text style={styles.messageTitle}>
+							<Text
+								level={18}
+								style={styles.messageTitle}>
 								{this.title}
 							</Text>
 						</View>
@@ -208,8 +249,13 @@ class Success extends View<void, Props, State> {
 							<Icon name="angle-right" size={26} color={'#A59F9A'}/>
 						</TouchableOpacity> */}
 				</View>
+				{hasOtherGateways && <TouchableButton
+					text={'COPY DEVICES FROM OTHER GATEWAY'}
+					onPress={this.navigateToCopy}
+					style={styles.button}
+				/>}
 				<TouchableButton
-					text={this.props.intl.formatMessage(i18n.continue)}
+					text={hasOtherGateways ? 'CONTINUE WITHOUT COPYING' : intl.formatMessage(i18n.continue)}
 					onPress={this.onPressContinue}
 					style={styles.button}
 				/>
@@ -217,7 +263,10 @@ class Success extends View<void, Props, State> {
 		);
 	}
 
-	getStyle(appLayout: Object): Object {
+	getStyle({
+		appLayout,
+		hasOtherGateways,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -225,16 +274,22 @@ class Success extends View<void, Props, State> {
 		const iconCheckSize = deviceWidth * 0.13;
 		const iconContCheckSize = iconCheckSize * 0.96;
 
+		const {
+			paddingFactor,
+			shadow,
+		} = Theme.Core;
+
+		const padding = deviceWidth * paddingFactor;
+
 		return {
 			iconCheckSize: iconCheckSize,
 			itemsContainer: {
-				backgroundColor: '#fff',
 				flexDirection: 'column',
 				marginTop: 20,
 				paddingVertical: 20,
 				paddingRight: 20,
 				alignItems: 'flex-start',
-				...Theme.Core.shadow,
+				...shadow,
 			},
 			imageLocation: {
 				width: deviceWidth * 0.32,
@@ -246,23 +301,24 @@ class Success extends View<void, Props, State> {
 				alignItems: 'center',
 				justifyContent: 'flex-start',
 			},
-			iconBackMask: {
+			iconCheckCover: {
+				flex: 0,
 				position: 'absolute',
 				top: 22,
-				left: deviceWidth * 0.185,
-				width: iconContCheckSize,
-				height: iconContCheckSize,
-				borderRadius: iconContCheckSize / 2,
-				backgroundColor: '#fff',
+				left: deviceWidth * 0.18,
+			},
+			iconBackMask: {
+				top: iconContCheckSize * 0.09,
+				position: 'absolute',
+				width: iconContCheckSize * 0.9,
+				height: iconContCheckSize * 0.9,
+				borderRadius: iconContCheckSize * 0.45,
 			},
 			iconCheck: {
 				position: 'absolute',
-				top: 20,
-				left: deviceWidth * 0.18,
 				backgroundColor: 'transparent',
 			},
 			messageTitle: {
-				color: '#00000099',
 				fontSize: Math.floor(deviceWidth * 0.068),
 				flexWrap: 'wrap',
 			},
@@ -287,12 +343,24 @@ class Success extends View<void, Props, State> {
 				marginRight: 5,
 			},
 			button: {
+				width: hasOtherGateways ? deviceWidth * 0.9 : undefined,
+				maxWidth: deviceWidth * 0.9,
 				alignSelf: 'center',
-				marginTop: 20,
-				marginBottom: 10,
+				marginTop: padding,
 			},
 		};
 	}
 }
 
-export default Success;
+const mapStateToProps = (store: Object): Object => {
+
+	const {
+		allIds,
+	} = store.gateways;
+
+	return {
+		allIds,
+	};
+};
+
+export default connect(mapStateToProps, null)(Success);

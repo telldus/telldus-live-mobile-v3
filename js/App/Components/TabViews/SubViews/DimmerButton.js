@@ -329,7 +329,7 @@ class DimmerButton extends View<Props, null> {
 				onPress={this.onTurnOn}>
 				<DimmerOnButton
 					ref={'onButton'}
-					style={[styles.buttonStyle]}
+					style={styles.buttonStyle}
 					onPress={this.onTurnOn}
 					{...sharedProps}
 				/>
@@ -342,7 +342,7 @@ class DimmerButton extends View<Props, null> {
 				onPress={this.onTurnOff}>
 				<DimmerOffButton
 					ref={'offButton'}
-					style={[styles.buttonStyle]}
+					style={styles.buttonStyle}
 					onPress={this.onTurnOff}
 					{...sharedProps}
 				/>
@@ -388,8 +388,6 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	buttonStyle: {
 		flex: 1,
@@ -399,8 +397,6 @@ const styles = StyleSheet.create({
 	buttonContainerStyle: {
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 });
 

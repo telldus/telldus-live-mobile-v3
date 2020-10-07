@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import {
 	useSelector,
 } from 'react-redux';
@@ -34,13 +36,19 @@ import {
 	ListItem,
 	CheckBoxIconText,
 	Switch,
+	TimezoneFormattedTime,
 } from '../../../../BaseComponents';
+
+import {
+	getRepeatDescription,
+} from '../../../Lib/scheduleUtils';
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
 
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
-
-const weekdayStrs = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const JobRow = React.memo<Object>((props: Object): Object => {
 
@@ -56,6 +64,17 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 	const {
 		name,
 	} = device;
+	const {
+		weekdays,
+		active,
+		type,
+		effectiveHour,
+		effectiveMinute,
+	} = job;
+
+	const {
+		colors,
+	} = useAppTheme();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -73,27 +92,26 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 		checkIconInActiveStyle,
 		textTwoStyle,
 		switchStyle,
-		switchTextStyle,
 	} = getStyles(layout, {
 		isLast,
+		colors,
 	});
 
-	function noOp() {}
+	const noOp = useCallback(() => {}, []);
 
 	const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
-	function getNameInfo(): Object {
+	const getNameInfo = useCallback((): Object => {
 
 		let coverStyle = nameStyle;
 		if (DeviceInfo.isTablet()) {
 			coverStyle = nameTabletStyle;
 		}
-
-		let dayStrs = [];
-		for (let i = 0; i < job.weekdays.length; i++) {
-			dayStrs.push(weekdayStrs[job.weekdays[i] - 1]);
-		}
-		let daysStr = dayStrs.join(',');
+		const description = getRepeatDescription({
+			type, weekdays, intl,
+		});
+		const date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
+		const timestamp = Date.parse(date);
 
 		return (
 			<View style={coverStyle}>
@@ -101,26 +119,34 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 					{deviceName}
 				</Text>
 				<Text style = {textTwoStyle} numberOfLines={1}>
-					{intl.formatMessage(i18n.atWithValue, {
-						value: `${job.hour}:${job.minute} - ${daysStr}`,
-					})}
+					{description}{' '}
+					{type === 'time' && (
+						<TimezoneFormattedTime
+							value={timestamp}
+							formattingOptions={{
+								hour: 'numeric',
+								minute: 'numeric',
+							}}
+							style={textTwoStyle}
+						/>)
+					}
 				</Text>
 			</View>
 		);
-	}
+	}, [deviceName, effectiveHour, effectiveMinute, intl, nameStyle, nameTabletStyle, textStyle, textTwoStyle, type, weekdays]);
 
 	const nameInfo = getNameInfo();
 
-	function _onChangeSelection() {
+	const _onChangeSelection = useCallback(() => {
 		onChangeSelection('schedule', checkBoxId, job);
-	}
+	}, [checkBoxId, job, onChangeSelection]);
 
-	function _toggleActiveState(active: boolean) {
+	const _toggleActiveState = useCallback((_active: boolean) => {
 		toggleActiveState('schedule', checkBoxId, {
 			...job,
-			active,
+			active: _active,
 		});
-	}
+	}, [checkBoxId, job, toggleActiveState]);
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
 
@@ -147,12 +173,9 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 				{
 					isChecked ? (
 						<>
-							<Text style={switchTextStyle}>
-								{intl.formatMessage(i18n.labelActive)}
-							</Text>
 							<Switch
 								style={switchStyle}
-								value={job.active}
+								value={active}
 								onValueChange={_toggleActiveState}/>
 						</>
 					) : null
@@ -165,6 +188,7 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 
 const getStyles = (appLayout: Object, {
 	isLast,
+	colors,
 }: Object): Object => {
 	let { height, width } = appLayout;
 	let isPortrait = height > width;
@@ -173,11 +197,15 @@ const getStyles = (appLayout: Object, {
 	let {
 		rowHeight,
 		maxSizeRowTextOne,
-		brandSecondary,
 		shadow,
 		paddingFactor,
-		rowTextColor,
 	} = Theme.Core;
+
+	const {
+		inAppBrandSecondary,
+		card,
+		textSeven,
+	} = colors;
 
 	let nameFontSize = Math.floor(deviceWidth * 0.047);
 	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
@@ -195,7 +223,7 @@ const getStyles = (appLayout: Object, {
 			marginHorizontal: padding,
 			marginTop: padding / 2,
 			marginBottom: isLast ? padding : 0,
-			backgroundColor: '#FFFFFF',
+			backgroundColor: card,
 			height: rowHeight,
 			borderRadius: 2,
 			...shadow,
@@ -221,14 +249,14 @@ const getStyles = (appLayout: Object, {
 			flexDirection: 'row',
 		},
 		textStyle: {
-			color: rowTextColor,
+			color: textSeven,
 			fontSize: nameFontSize,
 			textAlignVertical: 'center',
 			textAlign: 'left',
 			marginHorizontal: padding,
 		},
 		textTwoStyle: {
-			color: rowTextColor,
+			color: textSeven,
 			fontSize: nameFontSize * 0.8,
 			textAlignVertical: 'center',
 			textAlign: 'left',
@@ -238,24 +266,17 @@ const getStyles = (appLayout: Object, {
 			paddingHorizontal: padding,
 		},
 		checkIconActiveStyle: {
-			borderColor: brandSecondary,
-			backgroundColor: brandSecondary,
+			borderColor: inAppBrandSecondary,
+			backgroundColor: inAppBrandSecondary,
 			color: '#fff',
 		},
 		checkIconInActiveStyle: {
-			borderColor: rowTextColor,
+			borderColor: textSeven,
 			backgroundColor: 'transparent',
 			color: 'transparent',
 		},
 		switchStyle: {
 			marginRight: padding,
-		},
-		switchTextStyle: {
-			color: rowTextColor,
-			fontSize: nameFontSize * 0.8,
-			textAlignVertical: 'center',
-			textAlign: 'right',
-			marginRight: 5,
 		},
 	};
 };

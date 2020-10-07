@@ -22,13 +22,14 @@
 'use strict';
 
 import React, { Component } from 'react';
+
+import TouchableOpacity from './TouchableOpacity';
 import View from './View';
 import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
 
 type DefaultProps = {
 	color: string,
-	bgColor: string,
 	backgroundMask: boolean,
 };
 
@@ -43,6 +44,7 @@ type Props = {
 	backgroundMaskStyle?: Array<any> | Object,
 	iconLevel?: number,
 	blockLevel?: number,
+	onPress?: Function,
 };
 
 export default class BlockIcon extends Component<Props, null> {
@@ -50,7 +52,6 @@ export default class BlockIcon extends Component<Props, null> {
 
 	static defaultProps: DefaultProps = {
 		color: '#fff',
-		bgColor: Theme.Core.brandPrimary,
 		backgroundMask: false,
 	};
 
@@ -65,12 +66,15 @@ export default class BlockIcon extends Component<Props, null> {
 			backgroundMaskStyle,
 			iconLevel,
 			blockLevel,
+			onPress,
 		} = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<View
-				level={blockLevel || 8}
+			<TouchableOpacity
+				disabled={!onPress}
+				onPress={onPress}
+				level={blockLevel || 13}
 				style={[defaultStyle, containerStyle]}>
 				{backgroundMask && (<View style={backgroundMaskStyle}/>)}
 				<IconTelldus
@@ -79,15 +83,20 @@ export default class BlockIcon extends Component<Props, null> {
 					size={size}
 					color={typeof iconLevel === 'undefined' ? color : undefined}
 					style={style}/>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 
 	_getDefaultStyle = (): Object => {
+		const {
+			bgColor,
+			blockLevel,
+		} = this.props;
+		const _bgColor = blockLevel ? undefined : (bgColor ? bgColor : Theme.Core.brandPrimary);
 		return {
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: this.props.bgColor,
+			backgroundColor: _bgColor,
 		};
 	};
 }

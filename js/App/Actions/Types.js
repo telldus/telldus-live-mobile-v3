@@ -47,6 +47,19 @@ export type Action =
 	| { type: 'CHANGE_SCREEN', screen: string }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 
+	| { type: 'HIDE_TAB', payload: {
+		tab: string,
+		userId: string,
+	} }
+	| { type: 'UNHIDE_TAB', payload: {
+		tab: string,
+		userId: string,
+	} }
+	| { type: 'CHANGE_DEFAULT_START_SCREEN', payload: {
+		screenKey: string,
+		userId: string,
+	} }
+
 	| { type: 'ADD_TO_DASHBOARD', payload: {
 		kind: 'device' | 'sensor',
 		id: number,

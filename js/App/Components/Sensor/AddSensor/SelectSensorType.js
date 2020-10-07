@@ -205,12 +205,12 @@ render(): Object {
 					level={2}
 					style={no433Cover}>
 					<Text
-						level={7}
+						level={23}
 						style={no433Header}>
 						{formatMessage(i18n.gatewayNoSupport433Header)}
 					</Text>
 					<Text
-						level={6}
+						level={25}
 						style={no433Body}>
 						{enableWebshop ?
 							formatMessage(i18n.gatewayNoSupport433InfoTwo)

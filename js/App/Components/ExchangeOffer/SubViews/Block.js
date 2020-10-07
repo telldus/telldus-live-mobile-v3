@@ -53,11 +53,13 @@ const Block = (props: Object): Object => {
 	} = getStyles(appLayout, index);
 
 	return (
-		<View style={[contentContainerStyle, {
-			paddingTop: index === 0 ? padding * 1.5 : 0,
-			marginTop: index === 0 ? padding * 1.5 : padding / 2,
-			marginBottom: index === 3 ? padding * 1.5 : 0,
-		}]}>
+		<View
+			level={2}
+			style={[contentContainerStyle, {
+				paddingTop: index === 0 ? padding * 1.5 : 0,
+				marginTop: index === 0 ? padding * 1.5 : padding / 2,
+				marginBottom: index === 3 ? padding * 1.5 : 0,
+			}]}>
 			{!!img && <View style={imageCover}>
 				<Image source={img} style={{
 					flex: 1,
@@ -70,7 +72,9 @@ const Block = (props: Object): Object => {
 				(
 					<View style={priceInfoCover}>
 						<View style={priceInfoInnerCover}>
-							<Text style={priceInfoOne}>
+							<Text
+								level={23}
+								style={priceInfoOne}>
 							799 SEK
 							</Text>
 							<Text style={priceInfoTwo}>
@@ -93,7 +97,9 @@ const Block = (props: Object): Object => {
 					{h1}
 				</Text>
 				}
-				{!!h2 && <Text style={h2Style}>
+				{!!h2 && <Text
+					level={23}
+					style={h2Style}>
 					{h2}
 				</Text>
 				}
@@ -114,7 +120,6 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		paddingFactor,
 		shadow,
 		eulaContentColor,
-		brandSecondary,
 		rowTextColor,
 		brandPrimary,
 	} = Theme.Core;
@@ -130,7 +135,6 @@ const getStyles = (appLayout: Object, index: number): Object => {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...shadow,
 			borderRadius: 2,
 			width: widthIMG,
@@ -154,7 +158,6 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		},
 		h2Style: {
 			fontSize: Math.floor(deviceWidth * 0.042),
-			color: brandSecondary,
 			marginTop: 8,
 			textAlign: 'center',
 		},
@@ -175,7 +178,6 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		},
 		priceInfoOne: {
 			fontSize: Math.floor(deviceWidth * 0.066),
-			color: brandSecondary,
 			fontWeight: 'bold',
 		},
 		priceInfoTwo: {

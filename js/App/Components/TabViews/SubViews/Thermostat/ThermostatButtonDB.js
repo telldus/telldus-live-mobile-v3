@@ -39,6 +39,10 @@ type Props = {
 	isOpen?: boolean,
 	currentTemp?: number,
 
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
+
 	style: Object,
 	intl: Object,
 	isGatewayActive: boolean,
@@ -85,7 +89,14 @@ class ThermostatButtonDB extends View<Props, State> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth', 'isOpen', 'currentTemp']);
+		const propsChange = shouldUpdate(others, othersN, [
+			'item',
+			'tileWidth',
+			'isOpen',
+			'currentTemp',
+			'colorScheme',
+			'themeInApp',
+		]);
 		if (propsChange) {
 			return true;
 		}
@@ -115,6 +126,7 @@ class ThermostatButtonDB extends View<Props, State> {
 			containerStyle,
 			infoBlockStyle,
 			tileWidth,
+			colors,
 		} = this.props;
 
 		const { stateValues = {} } = item;
@@ -149,7 +161,7 @@ class ThermostatButtonDB extends View<Props, State> {
 			}]}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
-			mode === 'off' ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			mode === 'off' ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<TouchableOpacity onPress={this.onPressMoreButtons} style={containerStyle}>
@@ -191,15 +203,6 @@ const styles = StyleSheet.create({
 		fontSize: 22,
 		color: '#fff',
 		paddingLeft: 3,
-	},
-	itemIconContainerOn: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	itemIconContainerOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 

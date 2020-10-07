@@ -45,6 +45,10 @@ const PAYMENT_IMAGES = {
 };
 
 import {
+	withTheme,
+} from '../../HOC/withTheme';
+
+import {
 	getPaymentOptions,
 } from '../../../Lib/appUtils';
 
@@ -53,7 +57,7 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 const PaymentProvidersBlock = (props: Object): Object => {
-	const { style, onSelect } = props;
+	const { style, onSelect, colors } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		coverStyle,
@@ -97,13 +101,13 @@ const PaymentProvidersBlock = (props: Object): Object => {
 						marginLeft: (key % 2 === 0) ? 0 : padding / 2,
 					}, selectedIndex === key ? {
 						borderWidth: 3,
-						borderColor: Theme.Core.brandSecondary,
+						borderColor: colors.inAppBrandSecondary,
 					} : undefined]}
 					onPress={onSelectOption}>
 					<View style={innerCoverStyle}>
 						<View style={nameCoverStyle}>
 							<Text
-								level={5}
+								level={26}
 								style={nameStyle}
 								numberOfLines={1}>
 								{name.toUpperCase()}
@@ -123,7 +127,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 	return (
 		<View style={[coverStyle, style]}>
 			<Text
-				level={6}
+				level={25}
 				style={labelStyle}>
 				{formatMessage(i18n.selectPaymentProvider)}
 			</Text>
@@ -217,4 +221,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(PaymentProvidersBlock);
+export default React.memo<Object>(withTheme(PaymentProvidersBlock));

@@ -24,7 +24,11 @@ import React from 'react';
 import { Modal, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import moment from 'moment-timezone';
+let dayjs = require('dayjs');
+let utc = require('dayjs/plugin/utc');
+let timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 import Orientation from 'react-native-orientation-locker';
 const isEqual = require('react-fast-compare');
 import maxBy from 'lodash/maxBy';
@@ -64,6 +68,7 @@ type Props = {
 	liveData: Object,
 	sensorId: number,
 
+	intl: Object,
 	dispatch: Function,
 	onToggleChartData: (Object) => void,
 	refreshHistoryDataAfterLiveUpdate: () => Promise<any>,
@@ -348,6 +353,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			isChartLoading,
 			smoothing,
 			graphView,
+			intl,
 		} = this.props;
 
 		if (chartDataOne.length === 0 && chartDataTwo.length === 0) {
@@ -398,6 +404,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			graphView,
 			setLargeYTick: this.setLargeYTick,
 			y2Tick,
+			intl,
 		};
 
 		return (
@@ -522,16 +529,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 					...shadow,
 					marginBottom: padding,
 				},
-			containerWhenLoading: {
-				backgroundColor: '#fff',
-				width: chartWidth,
-				...shadow,
-				alignItems: 'center',
-				justifyContent: 'center',
-				height: chartHeight,
-				marginLeft: padding / 2,
-				marginBottom: padding,
-			},
 			chartWidth,
 			chartHeight,
 			colorsScatter: [brandDanger, brandInfo],
@@ -541,13 +538,13 @@ class SensorHistoryLineChart extends View<Props, State> {
 
 function getNewData(data: Object, toTimestamp: number, selectedData: Object, gatewayTimezone: string, tsOne?: number, tsTwo?: number): Object {
 	if (gatewayTimezone) {
-		moment.tz.setDefault(gatewayTimezone);
+		dayjs.tz.setDefault(gatewayTimezone);
 	}
 
-	const today = moment().format('YYYY-MM-DD');
-	const toDay = moment.unix(toTimestamp).format('YYYY-MM-DD');
+	const today = dayjs().format('YYYY-MM-DD');
+	const toDay = dayjs.unix(toTimestamp).format('YYYY-MM-DD');
 
-	moment.tz.setDefault();
+	dayjs.tz.setDefault();
 
 	// Return live data only if 'to' date is today.
 	if (today !== toDay) {

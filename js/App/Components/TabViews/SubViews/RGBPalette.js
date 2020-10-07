@@ -29,9 +29,8 @@ import { View, IconTelldus } from '../../../../BaseComponents';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import {
-	getMainColorRGB,
-	prepareMainColor,
-} from '../../../Lib/rgbUtils';
+	withTheme,
+} from '../../HOC/withTheme';
 
 type Props = {
 	displayedValue: string,
@@ -44,6 +43,11 @@ type Props = {
 	onColorMultiplier: number,
 	methodRequested: string,
 	disableActionIndicator?: boolean,
+	preparedMainColorRgb: string,
+
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 type DefaultProps = {
@@ -68,20 +72,24 @@ class RGBPalette extends View<Props, null> {
 	render(): Object {
 		const {
 			displayedValue,
-			rgb,
 			isInState,
 			fontSize,
 			fontSizeIcon,
 			isGatewayActive,
-			onColorMultiplier,
 			methodRequested,
 			disableActionIndicator,
+			colors,
+			preparedMainColorRgb,
 		} = this.props;
 
-		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? prepareMainColor(getMainColorRGB(rgb), onColorMultiplier) : '#eeeeee';
-		let iconColor = isInState === 'DIM' || isInState === 'RGB' ? '#FFF' : prepareMainColor(getMainColorRGB(rgb), onColorMultiplier);
+		const {
+			colorOnInActiveBg,
+		} = colors;
 
-		mainColor = isGatewayActive ? mainColor : '#eeeeee';
+		let mainColor = (isInState === 'DIM' || isInState === 'RGB') ? preparedMainColorRgb : colorOnInActiveBg;
+		let iconColor = (isInState === 'DIM' || isInState === 'RGB') ? '#FFF' : preparedMainColorRgb;
+
+		mainColor = isGatewayActive ? mainColor : colorOnInActiveBg;
 		iconColor = isGatewayActive ? iconColor : '#a2a2a2';
 
 		let dotColor = iconColor;
@@ -118,4 +126,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = RGBPalette;
+module.exports = withTheme(RGBPalette);

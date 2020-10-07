@@ -55,7 +55,6 @@ import {
 import {
 	getSubscriptionPlans,
 	getPaymentOptions,
-	capitalizeFirstLetterOfEachWord,
 	premiumAboutToExpire,
 } from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
@@ -74,11 +73,15 @@ import {
 	useIAPSuccessFailureHandle,
 } from '../../Hooks/IAP';
 
+import {
+	withTheme,
+} from '../HOC/withTheme';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const AdditionalPlansPaymentsScreen = (props: Object): Object => {
-	const { navigation, screenProps } = props;
+	const { navigation, screenProps, colors } = props;
 	const {
 		layout,
 	} = useSelector((state: Object): Object => state.app);
@@ -120,7 +123,11 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		infoTextStyle,
 		statusIconStyle,
 		footerHeight,
-	} = getStyles(layout);
+		inAppBrandSecondary,
+	} = getStyles({
+		layout,
+		colors,
+	});
 	const intl = useIntl();
 	const {
 		formatMessage,
@@ -156,19 +163,19 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					style={[contentCover,
 						selectedIndex === index ? {
 							borderWidth: 3,
-							borderColor: Theme.Core.brandSecondary,
+							borderColor: inAppBrandSecondary,
 						} : undefined,
 					]}>
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={premiumIconStyle}/>
 						<Text
-							level={5}
+							level={26}
 							style={validityTextStyle}>
 							{validity === 1 ? `${validity} ${formatMessage(i18n.month)}` : `${formatMessage(i18n.months, {value: validity})}`}
 						</Text>
 					</View>
 					<Text
-						level={9}
+						level={23}
 						style={pMonthTextStyle}>
 						{`€${formatNumber(cPerMonth, {
 							minimumFractionDigits: cPerMonth === 3 ? 0 : 2,
@@ -177,7 +184,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
 						<IconTelldus icon={'sms'} style={smsIconStyle}/>
 						<Text
-							level={5}
+							level={26}
 							style={smsCreditTextStyle}>
 							{formatMessage(i18n.includingSMS, {
 								value: smsCredit,
@@ -192,7 +199,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 							{`€${formatNumber(prevTotal)}`}
 						</Text>}
 						<Text
-							level={5}
+							level={26}
 							style={newChargeTextStyle}>
 							{`€${formatNumber(newTotal)} ${formatMessage(i18n.total)}`}
 						</Text>
@@ -314,7 +321,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 				paddingBottom: 20,
 			}}>
 				<Text
-					level={6}
+					level={25}
 					style={labelStyle}>{formatMessage(i18n.selectSubscriptionPlan)}</Text>
 				{plans}
 				<PaymentProvidersBlock onSelect={onSelect}/>
@@ -328,19 +335,21 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					iconStyle={recurring ?
 						{
 							color: '#fff',
-							backgroundColor: Theme.Core.brandSecondary,
-							borderColor: Theme.Core.brandSecondary,
+							backgroundColor: inAppBrandSecondary,
+							borderColor: inAppBrandSecondary,
 						}
 						:
 						{
 							color: 'transparent',
 							backgroundColor: 'transparent',
-							borderColor: Theme.Core.brandSecondary,
+							borderColor: inAppBrandSecondary,
 						}
 					}
 				/>
 				}
-				{showInfo && <View style={infoContainer}>
+				{showInfo && <View
+					level={2}
+					style={infoContainer}>
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
 					<Text style={infoTextStyle}>
 						{!supportAutoRenew ?
@@ -360,7 +369,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					style={buttonStyle}
 					disabled={onGoing}
 				/>
-				<Text style={backLinkStyle} onPress={onGoBack}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.backLabel))}</Text>
+				<Text style={backLinkStyle} onPress={onGoBack}>{capitalize(formatMessage(i18n.backLabel))}</Text>
 			</ScrollView>
 			{isHeadsUp && <Footer
 				navigation={navigation}
@@ -369,19 +378,26 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
+const getStyles = ({
+	layout,
+	colors,
+}: Object): Object => {
+	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.036);
 
-	let footerHeight = Math.floor(deviceWidth * 0.26);
-	footerHeight = footerHeight > 100 ? 100 : footerHeight;
+	const footerHeight = Theme.Core.getFooterHeight(deviceWidth);
+
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	return {
 		footerHeight,
+		inAppBrandSecondary,
 		container: {
 			flex: 1,
 		},
@@ -468,7 +484,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		textStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		checkButtonStyle: {
 			marginVertical: padding,
@@ -476,7 +492,7 @@ const getStyles = (appLayout: Object): Object => {
 		backLinkStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
 			alignSelf: 'center',
-			color: Theme.Core.brandSecondary,
+			color: inAppBrandSecondary,
 			padding: 10,
 			marginVertical: padding,
 		},
@@ -487,7 +503,6 @@ const getStyles = (appLayout: Object): Object => {
 			marginHorizontal: padding,
 			marginBottom: padding,
 			padding,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -495,7 +510,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
-			color: Theme.Core.brandSecondary,
+			color: inAppBrandSecondary,
 		},
 		infoTextStyle: {
 			flex: 1,
@@ -507,4 +522,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(AdditionalPlansPaymentsScreen);
+export default React.memo<Object>(withTheme(AdditionalPlansPaymentsScreen));

@@ -21,7 +21,11 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+	useCallback,
+} from 'react';
 import {
 	ScrollView,
 	Platform,
@@ -66,6 +70,8 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	actions: Object,
+	enableGeoFence: boolean,
 };
 
 const ActiveTime = React.memo<Object>((props: Props): Object => {
@@ -73,6 +79,8 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		navigation,
 		appLayout,
 		onDidMount,
+		actions,
+		enableGeoFence,
 	} = props;
 
 	const intl = useIntl();
@@ -111,11 +119,14 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
 
-	function onPressNext() {
+	const onPressNext = useCallback(() => {
 		setIsLoading(true);
 		dispatch(setFenceIdentifier(uuid.v1()));
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		dispatch(addGeofence()).then(() => {
+			if (enableGeoFence) {
+				actions.showToast(formatMessage(i18n.gFTurnedOn));
+			}
 			setIsLoading(false);
 			const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(fence.latitude, fence.longitude, fence.radius);
 			let _routes = [
@@ -170,7 +181,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 				showPositive: true,
 			});
 		});
-	}
+	}, [aA, actions, dispatch, enableGeoFence, fH, fM, fence.latitude, fence.longitude, fence.radius, formatMessage, navigation, tH, tM, toggleDialogueBoxState]);
 
 	const {
 		container,
@@ -180,13 +191,13 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		iconStyle,
 	} = getStyles(appLayout);
 
-	function onChangeTime(
+	const onChangeTime = useCallback((
 		alwaysActive: boolean,
 		fromHr: number,
 		fromMin: number,
 		toHr: number,
 		toMin: number,
-	) {
+	) => {
 		setTimeInfo({
 			alwaysActive,
 			fromHr,
@@ -194,7 +205,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 			toHr,
 			toMin,
 		});
-	}
+	}, []);
 
 	return (
 		<View style={{flex: 1}}>
@@ -226,7 +237,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -243,13 +253,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		rowStyle: {
 			padding: padding * 1.5,
-			backgroundColor: '#fff',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			height: undefined,
 		},
 		leftItemStyle: {
-			color: eulaContentColor,
 			fontSize,
 		},
 		iconStyle: {

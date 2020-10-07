@@ -33,72 +33,102 @@ import {
 } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MapView from 'react-native-maps';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
 	Text,
 } from '../../../../BaseComponents';
 
+import capitalize from '../../../Lib/capitalize';
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
 
 const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 	const {
 		onPress,
 		fence,
-		enableGeoFence,
 	} = props;
 
+	const intl = useIntl();
+	const {
+		formatMessage,
+		formatTime,
+	} = intl;
 	const markerRef = useRef(null);
 
 	const {
 		extras = {},
 		...others
 	} = fence;
+	const {
+		radius,
+		latitude,
+		longitude,
+		title,
+		isAlwaysActive,
+		fromHr,
+		fromMin,
+		toHr,
+		toMin,
+	} = extras;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const _onPress = useCallback(() => {
-		if (!enableGeoFence) {
-			return;
-		}
 		const _fence = {
 			...extras,
 			...others,
-			radius: extras.radius / 1000,
+			radius: radius / 1000,
 		};
 		if (markerRef && markerRef.current && markerRef.current.showCallout) {
 			markerRef.current.hideCallout();
 		}
 		onPress(_fence);
-	}, [enableGeoFence, extras, onPress, others]);
+	}, [extras, onPress, others, radius]);
+
+	const dateT = `01/01/2017 ${toHr}:${toMin}`;
+	const timestampT = Date.parse(dateT);
+	const dateF = `01/01/2017 ${fromHr}:${fromMin}`;
+	const timestampF = Date.parse(dateF);
 
 	const {
 		container,
 		titleStyle,
-		editBtn,
 		editIcon,
+		infoStyle,
 	} = getStyles(layout);
 
 	return (
 		<MapView.Marker.Animated
 			ref={markerRef}
 			image={{uri: 'marker'}}
-			coordinate={{ latitude: extras.latitude, longitude: extras.longitude }}>
+			coordinate={{ latitude, longitude }}>
 			<MapView.Callout
 				onPress={_onPress}>
-				<View style={container}>
-					<Text
-						style={titleStyle}>
-						{extras.title}
-					</Text>
-					<TouchableOpacity
-						style={editBtn}>
-						<Icon
-							style={editIcon}
-							name="mode-edit"/>
-					</TouchableOpacity>
-				</View>
+				<TouchableOpacity
+					style={container}>
+					<View>
+						<Text
+							level={23}
+							style={titleStyle}>
+							{title}
+						</Text>
+						<Text
+							level={4}
+							style={infoStyle}>
+							{isAlwaysActive ?
+								capitalize(formatMessage(i18n.alwaysActive))
+								:
+								`${capitalize(formatMessage(i18n.labelActive))} ${formatTime(timestampF)}-${formatTime(timestampT)}`
+							}
+						</Text>
+					</View>
+					<Icon
+						style={editIcon}
+						name="mode-edit"/>
+				</TouchableOpacity>
 			</MapView.Callout>
 		</MapView.Marker.Animated>
 	);
@@ -110,28 +140,28 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		brandSecondary,
 		eulaContentColor,
 	} = Theme.Core;
 
-	const fontSize = deviceWidth * 0.03;
+	const fontSize = deviceWidth * 0.045;
 
 	return {
 		container: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'center',
+			padding: 5,
 		},
 		titleStyle: {
 			fontSize,
-			color: brandSecondary,
 		},
-		editBtn: {
-			marginLeft: 8,
+		infoStyle: {
+			fontSize: fontSize * 0.9,
 		},
 		editIcon: {
 			color: eulaContentColor,
 			fontSize,
+			marginLeft: 8,
 		},
 	};
 };

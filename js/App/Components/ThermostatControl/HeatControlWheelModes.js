@@ -24,12 +24,12 @@
 import React from 'react';
 import { LayoutAnimation, TouchableOpacity } from 'react-native';
 import CircularSlider from 'react-native-circular-slider';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
 	InfoBlock,
 	EmptyView,
+	ThemedMaterialIcon,
 } from '../../../BaseComponents';
 import ModesList from './ModesList';
 import ControlInfoBlock from './ControlInfoBlock';
@@ -549,9 +549,9 @@ render(): Object | null {
 					style={cover}>
 					{showControlIcons ?
 						<TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
-							<MaterialIcons
+							<ThemedMaterialIcon
 								name="remove"
-								color={Theme.Core.brandPrimary}
+								level={23}
 								size={iconSize}/>
 						</TouchableOpacity>
 						:
@@ -610,9 +610,9 @@ render(): Object | null {
 					/>
 					{showControlIcons ?
 						<TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
-							<MaterialIcons
+							<ThemedMaterialIcon
 								name="add"
-								color={Theme.Core.brandSecondary}
+								level={23}
 								size={iconSize}/>
 						</TouchableOpacity>
 						:

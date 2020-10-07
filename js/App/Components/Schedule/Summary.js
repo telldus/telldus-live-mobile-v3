@@ -24,7 +24,6 @@
 import React from 'react';
 import {
 	ScrollView,
-	Platform,
 } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 import {
@@ -36,7 +35,11 @@ import {
 	View,
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getSelectedDays, getDeviceActionIcon } from '../../Lib';
+import {
+	getSelectedDays,
+	getDeviceActionIcon,
+	prepareVisibleTabs,
+} from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 
@@ -129,47 +132,94 @@ class Summary extends View<null, Props, State> {
 	}
 
 	resetNavigation = () => {
-		const { navigation, schedule } = this.props;
+		const {
+			navigation,
+			schedule,
+			route,
+			hiddenTabsCurrentUser,
+		} = this.props;
 
-		let _routes = [
-			{
-				name: 'Dashboard',
-			},
-			{
-				name: 'Devices',
-			},
-			{
-				name: 'Sensors',
-			},
-			{
-				name: 'Scheduler',
-			},
-		];
-		if (Platform.OS === 'ios') {
-			_routes.push({
-				name: 'MoreOptionsTab',
-			});
-		}
+		const {
+			params = {},
+		} = route;
+
+		const {
+			visibleTabs = [],
+			tabToCheckOrVeryNextIndex,
+		} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Scheduler');
 
 		let routes = [
 			{
 				name: 'Tabs',
+				key: 'Tabs',
 				state: {
-					index: 3,
-					routes: _routes,
-				},
-			},
-			{
-				name: 'InfoScreen',
-				params: {
-					info: 'add_schedule_another',
-					deviceId: schedule.deviceId,
+					index: tabToCheckOrVeryNextIndex,
+					routes: visibleTabs.map((vt: string): Object => {
+						return {'name': vt};
+					}),
 				},
 			},
 		];
 
+		if (params.origin === 'DeviceDetails_SchedulesTab') {
+			routes = [
+				{
+					name: 'Tabs',
+					key: 'Tabs',
+					state: {
+						index: 1,
+						routes: [
+							{
+								name: 'Dashboard',
+							},
+							{
+								name: 'Devices',
+							},
+							{
+								name: 'Sensors',
+							},
+							{
+								name: 'Scheduler',
+							},
+						],
+					},
+				},
+				{
+					name: 'DeviceDetails',
+					key: 'DeviceDetails',
+					params: {id: schedule.deviceId},
+					state: {
+						index: 3,
+						routes: [
+							{
+								name: 'Overview',
+							},
+							{
+								name: 'History',
+							},
+							{
+								name: 'Settings',
+							},
+							{
+								name: 'SchedulesTab',
+							},
+						],
+					},
+				},
+			];
+		}
+
+		routes.push({
+			name: 'InfoScreen',
+			key: 'InfoScreen',
+			params: {
+				info: 'add_schedule_another',
+				deviceId: schedule.deviceId,
+			},
+		});
+
 		const resetAction = CommonActions.reset({
-			index: 1,
+			index: routes.length - 1,
 			routes,
 		});
 		navigation.dispatch(resetAction);

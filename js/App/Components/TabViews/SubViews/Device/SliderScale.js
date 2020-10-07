@@ -22,11 +22,15 @@
 'use strict';
 
 import React from 'react';
-import { Animated, StyleSheet, Platform } from 'react-native';
+import { Animated, Platform } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { Text, View } from '../../../../../BaseComponents';
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
+
+import {
+	withTheme,
+} from '../../../HOC/withTheme';
 
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
@@ -61,6 +65,9 @@ type Props = {
 	methodRequested: string,
 	local: boolean,
 	disableActionIndicator?: boolean,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 };
 
 type State = {
@@ -132,19 +139,26 @@ class SliderScale extends View {
 			methodRequested,
 			local,
 			disableActionIndicator,
+			colors,
 		} = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
 		});
 
-		let thumbStyle = !isGatewayActive ? styles.offline :
-			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
-		let scaleStyle = !isGatewayActive ? styles.offline :
-			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
-		let valueColor = !isGatewayActive ? '#a2a2a2' :
-			isInState === 'DIM' ? '#fff' : Theme.Core.brandSecondary;
-		let backgroundStyle = isGatewayActive && isInState === 'DIM' ? styles.enabled : styles.disabled;
+		const styles = getStyles({colors});
+
+		let thumbStyle = !isGatewayActive ?
+			(isInState === 'DIM' ? styles.enabled : styles.offline) :
+			isInState === 'DIM' ? styles.enabled : styles.onInActive;
+		let scaleStyle = !isGatewayActive ?
+			(isInState === 'DIM' ? styles.enabled : styles.offline) :
+			isInState === 'DIM' ? styles.enabled : styles.onInActive;
+		let valueColor = !isGatewayActive ?
+			(isInState === 'DIM' ? colors.colorOnActiveIcon : '#a2a2a2') :
+			isInState === 'DIM' ? colors.colorOnActiveIcon : colors.colorOnInActiveIcon;
+		let backgroundStyle = !isGatewayActive ?
+			(isInState === 'DIM' ? styles.offline : styles.disabled) : isInState === 'DIM' ? styles.enabledBackground : styles.disabled;
 		let dotColor = local ? Theme.Core.brandPrimary : '#fff';
 
 		let bottomValue = (containerHeight / 2) - (thumbHeight * 2);
@@ -152,7 +166,7 @@ class SliderScale extends View {
 		let accessibilityLabel = `${this.labelPhraseOne} ${displayedValue}%, ${name}. ${this.labelPhraseTwo}`;
 
 		return (
-			<View style={[{flex: 1, justifyContent: 'center'}, backgroundStyle, style]}
+			<View style={[styles.styleDef, backgroundStyle, style]}
 				accessibilityLabel={accessibilityLabel}
 				importantForAccessibility={importantForAccessibility}>
 				<View
@@ -194,44 +208,60 @@ class SliderScale extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	enabledBackground: {
-		backgroundColor: '#fff',
-	},
-	enabled: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	enabledOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	disabled: {
-		backgroundColor: '#eeeeee',
-	},
-	offline: {
-		backgroundColor: '#a2a2a2',
-	},
-	thumb: {
-		flex: 1,
-		position: 'absolute',
-		justifyContent: 'center',
-		elevation: 2,
-	},
-	sliderScale: {
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	thumbText: {
-		position: 'absolute',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		alignSelf: 'center',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-});
+const getStyles = ({colors}: Object): Object => {
+	const {
+		colorOnActiveBg,
+		colorOnInActiveBg,
+		colorOnActiveIcon,
+		colorOnInActiveIcon,
+		buttonSeparatorColor,
+	} = colors;
+
+	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+			flex: 1,
+			justifyContent: 'center',
+		},
+		enabled: {
+			backgroundColor: colorOnActiveIcon,
+		},
+		enabledBackground: {
+			backgroundColor: colorOnActiveBg,
+		},
+		disabled: {
+			backgroundColor: colorOnInActiveBg,
+		},
+		offline: {
+			backgroundColor: '#a2a2a2',
+		},
+		onInActive: {
+			backgroundColor: colorOnInActiveIcon,
+		},
+		thumb: {
+			flex: 1,
+			position: 'absolute',
+			justifyContent: 'center',
+			elevation: 2,
+		},
+		sliderScale: {
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		thumbText: {
+			position: 'absolute',
+			textAlign: 'center',
+			textAlignVertical: 'center',
+			alignSelf: 'center',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+	};
+};
 
 SliderScale.defaultProps = {
 	thumbHeight: 12,
@@ -241,4 +271,4 @@ SliderScale.defaultProps = {
 	disableActionIndicator: false,
 };
 
-module.exports = injectIntl(SliderScale);
+module.exports = withTheme(injectIntl(SliderScale));

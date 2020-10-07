@@ -99,7 +99,9 @@ render(): Object {
 		<Modal
 			isVisible={showModal}
 			backdropOpacity={0.60}>
-			<View style={styles.container}>
+			<View
+				level={2}
+				style={styles.container}>
 				<View style={styles.stepCover}>
 					{
 						this.dimLevels.map((value: string): Object => {
@@ -122,7 +124,6 @@ render(): Object {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
 		...Theme.Core.shadow,

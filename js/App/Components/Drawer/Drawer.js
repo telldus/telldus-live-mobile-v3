@@ -23,10 +23,9 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, Image } from 'react-native';
+import { ScrollView } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { connect } from 'react-redux';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createSelector } from 'reselect';
 const isEqual = require('react-fast-compare');
 
@@ -35,14 +34,15 @@ import {
 	RippleButton,
 	Text,
 	Icon,
+	ThemedMaterialIcon,
 } from '../../../BaseComponents';
 import Gateway from './Gateway';
 import {
 	DrawerSubHeader,
 	NavigationHeader,
 	SettingsLink,
-	TestIapLink,
 } from './DrawerSubComponents';
+import Banner from '../TabViews/SubViews/Banner';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
@@ -59,12 +59,17 @@ import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
+import {
+	deployStore,
+} from '../../../Config';
+
 type Props = {
 	gateways: Array<Object>,
 	appLayout: Object,
 	isOpen: boolean,
 	hasAPremAccount: boolean,
 	enableGeoFenceFeature: boolean,
+	consentLocationData: boolean,
 
 	userProfile: Function,
 	onOpenSetting: Function,
@@ -75,12 +80,9 @@ type Props = {
 	showSwitchAccountActionSheet: () => void,
 	intl: Object,
 	toggleDialogueBox: (Object) => void,
-	appDrawerBanner?: Object,
 };
 
 type State = {
-	iapTestImageWidth: number,
-	iapTestImageheight: number,
 	hasStatusBar: boolean,
 };
 
@@ -88,12 +90,12 @@ class Drawer extends View<Props, State> {
 props: Props;
 state: State;
 
+isHuaweiBuild: boolean;
+
 constructor(props: Props) {
 	super(props);
 
 	this.state = {
-		iapTestImageWidth: 0,
-		iapTestImageheight: 0,
 		hasStatusBar: false,
 	};
 
@@ -126,6 +128,8 @@ constructor(props: Props) {
 	];
 
 	this._hasStatusBar();
+
+	this.isHuaweiBuild = deployStore === 'huawei';
 }
 
 _hasStatusBar = async () => {
@@ -133,10 +137,6 @@ _hasStatusBar = async () => {
 	this.setState({
 		hasStatusBar: _hasStatusBar,
 	});
-}
-
-componentDidMount() {
-	this.setBannerImageDimensions();
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -147,23 +147,24 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'appLayout',
 		'hasAPremAccount',
 		'enableGeoFenceFeature',
-		'appDrawerBanner',
+		'consentLocationData',
 	]);
-}
-
-componentDidUpdate(prevProps: Object, prevState: Object) {
-	if (!isEqual(this.props.appDrawerBanner, prevProps.appDrawerBanner)) {
-		this.setBannerImageDimensions();
-	}
 }
 
 	onPressGeoFence = () => {
 		const {
 			closeDrawer,
+			consentLocationData,
 		} = this.props;
 
 		closeDrawer();
-		navigate('GeoFenceNavigator');
+		let screen = 'AddEditGeoFence';
+		if (!consentLocationData) {
+			screen = 'InAppDisclosureScreen';
+		}
+		navigate('GeoFenceNavigator', {
+			screen,
+		});
 	}
 
 	showPurchacePremiumDialogue = () => {
@@ -186,6 +187,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			showNegative: true,
 			positiveText: formatMessage(i18n.upgrade).toUpperCase(),
 			onPressPositive: () => {
+				this.props.closeDrawer();
 				navigate('PremiumUpgradeScreen');
 			},
 			closeOnPressPositive: true,
@@ -206,42 +208,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		}
 	}
 
-	setBannerImageDimensions = () => {
-		const {
-			appLayout,
-		} = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
-		const drawerWidth = getDrawerWidth(deviceWidth);
-
-		let iapTestImageWidth = drawerWidth - 25;
-		let iapTestImageheight = iapTestImageWidth * 0.3;
-		const {
-			appDrawerBanner,
-		} = this.props;
-		const {
-			image,
-		} = appDrawerBanner ? appDrawerBanner : {};
-		if (image) {
-			Image.getSize(image, (w: number, h: number) => {
-				if (w && h) {
-					const ratio = w / h;
-					iapTestImageheight = iapTestImageWidth / ratio;
-				}
-				this.setState({
-					iapTestImageWidth,
-					iapTestImageheight,
-				});
-			}, () => {
-				this.setState({
-					iapTestImageWidth,
-					iapTestImageheight,
-				});
-			});
-		}
-	}
-
 	render(): Object {
 		const {
 			gateways,
@@ -251,7 +217,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			onPressGateway,
 			dispatch,
 			enableGeoFenceFeature,
-			appDrawerBanner,
 			intl,
 		} = this.props;
 		const {
@@ -285,7 +250,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 					textSwitchAccount={formatMessage(i18n.switchOrAddAccount)}
 					onPress={this._showSwitchAccountActionSheet}/>
 				<View
-					level={3}
+					level={17}
 					style={{
 						flex: 1,
 					}}>
@@ -295,22 +260,23 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 							styles={drawerSubHeader}/>
 						{settingLinks}
 					</View>
-					{enableGeoFenceFeature && (
+					{(enableGeoFenceFeature && !this.isHuaweiBuild) && (
 						<View style={styles.settingsLinkCover}>
 							<DrawerSubHeader
 								textIntl={i18n.geoFence}
 								styles={drawerSubHeader}/>
 							<RippleButton style={styles.linkCoverStyle} onPress={this.onPressGeoFence}>
-								<MaterialIcons
+								<ThemedMaterialIcon
+									level={23}
 									style={{
 										...styles.linkIconStyle,
 										paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
 									}}
 									name={'location-on'}/>
 								<Text
-									level={5}
+									level={27}
 									style={styles.linkLabelStyle}>
-									{formatMessage(i18n.Geofencing)}
+									{`${formatMessage(i18n.manageGeoFence)} (beta)`}
 								</Text>
 							</RippleButton>
 						</View>
@@ -324,7 +290,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 								marginBottom: 0,
 							},
 						}}/>
-					{gateways.map((gateway: number, index: number): Object => {
+					{gateways.map((gateway: Object, index: number): Object => {
 						return <Gateway
 							gateway={gateway}
 							key={index}
@@ -339,15 +305,14 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 						}}
 						text={capitalize(formatMessage(i18n.addNewGatway))}
 						iconComponent={<Icon
+							level={23}
 							style={{
 								...styles.linkIconStyle,
 								paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
 							}}
 							name={'plus-circle'}/>}
 						onPressLink={addNewLocation}/>
-					<TestIapLink
-						appDrawerBanner={appDrawerBanner}
-						styles={styles}/>
+					<Banner/>
 				</View>
 			</ScrollView>
 		);
@@ -359,7 +324,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 
 		const {
 			paddingFactor,
-			brandSecondary,
 			brandPrimary,
 		} = Theme.Core;
 
@@ -383,7 +347,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				paddingVertical: padding * 2,
 				width: drawerWidth,
 				minWidth: 250,
-				backgroundColor: brandPrimary,
 				marginTop: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 				flexDirection: 'row',
 				justifyContent: 'center',
@@ -396,7 +359,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				borderRadius: ImageSize / 2,
 			},
 			navigationHeaderText: {
-				color: brandSecondary,
 				fontSize: fontSizeHeader,
 				zIndex: 3,
 				textAlignVertical: 'center',
@@ -415,7 +377,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 					paddingVertical: padding / 2,
 					paddingLeft: 10,
 					alignItems: 'center',
-					backgroundColor: brandSecondary,
 				},
 				navigationTextTitle: {
 					color: '#fff',
@@ -424,7 +385,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				},
 			},
 			switchOrAdd: {
-				color: '#fff',
 				fontSize: fontSizeHeaderTwo,
 				zIndex: 3,
 				textAlignVertical: 'center',
@@ -455,11 +415,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				justifyContent: 'flex-start',
 				marginBottom: 5,
 			},
-			addNewLocationText: {
-				fontSize: fontSizeAddLocText,
-				color: brandSecondary,
-				marginLeft: 10,
-			},
 			settingsLinkCover: {
 				marginBottom: padding * 0.9,
 			},
@@ -477,7 +432,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			},
 			linkIconStyle: {
 				fontSize: fontSizeSettingsIcon,
-				color: brandSecondary,
 				marginRight: 8,
 				marginLeft: 10,
 				textAlign: 'left',
@@ -490,10 +444,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 				marginBottom: 5 + (fontSizeRow * 0.5),
 				marginLeft: 15,
 				alignItems: 'center',
-			},
-			iapTestImageStyle: {
-				width: this.state.iapTestImageWidth,
-				height: this.state.iapTestImageheight,
 			},
 		};
 	}
@@ -515,17 +465,21 @@ function mapStateToProps(store: Object): Object {
 
 	const {
 		geoFenceFeature = JSON.stringify({enable: false}),
-		appDrawerBanner = JSON.stringify({}),
 	} = firebaseRemoteConfig;
 
 	const { enable } = JSON.parse(geoFenceFeature);
+
+	const { defaultSettings = {} } = store.app;
+	const {
+		consentLocationData = false,
+	} = defaultSettings;
 
 	return {
 		gateways: getRows(store),
 		userProfile: getUserProfileSelector(store),
 		hasAPremAccount,
 		enableGeoFenceFeature: enable,
-		appDrawerBanner: appDrawerBanner === '' ? {} : JSON.parse(appDrawerBanner),
+		consentLocationData,
 	};
 }
 

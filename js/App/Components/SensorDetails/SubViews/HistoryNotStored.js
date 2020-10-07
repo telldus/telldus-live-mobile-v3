@@ -88,16 +88,16 @@ render(): Object {
 	return (
 		<View style={container}>
 			<FormattedMessage
-				level={5}
+				level={4}
 				{...i18n.historyNotStoredHeader}
 				style={headerStyle}/>
 			<FormattedMessage
-				level={6}
+				level={26}
 				{...i18n.historyNotStoredPOne}
 				style={contentStyle}/>
 			<Text />
 			<FormattedMessage
-				level={6}
+				level={26}
 				{...i18n.historyNotStoredPTwo}
 				style={contentStyle}/>
 			<TouchableButton

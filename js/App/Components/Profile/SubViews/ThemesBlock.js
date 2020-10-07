@@ -131,7 +131,6 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 				value={themeInApp}
 				appLayout={layout}
 				intl={intl}
-				dropdownOffsetTopCount={2}
 				dropDownContainerStyle={dropDownContainerStyleDef}
 				dropDownHeaderStyle={dropDownHeaderStyle}
 				fontSize={fontSize}

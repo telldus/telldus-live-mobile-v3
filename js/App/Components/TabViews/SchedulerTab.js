@@ -28,7 +28,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import moment from 'moment';
+let dayjs = require('dayjs');
 import Swiper from 'react-native-swiper';
 
 import {
@@ -36,6 +36,7 @@ import {
 	View,
 	Text,
 	Icon,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { JobRow, JobsPoster } from './SubViews';
 import {
@@ -61,6 +62,8 @@ type Props = {
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
 	currentScreen: string,
+	ScreenName: string,
+	removeClippedSubviews?: boolean,
 };
 
 type State = {
@@ -73,6 +76,10 @@ class SchedulerTab extends View<null, Props, State> {
 
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
+
+	static defaultProps = {
+		removeClippedSubviews: true,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -92,15 +99,15 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen, screenProps } = nextProps;
+		const { currentScreen, screenProps, ScreenName } = nextProps;
 		const { screenReaderEnabled } = screenProps;
 		const { currentScreen: prevScreen } = this.props;
-		return (currentScreen === 'Scheduler') || (currentScreen !== 'Scheduler' && prevScreen === 'Scheduler' && screenReaderEnabled);
+		return (currentScreen === ScreenName) || (currentScreen !== ScreenName && prevScreen === ScreenName && screenReaderEnabled);
 	}
 
 	componentDidMount() {
-		const { currentScreen } = this.props;
-		if (currentScreen === 'Scheduler') {
+		const { currentScreen, ScreenName } = this.props;
+		if (currentScreen === ScreenName) {
 			this.refreshJobs();
 		}
 	}
@@ -162,6 +169,8 @@ class SchedulerTab extends View<null, Props, State> {
 			gatewaysDidFetch,
 			gateways,
 			currentScreen,
+			ScreenName,
+			removeClippedSubviews,
 		} = this.props;
 		const {
 			appLayout,
@@ -190,7 +199,7 @@ class SchedulerTab extends View<null, Props, State> {
 				level={3}
 				style={swiperContainer}
 				accessible={false}
-				importantForAccessibility={currentScreen === 'Scheduler' ? 'no' : 'no-hide-descendants'}>
+				importantForAccessibility={currentScreen === ScreenName ? 'no' : 'no-hide-descendants'}>
 				<JobsPoster
 					days={days}
 					todayIndex={todayIndex}
@@ -200,6 +209,7 @@ class SchedulerTab extends View<null, Props, State> {
 					onToggleVisibility={this.onToggleVisibility}
 					currentScreen={currentScreen}
 					showInactive={showInactive}
+					ScreenName={ScreenName}
 				/>
 				<Swiper
 					ref={this._refScroll}
@@ -209,7 +219,8 @@ class SchedulerTab extends View<null, Props, State> {
 					loop={false}
 					index={todayIndex}
 					showsPagination={false}
-					onIndexChanged={this.onIndexChanged}>
+					onIndexChanged={this.onIndexChanged}
+					removeClippedSubviews={removeClippedSubviews}>
 					{daysToRender}
 				</Swiper>
 			</View>
@@ -304,7 +315,10 @@ class SchedulerTab extends View<null, Props, State> {
 					key={key}>
 					{isEmpty ?
 						<View style={containerWhenNoData}>
-							<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+							<Icon
+								level={23}
+								name="exclamation-circle"
+								size={iconSize}/>
 							<Text style={textWhenNoData}>
 								{this.noScheduleMessage}
 							</Text>
@@ -317,22 +331,26 @@ class SchedulerTab extends View<null, Props, State> {
 							<FlatList
 								data={schedules}
 								renderItem={this._renderRow}
-								onRefresh={this.onRefresh}
 								keyExtractor={this.keyExtractor}
-								refreshing={this.state.isRefreshing}
 								// To re-render the list to update row style on different weekdays(today screen will have different row design
 								// if there is any expired schedule)
 								extraData={{
 									todayIndex,
 									appLayout,
 								}}
+								refreshControl={
+									<ThemedRefreshControl
+										onRefresh={this.onRefresh}
+										refreshing={this.state.isRefreshing}
+									/>
+								}
 							/>
 						</View>
 					}
 				</View>
 			);
 
-			const day = moment().add(key, 'days');
+			const day = dayjs().add(key, 'day');
 			const weekday = formatDate(day, {weekday: 'long'});
 			const date = formatDate(day, {
 				day: '2-digit',
@@ -350,7 +368,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
-		const { rowsAndSections, screenProps, currentScreen } = this.props;
+		const { rowsAndSections, screenProps, currentScreen, ScreenName } = this.props;
 		const { todayIndex } = this.state;
 		const { item } = props;
 		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
@@ -366,6 +384,7 @@ class SchedulerTab extends View<null, Props, State> {
 				isFirst={props.index === 0}
 				gatewayTimezone={item.gatewayTimezone}
 				currentScreen={currentScreen}
+				ScreenName={ScreenName}
 				{...screenProps}/>
 		);
 	};

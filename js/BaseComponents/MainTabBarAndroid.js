@@ -26,6 +26,7 @@
 import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
 import Theme from '../App/Theme';
+import { connect } from 'react-redux';
 
 import View from './View';
 import MainTabsAndroid from './MainTabsAndroid';
@@ -34,6 +35,7 @@ type Props = {
 	navigationState: Object,
 	navigation: Object,
 	screenProps: Object,
+	hiddenTabsCurrentUser: Array<string>,
 };
 
 class MainTabBarAndroid extends Component<Props, null> {
@@ -78,9 +80,12 @@ class MainTabBarAndroid extends Component<Props, null> {
 	}
 
 	render(): Object {
-		const { navigationState, screenProps } = this.props;
-		const tabs = navigationState.routes.map((tab: Object, index: number): Object => {
-			return this.renderTabs(tab, index);
+		const { navigationState, screenProps, hiddenTabsCurrentUser } = this.props;
+		let tabs = [];
+		navigationState.routes.forEach((tab: Object, index: number) => {
+			if (hiddenTabsCurrentUser.indexOf(tab.name) === -1) {
+				tabs.push(this.renderTabs(tab, index));
+			}
 		});
 		const { appLayout } = screenProps;
 		const {
@@ -89,7 +94,9 @@ class MainTabBarAndroid extends Component<Props, null> {
 		} = this.getStyles(appLayout);
 
 		return (
-			<View style={container}>
+			<View
+				style={container}
+				level={11}>
 				<ScrollView
 					ref="scrollView"
 					contentContainerStyle={contentContainer}
@@ -115,7 +122,6 @@ class MainTabBarAndroid extends Component<Props, null> {
 		return {
 			container: {
 				flex: 0,
-				backgroundColor: Theme.Core.brandPrimary,
 				...Theme.Core.shadow,
 				zIndex: 1,
 				top: 0,
@@ -134,4 +140,21 @@ class MainTabBarAndroid extends Component<Props, null> {
 	}
 }
 
-export default MainTabBarAndroid;
+function mapStateToProps(state: Object, ownProps: Object): Object {
+
+	const {
+		userId = '',
+	} = state.user;
+
+	const {
+		hiddenTabs = {},
+	} = state.navigation;
+
+	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+
+	return {
+		hiddenTabsCurrentUser,
+	};
+}
+
+export default connect(mapStateToProps, null)(MainTabBarAndroid);

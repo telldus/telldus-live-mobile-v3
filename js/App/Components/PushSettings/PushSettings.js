@@ -155,7 +155,7 @@ render(): Object {
 				:
 				<View style={pushDisabledContentStyle}>
 					<Text
-						level={5}
+						level={26}
 						style={pushDisabledTextStyle}>
 						{isHuaweiBuild ? formatMessage(i18n.labelPushDisabledInfoHuawei) : formatMessage(i18n.labelPushDisabled)}
 					</Text>
@@ -167,7 +167,10 @@ render(): Object {
 				</View>
 			}
 			{(!!current && !isHuaweiBuild) && (
-				<Text onPress={this.props.submitPushToken} style={buttonResubmit}>
+				<Text
+					level={23}
+					onPress={this.props.submitPushToken}
+					style={buttonResubmit}>
 					{submitButText}
 				</Text>
 			)}
@@ -191,7 +194,6 @@ getStyles(appLayout: Object): Object {
 
 	const {
 		paddingFactor,
-		brandSecondary,
 		subHeader,
 	} = Theme.Core;
 
@@ -211,7 +213,6 @@ getStyles(appLayout: Object): Object {
 		},
 		buttonResubmit: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: brandSecondary,
 			alignSelf: 'center',
 			paddingVertical: 5,
 		},

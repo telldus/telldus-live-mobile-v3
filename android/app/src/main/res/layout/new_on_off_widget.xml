@@ -26,7 +26,9 @@
             android:layout_weight="1">
             <include layout="@layout/button_off"/>
             <include layout="@layout/rgb_palette"/>
+            <include layout="@layout/button_dim"/>
             <include layout="@layout/button_on"/>
+            <include layout="@layout/button_on_off"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

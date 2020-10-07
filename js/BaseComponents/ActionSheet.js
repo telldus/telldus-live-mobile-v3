@@ -154,6 +154,7 @@ type Props = {
 	disabledButtonIndexes?: Array<number>,
 	extraData?: Object,
 	colors: Object,
+	containerStyle?: Object,
 };
 
 type State = {
@@ -255,7 +256,7 @@ _renderTitle(): Object | null {
 			style={styles.titleBox}>
 			{React.isValidElement(title) ? title : (
 				<Text
-					level={5}
+					level={26}
 					style={styles.titleText}>{title}</Text>
 			)}
 		</View>
@@ -274,7 +275,7 @@ _renderMessage(): Object | null {
 			style={styles.messageBox}>
 			{React.isValidElement(message) ? message : (
 				<Text
-					level={6}
+					level={25}
 					style={styles.messageText}>{message}</Text>
 			)}
 		</View>
@@ -311,6 +312,7 @@ _renderOptions(): Array<Object> {
 render(): Object {
 	const {
 		colors,
+		containerStyle,
 	} = this.props;
 	const styles = prepareStyles(this.props.styles);
 	const {
@@ -346,6 +348,7 @@ render(): Object {
 						animated
 						style={[
 							styles.body,
+							containerStyle,
 							{ height: translateY, transform: [{ translateY: sheetAnim }] },
 						]}
 					>

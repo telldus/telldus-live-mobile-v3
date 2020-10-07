@@ -27,7 +27,7 @@ import { Linking, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 const forge = require('node-forge');
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import {
 	View,
@@ -54,7 +54,7 @@ import i18n from '../../Translations/common';
 const prepareTweetsForList = (data: Array<Object>): Array<Object> => {
 	let newData = [];
 	data.map((tweet: Object) => {
-		const daysDiff = moment().diff(new Date(tweet.created_at), 'days');
+		const daysDiff = dayjs().diff(new Date(tweet.created_at), 'day');
 		if (daysDiff <= 2) {
 			newData.push({
 				created_at: new Date(tweet.created_at),
@@ -155,13 +155,17 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 						}]}/>
 					<View style={tweetTextCover}>
 						<Text>
-							<Text style={tweetDateStyle}>
+							<Text
+								level={23}
+								style={tweetDateStyle}>
 								{formatDate(created_at)}
 							</Text>
 							<Text style={Theme.Styles.hiddenText}>
 								{'.'}
 							</Text>
-							<Text style={tweetDateStyle}>
+							<Text
+								level={23}
+								style={tweetDateStyle}>
 								{formatTime(created_at)}
 							</Text>
 						</Text>
@@ -245,7 +249,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		tweetDateStyle: {
 			fontSize: fontSize * 0.9,
-			color: Theme.Core.brandSecondary,
 		},
 	};
 };

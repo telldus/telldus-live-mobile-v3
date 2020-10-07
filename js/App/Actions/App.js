@@ -24,6 +24,8 @@
 
 import DeviceInfo from 'react-native-device-info';
 import axios from 'axios';
+import InAppUpdates from 'sp-react-native-in-app-updates';
+import Snackbar from 'react-native-snackbar';
 
 import type { ThunkAction, TicketData, Action } from './Types';
 
@@ -201,6 +203,65 @@ const onReceivedInAppPurchaseProducts = (products: Array<Object>): Action => {
 	};
 };
 
+const InAppUpdatesInstance = new InAppUpdates();
+const HIGH_PRIORITY_UPDATE = 5;
+const checkForInAppUpdates = (): ThunkAction => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		return InAppUpdatesInstance.checkNeedsUpdate({
+			curVersion: DeviceInfo.getReadableVersion(),
+			toSemverConverter: ((ver: string): string => {
+				const androidVersionNo = parseInt(ver, 10);
+				const majorVer = Math.trunc(androidVersionNo / 10000);
+				const minorVerStarter = androidVersionNo - majorVer * 10000;
+				const minorVer = Math.trunc(minorVerStarter / 100);
+				const patchVersion = Math.trunc(minorVerStarter - minorVer * 100);
+				return `${majorVer}.${minorVer}.${patchVersion}`;
+			}),
+		}).then((result: Object) => {
+			if (result.shouldUpdate) {
+				const updateType = result.other.updatePriority >= HIGH_PRIORITY_UPDATE
+					? InAppUpdates.UPDATE_TYPE.IMMEDIATE
+					: InAppUpdates.UPDATE_TYPE.FLEXIBLE;
+
+				InAppUpdatesInstance.startUpdate({
+					updateType, // android only, on iOS the user will be promped to go to your app store page
+				});
+			}
+		});
+	};
+};
+
+const addInAppStatusUpdateListener = ({intl}: Object): ThunkAction => {
+	return (dispatch: Function, getState: Function): Function => {
+		const callback = (data: Object = {}) => {
+			// const {
+			// 	formatMessage,
+			// } = intl;
+			const {
+				status,
+			} = data;
+			if (status === InAppUpdates.UPDATE_STATUS.UPDATE_DOWNLOADED) {
+				Snackbar.show({
+					text: 'Telldus Live! just downloaded an update', // TODO : Translate
+					duration: Snackbar.LENGTH_INDEFINITE,
+					action: {
+						text: 'Reload', // TODO : Translate
+						textColor: 'green',
+						onPress: () => {
+							InAppUpdatesInstance.installUpdate();
+						},
+					},
+				});
+			}
+		};
+
+		InAppUpdatesInstance.addStatusUpdateListener(callback);
+		return () => {
+			InAppUpdatesInstance.removeStatusUpdateListener(callback);
+		};
+	};
+};
+
 module.exports = {
 	...App,
 	createSupportTicket,
@@ -209,5 +270,7 @@ module.exports = {
 	setNetworkConnectionInfo,
 	createSupportInAppDebugData,
 	onReceivedInAppPurchaseProducts,
+	checkForInAppUpdates,
+	addInAppStatusUpdateListener,
 };
 

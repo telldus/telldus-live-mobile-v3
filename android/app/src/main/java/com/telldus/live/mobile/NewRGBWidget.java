@@ -61,6 +61,7 @@ import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.UserAPI;
 import com.telldus.live.mobile.Utility.RGBUtilities;
+import com.telldus.live.mobile.Utility.WidgetUtilities;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
@@ -113,39 +114,16 @@ public class NewRGBWidget extends AppWidgetProvider {
 
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
-
-            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.logged_out);
-            String preScript = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_one);
-            String phraseTwo = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_two);
-            view.setTextViewText(R.id.loggedOutInfoOne, preScript + ": ");
-            view.setTextViewText(R.id.loggedOutInfoEmail, userId);
-            view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
-
-            view.setTextViewTextSize(R.id.loggedOutInfoOne, COMPLEX_UNIT_SP, fontSizeSix);
-            view.setTextViewTextSize(R.id.loggedOutInfoEmail, COMPLEX_UNIT_SP, fontSizeSix);
-            view.setTextViewTextSize(R.id.loggedOutInfoTwo, COMPLEX_UNIT_SP, fontSizeSix);
-
-            appWidgetManager.updateAppWidget(appWidgetId, view);
+            RemoteViews remoteViews = WidgetUtilities.setUIWhenDifferentAccount(context, fontSizeSix, userId);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
             return;
         }
 
         Integer deviceId = DeviceWidgetInfo.getDeviceId();
         if (deviceId.intValue() == -1) {
-            iconWidth = (int) iconWidth / 2;
-            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
-            view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_device_not_found));
-            view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
-                    "info",
-                    ContextCompat.getColor(context, R.color.brightRed),
-                    iconWidth,
-                    (int) (iconWidth * 0.8),
-                    (int) (iconWidth * 0.8),
-                    context));
-
-            view.setTextViewTextSize(R.id.widgetItemRemovedInfo, COMPLEX_UNIT_SP, fontSizeFive);
-
-            appWidgetManager.updateAppWidget(appWidgetId, view);
+            RemoteViews remoteViews = WidgetUtilities.setUIWhenItemNotFound(context, fontSizeFive, iconWidth / 2);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             return;
         }
 
@@ -156,6 +134,8 @@ public class NewRGBWidget extends AppWidgetProvider {
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         String state = DeviceWidgetInfo.getState();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
+        String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
+        String requestedSecStateValue = DeviceWidgetInfo.getRequestedSecStateValue();
 
         String secondarySetting = DeviceWidgetInfo.getSecondarySetting();
         secondarySetting = secondarySetting == null ? "0" : secondarySetting;
@@ -163,7 +143,7 @@ public class NewRGBWidget extends AppWidgetProvider {
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
 
-        Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
+        Boolean hasRGB = CommonUtilities.hasMethod(supportedMethods,"RGB");
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_rgb_widget);
 
@@ -187,7 +167,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.rgbActionCover, View.VISIBLE);
 
             Boolean isLastButton = true;
-            handleBackgroundWhenIdleOne(
+            CommonUtilities.handleBackgroundWhenIdleOne(
                                 "RGB",
                                 transparent,
                                 renderedButtonsCount,
@@ -250,7 +230,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                 int flashSize = (int) (7 * d);
                 Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, flashColor);
 
-                showFlashIndicator(
+                CommonUtilities.showFlashIndicatorRGB(
                         views,
                         R.id.flash_view_rgb,
                         R.id.flashing_indicator_rgb,
@@ -273,7 +253,15 @@ public class NewRGBWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.palette, View.VISIBLE);
                 views.setViewVisibility(R.id.dimValue, View.GONE);
 
-                if (state != null && state.equals(String.valueOf(METHOD_RGB))) {
+                Boolean wasSuccess = state != null && state.equals(String.valueOf(METHOD_RGB));
+                if (secondaryStateValue != null && requestedSecStateValue != null) {
+                    int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
+                    int requestedColor = Integer.parseInt(requestedSecStateValue, 10);
+                    int _r = Color.red(currentColor), _g = Color.green(currentColor), _b = Color.blue(currentColor);
+                    int r = Color.red(requestedColor), g = Color.green(requestedColor), b = Color.blue(requestedColor);
+                    wasSuccess = r == _r && g == _g && b == _b;
+                }
+                if (wasSuccess) {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
                             ContextCompat.getColor(context, R.color.widgetGreen),
@@ -290,9 +278,9 @@ public class NewRGBWidget extends AppWidgetProvider {
                             iconSize,
                             context));
                 }
-                hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_rgb);
                 views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
-                handleBackgroundPostActionOne(
+                CommonUtilities.handleBackgroundPostActionOne(
                         "RGB",
                         transparent,
                         renderedButtonsCount,
@@ -310,7 +298,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             }
 
             if (normalizeUI) {
-                hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_rgb);
             }
             
             renderedButtonsCount++;
@@ -341,112 +329,6 @@ public class NewRGBWidget extends AppWidgetProvider {
         }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
-
-    public static void handleBackgroundPostActionOne(
-            String button, String transparent,
-            int renderedButtonsCount, Boolean isLastButton,
-            int viewId, RemoteViews views, Context context) {
-        if (transparent.equals("dark")) {
-            setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_border_left_round_black_fill,
-                    R.drawable.shape_border_right_round_black_fill,
-                    R.drawable.shape_left_black_fill,
-                    R.drawable.shape_border_round_black_fill,
-                    viewId,
-                    views,
-                    context
-            );
-        } else if (transparent.equals("light") || transparent.equals("true")) {
-            setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_border_left_round_white_fill,
-                    R.drawable.shape_border_right_round_white_fill,
-                    R.drawable.shape_left_white_fill,
-                    R.drawable.shape_border_round_white_fill,
-                    viewId,
-                    views,
-                    context
-            );
-        }
-    }
-
-    public static Boolean isPrimaryShade(String button) {
-        String[] primaryShadedButtons = new String[]{"OFF", "STOP"};
-
-        List<String> list = Arrays.asList(primaryShadedButtons);
-
-        return list.contains(button);
-    }
-
-    public static int handleBackgroundWhenIdleOne(
-        String button, String transparent,
-        int renderedButtonsCount, Boolean isLastButton,
-        int viewId, RemoteViews views, Context context) {
-
-            if (transparent.equals("dark")) {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_black_round,
-                    R.drawable.shape_border_right_round_black_fill,
-                    R.drawable.shape_left_black,
-                    R.drawable.shape_border_round_black_fill,
-                    viewId,
-                    views,
-                    context
-                );
-                return ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light") || transparent.equals("true")) {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_white_round,
-                    R.drawable.shape_border_right_round_white_fill,
-                    R.drawable.shape_left_white,
-                    R.drawable.shape_border_round_white_fill,
-                    viewId,
-                    views,
-                    context
-                );
-                return ContextCompat.getColor(context, R.color.white);
-            } else {
-                setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_rounded_corner,
-                    R.drawable.shape_right_rounded_corner,
-                    R.drawable.button_background_no_bordradi,
-                    R.drawable.button_background,
-                    viewId,
-                    views,
-                    context
-                );
-                if (isPrimaryShade(button)) {
-                    return ContextCompat.getColor(context, R.color.brandPrimary);
-                }
-                return ContextCompat.getColor(context, R.color.brandSecondary);
-            }
-    }
-
-    public static void setCoverBackground(
-        int renderedButtonsCount, Boolean isLastButton,
-        int drawableWhenFirst, int drawableWhenLast, int drawableWhenInMiddle, int drawableWhenTheOnly,
-        int viewId, RemoteViews views, Context context
-        ) {
-
-        if (renderedButtonsCount == 0 && isLastButton) {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenTheOnly);
-        } else if (renderedButtonsCount == 0) {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenFirst);
-        } else if (isLastButton) {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenLast);
-        } else {
-            views.setInt(viewId, "setBackgroundResource", drawableWhenInMiddle);
-        }
     }
 
     @Override
@@ -514,7 +396,9 @@ public class NewRGBWidget extends AppWidgetProvider {
 
         if (ACTION_RGB_SINGLE.equals(intent.getAction()) && methods != 0) {
             String stateValue = widgetInfo.getDeviceStateValue();
-            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId);
+            String primarySetting = widgetInfo.getPrimarySetting();
+            int pickedColor = Color.parseColor(primarySetting);
+            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId, null, String.valueOf(pickedColor));
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -541,7 +425,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
                     String secondaryStateValue = widgetInfo.getSecondaryStateValue();
                     String stateValue = widgetInfo.getDeviceStateValue();
-                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId);
+                    db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }
@@ -574,17 +458,6 @@ public class NewRGBWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             boolean b = db.deleteWidgetInfoDevice(appWidgetId);
         }
-    }
-
-    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, Bitmap backgroundFlash) {
-        hideFlashIndicator(views, flashId);
-
-        views.setImageViewBitmap(visibleFlashId, backgroundFlash);
-        views.setViewVisibility(flashId, View.VISIBLE);
-    }
-
-    public static void hideFlashIndicator(RemoteViews views, int flashId) {
-        views.setViewVisibility(flashId, View.GONE);
     }
 
     public void updateUserProfile(final int widgetId, final Context context) {

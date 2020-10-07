@@ -148,8 +148,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 });
 

@@ -39,11 +39,15 @@ import {
 import LabelBox from '../Common/LabelBox';
 
 import i18n from '../../../Translations/common';
-import Theme from '../../../Theme';
 
 import capitalize from '../../../Lib/capitalize';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
 	navigation: Object,
 	dispatch: Function,
 	onDidMount: Function,
@@ -201,10 +205,14 @@ class LocationActivationManual extends View {
 	}
 
 	render(): Object {
-		let { appLayout, currentScreen } = this.props;
+		let { appLayout, currentScreen, colors } = this.props;
 		const styles = this.getStyle(appLayout);
 
 		let importantForAccessibility = currentScreen === 'LocationActivationManual' ? 'no' : 'no-hide-descendants';
+
+		const {
+			inAppBrandSecondary,
+		} = colors;
 
 		return (
 			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
@@ -218,8 +226,8 @@ class LocationActivationManual extends View {
 						autoCapitalize="characters"
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={Theme.Core.brandSecondary}
-						tintColor={Theme.Core.brandSecondary}
+						baseColor={inAppBrandSecondary}
+						tintColor={inAppBrandSecondary}
 						defaultValue={this.state.activationCode}
 						labelOffset={{
 							x0: 5,
@@ -281,4 +289,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(LocationActivationManual);
+export default connect(null, mapDispatchToProps)(withTheme(LocationActivationManual));

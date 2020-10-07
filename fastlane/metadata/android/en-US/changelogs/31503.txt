@@ -1,0 +1,3 @@
+- Crashfix in iOS background service
+- Color fixes
+

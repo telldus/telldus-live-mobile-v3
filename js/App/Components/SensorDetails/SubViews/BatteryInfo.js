@@ -53,13 +53,19 @@ export default class BatteryInfo extends View {
 		} = this.getStyle(appLayout);
 
 		return (
-			<View style={[containerStyle, style]}>
-				<FormattedMessage {...i18n.labelBattery} style={labelStyle}/>
+			<View
+				level={2}
+				style={[containerStyle, style]}>
+				<FormattedMessage
+					level={3}
+					{...i18n.labelBattery} style={labelStyle}/>
 				<View style={{
 					flexDirection: 'row',
 				}}>
 					<Battery value={percentage} appLayout={appLayout}/>
-					<Text style={valueStyle}>
+					<Text
+						level={4}
+						style={valueStyle}>
 						{percentage}%
 					</Text>
 				</View>
@@ -72,7 +78,7 @@ export default class BatteryInfo extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { paddingFactor, shadow, rowTextColor } = Theme.Core;
+		const { paddingFactor, shadow } = Theme.Core;
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
 
@@ -87,16 +93,13 @@ export default class BatteryInfo extends View {
 				width: width - outerPadding,
 				padding: 15 + (labelFontSize * 0.4),
 				...shadow,
-				backgroundColor: '#fff',
 				borderRadius: 2,
 			},
 			labelStyle: {
 				fontSize: textFontSize,
-				color: '#000',
 			},
 			valueStyle: {
 				fontSize: textFontSize,
-				color: rowTextColor,
 				marginLeft: 5,
 			},
 		};

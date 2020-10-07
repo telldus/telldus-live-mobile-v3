@@ -63,6 +63,11 @@ public class MainActivity extends ReactActivity {
 
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+
+		// https://github.com/facebook/react-native/issues/28823
+		// Remove this is once above issue is fixed.
+		getReactInstanceManager().onConfigurationChanged(this, newConfig);
+
 		// Reloads the app when ever a change in user's locale is detected.
 		String locale = newConfig.locale.toString();
 		if (!MainActivity.currentLocale.equals(locale)) {

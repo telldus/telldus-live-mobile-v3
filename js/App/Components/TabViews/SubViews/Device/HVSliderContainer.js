@@ -27,8 +27,6 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import { View } from '../../../../../BaseComponents';
 
-import Theme from '../../../../Theme';
-
 function getSliderLabel(value: number, intl: intlShape): string {
 	return value.toString();
 }
@@ -445,15 +443,6 @@ class HVSliderContainer extends View {
 }
 
 const styles = StyleSheet.create({
-	enabledBackground: {
-		backgroundColor: '#fff',
-	},
-	enabled: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	enabledOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
 	disabled: {
 		backgroundColor: '#eeeeee',
 	},

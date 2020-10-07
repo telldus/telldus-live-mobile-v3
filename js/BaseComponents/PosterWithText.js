@@ -55,6 +55,8 @@ type Props = {
 	leftIcon: string,
 	scrollableH1?: boolean,
 	posterWidth?: number,
+	customComponent?: Object,
+	extraData?: Object,
 
 	navigation: Object,
 	posterCoverStyle?: Array<any> | Object,
@@ -134,6 +136,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'leftIcon',
 		'scrollableH1',
 		'posterWidth',
+		'extraData',
 	]);
 	if (propsChange) {
 		return true;
@@ -186,6 +189,7 @@ render(): Object {
 		posterItemsContainerStyle,
 		scrollableH1,
 		posterWidth,
+		customComponent,
 	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -213,7 +217,8 @@ render(): Object {
 					<View style={[posterItemsContainerDef, posterItemsContainerStyle]}>
 						{!!icon && (
 							<BlockIcon
-								iconLevel={15}
+								iconLevel={23}
+								blockLevel={18}
 								icon={icon}
 								style={iconStyle}
 								containerStyle={iconBackground}/>
@@ -228,7 +233,7 @@ render(): Object {
 									style={scolllViewStyle}
 									contentContainerStyle={scolllViewCCStyle}>
 									<Text
-										level={16}
+										level={33}
 										style={[h1StyleDef, h1Style]}
 										onLayout={this.onLayoutHeaderOne}>
 										{h1}
@@ -236,7 +241,7 @@ render(): Object {
 								</ScrollView>
 								:
 								<Text
-									level={16}
+									level={33}
 									style={[h1StyleDef, h1Style]}
 									onLayout={this.onLayoutHeaderOne}>
 									{h1}
@@ -244,7 +249,7 @@ render(): Object {
 						)}
 						{!!h2 && (
 							<Text
-								level={16}
+								level={33}
 								style={h2StyleDef} onLayout={this.onLayoutHeaderTwo}>
 								{h2}
 							</Text>
@@ -269,6 +274,7 @@ render(): Object {
 						</TouchableOpacity>
 					)}
 					{!!infoButton && this._renderInfoButton(infoButton)}
+					{!!customComponent && customComponent}
 				</View>
 			</Poster>
 		</View>
@@ -330,7 +336,6 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 				flexDirection: 'column',
 			},
 		iconBackground: {
-			backgroundColor: '#fff',
 			alignItems: 'center',
 			justifyContent: 'center',
 			width: iconBackgroundSize,
@@ -356,6 +361,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			flex: 0,
 			fontSize: fontSizeH1,
 			fontWeight: '500',
+			textAlign: align === 'center' ? 'center' : 'left',
 		},
 		h2StyleDef: {
 			fontSize: fontSizeH2,

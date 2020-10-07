@@ -36,6 +36,11 @@ import {
 } from '../../../../BaseComponents';
 
 import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
+import {
 	getWidgetConstants,
 	getWidgetTextFontSizeFactor,
 	setWidgetTextFontSizeFactor,
@@ -45,7 +50,7 @@ import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
     appLayout: Object,
     intl: Object,
 };
@@ -55,6 +60,7 @@ const WidgetFontSizeSetting = memo<Object>((props: Props): Object => {
 	const {
 		appLayout,
 		intl,
+		colors,
 	} = props;
 
 	const [ currentValue, setCurrentValue ] = useState(getWidgetTextFontSizeFactor());
@@ -71,7 +77,10 @@ const WidgetFontSizeSetting = memo<Object>((props: Props): Object => {
 		textStyle,
 		minimumTrackTintColor,
 		slider,
-	} = getStyles(appLayout);
+	} = getStyles({
+		appLayout,
+		colors,
+	});
 
 	const onValueChange = useCallback((value: number) => {
 		setCurrentValue(value);
@@ -83,7 +92,9 @@ const WidgetFontSizeSetting = memo<Object>((props: Props): Object => {
 
 	return (
 		<>
-			<Text style={textStyle}>
+			<Text
+				level={2}
+				style={textStyle}>
 				{intl.formatMessage(i18n.widgetTextSize)}
 			</Text>
 			<View level={2} style={containerStyle}>
@@ -101,21 +112,26 @@ const WidgetFontSizeSetting = memo<Object>((props: Props): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
 		shadow,
-		subHeader,
-		brandSecondary,
 	} = Theme.Core;
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
 	const fontSize2 = deviceWidth * 0.04;
 
 	const thumbSize = fontSize2;
+
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	return {
 		containerStyle: {
@@ -127,19 +143,18 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		textStyle: {
 			marginBottom: 5,
-			color: subHeader,
 			fontSize,
 		},
-		minimumTrackTintColor: brandSecondary,
+		minimumTrackTintColor: inAppBrandSecondary,
 		maximumTrackTintColor: 'rgba(219, 219, 219, 255)',
-		thumbTintColor: brandSecondary,
+		thumbTintColor: inAppBrandSecondary,
 		slider: {
 			track: {
 				borderRadius: 0,
 				height: deviceWidth * 0.010666667,
 			},
 			thumb: {
-				backgroundColor: brandSecondary,
+				backgroundColor: inAppBrandSecondary,
 				borderRadius: thumbSize / 2,
 				height: thumbSize,
 				width: thumbSize,
@@ -148,4 +163,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default WidgetFontSizeSetting;
+export default withTheme(WidgetFontSizeSetting);

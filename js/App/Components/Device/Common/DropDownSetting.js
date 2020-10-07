@@ -105,16 +105,23 @@ const DropDownSetting = (props: Object): Object => {
 			style={statuscheckStyle}/> : undefined;
 
 	return (
-		<View style={optionInputCover}>
+		<View
+			level={2}
+			style={optionInputCover}>
 			<View style={{
 				flexDirection: 'row',
 				alignItems: 'center',
 			}}>
-				<Text style={[optionInputLabelStyle, labelStyle]}>
+				<Text
+					level={3}
+					style={[optionInputLabelStyle, labelStyle]}>
 					{label}
 				</Text>
 				<TouchableOpacity onPress={onPressInfo}>
-					<IconTelldus icon={'help'} style={infoIconStyle}/>
+					<IconTelldus
+						level={23}
+						icon={'help'}
+						style={infoIconStyle}/>
 				</TouchableOpacity>
 			</View>
 			<DropDown
@@ -157,7 +164,6 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 	const {
 		paddingFactor,
 		shadow,
-		brandSecondary,
 		inactiveTintColor,
 		locationOnline,
 	} = Theme.Core;
@@ -200,18 +206,15 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 			justifyContent: 'space-between',
 			paddingLeft: padding,
 			borderRadius: 2,
-			backgroundColor: '#fff',
 			...shadow,
 			marginBottom: padding / 2,
 		},
 		optionInputLabelStyle: {
 			fontSize: fontSizeText,
-			color: '#000',
 		},
 		infoIconStyle: {
 			marginLeft: 3,
 			fontSize: fontSizeText,
-			color: brandSecondary,
 		},
 		throbberContainerStyle: {
 			backgroundColor: 'transparent',

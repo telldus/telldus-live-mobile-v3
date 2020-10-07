@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission tools:node="remove" android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
       android:name=".MainApplication"
@@ -109,7 +110,7 @@
         <service android:name=".ServiceBackground.RestartSensorUpdateAlarmManager"></service>
 
         <receiver android:name=".NewOnOffWidget"
-          android:label="@string/reserved_widget_android_widget_info_device_2">
+          android:label="@string/reserved_widget_android_labelDevice">
           <intent-filter>
             <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
           </intent-filter>
@@ -196,9 +197,13 @@
           android:exported="false"
           android:foregroundServiceType="location"/>
 
+        <!-- Geo Fence/ BG Location -->
         <meta-data
           android:name="com.transistorsoft.locationmanager.license"
           android:value="${geolocationApplicationKey}"/>
+        <service android:name="com.transistorsoft.locationmanager.service.TrackingService" android:foregroundServiceType="location" />
+        <service android:name="com.transistorsoft.locationmanager.service.LocationRequestService" android:foregroundServiceType="location" />
+  
     </application>
 
 </manifest>

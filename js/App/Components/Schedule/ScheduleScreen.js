@@ -48,6 +48,7 @@ type Props = {
 	ScreenName: string,
 	route: Object,
 	currentScreen: string,
+	hiddenTabsCurrentUser: Array<string>,
 
 	navigation: Object,
 	children: Object,
@@ -123,7 +124,7 @@ class ScheduleScreen extends View<null, Props, State> {
 			if (currentScreen !== nextProps.currentScreen) {
 				return true;
 			}
-			const propsChange = shouldUpdate(otherProps, otherPropsN, ['schedule']);
+			const propsChange = shouldUpdate(otherProps, otherPropsN, ['schedule', 'hiddenTabsCurrentUser']);
 			if (propsChange) {
 				return true;
 			}
@@ -168,6 +169,7 @@ class ScheduleScreen extends View<null, Props, State> {
 			currentScreen,
 			gateways,
 			route,
+			hiddenTabsCurrentUser,
 		} = this.props;
 		const {
 			appLayout,
@@ -218,6 +220,7 @@ class ScheduleScreen extends View<null, Props, State> {
 									currentScreen,
 									gateways,
 									route,
+									hiddenTabsCurrentUser,
 								},
 							)}
 						</View>
@@ -260,19 +263,26 @@ type mapStateToPropsType = {
 	app: Object,
 	gateways: Object,
 	navigation: Object,
+	user: Object,
 };
 
-const mapStateToProps = ({ schedule, devices, modal, app, gateways, navigation }: mapStateToPropsType): Object => {
+const mapStateToProps = ({ user, schedule, devices, modal, app, gateways, navigation }: mapStateToPropsType): Object => {
 
 	const {
 		screen: currentScreen,
+		hiddenTabs = {},
 	} = navigation;
+
+	const { userId } = user;
+
+	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
 
 	return {
 		schedule,
 		devices,
 		gateways,
 		currentScreen,
+		hiddenTabsCurrentUser,
 	};
 };
 

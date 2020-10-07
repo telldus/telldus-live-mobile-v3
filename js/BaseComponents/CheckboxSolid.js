@@ -22,10 +22,9 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { TouchableOpacity } from 'react-native';
 
-import Theme from '../App/Theme';
+import TouchableOpacity from './TouchableOpacity';
+
 import { getDeviceWidth } from '../App/Lib';
 
 type DefaultProps = {
@@ -43,38 +42,31 @@ type Props = {
 
 export default class CheckboxSolid extends React.Component<Props, null> {
 
-	static propTypes = {
-		onPress: PropTypes.func.isRequired,
-		checked: PropTypes.bool.isRequired,
-		size: PropTypes.number,
-		disabled: PropTypes.bool,
-		style: PropTypes.object,
-	};
-
 	static defaultProps: DefaultProps = {
 		size: getDeviceWidth() * 0.066666667,
 		disabled: false,
 	};
 
 	render(): React$Element<any> {
-		const { disabled, onPress, style } = this.props;
+		const { disabled, onPress, style, checked } = this.props;
 		const defaultStyle = this._getStyle();
+
+		const level = checked ? 13 : 14;
 
 		return (
 			<TouchableOpacity
 				onPress={onPress}
 				disabled={disabled}
 				style={[defaultStyle, style]}
+				level={level}
 			/>
 		);
 	}
 
 	_getStyle = (): Object => {
-		const { size, checked } = this.props;
-		const { inactiveGray, brandSecondary } = Theme.Core;
+		const { size } = this.props;
 
 		return {
-			backgroundColor: checked ? brandSecondary : inactiveGray,
 			height: size,
 			width: size,
 		};

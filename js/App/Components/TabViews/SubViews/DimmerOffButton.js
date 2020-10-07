@@ -26,6 +26,10 @@ import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 const isEqual = require('react-fast-compare');
 
+import {
+	withTheme,
+} from '../../HOC/withTheme';
+
 import shouldUpdate from '../../../Lib/shouldUpdate';
 
 import i18n from '../../../Translations/common';
@@ -40,6 +44,9 @@ type Props = {
 	local: boolean,
 	offButtonColor?: string,
 	iconOffColor?: string,
+	colors: Object,
+	colorScheme: string,
+	themeInApp: string,
 
 	style: Array<any> | Object,
 	onPress: () => void,
@@ -86,7 +93,7 @@ class DimmerOffButton extends View {
 			return true;
 		}
 		const propsChange = shouldUpdate(this.props, nextProps, [
-			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local', 'offButtonColor', 'iconOffColor',
+			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local', 'offButtonColor', 'iconOffColor', 'themeInApp', 'colorScheme',
 		]);
 		if (propsChange) {
 			return true;
@@ -107,20 +114,24 @@ class DimmerOffButton extends View {
 			offButtonColor,
 			iconOffColor,
 			disableActionIndicator,
+			colors,
 		} = this.props;
+
+		const styles = getStyles({colors});
+
 		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) :
 			offButtonColor ? { backgroundColor: offButtonColor } :
 				(isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
-			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') :
-			iconOffColor ? iconOffColor : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
-		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+			(isInState === 'TURNOFF' ? colors.colorOffActiveIcon : '#a2a2a2') :
+			iconOffColor ? iconOffColor : (isInState === 'TURNOFF' ? colors.colorOffActiveIcon : colors.colorOffInActiveIcon);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? colors.colorOffActiveBg : colors.colorOnActiveBg;
 
 		return (
 			<View
-				style={[style, buttonStyle]}
+				style={[styles.styleDef, style, buttonStyle]}
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon="off" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
@@ -142,41 +153,56 @@ class DimmerOffButton extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	enabled: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	disabled: {
-		backgroundColor: '#eeeeee',
-	},
-	offline: {
-		backgroundColor: '#a2a2a2',
-	},
-	textEnabled: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		color: 'red',
-	},
-	textDisabled: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		color: '#a0a0a0',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-	button: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-});
+const getStyles = ({
+	colors,
+}: Object): Object => {
+
+	const {
+		colorOffActiveBg,
+		colorOffInActiveBg,
+		buttonSeparatorColor,
+	} = colors;
+
+	return {
+		styleDef: {
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+		},
+		enabled: {
+			backgroundColor: colorOffActiveBg,
+		},
+		disabled: {
+			backgroundColor: colorOffInActiveBg,
+		},
+		offline: {
+			backgroundColor: '#a2a2a2',
+		},
+		textEnabled: {
+			textAlign: 'center',
+			textAlignVertical: 'center',
+			color: 'red',
+		},
+		textDisabled: {
+			textAlign: 'center',
+			textAlignVertical: 'center',
+			color: '#a0a0a0',
+		},
+		dot: {
+			position: 'absolute',
+			top: 3,
+			left: 3,
+		},
+		button: {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+	};
+};
 
 DimmerOffButton.defaultProps = {
 	enabled: true,
 	disableActionIndicator: false,
 };
 
-module.exports = DimmerOffButton;
+module.exports = withTheme(DimmerOffButton);

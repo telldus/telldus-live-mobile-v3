@@ -129,14 +129,14 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 			_screens.push(
 				<View style={cover} pointerEvents="box-none" key={`${i}`}>
 					<IconTelldus
-						level={9}
+						level={23}
 						icon={screen.icon}
 						style={iconStyle}/>
 					<Text
-						level={5}
+						level={26}
 						style={title}>{screen.title}</Text>
 					<Text
-						level={5}
+						level={26}
 						style={bodyText}>{screen.body}</Text>
 				</View>
 			);
@@ -147,7 +147,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 				}
 			}
 
-			const level = selectedIndex === i ? 9 : 6;
+			const level = selectedIndex === i ? 9 : 25;
 
 			_screenLabels.push(
 				<TouchableOpacity onPress={onChangeSelection} key={`${i}`}>
@@ -238,7 +238,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 						{screenLabels}
 					</View>
 					<Text
-						level={9}
+						level={23}
 						style={moreText} onPress={onPressMore}>...{formatMessage(i18n.labelMuchMore)}</Text>
 				</View>
 				<UpgradePremiumButton

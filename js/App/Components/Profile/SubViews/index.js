@@ -31,6 +31,8 @@ import EulaLink from './EulaLink';
 import WidgetFontSizeSetting from './WidgetFontSizeSetting';
 import SwitchOrAddAccountButton from './SwitchOrAddAccountButton';
 import ThemesBlock from './ThemesBlock';
+import ShowHideTabsBlock from './ShowHideTabsBlock';
+import SetDefaultStartScreenDropDown from './SetDefaultStartScreenDropDown';
 
 module.exports = {
 	EditNameBlock,
@@ -42,4 +44,6 @@ module.exports = {
 	WidgetFontSizeSetting,
 	SwitchOrAddAccountButton,
 	ThemesBlock,
+	ShowHideTabsBlock,
+	SetDefaultStartScreenDropDown,
 };

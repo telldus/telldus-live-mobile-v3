@@ -146,7 +146,7 @@ class Time extends View<null, Props & PropsThemedComponent, State> {
 	};
 
 	selectTime = () => {
-		const { actions, navigation, isEditMode } = this.props;
+		const { actions, navigation, isEditMode, route } = this.props;
 		const { selectedType, randomInterval, offset, date } = this.state;
 
 		if (!selectedType) {
@@ -178,6 +178,7 @@ class Time extends View<null, Props & PropsThemedComponent, State> {
 			navigation.navigate({
 				name: 'Days',
 				key: 'Days',
+				params: route.params,
 			});
 		}
 	};
@@ -277,6 +278,7 @@ class Time extends View<null, Props & PropsThemedComponent, State> {
 						mode="time"
 						style={{ flex: 1 }}
 						textColor={textColorDateTimePicker}
+						display={'spinner'}
 						onChange={this._onDateChange}
 					/>
 				</View>
@@ -416,14 +418,20 @@ class Time extends View<null, Props & PropsThemedComponent, State> {
 		const {
 			colors,
 		} = this.props;
-		const { brandPrimary, borderRadiusRow, maxSizeFloatingButton } = Theme.Core;
+
+		const {
+			inAppBrandPrimary,
+			textThree,
+		} = colors;
+
+		const { borderRadiusRow, maxSizeFloatingButton } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
 		const androidTimeWidth = deviceWidth * 0.213333333;
 		const androidTimeHeight = deviceWidth * 0.177333333;
-		const androidTimeColor = brandPrimary;
+		const androidTimeColor = inAppBrandPrimary;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const marginBottom = padding / 4;
@@ -433,7 +441,7 @@ class Time extends View<null, Props & PropsThemedComponent, State> {
 		let buttonBottom = deviceWidth * 0.066666667;
 
 		return {
-			textColorDateTimePicker: colors.textThree,
+			textColorDateTimePicker: textThree,
 			container: {
 				flex: 1,
 				justifyContent: 'flex-start',

@@ -180,7 +180,7 @@ class RGBControlScreen extends View<Props, State> {
 				style={styles.sliderCover}>
 				{
 					methodRequested === 'DIM' ?
-						<ButtonLoadingIndicator style={styles.dot} color={Theme.Core.brandSecondary}/>
+						<ButtonLoadingIndicator style={styles.dot}/>
 						: null
 				}
 				<SliderDetails
@@ -341,13 +341,6 @@ class RGBControlScreen extends View<Props, State> {
 				flex: 1,
 				marginHorizontal: padding,
 				marginBottom: padding,
-			},
-			handle: {
-				borderRadius: 28,
-				borderWidth: 4,
-				borderColor: Theme.Core.brandSecondary,
-				height: 28,
-				width: 28,
 			},
 			outerPadding,
 			LocationDetail: {

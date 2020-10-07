@@ -29,8 +29,6 @@ import DownButton from './Navigational/DownButton';
 
 import { shouldUpdate } from '../../../Lib';
 
-import Theme from '../../../Theme';
-
 type Props = {
 	item: Object,
 	tileWidth: number,
@@ -107,17 +105,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
-	},
-	itemIconContainerOn: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	itemIconContainerOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 

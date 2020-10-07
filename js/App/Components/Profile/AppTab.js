@@ -53,10 +53,13 @@ import {
 	DBSortControlBlock,
 	LanguageControlBlock,
 	SensorLastUpdateModeControlBlock,
+	DBNameDisplayControlBlock,
 } from '../Settings/SubViews';
 import {
 	WidgetFontSizeSetting,
 	ThemesBlock,
+	ShowHideTabsBlock,
+	SetDefaultStartScreenDropDown,
 } from './SubViews';
 
 import { LayoutAnimations } from '../../Lib';
@@ -236,6 +239,10 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					submitPushToken={submitPushToken}
 				/>
 				<LanguageControlBlock/>
+				<ShowHideTabsBlock
+					intl={intl}
+					layout={layout}/>
+				<SetDefaultStartScreenDropDown/>
 				<Text
 					level={2}
 					style={titleStyle}>
@@ -243,6 +250,8 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 				</Text>
 				<DBSortControlBlock
 					showLabel={true}
+					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
+				<DBNameDisplayControlBlock
 					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
 				<SettingsRow
 					label={formatMessage(i18n.autoCycleSenVal)}

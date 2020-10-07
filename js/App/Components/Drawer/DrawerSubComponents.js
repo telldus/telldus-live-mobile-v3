@@ -23,10 +23,6 @@
 'use strict';
 import React from 'react';
 const gravatar = require('gravatar-api');
-import {
-	Linking,
-	Image,
-} from 'react-native';
 
 import {
 	FormattedMessage,
@@ -35,10 +31,7 @@ import {
 	CachedImage,
 	IconTelldus,
 	RippleButton,
-	EmptyView,
 } from '../../../BaseComponents';
-
-import i18n from '../../Translations/common';
 
 const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwitchAccount }: Object): Object => {
 
@@ -51,6 +44,7 @@ const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwi
 
 	return (
 		<RippleButton
+			level={16}
 			style={styles.navigationHeader}
 			onPress={onPress}>
 			<View style={{
@@ -65,18 +59,26 @@ const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwi
 					style={styles.navigationHeaderImage}/>
 				<View>
 					<View style={styles.navigationHeaderTextCover}>
-						<Text numberOfLines={1} style={styles.navigationHeaderText}>
+						<Text
+							numberOfLines={1}
+							level={23}
+							style={styles.navigationHeaderText}>
 							{firstName}
 						</Text>
 						{lastName ?
-							<Text numberOfLines={1} style={styles.navigationHeaderText}>
+							<Text
+								numberOfLines={1}
+								level={23}
+								style={styles.navigationHeaderText}>
 								{` ${lastName}`}
 							</Text>
 							:
 							null
 						}
 					</View>
-					<Text style={styles.switchOrAdd}>
+					<Text
+						level={28}
+						style={styles.switchOrAdd}>
 						{textSwitchAccount}
 					</Text>
 				</View>
@@ -86,71 +88,29 @@ const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwi
 };
 
 const DrawerSubHeader = ({styles, textIntl}: Object): Object => (
-	<View style={styles.navigationTitle}>
+	<View
+		level={13}
+		style={styles.navigationTitle}>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...textIntl} style={styles.navigationTextTitle}/></Text>
 	</View>
 );
 
 const SettingsLink = ({styles, textIntl, text, iconName, iconComponent, onPressLink}: Object): Object => (
 	<RippleButton style={styles.linkCoverStyle} onPress={onPressLink}>
-		{!!iconName && <IconTelldus style={styles.linkIconStyle} icon={iconName}/>}
+		{!!iconName && <IconTelldus
+			level={23}
+			style={styles.linkIconStyle}
+			icon={iconName}/>}
 		{!!iconComponent && iconComponent}
-		<Text level={5} style={styles.linkLabelStyle}>
+		<Text level={27} style={styles.linkLabelStyle}>
 			{!!text && text}
 			{!!textIntl && <FormattedMessage {...textIntl} style={styles.linkLabelStyle}/>}
 		</Text>
 	</RippleButton>
 );
 
-const SettingsButton = ({ onPress, styles }: Object): Object => (
-	<RippleButton
-		style={styles.settingsCover}
-		onPress={onPress}>
-		<IconTelldus icon={'settings'} size={styles.settingsIconSize} accessible={false} importantForAccessibility={'no'} level={9} style={styles.settingsIconStyle}/>
-		<Text style={styles.settingsText}><FormattedMessage {...i18n.settingsHeader} style={styles.settingsText} /></Text>
-	</RippleButton>
-);
-
-const TestIapLink = ({styles, appDrawerBanner}: Object): Object => {
-	const {
-		image,
-		link,
-	} = appDrawerBanner ? appDrawerBanner : {};
-
-	const onPress = React.useCallback(() => {
-		Linking.canOpenURL(link)
-			.then((supported: boolean): any => {
-				if (!supported) {
-					console.error('Error open link', link);
-				} else {
-					return Linking.openURL(link);
-				}
-			})
-			.catch((err: any) => {
-				console.error(err);
-			});
-	}, [link]);
-
-	if (!link) {
-		return <EmptyView/>;
-	}
-
-	return (
-		<RippleButton
-			style={styles.iapTestCoverStyle}
-			onPress={onPress}>
-			<Image
-				style={styles.iapTestImageStyle}
-				source={{uri: image}}
-				resizeMode={'contain'}/>
-		</RippleButton>
-	);
-};
-
 module.exports = {
-	SettingsButton,
 	DrawerSubHeader,
 	NavigationHeader,
 	SettingsLink,
-	TestIapLink,
 };

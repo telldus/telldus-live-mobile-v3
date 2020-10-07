@@ -47,6 +47,8 @@ type Props = {
 	addingNewLocation: boolean,
 	currentScreen: string,
 	hasGateways: boolean,
+	hiddenTabsCurrentUser: Array<string>,
+	defaultStartScreenKey: string,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -113,6 +115,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			'screenReaderEnabled',
 			'hasGateways',
 			'addingNewLocation',
+			'hiddenTabsCurrentUser',
+			'defaultStartScreenKey',
 		]);
 	}
 
@@ -157,6 +161,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			toggleDialogueBox,
 			addingNewLocation,
 			addNewLocation,
+			hiddenTabsCurrentUser,
+			defaultStartScreenKey,
 		} = this.props;
 
 		const showAttentionCapture = this.showAttentionCapture();
@@ -174,6 +180,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			addNewSensor: this.addNewSensor,
 			addNewDevice: this.addNewDevice,
 			addNewLocation,
+			hiddenTabsCurrentUser,
+			defaultStartScreenKey,
 		};
 
 		return (
@@ -189,10 +197,25 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		screenReaderEnabled,
 	} = state.app;
 
+	const {
+		userId = '',
+	} = state.user;
+
+	const {
+		hiddenTabs = {},
+		defaultStartScreen = {},
+	} = state.navigation;
+
+	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+
+	const defaultStartScreenCurrentUser = defaultStartScreen[userId] || {};
+
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
 		currentScreen: state.navigation.screen,
+		hiddenTabsCurrentUser,
+		defaultStartScreenKey: defaultStartScreenCurrentUser.screenKey,
 	};
 }
 

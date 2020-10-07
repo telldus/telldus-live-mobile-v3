@@ -24,11 +24,16 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { View, StyleSheet } from '../../../../../BaseComponents';
+import { View } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
 	onPress: () => void,
 	intl: Object,
 	name: string,
@@ -36,7 +41,7 @@ type Props = {
 	dotStyle: Array<any> | Object,
 };
 
-export default class ShowMoreButton extends View<Props, null> {
+class ShowMoreButton extends View<Props, null> {
 props: Props;
 
 onPress: () => void;
@@ -63,31 +68,47 @@ render(): Object {
 	const { name, style, dotStyle } = this.props;
 	const accessibilityLabel = `${this.labelShowMore} ${this.labelButton}, ${name}. ${this.defaultDescriptionButton}`;
 
+	const styles = this.getStyles();
+
 	return (
 		<TouchableOpacity style={[styles.moreButtonsCover, style]} onPress={this.onPress} accessibilityLabel={accessibilityLabel}>
-			<View style={[styles.moreButtons, dotStyle]}/>
-			<View style={[styles.moreButtons, {marginHorizontal: 5}, dotStyle]}/>
-			<View style={[styles.moreButtons, dotStyle]}/>
+			<View
+				level={15}
+				style={[styles.moreButtons, dotStyle]}/>
+			<View
+				level={15}
+				style={[styles.moreButtons, {marginHorizontal: 5}, dotStyle]}/>
+			<View
+				level={15}
+				style={[styles.moreButtons, dotStyle]}/>
 		</TouchableOpacity>
 	);
 }
+getStyles = (): Object => {
+	const {
+		colorOnInActiveBg,
+		buttonSeparatorColor,
+	} = this.props.colors;
+
+	return {
+		moreButtonsCover: {
+			flexDirection: 'row',
+			width: Theme.Core.buttonWidth,
+			height: Theme.Core.rowHeight,
+			justifyContent: 'center',
+			alignItems: 'center',
+			borderLeftWidth: 1,
+			borderLeftColor: buttonSeparatorColor,
+			backgroundColor: colorOnInActiveBg,
+		},
+		moreButtons: {
+			height: 6,
+			width: 6,
+			borderRadius: 3,
+		},
+	};
 }
 
+}
 
-const styles = StyleSheet.create({
-	moreButtonsCover: {
-		flexDirection: 'row',
-		width: Theme.Core.buttonWidth,
-		height: Theme.Core.rowHeight,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
-	},
-	moreButtons: {
-		height: 6,
-		width: 6,
-		borderRadius: 3,
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-});
+export default withTheme(ShowMoreButton);

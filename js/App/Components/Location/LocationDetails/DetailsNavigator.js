@@ -27,6 +27,7 @@ import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigat
 
 import ZWaveSettings from './ZWaveSettings';
 import Details from './Details';
+import AdministrationTab from './AdministrationTab';
 import Theme from '../../../Theme';
 import {
 	View,
@@ -39,6 +40,10 @@ import {
 	shouldNavigatorUpdate,
 } from '../../../Lib/NavigationService';
 
+import {
+	withTheme,
+} from '../../../Components/HOC/withTheme';
+
 import i18n from '../../../Translations/common';
 
 const ScreenConfigs = [
@@ -46,12 +51,25 @@ const ScreenConfigs = [
 		name: 'Overview',
 		Component: Details,
 		options: {
+			tabBarLabel: ({ focused }: Object): Object => (
+				<TabBar
+					icon="home"
+					focused={focused}
+					label={i18n.overviewHeader}
+					accessibilityLabel={i18n.locationOverviewTab}/>
+			),
+		},
+	},
+	{
+		name: 'AdministrationTab',
+		Component: AdministrationTab,
+		options: {
 			tabBarLabel: ({ color }: Object): Object => (
 				<TabBar
 					icon="home"
 					tintColor={color}
-					label={i18n.overviewHeader}
-					accessibilityLabel={i18n.locationOverviewTab}/>
+					label={'Administration'} // TODO: Translate
+					accessibilityLabel={'AdministrationTab'}/>
 			),
 		},
 	},
@@ -59,16 +77,45 @@ const ScreenConfigs = [
 		name: 'ZWaveSettings',
 		Component: ZWaveSettings,
 		options: {
-			tabBarLabel: ({ color }: Object): Object => (
+			tabBarLabel: ({ focused }: Object): Object => (
 				<TabBar
 					icon="settings"
-					tintColor={color}
+					focused={focused}
 					label={'Z-Wave'}
 					accessibilityLabel={i18n.zWaveSettingsTab}/>
 			),
 		},
 	},
 ];
+
+const ThemedTabBar = withTheme(React.memo<Object>((props: Object): Object => {
+	const {
+		posterProps,
+		tabBarProps = {},
+		colors,
+	} = props;
+
+	const {
+		indicatorStyle,
+	} = tabBarProps;
+
+	const {
+		headerIconColor,
+	} = colors;
+
+	return (
+		<View style={{flex: 0}}>
+			<LocationDetailsHeaderPoster {...posterProps}/>
+			<MaterialTopTabBar
+				{...tabBarProps}
+				indicatorStyle={{
+					...indicatorStyle,
+					backgroundColor: headerIconColor,
+				}}
+			/>
+		</View>
+	);
+}));
 
 const NavigatorConfigs = {
 	initialRouteName: 'Overview',
@@ -94,42 +141,40 @@ const NavigatorConfigs = {
 			const isPortrait = height > width;
 			const deviceWidth = isPortrait ? width : height;
 
-			tabWidth = supportZWave ? width / 2 : width;
+			tabWidth = supportZWave ? width / 3 : width / 2;
 			fontSize = deviceWidth * 0.03;
 			paddingVertical = 10 + (fontSize * 0.5);
 		}
-		tabHeight = supportZWave ? undefined : 0;
 		return (
-			<View style={{flex: 0}}>
-				<LocationDetailsHeaderPoster {...rest}/>
-				<MaterialTopTabBar {...rest}
-					style={{
+			<ThemedTabBar
+				posterProps={{
+					...rest,
+				}}
+				tabBarProps={{
+					...rest,
+					style: {
 						...style,
 						height: tabHeight,
-					}}
-					tabStyle={{
+					},
+					tabStyle: {
 						...tabStyle,
 						width: tabWidth,
 						height: tabHeight,
 						paddingVertical,
-					}}
-					labelStyle={{
+					},
+					labelStyle: {
 						...labelStyle,
 						fontSize,
 						height: tabHeight,
-					}}
-					indicatorStyle={{
-						...indicatorStyle,
+					},
+					indicatorStyle: {
 						height: tabHeight,
-					}}
-				/>
-			</View>
+					},
+				}}
+			/>
 		);
 	},
 	tabBarOptions: {
-		indicatorStyle: {
-			backgroundColor: '#fff',
-		},
 		style: {
 			...Theme.Core.shadow,
 			justifyContent: 'center',
@@ -140,8 +185,6 @@ const NavigatorConfigs = {
 		},
 		upperCaseLabel: false,
 		scrollEnabled: false,
-		activeTintColor: Theme.Core.brandSecondary,
-		inactiveTintColor: Theme.Core.inactiveTintColor,
 		showIcon: false,
 		allowFontScaling: false,
 	},

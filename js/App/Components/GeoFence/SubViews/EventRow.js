@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import {
 	useSelector,
 } from 'react-redux';
@@ -35,6 +37,10 @@ import {
 	CheckBoxIconText,
 	Switch,
 } from '../../../../BaseComponents';
+
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
 
 import Theme from '../../../Theme';
 
@@ -54,6 +60,10 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 		description,
 	} = event;
 
+	const {
+		colors,
+	} = useAppTheme();
+
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const intl = useIntl();
@@ -69,16 +79,16 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 		checkIconActiveStyle,
 		checkIconInActiveStyle,
 		switchStyle,
-		switchTextStyle,
 	} = getStyles(layout, {
 		isLast,
+		colors,
 	});
 
-	function noOp() {}
+	const noOp = useCallback(() => {}, []);
 
 	const text = description ? description : intl.formatMessage(i18n.unknown);
 
-	function getNameInfo(): Object {
+	const getNameInfo = useCallback((): Object => {
 
 		let coverStyle = nameStyle;
 		if (DeviceInfo.isTablet()) {
@@ -92,20 +102,20 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 				</Text>
 			</View>
 		);
-	}
+	}, [nameStyle, nameTabletStyle, text, textStyle]);
 
 	const nameInfo = getNameInfo();
 
-	function _onChangeSelection() {
+	const _onChangeSelection = useCallback(() => {
 		onChangeSelection('event', checkBoxId, event);
-	}
+	}, [checkBoxId, event, onChangeSelection]);
 
-	function _toggleActiveState(active: boolean) {
+	const _toggleActiveState = ((active: boolean) => {
 		toggleActiveState('event', checkBoxId, {
 			...event,
 			active,
 		});
-	}
+	}, []);
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
 
@@ -132,9 +142,6 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 				{
 					isChecked ? (
 						<>
-							<Text style={switchTextStyle}>
-								{intl.formatMessage(i18n.labelActive)}
-							</Text>
 							<Switch
 								style={switchStyle}
 								value={event.active}
@@ -151,6 +158,7 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 
 const getStyles = (appLayout: Object, {
 	isLast,
+	colors,
 }: Object): Object => {
 	let { height, width } = appLayout;
 	let isPortrait = height > width;
@@ -159,11 +167,15 @@ const getStyles = (appLayout: Object, {
 	let {
 		rowHeight,
 		maxSizeRowTextOne,
-		brandSecondary,
 		shadow,
 		paddingFactor,
-		rowTextColor,
 	} = Theme.Core;
+
+	const {
+		card,
+		textSeven,
+		inAppBrandSecondary,
+	} = colors;
 
 	let nameFontSize = Math.floor(deviceWidth * 0.047);
 	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
@@ -181,7 +193,7 @@ const getStyles = (appLayout: Object, {
 			marginHorizontal: padding,
 			marginTop: padding / 2,
 			marginBottom: isLast ? padding : 0,
-			backgroundColor: '#FFFFFF',
+			backgroundColor: card,
 			height: rowHeight,
 			borderRadius: 2,
 			...shadow,
@@ -207,7 +219,7 @@ const getStyles = (appLayout: Object, {
 			flexDirection: 'row',
 		},
 		textStyle: {
-			color: rowTextColor,
+			color: textSeven,
 			fontSize: nameFontSize,
 			textAlignVertical: 'center',
 			textAlign: 'left',
@@ -217,24 +229,17 @@ const getStyles = (appLayout: Object, {
 			paddingHorizontal: padding,
 		},
 		checkIconActiveStyle: {
-			borderColor: brandSecondary,
-			backgroundColor: brandSecondary,
+			borderColor: inAppBrandSecondary,
+			backgroundColor: inAppBrandSecondary,
 			color: '#fff',
 		},
 		checkIconInActiveStyle: {
-			borderColor: rowTextColor,
+			borderColor: textSeven,
 			backgroundColor: 'transparent',
 			color: 'transparent',
 		},
 		switchStyle: {
 			marginRight: padding,
-		},
-		switchTextStyle: {
-			color: rowTextColor,
-			fontSize: nameFontSize * 0.8,
-			textAlignVertical: 'center',
-			textAlign: 'right',
-			marginRight: 5,
 		},
 	};
 };

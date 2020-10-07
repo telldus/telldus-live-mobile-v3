@@ -35,10 +35,18 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.RemoteViews;
+
+import androidx.core.content.ContextCompat;
 
 import com.telldus.live.mobile.Database.PrefManager;
+import com.telldus.live.mobile.R;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.telldus.live.mobile.Utility.Constants.BASE_ICON_SIZE_FACTOR;
 
@@ -181,5 +189,237 @@ public class CommonUtilities  {
         Double ratio = max / min;
 
         return ratio <= 1.5 && ratio >= 0.5;
+    }
+
+    public static int handleBackgroundWhenIdleOne(
+            String button, String transparent,
+            int renderedButtonsCount, Boolean isLastButton,
+            int viewId, RemoteViews views, Context context) {
+
+        if (transparent.equals("dark")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_black_round,
+                    R.drawable.shape_border_right_round_black,
+                    R.drawable.shape_left_black,
+                    R.drawable.shape_border_round_black,
+                    viewId,
+                    views,
+                    context
+            );
+            return ContextCompat.getColor(context, R.color.themeDark);
+        } else if (transparent.equals("light") || transparent.equals("true")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_white_round,
+                    R.drawable.shape_border_right_round_white,
+                    R.drawable.shape_left_white,
+                    R.drawable.shape_border_round_white,
+                    viewId,
+                    views,
+                    context
+            );
+            return ContextCompat.getColor(context, R.color.white);
+        } else {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_rounded_corner,
+                    R.drawable.shape_right_rounded_corner,
+                    R.drawable.button_background_no_bordradi,
+                    R.drawable.button_background,
+                    viewId,
+                    views,
+                    context
+            );
+            if (isPrimaryShade(button)) {
+                return ContextCompat.getColor(context, R.color.brandPrimary);
+            }
+            return ContextCompat.getColor(context, R.color.brandSecondary);
+        }
+    }
+
+    public static void handleBackgroundPostActionOne(
+            String button, String transparent,
+            int renderedButtonsCount, Boolean isLastButton,
+            int viewId, RemoteViews views, Context context) {
+        if (transparent.equals("dark")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_border_left_round_black_fill,
+                    R.drawable.shape_border_right_round_black_fill,
+                    R.drawable.shape_left_black_fill,
+                    R.drawable.shape_border_round_black_fill,
+                    viewId,
+                    views,
+                    context
+            );
+        } else if (transparent.equals("light") || transparent.equals("true")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_border_left_round_white_fill,
+                    R.drawable.shape_border_right_round_white_fill,
+                    R.drawable.shape_left_white_fill,
+                    R.drawable.shape_border_round_white_fill,
+                    viewId,
+                    views,
+                    context
+            );
+        }
+    }
+
+    public static int handleBackgroundOnActionOne(
+            String button, String transparent,
+            int renderedButtonsCount, Boolean isLastButton,
+            int flashViewId, int flashCoverId,
+            int viewId, RemoteViews views, Context context) {
+
+        if (transparent.equals("dark")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_black_round_fill,
+                    R.drawable.shape_border_right_round_black_fill,
+                    R.drawable.shape_left_black_fill,
+                    R.drawable.shape_border_round_black_fill,
+                    viewId,
+                    views,
+                    context
+            );
+            showFlashIndicator(
+                    views,
+                    flashViewId,
+                    flashCoverId,
+                    R.drawable.shape_circle_white_fill
+            );
+            return ContextCompat.getColor(context, R.color.white);
+        } else if (transparent.equals("light") || transparent.equals("true")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_white_round_fill,
+                    R.drawable.shape_border_right_round_white_fill,
+                    R.drawable.shape_left_white_fill,
+                    R.drawable.shape_border_round_white_fill,
+                    viewId,
+                    views,
+                    context
+            );
+            showFlashIndicator(
+                    views,
+                    flashViewId,
+                    flashCoverId,
+                    R.drawable.shape_circle_black_fill
+            );
+            return ContextCompat.getColor(context, R.color.themeDark);
+        } else {
+            if (isPrimaryShade(button)) {
+                setCoverBackground(
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.drawable.shape_left_rounded_corner_primary_fill,
+                        R.drawable.shape_right_rounded_corner_primary_fill,
+                        R.drawable.button_background_no_bordradi_primary_fill,
+                        R.drawable.button_background_primary_fill,
+                        viewId,
+                        views,
+                        context
+                );
+            } else {
+                setCoverBackground(
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.drawable.shape_left_rounded_corner_secondary_fill,
+                        R.drawable.shape_right_rounded_corner_secondary_fill,
+                        R.drawable.button_background_no_bordradi_secondary_fill,
+                        R.drawable.button_background_secondary_fill,
+                        viewId,
+                        views,
+                        context
+                );
+            }
+            showFlashIndicator(
+                    views,
+                    flashViewId,
+                    flashCoverId,
+                    R.drawable.shape_circle_white_fill
+            );
+            return ContextCompat.getColor(context, R.color.white);
+        }
+    }
+
+    public static void setCoverBackground(
+            int renderedButtonsCount, Boolean isLastButton,
+            int drawableWhenFirst, int drawableWhenLast, int drawableWhenInMiddle, int drawableWhenTheOnly,
+            int viewId, RemoteViews views, Context context
+    ) {
+
+        if (renderedButtonsCount == 0 && isLastButton) {
+            views.setInt(viewId, "setBackgroundResource", drawableWhenTheOnly);
+        } else if (renderedButtonsCount == 0) {
+            views.setInt(viewId, "setBackgroundResource", drawableWhenFirst);
+        } else if (isLastButton) {
+            views.setInt(viewId, "setBackgroundResource", drawableWhenLast);
+        } else {
+            views.setInt(viewId, "setBackgroundResource", drawableWhenInMiddle);
+        }
+    }
+
+    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
+        hideAllFlashIndicators(views);
+
+        views.setInt(visibleFlashId, "setBackgroundResource", drawable);
+        views.setViewVisibility(flashId, View.VISIBLE);
+    }
+
+    public static void showFlashIndicatorRGB(RemoteViews views, int visibleFlashId, int flashId, Bitmap backgroundFlash) {
+        CommonUtilities.hideAllFlashIndicators(views);
+
+        views.setImageViewBitmap(visibleFlashId, backgroundFlash);
+        views.setViewVisibility(flashId, View.VISIBLE);
+    }
+
+    public static Boolean isPrimaryShade(String button) {
+        String[] primaryShadedButtons = new String[]{"OFF", "STOP"};
+
+        List<String> list = Arrays.asList(primaryShadedButtons);
+
+        return list.contains(button);
+    }
+
+    public static boolean hasMethod(Map<String, Boolean> supportedMethods, String methodName) {
+        return ((supportedMethods.get(methodName) != null) && supportedMethods.get(methodName));
+    }
+
+    public static void hideAllFlashIndicators(RemoteViews views) {
+        Integer[] flash_indicators = new Integer[]{
+                R.id.flashing_indicator_on,
+                R.id.flashing_indicator_off,
+                R.id.flashing_indicator_rgb,
+                R.id.flashing_indicator_dim,
+                R.id.flashing_indicator_on_off,
+                R.id.flashing_indicator_bell,
+                R.id.flashing_indicator_up,
+                R.id.flashing_indicator_down,
+                R.id.flashing_indicator_stop,
+                R.id.flashing_indicator_dim25,
+                R.id.flashing_indicator_dim50,
+                R.id.flashing_indicator_dim75,
+        };
+
+        List<Integer> list = Arrays.asList(flash_indicators);
+
+        for (int i = 0; i < list.size(); i++) {
+            int id = list.get(i);
+            views.setViewVisibility(id, View.GONE);
+        }
+    }
+
+    public static void hideFlashIndicator(RemoteViews views, int flashId) {
+        views.setViewVisibility(flashId, View.GONE);
     }
 }

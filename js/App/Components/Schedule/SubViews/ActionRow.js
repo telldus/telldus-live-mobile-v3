@@ -59,8 +59,8 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.on,
 		actionLabel: i18n.turnOn,
 		method: 1,
-		bgColor: Theme.Core.brandSecondary,
-		textColor: Theme.Core.brandSecondary,
+		bgColor: 'colorOnActiveBg',
+		textColor: 'colorOnActiveBg',
 		icon: 'on',
 	},
 	{
@@ -69,8 +69,8 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.off,
 		actionLabel: i18n.turnOff,
 		method: 2,
-		bgColor: Theme.Core.brandPrimary,
-		textColor: '#999',
+		bgColor: 'colorOffActiveBg',
+		textColor: 'colorOffActiveBg',
 		icon: 'off',
 	},
 	{
@@ -79,8 +79,8 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.bell,
 		actionLabel: i18n.bell,
 		method: 4,
-		bgColor: Theme.Core.brandSecondary,
-		textColor: Theme.Core.brandSecondary,
+		bgColor: 'colorOnActiveBg',
+		textColor: 'colorOnActiveBg',
 		icon: 'bell',
 	},
 	{
@@ -89,9 +89,9 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.dim,
 		actionLabel: i18n.dim,
 		method: 16,
-		bgColor: '#EEA567',
-		bgColorDark: '#EA8F41',
-		textColor: Theme.Core.brandSecondary,
+		bgColor: 'dimL1Color', // TODO: Check with Johannes, the color code in dark mode
+		bgColorDark: 'dimL2Color', // TODO: Check with Johannes, the color code in dark mode
+		textColor: 'colorOnActiveBg',
 		icon: 'dim',
 	},
 	{
@@ -100,8 +100,8 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.up,
 		actionLabel: i18n.up,
 		method: 128,
-		bgColor: Theme.Core.brandSecondary,
-		textColor: Theme.Core.brandSecondary,
+		bgColor: 'colorOnActiveBg',
+		textColor: 'colorOnActiveBg',
 		icon: 'up',
 	},
 	{
@@ -110,8 +110,8 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.down,
 		actionLabel: i18n.down,
 		method: 256,
-		bgColor: Theme.Core.brandSecondary,
-		textColor: Theme.Core.brandSecondary,
+		bgColor: 'colorOnActiveBg',
+		textColor: 'colorOnActiveBg',
 		icon: 'down',
 	},
 	{
@@ -120,8 +120,8 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.stop,
 		actionLabel: i18n.stop,
 		method: 512,
-		bgColor: Theme.Core.brandSecondary,
-		textColor: Theme.Core.brandSecondary,
+		bgColor: 'colorOnActiveBg',
+		textColor: 'colorOnActiveBg',
 		icon: 'stop',
 	},
 	{
@@ -130,8 +130,8 @@ export const ACTIONS: ActionType[] = [
 		label: 'RGB',
 		actionLabel: 'rgb',
 		method: 1024,
-		bgColor: Theme.Core.brandSecondary,
-		textColor: Theme.Core.brandSecondary,
+		bgColor: 'colorOnActiveBg',
+		textColor: 'colorOnActiveBg',
 		icon: 'palette',
 	},
 	{
@@ -142,8 +142,8 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.thermostat,
 		actionLabel: i18n.thermostat,
 		method: 2048,
-		bgColor: Theme.Core.brandSecondary,
-		textColor: Theme.Core.brandSecondary,
+		bgColor: 'colorOnActiveBg',
+		textColor: 'colorOnActiveBg',
 		icon: 'temperature',
 	},
 ];
@@ -174,7 +174,7 @@ class ActionRow extends View<DefaultProps, Props, null> {
 	};
 
 	render(): React$Element<any> | null {
-		const { method, methodValue, showValue } = this.props;
+		const { method, methodValue, showValue, colors } = this.props;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 
 		if (!action) {
@@ -215,7 +215,7 @@ class ActionRow extends View<DefaultProps, Props, null> {
 				accessibilityLabel={accessibilityLabel}>
 				{this._renderIcon(action)}
 				<TextRowWrapper appLayout={appLayout}>
-					<Title color={action.textColor} appLayout={appLayout}>{typeof action.label === 'string' ? action.label : intl.formatMessage(action.label)}</Title>
+					<Title color={colors[action.textColor]} appLayout={appLayout}>{typeof action.label === 'string' ? action.label : intl.formatMessage(action.label)}</Title>
 					<Description style={description} appLayout={appLayout}>{descriptionText}</Description>
 				</TextRowWrapper>
 			</Row>
@@ -223,7 +223,16 @@ class ActionRow extends View<DefaultProps, Props, null> {
 	}
 
 	_renderIcon = (action: ActionType): Object => {
-		const { showValue, methodValue, appLayout, iconContainerStyle, actionIcons, method, intl } = this.props;
+		const {
+			showValue,
+			methodValue,
+			appLayout,
+			iconContainerStyle,
+			actionIcons,
+			method,
+			intl,
+			colors,
+		} = this.props;
 		const {
 			dimContainer,
 			dimValue,
@@ -238,9 +247,9 @@ class ActionRow extends View<DefaultProps, Props, null> {
 		if (showValue && action.icon === 'dim') {
 			const roundVal = Math.round(methodValue / 255 * 100);
 			const value = `${roundVal}%`;
-			let backgroundColor = action.bgColor;
+			let backgroundColor = colors[action.bgColor];
 			if (roundVal >= 50 && roundVal < 100) {
-				backgroundColor = action.bgColorDark;
+				backgroundColor = colors[action.bgColorDark];
 			}
 			return (
 				<View style={[dimContainer, { backgroundColor }, iconContainerStyle]}>
@@ -251,7 +260,7 @@ class ActionRow extends View<DefaultProps, Props, null> {
 			);
 		}
 		if (showValue && method === 2048) {
-			let backgroundColor = action.bgColor;
+			let backgroundColor = colors[action.bgColor];
 			const {
 				mode = '',
 				temperature,
@@ -283,12 +292,14 @@ class ActionRow extends View<DefaultProps, Props, null> {
 						alignItems: 'center',
 						justifyContent: 'center',
 					}}>
-						{showModeIcon && (<Icon
-							height={fontSize}
-							width={fontSize}
-							style={{
-								...others,
-							}}/>
+						{showModeIcon && (
+							// $FlowFixMe
+							<Icon
+								height={fontSize}
+								width={fontSize}
+								style={{
+									...others,
+								}}/>
 						)}
 						{!!changeMode &&
 								(
@@ -313,11 +324,11 @@ class ActionRow extends View<DefaultProps, Props, null> {
 		let iconName = actionIcons[methodString];
 
 		if (showValue && method === 1024) {
-			const color = methodValue.toLowerCase() === '#ffffff' ? Theme.Core.brandSecondary : methodValue;
+			const color = methodValue.toLowerCase() === '#ffffff' ? colors.colorOnActiveBg : methodValue;
 			return (
 				<BlockIcon
 					icon={iconName ? iconName : action.icon}
-					bgColor={action.bgColor}
+					bgColor={colors[action.bgColor]}
 					style={iconStyle}
 					containerStyle={[iconContainer, iconContainerStyle, {backgroundColor: color}]}
 				/>
@@ -327,7 +338,7 @@ class ActionRow extends View<DefaultProps, Props, null> {
 		return (
 			<BlockIcon
 				icon={iconName ? iconName : action.icon}
-				bgColor={action.bgColor}
+				bgColor={colors[action.bgColor]}
 				style={iconStyle}
 				containerStyle={[iconContainer, iconContainerStyle]}
 			/>
@@ -343,9 +354,6 @@ class ActionRow extends View<DefaultProps, Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const {
-			colors,
-		} = this.props;
 		const { borderRadiusRow } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -365,7 +373,6 @@ class ActionRow extends View<DefaultProps, Props, null> {
 				width: iconContainerWidth,
 			},
 			description: {
-				color: colors.textSix,
 				fontSize: deviceWidth * 0.032,
 				opacity: 1,
 			},

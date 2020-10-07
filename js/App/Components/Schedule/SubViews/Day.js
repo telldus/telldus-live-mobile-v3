@@ -28,7 +28,12 @@ import { Text, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
 	day: string,
 	isSelected: boolean,
 	onPress?: (index: number) => void,
@@ -36,7 +41,7 @@ type Props = {
 	intl: Object,
 };
 
-export default class Day extends View<null, Props, null> {
+class Day extends View<null, Props, null> {
 
 	static propTypes = {
 		day: PropTypes.string.isRequired,
@@ -64,13 +69,22 @@ export default class Day extends View<null, Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
+		const {
+			isSelected,
+			colors,
+		} = this.props;
+
+		const {
+			inAppBrandSecondary,
+		} = colors;
+
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const { brandSecondary, inactiveGray, fonts } = Theme.Core;
+		const { inactiveGray, fonts } = Theme.Core;
 
 		const size = deviceWidth * 0.101333333;
-		const backgroundColor = this.props.isSelected ? brandSecondary : inactiveGray;
+		const backgroundColor = isSelected ? inAppBrandSecondary : inactiveGray;
 
 		return {
 			container: {
@@ -89,3 +103,5 @@ export default class Day extends View<null, Props, null> {
 		};
 	};
 }
+
+export default withTheme(Day);

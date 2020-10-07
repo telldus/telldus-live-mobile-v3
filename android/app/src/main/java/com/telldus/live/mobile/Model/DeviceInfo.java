@@ -37,6 +37,8 @@ public class DeviceInfo {
     String secondaryStateValue;
     String primarySetting;
     String secondarySetting;
+    String requestedStateValue;
+    String requestedSecStateValue;
 
     public DeviceInfo() {
     }
@@ -44,7 +46,8 @@ public class DeviceInfo {
     public DeviceInfo(String state, int widgetId, int deviceId, String deviceName, Integer methods,
     String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested,
                       Integer isShowingStatus, Integer updateInterval, Integer clientDeviceId, Integer clientId,
-                      String secondaryStateValue, String primarySetting, String secondarySetting) {
+                      String secondaryStateValue, String primarySetting, String secondarySetting,
+                      String requestedStateValue, String requestedSecStateValue) {
         this.state = state;
         this.widgetId = widgetId;
         this.deviceId = deviceId;
@@ -62,6 +65,8 @@ public class DeviceInfo {
         this.secondaryStateValue = secondaryStateValue;
         this.primarySetting = primarySetting;
         this.secondarySetting = secondarySetting;
+        this.requestedStateValue = requestedStateValue;
+        this.requestedSecStateValue = requestedSecStateValue;
     }
 
     public String getState() {
@@ -192,11 +197,27 @@ public class DeviceInfo {
         this.primarySetting = primarySetting;
     }
 
-    public String getSecondarySetting() {
+     public String getSecondarySetting() {
         return secondarySetting;
     }
 
     public void setSecondarySetting(String secondarySetting) {
         this.secondarySetting = secondarySetting;
+    }
+
+    public String getRequestedStateValue() {
+        return requestedStateValue;
+    }
+
+    public void setRequestedStateValue(String requestedStateValue) {
+        this.requestedStateValue = requestedStateValue;
+    }
+
+    public String getRequestedSecStateValue() {
+        return requestedSecStateValue;
+    }
+
+    public void setRequestedSecStateValue(String requestedSecStateValue) {
+        this.requestedSecStateValue = requestedSecStateValue;
     }
 }

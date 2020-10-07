@@ -28,6 +28,8 @@ import { intlShape } from 'react-intl';
 import {
 	Text,
 	View,
+	ThemedMaterialIcon,
+	IconTelldus,
 } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
@@ -51,19 +53,21 @@ export default class WizardOne extends PureComponent<Props, null> {
 	titleWTwo: string;
 	descriptionWTwo: string;
 
+	titleWThree: string;
+	descriptionWThree: string;
+
 	constructor(props: Props) {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.wizardOneHeader314);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription314);
+		this.titleWOne = formatMessage(i18n.wizardOneHeader316);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription316);
 
-		this.titleWTwo = formatMessage(i18n.wizardTwoHeader314);
-		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription314);
+		this.titleWTwo = formatMessage(i18n.wizardTwoHeader316);
+		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription316);
 	}
 
 	getScreenData(currentScreen: number, styles: Object): Object {
-		const { brandSecondary } = Theme.Core;
 		const {
 			iconStyle,
 			// iconTwoStyle,
@@ -74,29 +78,44 @@ export default class WizardOne extends PureComponent<Props, null> {
 		let screenData = {
 			icon: null,
 			iconSize,
-			iconColor: brandSecondary,
+			iconLevel: 23,
 			iconStyle,
 			title: '',
 			description: '',
 		};
 
 		switch (currentScreen) {
+			// case 1:
+			// 	return {
+			// 		...screenData,
+			// 		icon: <ThemedMaterialIcon
+			// 			style={iconStyle}
+			// 			size={iconSize}
+			// 			name={'location-on'}
+			// 			level={23}/>,
+			// 		title: this.titleWOne,
+			// 		description: this.descriptionWOne,
+			// 		isPremiumFeature: true,
+			// 	};
 			case 1:
 				return {
 					...screenData,
-					icon: 'outlet',
+					icon: 'favorite',
 					title: this.titleWOne,
 					description: this.descriptionWOne,
 				};
-
 			case 2:
 				return {
 					...screenData,
-					icon: 'palette',
+					icon: <ThemedMaterialIcon
+						style={iconStyle}
+						size={iconSize}
+						name={'open-with'}
+						level={23}/>,
 					title: this.titleWTwo,
 					description: this.descriptionWTwo,
+					isPremiumFeature: true,
 				};
-
 			default:
 				return screenData;
 		}
@@ -108,20 +127,37 @@ export default class WizardOne extends PureComponent<Props, null> {
 		title,
 		descriptionStyle,
 		description,
+		isPremiumFeature,
+		premiumCoverStyle,
+		premIconStyle,
+		premTextStyle,
 	}: Object): Object => {
+
+		let { formatMessage } = this.props.intl;
+
 		return (
 			<>
 				<WizardIcon {...iconProps}/>
 				<Text
-					level={5}
+					level={26}
 					style={titleStyle}>
 					{title}
 				</Text>
 				<Text
-					level={6}
+					level={25}
 					style={descriptionStyle}>
 					{description}
 				</Text>
+				{!!isPremiumFeature && (
+					<View style={premiumCoverStyle}>
+						<IconTelldus icon={'premium'} style={premIconStyle}/>
+						<Text
+							level={25}
+							style={premTextStyle}>
+							{formatMessage(i18n.premFeature)}
+						</Text>
+					</View>
+				)}
 			</>
 		);
 	}
@@ -129,8 +165,21 @@ export default class WizardOne extends PureComponent<Props, null> {
 	render(): Object {
 		const { currentScreen, animatedX, animatedOpacity, appLayout } = this.props;
 
-		const { container, titleStyle, descriptionStyle, ...otherStyles } = this.getStyles(appLayout);
-		const { title, description, ...iconProps } = this.getScreenData(currentScreen, otherStyles);
+		const {
+			container,
+			titleStyle,
+			descriptionStyle,
+			premiumCoverStyle,
+			premIconStyle,
+			premTextStyle,
+			...otherStyles
+		} = this.getStyles(appLayout);
+		const {
+			title,
+			description,
+			isPremiumFeature,
+			...iconProps
+		} = this.getScreenData(currentScreen, otherStyles);
 
 		const contents = this.getContents({
 			iconProps,
@@ -138,6 +187,10 @@ export default class WizardOne extends PureComponent<Props, null> {
 			title,
 			descriptionStyle,
 			description,
+			isPremiumFeature,
+			premiumCoverStyle,
+			premIconStyle,
+			premTextStyle,
 		});
 
 		return (
@@ -158,7 +211,6 @@ export default class WizardOne extends PureComponent<Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 
 		const {
-			brandSecondary,
 			shadow,
 			paddingFactor,
 		} = Theme.Core;
@@ -178,17 +230,14 @@ export default class WizardOne extends PureComponent<Props, null> {
 				marginVertical: padding * 2,
 			},
 			iconStyle: {
-				color: brandSecondary,
 				textAlign: 'center',
 			},
 			iconTwoStyle: {
 				height: iconSize * 0.9,
 				width: iconSize * 0.9,
-				tintColor: brandSecondary,
 				marginVertical: 5 + (iconSize * 0.14),
 			},
 			iconThreeStyle: {
-				color: brandSecondary,
 				textAlignVertical: 'center',
 				textAlign: 'center',
 			},
@@ -201,6 +250,20 @@ export default class WizardOne extends PureComponent<Props, null> {
 				fontSize: Math.floor(deviceWidth * 0.042),
 				textAlign: 'left',
 				marginBottom: 10,
+			},
+			premiumCoverStyle: {
+				justifyContent: 'center',
+				alignItems: 'center',
+				flexDirection: 'row',
+			},
+			premIconStyle: {
+				textAlign: 'center',
+				color: Theme.Core.twine,
+				fontSize: Math.floor(deviceWidth * 0.075),
+			},
+			premTextStyle: {
+				fontSize: Math.floor(deviceWidth * 0.048),
+				marginLeft: 10,
 			},
 		};
 	}

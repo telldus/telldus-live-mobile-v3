@@ -28,7 +28,7 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import {
 	SettingsRow,
@@ -79,14 +79,14 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 		valueCompCoverStyle,
 	} = getStyle(layout);
 
-	const isBasic = moment().unix() > pro;
+	const isBasic = dayjs().unix() > pro;
 
 	const accStatus = isBasic ? 'Basic' :
 		<View style={valueCompCoverStyle}>
 			<IconTelldus icon={'premium'} style={premIconStyle}/>
 			<Text
 				level={4}
-				style={valueText}>{capitalizeFirstLetterOfEachWord('Premium access')}</Text>
+				style={valueText}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}</Text>
 		</View>;
 
 	return (
@@ -101,7 +101,9 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 				label={formatMessage(i18n.subscription)}
 				value={accStatus}
 				appLayout={layout}
-				iconValueRight={(isBasic && enable) ? <Text style={upgradeSyle}>{formatMessage(i18n.upgrade)}</Text> : null}
+				iconValueRight={(isBasic && enable) ? <Text
+					level={23}
+					style={upgradeSyle}>{formatMessage(i18n.upgrade)}</Text> : null}
 				onPress={false}
 				onPressIconValueRight={isBasic ? onPressUpgrade : null}
 				intl={intl}
@@ -121,7 +123,6 @@ const getStyle = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		brandSecondary,
 		twine,
 	} = Theme.Core;
 
@@ -133,7 +134,6 @@ const getStyle = (appLayout: Object): Object => {
 			marginTop: padding,
 		},
 		upgradeSyle: {
-			color: brandSecondary,
 			fontSize: deviceWidth * 0.04,
 		},
 		labelStyle: {

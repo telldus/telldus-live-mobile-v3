@@ -31,7 +31,6 @@ import {
 } from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
-import Theme from '../../../Theme';
 
 import { showChangeLog } from '../../../Actions/User';
 
@@ -51,7 +50,9 @@ const WhatsNewLink = (props: Object): Object => {
 	}, []);
 
 	return (
-		<Text onPress={onPressWhatsNew} style={buttonResubmit}>
+		<Text
+			level={23}
+			onPress={onPressWhatsNew} style={buttonResubmit}>
 			{formatMessage(i18n.labelWhatsNew)}
 		</Text>
 	);
@@ -66,7 +67,6 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		buttonResubmit: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.brandSecondary,
 			alignSelf: 'center',
 			paddingVertical: 5,
 			marginBottom: fontSize / 2,

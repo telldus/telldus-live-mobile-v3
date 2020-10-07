@@ -22,7 +22,11 @@
 'use strict';
 
 import React from 'react';
-import { LayoutAnimation, DrawerLayoutAndroid } from 'react-native';
+import {
+	LayoutAnimation,
+	DrawerLayoutAndroid,
+	BackHandler,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
@@ -51,6 +55,8 @@ type Props = {
 	appLayout: Object,
 	currentScreen: string,
 	hasGateways: boolean,
+	hiddenTabsCurrentUser: Array<string>,
+	defaultStartScreenKey: string,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -110,6 +116,19 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 
 		this.timeoutCloseDrawer = null;
+
+		this.backHandler = BackHandler.addEventListener(
+			'hardwareBackPress',
+			this.backAction
+		  );
+	}
+
+	backAction = (): boolean => {
+		if (this.state.drawer) {
+			this.closeDrawer();
+			return true;
+		}
+		return false;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -123,12 +142,17 @@ class AppNavigatorRenderer extends View<Props, State> {
 			'currentScreen',
 			'screenReaderEnabled',
 			'hasGateways',
+			'hiddenTabsCurrentUser',
+			'defaultStartScreenKey',
 		]);
 	}
 
 	componentWillUnmount() {
 		if (this.timeoutCloseDrawer) {
 			clearTimeout(this.timeoutCloseDrawer);
+		}
+		if (this.backHandler && this.backHandler.remove) {
+			this.backHandler.remove();
 		}
 	}
 
@@ -251,6 +275,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			screenReaderEnabled,
 			toggleDialogueBox,
 			currentScreen: CS,
+			hiddenTabsCurrentUser,
+			defaultStartScreenKey,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
@@ -281,6 +307,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			showAttentionCaptureAddDevice,
 			source: 'postlogin',
 			...MainNavHeaderProps,
+			hiddenTabsCurrentUser,
+			defaultStartScreenKey,
 		};
 
 		return (
@@ -334,10 +362,25 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		screenReaderEnabled,
 	} = state.app;
 
+	const {
+		userId = '',
+	} = state.user;
+
+	const {
+		hiddenTabs = {},
+		defaultStartScreen = {},
+	} = state.navigation;
+
+	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+
+	const defaultStartScreenCurrentUser = defaultStartScreen[userId] || {};
+
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
 		currentScreen: state.navigation.screen,
+		hiddenTabsCurrentUser,
+		defaultStartScreenKey: defaultStartScreenCurrentUser.screenKey,
 	};
 }
 

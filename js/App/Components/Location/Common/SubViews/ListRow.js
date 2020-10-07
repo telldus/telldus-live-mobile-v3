@@ -65,7 +65,7 @@ export default class ListRow extends View {
 					level={2}
 					style={styles.rowItems}>
 					<Text
-						level={6}
+						level={25}
 						style={styles.text}
 						allowFontScaling={false}>{this.props.item}</Text>
 				</View>

@@ -28,14 +28,18 @@ import { StyleSheet } from 'react-native';
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 
 import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../../HOC/withTheme';
+
+import {
 	shouldUpdate,
 	formatModeValue,
 	getKnownModes,
 } from '../../../../Lib';
 import i18n from '../../../../Translations/common';
-import Theme from '../../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	command: number,
 
 	device: Object,
@@ -75,7 +79,13 @@ class HeatInfoBlock extends View {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device', 'currentMode', 'currentValue']);
+		const propsChange = shouldUpdate(others, othersN, [
+			'device',
+			'currentMode',
+			'currentValue',
+			'themeInApp',
+			'colorScheme',
+		]);
 		if (propsChange) {
 			return true;
 		}
@@ -100,10 +110,11 @@ class HeatInfoBlock extends View {
 			intl,
 			iconSize,
 			disableActionIndicator,
+			colors,
 		} = this.props;
-		let { methodRequested, name, local } = device;
+		let { methodRequested, name } = device;
 
-		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+		let dotColor = colors.lightDrandSecDarkWhite;
 
 		let accessibilityLabel = `${this.thermostatMoreActions}, ${name}`;
 
@@ -170,4 +181,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = HeatInfoBlock;
+module.exports = withTheme(HeatInfoBlock);

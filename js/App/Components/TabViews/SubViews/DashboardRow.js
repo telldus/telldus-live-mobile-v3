@@ -36,6 +36,10 @@ import RGBDashboardTile from './RGBDashboardTile';
 import ThermostatButtonDB from './Thermostat/ThermostatButtonDB';
 
 import {
+	withTheme,
+} from '../../HOC/withTheme';
+
+import {
 	getLabelDevice,
 	getPowerConsumed,
 	shouldUpdate,
@@ -59,11 +63,17 @@ type Props = {
 	offColorMultiplier: number,
 	onColorMultiplier: number,
 
+	colors: Object,
+	themeInApp: string,
+	colorScheme: string,
+	dark: boolean,
+
     style: Object,
 	setScrollEnabled: (boolean) => void,
 	onPressDimButton: (Object) => void,
 	openRGBControl: (number) => void,
 	openThermostatControl: (number) => void,
+	navigation: Object,
 };
 
 type State = {
@@ -108,6 +118,9 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'currentTemp',
 		'offColorMultiplier',
 		'onColorMultiplier',
+		'themeInApp',
+		'colorScheme',
+		'dark',
 	]);
 	if (propsChange) {
 		return true;
@@ -130,6 +143,17 @@ openRGBControl = () => {
 	}
 }
 
+onPressIconRight = () => {
+	const { navigation, item } = this.props;
+	navigation.navigate('DeviceDetails', {
+		screen: 'History',
+		params: {
+			id: item.id,
+		},
+		id: item.id,
+	});
+}
+
 getButtonsInfo(item: Object, styles: Object): Object {
 	let { supportedMethods = {}, isInState, isOnline, deviceType, stateValues = {} } = item, buttons = [], buttonsInfo = [];
 	let {
@@ -138,6 +162,8 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		onPressDimButton,
 		offColorMultiplier,
 		onColorMultiplier,
+		dark,
+		colors,
 	} = this.props;
 	const {
 		TURNON,
@@ -158,15 +184,23 @@ getButtonsInfo(item: Object, styles: Object): Object {
 
 	let { RGB: rgbValue } = stateValues;
 	let colorDeviceIconBack = styles.itemIconContainerOn.backgroundColor;
-	let offColorRGB, iconOffColor, iconOnColor;
+	let offColorRGB, iconOffColor, iconOnColor, preparedMainColorRgb;
 	if (typeof rgbValue !== 'undefined' && isOnline) {
 		let mainColorRGB = getMainColorRGB(rgbValue);
 
-		offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
+		offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier, {
+			isDarkMode: dark,
+		});
 		iconOffColor = offColorRGB;
 
-		colorDeviceIconBack = prepareMainColor(mainColorRGB, onColorMultiplier);
+		preparedMainColorRgb = prepareMainColor(mainColorRGB, onColorMultiplier, {
+			isDarkMode: dark,
+			colorWhenWhite: colors.inAppBrandSecondary,
+		});
+		colorDeviceIconBack = preparedMainColorRgb;
 		iconOnColor = colorDeviceIconBack;
+
+		colorDeviceIconBack = isInState === 'TURNOFF' ? iconOffColor : colorDeviceIconBack;
 	}
 	colorDeviceIconBack = colorDeviceIconBack ? colorDeviceIconBack : styles.iconContainerStyle.backgroundColor;
 
@@ -247,6 +281,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 				onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
 				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
+				preparedMainColorRgb={preparedMainColorRgb}
 				containerStyle={[styles.buttonsContainerStyle, {width}]}
 			/>);
 		buttonsInfo.unshift({
@@ -291,13 +326,17 @@ getButtonsInfo(item: Object, styles: Object): Object {
 }
 
 render(): Object {
-	const { item, tileWidth, intl, appLayout } = this.props;
+	const { item, tileWidth, intl, appLayout, colors } = this.props;
 	const { showMoreActions } = this.state;
 	const { name, isInState } = item;
 	const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
 	const info = this.getInfo();
-	const styles = this.getStyles(appLayout, tileWidth);
+	const styles = this.getStyles({
+		appLayout,
+		tileWidth,
+		colors,
+	});
 	const { buttons, buttonsInfo } = this.getButtonsInfo(item, styles);
 	const { iconContainerStyle, iconsName } = buttonsInfo[0];
 	const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
@@ -322,6 +361,8 @@ render(): Object {
 				alignItems: 'center',
 				justifyContent: 'center',
 			}]}
+			iconRight={'history'}
+			onPressIconRight={this.onPressIconRight}
 			type={'device'}
 			tileWidth={tileWidth}
 			accessibilityLabel={accessibilityLabel}
@@ -379,7 +420,17 @@ closeMoreActions() {
 	});
 }
 
-getStyles(appLayout: Object, tileWidth: number): Object {
+getStyles({
+	appLayout,
+	tileWidth,
+	colors,
+}: Object): Object {
+
+	const {
+		colorOnActiveBg,
+		colorOffActiveBg,
+	} = colors;
+
 	return {
 		buttonsContainerStyle: {
 			height: tileWidth * 0.4,
@@ -397,10 +448,10 @@ getStyles(appLayout: Object, tileWidth: number): Object {
 			borderRadius: tileWidth * 0.025,
 		},
 		itemIconContainerOn: {
-			backgroundColor: Theme.Core.brandSecondary,
+			backgroundColor: colorOnActiveBg,
 		},
 		itemIconContainerOff: {
-			backgroundColor: Theme.Core.brandPrimary,
+			backgroundColor: colorOffActiveBg,
 		},
 		itemIconContainerOffline: {
 			backgroundColor: Theme.Core.offlineColor,
@@ -430,4 +481,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(DashboardRow);
+module.exports = connect(mapStateToProps, null)(withTheme(DashboardRow));

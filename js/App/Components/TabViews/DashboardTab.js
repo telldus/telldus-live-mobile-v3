@@ -25,26 +25,37 @@ import React from 'react';
 import { createSelector } from 'reselect';
 import {
 	Dimensions,
-	FlatList,
-	RefreshControl,
 	LayoutAnimation,
 	Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import DragAndDropScrollView from 'react-native-drag-and-drop-scroll-view';
 
 import {
 	Text,
 	View,
 	EmptyView,
+	TouchableOpacity,
+	Icon,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
 	NoGateways,
 } from './SubViews/EmptyInfo';
 
-import { getDevices, getSensors, getGateways } from '../../Actions';
-import { changeSensorDisplayTypeDB } from '../../Actions/Dashboard';
+import {
+	getDevices,
+	getSensors,
+	getGateways,
+	showToast,
+	changeSortingDB,
+} from '../../Actions';
+import {
+	changeSensorDisplayTypeDB,
+	updateDashboardOrder,
+	removeFromDashboard,
+} from '../../Actions/Dashboard';
 
 import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
@@ -54,8 +65,17 @@ import {
 	SensorDashboardTile,
 	DashboardRow,
 } from './SubViews';
+import {
+	MetWeatherDbTile,
+} from './SubViews/MET';
 
-import { LayoutAnimations } from '../../Lib';
+import {
+	LayoutAnimations,
+	prepareVisibleTabs,
+	DEVICE_KEY,
+	SENSOR_KEY,
+	MET_ID,
+} from '../../Lib';
 
 type Props = {
 	rows: Array<Object>,
@@ -65,9 +85,11 @@ type Props = {
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
 	currentScreen: string,
+	hiddenTabsCurrentUser: Array<string>,
+	sortingDB: 'Manual' | 'Alphabetical',
 
 	navigation: Object,
-	changeSensorDisplayTypeDB: (id?: number) => void,
+	changeSensorDisplayTypeDB: (id?: number, kind?: string) => void,
 	dispatch: Function,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
@@ -169,10 +191,10 @@ class DashboardTab extends View {
 		this.timer = null;
 	}
 
-	changeDisplayType(id: number) {
+	changeDisplayType(id: number, kind: string) {
 		this.stopSensorTimer();
 		LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
-		this.props.changeSensorDisplayTypeDB(id);
+		this.props.changeSensorDisplayTypeDB(id, kind);
 		this.startSensorTimer();
 	}
 
@@ -210,20 +232,25 @@ class DashboardTab extends View {
 	}
 
 	componentDidMount() {
-		const { isDBEmpty, navigation, currentScreen } = this.props;
+		const { isDBEmpty, navigation, currentScreen, hiddenTabsCurrentUser } = this.props;
 		const possibleScreen = ['Dashboard', 'Tabs', 'Login'];
 		if (isDBEmpty && possibleScreen.indexOf(currentScreen) !== -1) {
 			// Navigating to other tab inside componentDidMount of one tab has an issue in Android
 			// ISSUE: It successfully navigates to 'Devices' after after a second it navigates
 			// back to Dashboard itself.
 			// No issues in iOS though.
+
+			const {
+				tabToCheckOrVeryNext,
+			} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Devices');
+
 			if (Platform.OS === 'android') {
 				this.timeoutSwitchTabAndroid = setTimeout(() => {
-					navigation.navigate('Devices');
+					navigation.navigate(tabToCheckOrVeryNext);
 					this.timeoutSwitchTabAndroid = null;
 				}, 1000);
 			} else {
-				navigation.navigate('Devices');
+				navigation.navigate(tabToCheckOrVeryNext);
 			}
 		}
 		this.startSensorTimer();
@@ -288,14 +315,17 @@ class DashboardTab extends View {
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}>
-				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
+				<Icon
+					name={'star'}
+					size={style.starIconSize}
+					level={23}/>
 				<Text
 					level={4}
 					style={style.noItemsTitle}>
 					{this.noItemsTitle}
 				</Text>
 				<Text
-					level={5}
+					level={26}
 					style={style.noItemsContent}>
 					{'\n'}
 					{this.noItemsContent}
@@ -388,11 +418,33 @@ class DashboardTab extends View {
 		return data;
 	}
 
-	_keyExtractor = (item: Object, index: number): string => {
+	_onSortOrderUpdate = (data: Array<Object>) => {
 		const {
-			data = {},
-		} = item || {};
-		return `${data.id}-${index}`;
+			sortingDB,
+			dispatch,
+			screenProps,
+		} = this.props;
+
+		if (sortingDB === 'Alphabetical') {
+			const settings = { sortingDB: 'Manual' };
+			dispatch(changeSortingDB(settings));
+			dispatch(showToast(screenProps.intl.formatMessage(i18n.dBSortChangedToManual)));
+		}
+
+		dispatch(updateDashboardOrder(data));
+	}
+
+	_onDelete = (index: number, item: Object, fullData: Array<Object>, {animateDeleted}: Object) => {
+		if (item) {
+			const {
+				objectType,
+				data,
+			} = item;
+
+			animateDeleted(() => {
+				this.props.dispatch(removeFromDashboard(objectType, data.id));
+			});
+		}
 	}
 
 	render(): Object {
@@ -408,7 +460,7 @@ class DashboardTab extends View {
 			addingNewLocation,
 			addNewLocation,
 		} = screenProps;
-		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
+		const { isRefreshing, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		const style = this.getStyles({
 			appLayout,
@@ -434,30 +486,32 @@ class DashboardTab extends View {
 				level={3}
 				onLayout={this._onLayout}
 				style={style.container}>
-				<FlatList
-					ref="list"
+				<DragAndDropScrollView
 					data={rows}
+					enableDragDrop
+					showBin
 					renderItem={this._renderRow}
 					refreshControl={
-						<RefreshControl
+						<ThemedRefreshControl
 							enabled={showRefresh}
 							refreshing={isRefreshing}
 							onRefresh={this.onRefresh}
 						/>
 					}
-					key={numColumns}
-					numColumns={numColumns}
 					extraData={extraData}
-					style={{width: '100%'}}
+					style={{
+						width: '100%',
+					}}
 					contentContainerStyle={{
+						flexDirection: 'row',
+						flexWrap: 'wrap',
 						flexGrow: 1,
 						paddingVertical: style.padding,
 						paddingHorizontal: isDBEmpty ? 30 : style.padding,
 					}}
 					scrollEnabled={scrollEnabled}
-					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-					keyExtractor={this._keyExtractor}
-				/>
+					onSortOrderUpdate={this._onSortOrderUpdate}
+					onDelete={this._onDelete}/>
 			</View>
 		);
 	}
@@ -474,6 +528,7 @@ class DashboardTab extends View {
 				<Text
 					style={{
 						color: Theme.Core.eulaContentColor,
+						textAlign: 'center',
 					}}
 					key={id}>
 					{message}
@@ -486,7 +541,13 @@ class DashboardTab extends View {
 		if (!row || !row.item) {
 			return <EmptyView/>;
 		}
-		const { screenProps } = this.props;
+
+		const {
+			move,
+			moveEnd,
+		} = row;
+
+		const { screenProps, navigation } = this.props;
 		const { intl } = screenProps;
 		let { tileWidth } = this.state;
 		const { data, objectType } = row.item;
@@ -509,37 +570,49 @@ class DashboardTab extends View {
 			borderRadius: 2,
 		};
 
-		if (objectType !== 'sensor' && objectType !== 'device') {
-			return this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
-		}
-		if (!data) {
-			return this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
-		}
+		const sharedProps = {
+			key: id,
+			item: data,
+			style: tileStyle,
+			tileWidth,
+			intl,
+			navigation,
+			isGatewayActive: isOnline || supportLocalControl,
+		};
 
-		if (objectType === 'sensor') {
-			return <SensorDashboardTile
-				key={id}
-				item={data}
+		let rowItem = <EmptyView/>;
+		if (objectType !== SENSOR_KEY && objectType !== DEVICE_KEY && objectType !== MET_ID) {
+			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
+		} else if (!data) {
+			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
+		} else if (objectType === SENSOR_KEY) {
+			rowItem = <SensorDashboardTile
+				{...sharedProps}
 				isGatewayActive={isOnline || supportLocalControl}
-				style={tileStyle}
-				tileWidth={tileWidth}
-				intl={screenProps.intl}
 				onPress={this.changeDisplayType}
 			/>;
+		} else if (objectType === DEVICE_KEY) {
+			rowItem = <DashboardRow
+				{...sharedProps}
+				setScrollEnabled={this.setScrollEnabled}
+				onPressDimButton={this.showDimInfo}
+				openRGBControl={this.openRGBControl}
+				openThermostatControl={this.openThermostatControl}
+			/>;
+		} else if (objectType === MET_ID) {
+			rowItem = <MetWeatherDbTile
+				{...sharedProps}
+				onPress={this.changeDisplayType}/>;
 		}
 
-		return <DashboardRow
-			key={id}
-			item={data}
-			isGatewayActive={isOnline || supportLocalControl}
-			style={tileStyle}
-			tileWidth={tileWidth}
-			intl={screenProps.intl}
-			setScrollEnabled={this.setScrollEnabled}
-			onPressDimButton={this.showDimInfo}
-			openRGBControl={this.openRGBControl}
-			openThermostatControl={this.openThermostatControl}
-		/>;
+		return (
+			<TouchableOpacity
+				onLongPress={move}
+				onPressOut={moveEnd}
+				style={{flex: 0}}>
+				{rowItem}
+			</TouchableOpacity>
+		);
 	}
 
 	getPadding(): number {
@@ -590,10 +663,6 @@ class DashboardTab extends View {
 				paddingVertical: 10,
 				width: deviceWidth * 0.75,
 			},
-			dialogueBodyTextStyle: {
-				fontSize: 13,
-				color: '#6B6969',
-			},
 			dialogueBoxStyle: {
 				borderRadius: 8,
 				elevation: 2,
@@ -604,7 +673,6 @@ class DashboardTab extends View {
 					width: 0,
 					height: 1,
 				},
-				backgroundColor: '#fff',
 				overflow: 'visible',
 			},
 		};
@@ -619,14 +687,15 @@ const getRows = createSelector(
 		({ gateways }: Object): Object => gateways,
 		({ app }: Object): Object => app,
 		({ user }: Object): Object => user,
+		({ thirdParties }: Object): Object => thirdParties,
 	],
-	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object, user: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app, user)
+	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object, user: Object, thirdParties: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app, user, thirdParties)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
-	const { deviceIds = [], sensorIds = []} = state.dashboard;
+	const { deviceIds = {}, sensorIds = {}, metWeatherIds = {}} = state.dashboard;
 	const { defaultSettings } = state.app;
-	const { dbCarousel = true, activeDashboardId } = defaultSettings || {};
+	const { dbCarousel = true, activeDashboardId, sortingDB } = defaultSettings || {};
 
 	const { userId } = state.user;
 
@@ -634,23 +703,32 @@ function mapStateToProps(state: Object, props: Object): Object {
 	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
 	const userDbsAndDeviceIds = deviceIds[userId] || {};
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+	const userDbsAndMetWeathersIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeathersIds[activeDashboardId] || [];
 
-	const { screen: currentScreen } = state.navigation;
+	const {
+		screen: currentScreen,
+		hiddenTabs = {},
+	} = state.navigation;
+
+	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
 
 	return {
 		rows: getRows(state),
-		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0),
+		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0),
 		dbCarousel,
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
 		currentScreen,
+		hiddenTabsCurrentUser,
+		sortingDB,
 	};
 }
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		changeSensorDisplayTypeDB: (id?: number) => {
-			dispatch(changeSensorDisplayTypeDB(id));
+		changeSensorDisplayTypeDB: (id?: number, kind?: string) => {
+			dispatch(changeSensorDisplayTypeDB(id, kind));
 		},
 		dispatch,
 	};
