@@ -21,6 +21,8 @@
 // @flow
 
 let dayjs = require('dayjs');
+let isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
+dayjs.extend(isSameOrAfter);
 import { format } from 'url';
 
 import { LiveApi } from './LiveApi';
