@@ -2,7 +2,7 @@
 //  HomescreenWidget.swift
 //  HomescreenWidget
 //
-//  Created by Rimnesh Fernandez on 28/08/20.
+//  Created by Rimnesh Fernandez on 07/10/20.
 //  Copyright © 2020 Telldus Technologies AB. All rights reserved.
 //
 
@@ -46,7 +46,6 @@ struct HomescreenWidgetEntryView : View {
 
     var body: some View {
         Text(entry.date, style: .time)
-        Text("Telldus Live! Mobile")
     }
 }
 
@@ -58,7 +57,7 @@ struct HomescreenWidget: Widget {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             HomescreenWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Telldus Widget")
+        .configurationDisplayName("My Widget")
         .description("This is an example widget.")
     }
 }
