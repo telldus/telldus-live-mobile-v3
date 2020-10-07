@@ -25,7 +25,7 @@ import groupBy from 'lodash/groupBy';
 import orderBy from 'lodash/orderBy';
 import reduce from 'lodash/reduce';
 import isEmpty from 'lodash/isEmpty';
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import {
 	MET_ID,
@@ -54,10 +54,10 @@ const prepareWeather = (weatherData: Object = {}, gateways: Object = {}): Array<
 					if (meta && timeseries) {
 						for (let i = 0; i < timeseries.length; i++) {
 							const { time, data: __data } = timeseries[i];
-							const _moment = moment(time);
+							const _moment = dayjs(time);
 							const dayOfYear1 = _moment.dayOfYear();
 							const hour1 = _moment.hour();
-							const momentNow = moment();
+							const momentNow = dayjs();
 							const dayOfYearNow = momentNow.dayOfYear();
 							const hourNow = momentNow.hour();
 							if (dayOfYear1 === dayOfYearNow && hour1 === hourNow) {
