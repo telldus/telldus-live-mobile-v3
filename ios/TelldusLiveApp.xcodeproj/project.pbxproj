@@ -19,6 +19,9 @@
 		26B06645252E2832009C3325 /* HomescreenWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidget.intentdefinition */; };
 		26B06646252E2832009C3325 /* HomescreenWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidget.intentdefinition */; };
 		26B06649252E2832009C3325 /* HomescreenWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		26B7FFA0252F2F9500941737 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B7FF9F252F2F9500941737 /* WidgetModule.swift */; };
+		26B7FFA4252F2FB200941737 /* WidgetModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 26B7FFA3252F2FB200941737 /* WidgetModuleBridge.m */; };
+		26B7FFA7252F324E00941737 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B7FF9F252F2F9500941737 /* WidgetModule.swift */; };
 		26C7BEBA24977AEA007EC056 /* Caveat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB824977AEA007EC056 /* Caveat-Regular.ttf */; };
 		26C7BEBB24977AEA007EC056 /* Caveat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB924977AEA007EC056 /* Caveat-Bold.ttf */; };
 		26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC2221424D8A0060DC8E /* AddressBook.framework */; };
@@ -79,6 +82,8 @@
 		26B06641252E282E009C3325 /* HomescreenWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = HomescreenWidget.intentdefinition; sourceTree = "<group>"; };
 		26B06642252E2832009C3325 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		26B06644252E2832009C3325 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26B7FF9F252F2F9500941737 /* WidgetModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetModule.swift; sourceTree = "<group>"; };
+		26B7FFA3252F2FB200941737 /* WidgetModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WidgetModuleBridge.m; sourceTree = "<group>"; };
 		26BB28AF21622F8F0027C32A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		26BB28B1216230CA0027C32A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		26C7BEB824977AEA007EC056 /* Caveat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Caveat-Regular.ttf"; path = "../assets/fonts/Caveat-Regular.ttf"; sourceTree = "<group>"; };
@@ -149,6 +154,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				265B40BC244F07D100446DE2 /* TelldusLiveApp-Bridging-Header.h */,
+				26B7FF9F252F2F9500941737 /* WidgetModule.swift */,
+				26B7FFA3252F2FB200941737 /* WidgetModuleBridge.m */,
 			);
 			name = TelldusLiveApp;
 			sourceTree = "<group>";
@@ -526,6 +533,8 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				26B06646252E2832009C3325 /* HomescreenWidget.intentdefinition in Sources */,
+				26B7FFA4252F2FB200941737 /* WidgetModuleBridge.m in Sources */,
+				26B7FFA0252F2F9500941737 /* WidgetModule.swift in Sources */,
 				264F3394244F459A0042BDEE /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -535,6 +544,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26B7FFA7252F324E00941737 /* WidgetModule.swift in Sources */,
 				26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */,
 				26B06645252E2832009C3325 /* HomescreenWidget.intentdefinition in Sources */,
 			);
