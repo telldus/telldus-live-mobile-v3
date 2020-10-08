@@ -61,7 +61,7 @@ const Push = {
 		};
 	},
 	// Remote notification listerner. Returns a function that clears all(register & notification) the listeners.
-	onNotification: (): Function => {
+	onNotification: (params: Object): Function => {
 		PushNotificationIOS.addEventListener('notification', Push.createLocalNotification);
 		return Push.removeListeners;
 	},

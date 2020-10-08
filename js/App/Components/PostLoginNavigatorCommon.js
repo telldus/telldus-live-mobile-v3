@@ -103,6 +103,10 @@ type Props = {
 	pushToken: string,
 	visibilityEula: boolean,
 
+	themeInApp: string,
+	colorScheme: string,
+	colors: Object,
+
     showToast: boolean,
 	messageToast: string,
 	durationToast: string,
@@ -186,7 +190,9 @@ constructor(props: Props) {
 	this.onTokenRefreshListener = null;
 
 	// sets push notification listeners and returns a method that clears all listeners.
-	this.onNotification = Push.onNotification();
+	this.onNotification = Push.onNotification({
+		getThemeOptions: this.getThemeOptions,
+	});
 	this.onNotificationOpened = Push.onNotificationOpened();
 
 	this.screensAllowsNavigationOrModalOverride = [
@@ -196,12 +202,23 @@ constructor(props: Props) {
 		'Sensors',
 		'Scheduler',
 		'MoreOptionsTab',
+		'themeInApp',
+		'colorScheme',
 	];
 
 	this.refSwitchAccountActionSheet = {};
 	this.clearNetInfoListener = null;
 	this.clearListenerSyncLiveApiOnForeground = null;
 	this.clearListenerAppState = null;
+}
+
+getThemeOptions = (): Object => {
+	const {
+		colorScheme,
+	} = this.props;
+	return {
+		colorScheme,
+	};
 }
 
 async componentDidMount() {
