@@ -188,10 +188,30 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	}, [aA, areaName, dispatch, fH, fM, formatMessage, navigation, tH, tM, toggleDialogueBoxState]);
 
 	const onDelete = useCallback(() => {
-		dispatch(removeGeofence(identifier));
-		dispatch(setEditFence({}));
-		navigation.goBack();
-	}, [dispatch, identifier, navigation]);
+		toggleDialogueBoxState({
+			show: true,
+			showHeader: true,
+			imageHeader: true,
+			text: formatMessage(i18n.deleteGFenceBody),
+			header: `${formatMessage(i18n.deleteGFence)}?`,
+			psotiveText: formatMessage(i18n.delete),
+			showPositive: true,
+			showNegative: true,
+			onPressPositive: () => {
+				toggleDialogueBoxState({
+					show: false,
+				});
+				dispatch(removeGeofence(identifier));
+				dispatch(setEditFence({}));
+				navigation.goBack();
+			},
+			onPressNegative: () => {
+				toggleDialogueBoxState({
+					show: false,
+				});
+			},
+		});
+	}, [dispatch, formatMessage, identifier, navigation, toggleDialogueBoxState]);
 
 	const onEditArriving = useCallback(() => {
 		navigation.navigate('ArrivingActions', {
