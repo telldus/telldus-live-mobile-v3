@@ -40,7 +40,7 @@ import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { DimmerPopup } from './TabViews/SubViews';
 import SwitchAccountActionSheet from './AccountSettings/SwitchAccountActionSheet';
 
-const { AndroidWidget } = NativeModules;
+const { WidgetModule } = NativeModules;
 
 import {
 	getUserProfile,
@@ -417,9 +417,9 @@ pushConf(register: boolean) {
 checkIfOpenPurchase = async () => {
 	// TODO: Remove check once iOS support widgets.
 	if (Platform.OS === 'android') {
-		const openPurchase = await AndroidWidget.checkIfOpenPurchase();
+		const openPurchase = await WidgetModule.checkIfOpenPurchase();
 		if (openPurchase) {
-			AndroidWidget.setOpenPurchase(false);
+			WidgetModule.setOpenPurchase(false);
 			navigate('AdditionalPlansPaymentsScreen');
 		}
 	}
@@ -428,9 +428,9 @@ checkIfOpenPurchase = async () => {
 checkIfOpenThermostatControl = async () => {
 	// TODO: Remove check once iOS support widgets.
 	if (Platform.OS === 'android') {
-		const id = await AndroidWidget.checkIfOpenThermostatControl();
+		const id = await WidgetModule.checkIfOpenThermostatControl();
 		if (id && id !== -1) {
-			AndroidWidget.setOpenThermostatControl(-1);
+			WidgetModule.setOpenThermostatControl(-1);
 			navigate('ThermostatControl', {
 				id,
 			});

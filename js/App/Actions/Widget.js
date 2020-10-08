@@ -28,23 +28,20 @@ import type { ThunkAction } from './Types';
 
 const widgetAndroidConfigure = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
-		if (Platform.OS === 'android') {
-			const { user } = getState();
-			const { accessToken = {}, userProfile = {} } = user;
-			const { pro = -1, email } = userProfile;
-			const { access_token = '', refresh_token = '', expires_in = ''} = accessToken;
-			const { AndroidWidget } = NativeModules;
-			AndroidWidget.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, email, pro);
-		}
-		return;
+		const { user } = getState();
+		const { accessToken = {}, userProfile = {} } = user;
+		const { pro = -1, email } = userProfile;
+		const { access_token = '', refresh_token = '', expires_in = ''} = accessToken;
+		const { WidgetModule } = NativeModules;
+		WidgetModule.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, email, pro);
 	};
 };
 
 const widgetAndroidDisableAll = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		if (Platform.OS === 'android') {
-			const { AndroidWidget } = NativeModules;
-			AndroidWidget.disableAllWidgets();
+			const { WidgetModule } = NativeModules;
+			WidgetModule.disableAllWidgets();
 		}
 		return;
 	};
@@ -52,8 +49,8 @@ const widgetAndroidDisableAll = (): ThunkAction => {
 
 const widgetAndroidDisableWidget = (id: number, widgetType: "SENSOR" | "DEVICE") => {
 	if (Platform.OS === 'android') {
-		const { AndroidWidget } = NativeModules;
-		AndroidWidget.disableWidget(id, widgetType);
+		const { WidgetModule } = NativeModules;
+		WidgetModule.disableWidget(id, widgetType);
 	}
 };
 
@@ -74,15 +71,15 @@ const widgetAndroidRefresh = (): ThunkAction => {
 
 const widgetAndroidRefreshDevices = (deviceIds: Array<string>, byIdDevices: Object) => {
 	if (Platform.OS === 'android') {
-		const { AndroidWidget } = NativeModules;
-		AndroidWidget.refreshWidgetsDevices(deviceIds, byIdDevices);
+		const { WidgetModule } = NativeModules;
+		WidgetModule.refreshWidgetsDevices(deviceIds, byIdDevices);
 	}
 };
 
 const widgetAndroidRefreshSensors = (sensorIds: Array<string>, byIdSensors: Object) => {
 	if (Platform.OS === 'android') {
-		const { AndroidWidget } = NativeModules;
-		AndroidWidget.refreshWidgetsSensors(sensorIds, byIdSensors);
+		const { WidgetModule } = NativeModules;
+		WidgetModule.refreshWidgetsSensors(sensorIds, byIdSensors);
 	}
 };
 
@@ -124,8 +121,8 @@ const getWidgetConstants = (): Object => {
 	}
 
 	if (Platform.OS === 'android') {
-		const { AndroidWidget } = NativeModules;
-		return AndroidWidget.getAllConstants();
+		const { WidgetModule } = NativeModules;
+		return WidgetModule.getAllConstants();
 	}
 	return {};
 };
@@ -136,16 +133,16 @@ const getWidgetTextFontSizeFactor = (): number => {
 		return 0;
 	}
 	if (Platform.OS === 'android') {
-		const { AndroidWidget } = NativeModules;
-		return AndroidWidget.getTextFontSizeFactor();
+		const { WidgetModule } = NativeModules;
+		return WidgetModule.getTextFontSizeFactor();
 	}
 	return 0;
 };
 
 const setWidgetTextFontSizeFactor = (factor: number): Promise<number> => {
 	if (Platform.OS === 'android') {
-		const { AndroidWidget } = NativeModules;
-		return AndroidWidget.setTextFontSizeFactor(factor);
+		const { WidgetModule } = NativeModules;
+		return WidgetModule.setTextFontSizeFactor(factor);
 	}
 	return Promise.resolve(1);
 };

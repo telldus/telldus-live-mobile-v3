@@ -97,7 +97,7 @@ jest.mock('reconnecting-websocket', (): Object => {
 	return MockSocket;
 });
 
-NativeModules.AndroidWidget = {
+NativeModules.WidgetModule = {
 	configureWidgetAuthData: jest.fn(),
 	disableAllWidgets: jest.fn(),
 };

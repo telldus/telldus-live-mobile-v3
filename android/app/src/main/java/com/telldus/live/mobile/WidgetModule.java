@@ -93,7 +93,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   @Override
   public String getName() {
-    return "AndroidWidget";
+    return "WidgetModule";
   }
 
   @ReactMethod
