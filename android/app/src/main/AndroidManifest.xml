@@ -57,7 +57,7 @@
         <meta-data
           tools:replace="android:resource"
           android:name="com.google.firebase.messaging.default_notification_color"
-          android:resource="@color/brandSecondary" />
+          android:resource="@color/inAppBrandSecondary" />
 
         <receiver android:name=".BroadcastReceiver.BootCompleteReceiver" android:enabled="true">
             <intent-filter>
