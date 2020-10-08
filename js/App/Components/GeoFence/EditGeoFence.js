@@ -187,11 +187,11 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		});
 	}, [aA, areaName, dispatch, fH, fM, formatMessage, navigation, tH, tM, toggleDialogueBoxState]);
 
-	const onDelete = (() => {
+	const onDelete = useCallback(() => {
 		dispatch(removeGeofence(identifier));
 		dispatch(setEditFence({}));
 		navigation.goBack();
-	}, []);
+	}, [dispatch, identifier, navigation]);
 
 	const onEditArriving = useCallback(() => {
 		navigation.navigate('ArrivingActions', {
