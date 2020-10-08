@@ -43,6 +43,12 @@ import {
 import { registerPushToken } from '../Actions/User';
 import { reportException } from '../Lib/Analytics';
 
+import { CONSTANTS } from 'live-shared-data';
+const {
+	DARK_THEME_KEY,
+} = CONSTANTS;
+import Theme from '../Theme';
+
 import {
 	navigate,
 } from '../Lib';
@@ -160,25 +166,33 @@ const Push = {
 		};
 	},
 	// Remote notification listerner. Returns a function that clears the listener.
-	onNotification: (): any => {
+	onNotification: (params: Object): any => {
 		if (deployStore === 'huawei') {
 			return;
 		}
 		return messaging().onMessage((notification: Object): any => {
 			// Remote Notification received when app is in foreground is handled here.
-			Push.createLocalNotification(notification);
+			Push.createLocalNotification(notification, params);
 		});
 	},
 	// Displays notification in the notification tray.
-	createLocalNotification: ({notification}: Object) => {
+	createLocalNotification: ({notification}: Object, {getThemeOptions}: Object) => {
 		Push.setChannel();
+		const {
+			colorScheme,
+		} = getThemeOptions();
+		const {
+			brandSecondaryShadeOne,
+			brandSecondary,
+		} = Theme.Core;
+		const notifColor = colorScheme === DARK_THEME_KEY ? brandSecondaryShadeOne : brandSecondary;
 		NativeUtilitiesModule.showLocalNotification({
 			channelId: pushSenderId,
 			smallIcon: 'icon_notif',
 			title: notification.title,
 			text: notification.body,
 			notificationId: notification.notificationId,
-			color: '#e26901',
+			color: notifColor,
 			userInfo: notification.data,
 			bigText: {
 				text: notification.body,

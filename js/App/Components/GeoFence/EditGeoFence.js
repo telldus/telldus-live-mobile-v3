@@ -187,11 +187,31 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		});
 	}, [aA, areaName, dispatch, fH, fM, formatMessage, navigation, tH, tM, toggleDialogueBoxState]);
 
-	const onDelete = (() => {
-		dispatch(removeGeofence(identifier));
-		dispatch(setEditFence({}));
-		navigation.goBack();
-	}, []);
+	const onDelete = useCallback(() => {
+		toggleDialogueBoxState({
+			show: true,
+			showHeader: true,
+			imageHeader: true,
+			text: formatMessage(i18n.deleteGFenceBody),
+			header: `${formatMessage(i18n.deleteGFence)}?`,
+			psotiveText: formatMessage(i18n.delete),
+			showPositive: true,
+			showNegative: true,
+			onPressPositive: () => {
+				toggleDialogueBoxState({
+					show: false,
+				});
+				dispatch(removeGeofence(identifier));
+				dispatch(setEditFence({}));
+				navigation.goBack();
+			},
+			onPressNegative: () => {
+				toggleDialogueBoxState({
+					show: false,
+				});
+			},
+		});
+	}, [dispatch, formatMessage, identifier, navigation, toggleDialogueBoxState]);
 
 	const onEditArriving = useCallback(() => {
 		navigation.navigate('ArrivingActions', {
@@ -292,6 +312,11 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 				<MapView.Animated
 					style={mapStyle}
 					scrollEnabled={false}
+					zoomEnabled={false}
+					zoomTapEnabled={false}
+					zoomControlEnabled={false}
+					rotateEnabled={false}
+					pitchEnabled={false}
 					initialRegion={new MapView.AnimatedRegion(region)}
 					region={new MapView.AnimatedRegion(region)}
 					onPress={onPress}
