@@ -292,6 +292,11 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 				<MapView.Animated
 					style={mapStyle}
 					scrollEnabled={false}
+					zoomEnabled={false}
+					zoomTapEnabled={false}
+					zoomControlEnabled={false}
+					rotateEnabled={false}
+					pitchEnabled={false}
 					initialRegion={new MapView.AnimatedRegion(region)}
 					region={new MapView.AnimatedRegion(region)}
 					onPress={onPress}
