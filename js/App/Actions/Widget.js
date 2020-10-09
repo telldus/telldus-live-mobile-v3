@@ -26,7 +26,7 @@ import SInfo from 'react-native-sensitive-info';
 import { publicKey, privateKey } from '../../Config';
 import type { ThunkAction } from './Types';
 
-const widgetAndroidConfigure = (): ThunkAction => {
+const widgetConfigure = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		const { user } = getState();
 		const { accessToken = {}, userProfile = {} } = user;
@@ -125,7 +125,7 @@ const setWidgetTextFontSizeFactor = (factor: number): Promise<number> => {
 };
 
 module.exports = {
-	widgetAndroidConfigure,
+	widgetConfigure,
 	widgetAndroidDisableWidget,
 	widgetAndroidDisableAll,
 	widgetAndroidRefreshSensors,

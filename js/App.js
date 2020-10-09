@@ -43,7 +43,7 @@ import {
 	setAppLayout,
 	setAccessibilityListener,
 	setAccessibilityInfo,
-	widgetAndroidConfigure,
+	widgetConfigure,
 	networkConnection,
 	toggleDialogueBoxState,
 	checkForInAppUpdates,
@@ -171,8 +171,7 @@ class App extends React.Component<Props> {
 		if (accessToken) {
 			// Update accesstoken at the widget side, when ever it is refreshed at the App.
 			if (accessTokenPrev.access_token !== accessToken.access_token) {
-				dispatch(widgetAndroidConfigure());// Android.
-				// TODO: Do for iOS once widget is implemented.
+				dispatch(widgetConfigure());
 			}
 		}
 		if ((!isEqual(colorSchemePrev, colorScheme) || !isEqual(themeInAppPrev, themeInApp)) && Platform.OS === 'android' && StatusBar) {

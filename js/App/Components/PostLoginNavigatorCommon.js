@@ -73,7 +73,7 @@ import {
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
 import {
-	widgetAndroidConfigure,
+	widgetConfigure,
 	widgetAndroidRefresh,
 } from '../Actions/Widget';
 import Push from './Push';
@@ -317,7 +317,7 @@ actionsToPerformOnStart = async () => {
 		await dispatch(getUserProfile());
 		await dispatch(getGateways());
 
-		dispatch(widgetAndroidConfigure());
+		dispatch(widgetConfigure());
 	} catch (e) {
 		// Nothing much to do here
 	} finally {
