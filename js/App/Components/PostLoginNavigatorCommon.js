@@ -75,7 +75,6 @@ import { hideDimmerStep } from '../Actions/Dimmer';
 import {
 	widgetAndroidConfigure,
 	widgetAndroidRefresh,
-	widgetiOSConfigure,
 } from '../Actions/Widget';
 import Push from './Push';
 import {
@@ -319,7 +318,6 @@ actionsToPerformOnStart = async () => {
 		await dispatch(getGateways());
 
 		dispatch(widgetAndroidConfigure());
-		dispatch(widgetiOSConfigure());
 	} catch (e) {
 		// Nothing much to do here
 	} finally {
