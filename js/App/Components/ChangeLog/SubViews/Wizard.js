@@ -24,12 +24,15 @@
 
 import React, { PureComponent } from 'react';
 import { intlShape } from 'react-intl';
+import {
+	Platform,
+} from 'react-native';
 
 import {
 	Text,
 	View,
 	IconTelldus,
-	// ThemedMaterialIcon,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
@@ -60,7 +63,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.wizardOneHeader315);
+		this.titleWOne = `${formatMessage(i18n.wizardOneHeader315)}!`;
 		this.descriptionWOne = formatMessage(i18n.wizardOneDescription315);
 
 		this.titleWTwo = formatMessage(i18n.wizardTwoHeader315);
@@ -78,6 +81,8 @@ export default class WizardOne extends PureComponent<Props, null> {
 			iconSize,
 		} = styles;
 
+		const isIos = Platform.OS === 'ios';
+
 		let screenData = {
 			icon: null,
 			iconSize,
@@ -87,34 +92,40 @@ export default class WizardOne extends PureComponent<Props, null> {
 			description: '',
 		};
 
+		const case1 = {
+			...screenData,
+			icon: <ThemedMaterialIcon
+				style={iconStyle}
+				size={iconSize}
+				name={'location-on'}
+				level={23}/>,
+			title: this.titleWOne,
+			description: this.descriptionWOne,
+			isPremiumFeature: true,
+		};
+
+		const case2 = {
+			...screenData,
+			icon: 'darkmode',
+			title: this.titleWTwo,
+			description: this.descriptionWTwo,
+		};
+
+		const case3 = {
+			...screenData,
+			icon: 'user',
+			title: this.titleWThree,
+			description: this.descriptionWThree,
+			isPremiumFeature: true,
+		};
+
 		switch (currentScreen) {
-			// case 1:
-			// 	return {
-			// 		...screenData,
-			// 		icon: <ThemedMaterialIcon
-			// 			style={iconStyle}
-			// 			size={iconSize}
-			// 			name={'location-on'}
-			// 			level={23}/>,
-			// 		title: this.titleWOne,
-			// 		description: this.descriptionWOne,
-			// 		isPremiumFeature: true,
-			// 	};
 			case 1:
-				return {
-					...screenData,
-					icon: 'darkmode',
-					title: this.titleWTwo,
-					description: this.descriptionWTwo,
-				};
+				return isIos ? case1 : case2;
 			case 2:
-				return {
-					...screenData,
-					icon: 'user',
-					title: this.titleWThree,
-					description: this.descriptionWThree,
-					isPremiumFeature: true,
-				};
+				return isIos ? case2 : case3;
+			case 3:
+				return case3;
 			default:
 				return screenData;
 		}

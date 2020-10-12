@@ -19,7 +19,10 @@
  */
 
 // @flow
+import {
+	Platform,
+} from 'react-native';
 
 // Set the number of screens here.
-const Screens = [1, 2];// TODO add 3(geofence once it is reliable)
+const Screens = Platform.OS === 'ios' ? [1, 2, 3] : [1, 2];// TODO add 3(geofence once it is reliable)
 export default Screens;
