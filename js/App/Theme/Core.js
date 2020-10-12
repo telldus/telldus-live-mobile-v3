@@ -86,6 +86,7 @@ export default {
 	gatewayInactive: '#a2a2a2',
 	angleTintColor: '#A59F9A90',
 	angledRowBorderColor: '#BBB',
+	darkBG: '#403829',
 
 	baseColorPreloginScreen: '#ffffff',
 

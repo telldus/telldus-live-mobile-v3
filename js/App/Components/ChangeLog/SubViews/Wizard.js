@@ -85,18 +85,6 @@ export default class WizardOne extends PureComponent<Props, null> {
 		};
 
 		switch (currentScreen) {
-			// case 1:
-			// 	return {
-			// 		...screenData,
-			// 		icon: <ThemedMaterialIcon
-			// 			style={iconStyle}
-			// 			size={iconSize}
-			// 			name={'location-on'}
-			// 			level={23}/>,
-			// 		title: this.titleWOne,
-			// 		description: this.descriptionWOne,
-			// 		isPremiumFeature: true,
-			// 	};
 			case 1:
 				return {
 					...screenData,

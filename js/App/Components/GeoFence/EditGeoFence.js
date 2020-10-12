@@ -127,6 +127,8 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		labelStyle,
 		textFieldStyle,
 		overlayWidth,
+		infoContainer,
+		infoTextStyle,
 	} = getStyles({
 		appLayout,
 		colors,
@@ -325,6 +327,12 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 					showsUserLocation={true}/>
 				<MapOverlay
 					overlayWidth={overlayWidth}/>
+				<View
+					style={infoContainer}>
+					<Text style={infoTextStyle}>
+						{formatMessage(i18n.tapOnTheMap)}
+					</Text>
+				</View>
 			</View>
 			<TouchableButton
 				text={i18n.confirmAndSave}
@@ -421,6 +429,23 @@ const getStyles = ({
 			color: eulaContentColor,
 			fontSize,
 			textAlign: 'right',
+		},
+		infoContainer: {
+			flex: 0,
+			width: '100%',
+			opacity: 0.7,
+			backgroundColor: colors.inAppBrandSecondary,
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			justifyContent: 'center',
+			alignItems: 'center',
+			padding,
+		},
+		infoTextStyle: {
+			color: '#fff',
+			textAlign: 'center',
+			fontSize: fontSize * 0.9,
 		},
 	};
 };
