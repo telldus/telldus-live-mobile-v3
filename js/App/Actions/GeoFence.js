@@ -84,6 +84,7 @@ import type { Action } from './Types';
 
 import {
 	isBasicUser,
+	hasAPremiumAccount,
 } from '../Lib/appUtils';
 
 let retryQueueSchedule = {};
@@ -102,16 +103,16 @@ function setupGeoFence(intl: Object): ThunkAction {
 		const {
 			user: {
 				firebaseRemoteConfig = {},
-				userProfile = {},
+				accounts = {},
 			},
 			geoFence = {},
 		} = getState();
 		const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 		const { enable } = JSON.parse(geoFenceFeature);
 
-		const isBasic = isBasicUser(userProfile.pro);
+		const hasAPremAccount = hasAPremiumAccount(accounts);
 
-		if (!enable || isBasic) {
+		if (!enable || !hasAPremAccount) {
 			const state = await BackgroundGeolocation.getState();
 			if (state.enabled) {
 				BackgroundGeolocation.stop();
