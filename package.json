@@ -1,6 +1,6 @@
 {
   "name": "TelldusLiveApp",
-  "version": "3.15.5",
+  "version": "3.15.6",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -51,7 +51,7 @@
     "gravatar-api": "^1.5.0",
     "intl": "~1.2.5",
     "jwt-decode": "^2.2.0",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#92e838025289e607a8ab10577f238694cade6023",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#edbe14003c8f59ece3190ab932431cbc9db61598",
     "lodash": "~4.17.11",
     "node-forge": "~0.9.1",
     "react": "16.13.1",
