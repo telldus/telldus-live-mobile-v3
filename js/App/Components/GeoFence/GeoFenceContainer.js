@@ -43,6 +43,9 @@ import {
 	setupGeoFence,
 	showToast,
 } from '../../Actions';
+import {
+	isBasicUser,
+} from '../../Lib/appUtils';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -57,6 +60,7 @@ type Props = {
 	route: Object,
 	currentScreen: string,
 	enableGeoFence: boolean,
+	isBasic: boolean,
 };
 
 type State = {
@@ -210,10 +214,15 @@ export class GeoFenceContainer extends View<Props, State> {
 		const {
 			actions,
 			screenProps,
+			isBasic,
 		} = this.props;
 		const { formatMessage } = screenProps.intl;
 
 		const messageOnFail = formatMessage(i18n.errortoast);
+		if (isBasic) {
+			actions.showToast(messageOnFail);
+		}
+
 		if (!enableGeoFence) {
 			actions.stopGeoFence().then((res: Object) => {
 				if (!res.enabled) {
@@ -479,7 +488,12 @@ export const mapStateToProps = (store: Object): Object => {
 		defaultSettings = {},
 	} = store.app;
 
+	const {
+		userProfile = {},
+	} = store.user;
+
 	return {
+		isBasic: isBasicUser(userProfile.pro),
 		currentScreen,
 		toggleFeatureGeoFence,
 		enableGeoFence: typeof defaultSettings.enableGeoFence === 'undefined' ? true : defaultSettings.enableGeoFence,
