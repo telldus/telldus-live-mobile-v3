@@ -45,6 +45,9 @@ import {
 	View,
 	FullPageActivityIndicator,
 	InfoBlock,
+	IconTelldus,
+	Text,
+	TouchableOpacity,
 } from '../../../BaseComponents';
 import {
 	FenceCalloutWithMarker,
@@ -53,7 +56,7 @@ import {
 import HelpOverlay from './HelpOverlay';
 
 import {
-	hasAPremiumAccount,
+	isBasicUser,
 } from '../../Lib/appUtils';
 import {
 	setEditFence,
@@ -65,11 +68,9 @@ import {
 	requestIgnoreBatteryOptimizations,
 } from '../../Actions/GeoFence';
 import {
-	useNoPremiumDialogue,
-} from '../../Hooks/Dialoguebox';
-import {
 	useAppTheme,
 } from '../../Hooks/Theme';
+import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
@@ -106,10 +107,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	} = intl;
 	const dispatch = useDispatch();
 
-	const {
-		showDialogue,
-	} = useNoPremiumDialogue();
-
 	const fallbackLocation = {
 		latitude: 55.70584,
 		longitude: 13.19321,
@@ -141,8 +138,9 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const [ regionToResume, setRegionToResume ] = useState();
 	const [ currenLocationInApp, setCurrenLocationInApp ] = useState();
 
-	const { accounts = {} } = useSelector((state: Object): Object => state.user);
-	const hasAPremAccount = hasAPremiumAccount(accounts);
+	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
+
+	const isBasic = isBasicUser(userProfile.pro);
 
 	useEffect(() => {
 		if (isHelpVisible) {
@@ -174,32 +172,38 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		infoContainer,
 		infoIconStyle,
 		infoTextStyle,
+		premInfoContainerStyle,
+		premInfoTextStyle,
+		premIconStyle,
 	} = getStyles({
 		appLayout,
 		mapReady,
 		colors,
 	});
 
+	const takeMeToUpgrade = useCallback(() => {
+		navigation.navigate('PremiumUpgradeScreen');
+	}, [navigation]);
+
 	const onPressNext = useCallback(() => {
-		if (!hasAPremAccount) {
-			showDialogue(i18n.upgradeToPremium);
+		if (isBasic) {
+			takeMeToUpgrade();
 			return;
 		}
 		dispatch(resetFence());
 		navigation.navigate('SelectArea', {
 			region,
 		});
-	}, [dispatch, hasAPremAccount, navigation, region, showDialogue]);
+	}, [dispatch, isBasic, navigation, region, takeMeToUpgrade]);
 
 	const onEditFence = useCallback((fenceToEdit: Object) => {
-		if (!hasAPremAccount) {
-			showDialogue(i18n.upgradeToPremium);
+		if (isBasic) {
+			takeMeToUpgrade();
 			return;
 		}
 		dispatch(setEditFence(fenceToEdit));
 		navigation.navigate('EditGeoFence');
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [dispatch, isBasic, navigation, takeMeToUpgrade]);
 
 	const onPressFocusMyLocation = useCallback(() => {
 		(async () => {
@@ -345,12 +349,31 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				onPress={onPressNext}
 				imageSource={{uri: 'icon_plus'}}
 				disabled={!true}/>
-			{!enableGeoFence && <InfoBlock
+			{(!enableGeoFence && !isBasic) && <InfoBlock
 				text={formatMessage(i18n.messageGFInActive)}
 				appLayout={appLayout}
 				infoContainer={infoContainer}
 				infoIconStyle={infoIconStyle}
 				textStyle={infoTextStyle}/>
+			}
+			{isBasic &&
+				<TouchableOpacity
+					onPress={takeMeToUpgrade}
+					style={premInfoContainerStyle}>
+					<IconTelldus
+						icon={'premium'}
+						style={premIconStyle}/>
+					<View style={{
+						flex: 1,
+						flexDirection: 'row',
+						flexWrap: 'wrap',
+					}}>
+						<Text
+							style={premInfoTextStyle}>
+							{formatMessage(i18n.geofencePremiumInfo)}
+						</Text>
+					</View>
+				</TouchableOpacity>
 			}
 			<HelpOverlay
 				closeHelp={closeHelp}
@@ -370,10 +393,17 @@ const getStyles = ({
 	const {
 		statusRed,
 	} = colors;
+	const {
+		darkBG,
+		twine,
+		paddingFactor,
+	} = Theme.Core;
 
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+
+	const padding = deviceWidth * paddingFactor;
 
 	return {
 		container: {
@@ -399,6 +429,28 @@ const getStyles = ({
 		},
 		infoTextStyle: {
 			color: '#fff',
+		},
+		premInfoTextStyle: {
+			color: '#fff',
+			marginLeft: padding,
+			fontSize: Math.floor(deviceWidth * 0.04),
+		},
+		premIconStyle: {
+			color: twine,
+			fontSize: Math.floor(deviceWidth * 0.09),
+		},
+		premInfoContainerStyle: {
+			flex: 0,
+			flexDirection: 'row',
+			justifyContent: 'flex-start',
+			alignItems: 'center',
+			width: '100%',
+			backgroundColor: darkBG,
+			opacity: 0.7,
+			position: 'absolute',
+			padding: padding,
+			top: 0,
+			left: 0,
 		},
 	};
 };
