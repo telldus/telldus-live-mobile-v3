@@ -35,6 +35,7 @@ import {
 	Text,
 	Icon,
 	ThemedMaterialIcon,
+	IconTelldus,
 } from '../../../BaseComponents';
 import Gateway from './Gateway';
 import {
@@ -221,6 +222,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		} = this.props;
 		const {
 			drawerSubHeader,
+			premIconStyle,
 			...styles
 		} = this.getStyles(appLayout);
 
@@ -278,6 +280,9 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 									style={styles.linkLabelStyle}>
 									{`${formatMessage(i18n.manageGeoFence)} (beta)`}
 								</Text>
+								<IconTelldus
+									icon={'premium'}
+									style={premIconStyle}/>
 							</RippleButton>
 						</View>
 					)}
@@ -325,6 +330,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const {
 			paddingFactor,
 			brandPrimary,
+			twine,
 		} = Theme.Core;
 
 		const deviceWidth = isPortrait ? width : height;
@@ -444,6 +450,11 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 				marginBottom: 5 + (fontSizeRow * 0.5),
 				marginLeft: 15,
 				alignItems: 'center',
+			},
+			premIconStyle: {
+				color: twine,
+				fontSize: fontSizeAddLocText * 1.2,
+				marginLeft: 5,
 			},
 		};
 	}

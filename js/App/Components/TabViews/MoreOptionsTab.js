@@ -68,7 +68,9 @@ const MoreOptionsTab = (props: Props): Object => {
 	} = intl;
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	const { firebaseRemoteConfig = {} } = useSelector((state: Object): Object => state.user);
+	const {
+		firebaseRemoteConfig = {},
+	} = useSelector((state: Object): Object => state.user);
 
 	const {
 		geoFenceFeature = JSON.stringify({enable: false}),
@@ -87,6 +89,7 @@ const MoreOptionsTab = (props: Props): Object => {
 		rowCoverStyle,
 		iconStyle,
 		labelStyle,
+		premIconStyle,
 	} = getStyles(layout);
 
 	const {
@@ -161,6 +164,9 @@ const MoreOptionsTab = (props: Props): Object => {
 					});
 				},
 				enable: enableGeoFenceFeature,
+				iconRight: <IconTelldus
+					icon={'premium'}
+					style={premIconStyle}/>,
 			},
 			{
 				icon: 'faq',
@@ -179,6 +185,7 @@ const MoreOptionsTab = (props: Props): Object => {
 			text,
 			onPress,
 			enable,
+			iconRight,
 		}: Object, i: number): Object => {
 			if (enable) {
 				components.push(
@@ -195,6 +202,9 @@ const MoreOptionsTab = (props: Props): Object => {
 							style={labelStyle}>
 							{!!text && text}
 						</Text>
+						{!!iconRight &&
+							iconRight
+						}
 					</RippleButton>
 				);
 			}
@@ -234,6 +244,7 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		shadow,
+		twine,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -265,6 +276,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		labelStyle: {
 			fontSize: fontSizeText,
+		},
+		premIconStyle: {
+			color: twine,
+			fontSize: fontSizeText * 1.2,
+			marginLeft: 5,
 		},
 	};
 };
