@@ -16,8 +16,8 @@
 		26B0663D252E282E009C3325 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B224F93E1200DA89F5 /* SwiftUI.framework */; };
 		26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0663F252E282E009C3325 /* HomescreenWidget.swift */; };
 		26B06643252E2832009C3325 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26B06642252E2832009C3325 /* Assets.xcassets */; };
-		26B06645252E2832009C3325 /* HomescreenWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidget.intentdefinition */; };
-		26B06646252E2832009C3325 /* HomescreenWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidget.intentdefinition */; };
+		26B06645252E2832009C3325 /* HomescreenWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */; };
+		26B06646252E2832009C3325 /* HomescreenWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */; };
 		26B06649252E2832009C3325 /* HomescreenWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		26B7FFA0252F2F9500941737 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B7FF9F252F2F9500941737 /* WidgetModule.swift */; };
 		26B7FFA4252F2FB200941737 /* WidgetModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 26B7FFA3252F2FB200941737 /* WidgetModuleBridge.m */; };
@@ -79,7 +79,7 @@
 		266B41D4234B03A200095747 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		26B0663F252E282E009C3325 /* HomescreenWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenWidget.swift; sourceTree = "<group>"; };
-		26B06641252E282E009C3325 /* HomescreenWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = HomescreenWidget.intentdefinition; sourceTree = "<group>"; };
+		26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = HomescreenWidgetIntent.intentdefinition; sourceTree = "<group>"; };
 		26B06642252E2832009C3325 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		26B06644252E2832009C3325 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26B7FF9F252F2F9500941737 /* WidgetModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetModule.swift; sourceTree = "<group>"; };
@@ -164,7 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				26B0663F252E282E009C3325 /* HomescreenWidget.swift */,
-				26B06641252E282E009C3325 /* HomescreenWidget.intentdefinition */,
+				26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */,
 				26B06642252E2832009C3325 /* Assets.xcassets */,
 				26B06644252E2832009C3325 /* Info.plist */,
 			);
@@ -532,7 +532,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				26B06646252E2832009C3325 /* HomescreenWidget.intentdefinition in Sources */,
+				26B06646252E2832009C3325 /* HomescreenWidgetIntent.intentdefinition in Sources */,
 				26B7FFA4252F2FB200941737 /* WidgetModuleBridge.m in Sources */,
 				26B7FFA0252F2F9500941737 /* WidgetModule.swift in Sources */,
 				264F3394244F459A0042BDEE /* File.swift in Sources */,
@@ -546,7 +546,7 @@
 			files = (
 				26B7FFA7252F324E00941737 /* WidgetModule.swift in Sources */,
 				26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */,
-				26B06645252E2832009C3325 /* HomescreenWidget.intentdefinition in Sources */,
+				26B06645252E2832009C3325 /* HomescreenWidgetIntent.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
