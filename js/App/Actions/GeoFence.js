@@ -83,6 +83,7 @@ const ERROR_CODE_GF_RC_DISABLED = 'GF_REMOTE_CONFIG_DISABLED';
 import type { Action } from './Types';
 
 import {
+	isBasicUser,
 	hasAPremiumAccount,
 } from '../Lib/appUtils';
 
@@ -358,13 +359,18 @@ function handleActions(actions: Object, userId: string, eventUUID: string, extra
 		}
 
 		const { user: { accounts = {} } } = getState();
-		const { accessToken } = accounts[userId];
+		const {
+			accessToken,
+			pro,
+		} = accounts[userId] || {};
 		dispatch(debugGFSetCheckpoint({
 			checkpoint: 'handleActions-1',
 			eventUUID,
 			accessToken,
 		}));
-		if (!accessToken) {
+
+		const isBasic = isBasicUser(pro);
+		if (!accessToken || isBasic) {
 			return Promise.resolve('done');
 		}
 
