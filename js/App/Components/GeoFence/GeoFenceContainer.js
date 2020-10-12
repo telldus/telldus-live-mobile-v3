@@ -221,6 +221,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		const messageOnFail = formatMessage(i18n.errortoast);
 		if (isBasic) {
 			actions.showToast(messageOnFail);
+			return;
 		}
 
 		if (!enableGeoFence) {
