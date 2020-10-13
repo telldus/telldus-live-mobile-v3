@@ -37,7 +37,7 @@ let {height, width} = Dimensions.get('window');
 
 const store = configureStore().store;
 
-describe('<NavigationHeader /> - snapshot', () => {
+describe('<TouchableButton /> - snapshot', () => {
 
 	beforeAll(() => {
 		store.dispatch(setAppLayout({
