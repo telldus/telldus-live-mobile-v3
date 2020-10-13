@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BlockIcon /> - snapshot renders BlockIcon 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#1b365d",
+        "justifyContent": "center",
+      },
+      undefined,
+    ]
+  }
+>
+  <Text
+    accessible={true}
+    allowFontScaling={false}
+    importantForAccessibility="yes"
+    style={
+      Object {
+        "backgroundColor": "transparent",
+        "color": "#fff",
+        "fontFamily": "telldusicons",
+        "fontSize": 12,
+      }
+    }
+  >
+    info
+  </Text>
+</View>
+`;
