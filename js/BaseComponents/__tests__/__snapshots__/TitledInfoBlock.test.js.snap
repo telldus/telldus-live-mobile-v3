@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled/no onPress 1`] = `
+exports[`<TitledInfoBlock /> - snapshot renders TitledInfoBlock when disabled/no onPress 1`] = `
 <View
   style={
     Array [
@@ -121,7 +121,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled/no
 </View>
 `;
 
-exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled 1`] = `
+exports[`<TitledInfoBlock /> - snapshot renders TitledInfoBlock when enabled 1`] = `
 <View
   style={
     Array [
