@@ -1,0 +1,243 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled/no onPress 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "stretch",
+        "backgroundColor": "transparent",
+        "flex": 0,
+        "justifyContent": "center",
+        "marginBottom": 10,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#fff",
+        "elevation": 2,
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "opacity": 1,
+        "padding": 33,
+        "shadowColor": "#000",
+        "shadowOffset": Object {
+          "height": 1,
+          "width": 0,
+        },
+        "shadowOpacity": 0.23,
+        "shadowRadius": 2,
+      }
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      numberOfLines={1}
+      style={
+        Array [
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#000",
+            "fontSize": 33,
+          },
+          undefined,
+        ]
+      }
+    >
+      TitledInfoBlock
+    </Text>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "flexWrap": "wrap",
+          "justifyContent": "flex-end",
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        numberOfLines={1}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "color": "#4C4C4C",
+              "flexWrap": "wrap",
+              "fontSize": 33,
+              "marginLeft": 8,
+            },
+            undefined,
+          ]
+        }
+      >
+        value
+      </Text>
+    </View>
+    <Text
+      allowFontScaling={false}
+      style={
+        Array [
+          Object {
+            "color": "#4C4C4C",
+            "fontSize": 60,
+          },
+          Array [
+            Object {
+              "position": "absolute",
+              "right": 33,
+            },
+            undefined,
+          ],
+          Object {
+            "fontFamily": "FontAwesome",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          Object {},
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "stretch",
+        "backgroundColor": "transparent",
+        "flex": 0,
+        "justifyContent": "center",
+        "marginBottom": 10,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#fff",
+        "elevation": 2,
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "opacity": 1,
+        "padding": 33,
+        "shadowColor": "#000",
+        "shadowOffset": Object {
+          "height": 1,
+          "width": 0,
+        },
+        "shadowOpacity": 0.23,
+        "shadowRadius": 2,
+      }
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      numberOfLines={1}
+      style={
+        Array [
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#000",
+            "fontSize": 33,
+          },
+          undefined,
+        ]
+      }
+    >
+      TitledInfoBlock
+    </Text>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "flexWrap": "wrap",
+          "justifyContent": "flex-end",
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        numberOfLines={1}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "color": "#4C4C4C",
+              "flexWrap": "wrap",
+              "fontSize": 33,
+              "marginLeft": 8,
+            },
+            undefined,
+          ]
+        }
+      >
+        value
+      </Text>
+    </View>
+    <Text
+      allowFontScaling={false}
+      style={
+        Array [
+          Object {
+            "color": "#4C4C4C",
+            "fontSize": 60,
+          },
+          Array [
+            Object {
+              "position": "absolute",
+              "right": 33,
+            },
+            undefined,
+          ],
+          Object {
+            "fontFamily": "FontAwesome",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          Object {},
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+</View>
+`;
