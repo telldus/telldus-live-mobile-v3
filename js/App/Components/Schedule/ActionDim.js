@@ -108,7 +108,9 @@ class ActionDim extends View<null, Props, State> {
 				<View
 					level={2}
 					style={row}>
-					<Text style={caption}>
+					<Text
+						level={25}
+						style={caption}>
 						{intl.formatMessage(i18n.setDimValue, {value: `(${dimValue}%)`})}
 					</Text>
 					<Slider
