@@ -27,7 +27,7 @@ import {act} from 'react-test-renderer';
 import {
 	rendererWithIntlAndRedux,
 } from '../../Utils/jestUtils';
-import TouchableButton from '../TouchableButton';
+import TitledInfoBlock from '../TitledInfoBlock';
 import {
 	setAppLayout,
 } from '../../App/Actions';
@@ -37,21 +37,26 @@ let {height, width} = Dimensions.get('window');
 
 const store = configureStore().store;
 
-describe('<TouchableButton /> - snapshot', () => {
+const setLayout = () => {
+	store.dispatch(setAppLayout({
+		height,
+		width,
+	}));
+};
+const noOp = () => {};
 
-	beforeAll(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
-	});
+describe('<TitledInfoBlock /> - snapshot', () => {
 
-	it('renders TouchableButton when enabled', () => {
+	it('renders TitledInfoBlock when enabled', () => {
 		let component;
 		act(() => {
+			setLayout();
 			component = rendererWithIntlAndRedux(
-				<TouchableButton
-					text={'TouchableButton'}/>
+				<TitledInfoBlock
+					label={'TitledInfoBlock'}
+					value={'value'}
+					icon={'angle-right'}
+					onPress={noOp}/>
 			);
 		});
 
@@ -59,42 +64,15 @@ describe('<TouchableButton /> - snapshot', () => {
 		expect(tree).toMatchSnapshot();
 	});
 
-	it('renders TouchableButton when disabled', () => {
+	it('renders TitledInfoBlock when disabled/no onPress', () => {
 		let component;
 		act(() => {
+			setLayout();
 			component = rendererWithIntlAndRedux(
-				<TouchableButton
-					disabled
-					text={'TouchableButton'}/>
-			);
-		});
-
-		const tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-
-	it('renders TouchableButton when enabled and loading', () => {
-		let component;
-		act(() => {
-			component = rendererWithIntlAndRedux(
-				<TouchableButton
-					text={'TouchableButton'}
-					showThrobber={true}/>
-			);
-		});
-
-		const tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-
-	it('renders TouchableButton when disabled and loading', () => {
-		let component;
-		act(() => {
-			component = rendererWithIntlAndRedux(
-				<TouchableButton
-					disabled
-					text={'TouchableButton'}
-					showThrobber={true}/>
+				<TitledInfoBlock
+					label={'TitledInfoBlock'}
+					value={'value'}
+					icon={'angle-right'}/>
 			);
 		});
 

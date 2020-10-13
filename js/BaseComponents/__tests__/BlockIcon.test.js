@@ -27,7 +27,7 @@ import {act} from 'react-test-renderer';
 import {
 	rendererWithIntlAndRedux,
 } from '../../Utils/jestUtils';
-import TouchableButton from '../TouchableButton';
+import BlockIcon from '../BlockIcon';
 import {
 	setAppLayout,
 } from '../../App/Actions';
@@ -36,65 +36,21 @@ import { configureStore } from '../../App/Store/ConfigureStore';
 let {height, width} = Dimensions.get('window');
 
 const store = configureStore().store;
+const setLayout = () => {
+	store.dispatch(setAppLayout({
+		height,
+		width,
+	}));
+};
 
-describe('<TouchableButton /> - snapshot', () => {
+describe('<BlockIcon /> - snapshot', () => {
 
-	beforeAll(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
-	});
-
-	it('renders TouchableButton when enabled', () => {
+	it('renders BlockIcon', () => {
 		let component;
 		act(() => {
+			setLayout();
 			component = rendererWithIntlAndRedux(
-				<TouchableButton
-					text={'TouchableButton'}/>
-			);
-		});
-
-		const tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-
-	it('renders TouchableButton when disabled', () => {
-		let component;
-		act(() => {
-			component = rendererWithIntlAndRedux(
-				<TouchableButton
-					disabled
-					text={'TouchableButton'}/>
-			);
-		});
-
-		const tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-
-	it('renders TouchableButton when enabled and loading', () => {
-		let component;
-		act(() => {
-			component = rendererWithIntlAndRedux(
-				<TouchableButton
-					text={'TouchableButton'}
-					showThrobber={true}/>
-			);
-		});
-
-		const tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-
-	it('renders TouchableButton when disabled and loading', () => {
-		let component;
-		act(() => {
-			component = rendererWithIntlAndRedux(
-				<TouchableButton
-					disabled
-					text={'TouchableButton'}
-					showThrobber={true}/>
+				<BlockIcon icon={'info'}/>
 			);
 		});
 

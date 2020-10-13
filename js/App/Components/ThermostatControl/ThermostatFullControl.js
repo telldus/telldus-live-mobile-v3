@@ -39,7 +39,6 @@ import {
 	getLastUpdated,
 	getThermostatValue,
 } from '../../Lib';
-import Theme from '../../Theme';
 
 type Props = {
 	device: Object,
@@ -142,10 +141,11 @@ render(): Object | null {
 	const { timeoutPlusMinus } = route.params || {};
 
 	return (
-		<View style={{
-			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
-		}}>
+		<View
+			level={3}
+			style={{
+				flex: 1,
+			}}>
 			<NavigationHeader
 				showLeftIcon={true}
 				leftIcon={'close'}
