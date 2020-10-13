@@ -39,7 +39,6 @@ import {
 	getLastUpdated,
 	getThermostatValue,
 } from '../../Lib';
-import Theme from '../../Theme';
 
 type Props = {
 	device: Object,
