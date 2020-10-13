@@ -12,15 +12,15 @@ import Intents
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationIntent())
+        SimpleEntry(date: Date(), configuration: HomescreenWidgetIntent())
     }
 
-    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+    func getSnapshot(for configuration: HomescreenWidgetIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
         let entry = SimpleEntry(date: Date(), configuration: configuration)
         completion(entry)
     }
 
-    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    func getTimeline(for configuration: HomescreenWidgetIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         var entries: [SimpleEntry] = []
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
@@ -38,7 +38,7 @@ struct Provider: IntentTimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
-    let configuration: ConfigurationIntent
+    let configuration: HomescreenWidgetIntent
 }
 
 struct HomescreenWidgetEntryView : View {
@@ -54,7 +54,7 @@ struct HomescreenWidget: Widget {
     let kind: String = "HomescreenWidget"
 
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
+        IntentConfiguration(kind: kind, intent: HomescreenWidgetIntent.self, provider: Provider()) { entry in
             HomescreenWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("My Widget")
@@ -64,7 +64,7 @@ struct HomescreenWidget: Widget {
 
 struct HomescreenWidget_Previews: PreviewProvider {
     static var previews: some View {
-        HomescreenWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+        HomescreenWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: HomescreenWidgetIntent()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
