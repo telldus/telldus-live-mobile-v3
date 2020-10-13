@@ -392,10 +392,6 @@ getStyles(appLayout: Object): Object {
 	return {
 		inAppBrandSecondary,
 		rowTextColor,
-		scrollView: {
-			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
-		},
 		container: {
 			...shadow,
 			marginVertical: padding,

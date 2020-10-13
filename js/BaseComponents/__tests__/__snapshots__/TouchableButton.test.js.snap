@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled 1`] = `
+exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled 1`] = `
 <View
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
@@ -71,7 +71,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled 1
 </View>
 `;
 
-exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled and loading 1`] = `
+exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled and loading 1`] = `
 <View
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
@@ -181,7 +181,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
 </View>
 `;
 
-exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled 1`] = `
+exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled 1`] = `
 <View
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
@@ -252,7 +252,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled 1`
 </View>
 `;
 
-exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled and loading 1`] = `
+exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled and loading 1`] = `
 <View
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
