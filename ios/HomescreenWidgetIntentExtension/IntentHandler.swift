@@ -24,18 +24,34 @@ struct WidgetItem {
   var name: String;
 }
 
-extension IntentHandler: HomescreenWidgetIntentHandling {
+extension IntentHandler: DeviceWidgetIntentHandling {
   
-  func provideItemOptionsCollection(for intent: HomescreenWidgetIntent, with completion: @escaping (INObjectCollection<WidgetItemsList>?, Error?) -> Void) {
+  func provideItemOptionsCollection(for intent: DeviceWidgetIntent, with completion: @escaping (INObjectCollection<DevicesList>?, Error?) -> Void) {
       let itemOne = WidgetItem(id: "1", name: "Device one name")
       let itemTwo = WidgetItem(id: "2", name: "Device two name")
       let itemsList: [WidgetItem] = [itemOne, itemTwo];
-      var items = [WidgetItemsList]()
+      var items = [DevicesList]()
       for item in itemsList {
-          let emojiIntentObject =
-          WidgetItemsList(identifier: item.id, display: item.name)
-          items.append(emojiIntentObject)
+          let deviceIntentObject =
+            DevicesList(identifier: item.id, display: item.name)
+          items.append(deviceIntentObject)
       }
       completion(INObjectCollection(items: items), nil)
   }
+}
+
+extension IntentHandler: SensorWidgetIntentHandling {
+  func provideItemOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorsList>?, Error?) -> Void) {
+      let itemOne = WidgetItem(id: "1", name: "Sensor one name")
+      let itemTwo = WidgetItem(id: "2", name: "Sensor two name")
+      let itemsList: [WidgetItem] = [itemOne, itemTwo];
+      var items = [SensorsList]()
+      for item in itemsList {
+          let sensorIntentObject =
+          SensorsList(identifier: item.id, display: item.name)
+          items.append(sensorIntentObject)
+      }
+      completion(INObjectCollection(items: items), nil)
+  }
+  
 }

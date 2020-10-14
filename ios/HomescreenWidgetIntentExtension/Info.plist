@@ -30,7 +30,8 @@
 			<array/>
 			<key>IntentsSupported</key>
 			<array>
-				<string>HomescreenWidgetIntent</string>
+				<string>DeviceWidgetIntent</string>
+				<string>SensorWidgetIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>

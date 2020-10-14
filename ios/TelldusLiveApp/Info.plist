@@ -79,6 +79,7 @@
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>HomescreenWidgetIntent</string>
+		<string>SensorWidgetIntent</string>
 	</array>
 	<key>UIAppFonts</key>
 	<array>

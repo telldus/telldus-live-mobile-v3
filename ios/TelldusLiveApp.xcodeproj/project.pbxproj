@@ -14,19 +14,22 @@
 		266B41D5234B03A200095747 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 266B41D4234B03A200095747 /* libRNGoogleSignin.a */; };
 		2675DA492536C9B600802815 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
 		2675DA4D2536C9B600802815 /* HomescreenWidgetIntentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		2675DA5A2536C9E800802815 /* HomescreenWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */; };
+		2675DA5A2536C9E800802815 /* DeviceWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */; };
+		2675DA682536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA672536CBE000802815 /* SensorWidgetIntent.intentdefinition */; };
+		2675DA692536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA672536CBE000802815 /* SensorWidgetIntent.intentdefinition */; };
 		26B0663C252E282E009C3325 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B024F93E1200DA89F5 /* WidgetKit.framework */; };
 		26B0663D252E282E009C3325 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B224F93E1200DA89F5 /* SwiftUI.framework */; };
 		26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0663F252E282E009C3325 /* HomescreenWidget.swift */; };
 		26B06643252E2832009C3325 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26B06642252E2832009C3325 /* Assets.xcassets */; };
-		26B06645252E2832009C3325 /* HomescreenWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */; };
-		26B06646252E2832009C3325 /* HomescreenWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */; };
+		26B06645252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */; };
+		26B06646252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */; };
 		26B06649252E2832009C3325 /* HomescreenWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		26B7FFA0252F2F9500941737 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B7FF9F252F2F9500941737 /* WidgetModule.swift */; };
 		26B7FFA4252F2FB200941737 /* WidgetModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 26B7FFA3252F2FB200941737 /* WidgetModuleBridge.m */; };
 		26B7FFA7252F324E00941737 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B7FF9F252F2F9500941737 /* WidgetModule.swift */; };
 		26C7BEBA24977AEA007EC056 /* Caveat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB824977AEA007EC056 /* Caveat-Regular.ttf */; };
 		26C7BEBB24977AEA007EC056 /* Caveat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB924977AEA007EC056 /* Caveat-Bold.ttf */; };
+		26C93D702536CDC6005191C2 /* SensorWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA672536CBE000802815 /* SensorWidgetIntent.intentdefinition */; };
 		26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC2221424D8A0060DC8E /* AddressBook.framework */; };
 		26D4DC5B21424DAC0060DC8E /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5A21424DAC0060DC8E /* SafariServices.framework */; };
 		26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */; };
@@ -91,9 +94,10 @@
 		2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetIntentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2675DA482536C9B500802815 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		2675DA4A2536C9B600802815 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2675DA672536CBE000802815 /* SensorWidgetIntent.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = SensorWidgetIntent.intentdefinition; sourceTree = "<group>"; };
 		26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		26B0663F252E282E009C3325 /* HomescreenWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenWidget.swift; sourceTree = "<group>"; };
-		26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = HomescreenWidgetIntent.intentdefinition; sourceTree = "<group>"; };
+		26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = DeviceWidgetIntent.intentdefinition; sourceTree = "<group>"; };
 		26B06642252E2832009C3325 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		26B06644252E2832009C3325 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26B7FF9F252F2F9500941737 /* WidgetModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetModule.swift; sourceTree = "<group>"; };
@@ -194,7 +198,8 @@
 			isa = PBXGroup;
 			children = (
 				26B0663F252E282E009C3325 /* HomescreenWidget.swift */,
-				26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */,
+				26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */,
+				2675DA672536CBE000802815 /* SensorWidgetIntent.intentdefinition */,
 				26B06642252E2832009C3325 /* Assets.xcassets */,
 				26B06644252E2832009C3325 /* Info.plist */,
 			);
@@ -595,10 +600,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				26B06646252E2832009C3325 /* HomescreenWidgetIntent.intentdefinition in Sources */,
+				26B06646252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */,
 				26B7FFA4252F2FB200941737 /* WidgetModuleBridge.m in Sources */,
 				26B7FFA0252F2F9500941737 /* WidgetModule.swift in Sources */,
 				264F3394244F459A0042BDEE /* File.swift in Sources */,
+				2675DA682536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -608,7 +614,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2675DA492536C9B600802815 /* IntentHandler.swift in Sources */,
-				2675DA5A2536C9E800802815 /* HomescreenWidgetIntent.intentdefinition in Sources */,
+				2675DA5A2536C9E800802815 /* DeviceWidgetIntent.intentdefinition in Sources */,
+				26C93D702536CDC6005191C2 /* SensorWidgetIntent.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,7 +625,8 @@
 			files = (
 				26B7FFA7252F324E00941737 /* WidgetModule.swift in Sources */,
 				26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */,
-				26B06645252E2832009C3325 /* HomescreenWidgetIntent.intentdefinition in Sources */,
+				2675DA692536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */,
+				26B06645252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
