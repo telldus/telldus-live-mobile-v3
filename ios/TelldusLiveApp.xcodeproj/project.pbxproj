@@ -12,6 +12,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		264F3394244F459A0042BDEE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264F3393244F459A0042BDEE /* File.swift */; };
 		266B41D5234B03A200095747 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 266B41D4234B03A200095747 /* libRNGoogleSignin.a */; };
+		2675DA492536C9B600802815 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
+		2675DA4D2536C9B600802815 /* HomescreenWidgetIntentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2675DA5A2536C9E800802815 /* HomescreenWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */; };
 		26B0663C252E282E009C3325 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B024F93E1200DA89F5 /* WidgetKit.framework */; };
 		26B0663D252E282E009C3325 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B224F93E1200DA89F5 /* SwiftUI.framework */; };
 		26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0663F252E282E009C3325 /* HomescreenWidget.swift */; };
@@ -43,6 +46,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2675DA4B2536C9B600802815 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2675DA452536C9B500802815;
+			remoteInfo = HomescreenWidgetIntentExtension;
+		};
 		26B06647252E2832009C3325 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
@@ -60,6 +70,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				26B06649252E2832009C3325 /* HomescreenWidgetExtension.appex in Embed App Extensions */,
+				2675DA4D2536C9B600802815 /* HomescreenWidgetIntentExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,6 +88,9 @@
 		264F3393244F459A0042BDEE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		265B40BC244F07D100446DE2 /* TelldusLiveApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TelldusLiveApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		266B41D4234B03A200095747 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetIntentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2675DA482536C9B500802815 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		2675DA4A2536C9B600802815 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		26B0663F252E282E009C3325 /* HomescreenWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenWidget.swift; sourceTree = "<group>"; };
 		26B06641252E282E009C3325 /* HomescreenWidgetIntent.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = HomescreenWidgetIntent.intentdefinition; sourceTree = "<group>"; };
@@ -128,6 +142,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2675DA432536C9B500802815 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		26B06638252E282E009C3325 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -158,6 +179,15 @@
 				26B7FFA3252F2FB200941737 /* WidgetModuleBridge.m */,
 			);
 			name = TelldusLiveApp;
+			sourceTree = "<group>";
+		};
+		2675DA472536C9B500802815 /* HomescreenWidgetIntentExtension */ = {
+			isa = PBXGroup;
+			children = (
+				2675DA482536C9B500802815 /* IntentHandler.swift */,
+				2675DA4A2536C9B600802815 /* Info.plist */,
+			);
+			path = HomescreenWidgetIntentExtension;
 			sourceTree = "<group>";
 		};
 		26B0663E252E282E009C3325 /* HomescreenWidget */ = {
@@ -220,6 +250,7 @@
 				13B07FAE1A68108700A75B9A /* TelldusLiveApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				26B0663E252E282E009C3325 /* HomescreenWidget */,
+				2675DA472536C9B500802815 /* HomescreenWidgetIntentExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				978DD6CDC2824ACE99408D92 /* Resources */,
 				35B6E1CA58815496FB5B4C7C /* Pods */,
@@ -236,6 +267,7 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */,
 				26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */,
+				2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -279,11 +311,29 @@
 			);
 			dependencies = (
 				26B06648252E2832009C3325 /* PBXTargetDependency */,
+				2675DA4C2536C9B600802815 /* PBXTargetDependency */,
 			);
 			name = TelldusLiveApp;
 			productName = "Hello World";
 			productReference = 13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		2675DA452536C9B500802815 /* HomescreenWidgetIntentExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2675DA4E2536C9B600802815 /* Build configuration list for PBXNativeTarget "HomescreenWidgetIntentExtension" */;
+			buildPhases = (
+				2675DA422536C9B500802815 /* Sources */,
+				2675DA432536C9B500802815 /* Frameworks */,
+				2675DA442536C9B500802815 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HomescreenWidgetIntentExtension;
+			productName = HomescreenWidgetIntentExtension;
+			productReference = 2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		26B0663A252E282E009C3325 /* HomescreenWidgetExtension */ = {
 			isa = PBXNativeTarget;
@@ -326,6 +376,11 @@
 							};
 						};
 					};
+					2675DA452536C9B500802815 = {
+						CreatedOnToolsVersion = 12.0;
+						DevelopmentTeam = M2879GJ5VD;
+						ProvisioningStyle = Automatic;
+					};
 					26B0663A252E282E009C3325 = {
 						CreatedOnToolsVersion = 12.0;
 						DevelopmentTeam = M2879GJ5VD;
@@ -349,6 +404,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* TelldusLiveApp */,
 				26B0663A252E282E009C3325 /* HomescreenWidgetExtension */,
+				2675DA452536C9B500802815 /* HomescreenWidgetIntentExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -370,6 +426,13 @@
 				26D4DD542142612A0060DC8E /* GoogleService-Info.plist in Resources */,
 				59F114B4AC654FA7AAF457B4 /* SFNS Display.ttf in Resources */,
 				AD9B7A84CF90483DA832A7FB /* telldusicons.woff in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2675DA442536C9B500802815 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,6 +603,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2675DA422536C9B500802815 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2675DA492536C9B600802815 /* IntentHandler.swift in Sources */,
+				2675DA5A2536C9E800802815 /* HomescreenWidgetIntent.intentdefinition in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		26B06637252E282E009C3325 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -553,6 +625,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2675DA4C2536C9B600802815 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2675DA452536C9B500802815 /* HomescreenWidgetIntentExtension */;
+			targetProxy = 2675DA4B2536C9B600802815 /* PBXContainerItemProxy */;
+		};
 		26B06648252E2832009C3325 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 26B0663A252E282E009C3325 /* HomescreenWidgetExtension */;
@@ -650,6 +727,77 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		2675DA4F2536C9B600802815 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M2879GJ5VD;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = HomescreenWidgetIntentExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.2/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidgetIntentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2675DA502536C9B600802815 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M2879GJ5VD;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = HomescreenWidgetIntentExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.2/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidgetIntentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -874,6 +1022,15 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2675DA4E2536C9B600802815 /* Build configuration list for PBXNativeTarget "HomescreenWidgetIntentExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2675DA4F2536C9B600802815 /* Debug */,
+				2675DA502536C9B600802815 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
