@@ -21,7 +21,6 @@
 'use strict';
 
 import { NativeModules, Platform } from 'react-native';
-import SInfo from 'react-native-sensitive-info';
 
 import { publicKey, privateKey } from '../../Config';
 import type { ThunkAction } from './Types';
@@ -39,7 +38,7 @@ const widgetConfigure = (): ThunkAction => {
 
 const widgetAndroidDisableAll = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
-		if (Platform.OS === 'android') {
+		if (Platform.OS === 'android') {// TODO: Implement iOS
 			const { WidgetModule } = NativeModules;
 			WidgetModule.disableAllWidgets();
 		}
@@ -83,14 +82,6 @@ const widgetAndroidRefreshSensors = (sensorIds: Array<string>, byIdSensors: Obje
 	}
 };
 
-const widgetiOSRemoveDataFromKeychain = () => {
-	if (Platform.OS === 'ios') {
-		SInfo.deleteItem('widgetData', {
-			keychainService: 'TelldusKeychain',
-		});
-	}
-};
-
 const getWidgetConstants = (): Object => {
 	// NOTE: Calling synchronous native methods not supported while debugging in chrome
 	if (typeof atob !== 'undefined') {
@@ -131,7 +122,6 @@ module.exports = {
 	widgetAndroidRefreshSensors,
 	widgetAndroidRefreshDevices,
 	widgetAndroidRefresh,
-	widgetiOSRemoveDataFromKeychain,
 	getWidgetConstants,
 	getWidgetTextFontSizeFactor,
 	setWidgetTextFontSizeFactor,

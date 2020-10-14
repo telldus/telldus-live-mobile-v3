@@ -38,7 +38,7 @@ import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../C
 
 import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from '../Actions/Websockets';
-import { widgetAndroidDisableAll, widgetiOSRemoveDataFromKeychain } from './Widget';
+import { widgetAndroidDisableAll } from './Widget';
 import {
 	setBoolean,
 } from '../Lib/Analytics';
@@ -180,11 +180,11 @@ function getUserProfile(_accessToken?: Object = undefined, extras?: Object = {})
 }
 
 function logoutFromTelldus(): ThunkAction {
-	destroyAllConnections();
-	widgetiOSRemoveDataFromKeychain();
-
 	return (dispatch: Function): Function => {
+
+		destroyAllConnections();
 		dispatch(widgetAndroidDisableAll());
+
 		return dispatch({
 			type: 'LOGGED_OUT',
 		});
@@ -195,7 +195,6 @@ function logoutSelectedFromTelldus(data: Object): ThunkAction {
 	return (dispatch: Function, getState: Function): Function => {
 
 		destroyAllConnections();
-		widgetiOSRemoveDataFromKeychain();
 		dispatch(widgetAndroidDisableAll());
 
 		return dispatch({
@@ -210,7 +209,6 @@ function onSwitchAccount(payload: Object): ThunkAction {
 	return (dispatch: Function, getState: Function): Function => {
 
 		destroyAllConnections();
-		widgetiOSRemoveDataFromKeychain();
 		dispatch(widgetAndroidDisableAll());
 
 		return dispatch({
