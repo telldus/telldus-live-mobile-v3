@@ -50,15 +50,36 @@ struct HomescreenWidgetEntryView : View {
 }
 
 @main
-struct HomescreenWidget: Widget {
-    let kind: String = "HomescreenWidget"
+struct HomescreenWidget: WidgetBundle {
+
+  @WidgetBundleBuilder
+  var body: some Widget {
+    DeviceWidget()
+    SensorWidget()
+  }
+}
+
+struct SensorWidget: Widget {
+    let kind: String = "SensorWidget"
 
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: HomescreenWidgetIntent.self, provider: Provider()) { entry in
             HomescreenWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Sensor Widget")
+        .description("This is an example sensor widget.")
+    }
+}
+
+struct DeviceWidget: Widget {
+    let kind: String = "DeviceWidget"
+
+    var body: some WidgetConfiguration {
+        IntentConfiguration(kind: kind, intent: HomescreenWidgetIntent.self, provider: Provider()) { entry in
+            HomescreenWidgetEntryView(entry: entry)
+        }
+        .configurationDisplayName("Device Widget")
+        .description("This is an example device widget.")
     }
 }
 

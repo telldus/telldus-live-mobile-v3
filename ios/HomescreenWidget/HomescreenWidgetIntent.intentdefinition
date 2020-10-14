@@ -19,26 +19,42 @@
 		<dict>
 			<key>INIntentCategory</key>
 			<string>information</string>
-			<key>INIntentConfigurable</key>
-			<true/>
 			<key>INIntentDescriptionID</key>
 			<string>tVvJ9c</string>
 			<key>INIntentEligibleForWidgets</key>
 			<true/>
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
-			<key>INIntentManagedParameterCombinations</key>
-			<dict>
-				<key></key>
-				<dict>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationUpdatesLinked</key>
-					<true/>
-				</dict>
-			</dict>
+			<key>INIntentLastParameterTag</key>
+			<integer>1</integer>
 			<key>INIntentName</key>
 			<string>HomescreenWidget</string>
+			<key>INIntentParameters</key>
+			<array>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Parameter</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>PYpMQa</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>1</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataCapitalization</key>
+						<string>Sentences</string>
+						<key>INIntentParameterMetadataDefaultValueID</key>
+						<string>3qNK1b</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>parameter</string>
+					<key>INIntentParameterTag</key>
+					<integer>1</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
+				</dict>
+			</array>
 			<key>INIntentResponse</key>
 			<dict>
 				<key>INIntentResponseCodes</key>

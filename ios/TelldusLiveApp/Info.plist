@@ -76,6 +76,10 @@
 	<string>Used for GeoFencing.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Used for GeoFencing.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>HomescreenWidgetIntent</string>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>telldusicons.ttf</string>
