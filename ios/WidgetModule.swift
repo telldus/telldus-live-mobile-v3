@@ -52,17 +52,29 @@ class WidgetModule: NSObject {
   }
   
   func setSecureData(data: String) -> Bool {
-    let keychainItemQuery = [
-      kSecClass: kSecClassGenericPassword,
-      kSecAttrService: KEYCHAIN_SERVICE,
-      kSecAttrAccount: KEYCHAIN_ACCOUNT,
-    ] as CFDictionary
     
-    let updateFields = [
-      kSecValueData: data.data(using: .utf8)!,
-    ] as CFDictionary
-
-    let status = SecItemUpdate(keychainItemQuery, updateFields)
+    var status = 1;
+    let hasNotStored = getSecureData() == nil
+    if (hasNotStored) {
+      let keychainItemQuery = [
+        kSecClass: kSecClassGenericPassword,
+        kSecAttrService: KEYCHAIN_SERVICE,
+        kSecAttrAccount: KEYCHAIN_ACCOUNT,
+        kSecValueData: data.data(using: .utf8)!,
+      ] as CFDictionary
+      status = Int(SecItemAdd(keychainItemQuery, nil))
+    } else {
+      let keychainItemQuery = [
+        kSecClass: kSecClassGenericPassword,
+        kSecAttrService: KEYCHAIN_SERVICE,
+        kSecAttrAccount: KEYCHAIN_ACCOUNT,
+      ] as CFDictionary
+      let updateFields = [
+        kSecValueData: data.data(using: .utf8)!,
+      ] as CFDictionary
+      status = Int(SecItemUpdate(keychainItemQuery, updateFields))
+    }
+    
     return status == 0;
   }
   
