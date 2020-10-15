@@ -192,11 +192,6 @@
           android:name="org.apache.http.legacy"
           android:required="false"/>
 
-        <service
-          android:name="com.agontuk.RNFusedLocation.RNFusedBackgroundLocationService"
-          android:exported="false"
-          android:foregroundServiceType="location"/>
-
         <!-- Geo Fence/ BG Location -->
         <meta-data
           android:name="com.transistorsoft.locationmanager.license"
