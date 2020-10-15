@@ -141,6 +141,7 @@ testflight: &testflight
     - tags
   script:
     - fastlane ios beta --verbose
+    - fastlane ios refresh_dsyms --verbose
 
 testflight (master):
   <<: *testflight
