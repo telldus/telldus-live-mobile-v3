@@ -233,6 +233,12 @@ android {
     lintOptions{
         disable 'MissingTranslation'
     }
+    // TODO: See if required in react-native 0.63
+    configurations.all {
+        resolutionStrategy {
+            force "com.facebook.soloader:soloader:0.8.2"
+        }
+    }
 }
 
 dependencies {
