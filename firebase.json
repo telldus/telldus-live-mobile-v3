@@ -1,5 +1,7 @@
 {
     "react-native": {
-        "messaging_android_notification_channel_id": "high-priority"
+        "messaging_android_notification_channel_id": "high-priority",
+        "crashlytics_debug_enabled": true,
+        "crashlytics_disable_auto_disabler": true
     }
 }
