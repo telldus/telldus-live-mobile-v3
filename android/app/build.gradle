@@ -93,9 +93,10 @@ def readVersionCode() {
  * ]
  */
 
+def fileName = DEPLOY_STORE.replaceAll(/"/, '')+"_sourcemap.js";
 project.ext.react = [
     entryFile: "index.js",
-    extraPackagerArgs: ["--sourcemap-output", file("$buildDir/../../sourcemap.js")],
+    extraPackagerArgs: ["--sourcemap-output", file("$buildDir/../../$fileName")],
     enableHermes: false,  // clean and rebuild if changing
 ]
 
