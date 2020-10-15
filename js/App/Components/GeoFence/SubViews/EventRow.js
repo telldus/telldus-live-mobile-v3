@@ -110,12 +110,12 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 		onChangeSelection('event', checkBoxId, event);
 	}, [checkBoxId, event, onChangeSelection]);
 
-	const _toggleActiveState = ((active: boolean) => {
+	const _toggleActiveState = useCallback((active: boolean) => {
 		toggleActiveState('event', checkBoxId, {
 			...event,
 			active,
 		});
-	}, []);
+	}, [checkBoxId, event, toggleActiveState]);
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
 
