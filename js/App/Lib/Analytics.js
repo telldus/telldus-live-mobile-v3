@@ -65,6 +65,8 @@ export function setUserIdentifier(userId: string = '') {
 export function enableCrashlyticsCollection() {
 	if (enableAnalytics) {
 		crashlytics().setCrashlyticsCollectionEnabled(true);
+	} else if (crashlytics().isCrashlyticsCollectionEnabled) {
+		crashlytics().setCrashlyticsCollectionEnabled(false);
 	}
 }
 

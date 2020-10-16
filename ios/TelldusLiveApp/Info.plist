@@ -49,6 +49,10 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>3.0.0.1</string>
+	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+	<true/>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -115,8 +119,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>firebase_crashlytics_collection_enabled</key>
 	<false/>
 </dict>
 </plist>

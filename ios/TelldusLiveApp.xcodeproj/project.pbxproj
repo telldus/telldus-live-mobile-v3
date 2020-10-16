@@ -145,6 +145,13 @@
 			name = TelldusLiveApp;
 			sourceTree = "<group>";
 		};
+		262CD3AD25388C5D007333A2 /* dSYM */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = dSYM;
+			sourceTree = "<group>";
+		};
 		26DA5FD12045A238003FCA91 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -202,6 +209,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				262CD3AD25388C5D007333A2 /* dSYM */,
 				26BB28B1216230CA0027C32A /* Release.xcconfig */,
 				26BB28AF21622F8F0027C32A /* Debug.xcconfig */,
 				13B07FAE1A68108700A75B9A /* TelldusLiveApp */,
