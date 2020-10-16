@@ -98,6 +98,7 @@ platform :ios do
       output_directory: "ios/dSYM/",
       version: ENV["APP_VERSION"],
       wait_for_dsym_processing: true,
+      build_number: ENV['CI_BUILD_ID'],
       wait_timeout: 1000
     )
     upload_symbols_to_crashlytics(
