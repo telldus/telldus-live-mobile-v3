@@ -97,12 +97,13 @@ platform :ios do
   desc "Download dSYM files from iTC"
   lane :refresh_dsyms do
     download_dsyms(
+      output_directory: "ios/dSYM/",
       version: ENV["APP_VERSION"],
       wait_for_dsym_processing: true,
       wait_timeout: 500
     )
     upload_symbols_to_crashlytics(
-      dsym_path: "./App.dSYM.zip",
+      dsym_path: "ios/dSYM/",
       debug: true,
       gsp_path: "ios/TelldusLiveApp/GoogleService-Info.plist",
     )

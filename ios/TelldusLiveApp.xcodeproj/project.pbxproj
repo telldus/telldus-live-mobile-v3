@@ -198,6 +198,14 @@
 			name = TelldusLiveApp;
 			sourceTree = "<group>";
 		};
+		
+		262CD3AD25388C5D007333A2 /* dSYM */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = dSYM;
+			sourceTree = "<group>";
+		};
 		2675DA472536C9B500802815 /* HomescreenWidgetIntentExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -270,6 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				26C84BC425371D850094E674 /* HomescreenWidgetExtension.entitlements */,
+				262CD3AD25388C5D007333A2 /* dSYM */,
 				26BB28B1216230CA0027C32A /* Release.xcconfig */,
 				26BB28AF21622F8F0027C32A /* Debug.xcconfig */,
 				13B07FAE1A68108700A75B9A /* TelldusLiveApp */,
