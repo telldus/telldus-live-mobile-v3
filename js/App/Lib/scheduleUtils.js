@@ -88,8 +88,8 @@ const getTempDay = (job: Object, gateway: Object): Object => {
 		tempDay = dayjs(sunsetInMs + offsetInMs).tz(timezone);
 	} else {
 		tempDay = dayjs();
-		tempDay.hours(job.hour);
-		tempDay.minutes(job.minute);
+		tempDay.hour(job.hour);
+		tempDay.minute(job.minute);
 	}
 	return tempDay;
 };
