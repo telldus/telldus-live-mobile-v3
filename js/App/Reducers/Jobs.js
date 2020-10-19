@@ -91,7 +91,7 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 					return sections[relativeDay].push(nonMutantJob);
 				}
 
-				const nowInMinutes = now.hours() * 60 + now.minutes();
+				const nowInMinutes = now.hour() * 60 + now.minute();
 				const jobInMinutes = parseInt(nonMutantJob.effectiveHour, 10) * 60 + parseInt(nonMutantJob.effectiveMinute, 10);
 				if (jobInMinutes >= nowInMinutes) {
 					sections[0].push(nonMutantJob); // today
