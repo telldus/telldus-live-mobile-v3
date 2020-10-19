@@ -41,10 +41,12 @@ extension IntentHandler: DeviceWidgetIntentHandling {
 }
 
 extension IntentHandler: SensorWidgetIntentHandling {
+  func fetchSensors() -> Array<SensorDetails> {
+    return SensorsAPI().getSensorsList()
+  }
   func provideItemOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorsList>?, Error?) -> Void) {
-      let itemOne = WidgetItem(id: "1", name: "Sensor one name")
-      let itemTwo = WidgetItem(id: "2", name: "Sensor two name")
-      let itemsList: [WidgetItem] = [itemOne, itemTwo];
+      print("TEST provideItemOptionsCollection")
+      let itemsList = fetchSensors()
       var items = [SensorsList]()
       for item in itemsList {
           let sensorIntentObject =

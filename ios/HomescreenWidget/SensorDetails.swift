@@ -9,5 +9,6 @@
 import Foundation
 
 public struct SensorDetails {
-  public let name: String?
+  public let id: String
+  public let name: String
 }

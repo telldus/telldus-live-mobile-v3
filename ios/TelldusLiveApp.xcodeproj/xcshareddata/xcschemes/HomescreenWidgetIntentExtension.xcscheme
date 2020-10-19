@@ -57,8 +57,12 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "1"
+         BundleIdentifier = "com.telldus.live.mobile"
+         RemotePath = "/Users/rimneshfernandez/Library/Developer/CoreSimulator/Devices/9F2CDBE1-E06C-4E26-B233-E221E68A2DB8/data/Containers/Bundle/Application/283C70E5-60C6-4262-8C51-C27BA4108CFE/TelldusLiveApp.app">
+      </RemoteRunnable>
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
@@ -66,7 +70,14 @@
             BlueprintName = "TelldusLiveApp"
             ReferencedContainer = "container:TelldusLiveApp.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "TELLDUS_API_SERVER"
+            value = "https://api3.telldus.com"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

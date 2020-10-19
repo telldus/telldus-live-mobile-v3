@@ -14,7 +14,7 @@ struct SensorWidgetView: View {
 
   @available(iOS 13.0.0, *)
   var body: some View {
-    let name = sensorDetails.name ?? "no name"
+    let name = sensorDetails.name
     return ZStack {
       Color(UIColor.systemIndigo)
       VStack {

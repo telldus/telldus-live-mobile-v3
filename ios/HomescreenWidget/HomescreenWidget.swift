@@ -12,11 +12,11 @@ import Intents
 
 struct SensorProvider: IntentTimelineProvider {
     func placeholder(in context: Context) -> SensorSimpleEntry {
-      SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(name: "Placeholder"))
+      SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(id: "", name: "Placeholder"))
     }
 
     func getSnapshot(for configuration: SensorWidgetIntent, in context: Context, completion: @escaping (SensorSimpleEntry) -> ()) {
-        let entry = SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(name: "Snapshot"))
+      let entry = SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(id: "", name: "Snapshot"))
         completion(entry)
     }
 
@@ -31,7 +31,7 @@ struct SensorProvider: IntentTimelineProvider {
             if (name == nil) {
               name = "no name";
             }
-            let entry = SensorSimpleEntry(date: entryDate, sensorDetails: SensorDetails(name: name!))
+          let entry = SensorSimpleEntry(date: entryDate, sensorDetails: SensorDetails(id: "", name: name!))
             entries.append(entry)
         }
 
@@ -42,11 +42,11 @@ struct SensorProvider: IntentTimelineProvider {
 
 struct DeviceProvider: IntentTimelineProvider {
     func placeholder(in context: Context) -> DeviceSimpleEntry {
-      DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(name: "Placeholder"))
+      DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(id: "", name: "Placeholder"))
     }
 
     func getSnapshot(for configuration: DeviceWidgetIntent, in context: Context, completion: @escaping (DeviceSimpleEntry) -> ()) {
-        let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(name: "Snapshot"))
+      let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(id: "", name: "Snapshot"))
         completion(entry)
     }
 
@@ -57,11 +57,9 @@ struct DeviceProvider: IntentTimelineProvider {
         let currentDate = Date()
         for hourOffset in 0 ..< 5 {
             let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            var name = configuration.item?.displayString
-            if (name == nil) {
-              name = "no name";
-            }
-            let entry = DeviceSimpleEntry(date: entryDate, deviceDetails: DeviceDetails(name: name!))
+            let name = configuration.item?.displayString ?? "no name"
+            let id = configuration.item?.identifier ?? ""
+            let entry = DeviceSimpleEntry(date: entryDate, deviceDetails: DeviceDetails(id: id, name: name))
             entries.append(entry)
         }
 
@@ -97,6 +95,7 @@ struct SensorWidgetEntryView : View {
     var entry: SensorProvider.Entry
 
     var body: some View {
+        print("TEST SensorWidgetEntryView")
         let data = WidgetModule().getSecureData()
         if (data == nil) {
           return AnyView(NotLoggedInView())

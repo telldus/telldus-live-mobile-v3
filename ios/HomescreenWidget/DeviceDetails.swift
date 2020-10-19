@@ -9,5 +9,6 @@
 import Foundation
 
 public struct DeviceDetails {
-  public let name: String?
+  public let id: String
+  public let name: String
 }
