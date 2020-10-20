@@ -95,7 +95,6 @@ struct SensorWidgetEntryView : View {
     var entry: SensorProvider.Entry
 
     var body: some View {
-        print("TEST SensorWidgetEntryView")
         let data = WidgetModule().getSecureData()
         if (data == nil) {
           return AnyView(NotLoggedInView())
