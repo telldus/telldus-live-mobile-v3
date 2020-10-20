@@ -67,7 +67,7 @@ class API {
           guard error == nil else {
             let _error = error as! String
             if (_error == "invalid_token" || _error == "expired_token") {
-              self.refreshAccessToken(authData: dataDict) {responseAT in
+              return self.refreshAccessToken(authData: dataDict) {responseAT in
                 guard responseAT != nil else {
                   completion(Result.failure(AppError.invalidToken))
                   return
