@@ -231,8 +231,7 @@ function prepareCommonGAProperties(): ThunkAction {
 
 		const permission = typeof userProfile.permission === 'undefined' ? 0 : userProfile.permission;
 		// eslint-disable-next-line no-bitwise
-		const lsb = parseInt(permission, 2) & 1;
-		const beta = lsb === 1 ? 'true' : 'false';
+		const beta = (permission & 1) === 1 ? 'true' : 'false';
 
 		const premAccounts = getPremiumAccounts(accounts);
 		const isPremium = Object.keys(premAccounts).length > 0;
