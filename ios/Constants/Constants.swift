@@ -10,6 +10,7 @@ import Foundation
 struct Constants {
   
   static var telldusAPIServer: String = Constants.variable(named: "TELLDUS_API_SERVER") ?? CI.telldusAPIServer
+  static let supportedMethods = 4023;
   
   static func variable(named name: String) -> String? {
     let processInfo = ProcessInfo.processInfo
