@@ -9,14 +9,14 @@
 import Intents
 
 class IntentHandler: INExtension {
+  
+  override func handler(for intent: INIntent) -> Any {
+    // This is the default implementation.  If you want different objects to handle different intents,
+    // you can override this and return the handler you want for that particular intent.
     
-    override func handler(for intent: INIntent) -> Any {
-        // This is the default implementation.  If you want different objects to handle different intents,
-        // you can override this and return the handler you want for that particular intent.
-        
-        return self
-    }
-    
+    return self
+  }
+  
 }
 
 struct WidgetItem {
@@ -27,33 +27,33 @@ struct WidgetItem {
 extension IntentHandler: DeviceWidgetIntentHandling {
   
   func provideItemOptionsCollection(for intent: DeviceWidgetIntent, with completion: @escaping (INObjectCollection<DevicesList>?, Error?) -> Void) {
-      let itemOne = WidgetItem(id: "1", name: "Device one name")
-      let itemTwo = WidgetItem(id: "2", name: "Device two name")
-      let itemsList: [WidgetItem] = [itemOne, itemTwo];
-      var items = [DevicesList]()
-      for item in itemsList {
-          let deviceIntentObject =
-            DevicesList(identifier: item.id, display: item.name)
-          items.append(deviceIntentObject)
-      }
-      completion(INObjectCollection(items: items), nil)
+    let itemOne = WidgetItem(id: "1", name: "Device one name")
+    let itemTwo = WidgetItem(id: "2", name: "Device two name")
+    let itemsList: [WidgetItem] = [itemOne, itemTwo];
+    var items = [DevicesList]()
+    for item in itemsList {
+      let deviceIntentObject =
+        DevicesList(identifier: item.id, display: item.name)
+      items.append(deviceIntentObject)
+    }
+    completion(INObjectCollection(items: items), nil)
   }
 }
 
 extension IntentHandler: SensorWidgetIntentHandling {
-  func fetchSensors() -> Array<SensorDetails> {
-    return SensorsAPI().getSensorsList()
+  func fetchSensors(completion: @escaping (Array<SensorDetails>) -> Void) {
+    SensorsAPI().getSensorsList(completion: completion)
   }
   func provideItemOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorsList>?, Error?) -> Void) {
-      print("TEST provideItemOptionsCollection")
-      let itemsList = fetchSensors()
+    fetchSensors() {itemsList in
       var items = [SensorsList]()
       for item in itemsList {
-          let sensorIntentObject =
+        let sensorIntentObject =
           SensorsList(identifier: item.id, display: item.name)
-          items.append(sensorIntentObject)
+        items.append(sensorIntentObject)
       }
       completion(INObjectCollection(items: items), nil)
+    }
   }
   
 }
