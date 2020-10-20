@@ -62,7 +62,7 @@ import {
 	toggleVisibilityProExpireHeadsup,
 	setupGeoFence,
 	fetchRemoteConfig,
-	prepareGAPremiumProperties,
+	prepareCommonGAProperties,
 	updateAllAccountsInfo,
 	setGatewayRelatedGAProperties,
 	onReceivedInAppPurchaseProducts,
@@ -350,7 +350,7 @@ actionsToPerformOnStart = async () => {
 		} catch (userSubsErr) {
 			// Ignore
 		} finally {
-			const gAPremProps = dispatch(prepareGAPremiumProperties());
+			const gAPremProps = dispatch(prepareCommonGAProperties());
 			setGAUserProperties(gAPremProps);
 		}
 		dispatch(setGatewayRelatedGAProperties());// NOTE: Make sure is called resolving getGateways
