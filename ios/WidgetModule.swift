@@ -25,7 +25,7 @@ class WidgetModule: NSObject {
     userId: String,
     pro: NSNumber
     ) -> Void {
-    let dict: NSDictionary = [
+    let dict: Dictionary<String, Any> = [
         "accessToken": accessToken,
         "refreshToken": refreshToken,
         "expiresIn": expiresIn,
@@ -34,25 +34,11 @@ class WidgetModule: NSObject {
         "userId": userId,
         "pro": pro,
     ]
-    let stringifiedData = convertDictionaryToString(dict: dict)
+    let stringifiedData = Utilities().convertDictionaryToString(dict: dict)
     setSecureData(data: stringifiedData)
   }
   
-  func convertDictionaryToString (dict: NSDictionary) -> String {
-    var data: Data?;
-    do {
-        data = try JSONSerialization.data(withJSONObject: dict)
-    } catch {
-      
-    }
-    if let data = data {
-      return (NSString(data: data, encoding: String.Encoding.utf8.rawValue) ?? "") as String
-    }
-    return "";
-  }
-  
   func setSecureData(data: String) -> Bool {
-    
     var status = 1;
     let hasNotStored = getSecureData() == nil
     if (hasNotStored) {
@@ -64,18 +50,22 @@ class WidgetModule: NSObject {
       ] as CFDictionary
       status = Int(SecItemAdd(keychainItemQuery, nil))
     } else {
-      let keychainItemQuery = [
-        kSecClass: kSecClassGenericPassword,
-        kSecAttrService: KEYCHAIN_SERVICE,
-        kSecAttrAccount: KEYCHAIN_ACCOUNT,
-      ] as CFDictionary
-      let updateFields = [
-        kSecValueData: data.data(using: .utf8)!,
-      ] as CFDictionary
-      status = Int(SecItemUpdate(keychainItemQuery, updateFields))
+      status = updateSecureData(data: data)
     }
-    
     return status == 0;
+  }
+  
+  // IMP: Do not update with partial data! Should have all keys set by 'configureWidgetAuthData'
+  func updateSecureData(data: String) -> Int {
+    let keychainItemQuery = [
+      kSecClass: kSecClassGenericPassword,
+      kSecAttrService: KEYCHAIN_SERVICE,
+      kSecAttrAccount: KEYCHAIN_ACCOUNT,
+    ] as CFDictionary
+    let updateFields = [
+      kSecValueData: data.data(using: .utf8)!,
+    ] as CFDictionary
+    return Int(SecItemUpdate(keychainItemQuery, updateFields))
   }
   
   func getSecureData() -> String? {

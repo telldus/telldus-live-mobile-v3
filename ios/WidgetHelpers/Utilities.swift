@@ -9,6 +9,19 @@
 import Foundation
 
 struct Utilities {
+  func convertDictionaryToString (dict: Dictionary<String?, Any>) -> String {
+    var data: Data?;
+    do {
+        data = try JSONSerialization.data(withJSONObject: dict)
+    } catch {
+      
+    }
+    if let data = data {
+      return (NSString(data: data, encoding: String.Encoding.utf8.rawValue) ?? "") as String
+    }
+    return "";
+  }
+  
   func stringToDictionary(string: String) -> Dictionary<String?, Any>? {
     let data = string.data(using: .utf8)!
       do {
