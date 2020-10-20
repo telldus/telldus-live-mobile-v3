@@ -24,15 +24,15 @@
 
 import React, { PureComponent } from 'react';
 import { intlShape } from 'react-intl';
-import {
-	Platform,
-} from 'react-native';
+// import {
+// 	Platform,
+// } from 'react-native';
 
 import {
 	Text,
 	View,
 	IconTelldus,
-	ThemedMaterialIcon,
+	// ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
@@ -81,7 +81,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 			iconSize,
 		} = styles;
 
-		const isIos = Platform.OS === 'ios';
+		// const isIos = Platform.OS === 'ios';
 
 		let screenData = {
 			icon: null,
@@ -91,18 +91,18 @@ export default class WizardOne extends PureComponent<Props, null> {
 			title: '',
 			description: '',
 		};
-
-		const case1 = {
-			...screenData,
-			icon: <ThemedMaterialIcon
-				style={iconStyle}
-				size={iconSize}
-				name={'location-on'}
-				level={23}/>,
-			title: this.titleWOne,
-			description: this.descriptionWOne,
-			isPremiumFeature: true,
-		};
+		// TODO add 3(geofence once it is reliable)
+		// const case1 = {
+		// 	...screenData,
+		// 	icon: <ThemedMaterialIcon
+		// 		style={iconStyle}
+		// 		size={iconSize}
+		// 		name={'location-on'}
+		// 		level={23}/>,
+		// 	title: this.titleWOne,
+		// 	description: this.descriptionWOne,
+		// 	isPremiumFeature: true,
+		// };
 
 		const case2 = {
 			...screenData,
@@ -121,9 +121,9 @@ export default class WizardOne extends PureComponent<Props, null> {
 
 		switch (currentScreen) {
 			case 1:
-				return isIos ? case1 : case2;
+				return case2;
 			case 2:
-				return isIos ? case2 : case3;
+				return case3;
 			case 3:
 				return case3;
 			default:
