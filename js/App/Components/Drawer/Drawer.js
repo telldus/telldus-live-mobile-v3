@@ -278,7 +278,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 								<Text
 									level={27}
 									style={styles.linkLabelStyle}>
-									{`${formatMessage(i18n.manageGeoFence)} (beta)`}
+									{formatMessage(i18n.manageGeoFence)}
 								</Text>
 								<IconTelldus
 									icon={'premium'}

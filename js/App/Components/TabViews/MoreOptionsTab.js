@@ -153,7 +153,7 @@ const MoreOptionsTab = (props: Props): Object => {
 					style={iconStyle}
 					name={'location-on'}
 					level={23}/>,
-				text: `${capitalize(formatMessage(i18n.manageGeoFence))} (beta)`,
+				text: capitalize(formatMessage(i18n.manageGeoFence)),
 				onPress: () => {
 					let screen = 'AddEditGeoFence';
 					if (!consentLocationData) {

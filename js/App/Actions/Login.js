@@ -220,13 +220,19 @@ function onSwitchAccount(payload: Object): ThunkAction {
 	};
 }
 
-function prepareGAPremiumProperties(): ThunkAction {
+function prepareCommonGAProperties(): ThunkAction {
 	return (dispatch: Function, getState: Function): Object => {
 		const {
 			user: {
 				accounts = {},
+				userProfile = {},
 			},
 		} = getState();
+
+		const permission = typeof userProfile.permission === 'undefined' ? 0 : userProfile.permission;
+		// eslint-disable-next-line no-bitwise
+		const lsb = parseInt(permission, 2) & 1;
+		const beta = lsb === 1 ? 'true' : 'false';
 
 		const premAccounts = getPremiumAccounts(accounts);
 		const isPremium = Object.keys(premAccounts).length > 0;
@@ -244,6 +250,7 @@ function prepareGAPremiumProperties(): ThunkAction {
 			return {
 				isPremium: 'false',
 				premiumDate: greatestTS.toString(),
+				beta,
 			};
 		}
 
@@ -258,6 +265,7 @@ function prepareGAPremiumProperties(): ThunkAction {
 		return {
 			isPremium: 'true',
 			premiumDate: dates.length > 0 ? min(dates).toString() : '',
+			beta,
 		};
 	};
 }
@@ -268,5 +276,5 @@ module.exports = {
 	getUserProfile,
 	logoutSelectedFromTelldus,
 	onSwitchAccount,
-	prepareGAPremiumProperties,
+	prepareCommonGAProperties,
 };
