@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct SensorWidgetView: View {
-
+  
   let sensorDetails: SensorDetails
-
+  
   @available(iOS 13.0.0, *)
   var body: some View {
     let name = sensorDetails.name

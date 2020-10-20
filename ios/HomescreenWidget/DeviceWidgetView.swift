@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct DeviceWidgetView: View {
-
+  
   let deviceDetails: DeviceDetails
-
+  
   @available(iOS 13.0.0, *)
   var body: some View {
     let name = deviceDetails.name

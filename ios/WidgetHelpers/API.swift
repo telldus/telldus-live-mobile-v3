@@ -31,7 +31,7 @@ class API {
       completion(Result.failure(AppError.noAuthToken))
       return
     }
-
+    
     let dataDict = Utilities().stringToDictionary(string: data!)
     guard dataDict != nil else {
       completion(Result.failure(AppError.noAuthToken))
@@ -119,7 +119,7 @@ class API {
       completion(nil)
       return
     }
-
+    
     let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
       guard error == nil else {
         completion(nil)

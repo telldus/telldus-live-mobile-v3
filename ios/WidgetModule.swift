@@ -14,7 +14,7 @@ class WidgetModule: NSObject {
   
   let KEYCHAIN_SERVICE = "TelldusKeychain";
   let KEYCHAIN_ACCOUNT = "widgetData";
-
+  
   @objc(configureWidgetAuthData:refreshToken:expiresIn:clientId:clientSecret:userId:pro:)
   func configureWidgetAuthData(
     accessToken: String,
@@ -24,15 +24,15 @@ class WidgetModule: NSObject {
     clientSecret: String,
     userId: String,
     pro: NSNumber
-    ) -> Void {
+  ) -> Void {
     let dict: Dictionary<String, Any> = [
-        "accessToken": accessToken,
-        "refreshToken": refreshToken,
-        "expiresIn": expiresIn,
-        "clientId": clientId,
-        "clientSecret": clientSecret,
-        "userId": userId,
-        "pro": pro,
+      "accessToken": accessToken,
+      "refreshToken": refreshToken,
+      "expiresIn": expiresIn,
+      "clientId": clientId,
+      "clientSecret": clientSecret,
+      "userId": userId,
+      "pro": pro,
     ]
     let stringifiedData = Utilities().convertDictionaryToString(dict: dict)
     setSecureData(data: stringifiedData)
@@ -76,7 +76,7 @@ class WidgetModule: NSObject {
       kSecAttrService: KEYCHAIN_SERVICE,
       kSecAttrAccount: KEYCHAIN_ACCOUNT,
     ] as CFDictionary
-
+    
     var result: AnyObject?
     let status = SecItemCopyMatching(query, &result)
     guard status == 0 else {

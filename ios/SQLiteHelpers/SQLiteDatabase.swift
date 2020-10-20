@@ -38,9 +38,9 @@ class SQLiteDatabase {
         throw SQLiteError.OpenDatabase(message: message)
       } else {
         throw SQLiteError
-          .OpenDatabase(message: "No error message provided from sqlite.")
+        .OpenDatabase(message: "No error message provided from sqlite.")
       }
     }
   }
-
+  
 }

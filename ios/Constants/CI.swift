@@ -9,5 +9,5 @@
 import Foundation
 
 struct CI {
-    static var telldusAPIServer: String = "$(TELLDUS_API_SERVER)"
+  static var telldusAPIServer: String = "$(TELLDUS_API_SERVER)"
 }

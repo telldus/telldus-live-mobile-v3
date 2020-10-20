@@ -12,7 +12,7 @@ struct Utilities {
   func convertDictionaryToString (dict: Dictionary<String?, Any>) -> String {
     var data: Data?;
     do {
-        data = try JSONSerialization.data(withJSONObject: dict)
+      data = try JSONSerialization.data(withJSONObject: dict)
     } catch {
       
     }
@@ -24,15 +24,15 @@ struct Utilities {
   
   func stringToDictionary(string: String) -> Dictionary<String?, Any>? {
     let data = string.data(using: .utf8)!
-      do {
-        if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? Dictionary<String,Any>
-        {
-          return jsonArray
-        } else {
-          return nil
-        }
-      } catch _ as NSError {
+    do {
+      if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? Dictionary<String,Any>
+      {
+        return jsonArray
+      } else {
         return nil
       }
+    } catch _ as NSError {
+      return nil
+    }
   }
 }
