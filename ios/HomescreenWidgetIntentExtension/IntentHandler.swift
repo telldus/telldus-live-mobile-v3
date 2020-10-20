@@ -25,20 +25,19 @@ struct WidgetItem {
 }
 
 extension IntentHandler: DeviceWidgetIntentHandling {
-  
   func provideItemOptionsCollection(for intent: DeviceWidgetIntent, with completion: @escaping (INObjectCollection<DevicesList>?, Error?) -> Void) {
-    let itemOne = WidgetItem(id: "1", name: "Device one name")
-    let itemTwo = WidgetItem(id: "2", name: "Device two name")
-    let itemsList: [WidgetItem] = [itemOne, itemTwo];
-    var items = [DevicesList]()
-    for item in itemsList {
-      let deviceIntentObject =
-        DevicesList(identifier: item.id, display: item.name)
-      items.append(deviceIntentObject)
+    DevicesAPI().getDevicesList() {itemsList in
+      var items = [DevicesList]()
+      for item in itemsList {
+        let deviceIntentObject =
+          DevicesList(identifier: item.id, display: item.name)
+        items.append(deviceIntentObject)
+      }
+      completion(INObjectCollection(items: items), nil)
     }
-    completion(INObjectCollection(items: items), nil)
   }
 }
+
 
 extension IntentHandler: SensorWidgetIntentHandling {
   func fetchSensors(completion: @escaping (Array<SensorDetails>) -> Void) {
@@ -55,5 +54,4 @@ extension IntentHandler: SensorWidgetIntentHandling {
       completion(INObjectCollection(items: items), nil)
     }
   }
-  
 }
