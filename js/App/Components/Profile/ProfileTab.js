@@ -27,6 +27,7 @@ import React, {
 } from 'react';
 import {
 	TouchableOpacity,
+	Platform,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -240,6 +241,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 	]);
 
 	const hasMultipleAccounts = Object.keys(accounts).length > 1;
+	const isNotiOS = Platform.OS !== 'ios';
 
 	return (
 		<ThemedScrollView
@@ -293,7 +295,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						</Text>
 					</TouchableOpacity>
 				)}
-				{enable && (
+				{(enable && isNotiOS) && (
 					<TouchableOpacity onPress={onPressRedeemGift}>
 						<View style={redeemCoverStyle}>
 							<IconTelldus
