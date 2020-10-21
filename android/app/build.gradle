@@ -199,9 +199,6 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            firebaseCrashlytics {
-                nativeSymbolUploadEnabled true
-            }
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             applicationIdSuffix ""
