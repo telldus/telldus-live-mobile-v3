@@ -100,10 +100,14 @@ platform :ios do
       wait_for_dsym_processing: true,
       wait_timeout: 1000
     )
+    Dir["ios/dSYM/*dSYM.zip"].each {|file|
+    filename = file.split('/').last
+    path = "ios/dSYM/"+filename
     upload_symbols_to_crashlytics(
-      dsym_path: "ios/dSYM/",
+      dsym_path: path,
       debug: true,
       gsp_path: "ios/TelldusLiveApp/GoogleService-Info.plist",
     )
+    }
   end
 end
