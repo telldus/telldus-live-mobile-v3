@@ -62,6 +62,7 @@ import i18n from '../../Translations/common';
 
 import {
 	deployStore,
+	TEST_ACCOUNTS,
 } from '../../../Config';
 
 type Props = {
@@ -212,7 +213,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	render(): Object {
 		const {
 			gateways,
-			userProfile,
+			userProfile = {},
 			addNewLocation,
 			appLayout,
 			onPressGateway,
@@ -239,15 +240,23 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 				onPressLink={s.onPressLink}/>;
 		});
 
+		const {
+			firstname,
+			lastname,
+			email,
+			uuid,
+		} = userProfile;
+		const enableGeoFence = !this.isHuaweiBuild && (enableGeoFenceFeature || (TEST_ACCOUNTS.indexOf(uuid) !== -1)); // NOTE: Always show geofence option for test accounts
+
 		return (
 			<ScrollView
 				style={{ flex: 1 }}
 				contentContainerStyle={{flexGrow: 1}}>
 				<NavigationHeader
-					firstName={userProfile.firstname}
-					email={userProfile.email}
+					firstName={firstname}
+					email={email}
 					appLayout={appLayout}
-					lastName={userProfile.lastname}
+					lastName={lastname}
 					styles={styles}
 					textSwitchAccount={formatMessage(i18n.switchOrAddAccount)}
 					onPress={this._showSwitchAccountActionSheet}/>
@@ -262,7 +271,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 							styles={drawerSubHeader}/>
 						{settingLinks}
 					</View>
-					{(enableGeoFenceFeature && !this.isHuaweiBuild) && (
+					{enableGeoFence && (
 						<View style={styles.settingsLinkCover}>
 							<DrawerSubHeader
 								textIntl={i18n.geoFence}
