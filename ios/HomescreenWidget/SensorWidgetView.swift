@@ -15,16 +15,23 @@ struct SensorWidgetView: View {
   @available(iOS 13.0.0, *)
   var body: some View {
     let name = sensorDetails.name
-    return ZStack {
-      Color(UIColor.systemIndigo)
-      VStack {
-        Text(name)
-          .font(.headline)
-          .multilineTextAlignment(.center)
-          .padding(.top, 5)
-          .padding([.leading, .trailing])
-          .foregroundColor(.white)
-      }
+    switch sensorDetails.displayType {
+    case .preview:
+      return AnyView(SensorWidgetPreviewUIView())
+    case .preEditView:
+      return AnyView(EditWidgetInfoUIView())
+    case .postEditView:
+      return AnyView(ZStack {
+        Color(UIColor.systemIndigo)
+        VStack {
+          Text(name)
+            .font(.headline)
+            .multilineTextAlignment(.center)
+            .padding(.top, 5)
+            .padding([.leading, .trailing])
+            .foregroundColor(.white)
+        }
+      })
     }
   }
 }

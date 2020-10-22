@@ -12,11 +12,23 @@ import Intents
 
 struct SensorProvider: IntentTimelineProvider {
   func placeholder(in context: Context) -> SensorSimpleEntry {
-    SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(id: "", name: "Placeholder"))
+    SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(
+      id: "",
+      name: "",
+      displayType: WidgetViewType.preEditView
+    ))
   }
   
   func getSnapshot(for configuration: SensorWidgetIntent, in context: Context, completion: @escaping (SensorSimpleEntry) -> ()) {
-    let entry = SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(id: "", name: "Snapshot"))
+    var displayType = WidgetViewType.preEditView
+    if (context.isPreview) {
+      displayType = WidgetViewType.preview
+    }
+    let entry = SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(
+      id: "",
+      name: "",
+      displayType: displayType
+    ))
     completion(entry)
   }
   
@@ -27,11 +39,17 @@ struct SensorProvider: IntentTimelineProvider {
     let currentDate = Date()
     for hourOffset in 0 ..< 5 {
       let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-      var name = configuration.item?.displayString
-      if (name == nil) {
-        name = "no name";
+      let name = configuration.item?.displayString ?? ""
+      let id = configuration.item?.identifier ?? ""
+      var displayType = WidgetViewType.postEditView
+      if (configuration.item?.identifier == nil) {
+        displayType = WidgetViewType.preEditView
       }
-      let entry = SensorSimpleEntry(date: entryDate, sensorDetails: SensorDetails(id: "", name: name!))
+      let entry = SensorSimpleEntry(date: entryDate, sensorDetails: SensorDetails(
+        id: id,
+        name: name,
+        displayType: displayType
+      ))
       entries.append(entry)
     }
     

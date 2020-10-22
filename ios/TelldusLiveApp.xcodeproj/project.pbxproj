@@ -16,7 +16,7 @@
 		260381D7253DAF8700D4F8CA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260381D6253DAF8700D4F8CA /* Utilities.swift */; };
 		260381D8253DAF8700D4F8CA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260381D6253DAF8700D4F8CA /* Utilities.swift */; };
 		260381D9253DAF8700D4F8CA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260381D6253DAF8700D4F8CA /* Utilities.swift */; };
-		2608B58C253732F300BF0A36 /* DeviceWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B58A253732F300BF0A36 /* DeviceWidgetView.swift */; };
+		2608B58C253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B58A253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift */; };
 		2608B5932537330E00BF0A36 /* DeviceDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B5912537330E00BF0A36 /* DeviceDetails.swift */; };
 		2608B59A253737FF00BF0A36 /* NotLoggedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B598253737FF00BF0A36 /* NotLoggedInView.swift */; };
 		2608B5C6253752AE00BF0A36 /* SensorDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B5C5253752AE00BF0A36 /* SensorDetails.swift */; };
@@ -74,10 +74,16 @@
 		26FEC6D4254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6D2254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift */; };
 		26FEC6DC25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6DB25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift */; };
 		26FEC6E7254174900056EC71 /* EditWidgetInfoUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6E6254174900056EC71 /* EditWidgetInfoUIView.swift */; };
-		26FEC6EC254179A40056EC71 /* DeviceWidgetPreviewUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6EB254179A40056EC71 /* DeviceWidgetPreviewUIView.swift */; };
 		26FEC6F125417B720056EC71 /* CustomTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6F025417B720056EC71 /* CustomTypes.swift */; };
 		26FEC6F525417C670056EC71 /* CustomTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6F025417B720056EC71 /* CustomTypes.swift */; };
 		26FEC6F925417C680056EC71 /* CustomTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6F025417B720056EC71 /* CustomTypes.swift */; };
+		26FEC6FE254184740056EC71 /* SensorWidgetPreviewUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6FD254184740056EC71 /* SensorWidgetPreviewUIView.swift */; };
+		26FEC7082541942C0056EC71 /* DeviceWidgetSmallUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC7072541942C0056EC71 /* DeviceWidgetSmallUIView.swift */; };
+		26FEC710254194470056EC71 /* DeviceWidgetMediumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC70F254194470056EC71 /* DeviceWidgetMediumUIView.swift */; };
+		26FEC715254194590056EC71 /* DeviceWidgetLargeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC714254194590056EC71 /* DeviceWidgetLargeUIView.swift */; };
+		26FEC71C254198BA0056EC71 /* DWPreviewSmallUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC71B254198BA0056EC71 /* DWPreviewSmallUIView.swift */; };
+		26FEC721254198D10056EC71 /* DWPreviewMediumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC720254198D10056EC71 /* DWPreviewMediumUIView.swift */; };
+		26FEC726254198E10056EC71 /* DWPreviewLargeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC725254198E10056EC71 /* DWPreviewLargeUIView.swift */; };
 		40D7C76A1F73AB9C0078E086 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */; };
 		59F114B4AC654FA7AAF457B4 /* SFNS Display.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F455C17D479C4210A202688C /* SFNS Display.ttf */; };
 		68CC7CCADF574C7AB546E29B /* telldusicons.svg in Resources */ = {isa = PBXBuildFile; fileRef = DB8C12D469844F34ABBA0A64 /* telldusicons.svg */; };
@@ -132,7 +138,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TelldusLiveApp/main.m; sourceTree = "<group>"; };
 		26035742253ED333000798D1 /* DevicesAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesAPI.swift; sourceTree = "<group>"; };
 		260381D6253DAF8700D4F8CA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
-		2608B58A253732F300BF0A36 /* DeviceWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetView.swift; sourceTree = "<group>"; };
+		2608B58A253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetUIViewProvider.swift; sourceTree = "<group>"; };
 		2608B5912537330E00BF0A36 /* DeviceDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetails.swift; sourceTree = "<group>"; };
 		2608B598253737FF00BF0A36 /* NotLoggedInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotLoggedInView.swift; sourceTree = "<group>"; };
 		2608B5C5253752AE00BF0A36 /* SensorDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDetails.swift; sourceTree = "<group>"; };
@@ -175,8 +181,14 @@
 		26FEC6D2254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetBuilderUIView.swift; sourceTree = "<group>"; };
 		26FEC6DB25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetBuilderUIView.swift; sourceTree = "<group>"; };
 		26FEC6E6254174900056EC71 /* EditWidgetInfoUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWidgetInfoUIView.swift; sourceTree = "<group>"; };
-		26FEC6EB254179A40056EC71 /* DeviceWidgetPreviewUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetPreviewUIView.swift; sourceTree = "<group>"; };
 		26FEC6F025417B720056EC71 /* CustomTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTypes.swift; sourceTree = "<group>"; };
+		26FEC6FD254184740056EC71 /* SensorWidgetPreviewUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetPreviewUIView.swift; sourceTree = "<group>"; };
+		26FEC7072541942C0056EC71 /* DeviceWidgetSmallUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetSmallUIView.swift; sourceTree = "<group>"; };
+		26FEC70F254194470056EC71 /* DeviceWidgetMediumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetMediumUIView.swift; sourceTree = "<group>"; };
+		26FEC714254194590056EC71 /* DeviceWidgetLargeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetLargeUIView.swift; sourceTree = "<group>"; };
+		26FEC71B254198BA0056EC71 /* DWPreviewSmallUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DWPreviewSmallUIView.swift; sourceTree = "<group>"; };
+		26FEC720254198D10056EC71 /* DWPreviewMediumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DWPreviewMediumUIView.swift; sourceTree = "<group>"; };
+		26FEC725254198E10056EC71 /* DWPreviewLargeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DWPreviewLargeUIView.swift; sourceTree = "<group>"; };
 		409837E21F6140AE005E56A9 /* TelldusLiveApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TelldusLiveApp.entitlements; path = TelldusLiveApp/TelldusLiveApp.entitlements; sourceTree = "<group>"; };
 		40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TelldusLiveApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5E2F044E48EA427F9C4A967C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -296,21 +308,18 @@
 		26B0663E252E282E009C3325 /* HomescreenWidget */ = {
 			isa = PBXGroup;
 			children = (
+				26FEC719254198680056EC71 /* UIViews */,
 				26B0663F252E282E009C3325 /* HomescreenWidget.swift */,
 				26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */,
 				2675DA672536CBE000802815 /* SensorWidgetIntent.intentdefinition */,
 				26B06642252E2832009C3325 /* Assets.xcassets */,
 				26B06644252E2832009C3325 /* Info.plist */,
-				2608B58A253732F300BF0A36 /* DeviceWidgetView.swift */,
 				2608B5912537330E00BF0A36 /* DeviceDetails.swift */,
-				2608B598253737FF00BF0A36 /* NotLoggedInView.swift */,
 				2608B5C5253752AE00BF0A36 /* SensorDetails.swift */,
 				2608B5CA253752DF00BF0A36 /* SensorWidgetView.swift */,
-				26FEC6D2254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift */,
 				26FEC6DB25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift */,
-				26FEC6E6254174900056EC71 /* EditWidgetInfoUIView.swift */,
-				26FEC6EB254179A40056EC71 /* DeviceWidgetPreviewUIView.swift */,
 				26FEC6F025417B720056EC71 /* CustomTypes.swift */,
+				26FEC6FD254184740056EC71 /* SensorWidgetPreviewUIView.swift */,
 			);
 			path = HomescreenWidget;
 			sourceTree = "<group>";
@@ -321,6 +330,55 @@
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		26FEC705254194100056EC71 /* SensorWidget */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SensorWidget;
+			sourceTree = "<group>";
+		};
+		26FEC706254194100056EC71 /* DeviceWidget */ = {
+			isa = PBXGroup;
+			children = (
+				26FEC72A2541996B0056EC71 /* PostEditView */,
+				26FEC71A254198910056EC71 /* Preview */,
+				2608B58A253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift */,
+				26FEC6D2254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift */,
+			);
+			path = DeviceWidget;
+			sourceTree = "<group>";
+		};
+		26FEC719254198680056EC71 /* UIViews */ = {
+			isa = PBXGroup;
+			children = (
+				26FEC706254194100056EC71 /* DeviceWidget */,
+				26FEC705254194100056EC71 /* SensorWidget */,
+				26FEC6E6254174900056EC71 /* EditWidgetInfoUIView.swift */,
+				2608B598253737FF00BF0A36 /* NotLoggedInView.swift */,
+			);
+			path = UIViews;
+			sourceTree = "<group>";
+		};
+		26FEC71A254198910056EC71 /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				26FEC71B254198BA0056EC71 /* DWPreviewSmallUIView.swift */,
+				26FEC720254198D10056EC71 /* DWPreviewMediumUIView.swift */,
+				26FEC725254198E10056EC71 /* DWPreviewLargeUIView.swift */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
+		26FEC72A2541996B0056EC71 /* PostEditView */ = {
+			isa = PBXGroup;
+			children = (
+				26FEC7072541942C0056EC71 /* DeviceWidgetSmallUIView.swift */,
+				26FEC70F254194470056EC71 /* DeviceWidgetMediumUIView.swift */,
+				26FEC714254194590056EC71 /* DeviceWidgetLargeUIView.swift */,
+			);
+			path = PostEditView;
 			sourceTree = "<group>";
 		};
 		35B6E1CA58815496FB5B4C7C /* Pods */ = {
@@ -768,19 +826,25 @@
 				2608B5CB253752DF00BF0A36 /* SensorWidgetView.swift in Sources */,
 				26B7FFA7252F324E00941737 /* WidgetModule.swift in Sources */,
 				260381D8253DAF8700D4F8CA /* Utilities.swift in Sources */,
+				26FEC726254198E10056EC71 /* DWPreviewLargeUIView.swift in Sources */,
 				26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */,
+				26FEC7082541942C0056EC71 /* DeviceWidgetSmallUIView.swift in Sources */,
 				2675DA692536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */,
 				260D61D7253D63DE00115423 /* SensorsAPI.swift in Sources */,
 				26FEC6F125417B720056EC71 /* CustomTypes.swift in Sources */,
 				260D61C9253D608E00115423 /* Constants.swift in Sources */,
-				2608B58C253732F300BF0A36 /* DeviceWidgetView.swift in Sources */,
+				2608B58C253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift in Sources */,
+				26FEC715254194590056EC71 /* DeviceWidgetLargeUIView.swift in Sources */,
+				26FEC71C254198BA0056EC71 /* DWPreviewSmallUIView.swift in Sources */,
 				26FEC6D4254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift in Sources */,
 				26035744253ED333000798D1 /* DevicesAPI.swift in Sources */,
 				2608B5C6253752AE00BF0A36 /* SensorDetails.swift in Sources */,
 				260D619C253D578800115423 /* SQLiteError.swift in Sources */,
 				260D61AD253D5D3B00115423 /* API.swift in Sources */,
+				26FEC6FE254184740056EC71 /* SensorWidgetPreviewUIView.swift in Sources */,
 				263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */,
-				26FEC6EC254179A40056EC71 /* DeviceWidgetPreviewUIView.swift in Sources */,
+				26FEC710254194470056EC71 /* DeviceWidgetMediumUIView.swift in Sources */,
+				26FEC721254198D10056EC71 /* DWPreviewMediumUIView.swift in Sources */,
 				26FEC6DC25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift in Sources */,
 				26B06645252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */,
 			);

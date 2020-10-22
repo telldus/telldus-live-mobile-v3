@@ -9,6 +9,7 @@
 import Foundation
 
 public struct SensorDetails {
-  public let id: String
-  public let name: String
+  let id: String
+  let name: String
+  let displayType: WidgetViewType
 }

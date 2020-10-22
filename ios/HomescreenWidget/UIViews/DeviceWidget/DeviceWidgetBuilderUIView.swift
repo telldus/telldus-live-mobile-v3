@@ -20,19 +20,14 @@ struct DeviceProvider: IntentTimelineProvider {
   }
   
   func getSnapshot(for configuration: DeviceWidgetIntent, in context: Context, completion: @escaping (DeviceSimpleEntry) -> ()) {
-    if context.isPreview {
-      let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(
-        id: "",
-        name: "",
-        displayType: WidgetViewType.preview
-      ))
-      completion(entry)
-      return
+    var displayType = WidgetViewType.preEditView
+    if (context.isPreview) {
+      displayType = WidgetViewType.preview
     }
     let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(
       id: "",
       name: "",
-      displayType: WidgetViewType.preEditView
+      displayType: displayType
     ))
     completion(entry)
   }
@@ -76,7 +71,7 @@ struct DeviceWidgetEntryView : View {
     if (data == nil) {
       return AnyView(NotLoggedInView())
     } else {
-      return AnyView(DeviceWidgetView(deviceDetails: entry.deviceDetails))
+      return AnyView(DeviceWidgetUIViewProvider(deviceDetails: entry.deviceDetails))
     }
   }
 }

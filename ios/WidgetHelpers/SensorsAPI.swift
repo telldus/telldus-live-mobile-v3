@@ -27,7 +27,8 @@ class SensorsAPI {
           let name = sensor["name"] as! String;
           let sensorDetails = SensorDetails(
             id: id,
-            name: name
+            name: name,
+            displayType: WidgetViewType.postEditView
           )
           itemsList.append(sensorDetails)
         }
