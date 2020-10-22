@@ -1,5 +1,5 @@
 //
-//  SensorWidgetPreviewUIView.swift
+//  SWPreviewSmallUIView.swift
 //  HomescreenWidgetExtension
 //
 //  Created by Rimnesh Fernandez on 22/10/20.
@@ -8,13 +8,16 @@
 
 import SwiftUI
 
-struct SensorWidgetPreviewUIView: View {
+struct SWPreviewSmallUIView: View {
   var body: some View {
     ZStack {
       Color(UIColor.systemIndigo)
       VStack {
-        Text("This is sensor widget preview")
+        Text("Small Widget Preview")
           .font(.headline)
+          .foregroundColor(.white)
+        Text("This is sensor widget preview")
+          .font(.caption)
           .multilineTextAlignment(.center)
           .padding(.top, 5)
           .padding([.leading, .trailing])
@@ -24,8 +27,8 @@ struct SensorWidgetPreviewUIView: View {
   }
 }
 
-struct SensorWidgetPreviewUIView_Previews: PreviewProvider {
-  static var previews: some View {
-    SensorWidgetPreviewUIView()
-  }
+struct SWPreviewSmallUIView_Previews: PreviewProvider {
+    static var previews: some View {
+        SWPreviewSmallUIView()
+    }
 }

@@ -71,7 +71,7 @@ struct SensorWidgetEntryView : View {
     if (data == nil) {
       return AnyView(NotLoggedInView())
     }
-    return AnyView(SensorWidgetView(sensorDetails: entry.sensorDetails))
+    return AnyView(SensorWidgetUIViewProvider(sensorDetails: entry.sensorDetails))
   }
 }
 
