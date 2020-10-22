@@ -73,6 +73,11 @@
 		26DD7C6424167ABE00052599 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DD7C6324167ABE00052599 /* StoreKit.framework */; };
 		26FEC6D4254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6D2254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift */; };
 		26FEC6DC25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6DB25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift */; };
+		26FEC6E7254174900056EC71 /* EditWidgetInfoUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6E6254174900056EC71 /* EditWidgetInfoUIView.swift */; };
+		26FEC6EC254179A40056EC71 /* DeviceWidgetPreviewUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6EB254179A40056EC71 /* DeviceWidgetPreviewUIView.swift */; };
+		26FEC6F125417B720056EC71 /* CustomTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6F025417B720056EC71 /* CustomTypes.swift */; };
+		26FEC6F525417C670056EC71 /* CustomTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6F025417B720056EC71 /* CustomTypes.swift */; };
+		26FEC6F925417C680056EC71 /* CustomTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC6F025417B720056EC71 /* CustomTypes.swift */; };
 		40D7C76A1F73AB9C0078E086 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */; };
 		59F114B4AC654FA7AAF457B4 /* SFNS Display.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F455C17D479C4210A202688C /* SFNS Display.ttf */; };
 		68CC7CCADF574C7AB546E29B /* telldusicons.svg in Resources */ = {isa = PBXBuildFile; fileRef = DB8C12D469844F34ABBA0A64 /* telldusicons.svg */; };
@@ -169,6 +174,9 @@
 		26EDB68122266ACF003EF9E3 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		26FEC6D2254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetBuilderUIView.swift; sourceTree = "<group>"; };
 		26FEC6DB25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetBuilderUIView.swift; sourceTree = "<group>"; };
+		26FEC6E6254174900056EC71 /* EditWidgetInfoUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWidgetInfoUIView.swift; sourceTree = "<group>"; };
+		26FEC6EB254179A40056EC71 /* DeviceWidgetPreviewUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetPreviewUIView.swift; sourceTree = "<group>"; };
+		26FEC6F025417B720056EC71 /* CustomTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTypes.swift; sourceTree = "<group>"; };
 		409837E21F6140AE005E56A9 /* TelldusLiveApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TelldusLiveApp.entitlements; path = TelldusLiveApp/TelldusLiveApp.entitlements; sourceTree = "<group>"; };
 		40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TelldusLiveApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5E2F044E48EA427F9C4A967C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -300,6 +308,9 @@
 				2608B5CA253752DF00BF0A36 /* SensorWidgetView.swift */,
 				26FEC6D2254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift */,
 				26FEC6DB25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift */,
+				26FEC6E6254174900056EC71 /* EditWidgetInfoUIView.swift */,
+				26FEC6EB254179A40056EC71 /* DeviceWidgetPreviewUIView.swift */,
+				26FEC6F025417B720056EC71 /* CustomTypes.swift */,
 			);
 			path = HomescreenWidget;
 			sourceTree = "<group>";
@@ -702,6 +713,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26FEC6F525417C670056EC71 /* CustomTypes.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				260D61C8253D608E00115423 /* Constants.swift in Sources */,
 				26B06646252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */,
@@ -732,6 +744,7 @@
 				26C93D702536CDC6005191C2 /* SensorWidgetIntent.intentdefinition in Sources */,
 				260D61E3253D667B00115423 /* SensorDetails.swift in Sources */,
 				260D619D253D578800115423 /* SQLiteError.swift in Sources */,
+				26FEC6F925417C680056EC71 /* CustomTypes.swift in Sources */,
 				26D2B626253ED66900EB096F /* DeviceDetails.swift in Sources */,
 				260381D9253DAF8700D4F8CA /* Utilities.swift in Sources */,
 				26AAF5B82536DABB008B5E29 /* WidgetModule.swift in Sources */,
@@ -747,6 +760,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26FEC6E7254174900056EC71 /* EditWidgetInfoUIView.swift in Sources */,
 				2608B59A253737FF00BF0A36 /* NotLoggedInView.swift in Sources */,
 				2608B5932537330E00BF0A36 /* DeviceDetails.swift in Sources */,
 				260D61A3253D57AC00115423 /* SQLiteDatabase.swift in Sources */,
@@ -757,6 +771,7 @@
 				26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */,
 				2675DA692536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */,
 				260D61D7253D63DE00115423 /* SensorsAPI.swift in Sources */,
+				26FEC6F125417B720056EC71 /* CustomTypes.swift in Sources */,
 				260D61C9253D608E00115423 /* Constants.swift in Sources */,
 				2608B58C253732F300BF0A36 /* DeviceWidgetView.swift in Sources */,
 				26FEC6D4254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift in Sources */,
@@ -765,6 +780,7 @@
 				260D619C253D578800115423 /* SQLiteError.swift in Sources */,
 				260D61AD253D5D3B00115423 /* API.swift in Sources */,
 				263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */,
+				26FEC6EC254179A40056EC71 /* DeviceWidgetPreviewUIView.swift in Sources */,
 				26FEC6DC25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift in Sources */,
 				26B06645252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */,
 			);

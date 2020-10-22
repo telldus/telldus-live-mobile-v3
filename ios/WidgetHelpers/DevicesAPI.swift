@@ -27,7 +27,8 @@ class DevicesAPI {
           let name = device["name"] as! String;
           let deviceDetails = DeviceDetails(
             id: id,
-            name: name
+            name: name,
+            displayType: WidgetViewType.postEditView
           )
           itemsList.append(deviceDetails)
         }

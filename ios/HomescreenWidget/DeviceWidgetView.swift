@@ -15,16 +15,23 @@ struct DeviceWidgetView: View {
   @available(iOS 13.0.0, *)
   var body: some View {
     let name = deviceDetails.name
-    return ZStack {
-      Color(UIColor.systemIndigo)
-      VStack {
-        Text(name)
-          .font(.headline)
-          .multilineTextAlignment(.center)
-          .padding(.top, 5)
-          .padding([.leading, .trailing])
-          .foregroundColor(.white)
-      }
+    switch deviceDetails.displayType {
+    case .preview:
+      return AnyView(DeviceWidgetPreviewUIView())
+    case .preEditView:
+      return AnyView(EditWidgetInfoUIView())
+    case .postEditView:
+      return AnyView(ZStack {
+        Color(UIColor.systemIndigo)
+        VStack {
+          Text(name)
+            .font(.headline)
+            .multilineTextAlignment(.center)
+            .padding(.top, 5)
+            .padding([.leading, .trailing])
+            .foregroundColor(.white)
+        }
+      })
     }
   }
 }

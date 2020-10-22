@@ -12,11 +12,28 @@ import Intents
 
 struct DeviceProvider: IntentTimelineProvider {
   func placeholder(in context: Context) -> DeviceSimpleEntry {
-    DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(id: "", name: "Placeholder"))
+    DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(
+      id: "",
+      name: "",
+      displayType: WidgetViewType.preEditView
+    ))
   }
   
   func getSnapshot(for configuration: DeviceWidgetIntent, in context: Context, completion: @escaping (DeviceSimpleEntry) -> ()) {
-    let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(id: "", name: "Snapshot"))
+    if context.isPreview {
+      let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(
+        id: "",
+        name: "",
+        displayType: WidgetViewType.preview
+      ))
+      completion(entry)
+      return
+    }
+    let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(
+      id: "",
+      name: "",
+      displayType: WidgetViewType.preEditView
+    ))
     completion(entry)
   }
   
@@ -27,9 +44,17 @@ struct DeviceProvider: IntentTimelineProvider {
     let currentDate = Date()
     for hourOffset in 0 ..< 5 {
       let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-      let name = configuration.item?.displayString ?? "no name"
+      let name = configuration.item?.displayString ?? ""
       let id = configuration.item?.identifier ?? ""
-      let entry = DeviceSimpleEntry(date: entryDate, deviceDetails: DeviceDetails(id: id, name: name))
+      var displayType = WidgetViewType.postEditView
+      if (configuration.item?.identifier == nil) {
+        displayType = WidgetViewType.preEditView
+      }
+      let entry = DeviceSimpleEntry(date: entryDate, deviceDetails: DeviceDetails(
+        id: id,
+        name: name,
+        displayType: displayType
+      ))
       entries.append(entry)
     }
     
