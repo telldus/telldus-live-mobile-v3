@@ -85,5 +85,6 @@ struct DeviceWidgetBuilderUIView: Widget {
     }
     .configurationDisplayName("Device Widget")
     .description("This is an example device widget.")
+    .supportedFamilies([.systemSmall, .systemMedium])
   }
 }

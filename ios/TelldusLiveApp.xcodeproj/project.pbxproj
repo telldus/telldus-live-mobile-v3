@@ -344,8 +344,8 @@
 			children = (
 				26FEC73725419E9F0056EC71 /* PostEditView */,
 				26FEC73825419E9F0056EC71 /* Preview */,
-				26FEC6DB25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift */,
 				2608B5CA253752DF00BF0A36 /* SensorWidgetUIViewProvider.swift */,
+				26FEC6DB25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift */,
 			);
 			path = SensorWidget;
 			sourceTree = "<group>";
