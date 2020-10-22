@@ -86,6 +86,9 @@ import {
 	isBasicUser,
 	hasAPremiumAccount,
 } from '../Lib/appUtils';
+import {
+	TEST_ACCOUNTS,
+} from '../../Config';
 
 let retryQueueSchedule = {};
 let retryQueueEvent = {};
@@ -104,6 +107,7 @@ function setupGeoFence(intl: Object): ThunkAction {
 			user: {
 				firebaseRemoteConfig = {},
 				accounts = {},
+				userProfile = {},
 			},
 			geoFence = {},
 		} = getState();
@@ -111,8 +115,9 @@ function setupGeoFence(intl: Object): ThunkAction {
 		const { enable } = JSON.parse(geoFenceFeature);
 
 		const hasAPremAccount = hasAPremiumAccount(accounts);
+		const isTestAccount = TEST_ACCOUNTS.indexOf(userProfile.uuid) !== -1; // NOTE: Always enable geofence option for test accounts
 
-		if (!enable || !hasAPremAccount) {
+		if ((!enable || !hasAPremAccount) && !isTestAccount) {
 			const state = await BackgroundGeolocation.getState();
 			if (state.enabled) {
 				BackgroundGeolocation.stop();

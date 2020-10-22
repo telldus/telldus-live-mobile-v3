@@ -1,0 +1,3 @@
+- Remove redeem voucher from iOS
+- Crashfix in Android
+

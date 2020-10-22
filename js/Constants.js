@@ -79,4 +79,7 @@ module.exports = {
 		'433': '433',
 	},
 	CAMPAIGNS_URL: 'https://live.telldus.com/profile/campaigns',
+	TEST_ACCOUNTS: [
+		'9e240224-1759-4246-aeef-484b01215195',
+	],
 };
