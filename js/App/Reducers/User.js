@@ -597,5 +597,6 @@ export const getUserProfile = createSelector(
 		lastname: '',
 		email: '',
 		eula: 1,
+		uuid: '',
 	},
 );
