@@ -23,12 +23,13 @@ class SensorsAPI {
         }
         var itemsList: [SensorDetails] = []
         for sensor in sensors {
-          let id = sensor["id"] as! String;
-          let name = sensor["name"] as! String;
+          let id = sensor["id"] as! String
+          let name = sensor["name"] as! String
+          let data = sensor["data"] as? Array<Dictionary<String, Any>> ?? []
           let sensorDetails = SensorDetails(
             id: id,
             name: name,
-            displayType: WidgetViewType.postEditView
+            data: data
           )
           itemsList.append(sensorDetails)
         }

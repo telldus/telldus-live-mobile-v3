@@ -12,7 +12,7 @@ import Intents
 
 struct SensorProvider: IntentTimelineProvider {
   func placeholder(in context: Context) -> SensorSimpleEntry {
-    SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(
+    SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
       id: "",
       name: "",
       displayType: WidgetViewType.preEditView
@@ -24,7 +24,7 @@ struct SensorProvider: IntentTimelineProvider {
     if (context.isPreview) {
       displayType = WidgetViewType.preview
     }
-    let entry = SensorSimpleEntry(date: Date(), sensorDetails: SensorDetails(
+    let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
       id: "",
       name: "",
       displayType: displayType
@@ -45,7 +45,7 @@ struct SensorProvider: IntentTimelineProvider {
       if (configuration.item?.identifier == nil) {
         displayType = WidgetViewType.preEditView
       }
-      let entry = SensorSimpleEntry(date: entryDate, sensorDetails: SensorDetails(
+      let entry = SensorSimpleEntry(date: entryDate, sensorWidgetStructure: SensorWidgetStructure(
         id: id,
         name: name,
         displayType: displayType
@@ -60,7 +60,7 @@ struct SensorProvider: IntentTimelineProvider {
 
 struct SensorSimpleEntry: TimelineEntry {
   let date: Date
-  let sensorDetails: SensorDetails
+  let sensorWidgetStructure: SensorWidgetStructure
 }
 
 struct SensorWidgetEntryView : View {
@@ -71,7 +71,7 @@ struct SensorWidgetEntryView : View {
     if (data == nil) {
       return AnyView(NotLoggedInView())
     }
-    return AnyView(SensorWidgetUIViewProvider(sensorDetails: entry.sensorDetails))
+    return AnyView(SensorWidgetUIViewProvider(sensorWidgetStructure: entry.sensorWidgetStructure))
   }
 }
 

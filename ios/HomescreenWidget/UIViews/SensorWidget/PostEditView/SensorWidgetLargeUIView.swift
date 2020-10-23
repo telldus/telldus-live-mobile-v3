@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct SensorWidgetLargeUIView: View {
-  let sensorDetails: SensorDetails
+  let sensorWidgetStructure: SensorWidgetStructure
   var body: some View {
-    let name = sensorDetails.name
+    let name = sensorWidgetStructure.name
     ZStack {
       Color(UIColor.systemIndigo)
       VStack {

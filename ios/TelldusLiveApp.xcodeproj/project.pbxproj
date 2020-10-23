@@ -52,6 +52,9 @@
 		267D2AC025429DD1002F49AE /* SensorClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267D2ABF25429DD1002F49AE /* SensorClass.swift */; };
 		267D2AC125429DD1002F49AE /* SensorClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267D2ABF25429DD1002F49AE /* SensorClass.swift */; };
 		267D2AC225429DD1002F49AE /* SensorClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267D2ABF25429DD1002F49AE /* SensorClass.swift */; };
+		267D2ACA2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267D2AC92542D75D002F49AE /* SensorWidgetStructure.swift */; };
+		267D2ACB2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267D2AC92542D75D002F49AE /* SensorWidgetStructure.swift */; };
+		267D2ACC2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267D2AC92542D75D002F49AE /* SensorWidgetStructure.swift */; };
 		26AAF5B82536DABB008B5E29 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B7FF9F252F2F9500941737 /* WidgetModule.swift */; };
 		26B0663C252E282E009C3325 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B024F93E1200DA89F5 /* WidgetKit.framework */; };
 		26B0663D252E282E009C3325 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B224F93E1200DA89F5 /* SwiftUI.framework */; };
@@ -165,6 +168,7 @@
 		2675DA4A2536C9B600802815 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2675DA672536CBE000802815 /* SensorWidgetIntent.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = SensorWidgetIntent.intentdefinition; sourceTree = "<group>"; };
 		267D2ABF25429DD1002F49AE /* SensorClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorClass.swift; sourceTree = "<group>"; };
+		267D2AC92542D75D002F49AE /* SensorWidgetStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetStructure.swift; sourceTree = "<group>"; };
 		26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		26B0663F252E282E009C3325 /* HomescreenWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenWidget.swift; sourceTree = "<group>"; };
 		26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = DeviceWidgetIntent.intentdefinition; sourceTree = "<group>"; };
@@ -351,6 +355,7 @@
 				2608B5CA253752DF00BF0A36 /* SensorWidgetUIViewProvider.swift */,
 				26FEC6DB25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift */,
 				267D2ABF25429DD1002F49AE /* SensorClass.swift */,
+				267D2AC92542D75D002F49AE /* SensorWidgetStructure.swift */,
 			);
 			path = SensorWidget;
 			sourceTree = "<group>";
@@ -812,6 +817,7 @@
 				260D61C8253D608E00115423 /* Constants.swift in Sources */,
 				26B06646252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */,
 				260D61D6253D63DE00115423 /* SensorsAPI.swift in Sources */,
+				267D2ACA2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */,
 				26B7FFA4252F2FB200941737 /* WidgetModuleBridge.m in Sources */,
 				260D61A2253D57AC00115423 /* SQLiteDatabase.swift in Sources */,
 				260381D7253DAF8700D4F8CA /* Utilities.swift in Sources */,
@@ -838,6 +844,7 @@
 				260D61D1253D60E200115423 /* CI.swift in Sources */,
 				26C93D702536CDC6005191C2 /* SensorWidgetIntent.intentdefinition in Sources */,
 				260D61E3253D667B00115423 /* SensorDetails.swift in Sources */,
+				267D2ACC2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */,
 				260D619D253D578800115423 /* SQLiteError.swift in Sources */,
 				26FEC6F925417C680056EC71 /* CustomTypes.swift in Sources */,
 				267D2AC225429DD1002F49AE /* SensorClass.swift in Sources */,
@@ -865,6 +872,7 @@
 				2608B5CB253752DF00BF0A36 /* SensorWidgetUIViewProvider.swift in Sources */,
 				26B7FFA7252F324E00941737 /* WidgetModule.swift in Sources */,
 				260381D8253DAF8700D4F8CA /* Utilities.swift in Sources */,
+				267D2ACB2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */,
 				26FEC726254198E10056EC71 /* DWPreviewLargeUIView.swift in Sources */,
 				26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */,
 				26FEC73A25419EC00056EC71 /* SensorWidgetSmallUIView.swift in Sources */,

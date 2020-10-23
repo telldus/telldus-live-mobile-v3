@@ -11,12 +11,12 @@ import WidgetKit
 
 struct SensorWidgetUIViewProvider: View {
   
-  let sensorDetails: SensorDetails
+  let sensorWidgetStructure: SensorWidgetStructure
   @Environment(\.widgetFamily) var family: WidgetFamily
   
   @available(iOS 13.0.0, *)
   var body: some View {
-    switch sensorDetails.displayType {
+    switch sensorWidgetStructure.displayType {
     case .preview:
       switch family {
       case .systemSmall:
@@ -33,13 +33,13 @@ struct SensorWidgetUIViewProvider: View {
     case .postEditView:
       switch family {
       case .systemSmall:
-        return AnyView(SensorWidgetSmallUIView(sensorDetails: sensorDetails))
+        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
       case .systemMedium:
-        return AnyView(SensorWidgetMediumUIView(sensorDetails: sensorDetails))
+        return AnyView(SensorWidgetMediumUIView(sensorWidgetStructure: sensorWidgetStructure))
       case .systemLarge:
-        return AnyView(SensorWidgetLargeUIView(sensorDetails: sensorDetails))
+        return AnyView(SensorWidgetLargeUIView(sensorWidgetStructure: sensorWidgetStructure))
       default:
-        return AnyView(SensorWidgetSmallUIView(sensorDetails: sensorDetails))
+        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
       }
     }
   }

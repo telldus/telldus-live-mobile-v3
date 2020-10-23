@@ -11,5 +11,5 @@ import Foundation
 public struct SensorDetails {
   let id: String
   let name: String
-  let displayType: WidgetViewType
+  let data: Array<Dictionary<String, Any>>
 }

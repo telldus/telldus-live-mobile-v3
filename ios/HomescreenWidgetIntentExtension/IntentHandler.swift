@@ -19,11 +19,6 @@ class IntentHandler: INExtension {
   
 }
 
-struct WidgetItem {
-  var id: String;
-  var name: String;
-}
-
 extension IntentHandler: DeviceWidgetIntentHandling {
   func provideItemOptionsCollection(for intent: DeviceWidgetIntent, with completion: @escaping (INObjectCollection<DevicesList>?, Error?) -> Void) {
     DevicesAPI().getDevicesList() {itemsList in
@@ -52,8 +47,31 @@ extension IntentHandler: SensorWidgetIntentHandling {
   }
   
   func provideValueOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorValuesList>?, Error?) -> Swift.Void) {
-    var items = [SensorValuesList]()
-    completion(INObjectCollection(items: items), nil)
+    let item: SensorsList = intent.item ?? SensorsList(identifier: "", display: "")
+    let selectedSensorId = item.identifier!
+    var sensorValues: Array<Dictionary<String, Any>> = []
+    SensorsAPI().getSensorsList() {itemsList in
+      for item in itemsList {
+        if (item.id == selectedSensorId) {
+          sensorValues = item.data
+          break
+        }
+      }
+      var items = [SensorValuesList]()
+      if (sensorValues.count > 0) {
+        for valueInfo in sensorValues {
+          let name = valueInfo["name"] as! String
+          let scale = valueInfo["scale"] as! String
+          let key = "\(name)_\(scale)"
+          items.append(SensorValuesList(
+            identifier: key,
+            display: name
+          ))
+        }
+      }
+      
+      completion(INObjectCollection(items: items), nil)
+    }
   }
   
   func provideUpdateIntervalOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<UpdateIntervalList>?, Error?) -> Swift.Void) {
