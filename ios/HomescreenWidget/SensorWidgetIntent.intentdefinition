@@ -35,7 +35,7 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Select Sensor</string>
+					<string>Select a sensor</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>LMC9ji</string>
 					<key>INIntentParameterDisplayPriority</key>

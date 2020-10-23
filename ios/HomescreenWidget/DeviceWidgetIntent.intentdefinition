@@ -35,7 +35,7 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Select Device</string>
+					<string>Select a device</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>PYpMQa</string>
 					<key>INIntentParameterDisplayPriority</key>
