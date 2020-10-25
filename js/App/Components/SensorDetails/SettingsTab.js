@@ -940,7 +940,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { route } = ownProps;
 	const { id } = route.params || {};
-	const sensor = state.sensors.byId[id];
+	const sensor = state.sensors.byId[id] || {};
 
 	const {
 		dashboard,
@@ -960,7 +960,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { screen: currentScreen } = state.navigation;
 
 	return {
-		sensor: sensor ? sensor : {},
+		sensor,
 		inDashboard: !!sensorsByIdInCurrentDb[id],
 		isGatewayReachable: online && websocketOnline,
 		currentScreen,

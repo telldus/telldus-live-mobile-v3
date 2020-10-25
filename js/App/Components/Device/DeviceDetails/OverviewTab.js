@@ -277,8 +277,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { route } = ownProps;
 	const { id } = route.params || {};
-	const device = state.devices.byId[id];
-	const { clientId, clientDeviceId } = device ? device : {};
+	const device = state.devices.byId[id] || {};
+	const { clientId, clientDeviceId } = device;
 
 	const gateway = state.gateways.byId[clientId];
 	const {
