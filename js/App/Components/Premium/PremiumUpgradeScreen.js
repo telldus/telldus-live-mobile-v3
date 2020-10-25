@@ -170,7 +170,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 
 	React.useEffect((): Function => {
 		const didFocusSubscription = navigation.addListener(
-			'didFocus',
+			'focus',
 			(payload: Object) => {
 				if (!clearListeners) {
 					const listenerData = withInAppPurchaseListeners({
@@ -182,12 +182,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 				}
 			}
 		);
-
 		return () => {
 			clearListenersIAP();
-			if (didFocusSubscription && didFocusSubscription.remove) {
-				didFocusSubscription.remove();
-			}
+			didFocusSubscription();
 		};
 	}, [clearListeners]);
 
