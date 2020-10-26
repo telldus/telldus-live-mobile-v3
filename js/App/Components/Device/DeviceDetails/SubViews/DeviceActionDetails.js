@@ -106,6 +106,7 @@ class DeviceActionDetails extends View {
 			swatchWheelCover,
 			modesCoverStyle,
 			dot,
+			thumbSize,
 		} = this.getStyles(appLayout);
 		const sharedProps = {
 			...device,
@@ -229,7 +230,7 @@ class DeviceActionDetails extends View {
 							swatchesCover={swatchesCover}
 							colorWheelCover={colorWheelCover}
 							swatchWheelCover={swatchWheelCover}
-							thumbSize={15}
+							thumbSize={thumbSize}
 							showActionIndicator={false}/>
 					</>
 					}
@@ -274,7 +275,10 @@ class DeviceActionDetails extends View {
 		let swatchSize = Math.floor((deviceWidth - (itemsPadding + outerPadding + itemsBorder)) / numOfItemsPerRow);
 		swatchSize = swatchSize > swatchMaxSize ? swatchMaxSize : swatchSize;
 
+		const thumbSize = 15;
+
 		return {
+			thumbSize,
 			container: {
 				flex: 1,
 				alignItems: 'stretch',
@@ -335,6 +339,7 @@ class DeviceActionDetails extends View {
 				justifyContent: 'center',
 				alignSelf: 'center',
 				marginRight: -(padding / 2),
+				marginTop: thumbSize / 2,
 			},
 			swatchStyle: {
 				height: swatchSize,
