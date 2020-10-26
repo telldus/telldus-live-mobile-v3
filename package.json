@@ -49,6 +49,7 @@
     "global": "~4.4.0",
     "gravatar-api": "^1.5.0",
     "intl": "~1.2.5",
+    "jsc-android": "npm:@kudo-ci/jsc-android",
     "jwt-decode": "^2.2.0",
     "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#8a7fd4275591531ce58a8a9fe47b57a9691b6c5f",
     "lodash": "~4.17.11",
