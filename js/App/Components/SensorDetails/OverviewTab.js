@@ -240,8 +240,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { route } = ownProps;
 	const { id } = route.params || {};
-	const sensor = state.sensors.byId[id];
-	const { clientId } = sensor ? sensor : {};
+	const sensor = state.sensors.byId[id] || {};
+	const { clientId } = sensor;
 
 	const gateway = state.gateways.byId[clientId];
 	const {

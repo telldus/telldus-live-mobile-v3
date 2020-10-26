@@ -1158,8 +1158,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { route } = ownProps;
 	const { id } = route.params || {};
-	let device = state.devices.byId[id];
-	device = device ? device : {};
+	let device = state.devices.byId[id] || {};
 
 	const { clientId } = device;
 	const { online = false, websocketOnline = false, transports = '', type } = state.gateways.byId[clientId] || {};
@@ -1184,7 +1183,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	} = state.navigation;
 
 	return {
-		device: device ? device : {},
+		device,
 		inDashboard: !!devicesByIdInCurrentDb[id],
 		isGatewayReachable: online && websocketOnline,
 		addDevice433,

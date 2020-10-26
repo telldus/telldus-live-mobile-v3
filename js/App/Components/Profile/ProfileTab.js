@@ -327,7 +327,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					style={style}
 					enablePurchase={enable}/>
 				)}
-				{(isBasic && enable) && <ViewPremiumBenefitsButton
+				{true && <ViewPremiumBenefitsButton
 					navigation={navigation}/>}
 				{(hasMultipleAccounts && hasAPremAccount) && <LogoutButton
 					buttonAccessibleProp={true}
