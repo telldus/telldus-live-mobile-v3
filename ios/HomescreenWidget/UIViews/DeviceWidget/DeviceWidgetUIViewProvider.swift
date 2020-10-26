@@ -11,12 +11,12 @@ import WidgetKit
 
 struct DeviceWidgetUIViewProvider: View {
   
-  let deviceDetails: DeviceDetails
+  let deviceWidgetStructure: DeviceWidgetStructure
   @Environment(\.widgetFamily) var family: WidgetFamily
   
   @available(iOS 13.0.0, *)
   var body: some View {
-    switch deviceDetails.displayType {
+    switch deviceWidgetStructure.displayType {
     case .preview:
       switch family {
       case .systemSmall:
@@ -33,13 +33,13 @@ struct DeviceWidgetUIViewProvider: View {
     case .postEditView:
       switch family {
       case .systemSmall:
-        return AnyView(DeviceWidgetSmallUIView(deviceDetails: deviceDetails))
+        return AnyView(DeviceWidgetSmallUIView(deviceWidgetStructure: deviceWidgetStructure))
       case .systemMedium:
-        return AnyView(DeviceWidgetMediumUIView(deviceDetails: deviceDetails))
+        return AnyView(DeviceWidgetMediumUIView(deviceWidgetStructure: deviceWidgetStructure))
       case .systemLarge:
-        return AnyView(DeviceWidgetLargeUIView(deviceDetails: deviceDetails))
+        return AnyView(DeviceWidgetLargeUIView(deviceWidgetStructure: deviceWidgetStructure))
       default:
-        return AnyView(DeviceWidgetSmallUIView(deviceDetails: deviceDetails))
+        return AnyView(DeviceWidgetSmallUIView(deviceWidgetStructure: deviceWidgetStructure))
       }
     }
   }

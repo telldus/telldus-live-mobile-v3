@@ -11,8 +11,9 @@ import SwiftUI
 import Intents
 
 struct DeviceProvider: IntentTimelineProvider {
+  
   func placeholder(in context: Context) -> DeviceSimpleEntry {
-    DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(
+    return DeviceSimpleEntry(date: Date(), deviceWidgetStructure: DeviceWidgetStructure(
       id: "",
       name: "",
       displayType: WidgetViewType.preEditView
@@ -24,7 +25,7 @@ struct DeviceProvider: IntentTimelineProvider {
     if (context.isPreview) {
       displayType = WidgetViewType.preview
     }
-    let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(
+    let entry = DeviceSimpleEntry(date: Date(), deviceWidgetStructure: DeviceWidgetStructure(
       id: "",
       name: "",
       displayType: displayType
@@ -33,7 +34,6 @@ struct DeviceProvider: IntentTimelineProvider {
   }
   
   func getTimeline(for configuration: DeviceWidgetIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-    
     let name = configuration.item?.displayString ?? ""
     let id = configuration.item?.identifier ?? ""
     var displayType = WidgetViewType.preEditView
@@ -41,7 +41,7 @@ struct DeviceProvider: IntentTimelineProvider {
       displayType = WidgetViewType.postEditView
     }
     
-    let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(
+    let entry = DeviceSimpleEntry(date: Date(), deviceWidgetStructure: DeviceWidgetStructure(
       id: id,
       name: name,
       displayType: displayType
@@ -54,7 +54,7 @@ struct DeviceProvider: IntentTimelineProvider {
 
 struct DeviceSimpleEntry: TimelineEntry {
   let date: Date
-  let deviceDetails: DeviceDetails
+  let deviceWidgetStructure: DeviceWidgetStructure
 }
 
 struct DeviceWidgetEntryView : View {
@@ -65,7 +65,7 @@ struct DeviceWidgetEntryView : View {
     if (data == nil) {
       return AnyView(NotLoggedInView())
     } else {
-      return AnyView(DeviceWidgetUIViewProvider(deviceDetails: entry.deviceDetails))
+      return AnyView(DeviceWidgetUIViewProvider(deviceWidgetStructure: entry.deviceWidgetStructure))
     }
   }
 }

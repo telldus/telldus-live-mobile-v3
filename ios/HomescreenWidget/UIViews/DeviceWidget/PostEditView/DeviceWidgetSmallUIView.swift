@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct DeviceWidgetSmallUIView: View {
-  let deviceDetails: DeviceDetails
+  let deviceWidgetStructure: DeviceWidgetStructure
   var body: some View {
-    let name = deviceDetails.name
+    let name = deviceWidgetStructure.name
     ZStack {
       Color(UIColor.systemIndigo)
       VStack {

@@ -50,6 +50,9 @@
 		261AD8142546C9B500415713 /* SQLTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD8132546C9B500415713 /* SQLTable.swift */; };
 		261AD8152546C9B500415713 /* SQLTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD8132546C9B500415713 /* SQLTable.swift */; };
 		261AD8162546C9B500415713 /* SQLTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD8132546C9B500415713 /* SQLTable.swift */; };
+		261AD81B2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
+		261AD81C2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
+		261AD81D2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
 		263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
 		264F3394244F459A0042BDEE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264F3393244F459A0042BDEE /* File.swift */; };
 		266B41D5234B03A200095747 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 266B41D4234B03A200095747 /* libRNGoogleSignin.a */; };
@@ -172,6 +175,7 @@
 		261AD8052546C8E400415713 /* DeviceWidgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetModel.swift; sourceTree = "<group>"; };
 		261AD80C2546C8F600415713 /* SensorWidgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetModel.swift; sourceTree = "<group>"; };
 		261AD8132546C9B500415713 /* SQLTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLTable.swift; sourceTree = "<group>"; };
+		261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetStructure.swift; sourceTree = "<group>"; };
 		264F3393244F459A0042BDEE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		265B40BC244F07D100446DE2 /* TelldusLiveApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TelldusLiveApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		266B41D4234B03A200095747 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -382,6 +386,7 @@
 				26FEC71A254198910056EC71 /* Preview */,
 				2608B58A253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift */,
 				26FEC6D2254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift */,
+				261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */,
 			);
 			path = DeviceWidget;
 			sourceTree = "<group>";
@@ -846,6 +851,7 @@
 				261AD80D2546C8F600415713 /* SensorWidgetModel.swift in Sources */,
 				260D61E7253D67B900115423 /* SensorDetails.swift in Sources */,
 				260D619B253D578800115423 /* SQLiteError.swift in Sources */,
+				261AD81B2546E88400415713 /* DeviceWidgetStructure.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				261AD8062546C8E400415713 /* DeviceWidgetModel.swift in Sources */,
 				260D61CF253D60E200115423 /* CI.swift in Sources */,
@@ -870,6 +876,7 @@
 				267D2AC225429DD1002F49AE /* SensorClass.swift in Sources */,
 				261AD80F2546C8F600415713 /* SensorWidgetModel.swift in Sources */,
 				26D2B626253ED66900EB096F /* DeviceDetails.swift in Sources */,
+				261AD81D2546E88400415713 /* DeviceWidgetStructure.swift in Sources */,
 				260381D9253DAF8700D4F8CA /* Utilities.swift in Sources */,
 				26AAF5B82536DABB008B5E29 /* WidgetModule.swift in Sources */,
 				260D61A4253D57AC00115423 /* SQLiteDatabase.swift in Sources */,
@@ -895,6 +902,7 @@
 				260381D8253DAF8700D4F8CA /* Utilities.swift in Sources */,
 				267D2ACB2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */,
 				26FEC726254198E10056EC71 /* DWPreviewLargeUIView.swift in Sources */,
+				261AD81C2546E88400415713 /* DeviceWidgetStructure.swift in Sources */,
 				26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */,
 				26FEC73A25419EC00056EC71 /* SensorWidgetSmallUIView.swift in Sources */,
 				26FEC7082541942C0056EC71 /* DeviceWidgetSmallUIView.swift in Sources */,
