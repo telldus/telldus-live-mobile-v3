@@ -1,6 +1,6 @@
 {
   "name": "TelldusLiveApp",
-  "version": "3.15.12",
+  "version": "3.15.14",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -50,8 +50,9 @@
     "global": "~4.4.0",
     "gravatar-api": "^1.5.0",
     "intl": "~1.2.5",
+    "jsc-android": "npm:@kudo-ci/jsc-android",
     "jwt-decode": "^2.2.0",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#d734c3ad8858d5136c548f3ab17b1990c514351c",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#8a7fd4275591531ce58a8a9fe47b57a9691b6c5f",
     "lodash": "~4.17.11",
     "node-forge": "~0.9.1",
     "react": "16.13.1",
@@ -113,7 +114,7 @@
     "redux-thunk": "^2.3.0",
     "reduxsauce": "^1.2.0",
     "reselect": "~4.0.0",
-    "rn-fetch-blob": "^0.12.0",
+    "rn-fetch-blob": "git+https://github.com/joltup/rn-fetch-blob.git#9110ef295c42139407607f425ac2d46a5866e872",
     "seamless-immutable": "^7.1.4",
     "svgs": "~4.1.1",
     "url": "~0.11.0",

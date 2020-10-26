@@ -106,6 +106,7 @@ class DeviceActionDetails extends View {
 			swatchWheelCover,
 			modesCoverStyle,
 			dot,
+			thumbSize,
 		} = this.getStyles(appLayout);
 		const sharedProps = {
 			...device,
@@ -229,7 +230,7 @@ class DeviceActionDetails extends View {
 							swatchesCover={swatchesCover}
 							colorWheelCover={colorWheelCover}
 							swatchWheelCover={swatchWheelCover}
-							thumbSize={15}
+							thumbSize={thumbSize}
 							showActionIndicator={false}/>
 					</>
 					}
@@ -263,10 +264,9 @@ class DeviceActionDetails extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const outerPadding = deviceWidth * Theme.Core.paddingFactor * 2;
-		const buttonPadding = 10;
-		const bodyPadding = buttonPadding * 1.5;
-
 		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const buttonPadding = padding;
+		const bodyPadding = buttonPadding * 1.5;
 
 		const swatchMaxSize = 80;
 		const numOfItemsPerRow = 5;
@@ -275,7 +275,10 @@ class DeviceActionDetails extends View {
 		let swatchSize = Math.floor((deviceWidth - (itemsPadding + outerPadding + itemsBorder)) / numOfItemsPerRow);
 		swatchSize = swatchSize > swatchMaxSize ? swatchMaxSize : swatchSize;
 
+		const thumbSize = 15;
+
 		return {
+			thumbSize,
 			container: {
 				flex: 1,
 				alignItems: 'stretch',
@@ -309,6 +312,8 @@ class DeviceActionDetails extends View {
 				width: width - (padding * 2),
 				height: deviceWidth * 0.52,
 				alignItems: 'center',
+				marginLeft: buttonPadding,
+				backgroundColor: 'transparent',
 			},
 			colorWheel: {
 				width: deviceWidth * 0.5,
@@ -334,6 +339,7 @@ class DeviceActionDetails extends View {
 				justifyContent: 'center',
 				alignSelf: 'center',
 				marginRight: -(padding / 2),
+				marginTop: thumbSize / 2,
 			},
 			swatchStyle: {
 				height: swatchSize,

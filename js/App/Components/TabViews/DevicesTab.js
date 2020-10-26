@@ -365,9 +365,10 @@ class DevicesTab extends View {
 	toggleHiddenList() {
 		const { rowsAndSections } = this.props;
 		const { hiddenList, visibleList } = rowsAndSections;
-
+		if (this.timeoutScrollToHidden) {
+			clearTimeout(this.timeoutScrollToHidden);
+		}
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
-
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
 		}, () => {
