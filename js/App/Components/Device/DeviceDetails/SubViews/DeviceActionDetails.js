@@ -263,10 +263,9 @@ class DeviceActionDetails extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const outerPadding = deviceWidth * Theme.Core.paddingFactor * 2;
-		const buttonPadding = 10;
-		const bodyPadding = buttonPadding * 1.5;
-
 		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const buttonPadding = padding;
+		const bodyPadding = buttonPadding * 1.5;
 
 		const swatchMaxSize = 80;
 		const numOfItemsPerRow = 5;
@@ -309,6 +308,8 @@ class DeviceActionDetails extends View {
 				width: width - (padding * 2),
 				height: deviceWidth * 0.52,
 				alignItems: 'center',
+				marginLeft: buttonPadding,
+				backgroundColor: 'transparent',
 			},
 			colorWheel: {
 				width: deviceWidth * 0.5,
