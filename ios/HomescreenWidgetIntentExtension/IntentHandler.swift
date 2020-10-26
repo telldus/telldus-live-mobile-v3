@@ -38,9 +38,11 @@ extension IntentHandler: SensorWidgetIntentHandling {
     SensorsAPI().getSensorsList() {itemsList in
       var items = [SensorsList]()
       for item in itemsList {
-        let sensorIntentObject =
-          SensorsList(identifier: item.id, display: item.name)
-        items.append(sensorIntentObject)
+        if (item.data.count > 0) {
+          let sensorIntentObject =
+            SensorsList(identifier: item.id, display: item.name)
+          items.append(sensorIntentObject)
+        }
       }
       completion(INObjectCollection(items: items), nil)
     }
