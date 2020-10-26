@@ -113,7 +113,7 @@
     "redux-thunk": "^2.3.0",
     "reduxsauce": "^1.2.0",
     "reselect": "~4.0.0",
-    "rn-fetch-blob": "^0.12.0",
+    "rn-fetch-blob": "git+https://github.com/joltup/rn-fetch-blob.git#9110ef295c42139407607f425ac2d46a5866e872",
     "seamless-immutable": "^7.1.4",
     "svgs": "~4.1.1",
     "url": "~0.11.0",
