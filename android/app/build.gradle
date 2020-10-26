@@ -279,6 +279,13 @@ dependencies {
     }
 }
 
+// TODO: See if required in react-native 0.63
+configurations.all {
+    resolutionStrategy {
+        force "com.facebook.soloader:soloader:0.8.2"
+    }
+}
+
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
 task copyDownloadableDepsToLibs(type: Copy) {
