@@ -22,7 +22,7 @@ class SQLiteDatabase {
     sqlite3_close(dbPointer)
   }
   
-  static func open(path: String?) throws -> SQLiteDatabase {
+  static func open(_ path: String?) throws -> SQLiteDatabase {
     var db: OpaquePointer?
     let _path = path ?? "\(pathDir)/widgetdb.sqlite3";
     if sqlite3_open(_path, &db) == SQLITE_OK {
@@ -42,5 +42,33 @@ class SQLiteDatabase {
       }
     }
   }
+
+  func prepareStatement(sql: String) throws -> OpaquePointer? {
+    var statement: OpaquePointer?
+    guard sqlite3_prepare_v2(dbPointer, sql, -1, &statement, nil)
+            == SQLITE_OK else {
+      throw SQLiteError.Prepare(message: errorMessage)
+    }
+    return statement
+  }
+
+  func createTable(table: SQLTable.Type) throws {
+    let createTableStatement = try prepareStatement(sql: table.createStatement)
+    defer {
+      sqlite3_finalize(createTableStatement)
+    }
+    guard sqlite3_step(createTableStatement) == SQLITE_DONE else {
+      throw SQLiteError.Step(message: errorMessage)
+    }
+    print("\(table) table created.")
+  }
   
+  var errorMessage: String {
+    if let errorPointer = sqlite3_errmsg(dbPointer) {
+      let errorMessage = String(cString: errorPointer)
+      return errorMessage
+    } else {
+      return "No error message provided from sqlite."
+    }
+  }
 }
