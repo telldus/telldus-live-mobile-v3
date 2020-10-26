@@ -33,27 +33,21 @@ struct DeviceProvider: IntentTimelineProvider {
   }
   
   func getTimeline(for configuration: DeviceWidgetIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-    var entries: [DeviceSimpleEntry] = []
     
-    // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-    let currentDate = Date()
-    for hourOffset in 0 ..< 5 {
-      let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-      let name = configuration.item?.displayString ?? ""
-      let id = configuration.item?.identifier ?? ""
-      var displayType = WidgetViewType.postEditView
-      if (configuration.item?.identifier == nil) {
-        displayType = WidgetViewType.preEditView
-      }
-      let entry = DeviceSimpleEntry(date: entryDate, deviceDetails: DeviceDetails(
-        id: id,
-        name: name,
-        displayType: displayType
-      ))
-      entries.append(entry)
+    let name = configuration.item?.displayString ?? ""
+    let id = configuration.item?.identifier ?? ""
+    var displayType = WidgetViewType.preEditView
+    if (configuration.item?.identifier != nil) {
+      displayType = WidgetViewType.postEditView
     }
     
-    let timeline = Timeline(entries: entries, policy: .atEnd)
+    let entry = DeviceSimpleEntry(date: Date(), deviceDetails: DeviceDetails(
+      id: id,
+      name: name,
+      displayType: displayType
+    ))
+    
+    let timeline = Timeline(entries: [entry], policy: .atEnd)
     completion(timeline)
   }
 }
