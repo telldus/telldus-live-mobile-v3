@@ -21,15 +21,21 @@ class IntentHandler: INExtension {
 
 extension IntentHandler: DeviceWidgetIntentHandling {
   func provideItemOptionsCollection(for intent: DeviceWidgetIntent, with completion: @escaping (INObjectCollection<DevicesList>?, Error?) -> Void) {
-    DevicesAPI().getDevicesList() {itemsList in
-      var items = [DevicesList]()
-      for item in itemsList {
-        let deviceIntentObject =
-          DevicesList(identifier: item.id, display: item.name)
-        items.append(deviceIntentObject)
-      }
-      completion(INObjectCollection(items: items), nil)
+    var db: SQLiteDatabase? = nil
+    var itemsList: Array<DeviceDetailsModel> = []
+    do {
+      db = try SQLiteDatabase.open(nil)
+      itemsList = db?.deviceDetailsModels() as! Array<DeviceDetailsModel>
+    } catch {
     }
+    
+    var items = [DevicesList]()
+    for item in itemsList {
+      let deviceIntentObject =
+        DevicesList(identifier: String(item.id), display: item.name)
+      items.append(deviceIntentObject)
+    }
+    completion(INObjectCollection(items: items), nil)
   }
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 
 class DevicesAPI {
-  func getDevicesList(completion: @escaping (Array<DeviceDetails>) -> Void)  {
+  func getDevicesList(completion: @escaping (Array<Dictionary<String, Any>>) -> Void)  {
     API().callEndPoint("/devices/list?supportedMethods=\(Constants.supportedMethods)&includeIgnored=1&extras=devicetype,transport,room") {result in
       switch result {
       case let .success(data):
@@ -21,18 +21,7 @@ class DevicesAPI {
           completion([]);
           return
         }
-        var itemsList: [DeviceDetails] = []
-        for device in devices {
-          let id = device["id"] as! String;
-          let name = device["name"] as! String;
-          let deviceDetails = DeviceDetails(
-            id: id,
-            name: name,
-            displayType: WidgetViewType.postEditView
-          )
-          itemsList.append(deviceDetails)
-        }
-        completion(itemsList)
+        completion(devices)
         return;
       case .failure(_):
         completion([]);

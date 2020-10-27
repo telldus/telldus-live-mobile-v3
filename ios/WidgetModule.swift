@@ -35,7 +35,10 @@ class WidgetModule: NSObject {
       "pro": pro,
     ]
     let stringifiedData = Utilities().convertDictionaryToString(dict: dict)
-    setSecureData(data: stringifiedData)
+    let status = setSecureData(data: stringifiedData)
+    if (status) {
+      APICacher().cacheAPIData()
+    }
   }
   
   func setSecureData(data: String) -> Bool {

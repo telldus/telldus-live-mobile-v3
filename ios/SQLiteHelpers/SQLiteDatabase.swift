@@ -9,9 +9,7 @@
 import Foundation
 import SQLite3
 
-let pathDir = NSSearchPathForDirectoriesInDomains(
-  .documentDirectory, .userDomainMask, true
-).first!
+let pathDir = FileManager().containerURL(forSecurityApplicationGroupIdentifier: "com.telldus.live.mobile")
 
 class SQLiteDatabase {
   private let dbPointer: OpaquePointer?
@@ -24,7 +22,7 @@ class SQLiteDatabase {
   
   static func open(_ path: String?) throws -> SQLiteDatabase {
     var db: OpaquePointer?
-    let _path = path ?? "\(pathDir)/widgetdb.sqlite3";
+    let _path = path ?? "\(pathDir!)/widgetdb.sqlite3";
     if sqlite3_open(_path, &db) == SQLITE_OK {
       return SQLiteDatabase(dbPointer: db)
     } else {
@@ -60,63 +58,118 @@ class SQLiteDatabase {
     guard sqlite3_step(createTableStatement) == SQLITE_DONE else {
       throw SQLiteError.Step(message: errorMessage)
     }
-    print("\(table) table created.")
   }
   
-  func insertDeviceWidgetModel(deviceWidgetModel: DeviceWidgetModel) throws {
-    let insertSql = """
-    INSERT INTO \(DeviceWidgetModel.DEVICE_WIDGET_TABLE_NAME)
-    (
-    \(DeviceWidgetModel.DEVICE_WIDGET_COLUMN_WIDGET_ID),
-    \(DeviceWidgetModel.DEVICE_WIDGET_COLUMN_DEVICE_ID),
-    \(DeviceWidgetModel.DEVICE_WIDGET_COLUMN_DEVICE_NAME)) VALUES (?, ?, ?);
-    """
-    let insertStatement = try prepareStatement(sql: insertSql)
+  func insertDeviceDetailsModel(deviceDetailsModel: DeviceDetailsModel) throws {
+    let insertStatement = try prepareStatement(sql: DeviceDetailsModel.insertStatement)
     defer {
       sqlite3_finalize(insertStatement)
     }
-    let name: NSString = deviceWidgetModel.deviceName as NSString
+    let name: NSString = deviceDetailsModel.name as NSString
+    let deviceType: NSString = deviceDetailsModel.deviceType as NSString
+    let stateValue: NSString = deviceDetailsModel.stateValue as NSString
     guard
-      sqlite3_bind_int(insertStatement, 1, Int32(deviceWidgetModel.widgetId)) == SQLITE_OK  &&
-        sqlite3_bind_int(insertStatement, 1, Int32(deviceWidgetModel.deviceId)) == SQLITE_OK  &&
-        sqlite3_bind_text(insertStatement, 2, name.utf8String, -1, nil)
-        == SQLITE_OK
+      sqlite3_bind_int(insertStatement, 1, Int32(deviceDetailsModel.id)) == SQLITE_OK  &&
+        sqlite3_bind_text(insertStatement, 2, name.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_int(insertStatement, 3, Int32(deviceDetailsModel.state)) == SQLITE_OK &&
+        sqlite3_bind_int(insertStatement, 4, Int32(deviceDetailsModel.methods)) == SQLITE_OK &&
+        sqlite3_bind_text(insertStatement, 5, deviceType.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_text(insertStatement, 6, stateValue.utf8String, -1, nil) == SQLITE_OK
     else {
       throw SQLiteError.Bind(message: errorMessage)
     }
     guard sqlite3_step(insertStatement) == SQLITE_DONE else {
       throw SQLiteError.Step(message: errorMessage)
     }
-    print("TEST Successfully inserted row.")
   }
   
-  func deviceWidgetModel(widgetId: Int32) -> DeviceWidgetModel? {
-    let querySql = """
-    SELECT * FROM \(DeviceWidgetModel.DEVICE_WIDGET_TABLE_NAME) WHERE
-    \(DeviceWidgetModel.DEVICE_WIDGET_COLUMN_WIDGET_ID) = ?;
-    """
-    guard let queryStatement = try? prepareStatement(sql: querySql) else {
+  func deviceDetailsModel(deviceId: Int32) -> DeviceDetailsModel? {
+    guard let queryStatement = try? prepareStatement(sql: DeviceDetailsModel.selectStatement) else {
       return nil
     }
     defer {
       sqlite3_finalize(queryStatement)
     }
-    guard sqlite3_bind_int(queryStatement, 1, widgetId) == SQLITE_OK else {
+    guard sqlite3_bind_int(queryStatement, 1, deviceId) == SQLITE_OK else {
       return nil
     }
     guard sqlite3_step(queryStatement) == SQLITE_ROW else {
       return nil
     }
-    let widgetId = sqlite3_column_int(queryStatement, 0)
-    let deviceId = sqlite3_column_int(queryStatement, 1)
-    guard let queryResultCol1 = sqlite3_column_text(queryStatement, 2) else {
-      print("Query result is nil.")
+    let id = sqlite3_column_int(queryStatement, 0)
+    guard let queryResultCol1 = sqlite3_column_text(queryStatement, 1) else {
       return nil
     }
-    let deviceName = String(cString: queryResultCol1)
-    return DeviceWidgetModel(widgetId: Int(widgetId),
-                             deviceId: Int(deviceId),
-                             deviceName: deviceName)
+    let name = String(cString: queryResultCol1)
+    let state = sqlite3_column_int(queryStatement, 2)
+    let methods = sqlite3_column_int(queryStatement, 3)
+    guard let queryResultCol4 = sqlite3_column_text(queryStatement, 4) else {
+      return nil
+    }
+    let deviceType = String(cString: queryResultCol4)
+    guard let queryResultCol5 = sqlite3_column_text(queryStatement, 5) else {
+      return nil
+    }
+    let stateValue = String(cString: queryResultCol5)
+    
+    return DeviceDetailsModel(
+      id: Int(id),
+      name: name,
+      state: Int(state),
+      methods: Int(methods),
+      deviceType: deviceType,
+      stateValue: stateValue
+    )
+  }
+  
+  func deviceDetailsModels() -> Array<DeviceDetailsModel?> {
+    var data: Array<DeviceDetailsModel?> = []
+    guard let queryStatement = try? prepareStatement(sql: DeviceDetailsModel.selectAllStatement) else {
+      return data
+    }
+    defer {
+      sqlite3_finalize(queryStatement)
+    }
+    
+    while sqlite3_step(queryStatement) == SQLITE_ROW {
+      let id = sqlite3_column_int(queryStatement, 0)
+      if let queryResultCol1 = sqlite3_column_text(queryStatement, 1),
+         let queryResultCol4 = sqlite3_column_text(queryStatement, 4),
+         let queryResultCol5 = sqlite3_column_text(queryStatement, 5)
+      {
+        let name = String(cString: queryResultCol1)
+        let state = sqlite3_column_int(queryStatement, 2)
+        let methods = sqlite3_column_int(queryStatement, 3)
+        let deviceType = String(cString: queryResultCol4)
+        let stateValue = String(cString: queryResultCol5)
+        data.append(DeviceDetailsModel(
+          id: Int(id),
+          name: name,
+          state: Int(state),
+          methods: Int(methods),
+          deviceType: deviceType,
+          stateValue: stateValue
+        ))
+      }
+    }
+    return data;
+  }
+  
+  func countDeviceDetailsModel() -> Int {
+    let querySql = """
+    SELECT count(*) FROM \(DeviceDetailsModel.DEVICE_DETAILS_TABLE_NAME)
+    """
+    guard let queryStatement = try? prepareStatement(sql: querySql) else {
+      return 0
+    }
+    defer {
+      sqlite3_finalize(queryStatement)
+    }
+    guard sqlite3_step(queryStatement) == SQLITE_ROW else {
+      return 0
+    }
+    let count = sqlite3_column_int(queryStatement, 0)
+    return Int(count)
   }
   
   var errorMessage: String {

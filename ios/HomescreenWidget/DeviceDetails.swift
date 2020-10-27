@@ -11,5 +11,8 @@ import Foundation
 public struct DeviceDetails {
   let id: String
   let name: String
-  let displayType: WidgetViewType
+  let state: Int
+  let methods: Int
+  let deviceType: String
+  let stateValue: String
 }
