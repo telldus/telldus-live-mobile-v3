@@ -173,7 +173,7 @@ class LoginForm extends View {
 									idToken: identityToken,
 									provider,
 									fullName: _fullName,
-									email: isPvtEmail ? '' : email,
+									email: isPvtEmail ? '' : (email || tokenJSON.email),
 								});
 								return;
 							}
