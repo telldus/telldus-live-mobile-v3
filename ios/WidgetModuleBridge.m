@@ -11,12 +11,6 @@
 
 @interface RCT_EXTERN_MODULE(WidgetModule, NSObject)
 
-RCT_EXTERN_METHOD(configureWidgetAuthData:(NSString *)accessToken
-                  refreshToken:(NSString *)refreshToken
-                  expiresIn:(NSString *)expiresIn
-                  clientId:(NSString *)clientId
-                  clientSecret:(NSString *)clientSecret
-                  userId:(NSString *)userId
-                  pro:(nonnull NSNumber *)pro)
+RCT_EXTERN_METHOD(configureWidgetAuthData:(NSDictionary *)authData)
 
 @end

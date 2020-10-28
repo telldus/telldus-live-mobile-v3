@@ -15,26 +15,9 @@ class WidgetModule: NSObject {
   let KEYCHAIN_SERVICE = "TelldusKeychain";
   let KEYCHAIN_ACCOUNT = "widgetData";
   
-  @objc(configureWidgetAuthData:refreshToken:expiresIn:clientId:clientSecret:userId:pro:)
-  func configureWidgetAuthData(
-    accessToken: String,
-    refreshToken: String,
-    expiresIn: String,
-    clientId: String,
-    clientSecret: String,
-    userId: String,
-    pro: NSNumber
-  ) -> Void {
-    let dict: Dictionary<String, Any> = [
-      "accessToken": accessToken,
-      "refreshToken": refreshToken,
-      "expiresIn": expiresIn,
-      "clientId": clientId,
-      "clientSecret": clientSecret,
-      "userId": userId,
-      "pro": pro,
-    ]
-    let stringifiedData = Utilities().convertDictionaryToString(dict: dict)
+  @objc(configureWidgetAuthData:)
+  func configureWidgetAuthData(authData: Dictionary<String, Any>) -> Void {
+    let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
     let status = setSecureData(data: stringifiedData)
     if (status) {
       APICacher().cacheAPIData()
