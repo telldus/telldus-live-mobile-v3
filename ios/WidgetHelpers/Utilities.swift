@@ -35,4 +35,17 @@ struct Utilities {
       return nil
     }
   }
+  
+  func getAuthData() -> Dictionary<String?, Any>? {
+    let data: String? = WidgetModule().getSecureData()
+    guard data != nil else {
+      return nil
+    }
+    
+    let dataDict: Dictionary<String?, Any>? = Utilities().stringToDictionary(string: data!)
+    guard dataDict != nil else {
+      return nil
+    }
+    return dataDict
+  }
 }
