@@ -26,13 +26,7 @@ enum Result<T> {
 
 class API {
   func callEndPoint(_ params: String, completion: @escaping (Result<Any>) -> Void) {
-    let data = WidgetModule().getSecureData()
-    guard data != nil else {
-      completion(Result.failure(AppError.noAuthToken))
-      return
-    }
-    
-    let dataDict = Utilities().stringToDictionary(string: data!)
+    let dataDict = Utilities().getAuthData()
     guard dataDict != nil else {
       completion(Result.failure(AppError.noAuthToken))
       return
