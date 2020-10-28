@@ -49,12 +49,10 @@ const widgetConfigure = (): ThunkAction => {
 	};
 };
 
-const widgetAndroidDisableAll = (): ThunkAction => {
+const widgetDisableAll = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
-		if (Platform.OS === 'android') {// TODO: Implement iOS
-			const { WidgetModule } = NativeModules;
-			WidgetModule.disableAllWidgets();
-		}
+		const { WidgetModule } = NativeModules;
+		WidgetModule.disableAllWidgets();
 		return;
 	};
 };
@@ -131,7 +129,7 @@ const setWidgetTextFontSizeFactor = (factor: number): Promise<number> => {
 module.exports = {
 	widgetConfigure,
 	widgetAndroidDisableWidget,
-	widgetAndroidDisableAll,
+	widgetDisableAll,
 	widgetAndroidRefreshSensors,
 	widgetAndroidRefreshDevices,
 	widgetAndroidRefresh,
