@@ -13,7 +13,7 @@ class SensorsAPI {
     API().callEndPoint("/sensors/list?includeValues=1&includeScale=1") {result in
       switch result {
       case let .success(data):
-        guard let dataNew = data as? [String:Any] else {
+        guard let dataNew = data["result"] as? [String:Any] else {
           completion([]);
           return
         }

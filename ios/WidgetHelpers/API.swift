@@ -20,7 +20,7 @@ enum AppError: Error {
 
 //Result enum to show success or failure
 enum Result<T> {
-  case success(T)
+  case success(Dictionary<String, Any>)
   case failure(AppError)
 }
 
@@ -80,7 +80,7 @@ class API {
             completion(Result.failure(AppError.unknownError(_error )))
             return
           }
-          completion(Result.success(json))
+          completion(Result.success(["result": json, "authData": dataDict]))
           return
         }
       } catch let error {

@@ -68,13 +68,26 @@ class SQLiteDatabase {
     let name: NSString = deviceDetailsModel.name as NSString
     let deviceType: NSString = deviceDetailsModel.deviceType as NSString
     let stateValue: NSString = deviceDetailsModel.stateValue as NSString
+    let userId: NSString = deviceDetailsModel.userId as NSString
+    let secStateValue: NSString = deviceDetailsModel.secStateValue as NSString
+    let requestedStateValue: NSString = deviceDetailsModel.requestedStateValue as NSString
+    let requestedSecStateValue: NSString = deviceDetailsModel.requestedSecStateValue as NSString
+    let userEmail: NSString = deviceDetailsModel.userEmail as NSString
     guard
       sqlite3_bind_int(insertStatement, 1, Int32(deviceDetailsModel.id)) == SQLITE_OK  &&
         sqlite3_bind_text(insertStatement, 2, name.utf8String, -1, nil) == SQLITE_OK &&
         sqlite3_bind_int(insertStatement, 3, Int32(deviceDetailsModel.state)) == SQLITE_OK &&
         sqlite3_bind_int(insertStatement, 4, Int32(deviceDetailsModel.methods)) == SQLITE_OK &&
         sqlite3_bind_text(insertStatement, 5, deviceType.utf8String, -1, nil) == SQLITE_OK &&
-        sqlite3_bind_text(insertStatement, 6, stateValue.utf8String, -1, nil) == SQLITE_OK
+        sqlite3_bind_text(insertStatement, 6, stateValue.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_text(insertStatement, 7, userId.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_text(insertStatement, 8, secStateValue.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_int(insertStatement, 9, Int32(deviceDetailsModel.methodRequested)) == SQLITE_OK &&
+        sqlite3_bind_int(insertStatement, 10, Int32(deviceDetailsModel.clientId)) == SQLITE_OK &&
+        sqlite3_bind_int(insertStatement, 11, Int32(deviceDetailsModel.clientDeviceId)) == SQLITE_OK &&
+        sqlite3_bind_text(insertStatement, 12, requestedStateValue.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_text(insertStatement, 13, requestedSecStateValue.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_text(insertStatement, 14, userEmail.utf8String, -1, nil) == SQLITE_OK
     else {
       throw SQLiteError.Bind(message: errorMessage)
     }
@@ -111,6 +124,29 @@ class SQLiteDatabase {
       return nil
     }
     let stateValue = String(cString: queryResultCol5)
+    guard let queryResultCol6 = sqlite3_column_text(queryStatement, 6) else {
+      return nil
+    }
+    let userId = String(cString: queryResultCol6)
+    guard let queryResultCol7 = sqlite3_column_text(queryStatement, 7) else {
+      return nil
+    }
+    let secStateValue = String(cString: queryResultCol7)
+    let methodRequested = sqlite3_column_int(queryStatement, 8)
+    let clientId = sqlite3_column_int(queryStatement, 9)
+    let clientDeviceId = sqlite3_column_int(queryStatement, 10)
+    guard let queryResultCol11 = sqlite3_column_text(queryStatement, 11) else {
+      return nil
+    }
+    let requestedStateValue = String(cString: queryResultCol11)
+    guard let queryResultCol12 = sqlite3_column_text(queryStatement, 12) else {
+      return nil
+    }
+    let requestedSecStateValue = String(cString: queryResultCol12)
+    guard let queryResultCol13 = sqlite3_column_text(queryStatement, 13) else {
+      return nil
+    }
+    let userEmail = String(cString: queryResultCol13)
     
     return DeviceDetailsModel(
       id: Int(id),
@@ -118,7 +154,15 @@ class SQLiteDatabase {
       state: Int(state),
       methods: Int(methods),
       deviceType: deviceType,
-      stateValue: stateValue
+      stateValue: stateValue,
+      userId: userId,
+      secStateValue: secStateValue,
+      methodRequested: Int(methodRequested),
+      clientId: Int(clientId),
+      clientDeviceId: Int(clientDeviceId),
+      requestedStateValue: requestedStateValue,
+      requestedSecStateValue: requestedSecStateValue,
+      userEmail: userEmail
     )
   }
   
@@ -137,18 +181,41 @@ class SQLiteDatabase {
          let queryResultCol4 = sqlite3_column_text(queryStatement, 4),
          let queryResultCol5 = sqlite3_column_text(queryStatement, 5)
       {
+        let queryResultCol6 = sqlite3_column_text(queryStatement, 6)!
+        let queryResultCol7 = sqlite3_column_text(queryStatement, 7)!
+        let queryResultCol11 = sqlite3_column_text(queryStatement, 11)!
+        let queryResultCol12 = sqlite3_column_text(queryStatement, 12)!
+        let queryResultCol13 = sqlite3_column_text(queryStatement, 13)!
+        
         let name = String(cString: queryResultCol1)
         let state = sqlite3_column_int(queryStatement, 2)
         let methods = sqlite3_column_int(queryStatement, 3)
         let deviceType = String(cString: queryResultCol4)
         let stateValue = String(cString: queryResultCol5)
+        let userId = String(cString: queryResultCol6)
+        let secStateValue = String(cString: queryResultCol7)
+        let methodRequested = sqlite3_column_int(queryStatement, 8)
+        let clientId = sqlite3_column_int(queryStatement, 9)
+        let clientDeviceId = sqlite3_column_int(queryStatement, 10)
+        let requestedStateValue = String(cString: queryResultCol11)
+        let requestedSecStateValue = String(cString: queryResultCol12)
+        let userEmail = String(cString: queryResultCol13)
+        
         data.append(DeviceDetailsModel(
           id: Int(id),
           name: name,
           state: Int(state),
           methods: Int(methods),
           deviceType: deviceType,
-          stateValue: stateValue
+          stateValue: stateValue,
+          userId: userId,
+          secStateValue: secStateValue,
+          methodRequested: Int(methodRequested),
+          clientId: Int(clientId),
+          clientDeviceId: Int(clientDeviceId),
+          requestedStateValue: requestedStateValue,
+          requestedSecStateValue: requestedSecStateValue,
+          userEmail: userEmail
         ))
       }
     }

@@ -18,7 +18,18 @@ struct APICacher {
       return
     }
     
-    DevicesAPI().getDevicesList() {devices in
+    DevicesAPI().getDevicesList() {result in
+      guard let devices = result["devices"] as? Array<Dictionary<String, Any>> else {
+        return
+      }
+      guard let authData = result["authData"] as? Dictionary<String, Any> else {
+        return
+      }
+      let email = authData["email"] as? String
+      let uuid = authData["uuid"] as? String
+      guard email != nil && uuid != nil else {
+        return
+      }
       for device in devices {
         let did = device["id"] as? String;
         guard did != nil else {
@@ -48,7 +59,15 @@ struct APICacher {
           state: state!,
           methods: methods!,
           deviceType: deviceType,
-          stateValue: stateValue
+          stateValue: stateValue,
+          userId: uuid!,
+          secStateValue: "",
+          methodRequested: 0,
+          clientId: 0,
+          clientDeviceId: 0,
+          requestedStateValue: "",
+          requestedSecStateValue: "",
+          userEmail: email!
         )
         do {
           try db?.insertDeviceDetailsModel(deviceDetailsModel: deviceDetailsModel)
