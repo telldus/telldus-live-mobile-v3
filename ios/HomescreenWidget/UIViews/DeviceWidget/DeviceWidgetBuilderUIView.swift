@@ -16,7 +16,8 @@ struct DeviceProvider: IntentTimelineProvider {
     return DeviceSimpleEntry(date: Date(), deviceWidgetStructure: DeviceWidgetStructure(
       id: "",
       name: "",
-      displayType: WidgetViewType.preEditView
+      displayType: WidgetViewType.preEditView,
+      theme: ThemesListDW.default
     ))
   }
   
@@ -28,23 +29,35 @@ struct DeviceProvider: IntentTimelineProvider {
     let entry = DeviceSimpleEntry(date: Date(), deviceWidgetStructure: DeviceWidgetStructure(
       id: "",
       name: "",
-      displayType: displayType
+      displayType: displayType,
+      theme: ThemesListDW.default
     ))
     completion(entry)
   }
   
   func getTimeline(for configuration: DeviceWidgetIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-    let name = configuration.item?.displayString ?? ""
+    var name = configuration.item?.displayString ?? ""
     let id = configuration.item?.identifier ?? ""
+    let theme = configuration.theme
     var displayType = WidgetViewType.preEditView
     if (configuration.item?.identifier != nil) {
       displayType = WidgetViewType.postEditView
+      
+      var db: SQLiteDatabase? = nil
+      do {
+        db = try SQLiteDatabase.open(nil)
+        if let deviceDetails = db?.deviceDetailsModel(deviceId: Int32(id)!) {
+          name = deviceDetails.name
+        }
+      } catch {
+      }
     }
     
     let entry = DeviceSimpleEntry(date: Date(), deviceWidgetStructure: DeviceWidgetStructure(
       id: id,
       name: name,
-      displayType: displayType
+      displayType: displayType,
+      theme: theme
     ))
     
     let timeline = Timeline(entries: [entry], policy: .atEnd)
