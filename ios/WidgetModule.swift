@@ -72,4 +72,20 @@ class WidgetModule: NSObject {
     let passwordData = dic[kSecValueData] as! Data
     return String(data: passwordData, encoding: .utf8)!
   }
+  
+  @objc(configureWidgetAuthData)
+  func disableAllWidgets() -> Void {
+    let authData: Dictionary<String, Any> = [
+      "accessToken": "null",
+      "refreshToken": "null",
+      "expiresIn": "null",
+      "clientId": "null",
+      "clientSecret": "null",
+      "email": "null",
+      "pro": -1,
+      "uuid": "null",
+    ]
+    let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
+    updateSecureData(data: stringifiedData)
+  }
 }

@@ -12,5 +12,6 @@
 @interface RCT_EXTERN_MODULE(WidgetModule, NSObject)
 
 RCT_EXTERN_METHOD(configureWidgetAuthData:(NSDictionary *)authData)
+RCT_EXTERN_METHOD(disableAllWidgets)
 
 @end
