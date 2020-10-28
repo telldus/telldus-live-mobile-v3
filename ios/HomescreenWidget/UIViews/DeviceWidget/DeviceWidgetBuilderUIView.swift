@@ -17,7 +17,8 @@ struct DeviceProvider: IntentTimelineProvider {
       id: "",
       name: "",
       displayType: WidgetViewType.preEditView,
-      theme: ThemesListDW.default
+      theme: ThemesListDW.default,
+      owningAccount: ""
     ))
   }
   
@@ -30,17 +31,25 @@ struct DeviceProvider: IntentTimelineProvider {
       id: "",
       name: "",
       displayType: displayType,
-      theme: ThemesListDW.default
+      theme: ThemesListDW.default,
+      owningAccount: ""
     ))
     completion(entry)
   }
   
   func getTimeline(for configuration: DeviceWidgetIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    
+    var displayType = WidgetViewType.preEditView
     var name = configuration.item?.displayString ?? ""
     let id = configuration.item?.identifier ?? ""
     let theme = configuration.theme
-    var displayType = WidgetViewType.preEditView
-    if (configuration.item?.identifier != nil) {
+    var owningAccount = ""
+    var owningUserId = ""
+    
+    let dataDict = Utilities().getAuthData()
+    if (dataDict == nil) {
+      displayType = WidgetViewType.notLoggedInView
+    } else if (configuration.item?.identifier != nil) {
       displayType = WidgetViewType.postEditView
       
       var db: SQLiteDatabase? = nil
@@ -48,6 +57,12 @@ struct DeviceProvider: IntentTimelineProvider {
         db = try SQLiteDatabase.open(nil)
         if let deviceDetails = db?.deviceDetailsModel(deviceId: Int32(id)!) {
           name = deviceDetails.name
+          owningAccount = deviceDetails.userEmail
+          owningUserId = deviceDetails.userId
+          let activeUserId = dataDict?["uuid"] as? String
+          if (owningUserId != activeUserId) {
+            displayType = WidgetViewType.notSameAccountView
+          }
         }
       } catch {
       }
@@ -57,7 +72,8 @@ struct DeviceProvider: IntentTimelineProvider {
       id: id,
       name: name,
       displayType: displayType,
-      theme: theme
+      theme: theme,
+      owningAccount: owningAccount
     ))
     
     let timeline = Timeline(entries: [entry], policy: .atEnd)
@@ -74,12 +90,7 @@ struct DeviceWidgetEntryView : View {
   var entry: DeviceProvider.Entry
   
   var body: some View {
-    let data = WidgetModule().getSecureData()
-    if (data == nil) {
-      return AnyView(NotLoggedInView())
-    } else {
-      return AnyView(DeviceWidgetUIViewProvider(deviceWidgetStructure: entry.deviceWidgetStructure))
-    }
+    return AnyView(DeviceWidgetUIViewProvider(deviceWidgetStructure: entry.deviceWidgetStructure))
   }
 }
 

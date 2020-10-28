@@ -41,6 +41,39 @@ struct DeviceWidgetUIViewProvider: View {
       default:
         return AnyView(DeviceWidgetSmallUIView(deviceWidgetStructure: deviceWidgetStructure))
       }
+    case .notLoggedInView:
+      switch family {
+      case .systemSmall:
+        return AnyView(NotLoggedInView())
+      case .systemMedium:
+        return AnyView(NotLoggedInView())
+      case .systemLarge:
+        return AnyView(NotLoggedInView())
+      default:
+        return AnyView(NotLoggedInView())
+      }
+    case .notSameAccountView:
+      switch family {
+      case .systemSmall:
+        return AnyView(NotSameAccountUIView(owningAccount: deviceWidgetStructure.owningAccount))
+      case .systemMedium:
+        return AnyView(NotSameAccountUIView(owningAccount: deviceWidgetStructure.owningAccount))
+      case .systemLarge:
+        return AnyView(NotSameAccountUIView(owningAccount: deviceWidgetStructure.owningAccount))
+      default:
+        return AnyView(NotSameAccountUIView(owningAccount: deviceWidgetStructure.owningAccount))
+      }
+    case .upgradeToPremiumView:
+      switch family {
+      case .systemSmall:
+        return AnyView(DeviceWidgetSmallUIView(deviceWidgetStructure: deviceWidgetStructure))
+      case .systemMedium:
+        return AnyView(DeviceWidgetMediumUIView(deviceWidgetStructure: deviceWidgetStructure))
+      case .systemLarge:
+        return AnyView(DeviceWidgetLargeUIView(deviceWidgetStructure: deviceWidgetStructure))
+      default:
+        return AnyView(DeviceWidgetSmallUIView(deviceWidgetStructure: deviceWidgetStructure))
+      }
     }
   }
 }

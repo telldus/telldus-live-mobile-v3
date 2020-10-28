@@ -14,5 +14,6 @@ public struct DeviceWidgetStructure {
   let name: String
   let displayType: WidgetViewType
   let theme: ThemesListDW
+  let owningAccount: String
 }
- 
+

@@ -41,6 +41,39 @@ struct SensorWidgetUIViewProvider: View {
       default:
         return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
       }
+    case .notLoggedInView:
+      switch family {
+      case .systemSmall:
+        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+      case .systemMedium:
+        return AnyView(SensorWidgetMediumUIView(sensorWidgetStructure: sensorWidgetStructure))
+      case .systemLarge:
+        return AnyView(SensorWidgetLargeUIView(sensorWidgetStructure: sensorWidgetStructure))
+      default:
+        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+      }
+    case .notSameAccountView:
+      switch family {
+      case .systemSmall:
+        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+      case .systemMedium:
+        return AnyView(SensorWidgetMediumUIView(sensorWidgetStructure: sensorWidgetStructure))
+      case .systemLarge:
+        return AnyView(SensorWidgetLargeUIView(sensorWidgetStructure: sensorWidgetStructure))
+      default:
+        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+      }
+    case .upgradeToPremiumView:
+      switch family {
+      case .systemSmall:
+        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+      case .systemMedium:
+        return AnyView(SensorWidgetMediumUIView(sensorWidgetStructure: sensorWidgetStructure))
+      case .systemLarge:
+        return AnyView(SensorWidgetLargeUIView(sensorWidgetStructure: sensorWidgetStructure))
+      default:
+        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+      }
     }
   }
 }

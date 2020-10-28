@@ -12,4 +12,7 @@ enum WidgetViewType {
   case preview
   case preEditView
   case postEditView
+  case notLoggedInView
+  case notSameAccountView
+  case upgradeToPremiumView
 }

@@ -53,6 +53,7 @@
 		261AD81B2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
 		261AD81C2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
 		261AD81D2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
+		261AE60125499EFC00084FAD /* NotSameAccountUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */; };
 		263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
 		264F3394244F459A0042BDEE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264F3393244F459A0042BDEE /* File.swift */; };
 		266B41D5234B03A200095747 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 266B41D4234B03A200095747 /* libRNGoogleSignin.a */; };
@@ -179,6 +180,7 @@
 		261AD80C2546C8F600415713 /* SensorWidgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetModel.swift; sourceTree = "<group>"; };
 		261AD8132546C9B500415713 /* SQLTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLTable.swift; sourceTree = "<group>"; };
 		261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetStructure.swift; sourceTree = "<group>"; };
+		261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSameAccountUIView.swift; sourceTree = "<group>"; };
 		264F3393244F459A0042BDEE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		265B40BC244F07D100446DE2 /* TelldusLiveApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TelldusLiveApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		266B41D4234B03A200095747 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -403,6 +405,7 @@
 				26FEC705254194100056EC71 /* SensorWidget */,
 				26FEC6E6254174900056EC71 /* EditWidgetInfoUIView.swift */,
 				2608B598253737FF00BF0A36 /* NotLoggedInView.swift */,
+				261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */,
 			);
 			path = UIViews;
 			sourceTree = "<group>";
@@ -936,6 +939,7 @@
 				26FEC74F25419F710056EC71 /* SWPreviewSmallUIView.swift in Sources */,
 				26FEC74225419EDB0056EC71 /* SensorWidgetLargeUIView.swift in Sources */,
 				26FEC721254198D10056EC71 /* DWPreviewMediumUIView.swift in Sources */,
+				261AE60125499EFC00084FAD /* NotSameAccountUIView.swift in Sources */,
 				26FEC6DC25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift in Sources */,
 				26B06645252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */,
 				261AD8152546C9B500415713 /* SQLTable.swift in Sources */,
