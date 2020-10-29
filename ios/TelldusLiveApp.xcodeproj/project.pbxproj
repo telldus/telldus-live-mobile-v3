@@ -56,6 +56,9 @@
 		261AE60125499EFC00084FAD /* NotSameAccountUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */; };
 		263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
 		264F3394244F459A0042BDEE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264F3393244F459A0042BDEE /* File.swift */; };
+		2658A9312549C9F000D9E8B2 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */; };
+		2658A9322549C9F000D9E8B2 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */; };
+		2658A9332549C9F000D9E8B2 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */; };
 		266B41D5234B03A200095747 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 266B41D4234B03A200095747 /* libRNGoogleSignin.a */; };
 		2675DA492536C9B600802815 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
 		2675DA4D2536C9B600802815 /* HomescreenWidgetIntentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -182,6 +185,7 @@
 		261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetStructure.swift; sourceTree = "<group>"; };
 		261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSameAccountUIView.swift; sourceTree = "<group>"; };
 		264F3393244F459A0042BDEE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetUtils.swift; sourceTree = "<group>"; };
 		265B40BC244F07D100446DE2 /* TelldusLiveApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TelldusLiveApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		266B41D4234B03A200095747 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetIntentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -361,6 +365,7 @@
 				2608B5912537330E00BF0A36 /* DeviceDetails.swift */,
 				2608B5C5253752AE00BF0A36 /* SensorDetails.swift */,
 				26FEC6F025417B720056EC71 /* CustomTypes.swift */,
+				2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */,
 			);
 			path = HomescreenWidget;
 			sourceTree = "<group>";
@@ -855,6 +860,7 @@
 				264F3394244F459A0042BDEE /* File.swift in Sources */,
 				2675DA682536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */,
 				26D2B622253ED4D800EB096F /* DeviceDetails.swift in Sources */,
+				2658A9312549C9F000D9E8B2 /* WidgetUtils.swift in Sources */,
 				261AD8142546C9B500415713 /* SQLTable.swift in Sources */,
 				261AD80D2546C8F600415713 /* SensorWidgetModel.swift in Sources */,
 				260D61E7253D67B900115423 /* SensorDetails.swift in Sources */,
@@ -878,6 +884,7 @@
 				261AD8082546C8E400415713 /* DeviceDetailsModel.swift in Sources */,
 				26C93D702536CDC6005191C2 /* SensorWidgetIntent.intentdefinition in Sources */,
 				260D61E3253D667B00115423 /* SensorDetails.swift in Sources */,
+				2658A9332549C9F000D9E8B2 /* WidgetUtils.swift in Sources */,
 				267D2ACC2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */,
 				260D619D253D578800115423 /* SQLiteError.swift in Sources */,
 				26FEC6F925417C680056EC71 /* CustomTypes.swift in Sources */,
@@ -937,6 +944,7 @@
 				263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */,
 				26FEC710254194470056EC71 /* DeviceWidgetMediumUIView.swift in Sources */,
 				26FEC74F25419F710056EC71 /* SWPreviewSmallUIView.swift in Sources */,
+				2658A9322549C9F000D9E8B2 /* WidgetUtils.swift in Sources */,
 				26FEC74225419EDB0056EC71 /* SensorWidgetLargeUIView.swift in Sources */,
 				26FEC721254198D10056EC71 /* DWPreviewMediumUIView.swift in Sources */,
 				261AE60125499EFC00084FAD /* NotSameAccountUIView.swift in Sources */,
