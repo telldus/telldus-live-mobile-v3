@@ -125,6 +125,28 @@ class SQLiteDatabase {
     }
   }
   
+  func insertSensorDataModel(sensorDataModel: SensorDataModel) throws {
+    let insertStatement = try prepareStatement(sql: SensorDataModel.insertStatement)
+    defer {
+      sqlite3_finalize(insertStatement)
+    }
+    let userId: NSString = sensorDataModel.userId as NSString
+    let name: NSString = sensorDataModel.name as NSString
+    guard
+      sqlite3_bind_int(insertStatement, 1, Int32(sensorDataModel.sensorId)) == SQLITE_OK  &&
+        sqlite3_bind_text(insertStatement, 2, userId.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_int(insertStatement, 3, Int32(sensorDataModel.scale)) == SQLITE_OK &&
+        sqlite3_bind_double(insertStatement, 4, sensorDataModel.value) == SQLITE_OK &&
+        sqlite3_bind_text(insertStatement, 5, name.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_int(insertStatement, 6, Int32(sensorDataModel.lastUpdated)) == SQLITE_OK
+    else {
+      throw SQLiteError.Bind(message: errorMessage)
+    }
+    guard sqlite3_step(insertStatement) == SQLITE_DONE else {
+      throw SQLiteError.Step(message: errorMessage)
+    }
+  }
+  
   func deviceDetailsModel(deviceId: Int32) -> DeviceDetailsModel? {
     guard let queryStatement = try? prepareStatement(sql: DeviceDetailsModel.selectStatement) else {
       return nil
@@ -246,6 +268,40 @@ class SQLiteDatabase {
       isUpdating: Int(isUpdating),
       userEmail: userEmail
     )
+  }
+  
+  func sensorDataModels(sensorId: Int32) -> Array<SensorDataModel?> {
+    var data: Array<SensorDataModel?> = []
+    guard let queryStatement = try? prepareStatement(sql: SensorDataModel.selectStatement) else {
+      return data
+    }
+    defer {
+      sqlite3_finalize(queryStatement)
+    }
+    guard sqlite3_bind_int(queryStatement, 1, sensorId) == SQLITE_OK else {
+      return data
+    }
+    
+    while sqlite3_step(queryStatement) == SQLITE_ROW {
+      let _sensorId = sqlite3_column_int(queryStatement, 0)
+      let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
+      let userId = String(cString: queryResultCol1!)
+      let scale = sqlite3_column_int(queryStatement, 1)
+      let value = sqlite3_column_double(queryStatement, 3)
+      let queryResultCol4 = sqlite3_column_text(queryStatement, 4)
+      let name = String(cString: queryResultCol4!)
+      let lastUpdated = sqlite3_column_int(queryStatement, 5)
+      
+      data.append(SensorDataModel(
+        sensorId: Int(_sensorId),
+        userId: userId,
+        scale: Int(scale),
+        value: value,
+        name: name,
+        lastUpdated: Int(lastUpdated)
+      ))
+    }
+    return data;
   }
   
   func deviceDetailsModels() -> Array<DeviceDetailsModel?> {

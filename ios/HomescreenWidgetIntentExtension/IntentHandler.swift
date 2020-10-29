@@ -82,7 +82,43 @@ extension IntentHandler: SensorWidgetIntentHandling {
   }
   
   func provideValueOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorValuesList>?, Error?) -> Swift.Void) {
-    completion(INObjectCollection(items: []), nil)
+    
+    guard var sensorId = intent.item?.identifier else {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
+    guard let selectedSensorId = Int32(sensorId) else {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
+    
+    let dataDict = Utilities().getAuthData()
+    guard dataDict != nil else {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
+    //    guard let userId = dataDict?["uuid"] as? NSString else {
+    //      completion(INObjectCollection(items: []), nil)
+    //      return
+    //    }
+    
+    var db: SQLiteDatabase? = nil
+    var itemsList: Array<SensorDataModel> = []
+    do {
+      db = try SQLiteDatabase.open(nil)
+      itemsList = db?.sensorDataModels(sensorId: selectedSensorId) as! Array<SensorDataModel>
+    } catch {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
+    var items = [SensorValuesList]()
+    for item in itemsList {
+      let id = String(item.scale) + item.name
+      let sensorValueIntentObject =
+        SensorValuesList(identifier: id, display: item.name)
+      items.append(sensorValueIntentObject)
+    }
+    completion(INObjectCollection(items: items), nil)
   }
   
   func provideUpdateIntervalOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<UpdateIntervalList>?, Error?) -> Swift.Void) {

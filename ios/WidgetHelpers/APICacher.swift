@@ -15,6 +15,7 @@ struct APICacher {
       db = try SQLiteDatabase.open(nil)
       try db?.createTable(table: DeviceDetailsModel.self)
       try db?.createTable(table: SensorDetailsModel.self)
+      try db?.createTable(table: SensorDataModel.self)
     } catch {
       completion()
       return
@@ -144,7 +145,7 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
       let lastUpdated = sensor["lastUpdated"] as? Int ?? -1;
       let model = sensor["model"] as! String;
       let sensorProtocol = sensor["protocol"] as! String;
-      //      let data = sensor["data"] as? Array<Dictionary<String, Any>> ?? []
+      let data = sensor["data"] as? Array<Dictionary<String, Any>> ?? []
       let sensorDetailsModel = SensorDetailsModel(
         id: id,
         name: name,
@@ -159,6 +160,32 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
       )
       do {
         try db.insertSensorDetailsModel(sensorDetailsModel: sensorDetailsModel)
+        for item in data {
+          let _scale = item["scale"] as? String;
+          let _value = item["value"] as? String;
+          guard _value != nil && _value != nil else {
+            continue
+          }
+          
+          let scale = Int(_scale!)!
+          let value = Double(_value!)!
+          
+          let _lastUpdated = item["lastUpdated"] as? Int ?? -1;
+          let scaleName = item["name"] as! String;
+          
+          let sensorDataModel = SensorDataModel(
+            sensorId: id,
+            userId: uuid!,
+            scale: scale,
+            value: value,
+            name: scaleName,
+            lastUpdated: _lastUpdated
+          )
+          do {
+            try db.insertSensorDataModel(sensorDataModel: sensorDataModel)
+          } catch {
+          }
+        }
       } catch {
       }
     }

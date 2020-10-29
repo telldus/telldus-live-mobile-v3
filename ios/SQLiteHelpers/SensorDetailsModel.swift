@@ -97,10 +97,13 @@ struct SensorDataModel: SQLTable {
   static let COLUMN_VALUE = "value"
   static let COLUMN_NAME = "name"
   static let COLUMN_LAST_UP = "lastUpdated"
-  static let COLUMN_MAX = "max"
-  static let COLUMN_MIN = "min"
-  static let COLUMN_MAX_TIME = "maxTime"
-  static let COLUMN_MIN_TIME = "minTime"
+  
+  var sensorId: Int
+  var userId: String
+  var scale: Int
+  var value: Double
+  var name: String
+  var lastUpdated: Int
   
   static var createStatement: String {
     return """
@@ -111,12 +114,9 @@ struct SensorDataModel: SQLTable {
             \(COLUMN_VALUE) REAL,
             \(COLUMN_NAME) TEXT,
             \(COLUMN_LAST_UP) INTEGER,
-            \(COLUMN_MAX) REAL,
-            \(COLUMN_MIN) REAL,
-            \(COLUMN_MAX_TIME) REAL,
-            \(COLUMN_MIN_TIME) REAL,
             FOREIGN KEY (\(COLUMN_SENSOR_ID))
-            REFERENCES \(SensorDetailsModel.TABLE_NAME) (\(COLUMN_SENSOR_ID))
+            REFERENCES \(SensorDetailsModel.TABLE_NAME) (\(SensorDetailsModel.COLUMN_ID))
+            ON DELETE SET NULL
           );
           """
   }
@@ -130,12 +130,8 @@ struct SensorDataModel: SQLTable {
             \(COLUMN_SCALE),
             \(COLUMN_VALUE),
             \(COLUMN_NAME),
-            \(COLUMN_LAST_UP),
-            \(COLUMN_MAX),
-            \(COLUMN_MIN),
-            \(COLUMN_MAX_TIME),
-            \(COLUMN_MIN_TIME),
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            \(COLUMN_LAST_UP)
+          ) VALUES (?, ?, ?, ?, ?, ?);
           """
   }
   
