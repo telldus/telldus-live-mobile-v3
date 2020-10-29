@@ -21,12 +21,24 @@ class IntentHandler: INExtension {
 
 extension IntentHandler: DeviceWidgetIntentHandling {
   func provideItemOptionsCollection(for intent: DeviceWidgetIntent, with completion: @escaping (INObjectCollection<DevicesList>?, Error?) -> Void) {
+    let dataDict = Utilities().getAuthData()
+    guard dataDict != nil else {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
+    guard let userId = dataDict?["uuid"] as? NSString else {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
+    
     var db: SQLiteDatabase? = nil
     var itemsList: Array<DeviceDetailsModel> = []
     do {
       db = try SQLiteDatabase.open(nil)
-      itemsList = db?.deviceDetailsModels() as! Array<DeviceDetailsModel>
+      itemsList = db?.deviceDetailsModelsCurrentAccount(userId: userId) as! Array<DeviceDetailsModel>
     } catch {
+      completion(INObjectCollection(items: []), nil)
+      return
     }
     
     var items = [DevicesList]()
