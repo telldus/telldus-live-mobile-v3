@@ -55,7 +55,8 @@ struct DeviceDetailsModel: SQLTable {
             \(COLUMN_CLIENT_DEVICE_ID) INTEGER,
             \(COLUMN_REQUESTED_STATE_VALUE) TEXT,
             \(COLUMN_REQUESTED_SEC_STATE_VALUE) TEXT,
-            \(COLUMN_USER_EMAIL) TEXT
+            \(COLUMN_USER_EMAIL) TEXT,
+            PRIMARY KEY (\(COLUMN_ID), \(COLUMN_CLIENT_ID))
           );
           """
   }

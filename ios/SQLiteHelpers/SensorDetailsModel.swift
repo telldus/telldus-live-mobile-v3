@@ -44,7 +44,8 @@ struct SensorDetailsModel: SQLTable {
             \(COLUMN_MODEL) TEXT,
             \(COLUMN_PROTOCOL) TEXT,
             \(COLUMN_IS_UPDATING) INTEGER,
-            \(COLUMN_USER_EMAIL) TEXT
+            \(COLUMN_USER_EMAIL) TEXT,
+            PRIMARY KEY (\(COLUMN_ID), \(COLUMN_CLIENT_ID))
           );
           """
   }
