@@ -20,7 +20,9 @@ class WidgetModule: NSObject {
     let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
     let status = setSecureData(data: stringifiedData)
     if (status) {
-      APICacher().cacheAPIData()
+      APICacher().cacheAPIData() {
+        WidgetUtils.refreshAllWidgets()
+      }
     }
   }
   
@@ -42,6 +44,7 @@ class WidgetModule: NSObject {
   }
   
   // IMP: Do not update with partial data! Should have all keys set by 'configureWidgetAuthData'
+  @discardableResult
   func updateSecureData(data: String) -> Int {
     let keychainItemQuery = [
       kSecClass: kSecClassGenericPassword,
@@ -73,7 +76,7 @@ class WidgetModule: NSObject {
     return String(data: passwordData, encoding: .utf8)!
   }
   
-  @objc(configureWidgetAuthData)
+  @objc(disableAllWidgets)
   func disableAllWidgets() -> Void {
     let authData: Dictionary<String, Any> = [
       "accessToken": "null",
@@ -87,5 +90,6 @@ class WidgetModule: NSObject {
     ]
     let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
     updateSecureData(data: stringifiedData)
+    WidgetUtils.refreshAllWidgets()
   }
 }

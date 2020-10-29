@@ -9,24 +9,28 @@
 import Foundation
 
 struct APICacher {
-  func cacheAPIData() {
+  func cacheAPIData(completion: @escaping () -> Void) {
     var db: SQLiteDatabase? = nil
     do {
       db = try SQLiteDatabase.open(nil)
       try db?.createTable(table: DeviceDetailsModel.self)
     } catch {
+      completion()
       return
     }
     DevicesAPI().getDevicesList() {result in
       guard let devices = result["devices"] as? Array<Dictionary<String, Any>> else {
+        completion()
         return
       }
       guard let authData = result["authData"] as? Dictionary<String, Any> else {
+        completion()
         return
       }
       let email = authData["email"] as? String
       let uuid = authData["uuid"] as? String
       guard email != nil && uuid != nil else {
+        completion()
         return
       }
       for device in devices {
@@ -84,6 +88,7 @@ struct APICacher {
         } catch {
         }
       }
+      completion()
     }
     SensorsAPI().getSensorsList() {itemsList in
     }
