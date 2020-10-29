@@ -9,34 +9,26 @@
 import Foundation
 
 class SensorsAPI {
-  func getSensorsList(completion: @escaping (Array<SensorDetails>) -> Void)  {
+  func getSensorsList(completion: @escaping (Dictionary<String, Any>) -> Void)  {
     API().callEndPoint("/sensors/list?includeValues=1&includeScale=1") {result in
       switch result {
       case let .success(data):
         guard let dataNew = data["result"] as? [String:Any] else {
-          completion([]);
+          completion(["sensors": [], "authData": []]);
+          return
+        }
+        guard let authData = data["authData"] as? Dictionary<String, Any> else {
+          completion(["sensors": [], "authData": []]);
           return
         }
         guard let sensors = dataNew["sensor"] as? Array<Dictionary<String, Any>> else {
-          completion([]);
+          completion(["sensors": [], "authData": []]);
           return
         }
-        var itemsList: [SensorDetails] = []
-        for sensor in sensors {
-          let id = sensor["id"] as! String
-          let name = sensor["name"] as! String
-          let data = sensor["data"] as? Array<Dictionary<String, Any>> ?? []
-          let sensorDetails = SensorDetails(
-            id: id,
-            name: name,
-            data: data
-          )
-          itemsList.append(sensorDetails)
-        }
-        completion(itemsList)
+        completion(["sensors": sensors, "authData": authData])
         return;
       case .failure(_):
-        completion([]);
+        completion(["sensors": [], "authData": []]);
       }
     }
   }

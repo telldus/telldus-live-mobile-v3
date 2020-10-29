@@ -14,10 +14,25 @@ struct APICacher {
     do {
       db = try SQLiteDatabase.open(nil)
       try db?.createTable(table: DeviceDetailsModel.self)
+      try db?.createTable(table: SensorDetailsModel.self)
     } catch {
       completion()
       return
     }
+    
+    guard db != nil else {
+      completion()
+      return
+    }
+    
+    cacheDevicesData(db: db!) {
+      cacheSensorsData(db: db!) {
+        completion()
+      }
+    }
+  }
+  
+  func cacheDevicesData(db: SQLiteDatabase, completion: @escaping () -> Void) {
     DevicesAPI().getDevicesList() {result in
       guard let devices = result["devices"] as? Array<Dictionary<String, Any>> else {
         completion()
@@ -84,13 +99,69 @@ struct APICacher {
           userEmail: email!
         )
         do {
-          try db?.insertDeviceDetailsModel(deviceDetailsModel: deviceDetailsModel)
+          try db.insertDeviceDetailsModel(deviceDetailsModel: deviceDetailsModel)
         } catch {
         }
       }
       completion()
     }
-    SensorsAPI().getSensorsList() {itemsList in
+  }
+}
+
+func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
+  SensorsAPI().getSensorsList() {result in
+    guard let sensors = result["sensors"] as? Array<Dictionary<String, Any>> else {
+      completion()
+      return
     }
+    guard let authData = result["authData"] as? Dictionary<String, Any> else {
+      completion()
+      return
+    }
+    let email = authData["email"] as? String
+    let uuid = authData["uuid"] as? String
+    guard email != nil && uuid != nil else {
+      completion()
+      return
+    }
+    for sensor in sensors {
+      let did = sensor["id"] as? String;
+      guard did != nil else {
+        continue
+      }
+      let id = Int(did!)!
+      let name = sensor["name"] as! String;
+      let _sensorId = sensor["sensorId"] as? String;
+      guard _sensorId != nil else {
+        continue
+      }
+      let sensorId = Int(_sensorId!)!
+      let _clientId = sensor["client"] as? String;
+      guard _clientId != nil else {
+        continue
+      }
+      let clientId = Int(_clientId!)!
+      let lastUpdated = sensor["lastUpdated"] as? Int ?? -1;
+      let model = sensor["model"] as! String;
+      let sensorProtocol = sensor["protocol"] as! String;
+      //      let data = sensor["data"] as? Array<Dictionary<String, Any>> ?? []
+      let sensorDetailsModel = SensorDetailsModel(
+        id: id,
+        name: name,
+        userId: uuid!,
+        sensorId: Int(sensorId),
+        clientId: Int(clientId),
+        lastUpdated: lastUpdated,
+        model: model,
+        sensorProtocol: sensorProtocol,
+        isUpdating: 0,
+        userEmail: email!
+      )
+      do {
+        try db.insertSensorDetailsModel(sensorDetailsModel: sensorDetailsModel)
+      } catch {
+      }
+    }
+    completion()
   }
 }

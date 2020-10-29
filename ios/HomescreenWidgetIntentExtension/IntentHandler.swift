@@ -53,45 +53,36 @@ extension IntentHandler: DeviceWidgetIntentHandling {
 
 extension IntentHandler: SensorWidgetIntentHandling {
   func provideItemOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorsList>?, Error?) -> Void) {
-    SensorsAPI().getSensorsList() {itemsList in
-      var items = [SensorsList]()
-      for item in itemsList {
-        if (item.data.count > 0) {
-          let sensorIntentObject =
-            SensorsList(identifier: item.id, display: item.name)
-          items.append(sensorIntentObject)
-        }
-      }
-      completion(INObjectCollection(items: items), nil)
+    let dataDict = Utilities().getAuthData()
+    guard dataDict != nil else {
+      completion(INObjectCollection(items: []), nil)
+      return
     }
+    guard let userId = dataDict?["uuid"] as? NSString else {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
+    
+    var db: SQLiteDatabase? = nil
+    var itemsList: Array<SensorDetailsModel> = []
+    do {
+      db = try SQLiteDatabase.open(nil)
+      itemsList = db?.sensorDetailsModelsCurrentAccount(userId: userId) as! Array<SensorDetailsModel>
+    } catch {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
+    var items = [SensorsList]()
+    for item in itemsList {
+      let sensorIntentObject =
+        SensorsList(identifier: String(item.id), display: item.name)
+      items.append(sensorIntentObject)
+    }
+    completion(INObjectCollection(items: items), nil)
   }
   
   func provideValueOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorValuesList>?, Error?) -> Swift.Void) {
-    let item: SensorsList = intent.item ?? SensorsList(identifier: "", display: "")
-    let selectedSensorId = item.identifier!
-    var sensorValues: Array<Dictionary<String, Any>> = []
-    SensorsAPI().getSensorsList() {itemsList in
-      for item in itemsList {
-        if (item.id == selectedSensorId) {
-          sensorValues = item.data
-          break
-        }
-      }
-      var items = [SensorValuesList]()
-      if (sensorValues.count > 0) {
-        for valueInfo in sensorValues {
-          let name = valueInfo["name"] as! String
-          let scale = valueInfo["scale"] as! String
-          let key = "\(name)_\(scale)"
-          items.append(SensorValuesList(
-            identifier: key,
-            display: name
-          ))
-        }
-      }
-      
-      completion(INObjectCollection(items: items), nil)
-    }
+    completion(INObjectCollection(items: []), nil)
   }
   
   func provideUpdateIntervalOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<UpdateIntervalList>?, Error?) -> Swift.Void) {
