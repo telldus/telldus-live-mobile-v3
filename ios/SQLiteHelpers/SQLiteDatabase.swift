@@ -167,7 +167,7 @@ class SQLiteDatabase {
   }
   
   func deviceDetailsModels() -> Array<DeviceDetailsModel?> {
-    var data: Array<DeviceDetailsModel?> = []
+    let data: Array<DeviceDetailsModel?> = []
     guard let queryStatement = try? prepareStatement(sql: DeviceDetailsModel.selectAllStatement) else {
       return data
     }
@@ -175,6 +175,25 @@ class SQLiteDatabase {
       sqlite3_finalize(queryStatement)
     }
     
+    return getDeviceDetailsModels(queryStatement: queryStatement);
+  }
+  
+  func deviceDetailsModelsCurrentAccount(userId: NSString) -> Array<DeviceDetailsModel?> {
+    let data: Array<DeviceDetailsModel?> = []
+    guard let queryStatement = try? prepareStatement(sql: DeviceDetailsModel.selectStatementCurrentAccount) else {
+      return data
+    }
+    defer {
+      sqlite3_finalize(queryStatement)
+    }
+    guard sqlite3_bind_text(queryStatement, 1, userId.utf8String, -1, nil) == SQLITE_OK else {
+      return data
+    }
+    return getDeviceDetailsModels(queryStatement: queryStatement);
+  }
+  
+  func getDeviceDetailsModels(queryStatement: OpaquePointer) -> Array<DeviceDetailsModel?> {
+    var data: Array<DeviceDetailsModel?> = []
     while sqlite3_step(queryStatement) == SQLITE_ROW {
       let id = sqlite3_column_int(queryStatement, 0)
       if let queryResultCol1 = sqlite3_column_text(queryStatement, 1),

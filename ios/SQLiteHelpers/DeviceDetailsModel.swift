@@ -55,8 +55,7 @@ struct DeviceDetailsModel: SQLTable {
             \(DEVICE_DETAILS_COLUMN_CLIENT_DEVICE_ID) INTEGER,
             \(DEVICE_DETAILS_COLUMN_REQUESTED_STATE_VALUE) TEXT,
             \(DEVICE_DETAILS_COLUMN_REQUESTED_SEC_STATE_VALUE) TEXT,
-            \(DEVICE_DETAILS_COLUMN_USER_EMAIL) TEXT,
-            PRIMARY KEY (\(DEVICE_DETAILS_COLUMN_ID), \(DEVICE_DETAILS_COLUMN_USER_ID))
+            \(DEVICE_DETAILS_COLUMN_USER_EMAIL) TEXT
           );
           """
   }
@@ -87,6 +86,13 @@ struct DeviceDetailsModel: SQLTable {
     return """
           SELECT * FROM \(DEVICE_DETAILS_TABLE_NAME) WHERE
           \(DEVICE_DETAILS_COLUMN_ID) = ?;
+          """
+  }
+  
+  static var selectStatementCurrentAccount: String {
+    return """
+          SELECT * FROM \(DEVICE_DETAILS_TABLE_NAME) WHERE
+          \(DEVICE_DETAILS_COLUMN_USER_ID) = ?;
           """
   }
   
