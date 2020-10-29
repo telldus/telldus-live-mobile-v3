@@ -15,7 +15,9 @@ struct SensorProvider: IntentTimelineProvider {
     SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
       id: "",
       name: "",
-      displayType: WidgetViewType.preEditView
+      displayType: WidgetViewType.preEditView,
+      theme: ThemesList.default,
+      owningAccount: ""
     ))
   }
   
@@ -27,33 +29,52 @@ struct SensorProvider: IntentTimelineProvider {
     let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
       id: "",
       name: "",
-      displayType: displayType
+      displayType: displayType,
+      theme: ThemesList.default,
+      owningAccount: ""
     ))
     completion(entry)
   }
   
   func getTimeline(for configuration: SensorWidgetIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-    var entries: [SensorSimpleEntry] = []
     
-    // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-    let currentDate = Date()
-    for hourOffset in 0 ..< 5 {
-      let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-      let name = configuration.item?.displayString ?? ""
-      let id = configuration.item?.identifier ?? ""
-      var displayType = WidgetViewType.postEditView
-      if (configuration.item?.identifier == nil) {
-        displayType = WidgetViewType.preEditView
+    var displayType = WidgetViewType.preEditView
+    var name = configuration.item?.displayString ?? ""
+    let id = configuration.item?.identifier ?? ""
+    let theme = configuration.theme
+    var owningAccount = ""
+    var owningUserId = ""
+    
+    let dataDict = Utilities().getAuthData()
+    if (dataDict == nil) {
+      displayType = WidgetViewType.notLoggedInView
+    } else if (configuration.item?.identifier != nil) {
+      displayType = WidgetViewType.postEditView
+      
+      var db: SQLiteDatabase? = nil
+      do {
+        db = try SQLiteDatabase.open(nil)
+        if let sensorDetails = db?.sensorDetailsModel(sensorId: Int32(id)!) {
+          name = sensorDetails.name
+          owningAccount = sensorDetails.userEmail
+          owningUserId = sensorDetails.userId
+          let activeUserId = dataDict?["uuid"] as? String
+          if (owningUserId != activeUserId) {
+            displayType = WidgetViewType.notSameAccountView
+          }
+        }
+      } catch {
       }
-      let entry = SensorSimpleEntry(date: entryDate, sensorWidgetStructure: SensorWidgetStructure(
-        id: id,
-        name: name,
-        displayType: displayType
-      ))
-      entries.append(entry)
     }
     
-    let timeline = Timeline(entries: entries, policy: .atEnd)
+    let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
+      id: id,
+      name: name,
+      displayType: displayType,
+      theme: theme,
+      owningAccount: owningAccount
+    ))
+    let timeline = Timeline(entries: [entry], policy: .atEnd)
     completion(timeline)
   }
 }
@@ -67,11 +88,7 @@ struct SensorWidgetEntryView : View {
   var entry: SensorProvider.Entry
   
   var body: some View {
-    let data = WidgetModule().getSecureData()
-    if (data == nil) {
-      return AnyView(NotLoggedInView())
-    }
-    return AnyView(SensorWidgetUIViewProvider(sensorWidgetStructure: entry.sensorWidgetStructure))
+    AnyView(SensorWidgetUIViewProvider(sensorWidgetStructure: entry.sensorWidgetStructure))
   }
 }
 

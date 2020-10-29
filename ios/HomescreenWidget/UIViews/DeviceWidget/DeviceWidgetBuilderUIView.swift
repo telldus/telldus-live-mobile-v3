@@ -90,7 +90,7 @@ struct DeviceWidgetEntryView : View {
   var entry: DeviceProvider.Entry
   
   var body: some View {
-    return AnyView(DeviceWidgetUIViewProvider(deviceWidgetStructure: entry.deviceWidgetStructure))
+    AnyView(DeviceWidgetUIViewProvider(deviceWidgetStructure: entry.deviceWidgetStructure))
   }
 }
 

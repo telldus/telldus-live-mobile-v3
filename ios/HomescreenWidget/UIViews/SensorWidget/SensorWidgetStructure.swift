@@ -8,8 +8,11 @@
 
 import Foundation
 
+@available(iOS 12.0, *)
 public struct SensorWidgetStructure {
   let id: String
   let name: String
   let displayType: WidgetViewType
+  let theme: ThemesList
+  let owningAccount: String
 }

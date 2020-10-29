@@ -44,24 +44,24 @@ struct SensorWidgetUIViewProvider: View {
     case .notLoggedInView:
       switch family {
       case .systemSmall:
-        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+        return AnyView(NotLoggedInView())
       case .systemMedium:
-        return AnyView(SensorWidgetMediumUIView(sensorWidgetStructure: sensorWidgetStructure))
+        return AnyView(NotLoggedInView())
       case .systemLarge:
-        return AnyView(SensorWidgetLargeUIView(sensorWidgetStructure: sensorWidgetStructure))
+        return AnyView(NotLoggedInView())
       default:
-        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+        return AnyView(NotLoggedInView())
       }
     case .notSameAccountView:
       switch family {
       case .systemSmall:
-        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+        return AnyView(NotSameAccountUIView(owningAccount: sensorWidgetStructure.owningAccount))
       case .systemMedium:
-        return AnyView(SensorWidgetMediumUIView(sensorWidgetStructure: sensorWidgetStructure))
+        return AnyView(NotSameAccountUIView(owningAccount: sensorWidgetStructure.owningAccount))
       case .systemLarge:
-        return AnyView(SensorWidgetLargeUIView(sensorWidgetStructure: sensorWidgetStructure))
+        return AnyView(NotSameAccountUIView(owningAccount: sensorWidgetStructure.owningAccount))
       default:
-        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+        return AnyView(NotSameAccountUIView(owningAccount: sensorWidgetStructure.owningAccount))
       }
     case .upgradeToPremiumView:
       switch family {
