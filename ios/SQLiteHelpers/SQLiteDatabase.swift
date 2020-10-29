@@ -243,7 +243,7 @@ class SQLiteDatabase {
   
   func countDeviceDetailsModel() -> Int {
     let querySql = """
-    SELECT count(*) FROM \(DeviceDetailsModel.DEVICE_DETAILS_TABLE_NAME)
+    SELECT count(*) FROM \(DeviceDetailsModel.TABLE_NAME)
     """
     guard let queryStatement = try? prepareStatement(sql: querySql) else {
       return 0
