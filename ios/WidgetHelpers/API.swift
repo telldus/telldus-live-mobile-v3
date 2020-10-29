@@ -81,6 +81,7 @@ class API {
         completion(Result.failure(AppError.jsonParsingError(error)))
         return
       }
+      completion(Result.failure(AppError.unknownError("")))
       return
     }
     task.resume()
