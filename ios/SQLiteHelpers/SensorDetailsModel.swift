@@ -114,6 +114,7 @@ struct SensorDataModel: SQLTable {
             \(COLUMN_VALUE) REAL,
             \(COLUMN_NAME) TEXT,
             \(COLUMN_LAST_UP) INTEGER,
+            PRIMARY KEY (\(COLUMN_SENSOR_ID), \(COLUMN_SCALE), \(COLUMN_NAME), \(COLUMN_USER_ID))
             FOREIGN KEY (\(COLUMN_SENSOR_ID))
             REFERENCES \(SensorDetailsModel.TABLE_NAME) (\(SensorDetailsModel.COLUMN_ID))
             ON DELETE SET NULL
