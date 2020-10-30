@@ -10,6 +10,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		26012B35254BE77400D26A25 /* sensorConstants.json in Resources */ = {isa = PBXBuildFile; fileRef = 26012B34254BE77400D26A25 /* sensorConstants.json */; };
+		26012B36254BE77400D26A25 /* sensorConstants.json in Resources */ = {isa = PBXBuildFile; fileRef = 26012B34254BE77400D26A25 /* sensorConstants.json */; };
+		26012B37254BE77400D26A25 /* sensorConstants.json in Resources */ = {isa = PBXBuildFile; fileRef = 26012B34254BE77400D26A25 /* sensorConstants.json */; };
 		26035743253ED333000798D1 /* DevicesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26035742253ED333000798D1 /* DevicesAPI.swift */; };
 		26035744253ED333000798D1 /* DevicesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26035742253ED333000798D1 /* DevicesAPI.swift */; };
 		26035745253ED333000798D1 /* DevicesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26035742253ED333000798D1 /* DevicesAPI.swift */; };
@@ -166,6 +169,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = TelldusLiveApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TelldusLiveApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TelldusLiveApp/main.m; sourceTree = "<group>"; };
+		26012B34254BE77400D26A25 /* sensorConstants.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sensorConstants.json; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.json; };
 		26035742253ED333000798D1 /* DevicesAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesAPI.swift; sourceTree = "<group>"; };
 		260381D6253DAF8700D4F8CA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2608B58A253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetUIViewProvider.swift; sourceTree = "<group>"; };
@@ -308,6 +312,7 @@
 			children = (
 				260D61C7253D608E00115423 /* Constants.swift */,
 				260D61CE253D60E200115423 /* CI.swift */,
+				26012B34254BE77400D26A25 /* sensorConstants.json */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -674,6 +679,7 @@
 				DD7823359AB84A89988A5D47 /* Roboto-Light.ttf in Resources */,
 				695CAC4B3F4E464D989EC4D2 /* Roboto-Medium.ttf in Resources */,
 				794DAA9AEBAE4A7291C53EB5 /* Roboto-Regular.ttf in Resources */,
+				26012B35254BE77400D26A25 /* sensorConstants.json in Resources */,
 				26D4DD542142612A0060DC8E /* GoogleService-Info.plist in Resources */,
 				59F114B4AC654FA7AAF457B4 /* SFNS Display.ttf in Resources */,
 				AD9B7A84CF90483DA832A7FB /* telldusicons.woff in Resources */,
@@ -684,6 +690,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26012B37254BE77400D26A25 /* sensorConstants.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,6 +699,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				26B06643252E2832009C3325 /* Assets.xcassets in Resources */,
+				26012B36254BE77400D26A25 /* sensorConstants.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
