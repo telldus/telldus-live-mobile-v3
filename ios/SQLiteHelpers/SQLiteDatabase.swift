@@ -286,7 +286,7 @@ class SQLiteDatabase {
       let _sensorId = sqlite3_column_int(queryStatement, 0)
       let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
       let userId = String(cString: queryResultCol1!)
-      let scale = sqlite3_column_int(queryStatement, 1)
+      let scale = sqlite3_column_int(queryStatement, 2)
       let value = sqlite3_column_double(queryStatement, 3)
       let queryResultCol4 = sqlite3_column_text(queryStatement, 4)
       let name = String(cString: queryResultCol4!)

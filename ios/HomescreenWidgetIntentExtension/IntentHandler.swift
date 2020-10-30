@@ -114,8 +114,10 @@ extension IntentHandler: SensorWidgetIntentHandling {
     var items = [SensorValuesList]()
     for item in itemsList {
       let id = String(item.scale) + item.name
+      let info = SensorUtilities().getSensorInfo(name: item.name, scale: item.scale, value: item.value)
+      let label = info["label"] as? String
       let sensorValueIntentObject =
-        SensorValuesList(identifier: id, display: item.name)
+        SensorValuesList(identifier: id, display: label!)
       items.append(sensorValueIntentObject)
     }
     completion(INObjectCollection(items: items), nil)
