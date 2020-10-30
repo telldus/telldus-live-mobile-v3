@@ -28,12 +28,14 @@ import type { ThunkAction } from './Types';
 const widgetConfigure = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		const { user } = getState();
-		const { accessToken = {}, userProfile = {} } = user;
+		const { accessToken = {}, userProfile = {}, accounts, userId } = user;
 		const { pro = -1, email, uuid } = userProfile;
 		const { access_token = '', refresh_token = '', expires_in = ''} = accessToken;
+		const account = accounts[userId] || {};
+		const _email = account.email || email;
 		const { WidgetModule } = NativeModules;
 		if (Platform.OS === 'android') {
-			WidgetModule.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, email, pro);
+			WidgetModule.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, _email, pro);
 		} else {
 			WidgetModule.configureWidgetAuthData({
 				accessToken: access_token,
@@ -43,7 +45,7 @@ const widgetConfigure = (): ThunkAction => {
 				clientSecret: privateKey,
 				email,
 				pro,
-				uuid,
+				uuid: userId || uuid,
 			});
 		}
 	};
