@@ -139,7 +139,7 @@ struct SensorDataModel: SQLTable {
   static var selectStatement: String {
     return """
           SELECT * FROM \(TABLE_NAME) WHERE
-          \(COLUMN_SENSOR_ID) = ?;
+          \(COLUMN_SENSOR_ID) = ? AND \(COLUMN_USER_ID) = ?;
           """
   }
   

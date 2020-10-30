@@ -270,7 +270,7 @@ class SQLiteDatabase {
     )
   }
   
-  func sensorDataModels(sensorId: Int32) -> Array<SensorDataModel?> {
+  func sensorDataModels(sensorId: Int32, userId: NSString) -> Array<SensorDataModel?> {
     var data: Array<SensorDataModel?> = []
     guard let queryStatement = try? prepareStatement(sql: SensorDataModel.selectStatement) else {
       return data
@@ -278,7 +278,7 @@ class SQLiteDatabase {
     defer {
       sqlite3_finalize(queryStatement)
     }
-    guard sqlite3_bind_int(queryStatement, 1, sensorId) == SQLITE_OK else {
+    guard sqlite3_bind_int(queryStatement, 1, sensorId) == SQLITE_OK && sqlite3_bind_text(queryStatement, 2, userId.utf8String, -1, nil) == SQLITE_OK else {
       return data
     }
     

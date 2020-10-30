@@ -97,16 +97,16 @@ extension IntentHandler: SensorWidgetIntentHandling {
       completion(INObjectCollection(items: []), nil)
       return
     }
-    //    guard let userId = dataDict?["uuid"] as? NSString else {
-    //      completion(INObjectCollection(items: []), nil)
-    //      return
-    //    }
+    guard let userId = dataDict?["uuid"] as? NSString else {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
     
     var db: SQLiteDatabase? = nil
     var itemsList: Array<SensorDataModel> = []
     do {
       db = try SQLiteDatabase.open(nil)
-      itemsList = db?.sensorDataModels(sensorId: selectedSensorId) as! Array<SensorDataModel>
+      itemsList = db?.sensorDataModels(sensorId: selectedSensorId, userId: userId) as! Array<SensorDataModel>
     } catch {
       completion(INObjectCollection(items: []), nil)
       return
