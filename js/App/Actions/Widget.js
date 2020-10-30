@@ -43,7 +43,7 @@ const widgetConfigure = (): ThunkAction => {
 				expiresIn: expires_in.toString(),
 				clientId: publicKey,
 				clientSecret: privateKey,
-				email,
+				email: _email,
 				pro,
 				uuid: userId || uuid,
 			});
