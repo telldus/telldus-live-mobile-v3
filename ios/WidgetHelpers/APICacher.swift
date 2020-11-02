@@ -9,6 +9,107 @@
 import Foundation
 
 struct APICacher {
+  func cacheSensorData(sensorId: Int, completion: @escaping () -> Void) {
+    SensorsAPI().getSensorInfo(sensorId: sensorId) {result in
+      var db: SQLiteDatabase? = nil
+      do {
+        db = try SQLiteDatabase.open(nil)
+        try db?.createTable(table: SensorDetailsModel.self)
+        try db?.createTable(table: SensorDataModel.self)
+      } catch {
+        completion()
+        return
+      }
+      guard db != nil else {
+        completion()
+        return
+      }
+      
+      guard let sensor = result["sensor"] as? Dictionary<String, Any> else {
+        completion()
+        return
+      }
+      guard let authData = result["authData"] as? Dictionary<String, Any> else {
+        completion()
+        return
+      }
+      let email = authData["email"] as? String
+      let uuid = authData["uuid"] as? String
+      guard email != nil && uuid != nil else {
+        completion()
+        return
+      }
+      let did = sensor["id"] as? String;
+      guard did != nil else {
+        completion()
+        return
+      }
+      let id = Int(did!)!
+      let name = sensor["name"] as! String;
+      let _sensorId = sensor["sensorId"] as? String;
+      if _sensorId == nil {
+      }
+      let sensorId = Int(_sensorId!)!
+      let lastUpdated = sensor["lastUpdated"] as? Int ?? -1;
+      let sensorProtocol = sensor["protocol"] as! String;
+      
+      guard let dataFromDb = db?.sensorDetailsModel(sensorId: Int32(id)) else {
+        completion()
+        return
+      }
+      
+      let sensorDetailsModel = SensorDetailsModel(
+        id: id,
+        name: name,
+        userId: uuid!,
+        sensorId: dataFromDb.sensorId,
+        clientId: dataFromDb.clientId,
+        lastUpdated: lastUpdated,
+        model: dataFromDb.model,
+        sensorProtocol: sensorProtocol,
+        isUpdating: 0,
+        userEmail: email!
+      )
+      do {
+        try db?.insertSensorDetailsModel(sensorDetailsModel: sensorDetailsModel)
+      } catch {
+      }
+      
+      let data = sensor["data"] as? Array<Dictionary<String, Any>> ?? []
+      guard data.count > 0 else {
+        completion()
+        return
+      }
+      for item in data {
+        let _scale = item["scale"] as? String;
+        let _value = item["value"] as? String;
+        guard _value != nil && _value != nil else {
+          continue
+        }
+        
+        let scale = Int(_scale!)!
+        let value = Double(_value!)!
+        
+        let _lastUpdated = item["lastUpdated"] as? Int ?? -1;
+        let scaleName = item["name"] as! String;
+        
+        let sensorDataModel = SensorDataModel(
+          sensorId: id,
+          userId: uuid!,
+          scale: scale,
+          value: value,
+          name: scaleName,
+          lastUpdated: _lastUpdated
+        )
+        do {
+          try db?.insertSensorDataModel(sensorDataModel: sensorDataModel)
+        } catch {
+        }
+      }
+      
+      completion()
+    }
+  }
   func cacheAPIData(completion: @escaping () -> Void) {
     var db: SQLiteDatabase? = nil
     do {
