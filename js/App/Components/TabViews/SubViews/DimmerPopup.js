@@ -32,9 +32,14 @@ import { View, initializeRegistryWithDefinitions } from 'react-native-animatable
 import * as ANIMATION_DEFINITIONS from 'react-native-animatable/definitions';
 import Theme from '../../../Theme';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 initializeRegistryWithDefinitions(ANIMATION_DEFINITIONS);
 
-type Props = {
+type Props = PropsThemedComponent & {
 	animationIn: string,
 	animationInTiming: number,
 	animationOut: string,
@@ -150,7 +155,6 @@ class DimmerPopup extends Component<Props, State> {
 		}
 		return (
 			<View
-				level={2}
 				onLayout={this.handleLayout}
 				ref={this.setRefs}
 				style={{
@@ -162,6 +166,7 @@ class DimmerPopup extends Component<Props, State> {
 					borderRadius: 7,
 					alignItems: 'center',
 					justifyContent: 'center',
+					backgroundColor: this.props.colors.card,
 					...Theme.Core.shadow,
 				}}>
 				<Text
@@ -198,4 +203,4 @@ DimmerPopup.defaultProps = {
 	value: 1,
 };
 
-module.exports = DimmerPopup;
+module.exports = withTheme(DimmerPopup, true);
