@@ -44,6 +44,7 @@ struct SensorProvider: IntentTimelineProvider {
     let theme = configuration.theme
     var owningAccount = ""
     var owningUserId = ""
+    let updateInterval = configuration.updateInterval?.identifier ?? nil
     
     let dataDict = Utilities().getAuthData()
     if (dataDict == nil) {
@@ -66,8 +67,21 @@ struct SensorProvider: IntentTimelineProvider {
       } catch {
       }
     }
+    var date = Date()
+    if (updateInterval != nil) {
+      var value: Int? = nil
+      for interval in SensorClass.SensorUpdateInterval {
+        if (interval["id"] as? String == updateInterval!) {
+          value = interval["valueInMin"] as? Int
+          break;
+        }
+      }
+      if value != nil {
+        date = Calendar.current.date(byAdding: .minute, value: value!, to: Date())!
+      }
+    }
     
-    let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
+    let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
       id: id,
       name: name,
       displayType: displayType,
