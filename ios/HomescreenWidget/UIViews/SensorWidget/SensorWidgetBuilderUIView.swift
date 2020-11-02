@@ -51,6 +51,8 @@ struct SensorProvider: IntentTimelineProvider {
       displayType = WidgetViewType.notLoggedInView
     } else if (configuration.item?.identifier != nil) {
       displayType = WidgetViewType.postEditView
+      APICacher().cacheSensorData(sensorId: Int(id)!) {
+      }
       
       var db: SQLiteDatabase? = nil
       do {
