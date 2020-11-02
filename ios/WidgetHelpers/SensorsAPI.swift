@@ -32,5 +32,25 @@ class SensorsAPI {
       }
     }
   }
+  
+  func getSensorInfo(sensorId: Int, completion: @escaping (Dictionary<String, Any>) -> Void)  {
+    API().callEndPoint("/sensor/info?id=\(sensorId)") {result in
+      switch result {
+      case let .success(data):
+        guard let sensor = data["result"] as? [String:Any] else {
+          completion(["sensor": [], "authData": []]);
+          return
+        }
+        guard let authData = data["authData"] as? Dictionary<String, Any> else {
+          completion(["sensor": [], "authData": []]);
+          return
+        }
+        completion(["sensor": sensor, "authData": authData])
+        return;
+      case .failure(_):
+        completion(["sensor": [], "authData": []]);
+      }
+    }
+  }
 }
 
