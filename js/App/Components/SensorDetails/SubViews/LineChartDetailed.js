@@ -33,6 +33,7 @@ import {
 } from 'victory-native';
 import moment from 'moment';
 const isEqual = require('react-fast-compare');
+import * as RNLocalize from 'react-native-localize';
 
 import { View } from '../../../../BaseComponents';
 
@@ -341,7 +342,10 @@ showToolTipLabel = (data: Object): string => {
 		formatTime,
 		formatMessage,
 	} = intl;
-	return `${capitalize(formatMessage(i18n.date))}: ${formatDate(moment.unix(datum.ts))}\n${capitalize(formatMessage(i18n.time))}: ${formatTime(moment.unix(datum.ts))}\n${capitalize(formatMessage(i18n.labelValue))}: ${datum.value}`;
+	const hour12 = !RNLocalize.uses24HourClock();
+	return `${capitalize(formatMessage(i18n.date))}: ${formatDate(moment.unix(datum.ts))}\n${capitalize(formatMessage(i18n.time))}: ${formatTime(moment.unix(datum.ts), {
+		hour12,
+	})}\n${capitalize(formatMessage(i18n.labelValue))}: ${datum.value}`;
 }
 
 render(): Object | null {

@@ -29,6 +29,7 @@ import {
 	Platform,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as RNLocalize from 'react-native-localize';
 
 import {
 	View,
@@ -219,6 +220,7 @@ class TimePicker extends View<Props, State> {
 			formatMessage,
 			formatTime,
 		} = intl;
+		const hour12 = !RNLocalize.uses24HourClock();
 
 		const styles = getStyles({
 			appLayout,
@@ -246,7 +248,9 @@ class TimePicker extends View<Props, State> {
 							<View style={styles.body}>
 								<SettingsRow
 									label={`${formatMessage(i18n.activeFrom)}:`}
-									value={formatTime(timeFrom)}
+									value={formatTime(timeFrom, {
+										hour12,
+									})}
 									iconValueRight={(showTimePicker && editingValue === 'from') ? 'done' : 'edit'}
 									onPress={this.editFrom}
 									appLayout={appLayout}
@@ -268,7 +272,9 @@ class TimePicker extends View<Props, State> {
 								}
 								<SettingsRow
 									label={`${formatMessage(i18n.activeTo)}:`}
-									value={formatTime(timeTo)}
+									value={formatTime(timeTo, {
+										hour12,
+									})}
 									iconValueRight={(showTimePicker && editingValue === 'to') ? 'done' : 'edit'}
 									onPress={this.editTo}
 									appLayout={appLayout}
