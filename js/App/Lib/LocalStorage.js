@@ -43,6 +43,9 @@ export type SensorHistoryQueryParams = {
 	from: string,
 	to: string,
 };
+
+export type DeviceHistoryQueryParams = number;
+
 export default class TelldusLocalStorage {
 
 	constructor() {
@@ -154,7 +157,7 @@ export default class TelldusLocalStorage {
 		return query;
 	}
 
-	getDeviceHistory(id: number): Promise<any> {
+	getDeviceHistory(id: DeviceHistoryQueryParams): Promise<any> {
 		return this.loadDatabase().then((DB: Object): Promise<any> => {
 			return this.queryDeviceHistory(id);
 		}).catch((error: Object) => {

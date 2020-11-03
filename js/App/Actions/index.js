@@ -47,6 +47,7 @@ import * as Events from './Events';
 import * as GeoFence from './GeoFence';
 import * as Firebase from './Firebase';
 import * as Auth from './Auth';
+import * as ThirdParties from './ThirdParties';
 
 module.exports = {
 	...GatewayActions,
@@ -74,4 +75,5 @@ module.exports = {
 	...GeoFence,
 	...Firebase,
 	...Auth,
+	...ThirdParties,
 };

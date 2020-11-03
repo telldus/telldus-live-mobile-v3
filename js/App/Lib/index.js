@@ -55,6 +55,7 @@ import * as dashboardUtils from './dashboardUtils';
 import * as PushNotification from './PushNotification';
 import * as Timer from './Timer';
 import * as intlUtils from './intlUtils';
+import * as thirdPartyUtils from './thirdPartyUtils';
 
 module.exports = {
 	getRouteName,
@@ -92,4 +93,5 @@ module.exports = {
 	...PushNotification,
 	...Timer,
 	...intlUtils,
+	...thirdPartyUtils,
 };

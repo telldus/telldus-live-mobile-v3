@@ -28,7 +28,7 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import {
 	SettingsRow,
@@ -79,7 +79,7 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 		valueCompCoverStyle,
 	} = getStyle(layout);
 
-	const isBasic = moment().unix() > pro;
+	const isBasic = dayjs().unix() > pro;
 
 	const accStatus = isBasic ? 'Basic' :
 		<View style={valueCompCoverStyle}>

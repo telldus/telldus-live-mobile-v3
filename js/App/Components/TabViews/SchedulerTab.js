@@ -28,7 +28,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import moment from 'moment';
+let dayjs = require('dayjs');
 import Swiper from 'react-native-swiper';
 
 import {
@@ -340,7 +340,7 @@ class SchedulerTab extends View<null, Props, State> {
 				</View>
 			);
 
-			const day = moment().add(key, 'days');
+			const day = dayjs().add(key, 'day');
 			const weekday = formatDate(day, {weekday: 'long'});
 			const date = formatDate(day, {
 				day: '2-digit',

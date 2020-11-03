@@ -1,5 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import { deviceSetState, requestDeviceAction } from '../../Actions/Devices';
 import { configureStore } from '../../Store/ConfigureStore';
@@ -31,7 +31,7 @@ describe('Test device actions', ()=>{
 				websocketConnected: false,
 				localKey: {
 					key: null,
-					ttl: moment().add('days', 30),
+					ttl: dayjs().add(30, 'day'),
 					uuid: null,
 					address: null,
 					port: null,

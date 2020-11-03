@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import {
 	View,
@@ -39,6 +40,8 @@ import {
 	shouldUpdate,
 	getSensorInfo,
 	getWindDirection,
+	getSensorScalesOnDb,
+	SENSOR_KEY,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
@@ -51,14 +54,16 @@ type Props = {
 	item: Object,
 	tileWidth: number,
 	displayType: string,
+	sensorTypesInCurrentDb: Object | null,
 	colors: Object,
 	colorScheme: string,
 	themeInApp: string,
 
 	style: Object,
-	onPress: (number) => void,
+	onPress: (number, string) => void,
 	intl: Object,
 	isGatewayActive: boolean,
+	navigation: Object,
 };
 
 class SensorDashboardTile extends View<Props, null> {
@@ -111,12 +116,12 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item', 'themeInApp', 'colorScheme']);
+		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item', 'sensorTypesInCurrentDb', 'themeInApp', 'colorScheme']);
 	}
 
 	getSlideList(item: Object): Object {
 		let slideList = {}, sensorAccessibilityInfo = '';
-		const { intl } = this.props;
+		const { intl, sensorTypesInCurrentDb } = this.props;
 		const { formatMessage } = intl;
 
 		const {
@@ -128,7 +133,8 @@ class SensorDashboardTile extends View<Props, null> {
 			sensorValueCoverStyle,
 		} = this.getStyles();
 
-		for (let key in item.data) {
+		const _data = sensorTypesInCurrentDb || item.data;
+		for (let key in _data) {
 			const { value, scale, name } = item.data[key];
 			const isLarge = checkIfLarge(value.toString());
 
@@ -197,7 +203,18 @@ class SensorDashboardTile extends View<Props, null> {
 
 	onPressTile = () => {
 		const { onPress, item } = this.props;
-		onPress(item.id);
+		onPress(item.id, SENSOR_KEY);
+	}
+
+	onPressIconRight = () => {
+		const { navigation, item } = this.props;
+		navigation.navigate('SensorDetails', {
+			screen: 'SHistory',
+			params: {
+				id: item.id,
+			},
+			id: item.id,
+		});
 	}
 
 	render(): Object {
@@ -212,7 +229,11 @@ class SensorDashboardTile extends View<Props, null> {
 		} = this.props;
 		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
-		const { lastUpdated, gatewayTimezone } = item;
+		const {
+			lastUpdated,
+			gatewayTimezone,
+			keepHistory,
+		} = item;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 		const lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 
@@ -252,6 +273,8 @@ class SensorDashboardTile extends View<Props, null> {
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}
+				iconRight={keepHistory ? 'sensorhistory' : undefined}
+				onPressIconRight={this.onPressIconRight}
 				type={'sensor'}
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}
@@ -363,4 +386,23 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = withTheme(SensorDashboardTile, true);
+function mapStateToProps(state: Object, props: Object): Object {
+	const { defaultSettings } = state.app;
+	const { sensorsById = {} } = state.dashboard;
+
+	const { activeDashboardId } = defaultSettings;
+	const { userId } = state.user;
+	const { id } = props.item || {};
+
+	const userDbsAndSensorsById = sensorsById[userId] || {};
+	const sensorsByIdInCurrentDb = userDbsAndSensorsById[activeDashboardId] || {};
+
+	const sensorInCurrentDb = sensorsByIdInCurrentDb[id];
+	let _selectedScales = getSensorScalesOnDb(sensorInCurrentDb);
+
+	return {
+		sensorTypesInCurrentDb: _selectedScales,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(withTheme(SensorDashboardTile, true));

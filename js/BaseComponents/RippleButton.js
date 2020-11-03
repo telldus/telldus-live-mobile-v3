@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import Ripple from 'react-native-material-ripple';
 
 import {
@@ -42,16 +44,21 @@ type Props = {
 	children: Object,
 	onPress: Function,
 	level?: number,
+	onPressData?: any,
 };
 
 type ThemedRippleButton = Props & PropsThemedComponent;
 
 const RippleButton = (props: ThemedRippleButton): Object => {
-	const { children, onPress, ...others } = props;
+	const { children, onPress, onPressData, ...others } = props;
 
 	const theme = useAppTheme();
 
 	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
+
+	const _onPress = useCallback(() => {
+		onPress(onPressData);
+	}, [onPressData, onPress]);
 
 	return (
 		<Ripple
@@ -59,7 +66,7 @@ const RippleButton = (props: ThemedRippleButton): Object => {
 			rippleOpacity={rippleOpacity}
 			rippleDuration={rippleDuration}
 			rippleCentered={true}
-			onPress={onPress}
+			onPress={_onPress}
 			{
 				...prepareRootPropsView({
 					...others,

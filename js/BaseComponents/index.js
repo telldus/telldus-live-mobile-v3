@@ -109,6 +109,7 @@ import ThemedImage from './ThemedImage';
 import ThemedTextInput from './ThemedTextInput';
 import ThemedMaterialIcon from './ThemedMaterialIcon';
 import ThemedSwitch from './ThemedSwitch';
+import IconedSelectableBlock from './IconedSelectableBlock';
 import ThemedRefreshControl from './ThemedRefreshControl';
 
 import {
@@ -203,6 +204,7 @@ module.exports = {
 	TransparentFullPageLoadingIndicator,
 	MainTabBarIOS,
 	MainTabNavHeader,
+	IconedSelectableBlock,
 	SubHeaderText,
 
 	AppState,

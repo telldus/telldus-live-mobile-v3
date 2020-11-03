@@ -180,17 +180,22 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
       }
     >
       <View
+        accessible={true}
+        focusable={false}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "#1b365d",
-              "justifyContent": "center",
-            },
-            Object {
-              "backgroundColor": "transparent",
-            },
-          ]
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "transparent",
+            "justifyContent": "center",
+            "opacity": 1,
+          }
         }
       >
         <Text
@@ -613,17 +618,22 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             }
           >
             <View
+              accessible={true}
+              focusable={false}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
               style={
-                Array [
-                  Object {
-                    "alignItems": "center",
-                    "backgroundColor": "#1b365d",
-                    "justifyContent": "center",
-                  },
-                  Object {
-                    "backgroundColor": "transparent",
-                  },
-                ]
+                Object {
+                  "alignItems": "center",
+                  "backgroundColor": "transparent",
+                  "justifyContent": "center",
+                  "opacity": 1,
+                }
               }
             >
               <Text

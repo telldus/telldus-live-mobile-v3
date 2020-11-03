@@ -61,6 +61,7 @@ import {
 	SafeAreaProvider,
 	initialWindowMetrics,
 } from 'react-native-safe-area-context';
+import { LogBox } from 'react-native';
 
 import App from './App';
 import { configureStore } from './App/Store/ConfigureStore';
@@ -89,7 +90,7 @@ const {
 
 function Bootstrap(): Object {
 
-	console.disableYellowBox = true;
+	LogBox.ignoreAllLogs();
 
 	class Root extends React.Component<null, null> {
 

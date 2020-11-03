@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import moment from 'moment';
+let dayjs = require('dayjs');
 
 import {
 	View,
@@ -103,7 +103,7 @@ render(): Object {
 				</Text>
 				<FormattedDate
 					level={3}
-					value={moment.unix(date)}
+					value={dayjs.unix(date)}
 					style={dateStyle}/>
 			</View>
 			{align === 'right' && (<View

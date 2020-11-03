@@ -361,12 +361,14 @@ class JobRow extends View<null, Props, null> {
 								alignItems: 'center',
 								justifyContent: 'center',
 							}}>
-								{showModeIcon && (<Icon
-									height={fontSize}
-									width={fontSize}
-									style={{
-										color: color,
-									}}/>
+								{showModeIcon && (
+									// $FlowFixMe
+									<Icon
+										height={fontSize}
+										width={fontSize}
+										style={{
+											color: color,
+										}}/>
 								)}
 								{!!changeMode &&
 									(

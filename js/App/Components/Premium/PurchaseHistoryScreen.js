@@ -32,8 +32,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import reduce from 'lodash/reduce';
 import { useIntl } from 'react-intl';
-import moment from 'moment';
 import * as RNLocalize from 'react-native-localize';
+let dayjs = require('dayjs');
 
 import {
 	View,
@@ -175,7 +175,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 					key={index}>
 					<Text
 						level={3}
-						style={rowTextStyle1}>{formatTime(moment.unix(item.date), {
+						style={rowTextStyle1}>{formatTime(dayjs.unix(item.date), {
 							hour12,
 						})}</Text>
 					<View style={toBlock}>

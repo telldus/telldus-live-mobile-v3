@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+} from 'react';
 
 import { FormattedNumber, Text, View, IconTelldus } from '../../../../../BaseComponents';
 
@@ -44,7 +46,7 @@ type sensorProps = {
 	sensorValueCoverStyle?: Object,
 };
 
-const GenericSensor = ({
+const GenericSensor = memo<Object>(({
 	name, value, unit, icon, label, isLarge, formatOptions,
 	coverStyle, valueUnitCoverStyle, sensorValueCoverStyle,
 	iconStyle, valueStyle, unitStyle, labelStyle }: sensorProps): Object => {
@@ -69,12 +71,15 @@ const GenericSensor = ({
 						</Text>
 						:
 						<View style={{flex: 0, flexDirection: 'row', alignItems: 'center'}}>
-							<FormattedNumber
+							{typeof value !== 'undefined' ? <FormattedNumber
 								value={value}
 								{...formatOptions}
 								suffix={unit}
 								style={[sensorValueText, valueStyle]}
 								suffixStyle={[sensorValueLabelText, unitStyle]}/>
+								:
+								<Text style={[sensorValueText, valueStyle]}/>
+							}
 						</View>
 				}
 				<Text style={[{color: '#ffffff'}, labelStyle]}>
@@ -83,6 +88,6 @@ const GenericSensor = ({
 			</View>
 		</View>
 	);
-};
+});
 
 export default GenericSensor;

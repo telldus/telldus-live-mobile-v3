@@ -2,15 +2,22 @@
 
 exports[`<BlockIcon /> - snapshot renders BlockIcon 1`] = `
 <View
+  accessible={true}
+  focusable={false}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
   style={
-    Array [
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "#1b365d",
-        "justifyContent": "center",
-      },
-      undefined,
-    ]
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#1b365d",
+      "justifyContent": "center",
+      "opacity": 1,
+    }
   }
 >
   <Text

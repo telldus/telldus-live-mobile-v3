@@ -32,7 +32,7 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
-import moment from 'moment';
+let dayjs = require('dayjs');
 import RNIap, {
 	IAPErrorCode,
 } from 'react-native-iap';
@@ -337,7 +337,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 						level={26}
 						style={expireNotifContent}>
 						{formatMessage(i18n.premExpireNofifContent, {
-							expDate: formatDate(moment.unix(pro)),
+							expDate: formatDate(dayjs.unix(pro)),
 						})}
 					</Text>
 				</View>
