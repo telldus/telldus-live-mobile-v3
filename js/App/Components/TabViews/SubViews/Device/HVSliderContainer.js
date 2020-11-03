@@ -24,6 +24,7 @@
 import React from 'react';
 import { PanResponder, Animated, StyleSheet, Vibration, Platform, TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 
 import { View } from '../../../../../BaseComponents';
 
@@ -96,16 +97,17 @@ class HVSliderContainer extends View {
 	constructor(props: Props) {
 		super(props);
 		this.parentScrollEnabled = true;
+		const displayedValue = getSliderLabel(this.props.value, this.props.intl) || 0;
 		this.state = {
 			containerWidth: 0,
 			containerHeight: 0,
 			scaleWidth: 0,
 			scaleHeight: 0,
-			value: new Animated.Value(0),
+			value: new Animated.Value(parseInt(displayedValue, 10)),
 			minimumValue: 0,
 			maximumValue: 100,
 			step: 1,
-			displayedValue: getSliderLabel(0, this.props.intl),
+			displayedValue: displayedValue,
 			DimmerStep: false,
 		};
 		this.activeSlider = false;
@@ -467,4 +469,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = injectIntl(HVSliderContainer);
+function mapStateToProps(store: Object, ownProps: Function): Object {
+	const { id } = ownProps.item;
+	const { byId = {} } = store.devices;
+	return {
+		item: byId[id] || {},
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(injectIntl(HVSliderContainer));
