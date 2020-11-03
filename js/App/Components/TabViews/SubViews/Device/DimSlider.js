@@ -43,7 +43,8 @@ type Props = {
     showTitle?: boolean,
     isInState: string,
     id: number,
-    prefix?: string,
+	prefix?: string,
+	methodRequested: string,
 
     commandON: number,
 	commandOFF: number,
@@ -86,9 +87,11 @@ static defaultProps: DefaultProps = {
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
-		const { isInState, id, value } = this.props;
+		const { isInState, id, value, methodRequested } = this.props;
 
-		this.props.saveDimmerInitialState(id, value, isInState);
+		if (methodRequested === '') {
+			this.props.saveDimmerInitialState(id, value, isInState);
+		}
 	}
 
 	onSlidingComplete(sliderValue: number) {
@@ -182,10 +185,11 @@ const mapDispatchToProps = (dispatch: Function): Object => {
 
 const mapStateToProps = (store: Object, ownProps: Object): Object => {
 	const device = store.devices.byId[ownProps.id];
-	const { isInState, value, stateValues } = device ? device : {};
+	const { isInState, value, stateValues, methodRequested } = device ? device : {};
 	return {
 		isInState,
 		value: (stateValues && stateValues.DIM) ? stateValues.DIM : value,
+		methodRequested,
 	};
 };
 

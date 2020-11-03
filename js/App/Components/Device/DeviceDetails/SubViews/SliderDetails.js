@@ -121,9 +121,11 @@ class SliderDetails extends View {
 	onSlidingStart() {
 		const { device, requestDeviceAction: rDA, saveDimmerInitialState: sDIS } = this.props;
 
-		const { id, stateValues, isInState, value } = device;
+		const { id, stateValues, isInState, value, methodRequested } = device;
 		const stateValue = stateValues ? stateValues.DIM : value;
-		sDIS(id, stateValue, isInState);
+		if (methodRequested === '') {
+			sDIS(id, stateValue, isInState);
+		}
 
 		rDA(id);
 	}

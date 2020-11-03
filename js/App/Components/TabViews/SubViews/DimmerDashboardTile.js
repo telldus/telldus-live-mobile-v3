@@ -139,7 +139,9 @@ class DimmerDashboardTile extends View<Props, void> {
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
-		this.props.saveDimmerInitialState(this.props.item.id, this.props.item.value, this.props.item.isInState);
+		if (this.props.item.methodRequested === '') {
+			this.props.saveDimmerInitialState(this.props.item.id, this.props.item.value, this.props.item.isInState);
+		}
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
