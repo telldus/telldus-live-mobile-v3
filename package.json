@@ -51,7 +51,7 @@
     "intl": "~1.2.5",
     "jsc-android": "npm:@kudo-ci/jsc-android",
     "jwt-decode": "^2.2.0",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#8a7fd4275591531ce58a8a9fe47b57a9691b6c5f",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#19ae1389a886d7b86792deec2110f51c6f1f39f6",
     "lodash": "~4.17.11",
     "moment": "~2.27.0",
     "moment-timezone": "~0.5.31",
