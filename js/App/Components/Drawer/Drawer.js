@@ -31,11 +31,11 @@ const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	RippleButton,
-	Text,
+	// RippleButton,
+	// Text,
 	Icon,
-	ThemedMaterialIcon,
-	IconTelldus,
+	// ThemedMaterialIcon,
+	// IconTelldus,
 } from '../../../BaseComponents';
 import Gateway from './Gateway';
 import {
@@ -62,7 +62,7 @@ import i18n from '../../Translations/common';
 
 import {
 	deployStore,
-	TEST_ACCOUNTS,
+	// TEST_ACCOUNTS,
 } from '../../../Config';
 
 type Props = {
@@ -218,12 +218,12 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 			appLayout,
 			onPressGateway,
 			dispatch,
-			enableGeoFenceFeature,
+			// enableGeoFenceFeature,
 			intl,
 		} = this.props;
 		const {
 			drawerSubHeader,
-			premIconStyle,
+			// premIconStyle,
 			...styles
 		} = this.getStyles(appLayout);
 
@@ -244,9 +244,9 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 			firstname,
 			lastname,
 			email,
-			uuid,
+			// uuid,
 		} = userProfile;
-		const enableGeoFence = !this.isHuaweiBuild && (enableGeoFenceFeature || (TEST_ACCOUNTS.indexOf(uuid) !== -1)); // NOTE: Always show geofence option for test accounts
+		// const enableGeoFence = !this.isHuaweiBuild && (enableGeoFenceFeature || (TEST_ACCOUNTS.indexOf(uuid) !== -1)); // NOTE: Always show geofence option for test accounts
 
 		return (
 			<ScrollView
@@ -271,7 +271,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 							styles={drawerSubHeader}/>
 						{settingLinks}
 					</View>
-					{enableGeoFence && (
+					{/* {enableGeoFence && (
 						<View style={styles.settingsLinkCover}>
 							<DrawerSubHeader
 								textIntl={i18n.geoFence}
@@ -294,7 +294,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 									style={premIconStyle}/>
 							</RippleButton>
 						</View>
-					)}
+					)} */}
 					<DrawerSubHeader
 						textIntl={i18n.locationsLayoutTitle}
 						styles={{
