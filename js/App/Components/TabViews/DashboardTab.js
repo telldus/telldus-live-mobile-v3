@@ -145,7 +145,6 @@ class DashboardTab extends View {
 		this.noItemsTitle = props.screenProps.intl.formatMessage(i18n.messageNoItemsTitle);
 		this.noItemsContent = props.screenProps.intl.formatMessage(i18n.messageNoItemsContent);
 
-		this.showDimInfo = this.showDimInfo.bind(this);
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 
 		this.openRGBControl = this.openRGBControl.bind(this);
@@ -317,14 +316,21 @@ class DashboardTab extends View {
 		toggleDialogueBox({show: false});
 	}
 
-	showDimInfo(device: Object) {
+	showDimInfo = (device: Object) => {
 		this.setState({
 			dialogueBoxConf: {
 				action: 'dim_info',
 				device,
 			},
-		}, () => {
-			this.openDialogueBox('dim_info', device);
+		});
+	}
+
+	hideDimInfo = (device: Object) => {
+		this.setState({
+			dialogueBoxConf: {
+				action: '',
+				device: {},
+			},
 		});
 	}
 
@@ -336,59 +342,12 @@ class DashboardTab extends View {
 			});
 	}
 
-	openDialogueBox(action: string, device: Object) {
-		const { screenProps } = this.props;
-		const { toggleDialogueBox } = screenProps;
-		const dialogueData = this.getDialogueBoxData(action, device);
-		toggleDialogueBox(dialogueData);
-	}
-
 	openThermostatControl = (id: number) => {
 		const { navigation } = this.props;
 		navigation.navigate('ThermostatControl',
 			{
 				id,
 			});
-	}
-
-	getDialogueBoxData(action: string, device: Object): Object {
-		const { screenProps } = this.props;
-		const { appLayout, intl } = screenProps;
-		const style = this.getStyles({
-			appLayout,
-		});
-
-		let data = {
-			show: true,
-		};
-		if (action === 'dim_info') {
-			const { isOnline, name, id } = device;
-			const styles = {
-				dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
-				dialogueBodyStyle: style.dialogueBodyStyle,
-				dialogueBodyTextStyle: style.dialogueBodyTextStyle,
-				headerWidth: style.headerWidth,
-				headerHeight: style.headerHeight,
-			};
-
-			return {
-				...data,
-				showHeader: false,
-				text: <DimmerControlInfo
-					style={styles}
-					name={name}
-					id={id}
-					onPressButton={this.onDismissDialogueHide}
-					isOnline={isOnline}
-					appLayout={appLayout}
-					intl={intl}
-				/>,
-				style: style.dialogueBoxStyle,
-				backdropOpacity: 0,
-				closeOnPressPositive: true,
-			};
-		}
-		return data;
 	}
 
 	_keyExtractor = (item: Object, index: number): string => {
@@ -410,8 +369,21 @@ class DashboardTab extends View {
 			appLayout,
 			addingNewLocation,
 			addNewLocation,
+			intl,
 		} = screenProps;
-		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
+		const {
+			isRefreshing,
+			numColumns,
+			tileWidth,
+			scrollEnabled,
+			showRefresh,
+			dialogueBoxConf,
+		} = this.state;
+		const {
+			action,
+			device,
+		} = dialogueBoxConf;
+		const showDimInfo = action === 'dim_info' && !!device;
 
 		const style = this.getStyles({
 			appLayout,
@@ -460,6 +432,22 @@ class DashboardTab extends View {
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 					keyExtractor={this._keyExtractor}
+				/>
+				<DimmerControlInfo
+					show={showDimInfo}
+					style={{
+						dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
+						dialogueBodyStyle: style.dialogueBodyStyle,
+						dialogueBodyTextStyle: style.dialogueBodyTextStyle,
+						headerWidth: style.headerWidth,
+						headerHeight: style.headerHeight,
+					}}
+					name={device.name}
+					id={device.id}
+					onPressButton={this.hideDimInfo}
+					isOnline={device.isOnline}
+					appLayout={appLayout}
+					intl={intl}
 				/>
 			</View>
 		);

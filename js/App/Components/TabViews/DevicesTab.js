@@ -160,7 +160,6 @@ class DevicesTab extends View {
 		this.labelHide = formatMessage(i18n.hide).toUpperCase();
 		this.defaultDescriptionButton = formatMessage(i18n.defaultDescriptionButton);
 
-		this.showDimInfo = this.showDimInfo.bind(this);
 		this.handleAddDeviceAttentionCapture = this.handleAddDeviceAttentionCapture.bind(this);
 		this.setRef = this.setRef.bind(this);
 		this.listView = null;
@@ -388,14 +387,21 @@ class DevicesTab extends View {
 		});
 	}
 
-	showDimInfo(device: Object) {
+	showDimInfo = (device: Object) => {
 		this.setState({
 			dialogueBoxConf: {
 				action: 'dim_info',
 				device,
 			},
-		}, () => {
-			this.openDialogueBox('dim_info', device);
+		});
+	}
+
+	hideDimInfo = (device: Object) => {
+		this.setState({
+			dialogueBoxConf: {
+				action: '',
+				device: {},
+			},
 		});
 	}
 
@@ -418,43 +424,10 @@ class DevicesTab extends View {
 	}
 
 	getDialogueBoxData(action: string, device: Object): Object {
-		const { screenProps } = this.props;
-		const { appLayout, intl } = screenProps;
-		const style = this.getStyles({
-			appLayout,
-		});
-
 		let data = {
 			show: true,
 			closeOnPressPositive: true,
 		};
-		if (action === 'dim_info') {
-			const { isOnline, name, id } = device;
-			const styles = {
-				dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
-				dialogueBodyStyle: style.dialogueBodyStyle,
-				dialogueBodyTextStyle: style.dialogueBodyTextStyle,
-				headerWidth: style.headerWidth,
-				headerHeight: style.headerHeight,
-			};
-
-			return {
-				...data,
-				showHeader: false,
-				header: null,
-				text: <DimmerControlInfo
-					style={styles}
-					name={name}
-					id={id}
-					onPressButton={this.onDismissDialogueHide}
-					isOnline={isOnline}
-					appLayout={appLayout}
-					intl={intl}
-				/>,
-				style: style.dialogueBoxStyle,
-				backdropOpacity: 0,
-			};
-		}
 		if (action === 'set_ignore') {
 			return {
 				...data,
@@ -713,13 +686,20 @@ class DevicesTab extends View {
 			appLayout,
 			addingNewLocation,
 			addNewLocation,
+			intl,
 		} = screenProps;
 		const {
 			isRefreshing,
 			propsSwipeRow,
 			scrollEnabled,
 			showRefresh,
+			dialogueBoxConf,
 		} = this.state;
+		const {
+			action,
+			device,
+		} = dialogueBoxConf;
+		const showDimInfo = action === 'dim_info' && !!device;
 
 		const style = this.getStyles({
 			appLayout,
@@ -768,6 +748,22 @@ class DevicesTab extends View {
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 					ref={this.setRef}
 					getItemLayout={this.getItemLayout}
+				/>
+				<DimmerControlInfo
+					show={showDimInfo}
+					style={{
+						dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
+						dialogueBodyStyle: style.dialogueBodyStyle,
+						dialogueBodyTextStyle: style.dialogueBodyTextStyle,
+						headerWidth: style.headerWidth,
+						headerHeight: style.headerHeight,
+					}}
+					name={device.name}
+					id={device.id}
+					onPressButton={this.hideDimInfo}
+					isOnline={device.isOnline}
+					appLayout={appLayout}
+					intl={intl}
 				/>
 			</View>
 		);

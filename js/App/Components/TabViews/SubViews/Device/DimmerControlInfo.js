@@ -30,6 +30,7 @@ import {
 	FloatingButton,
 } from '../../../../../BaseComponents';
 import DimSlider from './DimSlider';
+import Modal from 'react-native-modal';
 
 import {
 	withTheme,
@@ -49,6 +50,7 @@ type Props = PropsThemedComponent & {
 	isOnline: boolean,
 	appLayout: Object,
 	intl: Object,
+	show: boolean,
 };
 
 class DimmerControlInfo extends View<Props, null> {
@@ -63,6 +65,7 @@ class DimmerControlInfo extends View<Props, null> {
 			'isOnline',
 			'themeInApp',
 			'colorScheme',
+			'show',
 		]);
 	}
 
@@ -76,6 +79,7 @@ class DimmerControlInfo extends View<Props, null> {
 			appLayout,
 			intl,
 			colors,
+			show,
 		} = this.props;
 
 		const {
@@ -94,44 +98,54 @@ class DimmerControlInfo extends View<Props, null> {
 			iconStyle,
 			iconSize,
 			dialogueBodyTextStyle,
+			modal,
 		} = this.getStyles(appLayout);
 
 		return (
-			<View style={dimInfoDialogueContainer}>
-				<DialogueHeader
-					headerText={`${intl.formatMessage(i18n.dim)} ${name}`}
-					shouldCapitalize={false}
-					showIcon={false}
-					textStyle={style.dialogueHeaderTextStyle}
-					headerWidth={style.headerWidth}
-					headerHeight={style.headerHeight}/>
-				<View style={style.dialogueBodyStyle}>
-					<Text
-						level={18}
-						style={dialogueBodyTextStyle}>
-						{intl.formatMessage(i18n.dimInstruction)}
-					</Text>
-					<View style={{
-						flexDirection: 'row',
-						marginTop: 8,
-					}}>
-						<DimSlider
-							prefix={`${intl.formatMessage(i18n.dimmingLevel)}: `}
-							id={id}
-							sliderContainerStyle={sliderContainerStyle}
-							thumbStyle={thumbStyle}
-							minimumTrackTintColor={minimumTrackTintColor}
-							maximumTrackTintColor={maximumTrackTintColor}
-							thumbTintColor={thumbTintColor}/>
-						<FloatingButton
-							buttonStyle={buttonStyle}
-							iconStyle={iconStyle}
-							onPress={onPressButton}
-							iconName={'checkmark'}
-							iconSize={iconSize}/>
+			<Modal
+				accessible={false}
+				style={modal}
+				isVisible={show}
+				hideModalContentWhileAnimating={true}
+				supportedOrientations={['portrait', 'landscape']}>
+				<View style={dimInfoDialogueContainer}>
+					<DialogueHeader
+						headerText={`${intl.formatMessage(i18n.dim)} ${name}`}
+						shouldCapitalize={false}
+						showIcon={false}
+						textStyle={style.dialogueHeaderTextStyle}
+						headerWidth={style.headerWidth}
+						headerHeight={style.headerHeight}/>
+					<View
+						level={3}
+						style={style.dialogueBodyStyle}>
+						<Text
+							level={18}
+							style={dialogueBodyTextStyle}>
+							{intl.formatMessage(i18n.dimInstruction)}
+						</Text>
+						<View style={{
+							flexDirection: 'row',
+							marginTop: 8,
+						}}>
+							<DimSlider
+								prefix={`${intl.formatMessage(i18n.dimmingLevel)}: `}
+								id={id}
+								sliderContainerStyle={sliderContainerStyle}
+								thumbStyle={thumbStyle}
+								minimumTrackTintColor={minimumTrackTintColor}
+								maximumTrackTintColor={maximumTrackTintColor}
+								thumbTintColor={thumbTintColor}/>
+							<FloatingButton
+								buttonStyle={buttonStyle}
+								iconStyle={iconStyle}
+								onPress={onPressButton}
+								iconName={'checkmark'}
+								iconSize={iconSize}/>
+						</View>
 					</View>
 				</View>
-			</View>
+			</Modal>
 		);
 	}
 
@@ -146,6 +160,11 @@ class DimmerControlInfo extends View<Props, null> {
 		fButtonSize = fButtonSize > maxSizeFloatingButton ? maxSizeFloatingButton : fButtonSize;
 
 		return {
+			modal: {
+				flex: 1,
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
 			iconSize: deviceWidth * 0.050666667,
 			buttonStyle: {
 				elevation: 4,
