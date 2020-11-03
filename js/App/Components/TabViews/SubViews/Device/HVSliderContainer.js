@@ -97,7 +97,7 @@ class HVSliderContainer extends View {
 	constructor(props: Props) {
 		super(props);
 		this.parentScrollEnabled = true;
-		const displayedValue = getSliderLabel(this.props.value, this.props.intl) || 0;
+		const displayedValue = getSliderLabel(this.props.value, this.props.intl) || '0';
 		this.state = {
 			containerWidth: 0,
 			containerHeight: 0,
