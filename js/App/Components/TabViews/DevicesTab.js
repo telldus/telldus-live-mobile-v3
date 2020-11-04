@@ -380,7 +380,7 @@ class DevicesTab extends View {
 					if (this.listView) {
 						this.listView.scrollToLocation({
 							animated: true,
-							sectionIndex:  visibleList.length - 1,
+							sectionIndex: visibleList.length - 1,
 							itemIndex: 0,
 							viewPosition: 0.6,
 						});
