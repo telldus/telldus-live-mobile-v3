@@ -206,6 +206,10 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             buildConfigField "String", "TELLDUS_API_SERVER", TELLDUS_API_SERVER
+
+            ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }
         }
     }
     // applicationVariants are e.g. debug, release
