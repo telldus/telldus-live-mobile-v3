@@ -373,13 +373,16 @@ class DevicesTab extends View {
 		}, () => {
 			const { showHiddenList } = this.state;
 			if (showHiddenList && hiddenList.length > 0 && visibleList.length > 0) {
+				if (this.timeoutScrollToHidden) {
+					clearTimeout(this.timeoutScrollToHidden);
+				}
 				this.timeoutScrollToHidden = setTimeout(() => {
 					if (this.listView) {
 						this.listView.scrollToLocation({
 							animated: true,
-							sectionIndex: visibleList.length,
+							sectionIndex: visibleList.length - 1,
 							itemIndex: 0,
-							viewPosition: 0.8,
+							viewPosition: 0.6,
 						});
 					}
 				}, 500);

@@ -77,7 +77,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	const { editNameAcive, isPushSubmitLoading, name } = state;
 	if (name !== props.name && !editNameAcive && !isPushSubmitLoading) {
 		return {
-			name: props.name,
+			name: props.name || '',
 		};
 	}
 	return null;
@@ -86,7 +86,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 constructor(props: Props) {
 	super(props);
 
-	const { name = ''} = props;
+	const name = props.name || '';
 	this.state = {
 		name: name.toString(),
 		editNameAcive: false,
@@ -129,7 +129,8 @@ onPressEditName() {
 }
 
 onSubmitEditing() {
-	const { onSubmitDeviceName, name: prevName = '' } = this.props;
+	const { onSubmitDeviceName } = this.props;
+	const prevName = this.props.name || '';
 	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	this.setState({
 		editNameAcive: false,
