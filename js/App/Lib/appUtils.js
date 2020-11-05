@@ -131,6 +131,21 @@ const getSectionHeaderFontSize = (deviceWidth: number): number => {
 
 const getSectionHeaderHeight = (sectionHeaderFontSize: number): number => sectionHeaderFontSize * 1.8;
 
+const getDefaultMapCoordinates = (): Object => {
+	return {
+		region: {
+			latitude: 55.70584,
+			longitude: 13.19321,
+			latitudeDelta: 0.24442,
+			longitudeDelta: 0.24442,
+		},
+		latitude: 55.70584,
+		longitude: 13.19321,
+		latitudeDelta: 0.24442,
+		longitudeDelta: 0.24442,
+	};
+};
+
 module.exports = {
 	supportRSA,
 	getLocale,
@@ -142,4 +157,5 @@ module.exports = {
 	getItemLayout,
 	getSectionHeaderFontSize,
 	getSectionHeaderHeight,
+	getDefaultMapCoordinates,
 };
