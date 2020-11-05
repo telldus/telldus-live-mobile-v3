@@ -81,7 +81,7 @@ const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId
 						});
 					}
 				}
-				if (!timeKey || timeKey === NOW_KEY) {
+				if (!timeKey || timeKey === TOMORROW_KEY) {
 					const hourTom = tom.hour();
 					if (hourTom !== _hour) {
 						continue;
@@ -98,7 +98,7 @@ const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId
 						});
 					}
 				}
-				if (!timeKey || timeKey === NOW_KEY) {
+				if (!timeKey || timeKey === DAY_AFTER_TOMORROW_KEY) {
 					const dFTom = tom.add('1', 'd');
 					const hourDFTom = dFTom.hour();
 					if (hourDFTom !== _hour) {
