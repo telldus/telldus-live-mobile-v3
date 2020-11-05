@@ -84,7 +84,8 @@ static void InitializeFlipper(UIApplication *application) {
 	rootViewController.view = rootView;
 	self.window.rootViewController = rootViewController;
 	[self.window makeKeyAndVisible];
-	[RNSplashScreen show];
+
+	[RNSplashScreen showSplash:@"LaunchView" inRootView:rootView];
  
   
   // NOTE: Deprecated iOS Background Fetch API for devices running < iOS 13
