@@ -63,6 +63,7 @@ const updateAllMetWeatherDbTiles = (): ThunkAction => {
 			const {
 				latitude,
 				longitude,
+				timeKey,
 			} = metWeatherByIdInCurrentDb[metDbId];
 
 			const currentDBIdWeatherData = weather[metDbId] || {};
@@ -76,6 +77,7 @@ const updateAllMetWeatherDbTiles = (): ThunkAction => {
 					}, {
 						id: metDbId,
 						providerId: MET_ID,
+						forecastDay: timeKey,
 					}));
 				}
 			}
