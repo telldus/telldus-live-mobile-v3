@@ -40,6 +40,9 @@ import {
 	withTheme,
 	PropsThemedComponent,
 } from '../../HOC/withTheme';
+import {
+	getDefaultMapCoordinates,
+} from '../../../Lib/appUtils';
 
 import Theme from '../../../Theme';
 
@@ -110,16 +113,7 @@ class GeoPosition extends View {
 	renderLeftButton: () => Object;
 
 	static defaultProps: DefaultProps = {
-		region: {
-			latitude: 55.70584,
-			longitude: 13.19321,
-			latitudeDelta: 0.24442,
-			longitudeDelta: 0.24442,
-		},
-		latitude: 55.70584,
-		longitude: 13.19321,
-		latitudeDelta: 0.24442,
-		longitudeDelta: 0.24442,
+		...getDefaultMapCoordinates(),
 	}
 
 	constructor(props: Props) {
