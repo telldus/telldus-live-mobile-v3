@@ -166,11 +166,13 @@ class RGBButton extends View<Props, null> {
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
-		const { stateValues, isInState, id, value } = this.props.device;
+		const { stateValues, isInState, id, value, methodRequested } = this.props.device;
 		const stateValue = stateValues ? stateValues.DIM : value;
 
 		this.props.onSlideActive();
-		this.props.saveDimmerInitialState(id, stateValue, isInState);
+		if (methodRequested === '') {
+			this.props.saveDimmerInitialState(id, stateValue, isInState);
+		}
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 

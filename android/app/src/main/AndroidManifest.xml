@@ -11,8 +11,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission tools:node="remove" android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
@@ -184,12 +182,12 @@
           android:required="false"/>
 
         <!-- Geo Fence/ BG Location -->
-        <meta-data
+        <!-- <meta-data
           android:name="com.transistorsoft.locationmanager.license"
           android:value="${geolocationApplicationKey}"/>
         <service android:name="com.transistorsoft.locationmanager.service.TrackingService" android:foregroundServiceType="location" />
         <service android:name="com.transistorsoft.locationmanager.service.LocationRequestService" android:foregroundServiceType="location" />
-  
+   -->
     </application>
 
 </manifest>

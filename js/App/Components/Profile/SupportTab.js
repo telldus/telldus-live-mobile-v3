@@ -27,6 +27,7 @@ import { Linking, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 const forge = require('node-forge');
+import * as RNLocalize from 'react-native-localize';
 let dayjs = require('dayjs');
 
 import {
@@ -75,6 +76,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 		formatTime,
 		formatMessage,
 	} = useIntl();
+	const hour12 = !RNLocalize.uses24HourClock();
 
 	const {
 		container,
@@ -166,7 +168,9 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 							<Text
 								level={23}
 								style={tweetDateStyle}>
-								{formatTime(created_at)}
+								{formatTime(created_at, {
+									hour12,
+								})}
 							</Text>
 						</Text>
 						<Text

@@ -8,6 +8,8 @@ RUN /opt/android-sdk-linux/tools/bin/sdkmanager "platforms;android-28" "build-to
 
 RUN /opt/android-sdk-linux/tools/bin/sdkmanager "platforms;android-29" "build-tools;29.0.3"
 
+RUN /opt/android-sdk-linux/tools/bin/sdkmanager --install "ndk;21.3.6528147" --channel=0
+
 RUN apk add --no-cache bash --repository=http://dl-cdn.alpinelinux.org/alpine/v3.10/main/ libuv nodejs npm openssh-client yarn
 
 # Install bundletool

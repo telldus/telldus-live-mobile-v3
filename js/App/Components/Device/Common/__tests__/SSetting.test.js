@@ -40,6 +40,8 @@ spy.mockReturnValue(
 	}
 );
 
+jest.useFakeTimers();
+
 it('renders SSetting when isOneSelected using Snapshots', () => {
 	expect(renderer.create(
 		<SSetting

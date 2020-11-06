@@ -64,17 +64,29 @@ const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): O
 	let { language = {} } = defaultSettings;
 	let locale = language.code;
 
+	const hour12 = !RNLocalize.uses24HourClock();
+
 	return useMemo((): Object => {
 		const cache = createIntlCache();
-		return createIntl({
+		const {
+			formatTime,
+			...others
+		} = createIntl({
 			locale,
 			timeZone: gatewayTimezone,
 			messages: Translations[locale] || Translations.en,
 		}, cache);
-	}, [
-		locale,
-		gatewayTimezone,
-	]);
+		const _formatTime = (value: string, opts?: Object = {}): Function => {
+			return formatTime(value, {
+				hour12,
+				...opts,
+			});
+		};
+		return {
+			...others,
+			formatTime: _formatTime,
+		};
+	}, [locale, gatewayTimezone, hour12]);
 };
 
 const useNoInternetDialogue = (): Object => {

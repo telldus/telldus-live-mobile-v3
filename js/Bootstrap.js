@@ -101,13 +101,13 @@ function Bootstrap(): Object {
 		}
 
 		onBeforeLift = () => {
-			SplashScreen.hide();
 			const { getState, dispatch } = store;
 			let state = getState();
 			if (state.user && state.user.userProfile) {
 				dispatch(setUserIdentifierFirebaseCrashlytics());
 				dispatch(setUserNameFirebaseCrashlytics());
 			}
+			SplashScreen.hide();
 		}
 
 		render(): Provider {

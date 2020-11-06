@@ -40,6 +40,8 @@ spy.mockReturnValue(
 	}
 );
 
+jest.useFakeTimers();
+
 it('renders ShortcutRow using Snapshots', () => {
 	expect(renderer.create(
 		<ShortcutRow/>

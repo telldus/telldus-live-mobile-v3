@@ -179,7 +179,7 @@ class SliderScale extends View {
 					// TODO: Remove once RN is upgraded, and after making sure onLayout getting called
 					// indefinitely issue is solved in iPhone 7 & 8 plus
 					onLayout={(scaleWidth && Platform.OS === 'ios') ? undefined : this.layoutScale}/>
-				<Animated.View style={[
+				{!!scaleWidth && <Animated.View style={[
 					styles.thumb, thumbStyle, {
 						width: thumbWidth,
 						height: thumbHeight,
@@ -188,6 +188,7 @@ class SliderScale extends View {
 						transform: [{ translateX: thumbLeft }],
 					},
 				]}/>
+				}
 				<Text
 					ellipsizeMode="middle"
 					numberOfLines={1}

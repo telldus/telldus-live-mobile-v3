@@ -104,8 +104,8 @@ apply from: "../../node_modules/react-native/react.gradle"
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
-Project background_geolocation = project(':react-native-background-geolocation')
-apply from: "${background_geolocation.projectDir}/app.gradle"
+// Project background_geolocation = project(':react-native-background-geolocation')
+// apply from: "${background_geolocation.projectDir}/app.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -145,6 +145,7 @@ def jscFlavor = 'org.webkit:android-jsc-intl:+'
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
+    ndkVersion '21.3.6528147'
     compileSdkVersion rootProject.ext.compileSdkVersion
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -206,6 +207,10 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             buildConfigField "String", "TELLDUS_API_SERVER", TELLDUS_API_SERVER
+
+            ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }
         }
     }
     // applicationVariants are e.g. debug, release

@@ -33,43 +33,72 @@ const {
 	DARK_THEME_KEY,
 } = CONSTANTS;
 
-import ThemedColors from '../Theme/ThemedColors';
+import ThemedColorsOne from '../Theme/ThemedColors';
+import ThemedColorsTwo from '../Theme/ThemedColorsTwo';
 import i18n from '../Translations/common';
+
+import {
+	getThemeSetOptions,
+} from '../Lib/appUtils';
+
+const getThemedColors = (selectedThemeSet: Object): Object => {
+	switch (selectedThemeSet.key) {
+		case 1:
+			return ThemedColorsOne;
+		case 2:
+			return ThemedColorsTwo;
+		default:
+			return ThemedColorsOne;
+	}
+};
+
+const getThemeData = (themeInApp: string | null = 'light', ThemedColors: Object): Object => {
+	const colors = ThemedColors[themeInApp] || ThemedColors.light;
+	return {colors};
+};
 
 const useAppTheme = (): Object => {
 	const colorScheme = useColorScheme();
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const {
 		themeInApp = DEVICE_THEME_KEY,
+		selectedThemeSet,
 	} = defaultSettings;
+	const options = getThemeSetOptions();
+	const _selectedThemeSet = (selectedThemeSet && selectedThemeSet.key) ? selectedThemeSet : options[0];
 	return React.useMemo((): Object => {
+		const ThemedColors = getThemedColors(_selectedThemeSet);
 		if (themeInApp === DEVICE_THEME_KEY) {
 			return {
 				colorScheme,
 				dark: colorScheme === DARK_THEME_KEY,
 				themeInApp,
-				...getThemeData(colorScheme),
+				...getThemeData(colorScheme, ThemedColors),
 			};
 		}
 		return {
 			colorScheme,
 			dark: themeInApp === DARK_THEME_KEY,
 			themeInApp,
-			...getThemeData(themeInApp),
+			...getThemeData(themeInApp, ThemedColors),
 		};
 	}, [
 		colorScheme,
 		themeInApp,
+		_selectedThemeSet,
 	]);
-};
-
-const getThemeData = (themeInApp: string | null = 'light'): Object => {
-	const colors = ThemedColors[themeInApp] || ThemedColors.light;
-	return {colors};
 };
 
 const useAppThemeOptions = (): Object => {
 	const colorScheme = useColorScheme();
+
+	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
+	const {
+		selectedThemeSet,
+	} = defaultSettings;
+	const optionsTS = getThemeSetOptions();
+	const _selectedThemeSet = (selectedThemeSet && selectedThemeSet.key) ? selectedThemeSet : optionsTS[0];
+	const ThemedColors = getThemedColors(_selectedThemeSet);
 	const themes = Object.keys(ThemedColors);
 
 	const intl = useIntl();

@@ -26,7 +26,7 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, Platform, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
+const ExtraDimensions = Platform.OS === 'ios' ? {} : require('react-native-extra-dimensions-android');
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
@@ -204,7 +204,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 		let isPortrait = height > width;
 		let deviceHeight = isPortrait ? height : width;
 
-		const statusBarHeight = topMargin && this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0;
+		const statusBarHeight = (topMargin && this.state.hasStatusBar && Platform.OS === 'android') ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0;
 
 		if (height < width && !this.isTablet) {
 			return <View style={{

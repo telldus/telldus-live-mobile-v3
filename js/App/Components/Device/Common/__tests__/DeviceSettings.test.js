@@ -62,6 +62,8 @@ const deviceId = id, widgetId = widget;
 
 const setting = getDeviceSettings(parseInt(widgetId, 10), () => '');
 
+jest.useFakeTimers();
+
 describe('<DeviceSettings /> - snapshot', () => {
 	it('renders DeviceSettings, with initializeValueFromStore', () => {
 		let component;

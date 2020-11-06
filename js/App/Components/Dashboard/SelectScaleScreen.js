@@ -94,7 +94,7 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 	const currentItemInPreDb = preAddToDb[id] || {};
 
 	useEffect(() => {
-		onDidMount(formatMessage(i18n.selectScale), formatMessage(i18n.selectOneOrMoreScale));
+		onDidMount(formatMessage(i18n.selectScale), formatMessage(i18n.selectOneOrMoreScales));
 	}, [formatMessage, onDidMount]);
 
 	const {

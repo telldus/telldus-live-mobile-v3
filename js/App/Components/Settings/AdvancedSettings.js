@@ -45,6 +45,9 @@ import {
 	SettingsRow,
 	Text,
 } from '../../../BaseComponents';
+import {
+	SelectThemeSetDD,
+} from './SubViews';
 
 import {
 	updateGeoFenceConfig,
@@ -328,6 +331,12 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 						h2={'Advanced settings'}
 						navigation={navigation}/>
 					<View style={itemsContainer}>
+						<Text
+							level={2}
+							style={headerMainStyle}>
+							General Settings
+						</Text>
+						<SelectThemeSetDD/>
 						<Text
 							level={2}
 							style={headerMainStyle}>
