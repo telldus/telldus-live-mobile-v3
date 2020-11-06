@@ -36,6 +36,7 @@ import { configureStore } from '../../App/Store/ConfigureStore';
 let {height, width} = Dimensions.get('window');
 
 const store = configureStore().store;
+jest.useFakeTimers();
 
 describe('<TouchableButton /> - snapshot', () => {
 
