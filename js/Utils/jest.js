@@ -139,3 +139,15 @@ jest.mock('axios', (): Object => {
 	});
 	return mockAxios;
 });
+
+// NOTE: A work around for the issue -> https://github.com/rt2zz/redux-persist/issues/1243
+import { combineReducers } from 'redux';
+jest.mock('redux-persist', (): Object => {
+	const real = jest.requireActual('redux-persist');
+	return {
+		...real,
+		persistCombineReducers: jest
+			.fn()
+			.mockImplementation((config: Object, reducers: Function): Object => combineReducers(reducers)),
+	};
+});
