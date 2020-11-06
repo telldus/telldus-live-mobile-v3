@@ -32,6 +32,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import reduce from 'lodash/reduce';
 import { useIntl } from 'react-intl';
+import * as RNLocalize from 'react-native-localize';
 let dayjs = require('dayjs');
 
 import {
@@ -82,6 +83,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const { formatTime, formatMessage, formatNumber } = useIntl();
+	const hour12 = !RNLocalize.uses24HourClock();
 
 	const dispatch = useDispatch();
 	const [ screenData, setScreenData ] = useState({
@@ -173,7 +175,9 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 					key={index}>
 					<Text
 						level={3}
-						style={rowTextStyle1}>{formatTime(dayjs.unix(item.date))}</Text>
+						style={rowTextStyle1}>{formatTime(dayjs.unix(item.date), {
+							hour12,
+						})}</Text>
 					<View style={toBlock}>
 						<Text
 							level={3}

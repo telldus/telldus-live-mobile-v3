@@ -44,6 +44,8 @@ const intl = {
 	formatMessage: () => '',
 };
 
+jest.useFakeTimers();
+
 it('renders USetting when checked using Snapshots', () => {
 	expect(renderer.create(
 		<USetting

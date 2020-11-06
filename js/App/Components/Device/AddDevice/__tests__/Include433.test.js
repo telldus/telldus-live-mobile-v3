@@ -102,6 +102,8 @@ const customMapStateToProps = (_store, _ownProps) => {
 	};
 };
 
+jest.useFakeTimers();
+
 describe('<Include433 />', () => {
 
 	beforeAll(() => {

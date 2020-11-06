@@ -22,7 +22,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:4.1.0'
         classpath 'com.google.gms:google-services:4.3.3'
         classpath 'com.huawei.agconnect:agcp:1.4.0.300'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.0'
@@ -48,14 +48,14 @@ allprojects {
         maven {
             url ("https://developer.huawei.com/repo/")
         }
-        maven {
-           // Required for react-native-background-geolocation
-           url("${project(':react-native-background-geolocation').projectDir}/libs")
-        }
-        maven {
-            // react-native-background-fetch
-            url("${project(':react-native-background-fetch').projectDir}/libs")
-        }
+        // maven {
+        //    // Required for react-native-background-geolocation
+        //    url("${project(':react-native-background-geolocation').projectDir}/libs")
+        // }
+        // maven {
+        //     // react-native-background-fetch
+        //     url("${project(':react-native-background-fetch').projectDir}/libs")
+        // }
     }
 }
 
@@ -67,5 +67,12 @@ subprojects {
                 buildToolsVersion rootProject.ext.buildToolsVersion
             }
         }
+    }
+}
+
+// TODO: See if required in react-native 0.63
+configurations.all {
+    resolutionStrategy {
+        force "com.facebook.soloader:soloader:0.8.2"
     }
 }

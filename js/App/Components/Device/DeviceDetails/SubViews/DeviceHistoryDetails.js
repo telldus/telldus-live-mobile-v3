@@ -30,7 +30,7 @@ import {
 	Platform,
 	StatusBar,
 } from 'react-native';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
+const ExtraDimensions = Platform.OS === 'ios' ? {} : require('react-native-extra-dimensions-android');
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import {
@@ -51,7 +51,7 @@ import {
 	getKnownModes,
 } from '../../../../Lib';
 
-let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
+let statusBarHeight = Platform.OS === 'android' ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0;
 
 import i18n from '../../../../Translations/common';
 

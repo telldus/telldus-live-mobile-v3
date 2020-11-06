@@ -250,7 +250,7 @@ actionsToPerformOnStart = async () => {
 		// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
 		await dispatch(fetchRemoteConfig());
 
-		if (enableGeoFence) {
+		if (enableGeoFence && Platform.OS === 'ios') {
 			await dispatch(setupGeoFence(intl));
 		}
 	} catch (e) {

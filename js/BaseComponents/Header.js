@@ -36,7 +36,7 @@ import {
 	useSelector,
 } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
+const ExtraDimensions = Platform.OS === 'ios' ? {} : require('react-native-extra-dimensions-android');
 import { useIntl } from 'react-intl';
 
 import Theme from '../App/Theme';
@@ -460,7 +460,7 @@ const getStyles = (appLayout: Object, {
 			position: 'relative',
 		},
 		statusBar: {
-			height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+			height: Platform.OS === 'android' ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 		},
 		iosToolbarSearch: {
 			backgroundColor: toolbarInputColor,

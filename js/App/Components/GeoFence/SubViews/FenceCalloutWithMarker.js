@@ -34,6 +34,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MapView from 'react-native-maps';
 import { useIntl } from 'react-intl';
+import * as RNLocalize from 'react-native-localize';
 
 import {
 	View,
@@ -56,6 +57,7 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 		formatMessage,
 		formatTime,
 	} = intl;
+	const hour12 = !RNLocalize.uses24HourClock();
 	const markerRef = useRef(null);
 
 	const {
@@ -121,7 +123,11 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 							{isAlwaysActive ?
 								capitalize(formatMessage(i18n.alwaysActive))
 								:
-								`${capitalize(formatMessage(i18n.labelActive))} ${formatTime(timestampF)}-${formatTime(timestampT)}`
+								`${capitalize(formatMessage(i18n.labelActive))} ${formatTime(timestampF, {
+									hour12,
+								})}-${formatTime(timestampT, {
+									hour12,
+								})}`
 							}
 						</Text>
 					</View>

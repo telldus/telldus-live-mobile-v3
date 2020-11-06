@@ -44,6 +44,8 @@ const intl = {
 	formatMessage: () => '',
 };
 
+jest.useFakeTimers();
+
 it('renders VSetting when isOneSelected using Snapshots', () => {
 	expect(renderer.create(
 		<VSetting

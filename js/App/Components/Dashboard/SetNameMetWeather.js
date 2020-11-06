@@ -125,6 +125,7 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 		}, {
 			providerId: selectedType,
 			id: uniqueId,
+			forcastDay: timeKey,
 		})).then((res: Object) => {
 			setIsLoading(false);
 			if (res && res.data) {
