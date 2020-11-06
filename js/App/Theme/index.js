@@ -24,10 +24,12 @@ import Core from './Core';
 import Forms from './Forms';
 import Styles from './Styles';
 import ThemedColors from './ThemedColors';
+import ThemedColorsTwo from './ThemedColorsTwo';
 
 module.exports = {
 	Core,
 	Forms,
 	Styles,
 	ThemedColors,
+	ThemedColorsTwo,
 };
