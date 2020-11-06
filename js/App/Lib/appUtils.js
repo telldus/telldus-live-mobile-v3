@@ -146,6 +146,19 @@ const getDefaultMapCoordinates = (): Object => {
 	};
 };
 
+const getThemeSetOptions = (): Array<Object> => {
+	return [
+		{
+			key: 1,
+			value: 'Johannes on road trip',
+		},
+		{
+			key: 2,
+			value: 'Fred on vacation',
+		},
+	];
+};
+
 module.exports = {
 	supportRSA,
 	getLocale,
@@ -158,4 +171,5 @@ module.exports = {
 	getSectionHeaderFontSize,
 	getSectionHeaderHeight,
 	getDefaultMapCoordinates,
+	getThemeSetOptions,
 };

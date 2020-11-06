@@ -31,6 +31,7 @@ import LogoutAllAccButton from './LogoutAllAccButton';
 import GeoFenceEventsLogRow from './GeoFenceEventsLogRow';
 import SensorLastUpdateModeControlBlock from './SensorLastUpdateModeControlBlock';
 import DBNameDisplayControlBlock from './DBNameDisplayControlBlock';
+import SelectThemeSetDD from './SelectThemeSetDD';
 
 module.exports = {
 	PushSettingsRow,
@@ -45,4 +46,5 @@ module.exports = {
 	GeoFenceEventsLogRow,
 	SensorLastUpdateModeControlBlock,
 	DBNameDisplayControlBlock,
+	SelectThemeSetDD,
 };
