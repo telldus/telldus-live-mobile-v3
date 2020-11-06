@@ -220,8 +220,8 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 				}
 				return {
 					...AddButton,
-					onPress: editDb, // TODO: translate
-					accessibilityLabel: `Edit Dashboard, ${formatMessage(i18n.defaultDescriptionButton)}`,
+					onPress: editDb,
+					accessibilityLabel: `${formatMessage(i18n.editDashboard)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			default:
 				return null;
