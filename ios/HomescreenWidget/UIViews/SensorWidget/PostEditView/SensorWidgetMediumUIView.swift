@@ -15,7 +15,7 @@ struct SensorWidgetMediumUIView: View {
     ZStack {
       Color(UIColor.systemIndigo)
       VStack {
-        Text("Small Widget")
+        Text("Medium Widget")
           .font(.headline)
           .foregroundColor(.white)
         Text(name)

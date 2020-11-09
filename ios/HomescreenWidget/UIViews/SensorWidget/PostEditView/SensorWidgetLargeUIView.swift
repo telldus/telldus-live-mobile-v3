@@ -15,7 +15,7 @@ struct SensorWidgetLargeUIView: View {
     ZStack {
       Color(UIColor.systemIndigo)
       VStack {
-        Text("Small Widget")
+        Text("Large Widget")
           .font(.headline)
           .foregroundColor(.white)
         Text(name)
