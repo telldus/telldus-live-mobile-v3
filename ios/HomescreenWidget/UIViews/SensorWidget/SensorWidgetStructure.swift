@@ -12,6 +12,10 @@ import Foundation
 public struct SensorWidgetStructure {
   let id: String
   let name: String
+  let icon: String
+  let value: String
+  let unit: String
+  let luTime: Int
   let displayType: WidgetViewType
   let theme: ThemesList
   let owningAccount: String
