@@ -134,16 +134,19 @@ class API {
             return
           }
           let accessToken = json["access_token"]
+          let expiresIn = json["expires_in"]
           guard accessToken != nil else {
             completion(nil)
             return
           }
-          let secData: Dictionary = authData!;
-          let _ = WidgetModule().updateSecureData(data: Utilities().convertDictionaryToString(dict: secData));
+          var secData: Dictionary = authData!
+          secData["accessToken"] = accessToken
+          secData["expiresIn"] = expiresIn
+          let _ = WidgetModule().updateSecureData(data: Utilities().convertDictionaryToString(dict: secData))
           completion(json)
           return
         }
-      } catch let error {
+      } catch _ {
         completion(nil)
         return
       }
