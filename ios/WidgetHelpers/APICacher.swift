@@ -46,10 +46,6 @@ struct APICacher {
       }
       let id = Int(did!)!
       let name = sensor["name"] as! String;
-      let _sensorId = sensor["sensorId"] as? String;
-      if _sensorId == nil {
-      }
-      let sensorId = Int(_sensorId!)!
       let lastUpdated = sensor["lastUpdated"] as? Int ?? -1;
       let sensorProtocol = sensor["protocol"] as! String;
       
