@@ -49,49 +49,66 @@ struct SensorProvider: IntentTimelineProvider {
     let dataDict = Utilities().getAuthData()
     if (dataDict == nil) {
       displayType = WidgetViewType.notLoggedInView
+      let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
+        id: id,
+        name: name,
+        displayType: displayType,
+        theme: theme,
+        owningAccount: owningAccount
+      ))
+      let timeline = Timeline(entries: [entry], policy: .atEnd)
+      completion(timeline)
     } else if (configuration.item?.identifier != nil) {
       displayType = WidgetViewType.postEditView
       APICacher().cacheSensorData(sensorId: Int(id)!) {
-      }
-      
-      var db: SQLiteDatabase? = nil
-      do {
-        db = try SQLiteDatabase.open(nil)
-        if let sensorDetails = db?.sensorDetailsModel(sensorId: Int32(id)!) {
-          name = sensorDetails.name
-          owningAccount = sensorDetails.userEmail
-          owningUserId = sensorDetails.userId
-          let activeUserId = dataDict?["uuid"] as? String
-          if (owningUserId != activeUserId) {
-            displayType = WidgetViewType.notSameAccountView
+        var db: SQLiteDatabase? = nil
+        do {
+          db = try SQLiteDatabase.open(nil)
+          if let sensorDetails = db?.sensorDetailsModel(sensorId: Int32(id)!) {
+            name = sensorDetails.name
+            owningAccount = sensorDetails.userEmail
+            owningUserId = sensorDetails.userId
+            let activeUserId = dataDict?["uuid"] as? String
+            if (owningUserId != activeUserId) {
+              displayType = WidgetViewType.notSameAccountView
+            }
+          }
+        } catch {
+        }
+        var date = Date()
+        if (updateInterval != nil) {
+          var value: Int? = nil
+          for interval in SensorClass.SensorUpdateInterval {
+            if (interval["id"] as? String == updateInterval!) {
+              value = interval["valueInMin"] as? Int
+              break;
+            }
+          }
+          if value != nil {
+            date = Calendar.current.date(byAdding: .minute, value: 1, to: Date())!
           }
         }
-      } catch {
+        let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
+          id: id,
+          name: name,
+          displayType: displayType,
+          theme: theme,
+          owningAccount: owningAccount
+        ))
+        let timeline = Timeline(entries: [entry], policy: .atEnd)
+        completion(timeline)
       }
+    } else {
+      let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
+        id: id,
+        name: name,
+        displayType: displayType,
+        theme: theme,
+        owningAccount: owningAccount
+      ))
+      let timeline = Timeline(entries: [entry], policy: .atEnd)
+      completion(timeline)
     }
-    var date = Date()
-    if (updateInterval != nil) {
-      var value: Int? = nil
-      for interval in SensorClass.SensorUpdateInterval {
-        if (interval["id"] as? String == updateInterval!) {
-          value = interval["valueInMin"] as? Int
-          break;
-        }
-      }
-      if value != nil {
-        date = Calendar.current.date(byAdding: .minute, value: value!, to: Date())!
-      }
-    }
-    
-    let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
-      id: id,
-      name: name,
-      displayType: displayType,
-      theme: theme,
-      owningAccount: owningAccount
-    ))
-    let timeline = Timeline(entries: [entry], policy: .atEnd)
-    completion(timeline)
   }
 }
 
