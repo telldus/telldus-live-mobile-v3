@@ -116,7 +116,7 @@ struct SensorProvider: IntentTimelineProvider {
             }
           }
           if value != nil {
-            date = Calendar.current.date(byAdding: .minute, value: 1, to: Date())!
+            date = Calendar.current.date(byAdding: .minute, value: value!, to: Date())!
           }
         }
         let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
