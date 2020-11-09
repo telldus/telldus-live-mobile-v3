@@ -57,10 +57,11 @@
 		261AD81C2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
 		261AD81D2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
 		261AE60125499EFC00084FAD /* NotSameAccountUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */; };
-		263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
 		263988B425543CBA000015DF /* LaunchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 263988B325543CBA000015DF /* LaunchView.xib */; };
 		263988B725543CC3000015DF /* LaunchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 263988B325543CBA000015DF /* LaunchView.xib */; };
+		263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
 		264F3394244F459A0042BDEE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264F3393244F459A0042BDEE /* File.swift */; };
+		2651F70D25591AC0007ADB29 /* telldusicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA4E203FFC8849A6989EDD54 /* telldusicons.ttf */; };
 		2658A9312549C9F000D9E8B2 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */; };
 		2658A9322549C9F000D9E8B2 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */; };
 		2658A9332549C9F000D9E8B2 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */; };
@@ -188,12 +189,12 @@
 		260D61C7253D608E00115423 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		260D61CE253D60E200115423 /* CI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CI.swift; sourceTree = "<group>"; };
 		260D61D5253D63DE00115423 /* SensorsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorsAPI.swift; sourceTree = "<group>"; };
+		26117534244F315500731FA7 /* Widget-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Widget-Bridging-Header.h"; sourceTree = "<group>"; };
 		261AD8052546C8E400415713 /* DeviceDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailsModel.swift; sourceTree = "<group>"; };
 		261AD80C2546C8F600415713 /* SensorDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDetailsModel.swift; sourceTree = "<group>"; };
 		261AD8132546C9B500415713 /* SQLTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLTable.swift; sourceTree = "<group>"; };
 		261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetStructure.swift; sourceTree = "<group>"; };
 		261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSameAccountUIView.swift; sourceTree = "<group>"; };
-		26117534244F315500731FA7 /* Widget-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Widget-Bridging-Header.h"; sourceTree = "<group>"; };
 		263988B325543CBA000015DF /* LaunchView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LaunchView.xib; sourceTree = "<group>"; };
 		264F3393244F459A0042BDEE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetUtils.swift; sourceTree = "<group>"; };
@@ -711,6 +712,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				26B06643252E2832009C3325 /* Assets.xcassets in Resources */,
+				2651F70D25591AC0007ADB29 /* telldusicons.ttf in Resources */,
 				26012B36254BE77400D26A25 /* sensorConstants.json in Resources */,
 				263988B725543CC3000015DF /* LaunchView.xib in Resources */,
 			);
