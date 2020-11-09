@@ -107,6 +107,7 @@ struct SensorUtilities {
     var unit: String = ""
     info["label"] = "Unknown"
     info["icon"] = "sensor"
+    info["iconUniC"] = "\u{e911}"
     info["unit"] = unit
     info["value"] = value
     info["name"] = name
@@ -127,22 +128,26 @@ struct SensorUtilities {
     if (name == "humidity") {
       info["label"] = "Humidity"
       info["icon"] = "humidity"
+      info["iconUniC"] = "\u{e910}"
       return info
     }
     if (name == "temp") {
       info["label"] = "Temperature"
       info["icon"] = "temperature"
+      info["iconUniC"] = "\u{e90d}"
       return info
     }
     if (name == "rrate" || name == "rtot") {
       let label = name == "rrate" ? "Rain Rate" : "Rain Total"
       info["label"] = label
       info["icon"] = "rain"
+      info["iconUniC"] = "\u{e90e}"
       return info
     }
     if (name == "wgust" || name == "wavg" || name == "wdir") {
       var label = name == "wgust" ? "Wind Gust" : "Wind Average"
       info["icon"] = "wind"
+      info["iconUniC"] = "\u{e904}"
       if (name == "wdir") {
         label = "Wind Direction"
         let direction = getWindDirection(value: value)
@@ -155,6 +160,7 @@ struct SensorUtilities {
       let label = "UV Index"
       info["label"] = label
       info["icon"] = "uv"
+      info["iconUniC"] = "\u{e90c}"
       return info
     }
     if (name == "watt") {
@@ -179,36 +185,42 @@ struct SensorUtilities {
       }
       info["label"] = label
       info["icon"] = "watt"
+      info["iconUniC"] = "\u{e90a}"
       return info
     }
     if (name == "lum") {
       let label = "Luminance"
       info["label"] = label
       info["icon"] = "luminance"
+      info["iconUniC"] = "\u{e90f}"
       return info
     }
     if (name == "dewp") {
       let label = "Dew Point"
       info["label"] = label
       info["icon"] = "humidity"
+      info["iconUniC"] = "\u{e910}"
       return info
     }
     if (name  == "barpress") {
       let label = "Barometric Pressure"
       info["label"] = label
       info["icon"] = "gauge"
+      info["iconUniC"] = "\u{e95e}"
       return info
     }
     if (name == "genmeter") {
       let label = "Generic Meter"
       info["label"] = label
       info["icon"] = "sensor"
+      info["iconUniC"] = "\u{e911}"
       return info
     }
     if (name == "co2") {
       let label = "CO2"
       info["label"] = label
       info["icon"] = "co2"
+      info["iconUniC"] = "\u{e983}"
       return info
     }
     if (name == "volume") {
@@ -216,36 +228,42 @@ struct SensorUtilities {
       let icon = scale == 0 ? "volumeliquid" : "volume3d"
       info["label"] = label
       info["icon"] = icon
+      info["iconUniC"] = scale == 0 ? "\u{e981}": "\u{e982}";
       return info
     }
     if (name == "loudness") {
       let label = "Loudness"
       info["label"] = label
       info["icon"] = "speaker"
+      info["iconUniC"] = "\u{e979}"
       return info
     }
     if (name == "particulatematter2.5") {
       let label = "PM2.5"
       info["label"] = label
       info["icon"] = "pm25"
+      info["iconUniC"] = "\u{e984}"
       return info
     }
     if (name == "co") {
       let label = "CO"
       info["label"] = label
       info["icon"] = "co"
+      info["iconUniC"] = "\u{e986}"
       return info
     }
     if (name == "weight") {
       let label = "Weight"
       info["label"] = label
       info["icon"] = "weight"
+      info["iconUniC"] = "\u{e985}"
       return info
     }
     if (name == "moisture") {
       let label = "Moisture"
       info["label"] = label
       info["icon"] = "humidity"
+      info["iconUniC"] = "\u{e910}"
       return info
     }
     return info
@@ -258,5 +276,26 @@ struct SensorUtilities {
       return WIND_DIR[Int(index)]
     }
     return ""
+  }
+  
+  func getLastUpdatedString(lastUpdated: Int) -> String {
+    guard lastUpdated != -1 else {
+      return ""
+    }
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeStyle = DateFormatter.Style.short
+    dateFormatter.dateStyle = DateFormatter.Style.short
+    dateFormatter.timeZone = .current
+    return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(lastUpdated)))
+  }
+  
+  func isTooOld(lastUpdated: Int) -> Bool {
+    guard lastUpdated != -1 else {
+      return true
+    }
+    let currentTime = Date().timeIntervalSince1970
+    let timeAgo = currentTime - TimeInterval(lastUpdated);
+    let limit = TimeInterval(24 * 3600);
+    return timeAgo >= limit
   }
 }
