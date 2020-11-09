@@ -247,6 +247,9 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
       let model = sensor["model"] as! String;
       let sensorProtocol = sensor["protocol"] as! String;
       let data = sensor["data"] as? Array<Dictionary<String, Any>> ?? []
+      guard data.count > 0 else {
+        continue
+      }
       let sensorDetailsModel = SensorDetailsModel(
         id: id,
         name: name,
