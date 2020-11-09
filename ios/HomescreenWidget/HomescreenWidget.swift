@@ -15,7 +15,7 @@ struct HomescreenWidget: WidgetBundle {
   
   @WidgetBundleBuilder
   var body: some Widget {
-    DeviceWidgetBuilderUIView()
+//    DeviceWidgetBuilderUIView()
     SensorWidgetBuilderUIView()
   }
 }
