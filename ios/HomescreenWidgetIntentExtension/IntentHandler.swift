@@ -9,11 +9,23 @@
 import Intents
 
 class IntentHandler: INExtension {
+  static var sensorsLastFetchedTS: Double = 0;
+  static var isFetchingSensorsData: Bool = false;
+  static let REFETCH_INTERVAL: Double = 60 * 60
   
   override func handler(for intent: INIntent) -> Any {
     // This is the default implementation.  If you want different objects to handle different intents,
     // you can override this and return the handler you want for that particular intent.
     
+    // Refresh sensors list/data on pressing edit widget, 1 hour apart
+    let interval = Date().timeIntervalSince1970 - IntentHandler.sensorsLastFetchedTS
+    if intent is SensorWidgetIntent, !IntentHandler.isFetchingSensorsData, (IntentHandler.sensorsLastFetchedTS == 0 || interval > IntentHandler.REFETCH_INTERVAL) {
+      IntentHandler.isFetchingSensorsData = true
+      APICacher().cacheAPIData() {
+        IntentHandler.sensorsLastFetchedTS = Date().timeIntervalSince1970
+        IntentHandler.isFetchingSensorsData = false
+      }
+    }
     return self
   }
   
@@ -83,7 +95,7 @@ extension IntentHandler: SensorWidgetIntentHandling {
   
   func provideValueOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorValuesList>?, Error?) -> Swift.Void) {
     
-    guard var sensorId = intent.item?.identifier else {
+    guard let sensorId = intent.item?.identifier else {
       completion(INObjectCollection(items: []), nil)
       return
     }
