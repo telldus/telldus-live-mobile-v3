@@ -11,6 +11,8 @@ import SwiftUI
 import Intents
 
 struct SensorProvider: IntentTimelineProvider {
+  static let updateIntervalInMinutes = 15
+  
   func placeholder(in context: Context) -> SensorSimpleEntry {
     SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
       id: "",
@@ -53,12 +55,13 @@ struct SensorProvider: IntentTimelineProvider {
     let theme = configuration.theme
     var owningAccount = ""
     var owningUserId = ""
-    let updateInterval = configuration.updateInterval?.identifier ?? nil
+    
+    let date = Calendar.current.date(byAdding: .minute, value: SensorProvider.updateIntervalInMinutes, to: Date())!
     
     let dataDict = Utilities().getAuthData()
     if (dataDict == nil) {
       displayType = WidgetViewType.notLoggedInView
-      let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
+      let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
         id: id,
         name: name,
         icon: "",
@@ -106,19 +109,6 @@ struct SensorProvider: IntentTimelineProvider {
           }
         } catch {
         }
-        var date = Date()
-        if (updateInterval != nil) {
-          var value: Int? = nil
-          for interval in SensorClass.SensorUpdateInterval {
-            if (interval["id"] as? String == updateInterval!) {
-              value = interval["valueInMin"] as? Int
-              break;
-            }
-          }
-          if value != nil {
-            date = Calendar.current.date(byAdding: .minute, value: value!, to: Date())!
-          }
-        }
         let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
           id: id,
           name: name,
@@ -134,7 +124,7 @@ struct SensorProvider: IntentTimelineProvider {
         completion(timeline)
       }
     } else {
-      let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
+      let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
         id: id,
         name: name,
         icon: "",

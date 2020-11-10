@@ -63,7 +63,7 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>xUuK87</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>19H2</string>
+	<string>19H15</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
 	<string>12A7209</string>
 	<key>INIntentDefinitionToolsVersion</key>
@@ -170,48 +170,11 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Update interval</string>
-					<key>INIntentParameterDisplayNameID</key>
-					<string>fgOf6Q</string>
-					<key>INIntentParameterDisplayPriority</key>
-					<integer>3</integer>
-					<key>INIntentParameterName</key>
-					<string>updateInterval</string>
-					<key>INIntentParameterObjectType</key>
-					<string>UpdateIntervalList</string>
-					<key>INIntentParameterObjectTypeNamespace</key>
-					<string>xUuK87</string>
-					<key>INIntentParameterPromptDialogs</key>
-					<array>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Configuration</string>
-						</dict>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Primary</string>
-						</dict>
-					</array>
-					<key>INIntentParameterSupportsDynamicEnumeration</key>
-					<true/>
-					<key>INIntentParameterTag</key>
-					<integer>4</integer>
-					<key>INIntentParameterType</key>
-					<string>Object</string>
-				</dict>
-				<dict>
-					<key>INIntentParameterConfigurable</key>
-					<true/>
-					<key>INIntentParameterDisplayName</key>
 					<string>Select Theme</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>xvDnAX</string>
 					<key>INIntentParameterDisplayPriority</key>
-					<integer>4</integer>
+					<integer>3</integer>
 					<key>INIntentParameterEnumType</key>
 					<string>ThemesList</string>
 					<key>INIntentParameterEnumTypeNamespace</key>
@@ -301,69 +264,6 @@
 			<integer>99</integer>
 			<key>INTypeName</key>
 			<string>SensorsList</string>
-			<key>INTypeProperties</key>
-			<array>
-				<dict>
-					<key>INTypePropertyDefault</key>
-					<true/>
-					<key>INTypePropertyDisplayPriority</key>
-					<integer>1</integer>
-					<key>INTypePropertyName</key>
-					<string>identifier</string>
-					<key>INTypePropertyTag</key>
-					<integer>1</integer>
-					<key>INTypePropertyType</key>
-					<string>String</string>
-				</dict>
-				<dict>
-					<key>INTypePropertyDefault</key>
-					<true/>
-					<key>INTypePropertyDisplayPriority</key>
-					<integer>2</integer>
-					<key>INTypePropertyName</key>
-					<string>displayString</string>
-					<key>INTypePropertyTag</key>
-					<integer>2</integer>
-					<key>INTypePropertyType</key>
-					<string>String</string>
-				</dict>
-				<dict>
-					<key>INTypePropertyDefault</key>
-					<true/>
-					<key>INTypePropertyDisplayPriority</key>
-					<integer>3</integer>
-					<key>INTypePropertyName</key>
-					<string>pronunciationHint</string>
-					<key>INTypePropertyTag</key>
-					<integer>3</integer>
-					<key>INTypePropertyType</key>
-					<string>String</string>
-				</dict>
-				<dict>
-					<key>INTypePropertyDefault</key>
-					<true/>
-					<key>INTypePropertyDisplayPriority</key>
-					<integer>4</integer>
-					<key>INTypePropertyName</key>
-					<string>alternativeSpeakableMatches</string>
-					<key>INTypePropertySupportsMultipleValues</key>
-					<true/>
-					<key>INTypePropertyTag</key>
-					<integer>4</integer>
-					<key>INTypePropertyType</key>
-					<string>SpeakableString</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>INTypeDisplayName</key>
-			<string>Update Interval List</string>
-			<key>INTypeDisplayNameID</key>
-			<string>cnG9mS</string>
-			<key>INTypeLastPropertyTag</key>
-			<integer>99</integer>
-			<key>INTypeName</key>
-			<string>UpdateIntervalList</string>
 			<key>INTypeProperties</key>
 			<array>
 				<dict>

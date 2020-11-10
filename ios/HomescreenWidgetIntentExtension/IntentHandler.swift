@@ -134,15 +134,4 @@ extension IntentHandler: SensorWidgetIntentHandling {
     }
     completion(INObjectCollection(items: items), nil)
   }
-  
-  func provideUpdateIntervalOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<UpdateIntervalList>?, Error?) -> Swift.Void) {
-    var items = [UpdateIntervalList]()
-    for intervalInfo in SensorClass.SensorUpdateInterval {
-      items.append(UpdateIntervalList(
-        identifier: intervalInfo["id"] as? String,
-        display: intervalInfo["label"] as! String
-      ))
-    }
-    completion(INObjectCollection(items: items), nil)
-  }
 }
