@@ -18,14 +18,10 @@ class WidgetModule: NSObject {
   @objc(configureWidgetAuthData:)
   func configureWidgetAuthData(authData: Dictionary<String, Any>) -> Void {
     let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
-    let status = setSecureData(data: stringifiedData)
-    if (status) {
-      APICacher().cacheAPIData() {
-        WidgetUtils.refreshAllWidgets()
-      }
-    }
+    setSecureData(data: stringifiedData)
   }
   
+  @discardableResult
   func setSecureData(data: String) -> Bool {
     var status = 1;
     let hasNotStored = getSecureData() == nil
@@ -91,5 +87,12 @@ class WidgetModule: NSObject {
     let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
     updateSecureData(data: stringifiedData)
     WidgetUtils.refreshAllWidgets()
+  }
+  
+  @objc(refreshAllWidgetsData)
+  func refreshAllWidgetsData() {
+    APICacher().cacheAPIData() {
+      WidgetUtils.refreshAllWidgets()
+    }
   }
 }

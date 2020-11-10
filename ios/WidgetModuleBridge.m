@@ -13,5 +13,6 @@
 
 RCT_EXTERN_METHOD(configureWidgetAuthData:(NSDictionary *)authData)
 RCT_EXTERN_METHOD(disableAllWidgets)
+RCT_EXTERN_METHOD(refreshAllWidgetsData)
 
 @end
