@@ -460,6 +460,17 @@ class SQLiteDatabase {
     return Int(count)
   }
   
+  func deleteAllRecordsCurrentAccount(table: SQLTable.Type, userId: NSString) {
+    let deleteStatement = try? prepareStatement(sql: table.deleteAllRecordsCurrentAccountStatement)
+    if (deleteStatement != nil) {
+      guard sqlite3_bind_text(deleteStatement, 1, userId.utf8String, -1, nil) == SQLITE_OK else {
+        return
+      }
+      sqlite3_step(deleteStatement)
+    }
+    sqlite3_finalize(deleteStatement)
+  }
+  
   var errorMessage: String {
     if let errorPointer = sqlite3_errmsg(dbPointer) {
       let errorMessage = String(cString: errorPointer)

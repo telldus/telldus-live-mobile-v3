@@ -9,6 +9,7 @@
 import Foundation
 
 struct SensorDetailsModel: SQLTable {
+  
   static let TABLE_NAME = "SensorDetails"
   static let COLUMN_ID = "id"
   static let COLUMN_NAME = "name"
@@ -87,6 +88,13 @@ struct SensorDetailsModel: SQLTable {
           SELECT * FROM \(TABLE_NAME);
           """
   }
+  
+  static var deleteAllRecordsCurrentAccountStatement: String {
+    return """
+          DELETE FROM \(TABLE_NAME) WHERE
+          \(COLUMN_USER_ID) = ?;
+          """
+  }
 }
 
 struct SensorDataModel: SQLTable {
@@ -153,6 +161,13 @@ struct SensorDataModel: SQLTable {
   static var selectAllStatement: String {
     return """
           SELECT * FROM \(TABLE_NAME);
+          """
+  }
+  
+  static var deleteAllRecordsCurrentAccountStatement: String {
+    return """
+          DELETE FROM \(TABLE_NAME) WHERE
+          \(COLUMN_USER_ID) = ?;
           """
   }
 }

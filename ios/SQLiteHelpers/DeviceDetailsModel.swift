@@ -102,4 +102,11 @@ struct DeviceDetailsModel: SQLTable {
           SELECT * FROM \(TABLE_NAME);
           """
   }
+  
+  static var deleteAllRecordsCurrentAccountStatement: String {
+    return """
+          DELETE FROM \(TABLE_NAME) WHERE
+          \(COLUMN_USER_ID) = ?;
+          """
+  }
 }
