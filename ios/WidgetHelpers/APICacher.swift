@@ -110,7 +110,7 @@ struct APICacher {
     var db: SQLiteDatabase? = nil
     do {
       db = try SQLiteDatabase.open(nil)
-      try db?.createTable(table: DeviceDetailsModel.self)
+//      try db?.createTable(table: DeviceDetailsModel.self) // TODO: Enable device widget
       try db?.createTable(table: SensorDetailsModel.self)
       try db?.createTable(table: SensorDataModel.self)
     } catch {
@@ -123,11 +123,11 @@ struct APICacher {
       return
     }
     
-    cacheDevicesData(db: db!) {
+//    cacheDevicesData(db: db!) {// TODO: Enable device widget
       cacheSensorsData(db: db!) {
         completion()
       }
-    }
+//    }
   }
   
   func cacheDevicesData(db: SQLiteDatabase, completion: @escaping () -> Void) {
