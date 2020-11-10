@@ -105,7 +105,8 @@ struct SensorProvider: IntentTimelineProvider {
                 }
               }
             }
-            
+          } else {
+            displayType = WidgetViewType.preEditView
           }
         } catch {
         }

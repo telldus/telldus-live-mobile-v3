@@ -63,6 +63,8 @@ struct DeviceProvider: IntentTimelineProvider {
           if (owningUserId != activeUserId) {
             displayType = WidgetViewType.notSameAccountView
           }
+        } else {
+          displayType = WidgetViewType.preEditView
         }
       } catch {
       }
