@@ -74,7 +74,7 @@ import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
 import {
 	widgetConfigure,
-	widgetAndroidRefresh,
+	widgetRefresh,
 } from '../Actions/Widget';
 import Push from './Push';
 import {
@@ -342,7 +342,7 @@ actionsToPerformOnStart = async () => {
 
 		this.clearListenerSyncLiveApiOnForeground = await dispatch(syncLiveApiOnForeground());
 		dispatch(getAppData()).then(() => {
-			dispatch(widgetAndroidRefresh());
+			dispatch(widgetRefresh());
 		});
 
 		try {

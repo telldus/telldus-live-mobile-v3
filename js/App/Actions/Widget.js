@@ -66,7 +66,7 @@ const widgetAndroidDisableWidget = (id: number, widgetType: "SENSOR" | "DEVICE")
 	}
 };
 
-const widgetAndroidRefresh = (): ThunkAction => {
+const widgetRefresh = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		if (Platform.OS === 'android') {
 			const { devices: {allIds: allDevices, byId: byIdDevices}, sensors: {allIds: allSensors, byId: byIdSensors} } = getState();
@@ -76,6 +76,10 @@ const widgetAndroidRefresh = (): ThunkAction => {
 			if (allSensors.length !== 0) {
 				widgetAndroidRefreshSensors(allSensors, byIdSensors);
 			}
+		}
+		if (Platform.OS === 'ios') {
+			const { WidgetModule } = NativeModules;
+			WidgetModule.refreshAllWidgetsData();
 		}
 		return;
 	};
@@ -134,7 +138,7 @@ module.exports = {
 	widgetDisableAll,
 	widgetAndroidRefreshSensors,
 	widgetAndroidRefreshDevices,
-	widgetAndroidRefresh,
+	widgetRefresh,
 	getWidgetConstants,
 	getWidgetTextFontSizeFactor,
 	setWidgetTextFontSizeFactor,
