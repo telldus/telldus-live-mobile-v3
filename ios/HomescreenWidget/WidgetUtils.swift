@@ -33,8 +33,24 @@ struct WidgetUtils {
     
     switch (theme) {
     case .dark :
+      colors["widgetBackgroundColor"] = Color.black
+      colors["innerContainerBackgroundColor"] = Color.black
+      colors["iconColor"] = Color.white
+      colors["valueTextColor"] = Color.white
+      colors["unitTextColor"] = Color.white
+      colors["timeTextColor"] = Color.white
+      colors["timeTextColorExpired"] = Color.red
+      colors["nameTextColor"] = Color.white
       return colors
     case .light :
+      colors["widgetBackgroundColor"] = Color.white
+      colors["innerContainerBackgroundColor"] = Color.white
+      colors["iconColor"] = Color.black
+      colors["valueTextColor"] = Color.black
+      colors["unitTextColor"] = Color.black
+      colors["timeTextColor"] = Color.black
+      colors["timeTextColorExpired"] = Color.red
+      colors["nameTextColor"] = Color.black
       return colors
     default :
       return colors
