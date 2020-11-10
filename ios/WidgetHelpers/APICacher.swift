@@ -45,7 +45,11 @@ struct APICacher {
         return
       }
       let id = Int(did!)!
-      let name = sensor["name"] as! String;
+      let name = sensor["name"] as? String;
+      guard name != nil else {
+        completion()
+        return
+      }
       let lastUpdated = sensor["lastUpdated"] as? Int ?? -1;
       let sensorProtocol = sensor["protocol"] as! String;
       
@@ -56,7 +60,7 @@ struct APICacher {
       
       let sensorDetailsModel = SensorDetailsModel(
         id: id,
-        name: name,
+        name: name!,
         userId: uuid!,
         sensorId: dataFromDb.sensorId,
         clientId: dataFromDb.clientId,
@@ -110,9 +114,10 @@ struct APICacher {
     var db: SQLiteDatabase? = nil
     do {
       db = try SQLiteDatabase.open(nil)
-//      try db?.createTable(table: DeviceDetailsModel.self) // TODO: Enable device widget
+      //      try db?.createTable(table: DeviceDetailsModel.self) // TODO: Enable device widget
       try db?.createTable(table: SensorDetailsModel.self)
       try db?.createTable(table: SensorDataModel.self)
+      
     } catch {
       completion()
       return
@@ -123,11 +128,11 @@ struct APICacher {
       return
     }
     
-//    cacheDevicesData(db: db!) {// TODO: Enable device widget
-      cacheSensorsData(db: db!) {
-        completion()
-      }
-//    }
+    //    cacheDevicesData(db: db!) {// TODO: Enable device widget
+    cacheSensorsData(db: db!) {
+      completion()
+    }
+    //    }
   }
   
   func cacheDevicesData(db: SQLiteDatabase, completion: @escaping () -> Void) {
@@ -146,13 +151,18 @@ struct APICacher {
         completion()
         return
       }
+      //      db.deleteAllRecordsCurrentAccount(table: DeviceDetailsModel.self, userId: uuid as! NSString) // TODO: Enable device widget
       for device in devices {
         let did = device["id"] as? String;
         guard did != nil else {
           continue
         }
         let id = Int(did!)!
-        let name = device["name"] as! String;
+        let name = device["name"] as? String;
+        guard name != nil else {
+          continue
+        }
+        
         var state: Int? = -1
         if let _state = device["state"] as? Int {
           state = _state
@@ -182,7 +192,7 @@ struct APICacher {
         
         let deviceDetailsModel = DeviceDetailsModel(
           id: id,
-          name: name,
+          name: name!,
           state: state!,
           methods: methods!,
           deviceType: deviceType,
@@ -222,13 +232,19 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
       completion()
       return
     }
+    
+    db.deleteAllRecordsCurrentAccount(table: SensorDetailsModel.self, userId: uuid as! NSString)
+    
     for sensor in sensors {
       let did = sensor["id"] as? String;
       guard did != nil else {
         continue
       }
       let id = Int(did!)!
-      let name = sensor["name"] as! String;
+      let name = sensor["name"] as? String;
+      guard name != nil else {
+        continue
+      }
       let _sensorId = sensor["sensorId"] as? String;
       guard _sensorId != nil else {
         continue
@@ -248,7 +264,7 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
       }
       let sensorDetailsModel = SensorDetailsModel(
         id: id,
-        name: name,
+        name: name!,
         userId: uuid!,
         sensorId: Int(sensorId),
         clientId: Int(clientId),
