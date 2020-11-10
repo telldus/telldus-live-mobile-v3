@@ -17,6 +17,7 @@ struct SensorProvider: IntentTimelineProvider {
     SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
       id: "",
       name: "",
+      label: "",
       icon: "",
       value: "",
       unit: "",
@@ -35,6 +36,7 @@ struct SensorProvider: IntentTimelineProvider {
     let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
       id: "",
       name: "",
+      label: "",
       icon: "",
       value: "",
       unit: "",
@@ -64,6 +66,7 @@ struct SensorProvider: IntentTimelineProvider {
       let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
         id: id,
         name: name,
+        label: "",
         icon: "",
         value: "",
         unit: "",
@@ -78,6 +81,7 @@ struct SensorProvider: IntentTimelineProvider {
       displayType = WidgetViewType.postEditView
       APICacher().cacheSensorData(sensorId: Int(id)!) {
         var icon = ""
+        var label = ""
         var _value = ""
         var unit: String? = ""
         var lastUpdated: Int = -1
@@ -102,6 +106,7 @@ struct SensorProvider: IntentTimelineProvider {
                   _value = String(item.value)
                   icon = (info["iconUniC"] as? String)!
                   unit = info["unit"] as? String ?? ""
+                  label = info["label"] as? String ?? ""
                 }
               }
             }
@@ -113,6 +118,7 @@ struct SensorProvider: IntentTimelineProvider {
         let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
           id: id,
           name: name,
+          label: label,
           icon: icon,
           value: _value,
           unit: unit!,
@@ -128,6 +134,7 @@ struct SensorProvider: IntentTimelineProvider {
       let entry = SensorSimpleEntry(date: date, sensorWidgetStructure: SensorWidgetStructure(
         id: id,
         name: name,
+        label: "",
         icon: "",
         value: "",
         unit: "",

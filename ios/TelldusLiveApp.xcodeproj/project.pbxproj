@@ -65,6 +65,7 @@
 		2658A9312549C9F000D9E8B2 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */; };
 		2658A9322549C9F000D9E8B2 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */; };
 		2658A9332549C9F000D9E8B2 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */; };
+		2665772E255ABDB800572D52 /* ContainerRelativeShapeSpecificCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26657723255ABD6600572D52 /* ContainerRelativeShapeSpecificCorner.swift */; };
 		266B41D5234B03A200095747 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 266B41D4234B03A200095747 /* libRNGoogleSignin.a */; };
 		2675DA492536C9B600802815 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
 		2675DA4D2536C9B600802815 /* HomescreenWidgetIntentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -199,6 +200,7 @@
 		264F3393244F459A0042BDEE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetUtils.swift; sourceTree = "<group>"; };
 		265B40BC244F07D100446DE2 /* TelldusLiveApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TelldusLiveApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		26657723255ABD6600572D52 /* ContainerRelativeShapeSpecificCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerRelativeShapeSpecificCorner.swift; sourceTree = "<group>"; };
 		266B41D4234B03A200095747 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetIntentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2675DA482536C9B500802815 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
@@ -335,6 +337,14 @@
 			path = dSYM;
 			sourceTree = "<group>";
 		};
+		26657722255ABD3B00572D52 /* UIHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				26657723255ABD6600572D52 /* ContainerRelativeShapeSpecificCorner.swift */,
+			);
+			path = UIHelpers;
+			sourceTree = "<group>";
+		};
 		2675DA472536C9B500802815 /* HomescreenWidgetIntentExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -373,6 +383,7 @@
 		26B0663E252E282E009C3325 /* HomescreenWidget */ = {
 			isa = PBXGroup;
 			children = (
+				26657722255ABD3B00572D52 /* UIHelpers */,
 				26FEC719254198680056EC71 /* UIViews */,
 				26B0663F252E282E009C3325 /* HomescreenWidget.swift */,
 				26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */,
@@ -956,6 +967,7 @@
 				261AD8072546C8E400415713 /* DeviceDetailsModel.swift in Sources */,
 				260D61C9253D608E00115423 /* Constants.swift in Sources */,
 				2608B58C253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift in Sources */,
+				2665772E255ABDB800572D52 /* ContainerRelativeShapeSpecificCorner.swift in Sources */,
 				26FEC74725419EEE0056EC71 /* SensorWidgetMediumUIView.swift in Sources */,
 				26FEC715254194590056EC71 /* DeviceWidgetLargeUIView.swift in Sources */,
 				26FEC71C254198BA0056EC71 /* DWPreviewSmallUIView.swift in Sources */,
