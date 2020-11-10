@@ -164,7 +164,7 @@ struct SensorWidgetBuilderUIView: Widget {
     }
     .configurationDisplayName("Sensor Widget")
     .description("This is an example sensor widget.")
-    .supportedFamilies([.systemSmall, .systemMedium])
+    .supportedFamilies([.systemSmall])
   }
 }
 
