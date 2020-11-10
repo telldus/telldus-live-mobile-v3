@@ -16,28 +16,39 @@ struct SensorWidgetSmallUIView: View {
     let value = sensorWidgetStructure.value
     let unit = sensorWidgetStructure.unit
     let luTime = SensorUtilities().getLastUpdatedString(lastUpdated: sensorWidgetStructure.luTime)
+    
+    let colors = WidgetUtils.getColorsSensorPostEdit(theme: sensorWidgetStructure.theme)
+    let widgetBackgroundColor = colors["widgetBackgroundColor"]
+    let innerContainerBackgroundColor: Color = colors["innerContainerBackgroundColor"]!
+    let iconColor = colors["iconColor"]
+    let valueTextColor = colors["valueTextColor"]
+    let unitTextColor = colors["unitTextColor"]
+    let timeTextColor = colors["timeTextColor"]
+    let timeTextColorExpired = colors["timeTextColorExpired"]
+    let nameTextColor = colors["nameTextColor"]
+    
     ZStack(alignment: .center) {
-      Color("widgetBackgroundColor")
+      widgetBackgroundColor
       VStack (alignment: .center) {
         ZStack(alignment: .center) {
           ContainerRelativeShape()
-            .fill(Color("brandPrimary"))
+            .fill(innerContainerBackgroundColor)
           HStack (alignment: .center) {
             Text(icon)
-              .foregroundColor(.white)
+              .foregroundColor(iconColor)
               .font(.custom("telldusicons", size: 28))
             VStack (alignment: .leading) {
               HStack {
                 Text(value)
-                  .foregroundColor(.white)
+                  .foregroundColor(valueTextColor)
                   .font(.system(size: 18))
                   .lineLimit(1)
                 Text(unit)
-                  .foregroundColor(.white)
+                  .foregroundColor(unitTextColor)
                   .font(.system(size: 16))
               }
               Text(luTime)
-                .foregroundColor(SensorUtilities().isTooOld(lastUpdated: sensorWidgetStructure.luTime) ? .red : .white)
+                .foregroundColor(SensorUtilities().isTooOld(lastUpdated: sensorWidgetStructure.luTime) ? timeTextColorExpired : timeTextColor)
                 .font(.system(size: 12))
             }
           }
@@ -47,7 +58,7 @@ struct SensorWidgetSmallUIView: View {
             .multilineTextAlignment(.center)
             .padding(.top, 5)
             .padding([.leading, .trailing])
-            .foregroundColor(.white)
+            .foregroundColor(nameTextColor)
             .lineLimit(1)
             .font(.system(size: 15))
         }

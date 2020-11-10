@@ -8,6 +8,7 @@
 
 import Foundation
 import WidgetKit
+import SwiftUI
 
 struct WidgetUtils {
   static func refreshAllWidgets() {
@@ -15,6 +16,28 @@ struct WidgetUtils {
       WidgetCenter.shared.reloadAllTimelines()
     } else {
       // Fallback on earlier versions
+    }
+  }
+  
+  @available(iOS 14.0, *)
+  static func getColorsSensorPostEdit(theme: ThemesList) -> Dictionary<String, Color> {
+    var colors: Dictionary<String, Color> = [:]
+    colors["widgetBackgroundColor"] = Color("widgetBackgroundColor")
+    colors["innerContainerBackgroundColor"] = Color("brandPrimary")
+    colors["iconColor"] = Color.white
+    colors["valueTextColor"] = Color.white
+    colors["unitTextColor"] = Color.white
+    colors["timeTextColor"] = Color.white
+    colors["timeTextColorExpired"] = Color.red
+    colors["nameTextColor"] = Color.white
+    
+    switch (theme) {
+    case .dark :
+      return colors
+    case .light :
+      return colors
+    default :
+      return colors
     }
   }
 }
