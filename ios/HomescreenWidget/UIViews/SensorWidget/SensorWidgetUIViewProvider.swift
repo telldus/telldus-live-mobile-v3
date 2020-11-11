@@ -28,7 +28,7 @@ struct SensorWidgetUIViewProvider: View {
     case .notSameAccountView:
         return AnyView(NotSameAccountUIView(owningAccount: sensorWidgetStructure.owningAccount))
     case .upgradeToPremiumView:
-        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+        return AnyView(PurchasePremiumUIView())
     }
   }
 }

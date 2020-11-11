@@ -28,6 +28,7 @@
 		260C09A1255BF71C00B2EA50 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260C099F255BF71C00B2EA50 /* WidgetModule.swift */; };
 		260C09A7255BF73D00B2EA50 /* WidgetModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 260C09A6255BF73D00B2EA50 /* WidgetModuleBridge.m */; };
 		260C09B7255BFB3A00B2EA50 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260C099F255BF71C00B2EA50 /* WidgetModule.swift */; };
+		260C09BF255C30DF00B2EA50 /* PurchasePremiumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260C09BE255C30DF00B2EA50 /* PurchasePremiumUIView.swift */; };
 		260D619B253D578800115423 /* SQLiteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D619A253D578800115423 /* SQLiteError.swift */; };
 		260D619C253D578800115423 /* SQLiteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D619A253D578800115423 /* SQLiteError.swift */; };
 		260D619D253D578800115423 /* SQLiteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D619A253D578800115423 /* SQLiteError.swift */; };
@@ -184,6 +185,7 @@
 		2608B5CA253752DF00BF0A36 /* SensorWidgetUIViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetUIViewProvider.swift; sourceTree = "<group>"; };
 		260C099F255BF71C00B2EA50 /* WidgetModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetModule.swift; sourceTree = "<group>"; };
 		260C09A6255BF73D00B2EA50 /* WidgetModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WidgetModuleBridge.m; sourceTree = "<group>"; };
+		260C09BE255C30DF00B2EA50 /* PurchasePremiumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasePremiumUIView.swift; sourceTree = "<group>"; };
 		260D619A253D578800115423 /* SQLiteError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteError.swift; sourceTree = "<group>"; };
 		260D61A1253D57AC00115423 /* SQLiteDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteDatabase.swift; sourceTree = "<group>"; };
 		260D61AB253D5D3B00115423 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 				26FEC6E6254174900056EC71 /* EditWidgetInfoUIView.swift */,
 				2608B598253737FF00BF0A36 /* NotLoggedInView.swift */,
 				261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */,
+				260C09BE255C30DF00B2EA50 /* PurchasePremiumUIView.swift */,
 			);
 			path = UIViews;
 			sourceTree = "<group>";
@@ -979,6 +982,7 @@
 				26FEC721254198D10056EC71 /* DWPreviewMediumUIView.swift in Sources */,
 				261AE60125499EFC00084FAD /* NotSameAccountUIView.swift in Sources */,
 				26FEC6DC25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift in Sources */,
+				260C09BF255C30DF00B2EA50 /* PurchasePremiumUIView.swift in Sources */,
 				26B06645252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */,
 				261AD8152546C9B500415713 /* SQLTable.swift in Sources */,
 			);
