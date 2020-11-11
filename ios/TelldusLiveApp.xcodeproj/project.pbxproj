@@ -119,8 +119,6 @@
 		26FEC721254198D10056EC71 /* DWPreviewMediumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC720254198D10056EC71 /* DWPreviewMediumUIView.swift */; };
 		26FEC726254198E10056EC71 /* DWPreviewLargeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC725254198E10056EC71 /* DWPreviewLargeUIView.swift */; };
 		26FEC73A25419EC00056EC71 /* SensorWidgetSmallUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC73925419EC00056EC71 /* SensorWidgetSmallUIView.swift */; };
-		26FEC74225419EDB0056EC71 /* SensorWidgetLargeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC74125419EDB0056EC71 /* SensorWidgetLargeUIView.swift */; };
-		26FEC74725419EEE0056EC71 /* SensorWidgetMediumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC74625419EED0056EC71 /* SensorWidgetMediumUIView.swift */; };
 		26FEC74F25419F710056EC71 /* SWPreviewSmallUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC74E25419F710056EC71 /* SWPreviewSmallUIView.swift */; };
 		26FEC75425419F880056EC71 /* SWPreviewMediumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC75325419F880056EC71 /* SWPreviewMediumUIView.swift */; };
 		26FEC75925419F9D0056EC71 /* SWPreviewLargeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC75825419F9D0056EC71 /* SWPreviewLargeUIView.swift */; };
@@ -243,8 +241,6 @@
 		26FEC720254198D10056EC71 /* DWPreviewMediumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DWPreviewMediumUIView.swift; sourceTree = "<group>"; };
 		26FEC725254198E10056EC71 /* DWPreviewLargeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DWPreviewLargeUIView.swift; sourceTree = "<group>"; };
 		26FEC73925419EC00056EC71 /* SensorWidgetSmallUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetSmallUIView.swift; sourceTree = "<group>"; };
-		26FEC74125419EDB0056EC71 /* SensorWidgetLargeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetLargeUIView.swift; sourceTree = "<group>"; };
-		26FEC74625419EED0056EC71 /* SensorWidgetMediumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetMediumUIView.swift; sourceTree = "<group>"; };
 		26FEC74E25419F710056EC71 /* SWPreviewSmallUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWPreviewSmallUIView.swift; sourceTree = "<group>"; };
 		26FEC75325419F880056EC71 /* SWPreviewMediumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWPreviewMediumUIView.swift; sourceTree = "<group>"; };
 		26FEC75825419F9D0056EC71 /* SWPreviewLargeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWPreviewLargeUIView.swift; sourceTree = "<group>"; };
@@ -467,8 +463,6 @@
 			isa = PBXGroup;
 			children = (
 				26FEC73925419EC00056EC71 /* SensorWidgetSmallUIView.swift */,
-				26FEC74625419EED0056EC71 /* SensorWidgetMediumUIView.swift */,
-				26FEC74125419EDB0056EC71 /* SensorWidgetLargeUIView.swift */,
 			);
 			path = PostEditView;
 			sourceTree = "<group>";
@@ -968,7 +962,6 @@
 				260D61C9253D608E00115423 /* Constants.swift in Sources */,
 				2608B58C253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift in Sources */,
 				2665772E255ABDB800572D52 /* ContainerRelativeShapeSpecificCorner.swift in Sources */,
-				26FEC74725419EEE0056EC71 /* SensorWidgetMediumUIView.swift in Sources */,
 				26FEC715254194590056EC71 /* DeviceWidgetLargeUIView.swift in Sources */,
 				26FEC71C254198BA0056EC71 /* DWPreviewSmallUIView.swift in Sources */,
 				26FEC6D4254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift in Sources */,
@@ -983,7 +976,6 @@
 				26FEC710254194470056EC71 /* DeviceWidgetMediumUIView.swift in Sources */,
 				26FEC74F25419F710056EC71 /* SWPreviewSmallUIView.swift in Sources */,
 				2658A9322549C9F000D9E8B2 /* WidgetUtils.swift in Sources */,
-				26FEC74225419EDB0056EC71 /* SensorWidgetLargeUIView.swift in Sources */,
 				26FEC721254198D10056EC71 /* DWPreviewMediumUIView.swift in Sources */,
 				261AE60125499EFC00084FAD /* NotSameAccountUIView.swift in Sources */,
 				26FEC6DC25416ABF0056EC71 /* SensorWidgetBuilderUIView.swift in Sources */,
