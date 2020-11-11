@@ -74,6 +74,12 @@ extension IntentHandler: SensorWidgetIntentHandling {
       completion(INObjectCollection(items: []), nil)
       return
     }
+    let pro = dataDict?["pro"] as? Int
+    let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+    guard !_isBasicUser else {
+      completion(INObjectCollection(items: []), nil)
+      return
+    }
     
     var db: SQLiteDatabase? = nil
     var itemsList: Array<SensorDetailsModel> = []

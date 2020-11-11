@@ -20,7 +20,14 @@ class WidgetModule: NSObject {
   @objc(configureWidgetAuthData:)
   func configureWidgetAuthData(authData: Dictionary<String, Any>) -> Void {
     let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
-    setSecureData(data: stringifiedData)
+    let status = setSecureData(data: stringifiedData)
+    if status {
+      if #available(iOS 12.0, *) {
+        WidgetUtils.refreshAllWidgets()
+      } else {
+        // Fallback on earlier versions
+      }
+    }
   }
   
   @discardableResult

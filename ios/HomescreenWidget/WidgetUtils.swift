@@ -49,12 +49,14 @@ struct WidgetUtils {
         value: "",
         unit: "",
         luTime: -1,
-        displayType: WidgetViewType.notLoggedInView,
+        displayType: .notLoggedInView,
         owningAccount: owningAccount
       ))
       return
     } else if (configuration.item?.identifier != nil) {
-      displayType = WidgetViewType.postEditView
+      let pro = dataDict?["pro"] as? Int
+      let _isBasicUser = isBasicUser(pro: pro)
+      displayType = _isBasicUser ? .upgradeToPremiumView : .postEditView
       APICacher().cacheSensorData(sensorId: Int(id)!) {
         var icon = ""
         var label = ""
@@ -71,7 +73,7 @@ struct WidgetUtils {
             lastUpdated = sensorDetails.lastUpdated;
             let activeUserId = dataDict?["uuid"] as? String
             if (owningUserId != activeUserId) {
-              displayType = WidgetViewType.notSameAccountView
+              displayType = .notSameAccountView
             }
             if (configuration.value?.identifier != nil) {
               let sensorData: Array<SensorDataModel> = db?.sensorDataModels(sensorId: Int32(id)!, userId: owningUserId as NSString) as! Array<SensorDataModel>
@@ -87,7 +89,7 @@ struct WidgetUtils {
               }
             }
           } else {
-            displayType = WidgetViewType.preEditView
+            displayType = _isBasicUser ? .upgradeToPremiumView : .preEditView
           }
         } catch {
         }
@@ -105,6 +107,8 @@ struct WidgetUtils {
         return
       }
     } else {
+      let pro = dataDict?["pro"] as? Int
+      let _isBasicUser = isBasicUser(pro: pro)
       completion(SensorWidgetStructure(
         id: id,
         name: name,
@@ -113,9 +117,14 @@ struct WidgetUtils {
         value: "",
         unit: "",
         luTime: -1,
-        displayType: displayType,
+        displayType: _isBasicUser ? .upgradeToPremiumView : displayType,
         owningAccount: owningAccount
       ))
     }
   }
+  
+  func isBasicUser (pro: Int?) -> Bool {
+    let now = Date().timeIntervalSince1970
+    return pro == nil || (Double(pro!) < now);
+  };
 }
