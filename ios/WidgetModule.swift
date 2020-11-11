@@ -86,13 +86,21 @@ class WidgetModule: NSObject {
     ]
     let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
     updateSecureData(data: stringifiedData)
-    WidgetUtils.refreshAllWidgets()
+    if #available(iOS 12.0, *) {
+      WidgetUtils.refreshAllWidgets()
+    } else {
+      // Fallback on earlier versions
+    }
   }
   
   @objc(refreshAllWidgetsData)
   func refreshAllWidgetsData() {
     APICacher().cacheAPIData() {
-      WidgetUtils.refreshAllWidgets()
+      if #available(iOS 12.0, *) {
+        WidgetUtils.refreshAllWidgets()
+      } else {
+        // Fallback on earlier versions
+      }
     }
   }
 }

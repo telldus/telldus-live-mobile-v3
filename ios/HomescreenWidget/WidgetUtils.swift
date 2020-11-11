@@ -10,6 +10,7 @@ import Foundation
 import WidgetKit
 import SwiftUI
 
+@available(iOS 12.0, *)
 struct WidgetUtils {
   static func refreshAllWidgets() {
     if #available(iOS 14.0, *) {
@@ -19,41 +20,95 @@ struct WidgetUtils {
     }
   }
   
-  @available(iOS 14.0, *)
-  static func getColorsSensorPostEdit(theme: ThemesList) -> Dictionary<String, Color> {
-    var colors: Dictionary<String, Color> = [:]
-    colors["widgetBackgroundColor"] = Color("widgetBackgroundColor")
-    colors["innerContainerBackgroundColor"] = Color("brandPrimary")
-    colors["iconColor"] = Color.white
-    colors["valueTextColor"] = Color.white
-    colors["unitTextColor"] = Color.white
-    colors["timeTextColor"] = Color.white
-    colors["timeTextColorExpired"] = Color.red
-    colors["nameTextColor"] = Color.white
+  func getSensorSimpleEntry(configuration: SensorWidgetIntent, completion: @escaping (SensorWidgetStructure) -> ()) {
+    var displayType = WidgetViewType.preEditView
+    var name = configuration.item?.displayString ?? ""
+    let id = configuration.item?.identifier ?? ""
+    let valueIdentifier = configuration.value?.identifier ?? ""
+    let theme = configuration.theme
+    var owningAccount = ""
+    var owningUserId = ""
     
-    switch (theme) {
-    case .dark :
-      colors["widgetBackgroundColor"] = Color.black
-      colors["innerContainerBackgroundColor"] = Color.black
-      colors["iconColor"] = Color.white
-      colors["valueTextColor"] = Color.white
-      colors["unitTextColor"] = Color.white
-      colors["timeTextColor"] = Color.white
-      colors["timeTextColorExpired"] = Color.red
-      colors["nameTextColor"] = Color.white
-      return colors
-    case .light :
-      colors["widgetBackgroundColor"] = Color.white
-      colors["innerContainerBackgroundColor"] = Color.white
-      colors["iconColor"] = Color.black
-      colors["valueTextColor"] = Color.black
-      colors["unitTextColor"] = Color.black
-      colors["timeTextColor"] = Color.black
-      colors["timeTextColorExpired"] = Color.red
-      colors["nameTextColor"] = Color.black
-      return colors
-    default :
-      return colors
-    }
+    let dataDict = Utilities().getAuthData()
+    if (dataDict == nil) {
+      completion(SensorWidgetStructure(
+        id: id,
+        name: name,
+        label: "",
+        icon: "",
+        value: "",
+        unit: "",
+        luTime: -1,
+        displayType: WidgetViewType.notLoggedInView,
+        theme: theme,
+        owningAccount: owningAccount
+      ))
+      return
+    } else if (configuration.item?.identifier != nil) {
+      displayType = WidgetViewType.postEditView
+      APICacher().cacheSensorData(sensorId: Int(id)!) {
+        var icon = ""
+        var label = ""
+        var _value = ""
+        var unit: String? = ""
+        var lastUpdated: Int = -1
+        var db: SQLiteDatabase? = nil
+        do {
+          db = try SQLiteDatabase.open(nil)
+          if let sensorDetails = db?.sensorDetailsModel(sensorId: Int32(id)!) {
+            name = sensorDetails.name
+            owningAccount = sensorDetails.userEmail
+            owningUserId = sensorDetails.userId
+            lastUpdated = sensorDetails.lastUpdated;
+            let activeUserId = dataDict?["uuid"] as? String
+            if (owningUserId != activeUserId) {
+              displayType = WidgetViewType.notSameAccountView
+            }
+            if (configuration.value?.identifier != nil) {
+              let sensorData: Array<SensorDataModel> = db?.sensorDataModels(sensorId: Int32(id)!, userId: owningUserId as NSString) as! Array<SensorDataModel>
+              for item in sensorData {
+                let _valueIdentifier = String(item.scale) + item.name
+                if (_valueIdentifier == valueIdentifier) {
+                  let info = SensorUtilities().getSensorInfo(name: item.name, scale: item.scale, value: item.value)
+                  _value = String(item.value)
+                  icon = (info["iconUniC"] as? String)!
+                  unit = info["unit"] as? String ?? ""
+                  label = info["label"] as? String ?? ""
+                }
+              }
+            }
+          } else {
+            displayType = WidgetViewType.preEditView
+          }
+        } catch {
+        }
+        completion(SensorWidgetStructure(
+          id: id,
+          name: name,
+          label: label,
+          icon: icon,
+          value: _value,
+          unit: unit!,
+          luTime: lastUpdated,
+          displayType: displayType,
+          theme: theme,
+          owningAccount: owningAccount
+        ))
+        return
+      }
+    } else {
+      completion(SensorWidgetStructure(
+        id: id,
+        name: name,
+        label: "",
+        icon: "",
+        value: "",
+        unit: "",
+        luTime: -1,
+        displayType: displayType,
+        theme: theme,
+        owningAccount: owningAccount
+      ))
   }
+}
 }
