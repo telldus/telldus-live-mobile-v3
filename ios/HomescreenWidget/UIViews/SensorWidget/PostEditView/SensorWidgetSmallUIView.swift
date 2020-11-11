@@ -16,11 +16,11 @@ struct SensorWidgetSmallUIView: View {
     let icon = sensorWidgetStructure.icon
     let value = sensorWidgetStructure.value
     let unit = sensorWidgetStructure.unit
-    let luTime = SensorUtilities().getLastUpdatedString(lastUpdated: sensorWidgetStructure.luTime)
+    let luTime = SensorUtilities().getLastUpdatedDate(lastUpdated: sensorWidgetStructure.luTime)
     let isLarge = SensorUtilities().isValueLarge(value: value)
     
     VStack(spacing: 0) {
-      VStack(spacing: 0) {
+      VStack(alignment: .center, spacing: 0) {
         Text("\u{e911}")
           .foregroundColor(Color("widgetTextColorOne"))
           .font(.custom("telldusicons", size: 30))
@@ -30,9 +30,12 @@ struct SensorWidgetSmallUIView: View {
           .font(.system(size: 14))
           .lineLimit(1)
           .padding(.bottom, 2)
-        Text(luTime)
-          .foregroundColor(Color("widgetTextColorTwo"))
-          .font(.system(size: 12))
+        if luTime != nil {
+          Text(luTime!, style: .relative)
+            .foregroundColor(Color("widgetTextColorTwo"))
+            .font(.system(size: 12))
+            .multilineTextAlignment(.center)
+        }
       }
       .padding(.horizontal, 8)
       .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
