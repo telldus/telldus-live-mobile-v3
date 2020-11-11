@@ -285,6 +285,17 @@ struct SensorUtilities {
     return Date(timeIntervalSince1970: TimeInterval(lastUpdated))
   }
   
+  func getLastUpdatedString(lastUpdated: Int) -> String {
+    guard lastUpdated != -1 else {
+      return ""
+    }
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeStyle = DateFormatter.Style.short
+    dateFormatter.dateStyle = DateFormatter.Style.short
+    dateFormatter.timeZone = .current
+    return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(lastUpdated)))
+  }
+  
   func isTooOld(lastUpdated: Int) -> Bool {
     guard lastUpdated != -1 else {
       return true

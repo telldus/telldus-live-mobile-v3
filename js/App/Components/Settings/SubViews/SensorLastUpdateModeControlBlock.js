@@ -34,7 +34,10 @@ import {
 	Text,
 } from '../../../../BaseComponents';
 
-import { changSensorLastUpdatedMode } from '../../../Actions';
+import {
+	changSensorLastUpdatedMode,
+	setWidgetSensorLastUpdatedModeIOS,
+} from '../../../Actions';
 
 import Theme from '../../../Theme';
 
@@ -66,6 +69,7 @@ const SensorLastUpdateModeControlBlock = (props: Object): Object => {
 			const { key: sensorLastUpdatedMode } = data[itemIndex];
 			const settings = { sensorLastUpdatedMode };
 			dispatch(changSensorLastUpdatedMode(settings));
+			dispatch(setWidgetSensorLastUpdatedModeIOS(true));
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

@@ -132,6 +132,27 @@ const setWidgetTextFontSizeFactor = (factor: number): Promise<number> => {
 	return Promise.resolve(1);
 };
 
+const setWidgetSensorLastUpdatedModeIOS = (forceUpdate: boolean = false): ThunkAction => {
+	return (dispatch: Function, getState: Function) => {
+		if (Platform.OS === 'ios') {
+			const { WidgetModule } = NativeModules;
+			const { app } = getState();
+			const {
+				defaultSettings = {},
+			} = app;
+			const {
+				sensorLastUpdatedMode = '0',
+			} = defaultSettings;
+			const curValue = WidgetModule.getUserDefault('sensorLastUpdatedModeKey');
+			WidgetModule.setUserDefault('sensorLastUpdatedModeKey', sensorLastUpdatedMode);
+			if (!forceUpdate && curValue) {
+				return;
+			}
+			WidgetModule.refreshAllWidgets();
+		}
+	};
+};
+
 module.exports = {
 	widgetConfigure,
 	widgetAndroidDisableWidget,
@@ -142,4 +163,5 @@ module.exports = {
 	getWidgetConstants,
 	getWidgetTextFontSizeFactor,
 	setWidgetTextFontSizeFactor,
+	setWidgetSensorLastUpdatedModeIOS,
 };

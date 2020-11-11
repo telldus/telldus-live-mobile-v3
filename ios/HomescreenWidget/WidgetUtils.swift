@@ -14,15 +14,15 @@ import SwiftUI
 struct WidgetUtils {
   
   static let previewPostEditSensorWidgetStructure = SensorWidgetStructure(id: "1",
-                                                                  name: "Aeotec Smart Switch",
-                                                                  label: "Temperature",
-                                                                  icon: "\u{e911}",
-                                                                  value: "32",
-                                                                  unit: "°C",
-                                                                  luTime: Int(Date().timeIntervalSince1970),
-                                                                  displayType: WidgetViewType.postEditView,
-                                                                  theme: ThemesList.light,
-                                                                  owningAccount: "developer@telldus.com")
+                                                                          name: "Aeotec Smart Switch",
+                                                                          label: "Temperature",
+                                                                          icon: "\u{e911}",
+                                                                          value: "32",
+                                                                          unit: "°C",
+                                                                          luTime: Int(Date().timeIntervalSince1970),
+                                                                          displayType: WidgetViewType.postEditView,
+                                                                          theme: ThemesList.light,
+                                                                          owningAccount: "developer@telldus.com")
   
   static func refreshAllWidgets() {
     if #available(iOS 14.0, *) {
@@ -121,6 +121,6 @@ struct WidgetUtils {
         theme: theme,
         owningAccount: owningAccount
       ))
+    }
   }
-}
 }

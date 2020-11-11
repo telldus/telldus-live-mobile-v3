@@ -17,10 +17,13 @@ struct SensorWidgetSmallUIView: View {
     let value = sensorWidgetStructure.value
     let unit = sensorWidgetStructure.unit
     let luTime = SensorUtilities().getLastUpdatedDate(lastUpdated: sensorWidgetStructure.luTime)
+    let luTimeString = SensorUtilities().getLastUpdatedString(lastUpdated: sensorWidgetStructure.luTime)
     let isLarge = SensorUtilities().isValueLarge(value: value)
     let isUpdateTimeOld = SensorUtilities().isTooOld(lastUpdated: sensorWidgetStructure.luTime)
     
-    VStack(spacing: 0) {
+    let sensorLastUpdatedMode = WidgetModule().getUserDefault(key: "sensorLastUpdatedModeKey")
+    
+    return VStack(spacing: 0) {
       VStack(alignment: .center, spacing: 0) {
         Text("\u{e911}")
           .foregroundColor(Color("widgetTextColorOne"))
@@ -31,11 +34,16 @@ struct SensorWidgetSmallUIView: View {
           .font(.system(size: 14))
           .lineLimit(1)
           .padding(.bottom, 2)
-        if luTime != nil {
-          Text(luTime!, style: .relative)
+        if luTime != nil, sensorLastUpdatedMode == "0" {
+          Text(luTime!, style:  .relative)
             .foregroundColor(isUpdateTimeOld ? Color.red : Color("widgetTextColorTwo"))
             .font(.system(size: 12))
             .multilineTextAlignment(.center)
+        }
+        if luTime != nil, sensorLastUpdatedMode == "1" {
+          Text(luTimeString)
+            .foregroundColor(isUpdateTimeOld ? Color.red : Color("widgetTextColorTwo"))
+            .font(.system(size: 12))
         }
       }
       .padding(.horizontal, 8)

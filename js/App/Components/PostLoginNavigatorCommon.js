@@ -69,6 +69,7 @@ import {
 	onReceivedInAppAvailablePurchases,
 	checkAndLinkAccountIfRequired,
 	updateAllMetWeatherDbTiles,
+	setWidgetSensorLastUpdatedModeIOS,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -342,6 +343,7 @@ actionsToPerformOnStart = async () => {
 
 		this.clearListenerSyncLiveApiOnForeground = await dispatch(syncLiveApiOnForeground());
 		dispatch(getAppData()).then(() => {
+			dispatch(setWidgetSensorLastUpdatedModeIOS(false));
 			dispatch(widgetRefresh());
 		});
 
