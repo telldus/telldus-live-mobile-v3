@@ -17,6 +17,7 @@ struct SensorWidgetSmallUIView: View {
     let value = sensorWidgetStructure.value
     let unit = sensorWidgetStructure.unit
     let luTime = SensorUtilities().getLastUpdatedString(lastUpdated: sensorWidgetStructure.luTime)
+    let isLarge = SensorUtilities().isValueLarge(value: value)
     
     VStack(spacing: 0) {
       VStack(spacing: 0) {
@@ -33,12 +34,15 @@ struct SensorWidgetSmallUIView: View {
           .foregroundColor(Color("widgetTextColorTwo"))
           .font(.system(size: 12))
       }
+      .padding(.horizontal, 8)
       .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
       .background(Color("widgetTopBGC"))
       HStack (spacing: 0) {
-        Text(icon)
-          .foregroundColor(Color("widgetTextColorThree"))
-          .font(.custom("telldusicons", size: 40))
+        if !isLarge {
+          Text(icon)
+            .foregroundColor(Color("widgetTextColorThree"))
+            .font(.custom("telldusicons", size: 40))
+        }
         VStack (alignment: .leading) {
           HStack (alignment: .lastTextBaseline) {
             Text(value)

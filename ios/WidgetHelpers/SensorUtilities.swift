@@ -298,4 +298,8 @@ struct SensorUtilities {
     let limit = TimeInterval(24 * 3600);
     return timeAgo >= limit
   }
+  
+  func isValueLarge(value: String) -> Bool {
+    return value.count > 3
+  }
 }
