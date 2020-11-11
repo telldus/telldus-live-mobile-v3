@@ -17,7 +17,6 @@ struct DeviceProvider: IntentTimelineProvider {
       id: "",
       name: "",
       displayType: WidgetViewType.preEditView,
-      theme: ThemesListDW.default,
       owningAccount: ""
     ))
   }
@@ -31,7 +30,6 @@ struct DeviceProvider: IntentTimelineProvider {
       id: "",
       name: "",
       displayType: displayType,
-      theme: ThemesListDW.default,
       owningAccount: ""
     ))
     completion(entry)
@@ -42,7 +40,6 @@ struct DeviceProvider: IntentTimelineProvider {
     var displayType = WidgetViewType.preEditView
     var name = configuration.item?.displayString ?? ""
     let id = configuration.item?.identifier ?? ""
-    let theme = configuration.theme
     var owningAccount = ""
     var owningUserId = ""
     
@@ -74,7 +71,6 @@ struct DeviceProvider: IntentTimelineProvider {
       id: id,
       name: name,
       displayType: displayType,
-      theme: theme,
       owningAccount: owningAccount
     ))
     

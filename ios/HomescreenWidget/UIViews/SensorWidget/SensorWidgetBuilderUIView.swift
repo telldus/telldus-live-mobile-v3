@@ -23,7 +23,6 @@ struct SensorProvider: IntentTimelineProvider {
       unit: "",
       luTime: -1,
       displayType: WidgetViewType.preEditView,
-      theme: ThemesList.default,
       owningAccount: ""
     ))
   }
@@ -42,7 +41,6 @@ struct SensorProvider: IntentTimelineProvider {
       unit: "",
       luTime: -1,
       displayType: displayType,
-      theme: ThemesList.default,
       owningAccount: ""
     ))
     completion(entry)

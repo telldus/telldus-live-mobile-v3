@@ -18,6 +18,5 @@ public struct SensorWidgetStructure {
   let unit: String
   let luTime: Int
   let displayType: WidgetViewType
-  let theme: ThemesList
   let owningAccount: String
 }

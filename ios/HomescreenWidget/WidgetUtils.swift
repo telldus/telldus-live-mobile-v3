@@ -21,7 +21,6 @@ struct WidgetUtils {
                                                                           unit: "°C",
                                                                           luTime: Int(Date().timeIntervalSince1970),
                                                                           displayType: WidgetViewType.postEditView,
-                                                                          theme: ThemesList.light,
                                                                           owningAccount: "developer@telldus.com")
   
   static func refreshAllWidgets() {
@@ -37,7 +36,6 @@ struct WidgetUtils {
     var name = configuration.item?.displayString ?? ""
     let id = configuration.item?.identifier ?? ""
     let valueIdentifier = configuration.value?.identifier ?? ""
-    let theme = configuration.theme
     var owningAccount = ""
     var owningUserId = ""
     
@@ -52,7 +50,6 @@ struct WidgetUtils {
         unit: "",
         luTime: -1,
         displayType: WidgetViewType.notLoggedInView,
-        theme: theme,
         owningAccount: owningAccount
       ))
       return
@@ -103,7 +100,6 @@ struct WidgetUtils {
           unit: unit!,
           luTime: lastUpdated,
           displayType: displayType,
-          theme: theme,
           owningAccount: owningAccount
         ))
         return
@@ -118,7 +114,6 @@ struct WidgetUtils {
         unit: "",
         luTime: -1,
         displayType: displayType,
-        theme: theme,
         owningAccount: owningAccount
       ))
     }

@@ -13,7 +13,6 @@ public struct DeviceWidgetStructure {
   let id: String
   let name: String
   let displayType: WidgetViewType
-  let theme: ThemesListDW
   let owningAccount: String
 }
 
