@@ -15,6 +15,8 @@ class WidgetModule: NSObject {
   let KEYCHAIN_SERVICE = "TelldusKeychain";
   let KEYCHAIN_ACCOUNT = "widgetData";
   
+  var userDefaults = UserDefaults(suiteName: "group.com.telldus.live.mobile")!
+  
   @objc(configureWidgetAuthData:)
   func configureWidgetAuthData(authData: Dictionary<String, Any>) -> Void {
     let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
@@ -102,5 +104,25 @@ class WidgetModule: NSObject {
         // Fallback on earlier versions
       }
     }
+  }
+  
+  @objc(refreshAllWidgets)
+  func refreshAllWidgets() {
+    if #available(iOS 12.0, *) {
+      WidgetUtils.refreshAllWidgets()
+    } else {
+      // Fallback on earlier versions
+    }
+  }
+  
+  @objc(setUserDefault:value:)
+  func setUserDefault(key: NSString, value: NSString) {
+    userDefaults.set(value, forKey: key as String)
+  }
+  
+  @objc(getUserDefault:)
+  func getUserDefault(key: NSString) -> NSString {
+    let value = userDefaults.string(forKey: key as String) ?? "0"
+    return value as NSString
   }
 }
