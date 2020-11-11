@@ -27,8 +27,13 @@ module.exports = {
 };
 EOF
 
+KEY_STORE_FILE="../android-signing/telldus-upload.keystore"
+if [ "${DEPLOY_STORE}" == "huawei" ]; then
+    KEY_STORE_FILE="../android-signing/telldus.keystore"
+fi
+
 cat > gradle.properties <<EOF
-TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE=../android-signing/telldus-upload.keystore
+TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE=${KEY_STORE_FILE}
 TELLDUS_REACT_NATIVE_LOCAL_KEY_ALIAS=telldus
 TELLDUS_REACT_NATIVE_LOCAL_STORE_PASSWORD=${ANDROID_STORE_PASSWORD}
 TELLDUS_REACT_NATIVE_LOCAL_KEY_PASSWORD=${ANDROID_KEY_PASSWORD}
