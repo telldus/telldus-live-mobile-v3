@@ -18,6 +18,7 @@ struct SensorWidgetSmallUIView: View {
     let unit = sensorWidgetStructure.unit
     let luTime = SensorUtilities().getLastUpdatedDate(lastUpdated: sensorWidgetStructure.luTime)
     let isLarge = SensorUtilities().isValueLarge(value: value)
+    let isUpdateTimeOld = SensorUtilities().isTooOld(lastUpdated: sensorWidgetStructure.luTime)
     
     VStack(spacing: 0) {
       VStack(alignment: .center, spacing: 0) {
@@ -32,7 +33,7 @@ struct SensorWidgetSmallUIView: View {
           .padding(.bottom, 2)
         if luTime != nil {
           Text(luTime!, style: .relative)
-            .foregroundColor(Color("widgetTextColorTwo"))
+            .foregroundColor(isUpdateTimeOld ? Color.red : Color("widgetTextColorTwo"))
             .font(.system(size: 12))
             .multilineTextAlignment(.center)
         }
