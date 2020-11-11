@@ -78,3 +78,11 @@ struct SensorWidgetUIViewProvider: View {
   }
 }
 
+struct SensorWidgetUIViewProvider_Previews: PreviewProvider {
+  static var previews: some View {
+    Group {
+      SensorWidgetUIViewProvider(sensorWidgetStructure: WidgetUtils.previewPostEditSensorWidgetStructure).previewContext(WidgetPreviewContext(family: .systemSmall))
+    }
+  }
+}
+
