@@ -10,17 +10,19 @@ import SwiftUI
 
 struct EditWidgetInfoUIView: View {
   var body: some View {
-    ZStack {
-      Color(UIColor.systemIndigo)
-      VStack {
-        Text("Please use the edit option to add any item")
-          .font(.headline)
-          .multilineTextAlignment(.center)
+    VStack (alignment: .center, spacing: 0) {
+      Text("\u{e92e}")
+        .foregroundColor(Color("widgetTextColorOne"))
+        .font(.custom("telldusicons", size: 32))
+        Text("Please use the edit option to add any item.")
+          .foregroundColor(Color("widgetTextColorOne"))
+          .font(.system(size: 16))
           .padding(.top, 5)
-          .padding([.leading, .trailing])
-          .foregroundColor(.white)
-      }
+          .multilineTextAlignment(.center)
     }
+    .padding(.all, 8)
+    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+    .background(Color("widgetTopBGC"))
   }
 }
 
