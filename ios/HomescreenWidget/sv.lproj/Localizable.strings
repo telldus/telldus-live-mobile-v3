@@ -1,1 +1,5 @@
 
+"widget_ios_pre_edit_info" = "Redigera widgeten för att välja en sensor att visa";
+"widget_ios_pre_login_info" = "Logga in i appen för att lägga till widgets";
+"widget_ios_basic_user_info" = "Denna funktion kräver Premium. Uppgradera till Premium för att använda widgets.";
+"widget_ios_not_same_account_info" = "Denna widget lades till för %@. Logga in på det kontot för att visa denna widget.";
