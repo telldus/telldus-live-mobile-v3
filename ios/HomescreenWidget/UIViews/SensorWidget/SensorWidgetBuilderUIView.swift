@@ -33,15 +33,15 @@ struct SensorProvider: IntentTimelineProvider {
       displayType = WidgetViewType.preview
     }
     let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
-      id: "",
-      name: "",
-      label: "",
-      icon: "",
-      value: "",
-      unit: "",
-      luTime: -1,
-      displayType: displayType,
-      owningAccount: ""
+      id: WidgetUtils.previewPostEditSensorWidgetStructure.id,
+      name: WidgetUtils.previewPostEditSensorWidgetStructure.name,
+      label: WidgetUtils.previewPostEditSensorWidgetStructure.label,
+      icon: WidgetUtils.previewPostEditSensorWidgetStructure.icon,
+      value: WidgetUtils.previewPostEditSensorWidgetStructure.value,
+      unit: WidgetUtils.previewPostEditSensorWidgetStructure.unit,
+      luTime: WidgetUtils.previewPostEditSensorWidgetStructure.luTime,
+      displayType: WidgetUtils.previewPostEditSensorWidgetStructure.displayType,
+      owningAccount: WidgetUtils.previewPostEditSensorWidgetStructure.owningAccount
     ))
     completion(entry)
   }

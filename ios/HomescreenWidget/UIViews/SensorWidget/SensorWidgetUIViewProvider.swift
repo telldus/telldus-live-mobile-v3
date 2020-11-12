@@ -18,7 +18,7 @@ struct SensorWidgetUIViewProvider: View {
   var body: some View {
     switch sensorWidgetStructure.displayType {
     case .preview:
-        return AnyView(SWPreviewSmallUIView())
+        return AnyView(SWPreviewSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
     case .preEditView:
       return AnyView(EditWidgetInfoUIView())
     case .postEditView:

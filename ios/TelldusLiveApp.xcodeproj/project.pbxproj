@@ -124,8 +124,6 @@
 		26FEC726254198E10056EC71 /* DWPreviewLargeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC725254198E10056EC71 /* DWPreviewLargeUIView.swift */; };
 		26FEC73A25419EC00056EC71 /* SensorWidgetSmallUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC73925419EC00056EC71 /* SensorWidgetSmallUIView.swift */; };
 		26FEC74F25419F710056EC71 /* SWPreviewSmallUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC74E25419F710056EC71 /* SWPreviewSmallUIView.swift */; };
-		26FEC75425419F880056EC71 /* SWPreviewMediumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC75325419F880056EC71 /* SWPreviewMediumUIView.swift */; };
-		26FEC75925419F9D0056EC71 /* SWPreviewLargeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FEC75825419F9D0056EC71 /* SWPreviewLargeUIView.swift */; };
 		40D7C76A1F73AB9C0078E086 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */; };
 		59F114B4AC654FA7AAF457B4 /* SFNS Display.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F455C17D479C4210A202688C /* SFNS Display.ttf */; };
 		68CC7CCADF574C7AB546E29B /* telldusicons.svg in Resources */ = {isa = PBXBuildFile; fileRef = DB8C12D469844F34ABBA0A64 /* telldusicons.svg */; };
@@ -253,8 +251,6 @@
 		26FEC725254198E10056EC71 /* DWPreviewLargeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DWPreviewLargeUIView.swift; sourceTree = "<group>"; };
 		26FEC73925419EC00056EC71 /* SensorWidgetSmallUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetSmallUIView.swift; sourceTree = "<group>"; };
 		26FEC74E25419F710056EC71 /* SWPreviewSmallUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWPreviewSmallUIView.swift; sourceTree = "<group>"; };
-		26FEC75325419F880056EC71 /* SWPreviewMediumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWPreviewMediumUIView.swift; sourceTree = "<group>"; };
-		26FEC75825419F9D0056EC71 /* SWPreviewLargeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWPreviewLargeUIView.swift; sourceTree = "<group>"; };
 		409837E21F6140AE005E56A9 /* TelldusLiveApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TelldusLiveApp.entitlements; path = TelldusLiveApp/TelldusLiveApp.entitlements; sourceTree = "<group>"; };
 		40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TelldusLiveApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5E2F044E48EA427F9C4A967C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -483,8 +479,6 @@
 			isa = PBXGroup;
 			children = (
 				26FEC74E25419F710056EC71 /* SWPreviewSmallUIView.swift */,
-				26FEC75325419F880056EC71 /* SWPreviewMediumUIView.swift */,
-				26FEC75825419F9D0056EC71 /* SWPreviewLargeUIView.swift */,
 			);
 			path = Preview;
 			sourceTree = "<group>";
@@ -962,7 +956,6 @@
 			files = (
 				26FEC6E7254174900056EC71 /* EditWidgetInfoUIView.swift in Sources */,
 				2608B59A253737FF00BF0A36 /* NotLoggedInView.swift in Sources */,
-				26FEC75425419F880056EC71 /* SWPreviewMediumUIView.swift in Sources */,
 				2608B5932537330E00BF0A36 /* DeviceDetails.swift in Sources */,
 				260D61A3253D57AC00115423 /* SQLiteDatabase.swift in Sources */,
 				260D61D0253D60E200115423 /* CI.swift in Sources */,
@@ -990,7 +983,6 @@
 				26035744253ED333000798D1 /* DevicesAPI.swift in Sources */,
 				2608B5C6253752AE00BF0A36 /* SensorDetails.swift in Sources */,
 				260D619C253D578800115423 /* SQLiteError.swift in Sources */,
-				26FEC75925419F9D0056EC71 /* SWPreviewLargeUIView.swift in Sources */,
 				261AD80E2546C8F600415713 /* SensorDetailsModel.swift in Sources */,
 				260D61AD253D5D3B00115423 /* API.swift in Sources */,
 				263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */,
