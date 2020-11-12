@@ -2,4 +2,4 @@
 "widget_ios_pre_edit_info" = "Please edit the widget to select a sensor to show";
 "widget_ios_pre_login_info" = "Please log into the app to add widgets";
 "widget_ios_basic_user_info" = "This feature require a Premium subscription. Please upgrade to our Premium service to use this feature";
-"widget_ios_not_same_account_info" = "This widget was added for %@. Please log in to that account to view this widget.";
+"widget_ios_not_same_account_info" = "This widget was added for %@. Please log in to that account to view this widget";
