@@ -29,6 +29,8 @@
 #import "Orientation.h"
 #import "RNSplashScreen.h"
 
+#import <React/RCTLinkingManager.h>
+
 // IMPORTANT:  Paste import ABOVE the DEBUG macro
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 
@@ -55,20 +57,20 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
-	#ifdef FB_SONARKIT_ENABLED
-		InitializeFlipper(application);
-	#endif
-
-	if ([FIRApp defaultApp] == nil) {
-		[FIRApp configure];
-	}
-
-	RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-	RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-		moduleName:@"TelldusLiveApp"
-		initialProperties:nil];
-
+  
+#ifdef FB_SONARKIT_ENABLED
+  InitializeFlipper(application);
+#endif
+  
+  if ([FIRApp defaultApp] == nil) {
+    [FIRApp configure];
+  }
+  
+  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
+                                                   moduleName:@"TelldusLiveApp"
+                                            initialProperties:nil];
+  
   if (@available(iOS 13.0, *)) {
     if (UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
       rootView.backgroundColor = [UIColor systemBackgroundColor];
@@ -78,26 +80,26 @@ static void InitializeFlipper(UIApplication *application) {
   } else {
     rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
   }
-
-	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	UIViewController *rootViewController = [UIViewController new];
-	rootViewController.view = rootView;
-	self.window.rootViewController = rootViewController;
-	[self.window makeKeyAndVisible];
-
-	[RNSplashScreen showSplash:@"LaunchView" inRootView:rootView];
- 
+  
+  self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+  UIViewController *rootViewController = [UIViewController new];
+  rootViewController.view = rootView;
+  self.window.rootViewController = rootViewController;
+  [self.window makeKeyAndVisible];
+  
+  [RNSplashScreen showSplash:@"LaunchView" inRootView:rootView];
+  
   
   // NOTE: Deprecated iOS Background Fetch API for devices running < iOS 13
   // part is not enabled.
   // [REQUIRED] Register BackgroundFetch
   [[TSBackgroundFetch sharedInstance] didFinishLaunching];
   
-	return YES;
+  return YES;
 }
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-	return [Orientation getOrientation];
+  return [Orientation getOrientation];
 }
 
 // Required to register for notifications
@@ -129,16 +131,21 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 
 // method to respond to the google auth URL scheme
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<NSString *,id> *)options {
-    return [RNGoogleSignin application:application openURL:url options:options];
+  NSURL *url2 = [NSURL URLWithString:@"widget-deeplink://purchase-premium"]; // NOTE: IMP: Do not change
+  BOOL equalty = [[url absoluteString] isEqualToString:[url2 absoluteString]];
+  if (equalty) {
+    return [RCTLinkingManager application:application openURL:url options:options];
+  }
+  return [RNGoogleSignin application:application openURL:url options:options];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
-	#if DEBUG
-		return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-	#else
-		return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-	#endif
+#if DEBUG
+  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+#else
+  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+#endif
 }
 
 @end

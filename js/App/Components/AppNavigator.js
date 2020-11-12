@@ -500,6 +500,17 @@ const NavigatorConfigs = {
 	},
 };
 
+const linking = {
+	prefixes: [
+		'widget-deeplink://', // NOTE: IMP: Do not change
+	],
+	config: {
+		screens: {
+			PremiumUpgradeScreen: 'purchase-premium', // NOTE: IMP: Do not change
+		},
+	},
+};
+
 const Stack = createStackNavigator();
 
 const AppNavigator = React.memo<Object>((props: Object): Object => {
@@ -546,6 +557,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 
 	return (
 		<NavigationContainer
+			linking={linking}
 			ref={navigationRef}
 			onStateChange={onNavigationStateChange}
 			theme={theme}>

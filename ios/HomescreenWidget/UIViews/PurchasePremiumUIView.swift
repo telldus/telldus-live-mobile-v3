@@ -24,6 +24,7 @@ struct PurchasePremiumUIView: View {
     .padding(.all, 8)
     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
     .background(Color("widgetTopBGC"))
+    .widgetURL(URL(string: Constants.DEEP_LINK_PURCHASE_PREMIUM))
   }
 }
 

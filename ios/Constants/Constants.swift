@@ -10,7 +10,8 @@ import Foundation
 struct Constants {
   
   static var telldusAPIServer: String = Constants.variable(named: "TELLDUS_API_SERVER") ?? CI.telldusAPIServer
-  static let supportedMethods = 4023;
+  static let supportedMethods = 4023
+  static let DEEP_LINK_PURCHASE_PREMIUM = "widget-deeplink://purchase-premium" // NOTE: IMP: Do not change
   
   static func variable(named name: String) -> String? {
     let processInfo = ProcessInfo.processInfo
