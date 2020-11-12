@@ -124,7 +124,6 @@ struct WidgetUtils {
   }
   
   func isBasicUser (pro: Int?) -> Bool {
-    let now = Date().timeIntervalSince1970
-    return pro == nil || (Double(pro!) < now);
-  };
+    return pro == nil || (Double(pro!) < Date().timeIntervalSince1970)
+  }
 }
