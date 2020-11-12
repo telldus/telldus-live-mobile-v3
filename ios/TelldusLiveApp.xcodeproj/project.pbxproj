@@ -96,6 +96,9 @@
 		26C7BEBA24977AEA007EC056 /* Caveat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB824977AEA007EC056 /* Caveat-Regular.ttf */; };
 		26C7BEBB24977AEA007EC056 /* Caveat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB924977AEA007EC056 /* Caveat-Bold.ttf */; };
 		26C93D702536CDC6005191C2 /* SensorWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA672536CBE000802815 /* SensorWidgetIntent.intentdefinition */; };
+		26CA62DC255D22DD0009C7C1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26CA62E0255D22DD0009C7C1 /* Localizable.strings */; };
+		26CA62DD255D22DD0009C7C1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26CA62E0255D22DD0009C7C1 /* Localizable.strings */; };
+		26CA62DE255D22DD0009C7C1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26CA62E0255D22DD0009C7C1 /* Localizable.strings */; };
 		26D2B622253ED4D800EB096F /* DeviceDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B5912537330E00BF0A36 /* DeviceDetails.swift */; };
 		26D2B626253ED66900EB096F /* DeviceDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B5912537330E00BF0A36 /* DeviceDetails.swift */; };
 		26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC2221424D8A0060DC8E /* AddressBook.framework */; };
@@ -221,6 +224,13 @@
 		26C7BEB924977AEA007EC056 /* Caveat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Caveat-Bold.ttf"; path = "../assets/fonts/Caveat-Bold.ttf"; sourceTree = "<group>"; };
 		26C84BC425371D850094E674 /* HomescreenWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HomescreenWidgetExtension.entitlements; sourceTree = "<group>"; };
 		26C84BC825371D980094E674 /* HomescreenWidgetIntentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HomescreenWidgetIntentExtension.entitlements; sourceTree = "<group>"; };
+		26CA62DF255D22DD0009C7C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		26CA62E4255D22E80009C7C1 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		26CA62E8255D27210009C7C1 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		26CA62EC255D28EA0009C7C1 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
+		26CA62ED255D28FC0009C7C1 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		26CA62EE255D29060009C7C1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		26CA62EF255D29120009C7C1 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		26D4DC2221424D8A0060DC8E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		26D4DC5A21424DAC0060DC8E /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -390,6 +400,7 @@
 				2608B5C5253752AE00BF0A36 /* SensorDetails.swift */,
 				26FEC6F025417B720056EC71 /* CustomTypes.swift */,
 				2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */,
+				26CA62E0255D22DD0009C7C1 /* Localizable.strings */,
 			);
 			path = HomescreenWidget;
 			sourceTree = "<group>";
@@ -672,6 +683,11 @@
 				English,
 				en,
 				Base,
+				sv,
+				cs,
+				de,
+				fr,
+				nb,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -700,6 +716,7 @@
 				DD7823359AB84A89988A5D47 /* Roboto-Light.ttf in Resources */,
 				695CAC4B3F4E464D989EC4D2 /* Roboto-Medium.ttf in Resources */,
 				794DAA9AEBAE4A7291C53EB5 /* Roboto-Regular.ttf in Resources */,
+				26CA62DC255D22DD0009C7C1 /* Localizable.strings in Resources */,
 				26012B35254BE77400D26A25 /* sensorConstants.json in Resources */,
 				26D4DD542142612A0060DC8E /* GoogleService-Info.plist in Resources */,
 				59F114B4AC654FA7AAF457B4 /* SFNS Display.ttf in Resources */,
@@ -712,6 +729,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				26012B37254BE77400D26A25 /* sensorConstants.json in Resources */,
+				26CA62DE255D22DD0009C7C1 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -719,6 +737,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26CA62DD255D22DD0009C7C1 /* Localizable.strings in Resources */,
 				26B06643252E2832009C3325 /* Assets.xcassets in Resources */,
 				2651F70D25591AC0007ADB29 /* telldusicons.ttf in Resources */,
 				26012B36254BE77400D26A25 /* sensorConstants.json in Resources */,
@@ -1002,6 +1021,23 @@
 			targetProxy = 26B06647252E2832009C3325 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		26CA62E0255D22DD0009C7C1 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				26CA62DF255D22DD0009C7C1 /* en */,
+				26CA62E4255D22E80009C7C1 /* sv */,
+				26CA62E8255D27210009C7C1 /* English */,
+				26CA62EC255D28EA0009C7C1 /* cs */,
+				26CA62ED255D28FC0009C7C1 /* de */,
+				26CA62EE255D29060009C7C1 /* fr */,
+				26CA62EF255D29120009C7C1 /* nb */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
