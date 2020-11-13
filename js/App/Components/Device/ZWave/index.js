@@ -22,7 +22,9 @@
 
 
 import SupportedCommandClasses from './SupportedCommandClasses';
+import BatteryFunctions from './BatteryFunctions';
 
 module.exports = {
 	SupportedCommandClasses,
+	BatteryFunctions,
 };
