@@ -27,13 +27,22 @@ import React, {
 	useMemo,
 	useState,
 	useCallback,
+	useRef,
+	useEffect,
 } from 'react';
 import {
 	TouchableOpacity,
 	LayoutAnimation,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
 import Slider from 'react-native-slider';
+const isEqual = require('react-fast-compare');
+// import {
+// 	useIntl,
+// } from 'react-intl';
 
 import {
 	View,
@@ -45,7 +54,9 @@ import {
 import {
 	useAppTheme,
 } from '../../../Hooks/Theme';
-
+import {
+	getDeviceManufacturerInfo,
+} from '../../../Actions/Devices';
 import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 
@@ -54,6 +65,16 @@ import Theme from '../../../Theme';
 type Props = {
 	id: string,
 };
+
+function usePreviousNodeInfo(value: Object): Object {
+	const ref = useRef();
+
+	useEffect(() => {
+		ref.current = value;
+	}, [value]);
+
+	return ref.current;
+}
 
 const BatteryFunctions = (props: Props): Object => {
 	const {
@@ -70,6 +91,8 @@ const BatteryFunctions = (props: Props): Object => {
 	const {
 		colors,
 	} = useAppTheme();
+
+	const dispatch = useDispatch();
 
 	const {
 		titleCoverStyle,
@@ -88,11 +111,54 @@ const BatteryFunctions = (props: Props): Object => {
 		colors,
 	});
 
-	const zWaveFunctions = new ZWaveFunctions(nodeInfo);
-	// const cmdClass = zWaveFunctions.supportedCommandClasses || [];
-	const supportsWakeup = zWaveFunctions.supportsCommandClass(ZWaveFunctions.COMMAND_CLASS_WAKEUP);
-	const showBatteryInfo = zWaveFunctions.supportsCommandClass(ZWaveFunctions.COMMAND_CLASS_BATTERY) ||
-    supportsWakeup;
+	const [ zWaveFunctions, setZWaveFunctions ] = useState();
+
+	const manufacturerAttributes = nodeInfo ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC] : {};
+	const prevNodeInfo = usePreviousNodeInfo(nodeInfo);
+	const isNodeInfoEqual = isEqual(prevNodeInfo, nodeInfo);
+	const ManufacturerInfo = useCallback(async (): Object => {
+		const {
+			manufacturerId,
+			productId,
+			productTypeId,
+		} = manufacturerAttributes;
+		let _manufacturerInfo = {};
+		if (typeof manufacturerAttributes.manufacturerId !== 'undefined') {
+			try {
+				_manufacturerInfo = await dispatch(getDeviceManufacturerInfo(manufacturerId, productTypeId, productId));
+			} catch (e) {
+				_manufacturerInfo = {};
+			}
+		}
+		return _manufacturerInfo;
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isNodeInfoEqual]);
+
+	useEffect(() => {
+		const getManufacturerInfo = async () => {
+			const manufacturerInfo = await ManufacturerInfo();
+			setZWaveFunctions(new ZWaveFunctions(nodeInfo, {
+				manufacturerInfo,
+			}));
+		};
+		if (!isNodeInfoEqual) {
+			getManufacturerInfo();
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isNodeInfoEqual]);
+
+	const supportsWakeup = zWaveFunctions ? zWaveFunctions.supportsCommandClass(ZWaveFunctions.COMMAND_CLASS_WAKEUP) : false;
+	const showBatteryInfo = zWaveFunctions ? (zWaveFunctions.supportsCommandClass(ZWaveFunctions.COMMAND_CLASS_BATTERY) ||
+    supportsWakeup) : false;
+
+	const {
+		wakeupNote,
+		lastWakeup,
+		wakeupInterval,
+		batteryType,
+		batteryCount,
+		level,
+	} = zWaveFunctions ? zWaveFunctions.batteryInfo() : {};
 
 	const onValueChange = useCallback((value: number) => {
 	}, []);
@@ -118,51 +184,57 @@ const BatteryFunctions = (props: Props): Object => {
 This device is running on battery. To save as much power as possible this device sleeps and will not accept commands. Changes in its settings will only be set the next time it wakes up.
 					</Text>
 				)}
-				<View
-					style={horizontalCover}>
-					<Text>
-						<Text
-							level={3}
-							style={hItemLabel}>
-							{'Waking this device is done by: '}
+				{!!wakeupNote && (
+					<View
+						style={horizontalCover}>
+						<Text>
+							<Text
+								level={3}
+								style={hItemLabel}>
+								{'Waking this device is done by: '}
+							</Text>
+							<Text
+								level={4}
+								style={hItemValue}>
+								{wakeupNote}
+							</Text>
 						</Text>
-						<Text
-							level={4}
-							style={hItemValue}>
-                            value
+					</View>
+				)}
+				{(lastWakeup > 0 && supportsWakeup) && (
+					<View
+						style={horizontalCover}>
+						<Text>
+							<Text
+								level={3}
+								style={hItemLabel}>
+								{'This device was previously awake: '}
+							</Text>
+							<Text
+								level={4}
+								style={hItemValue}>
+								{lastWakeup * 1000}
+							</Text>
 						</Text>
-					</Text>
-				</View>
-				<View
-					style={horizontalCover}>
-					<Text>
-						<Text
-							level={3}
-							style={hItemLabel}>
-							{'This device was previously awake: '}
+					</View>
+				)}
+				{(wakeupInterval > 0 && lastWakeup > 0) && (
+					<View
+						style={horizontalCover}>
+						<Text>
+							<Text
+								level={3}
+								style={hItemLabel}>
+								{'Next time this device will wake up will probably be: '}
+							</Text>
+							<Text
+								level={4}
+								style={hItemValue}>
+								{lastWakeup + wakeupInterval * 1000}
+							</Text>
 						</Text>
-						<Text
-							level={4}
-							style={hItemValue}>
-                            value
-						</Text>
-					</Text>
-				</View>
-				<View
-					style={horizontalCover}>
-					<Text>
-						<Text
-							level={3}
-							style={hItemLabel}>
-							{'Next time this device will wake up will probably be: '}
-						</Text>
-						<Text
-							level={4}
-							style={hItemValue}>
-                            value
-						</Text>
-					</Text>
-				</View>
+					</View>
+				)}
 				<View
 					style={horizontalCover}>
 					<Text
@@ -173,10 +245,10 @@ This device is running on battery. To save as much power as possible this device
 					<Text
 						level={4}
 						style={hItemValue}>
-                            value
+						{level}%
 					</Text>
 				</View>
-				<View
+				{(!!batteryType && !!batteryCount) && <View
 					style={horizontalCover}>
 					<Text
 						level={3}
@@ -186,9 +258,24 @@ This device is running on battery. To save as much power as possible this device
 					<Text
 						level={4}
 						style={hItemValue}>
-                            value
+						{`${batteryCount} pcs of ${batteryType}`}
 					</Text>
 				</View>
+				}
+				{(!!batteryType && !batteryCount) && <View
+					style={horizontalCover}>
+					<Text
+						level={3}
+						style={hItemLabel}>
+						{'Battery type: '}
+					</Text>
+					<Text
+						level={4}
+						style={hItemValue}>
+						{batteryType}
+					</Text>
+				</View>
+				}
 				<View
 					style={horizontalCover}>
 					<Text
@@ -214,7 +301,7 @@ This device is running on battery. To save as much power as possible this device
 					thumbStyle={slider.thumb}/>
 			</View>
 		);
-	}, [id, coverStyle, supportsWakeup, textStyle, horizontalCover, hItemLabel, hItemValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
+	}, [id, coverStyle, supportsWakeup, textStyle, wakeupNote, horizontalCover, hItemLabel, hItemValue, lastWakeup, wakeupInterval, level, batteryType, batteryCount, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
