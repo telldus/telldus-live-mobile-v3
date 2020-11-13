@@ -30,6 +30,7 @@ const { images: {DEVICES} } = utils;
 
 import {
 	SupportedCommandClasses,
+	BatteryFunctions,
 } from '../ZWave';
 import {
 	ThemedScrollView,
@@ -211,6 +212,8 @@ class OverviewTab extends View<Props, null> {
 
 		const styles = this.getStyles(appLayout);
 
+		const showBatteryFunctions = true;
+
 		return (
 			<ThemedScrollView
 				level={3}
@@ -238,6 +241,10 @@ class OverviewTab extends View<Props, null> {
 					}]}/>
 				<SupportedCommandClasses
 					id={device.id}/>
+				{showBatteryFunctions && (
+					<BatteryFunctions
+						id={device.id}/>
+				)}
 			</ThemedScrollView>
 		);
 	}
