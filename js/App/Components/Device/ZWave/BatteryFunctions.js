@@ -40,9 +40,6 @@ import {
 } from 'react-redux';
 import Slider from 'react-native-slider';
 const isEqual = require('react-fast-compare');
-// import {
-// 	useIntl,
-// } from 'react-intl';
 
 import {
 	View,
@@ -50,7 +47,11 @@ import {
 	EmptyView,
 	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
+import BatteryInfoItem from './BatteryInfoItem';
 
+import {
+	useRelativeIntl,
+} from '../../../Hooks/App';
 import {
 	useAppTheme,
 } from '../../../Hooks/Theme';
@@ -64,6 +65,7 @@ import Theme from '../../../Theme';
 
 type Props = {
 	id: string,
+	gatewayTimezone: string,
 };
 
 function usePreviousNodeInfo(value: Object): Object {
@@ -76,10 +78,26 @@ function usePreviousNodeInfo(value: Object): Object {
 	return ref.current;
 }
 
+function usePreviousBatteryInfo(value: Object): Object {
+	const ref = useRef();
+
+	useEffect(() => {
+		ref.current = value;
+	}, [value]);
+
+	return ref.current;
+}
+
 const BatteryFunctions = (props: Props): Object => {
 	const {
 		id,
+		gatewayTimezone,
 	} = props;
+
+	const {
+		formatDate,
+		formatTime,
+	} = useRelativeIntl(gatewayTimezone);
 
 	const [ expand, setExpand ] = useState(true);
 
@@ -101,9 +119,6 @@ const BatteryFunctions = (props: Props): Object => {
 		titleStyle,
 		iconStyle,
 		iconSize,
-		horizontalCover,
-		hItemLabel,
-		hItemValue,
 		slider,
 		minimumTrackTintColor,
 	} = getStyles({
@@ -158,13 +173,71 @@ const BatteryFunctions = (props: Props): Object => {
 		batteryType,
 		batteryCount,
 		level,
+		maximumWakeupInterval,
+		minimumWakeupInterval,
+		wakeupIntervalStep,
+		queue,
 	} = zWaveFunctions ? zWaveFunctions.batteryInfo() : {};
 
+	const getWakeUpIntervalValue = useCallback((value: number): string => {
+		value = value < 0 ? 0 : value;
+		let _wakeupInterval = (value * wakeupIntervalStep) + minimumWakeupInterval;
+		let seconds = _wakeupInterval;
+		let time = [];
+		if (seconds >= 86400) {
+			time.push(`${Math.floor(seconds / 86400)} days`);
+			seconds %= 86400;
+		}
+		if (seconds >= 3600) {
+			time.push(`${Math.floor(seconds / 3600)} h`);
+			seconds %= 3600;
+		}
+		if (seconds >= 60) {
+			time.push(`${Math.floor(seconds / 60)} min`);
+			seconds %= 60;
+		}
+		if (seconds > 0) {
+			time.push(`${seconds} s`);
+		}
+		return time.join(', ');
+	}, [minimumWakeupInterval, wakeupIntervalStep]);
+
 	const onValueChange = useCallback((value: number) => {
-	}, []);
+		setWakeUpIntervalValue(getWakeUpIntervalValue(value));
+	}, [getWakeUpIntervalValue]);
 
 	const onSlidingComplete = useCallback((value: number) => {
 	}, []);
+
+	let storedWakeupInterval = wakeupInterval;
+	if (typeof queue === 'number') {
+		storedWakeupInterval = queue;
+	}
+
+	let maximumValue = (maximumWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
+	let sliderValueInitial = (storedWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
+	const initialTime = getWakeUpIntervalValue(sliderValueInitial);
+	const [ wakeUpIntervalValue, setWakeUpIntervalValue ] = useState(initialTime);
+	const [ sliderValue, setSliderValue ] = useState(sliderValueInitial);
+
+	const bInfoToListenFor = {
+		wakeupInterval,
+		queue,
+		minimumWakeupInterval,
+		wakeupIntervalStep,
+	};
+	const prevBatteryInfo = usePreviousBatteryInfo(bInfoToListenFor);
+	const isBatteryInfoEqual = isEqual(prevBatteryInfo, bInfoToListenFor);
+	useEffect(() => {
+		if (!isBatteryInfoEqual) {
+			setWakeUpIntervalValue(initialTime);
+			setSliderValue(sliderValueInitial);
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isBatteryInfoEqual]);
+
+	const lastWakeupDateTime = new Date(lastWakeup * 1000);
+	const nextWakeupDateTime = new Date((lastWakeup + wakeupInterval) * 1000);
 
 	const body = useMemo((): ?Object => {
 
@@ -185,123 +258,53 @@ This device is running on battery. To save as much power as possible this device
 					</Text>
 				)}
 				{!!wakeupNote && (
-					<View
-						style={horizontalCover}>
-						<Text>
-							<Text
-								level={3}
-								style={hItemLabel}>
-								{'Waking this device is done by: '}
-							</Text>
-							<Text
-								level={4}
-								style={hItemValue}>
-								{wakeupNote}
-							</Text>
-						</Text>
-					</View>
+					<BatteryInfoItem
+						label={'Waking this device is done by: '}
+						value={wakeupNote}/>
 				)}
 				{(lastWakeup > 0 && supportsWakeup) && (
-					<View
-						style={horizontalCover}>
-						<Text>
-							<Text
-								level={3}
-								style={hItemLabel}>
-								{'This device was previously awake: '}
-							</Text>
-							<Text
-								level={4}
-								style={hItemValue}>
-								{lastWakeup * 1000}
-							</Text>
-						</Text>
-					</View>
+					<BatteryInfoItem
+						label={'This device was previously awake: '}
+						value={`${formatDate(lastWakeupDateTime)} ${formatTime(lastWakeupDateTime)}`}/>
 				)}
 				{(wakeupInterval > 0 && lastWakeup > 0) && (
-					<View
-						style={horizontalCover}>
-						<Text>
-							<Text
-								level={3}
-								style={hItemLabel}>
-								{'Next time this device will wake up will probably be: '}
-							</Text>
-							<Text
-								level={4}
-								style={hItemValue}>
-								{lastWakeup + wakeupInterval * 1000}
-							</Text>
-						</Text>
-					</View>
+					<BatteryInfoItem
+						label={'Next time this device will wake up will probably be: '}
+						value={`${formatDate(nextWakeupDateTime)} ${formatTime(nextWakeupDateTime)}`}/>
 				)}
-				<View
-					style={horizontalCover}>
-					<Text
-						level={3}
-						style={hItemLabel}>
-						{'Battery level: '}
-					</Text>
-					<Text
-						level={4}
-						style={hItemValue}>
-						{level}%
-					</Text>
-				</View>
-				{(!!batteryType && !!batteryCount) && <View
-					style={horizontalCover}>
-					<Text
-						level={3}
-						style={hItemLabel}>
-						{'Battery type: '}
-					</Text>
-					<Text
-						level={4}
-						style={hItemValue}>
-						{`${batteryCount} pcs of ${batteryType}`}
-					</Text>
-				</View>
-				}
-				{(!!batteryType && !batteryCount) && <View
-					style={horizontalCover}>
-					<Text
-						level={3}
-						style={hItemLabel}>
-						{'Battery type: '}
-					</Text>
-					<Text
-						level={4}
-						style={hItemValue}>
-						{batteryType}
-					</Text>
-				</View>
-				}
-				<View
-					style={horizontalCover}>
-					<Text
-						level={3}
-						style={hItemLabel}>
-						{'Wakeup interval: '}
-					</Text>
-					<Text
-						level={4}
-						style={hItemValue}>
-                            value
-					</Text>
-				</View>
-
-				<Slider
-					minimumValue= {1}
-					maximumValue={100}
-					value={20}
-					onValueChange={onValueChange}
-					onSlidingComplete={onSlidingComplete}
-					minimumTrackTintColor={minimumTrackTintColor}
-					trackStyle={slider.track}
-					thumbStyle={slider.thumb}/>
+				<BatteryInfoItem
+					label={'Battery level: '}
+					value={`${level}%`}/>
+				{(!!batteryType && !!batteryCount) && (
+					<BatteryInfoItem
+						label={'Battery type: '}
+						value={`${batteryCount} pcs of ${batteryType}`}/>
+				)}
+				{(!!batteryType && !batteryCount) && (
+					<BatteryInfoItem
+						label={'Battery type: '}
+						value={batteryType}/>
+				)}
+				{supportsWakeup && (
+					<>
+						<BatteryInfoItem
+							label={'Wakeup interval: '}
+							value={wakeUpIntervalValue}/>
+						<Slider
+							minimumValue= {0}
+							maximumValue={maximumValue}
+							value={sliderValue}
+							step={10}
+							onValueChange={onValueChange}
+							onSlidingComplete={onSlidingComplete}
+							minimumTrackTintColor={minimumTrackTintColor}
+							trackStyle={slider.track}
+							thumbStyle={slider.thumb}/>
+					</>
+				)}
 			</View>
 		);
-	}, [id, coverStyle, supportsWakeup, textStyle, wakeupNote, horizontalCover, hItemLabel, hItemValue, lastWakeup, wakeupInterval, level, batteryType, batteryCount, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
+	}, [id, coverStyle, supportsWakeup, textStyle, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, nextWakeupDateTime, level, batteryType, batteryCount, wakeUpIntervalValue, maximumValue, sliderValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
@@ -378,16 +381,6 @@ const getStyles = ({
 		textStyle: {
 			fontSize,
 			textAlign: 'center',
-		},
-		horizontalCover: {
-			flexDirection: 'row',
-			marginTop: padding,
-		},
-		hItemLabel: {
-			fontSize,
-		},
-		hItemValue: {
-			fontSize,
 		},
 		slider: {
 			track: {
