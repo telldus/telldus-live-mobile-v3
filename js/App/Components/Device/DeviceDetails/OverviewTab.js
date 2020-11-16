@@ -55,6 +55,7 @@ import {
 	shouldUpdate,
 	prepare433ModelName,
 } from '../../../Lib';
+import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 
 import {
 	DeviceActionDetails,
@@ -200,6 +201,11 @@ class OverviewTab extends View<Props, null> {
 			return null;
 		}
 
+		const {
+			nodeInfo = {},
+			clientId,
+		} = device;
+
 		const locationImageUrl = getLocationImageUrl(gatewayType);
 		const locationData = {
 			title: this.boxTitle,
@@ -212,7 +218,9 @@ class OverviewTab extends View<Props, null> {
 
 		const styles = this.getStyles(appLayout);
 
-		const showBatteryFunctions = true;
+		const supportsWakeup = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_WAKEUP] : false;
+		const showBatteryFunctions = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_BATTERY] ||
+		supportsWakeup) : false;
 
 		return (
 			<ThemedScrollView
@@ -241,10 +249,10 @@ class OverviewTab extends View<Props, null> {
 					}]}/>
 				<SupportedCommandClasses
 					id={device.id}/>
-				{showBatteryFunctions && (
+				{!!showBatteryFunctions && (
 					<BatteryFunctions
 						id={device.id}
-						clientId={device.clientId}
+						clientId={clientId}
 						gatewayTimezone={gatewayTimezone}/>
 				)}
 			</ThemedScrollView>
