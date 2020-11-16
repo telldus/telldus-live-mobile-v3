@@ -21,6 +21,8 @@
 'use strict';
 import {
 	useCallback,
+	useRef,
+	useEffect,
 } from 'react';
 import {
 	Linking,
@@ -220,9 +222,20 @@ const useSwitchOrAddAccountAction = (): Object => {
 	};
 };
 
+function usePreviousValue(value: Object): Object {
+	const ref = useRef();
+
+	useEffect(() => {
+		ref.current = value;
+	}, [value]);
+
+	return ref.current;
+}
+
 module.exports = {
 	useRelativeIntl,
 	useNoInternetDialogue,
 	useCampaignAction,
 	useSwitchOrAddAccountAction,
+	usePreviousValue,
 };
