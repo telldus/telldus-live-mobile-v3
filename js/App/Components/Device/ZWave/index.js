@@ -23,8 +23,10 @@
 
 import SupportedCommandClasses from './SupportedCommandClasses';
 import BatteryFunctions from './BatteryFunctions';
+import BatteryInfoItem from './BatteryInfoItem';
 
 module.exports = {
 	SupportedCommandClasses,
 	BatteryFunctions,
+	BatteryInfoItem,
 };
