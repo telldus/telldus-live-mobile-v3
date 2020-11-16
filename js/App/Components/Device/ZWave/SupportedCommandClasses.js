@@ -34,6 +34,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+const isEqual = require('react-fast-compare');
 
 import {
 	View,
@@ -41,6 +42,9 @@ import {
 	EmptyView,
 } from '../../../../BaseComponents';
 
+import {
+	usePreviousValue,
+} from '../../../Hooks/App';
 import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 
@@ -77,6 +81,8 @@ const SupportedCommandClasses = (props: Props): Object => {
 		interviewLinkStyle,
 	} = getStyles(layout);
 
+	const prevNodeInfo = usePreviousValue(nodeInfo);
+	const isNodeInfoEqual = isEqual(prevNodeInfo, nodeInfo);
 	const commands = useMemo((): ?Array<Object> => {
 
 		if (!id || !nodeInfo) {
@@ -119,7 +125,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
-		nodeInfo,
+		isNodeInfoEqual,
 		layout,
 		id,
 		admin,
