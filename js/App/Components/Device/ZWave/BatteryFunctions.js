@@ -57,7 +57,8 @@ import {
 } from '../../../Hooks/Theme';
 import {
 	getDeviceManufacturerInfo,
-} from '../../../Actions/Devices';
+	sendSocketMessage,
+} from '../../../Actions';
 import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 
@@ -66,6 +67,7 @@ import Theme from '../../../Theme';
 type Props = {
 	id: string,
 	gatewayTimezone: string,
+	clientId: string,
 };
 
 function usePreviousNodeInfo(value: Object): Object {
@@ -92,6 +94,7 @@ const BatteryFunctions = (props: Props): Object => {
 	const {
 		id,
 		gatewayTimezone,
+		clientId,
 	} = props;
 
 	const {
@@ -179,7 +182,12 @@ const BatteryFunctions = (props: Props): Object => {
 		queue,
 	} = zWaveFunctions ? zWaveFunctions.batteryInfo() : {};
 
-	const getWakeUpIntervalValue = useCallback((value: number): string => {
+	let storedWakeupInterval = wakeupInterval;
+	if (typeof queue === 'number') {
+		storedWakeupInterval = queue;
+	}
+
+	const getWakeUpIntervalValue = useCallback((value: number): Object => {
 		value = value < 0 ? 0 : value;
 		let _wakeupInterval = (value * wakeupIntervalStep) + minimumWakeupInterval;
 		let seconds = _wakeupInterval;
@@ -199,26 +207,33 @@ const BatteryFunctions = (props: Props): Object => {
 		if (seconds > 0) {
 			time.push(`${seconds} s`);
 		}
-		return time.join(', ');
+		return {
+			timeValue: _wakeupInterval,
+			timeString: time.join(', '),
+		};
 	}, [minimumWakeupInterval, wakeupIntervalStep]);
+
+	let maximumValue = (maximumWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
+	let sliderValueInitial = (storedWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
+	const initialWakeUpIntervalValue = getWakeUpIntervalValue(sliderValueInitial);
+	const [ wakeUpIntervalValue, setWakeUpIntervalValue ] = useState(initialWakeUpIntervalValue);
+	const [ sliderValue, setSliderValue ] = useState(sliderValueInitial);
 
 	const onValueChange = useCallback((value: number) => {
 		setWakeUpIntervalValue(getWakeUpIntervalValue(value));
 	}, [getWakeUpIntervalValue]);
 
+	const nodeId = nodeInfo ? nodeInfo.nodeId : '';
 	const onSlidingComplete = useCallback((value: number) => {
-	}, []);
-
-	let storedWakeupInterval = wakeupInterval;
-	if (typeof queue === 'number') {
-		storedWakeupInterval = queue;
-	}
-
-	let maximumValue = (maximumWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
-	let sliderValueInitial = (storedWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
-	const initialTime = getWakeUpIntervalValue(sliderValueInitial);
-	const [ wakeUpIntervalValue, setWakeUpIntervalValue ] = useState(initialTime);
-	const [ sliderValue, setSliderValue ] = useState(sliderValueInitial);
+		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': 'cmdClass',
+			'nodeId': nodeId,
+			'class': ZWaveFunctions.COMMAND_CLASS_WAKEUP,
+			'cmd': 'setWakeupInterval',
+			'data': wakeUpIntervalValue.timeValue,
+		}));
+	}, [clientId, dispatch, nodeId, wakeUpIntervalValue.timeValue]);
 
 	const bInfoToListenFor = {
 		wakeupInterval,
@@ -230,7 +245,7 @@ const BatteryFunctions = (props: Props): Object => {
 	const isBatteryInfoEqual = isEqual(prevBatteryInfo, bInfoToListenFor);
 	useEffect(() => {
 		if (!isBatteryInfoEqual) {
-			setWakeUpIntervalValue(initialTime);
+			setWakeUpIntervalValue(initialWakeUpIntervalValue);
 			setSliderValue(sliderValueInitial);
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -289,7 +304,7 @@ This device is running on battery. To save as much power as possible this device
 					<>
 						<BatteryInfoItem
 							label={'Wakeup interval: '}
-							value={wakeUpIntervalValue}/>
+							value={wakeUpIntervalValue.timeString}/>
 						<Slider
 							minimumValue= {0}
 							maximumValue={maximumValue}

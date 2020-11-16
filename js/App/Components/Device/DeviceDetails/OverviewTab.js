@@ -244,6 +244,7 @@ class OverviewTab extends View<Props, null> {
 				{showBatteryFunctions && (
 					<BatteryFunctions
 						id={device.id}
+						clientId={device.clientId}
 						gatewayTimezone={gatewayTimezone}/>
 				)}
 			</ThemedScrollView>
