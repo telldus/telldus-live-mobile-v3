@@ -71,6 +71,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 	} = userProfile;
 
 	const {
+		itemsCoverStyle,
 		titleCoverStyle,
 		coverStyle,
 		textStyle,
@@ -154,7 +155,11 @@ const SupportedCommandClasses = (props: Props): Object => {
 					Supported Command Classes
 				</Text>
 			</TouchableOpacity>
-			{!expand && commands}
+			{!expand && (
+				<View style={itemsCoverStyle}>
+				 {commands}
+				</View>
+			)}
 		</>
 	);
 };
@@ -196,6 +201,9 @@ const getStyles = (appLayout: Object): Object => {
 			borderRadius: 2,
 			paddingHorizontal: padding,
 			paddingVertical: padding / 2,
+		},
+		itemsCoverStyle: {
+			marginBottom: padding,
 		},
 		textStyle: {
 			color: rowTextColor,
