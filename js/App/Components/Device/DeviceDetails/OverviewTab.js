@@ -31,6 +31,7 @@ const { images: {DEVICES} } = utils;
 import {
 	SupportedCommandClasses,
 	BatteryFunctions,
+	Associations,
 } from '../ZWave';
 import {
 	ThemedScrollView,
@@ -222,6 +223,8 @@ class OverviewTab extends View<Props, null> {
 		const showBatteryFunctions = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_BATTERY] ||
 		supportsWakeup) : false;
 
+		const showAssociations = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_ASSOCIATION] : false;
+
 		return (
 			<ThemedScrollView
 				level={3}
@@ -249,6 +252,12 @@ class OverviewTab extends View<Props, null> {
 					}]}/>
 				<SupportedCommandClasses
 					id={device.id}/>
+				{!!showAssociations && (
+					<Associations
+						id={device.id}
+						clientId={clientId}
+						gatewayTimezone={gatewayTimezone}/>
+				)}
 				{!!showBatteryFunctions && (
 					<BatteryFunctions
 						id={device.id}
