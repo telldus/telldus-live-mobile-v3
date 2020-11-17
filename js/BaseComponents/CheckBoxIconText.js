@@ -39,11 +39,12 @@ type Props = PropsThemedComponent & {
     style?: Array<any> | Object,
     iconStyle?: Object,
     textStyle?: Array<any> | Object,
-    onToggleCheckBox: () => void,
+    onToggleCheckBox: (?Object) => void,
     isChecked: boolean,
     text?: string,
 	intl: Object,
 	level?: number,
+	onPressData?: Object,
 };
 
 const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
@@ -59,13 +60,14 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 		colors,
 		level,
 		dark,
+		onPressData,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	function onPress() {
 		if (onToggleCheckBox) {
-			onToggleCheckBox();
+			onToggleCheckBox(onPressData);
 		}
 	}
 
