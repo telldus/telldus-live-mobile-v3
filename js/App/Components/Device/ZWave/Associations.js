@@ -38,11 +38,14 @@ const isEqual = require('react-fast-compare');
 import {
 	useDispatch,
 } from 'react-redux';
+import xor from 'lodash/xor';
 
 import {
 	Text,
 	EmptyView,
 	ThemedMaterialIcon,
+	TouchableButton,
+	View,
 } from '../../../../BaseComponents';
 import AssociationGroup from './AssociationGroup';
 
@@ -97,8 +100,42 @@ const Associations = (props: Props): Object => {
 		titleStyle,
 		iconStyle,
 		iconSize,
+		buttonStyle,
+		padding,
 	} = getStyles(layout);
 
+	const [ associationsConf, setAssociationsConf ] = useState({
+		changedGroups: [],
+		changedGroupsAndDevices: {},
+	});
+	const onAssociationsChange = useCallback(({
+		selectedList,
+		queue,
+		group,
+	}: Object) => {
+		let changedGroups = associationsConf.changedGroups;
+		let changedGroupsAndDevices = associationsConf.changedGroupsAndDevices;
+		if (xor(selectedList, queue).length > 0) {
+			changedGroups = [
+				...changedGroups,
+				group,
+			];
+			changedGroupsAndDevices = {
+				...changedGroupsAndDevices,
+				[group]: selectedList,
+			};
+		} else {
+			changedGroups = changedGroups.filter((item: string): boolean => item !== group);
+			delete changedGroupsAndDevices[group];
+		}
+		setAssociationsConf({
+			...associationsConf,
+			changedGroupsAndDevices,
+			changedGroups,
+		});
+	}, [associationsConf]);
+
+	const nodeId = nodeInfo ? nodeInfo.nodeId : '';
 	const prevNodeInfo = usePreviousValue(nodeInfo);
 	const isNodeInfoEqual = isEqual(prevNodeInfo, nodeInfo);
 	const prevNodeList = usePreviousValue(nodeList);
@@ -109,23 +146,23 @@ const Associations = (props: Props): Object => {
 			return;
 		}
 
-		const zWaveFunctions = new ZWaveFunctions(nodeInfo);
-		const {
-			groupings,
-		} = zWaveFunctions.supportsCommandClass(ZWaveFunctions.COMMAND_CLASS_ASSOCIATION) || {};
-
-		if (!groupings) {
+		const _groups = ZWaveFunctions.prepareGroups(nodeList, nodeId, nodeInfo);
+		if (!_groups) {
 			return;
 		}
 
 		let g = [];
-		for (let key in groupings) {
+		for (let key in _groups) {
 			g.push(
 				<AssociationGroup
 					key={key}
 					group={key}
-					nodeList={nodeList}
-					{...groupings[key]}/>
+					nodeList={_groups[key].nodesList}
+					clientId={clientId}
+					nodeId={nodeId}
+					{..._groups[key].group}
+					currentAssociations={_groups[key].currentAssociations}
+					onAssociationsChange={onAssociationsChange}/>
 			);
 		}
 		return g;
@@ -136,6 +173,9 @@ const Associations = (props: Props): Object => {
 		layout,
 		id,
 		admin,
+		clientId,
+		nodeId,
+		onAssociationsChange,
 	]);
 
 	const onPressToggle = useCallback(() => {
@@ -143,9 +183,30 @@ const Associations = (props: Props): Object => {
 		setExpand(!expand);
 	}, [expand]);
 
+	const saveAssociation = useCallback((data: Object) => {
+		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': 'cmdClass',
+			'nodeId': nodeId,
+			'class': ZWaveFunctions.COMMAND_CLASS_ASSOCIATION,
+			'cmd': 'setAssociations',
+			'data': data,
+		}));
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [clientId, nodeId]);
+
+	const {
+		changedGroups,
+	} = associationsConf;
+	const onPressSave = useCallback(() => {
+		saveAssociation(associationsConf.changedGroupsAndDevices);
+	}, [associationsConf.changedGroupsAndDevices, saveAssociation]);
+
 	if (!id || !nodeInfo || !groups || groups.length === 0) {
 		return <EmptyView/>;
 	}
+
+	const hasChanged = changedGroups.length > 0;
 
 	return (
 		<>
@@ -163,7 +224,19 @@ const Associations = (props: Props): Object => {
                     Associations
 				</Text>
 			</TouchableOpacity>
-			{!expand && groups}
+			{!expand &&
+			<View style={{
+				marginTop: padding / 2,
+			}}>
+				{groups}
+				{hasChanged &&
+				<TouchableButton
+					style={buttonStyle}
+					text={'Save new associations'}
+					onPress={onPressSave}/>
+				}
+			</View>
+			}
 		</>
 	);
 };
@@ -178,8 +251,10 @@ const getStyles = (appLayout: Object): Object => {
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
+	const buttonWidth = width - (padding * 9);
 
 	return {
+		padding,
 		iconSize: deviceWidth * 0.06,
 		titleCoverStyle: {
 			flexDirection: 'row',
@@ -190,6 +265,11 @@ const getStyles = (appLayout: Object): Object => {
 		titleStyle: {
 			marginLeft: 8,
 			fontSize: deviceWidth * 0.04,
+		},
+		buttonStyle: {
+			marginTop: padding / 2,
+			width: buttonWidth,
+			maxWidth: buttonWidth,
 		},
 	};
 };

@@ -35,25 +35,35 @@ const isEqual = require('react-fast-compare');
 import {
 	LayoutAnimation,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
 	Text,
 	TouchableButton,
+	CheckBoxIconText,
 } from '../../../../BaseComponents';
 
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 import {
 	usePreviousValue,
 } from '../../../Hooks/App';
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
+
 import Theme from '../../../Theme';
 
 type Props = {
     nodeList: Object,
     maxNodes: number,
-    queue: string,
+    queue: Array<string>,
     nodes: Array<string>,
-    group: string,
+	group: string,
+	clientId: string,
+	nodeId: string,
+	onAssociationsChange: (Object) => void,
+	currentAssociations: string,
 };
 
 const AssociationGroup = memo<Object>((props: Props): Object => {
@@ -61,8 +71,16 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		nodeList,
 		maxNodes,
 		group,
-		nodes,
+		queue = [],
+		nodeId,
+		onAssociationsChange,
+		currentAssociations = '',
 	} = props;
+
+	const {
+		colors,
+	} = useAppTheme();
+	const intl = useIntl();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
@@ -74,41 +92,70 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		labelStyle,
 		selectListCover,
 		selectListText,
+		inAppBrandSecondary,
 	} = getStyles({
 		layout,
+		colors,
 	});
 
 	const prevNodeList = usePreviousValue(nodeList);
 	const isNodeListEqual = isEqual(prevNodeList, nodeList);
-	const associatedDevices = useMemo((): string => {
-		let an = [];
-		for (let i = 0; i < nodes.length; i++) {
-			if (nodeList[nodes[i]]) {
-				an.push(nodeList[nodes[i]].name);
-			}
+
+	const [ selectedList, setSelectedList ] = useState(queue);
+	const onToggleCheckBox = useCallback(({
+		key,
+	}: Object) => {
+		let _selectedList = selectedList;
+		if (selectedList.indexOf(key) === -1) {
+			_selectedList = [..._selectedList, key];
+		} else {
+			_selectedList = _selectedList.filter((item: string): boolean => item !== key);
 		}
-		return an.join(',');
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isNodeListEqual, nodes]);
+		setSelectedList(_selectedList);
+		onAssociationsChange({
+			selectedList: _selectedList,
+			queue,
+			group,
+		});
+	}, [onAssociationsChange, selectedList, queue, group]);
 
 	const selectionList = useMemo((): Array<Object> => {
 		let list = [];
 		for (let key in nodeList) {
+			if (key === nodeId) {
+				continue;
+			}
+
+			let isChecked = selectedList.indexOf(key) !== -1;
+
 			list.push(
 				<View
 					key={key}
 					style={selectListCover}>
 					<Text
-						style={selectListText}
-						key={key}>
+						level={3}
+						style={selectListText}>
 						{nodeList[key].name}
 					</Text>
+					<CheckBoxIconText
+						isChecked={isChecked}
+						onPressData={{key}}
+						iconStyle={{
+							backgroundColor: isChecked ? inAppBrandSecondary : 'transparent',
+							color: isChecked ? '#fff' : 'transparent',
+							borderColor: inAppBrandSecondary,
+						}}
+						style={{
+							overflow: 'visible',
+						}}
+						onToggleCheckBox={onToggleCheckBox}
+						intl={intl}/>
 				</View>
 			);
 		}
 		return list;
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isNodeListEqual, layout]);
+	}, [isNodeListEqual, layout, inAppBrandSecondary, selectedList, onToggleCheckBox]);
 
 	const [ editActive, setEditActive ] = useState(false);
 	const toggleEditSave = useCallback(() => {
@@ -153,11 +200,11 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 				<Text
 					level={4}
 					style={hItemValueDef}>
-					{associatedDevices}
+					{currentAssociations}
 				</Text>
 			</View>
 			<TouchableButton
-				text={editActive ? 'Save new associations' : 'Edit device associations'}
+				text={editActive ? 'Hide device associations' : 'Edit device associations'}
 				style={buttonStyle}
 				labelStyle={labelStyle}
 				throbberStyle={labelStyle}
@@ -169,6 +216,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 
 const getStyles = ({
 	layout,
+	colors,
 }: Object): Object => {
 	const { height, width } = layout;
 	const isPortrait = height > width;
@@ -180,6 +228,9 @@ const getStyles = ({
 		shadow,
 		maxSizeTextButton,
 	} = Theme.Core;
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	const padding = deviceWidth * paddingFactor;
 	const buttonWidth = width - (padding * 9);
@@ -188,15 +239,16 @@ const getStyles = ({
 	fontSizeButtonText = fontSizeButtonText > maxSizeTextButton ? maxSizeTextButton : fontSizeButtonText;
 
 	return {
+		inAppBrandSecondary,
 		verticalCoverDef: {
 			marginHorizontal: padding,
 			padding,
-			marginBottom: padding,
+			marginBottom: padding / 2,
 			...shadow,
 		},
 		horizontalCoverDef: {
 			flexDirection: 'row',
-			marginTop: 5,
+			marginTop: padding,
 		},
 		hItemLabelDef: {
 			fontSize,
@@ -216,10 +268,11 @@ const getStyles = ({
 		},
 		selectListCover: {
 			flexDirection: 'row',
-			marginTop: 5,
+			marginTop: padding,
+			justifyContent: 'space-between',
 		},
 		selectListText: {
-
+			fontSize,
 		},
 	};
 };
