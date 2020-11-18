@@ -23,17 +23,20 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TouchableOpacity, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import ThemedImage from './ThemedImage';
 
 type ButtonProps = {
 	onPress?: Function,
 	infoButtonContainerStyle?: Array<any> | Object,
 	infoButtonStyle?: Array<any> | Object,
+	onPressData?: Object,
 };
 
 type Props = {
 	buttonProps: ButtonProps,
 	appLayout: Object,
+	iconLevel: number,
 };
 
 class RoundedInfoButton extends Component<Props, null> {
@@ -46,10 +49,10 @@ class RoundedInfoButton extends Component<Props, null> {
 
 	onPress = () => {
 		if (this.props.buttonProps) {
-			let {onPress} = this.props.buttonProps;
+			let {onPress, onPressData} = this.props.buttonProps;
 			if (onPress) {
 				if (typeof onPress === 'function') {
-					onPress();
+					onPress(onPressData);
 				} else {
 					console.warn('Invalid Prop Passed : onPress expects a Function.');
 				}
@@ -58,6 +61,10 @@ class RoundedInfoButton extends Component<Props, null> {
 	}
 
 	render(): Object {
+		const {
+			iconLevel,
+			appLayout,
+		} = this.props;
 		let infoButtonContainerStyle = {}, infoButtonStyle = {};
 		if (this.props.buttonProps && this.props.buttonProps.infoButtonContainerStyle) {
 			infoButtonContainerStyle = this.props.buttonProps.infoButtonContainerStyle;
@@ -65,14 +72,14 @@ class RoundedInfoButton extends Component<Props, null> {
 		if (this.props.buttonProps && this.props.buttonProps.infoButtonStyle) {
 			infoButtonStyle = this.props.buttonProps.infoButtonStyle;
 		}
-		let { appLayout } = this.props;
 		const styles = this.getStyle(appLayout);
 
 		return (
 			<TouchableOpacity style={[styles.roundedInfoButtonContainer, infoButtonContainerStyle]} onPress={this.onPress}>
-				<Image
+				<ThemedImage
 					source={{uri: 'rounded_info_button'}}
 					style={[styles.roundedInfoButton, infoButtonStyle]}
+					level={iconLevel}
 				/>
 			</TouchableOpacity>
 		);
