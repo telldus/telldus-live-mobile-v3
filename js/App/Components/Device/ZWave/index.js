@@ -25,10 +25,12 @@ import SupportedCommandClasses from './SupportedCommandClasses';
 import BatteryFunctions from './BatteryFunctions';
 import BatteryInfoItem from './BatteryInfoItem';
 import Associations from './Associations';
+import Configuration from './Configuration';
 
 module.exports = {
 	SupportedCommandClasses,
 	BatteryFunctions,
 	BatteryInfoItem,
 	Associations,
+	Configuration,
 };

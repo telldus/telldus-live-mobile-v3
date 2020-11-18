@@ -389,8 +389,7 @@ const getStyles = ({
 			marginTop: 2,
 			marginHorizontal: padding,
 			borderRadius: 2,
-			paddingHorizontal: padding * 2,
-			paddingVertical: padding * 2,
+			padding,
 			...shadow,
 		},
 		textStyle: {

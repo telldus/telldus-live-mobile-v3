@@ -32,6 +32,7 @@ import {
 	SupportedCommandClasses,
 	BatteryFunctions,
 	Associations,
+	Configuration,
 } from '../ZWave';
 import {
 	ThemedScrollView,
@@ -226,6 +227,12 @@ class OverviewTab extends View<Props, null> {
 
 		const showAssociations = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_ASSOCIATION] : false;
 
+		const showConfiguration = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_CONFIGURATION] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_INDICATOR] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_SWITCH_ALL]) :
+			false;
+
 		return (
 			<ThemedScrollView
 				level={3}
@@ -262,6 +269,12 @@ class OverviewTab extends View<Props, null> {
 				)}
 				{!!showBatteryFunctions && (
 					<BatteryFunctions
+						id={device.id}
+						clientId={clientId}
+						gatewayTimezone={gatewayTimezone}/>
+				)}
+				{!!showConfiguration && (
+					<Configuration
 						id={device.id}
 						clientId={clientId}
 						gatewayTimezone={gatewayTimezone}/>
