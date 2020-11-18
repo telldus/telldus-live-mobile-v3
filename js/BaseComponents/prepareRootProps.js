@@ -313,6 +313,9 @@ const getTintColor = (props: Object): ?string => {
 		case 5: {
 			return colors.inAppBrandSecondary;
 		}
+		case 6: {
+			return colors.inAppBrandPrimary;
+		}
 		default:
 			return;
 	}
