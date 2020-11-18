@@ -176,7 +176,6 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 						flexDirection: 'row',
 						justifyContent: 'center',
 						alignItems: 'center',
-
 					}}>
 						<Text
 							numberOfLines={1}

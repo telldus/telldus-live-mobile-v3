@@ -68,6 +68,26 @@ type Props = {
 	clientDeviceId: string,
 };
 
+const hasAssociationChanged = (groupings: Object, two: Object): boolean => {
+	if (!groupings || !two || Object.keys(two).length <= 0) {
+		return false;
+	}
+	let hasChanged = false;
+	for (let key in groupings) {
+		const {
+			group = {},
+		} = groupings[key];
+		if (!two[key]) {
+			continue;
+		}
+		if (xor(two[key], group.queue).length > 0) {
+			hasChanged = true;
+			break;
+		}
+	}
+	return hasChanged;
+};
+
 const Associations = (props: Props): Object => {
 	const {
 		id,
@@ -120,6 +140,7 @@ const Associations = (props: Props): Object => {
 	const [ associationsConf, setAssociationsConf ] = useState({
 		changedGroups: [],
 		changedGroupsAndDevices: {},
+		selectedList: {},
 	});
 	const onAssociationsChange = useCallback(({
 		selectedList,
@@ -142,9 +163,12 @@ const Associations = (props: Props): Object => {
 			delete changedGroupsAndDevices[group];
 		}
 		setAssociationsConf({
-			...associationsConf,
 			changedGroupsAndDevices,
 			changedGroups,
+			selectedList: {
+				...associationsConf.selectedList,
+				[group]: selectedList,
+			},
 		});
 	}, [associationsConf]);
 
@@ -153,28 +177,36 @@ const Associations = (props: Props): Object => {
 	const isNodeInfoEqual = isEqual(prevNodeInfo, nodeInfo);
 	const prevNodeList = usePreviousValue(nodeList);
 	const isNodeListEqual = isEqual(prevNodeList, nodeList);
+
+	const groupings = useMemo((): Object => {
+		return ZWaveFunctions.prepareGroups(nodeList, nodeId, nodeInfo);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		isNodeInfoEqual,
+		isNodeListEqual,
+	]);
+
 	const groups = useMemo((): ?Array<Object> => {
 
 		if (!id || !nodeInfo) {
 			return;
 		}
 
-		const _groups = ZWaveFunctions.prepareGroups(nodeList, nodeId, nodeInfo);
-		if (!_groups) {
+		if (!groupings) {
 			return;
 		}
 
 		let g = [];
-		for (let key in _groups) {
+		for (let key in groupings) {
 			g.push(
 				<AssociationGroup
 					key={key}
 					group={key}
-					nodeList={_groups[key].nodesList}
+					nodeList={groupings[key].nodesList}
 					clientId={clientId}
 					nodeId={nodeId}
-					{..._groups[key].group}
-					currentAssociations={_groups[key].currentAssociations}
+					{...groupings[key].group}
+					currentAssociations={groupings[key].currentAssociations.join(', ')}
 					onAssociationsChange={onAssociationsChange}/>
 			);
 		}
@@ -212,7 +244,7 @@ const Associations = (props: Props): Object => {
 	}, [clientId, nodeId, clientDeviceId]);
 
 	const {
-		changedGroups,
+		selectedList,
 	} = associationsConf;
 	const onPressSave = useCallback(() => {
 		saveAssociation(associationsConf.changedGroupsAndDevices);
@@ -222,7 +254,7 @@ const Associations = (props: Props): Object => {
 		return <EmptyView/>;
 	}
 
-	const hasChanged = changedGroups.length > 0;
+	const hasChanged = hasAssociationChanged(groupings, selectedList);
 
 	return (
 		<>
