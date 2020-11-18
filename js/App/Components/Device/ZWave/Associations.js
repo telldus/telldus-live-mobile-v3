@@ -123,10 +123,6 @@ const Associations = (props: Props): Object => {
 	const {
 		nodeInfo,
 	} = useSelector((state: Object): Object => state.devices.byId[id]) || {};
-	const { userProfile } = useSelector((state: Object): Object => state.user);
-	const {
-		admin = 0,
-	} = userProfile;
 
 	const {
 		titleCoverStyle,
@@ -217,7 +213,6 @@ const Associations = (props: Props): Object => {
 		isNodeListEqual,
 		layout,
 		id,
-		admin,
 		clientId,
 		nodeId,
 		onAssociationsChange,
