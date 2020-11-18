@@ -205,6 +205,7 @@ class OverviewTab extends View<Props, null> {
 		const {
 			nodeInfo = {},
 			clientId,
+			clientDeviceId,
 		} = device;
 
 		const locationImageUrl = getLocationImageUrl(gatewayType);
@@ -256,7 +257,8 @@ class OverviewTab extends View<Props, null> {
 					<Associations
 						id={device.id}
 						clientId={clientId}
-						gatewayTimezone={gatewayTimezone}/>
+						gatewayTimezone={gatewayTimezone}
+						clientDeviceId={clientDeviceId}/>
 				)}
 				{!!showBatteryFunctions && (
 					<BatteryFunctions

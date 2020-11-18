@@ -28,6 +28,7 @@ import React, {
 	useState,
 	useCallback,
 	useEffect,
+	useRef,
 } from 'react';
 import {
 	TouchableOpacity,
@@ -49,6 +50,7 @@ import {
 } from '../../../../BaseComponents';
 import AssociationGroup from './AssociationGroup';
 
+import { requestNodeInfo } from '../../../Actions/Websockets';
 import {
 	usePreviousValue,
 } from '../../../Hooks/App';
@@ -62,14 +64,25 @@ import Theme from '../../../Theme';
 
 type Props = {
     id: string,
-    clientId: string,
+	clientId: string,
+	clientDeviceId: string,
 };
 
 const Associations = (props: Props): Object => {
 	const {
 		id,
 		clientId,
+		clientDeviceId,
 	} = props;
+
+	const timeoutRef = useRef();
+	useEffect((): Function => {
+		return () => {
+			if (timeoutRef) {
+				clearTimeout(timeoutRef.current);
+			}
+		};
+	}, []);
 
 	const [ expand, setExpand ] = useState(true);
 	const dispatch = useDispatch();
@@ -192,8 +205,11 @@ const Associations = (props: Props): Object => {
 			'cmd': 'setAssociations',
 			'data': data,
 		}));
+		timeoutRef.current = setTimeout(() => {
+			dispatch(requestNodeInfo(clientId, clientDeviceId));
+		}, 1000);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [clientId, nodeId]);
+	}, [clientId, nodeId, clientDeviceId]);
 
 	const {
 		changedGroups,
