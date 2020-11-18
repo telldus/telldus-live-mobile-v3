@@ -42,6 +42,7 @@ import {
 	Text,
 	TouchableButton,
 	CheckBoxIconText,
+	RoundedInfoButton,
 } from '../../../../BaseComponents';
 
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
@@ -51,6 +52,9 @@ import {
 import {
 	useAppTheme,
 } from '../../../Hooks/Theme';
+import {
+	useDialogueBox,
+} from '../../../Hooks/Dialoguebox';
 
 import Theme from '../../../Theme';
 
@@ -98,6 +102,10 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		colors,
 	});
 
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
 	const prevNodeList = usePreviousValue(nodeList);
 	const isNodeListEqual = isEqual(prevNodeList, nodeList);
 
@@ -119,6 +127,31 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		});
 	}, [onAssociationsChange, selectedList, queue, group]);
 
+	const onPressInfo = useCallback(({
+		associationWarningDisabled,
+		associationWarningQueue,
+		associationWarningRemoved,
+	}: Object) => {
+		let text;
+		if (associationWarningDisabled) {// TODO: Translate
+			text = 'Setting association to multi channel endpoints is not supported in this device.';
+		} else if (associationWarningQueue) {
+			text = 'This device has been added to this association group but has not yet been stored in the device. This will happen next time the device is awake.';
+		} else if (associationWarningRemoved) {
+			text = 'This device has been removed from this association group but has not yet been removed from the device. This will happen next time the device is awake.';
+		}
+		if (text) {
+			toggleDialogueBoxState({
+				show: true,
+				header: ' ',
+				showHeader: true,
+				imageHeader: true,
+				text,
+				showPositive: true,
+			});
+		}
+	}, [toggleDialogueBoxState]);
+
 	const selectionList = useMemo((): Array<Object> => {
 		let list = [];
 		for (let key in nodeList) {
@@ -127,16 +160,49 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 			}
 
 			let isChecked = selectedList.indexOf(key) !== -1;
+			const {
+				name,
+				associationWarningDisabled,
+				associationWarningQueue,
+				associationWarningRemoved,
+			} = nodeList[key];
+			const showInfo = associationWarningDisabled || associationWarningQueue || associationWarningRemoved;
 
 			list.push(
 				<View
 					key={key}
 					style={selectListCover}>
-					<Text
-						level={3}
-						style={selectListText}>
-						{nodeList[key].name}
-					</Text>
+					<View style={{
+						flexDirection: 'row',
+						justifyContent: 'center',
+						alignItems: 'center',
+
+					}}>
+						<Text
+							numberOfLines={1}
+							level={3}
+							style={selectListText}>
+							{name}
+						</Text>
+						{showInfo && (
+							<RoundedInfoButton
+								iconLevel={6}
+								buttonProps={{
+									infoButtonContainerStyle: {
+										position: 'relative',
+										right: undefined,
+										bottom: undefined,
+										marginLeft: 5,
+									},
+									onPress: onPressInfo,
+									onPressData: {
+										associationWarningDisabled,
+										associationWarningQueue,
+										associationWarningRemoved,
+									},
+								}}/>
+						)}
+					</View>
 					<CheckBoxIconText
 						isChecked={isChecked}
 						onPressData={{key}}
@@ -155,7 +221,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		}
 		return list;
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isNodeListEqual, layout, inAppBrandSecondary, selectedList, onToggleCheckBox]);
+	}, [isNodeListEqual, layout, inAppBrandSecondary, selectedList, onToggleCheckBox, onPressInfo]);
 
 	const [ editActive, setEditActive ] = useState(false);
 	const toggleEditSave = useCallback(() => {
