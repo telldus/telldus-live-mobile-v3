@@ -73,6 +73,7 @@ const useAppTheme = (): Object => {
 				colorScheme,
 				dark: colorScheme === DARK_THEME_KEY,
 				themeInApp,
+				selectedThemeSet: _selectedThemeSet,
 				...getThemeData(colorScheme, ThemedColors),
 			};
 		}
@@ -80,6 +81,7 @@ const useAppTheme = (): Object => {
 			colorScheme,
 			dark: themeInApp === DARK_THEME_KEY,
 			themeInApp,
+			selectedThemeSet: _selectedThemeSet,
 			...getThemeData(themeInApp, ThemedColors),
 		};
 	}, [
