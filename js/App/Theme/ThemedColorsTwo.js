@@ -357,7 +357,7 @@ export default {
 			return '#777777';
 		},
 		get activeTintOne() {
-			return Core.brandSecondaryShadeOne;
+			return '#9C7D69';
 		},
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
@@ -366,7 +366,7 @@ export default {
 			return Core.inactiveGray;
 		},
 		get thumbColorActiveSwitch() {
-			return Core.brandSecondaryShadeOne;
+			return '#9C7D69';
 		},
 		get thumbColorInActiveSwitch() {
 			return Core.inactiveSwitch;
@@ -381,7 +381,7 @@ export default {
 			return '#202020';
 		},
 		get headerOneColorBlockEnabled() {
-			return Core.brandSecondaryShadeOne;
+			return '#9C7D69';
 		},
 		get headerOneColorBlockDisabled() {
 			return '#666666';
@@ -408,13 +408,13 @@ export default {
 			return '#666666';
 		},
 		get headerIconColorBlock() {
-			return Core.brandSecondaryShadeOne;
+			return '#9C7D69';
 		},
 		get colorTimeExpired() {
 			return '#EF9A9A';
 		},
 		get footerPrimary() {
-			return Core.brandSecondaryShadeOne;
+			return '#9C7D69';
 		},
 		get footerSecondary() {
 			return '#000';
@@ -423,7 +423,7 @@ export default {
 			return '#fff';
 		},
 		get backgroundOneButtonEnabled() {
-			return Core.brandSecondaryShadeOne;
+			return '#9C7D69';
 		},
 		get backgroundOneButtonDisabled() {
 			return '#b5b5b5';
@@ -438,7 +438,7 @@ export default {
 			return '#ffffff';
 		},
 		get checkBoxIconActiveOne() {
-			return Core.brandSecondaryShadeOne;
+			return '#9C7D69';
 		},
 		get checkBoxIconInactiveOne() {
 			return 'transparent';
@@ -450,7 +450,7 @@ export default {
 			return 'transparent';
 		},
 		get checkBoxIconBorderActiveOne() {
-			return Core.brandSecondaryShadeOne;
+			return '#9C7D69';
 		},
 		get checkBoxIconBorderInactiveOne() {
 			return '#ffffff';
@@ -471,7 +471,7 @@ export default {
 			return Core.textColorValue;
 		},
 		get posterBG() {
-			return Core.brandSecondaryShadeOne;
+			return '#9C7D69';
 		},
 		get textInsidePoster() {
 			return '#424242';
@@ -480,10 +480,10 @@ export default {
 			return Core.textColorLabel;
 		},
 		get colorOnActiveBg() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get colorOffActiveBg() {
-			return '#607D8B';
+			return '#80919E';
 		},
 		get colorOnInActiveBg() {
 			return '#424242';
@@ -498,16 +498,16 @@ export default {
 			return '#FFFFFF';
 		},
 		get colorOnInActiveIcon() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get colorOffInActiveIcon() {
-			return '#607D8B';
+			return '#80919E';
 		},
 		get inAppBrandSecondary() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get inAppBrandPrimary() {
-			return '#607D8B';
+			return '#80919E';
 		},
 		get buttonSeparatorColor() {
 			return Core.grayPrimary;
@@ -525,7 +525,7 @@ export default {
 			return '#ef5350'; // TODO: Confirm with Johannes
 		},
 		get timeColor() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get drawerBg() {
 			return '#424242';
@@ -546,7 +546,7 @@ export default {
 			return '#C5E1A5';
 		},
 		get statusOrange() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get statusRed() {
 			return '#EF5350';
