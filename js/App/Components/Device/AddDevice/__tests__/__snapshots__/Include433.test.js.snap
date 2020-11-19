@@ -546,6 +546,12 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               <View
                 colorScheme="light"
                 dark={false}
+                selectedThemeSet={
+                  Object {
+                    "key": 1,
+                    "value": "Johannes on road trip",
+                  }
+                }
                 style={
                   Array [
                     Object {
