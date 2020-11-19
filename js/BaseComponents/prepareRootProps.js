@@ -117,6 +117,9 @@ const getBGColor = (props: Object): ?string => {
 		case 18: {
 			return colors.textInsidePoster;
 		}
+		case 19: {
+			return colors.headerBG;
+		}
 		default:
 			return 'transparent';
 	}
