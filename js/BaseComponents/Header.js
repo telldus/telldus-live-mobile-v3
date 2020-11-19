@@ -54,6 +54,7 @@ import {
 } from '../App/Hooks/Theme';
 
 import TelldusLogo from '../App/Components/TabViews/img/telldus_logo.svg';
+import TelldusLogoTwo from '../App/Components/TabViews/img/telldus_logo_two.svg';
 
 import { hasStatusBar as hasStatusBarMeth } from '../App/Lib';
 
@@ -105,6 +106,7 @@ const HeaderComponent = (props: Props): Object => {
 
 	const {
 		colors,
+		selectedThemeSet,
 	} = useAppTheme();
 
 	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
@@ -128,17 +130,26 @@ const HeaderComponent = (props: Props): Object => {
 
 	const renderChildren = useCallback((): ?Object | ?Array<any> => {
 		if (!children) {
+			console.log('TEST selectedThemeSet', selectedThemeSet);
 			return (
 				<TouchableOpacity
 					disabled={!onPressLogo}
 					onPress={onPressLogo}>
-					<TelldusLogo
-						colorHomeLogo={colors.inAppBrandSecondary}
-						colorTextLogo={colors.headerIconColor}
-						colorWaveLogo={colors.headerIconColor}
-						style={logoStyle}
-						height={logoHeight}
-						width={logoWidth}/>
+					{(selectedThemeSet && selectedThemeSet.key === 2) ?
+						<TelldusLogoTwo
+							colorHomeLogo={colors.headerLogoColor}
+							style={logoStyle}
+							height={logoHeight}
+							width={logoWidth}/>
+						:
+						<TelldusLogo
+							colorHomeLogo={colors.headerLogoColor}
+							colorTextLogo={colors.headerIconColor}
+							colorWaveLogo={colors.headerIconColor}
+							style={logoStyle}
+							height={logoHeight}
+							width={logoWidth}/>
+					}
 				</TouchableOpacity>
 			);
 		} else if (!Array.isArray(children)) {
@@ -308,7 +319,7 @@ const HeaderComponent = (props: Props): Object => {
 			}
 			return newChildren;
 		}
-	}, [children, onPressLogo, colors.inAppBrandSecondary, colors.headerIconColor, logoStyle, logoHeight, logoWidth, searchBar, iosToolbarSearch, iosToolbarBtnColor, toolbarButton, androidToolbarSearch, toolbarTextColor]);
+	}, [children, selectedThemeSet, onPressLogo, colors.headerLogoColor, colors.headerIconColor, logoStyle, logoHeight, logoWidth, searchBar, iosToolbarSearch, iosToolbarBtnColor, toolbarButton, androidToolbarSearch, toolbarTextColor]);
 
 	const renderButtonContent = useCallback((button: Object): ?Object => {
 		if (button.image) {
