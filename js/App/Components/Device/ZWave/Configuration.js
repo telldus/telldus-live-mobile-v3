@@ -73,6 +73,7 @@ const Configuration = (props: Props): Object => {
 
 	const protectionClass = nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION];
 	const configurationClass = nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_CONFIGURATION];
+	const manufacturerAttributes = nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC];
 	const hasProtection = !!protectionClass;
 	const hasConfiguration = !!configurationClass;
 
@@ -93,10 +94,11 @@ const Configuration = (props: Props): Object => {
 		}
 		return (
 			<AdvancedConf
-				{...configurationClass}/>
+				{...configurationClass}
+				manufacturerAttributes={manufacturerAttributes}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasConfiguration]);
+	}, [hasConfiguration, manufacturerAttributes]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));

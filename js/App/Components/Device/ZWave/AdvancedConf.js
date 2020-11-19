@@ -24,21 +24,35 @@
 
 import React, {
 	memo,
+	useCallback,
 } from 'react';
-import { useSelector } from 'react-redux';
+import {
+	useSelector,
+} from 'react-redux';
 
 import {
 	Text,
 	View,
 } from '../../../../BaseComponents';
+
+// import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import Theme from '../../../Theme';
 
-type Props = {
+import {
+	useManufacturerInfo,
+} from '../../../Hooks';
 
+type Props = {
+	parameters: Object,
+	manufacturerAttributes: Object,
 };
 
 const AdvancedConf = (props: Props): Object => {
 	console.log('TEST props', props);
+	const {
+		// parameters,
+		manufacturerAttributes,
+	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
@@ -47,6 +61,11 @@ const AdvancedConf = (props: Props): Object => {
 		subTitleTextStyle,
 		hItemLabelDef,
 	} = getStyles(layout);
+
+	const callback = useCallback((info: Object) => {
+		console.log('TEST info', info);
+	}, []);
+	useManufacturerInfo(manufacturerAttributes, callback);
 
 	return (
 		<View
