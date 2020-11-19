@@ -31,17 +31,14 @@ import React, {
 import {
 	useSelector,
 } from 'react-redux';
-import {
-	Platform,
-} from 'react-native';
 
 import {
 	Text,
 	View,
 	EmptyView,
 	RoundedInfoButton,
-	ThemedTextInput,
 } from '../../../../BaseComponents';
+import GenericConfSetting from './GenericConfSetting';
 
 // import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import Theme from '../../../Theme';
@@ -79,7 +76,6 @@ const AdvancedConf = (props: Props): Object => {
 		hItemLabelDef,
 		horizontalCover,
 		leftBlock,
-		textFieldStyle,
 		rightBlock,
 	} = getStyles({
 		layout,
@@ -111,33 +107,19 @@ const AdvancedConf = (props: Props): Object => {
 		ConfigurationParameters = [],
 	} = manufacturerInfo || {};
 
-	const _onChangeText = useCallback(() => {
-
-	}, []);
-
-	const _onSubmitEditing = useCallback(() => {
-
-	}, []);
-
-	const getConfSettings = useCallback(({type}: Object): Object => {
+	const getConfSettings = useCallback(({
+		type,
+		...others
+	}: Object): Object => {
 		switch (type) {
 			default:
 				return (
-					<ThemedTextInput
-						level={6}
-						value={''}
-						style={textFieldStyle}
-						onChangeText={_onChangeText}
-						onSubmitEditing={_onSubmitEditing}
-						autoCorrect={false}
-						autoFocus={false}
-						returnKeyType={'done'}
-						keyboardType={Platform.OS === 'ios' ? 'phone-pad' : 'decimal-pad'}
-					/>
+					<GenericConfSetting
+						{...others}/>
 				);
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [_onChangeText, _onSubmitEditing, layout]);
+	}, []);
 
 	const cParamsLength = ConfigurationParameters.length;
 	const paramsLen = Object.keys(parameters);
@@ -150,10 +132,11 @@ const AdvancedConf = (props: Props): Object => {
 				ConfigurationParameterValues: values = [],
 				Size,
 				Type,
+				DefaultValue,
 			} = cp;
 
-			let _min = null;
-			let _max = null;
+			let min = null;
+			let max = null;
 			let steps = 0;
 			let _values = [];
 			for (let i = 0; i < values.length; ++i) {
@@ -176,11 +159,11 @@ const AdvancedConf = (props: Props): Object => {
 					'rangeFrom': undefined,
 					'rangeTo': undefined,
 				});
-				if (_min === null || from < _min) {
-					_min = from;
+				if (min === null || from < min) {
+					min = from;
 				}
-				if (_max === null || to > _max) {
-					_max = to;
+				if (max === null || to > max) {
+					max = to;
 				}
 			}
 			_values.sort((a: Object, b: Object): 0 | 1 | -1 => {
@@ -198,10 +181,17 @@ const AdvancedConf = (props: Props): Object => {
 				offset += (_values[i].to - _values[i].from) + 1;
 			}
 
+			let defaultValue = DefaultValue;
+			if (ParameterNumber in parameters) {
+				defaultValue = typeof parameters[ParameterNumber].queue === 'number' ? parameters[ParameterNumber].queue : parameters[ParameterNumber].value;
+			}
 			const setting = getConfSettings({
 				values: _values,
 				type: Type,
-				steps,
+				stepsTot: steps,
+				defaultValue: defaultValue.toString(),
+				min,
+				max,
 			});
 
 			return (
@@ -319,15 +309,6 @@ const getStyles = ({
 			flexDirection: 'row',
 			width: '30%',
 			alignItems: 'center',
-		},
-		textFieldStyle: {
-			flex: 1,
-			paddingBottom: 0,
-			paddingTop: 0,
-			fontSize,
-			textAlign: 'right',
-			borderBottomWidth: 1,
-			borderBottomColor: colors.inAppBrandSecondary,
 		},
 	};
 };
