@@ -298,6 +298,9 @@ export default {
 		get headerBG() {
 			return '#000000';
 		},
+		get headerLogoColor() {
+			return '#ffffff';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -553,6 +556,9 @@ export default {
 		},
 		get headerBG() {
 			return '#000000';
+		},
+		get headerLogoColor() {
+			return '#ffffff';
 		},
 	},
 };
