@@ -27,10 +27,10 @@ const {
 
 const common = {
 	get primary() {
-		return Core.brandPrimary;
+		return '#80919E';
 	},
 	get secondary() {
-		return Core.brandSecondary;
+		return '#9C7D69';
 	},
 	get danger() {
 		return Core.brandDanger;
@@ -47,7 +47,7 @@ export default {
 	[LIGHT_THEME_KEY]: {
 		...common,
 		get safeAreaBG() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get text() {
 			return Core.inactiveTintColor;
@@ -101,7 +101,7 @@ export default {
 			return '#000';
 		},
 		get activeTintOne() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
@@ -110,7 +110,7 @@ export default {
 			return Core.inactiveGray;
 		},
 		get thumbColorActiveSwitch() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get thumbColorInActiveSwitch() {
 			return Core.inactiveSwitch;
@@ -125,19 +125,19 @@ export default {
 			return '#f5f5f5';
 		},
 		get headerOneColorBlockEnabled() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get headerOneColorBlockDisabled() {
 			return '#999999';
 		},
 		get iconOneColorBlockEnabled() {
-			return '#1b365d';
+			return '#80919E';
 		},
 		get iconOneColorBlockDisabled() {
 			return '#bdbdbd';
 		},
 		get iconOneSubColorBlock() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get iconTwoColorBlock() {
 			return '#BDBDBD';
@@ -152,13 +152,13 @@ export default {
 			return Core.rowTextColor;
 		},
 		get headerIconColorBlock() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get colorTimeExpired() {
 			return '#990000';
 		},
 		get footerPrimary() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get footerSecondary() {
 			return '#fff';
@@ -167,7 +167,7 @@ export default {
 			return Core.rowTextColor;
 		},
 		get backgroundOneButtonEnabled() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get backgroundOneButtonDisabled() {
 			return '#b5b5b5';
@@ -182,7 +182,7 @@ export default {
 			return '#ffffff';
 		},
 		get checkBoxIconActiveOne() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get checkBoxIconInactiveOne() {
 			return 'transparent';
@@ -194,7 +194,7 @@ export default {
 			return 'transparent';
 		},
 		get checkBoxIconBorderActiveOne() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get checkBoxIconBorderInactiveOne() {
 			return '#ffffff';
@@ -215,7 +215,7 @@ export default {
 			return Core.rowTextColor;
 		},
 		get posterBG() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get textInsidePoster() {
 			return '#ffffff';
@@ -224,10 +224,10 @@ export default {
 			return '#ffffff';
 		},
 		get colorOnActiveBg() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get colorOffActiveBg() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get colorOnInActiveBg() {
 			return '#eeeeee';
@@ -242,16 +242,16 @@ export default {
 			return '#FFFFFF';
 		},
 		get colorOnInActiveIcon() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get colorOffInActiveIcon() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get inAppBrandSecondary() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get inAppBrandPrimary() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get buttonSeparatorColor() {
 			return '#dddddd';
@@ -269,10 +269,10 @@ export default {
 			return '#ef5350';
 		},
 		get timeColor() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get drawerBg() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get drawerBottomBg() {
 			return Core.appBackground;
@@ -281,7 +281,7 @@ export default {
 			return '#6B6969';
 		},
 		get lightDrandSecDarkWhite() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get badgeColor() {
 			return '#ED1727';
@@ -294,6 +294,9 @@ export default {
 		},
 		get statusRed() {
 			return '#F44336';
+		},
+		get headerBG() {
+			return '#000000';
 		},
 	},
 
@@ -547,6 +550,9 @@ export default {
 		},
 		get statusRed() {
 			return '#EF5350';
+		},
+		get headerBG() {
+			return '#000000';
 		},
 	},
 };

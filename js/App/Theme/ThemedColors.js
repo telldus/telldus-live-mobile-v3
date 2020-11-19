@@ -295,6 +295,9 @@ export default {
 		get statusRed() {
 			return '#F44336';
 		},
+		get headerBG() {
+			return '#1b365d';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -547,6 +550,9 @@ export default {
 		},
 		get statusRed() {
 			return '#EF5350';
+		},
+		get headerBG() {
+			return Core.grayPrimary;
 		},
 	},
 };
