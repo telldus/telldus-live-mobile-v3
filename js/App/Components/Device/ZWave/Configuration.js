@@ -38,8 +38,9 @@ import {
 	TouchableOpacity,
 	ThemedMaterialIcon,
 	Text,
-	View,
 } from '../../../../BaseComponents';
+import ProtectionConf from './ProtectionConf';
+import AdvancedConf from './AdvancedConf';
 
 import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
@@ -68,10 +69,6 @@ const Configuration = (props: Props): Object => {
 		titleStyle,
 		iconStyle,
 		iconSize,
-		verticalCover,
-		coverStyle,
-		subTitleTextStyle,
-		hItemLabelDef,
 	} = getStyles(layout);
 
 	const protectionClass = nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION];
@@ -84,52 +81,22 @@ const Configuration = (props: Props): Object => {
 			return;
 		}
 		return (
-			<View
-				style={verticalCover}>
-				<Text
-					level={2}
-					style={subTitleTextStyle}>
-                Protection
-				</Text>
-				<View
-					level={2}
-					style={coverStyle}>
-					<Text
-						level={3}
-						style={hItemLabelDef}>
-						{'State: '}
-					</Text>
-				</View>
-			</View>
+			<ProtectionConf
+				{...protectionClass}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasProtection, layout]);
+	}, [hasProtection]);
 
 	const configuration = useMemo((): ?Object => {
 		if (!hasConfiguration) {
 			return;
 		}
 		return (
-			<View
-				style={verticalCover}>
-				<Text
-					level={2}
-					style={subTitleTextStyle}>
-                Advanced settings
-				</Text>
-				<View
-					level={2}
-					style={coverStyle}>
-					<Text
-						level={3}
-						style={hItemLabelDef}>
-                Advanced settings
-					</Text>
-				</View>
-			</View>
+			<AdvancedConf
+				{...configurationClass}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasConfiguration, layout]);
+	}, [hasConfiguration]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
@@ -173,12 +140,10 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		shadow,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const buttonWidth = width - (padding * 9);
-	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	return {
 		padding,
@@ -197,25 +162,6 @@ const getStyles = (appLayout: Object): Object => {
 			marginTop: padding / 2,
 			width: buttonWidth,
 			maxWidth: buttonWidth,
-		},
-		coverStyle: {
-			justifyContent: 'space-between',
-			marginTop: 2,
-			marginHorizontal: padding,
-			borderRadius: 2,
-			padding,
-			...shadow,
-		},
-		verticalCover: {
-		},
-		subTitleTextStyle: {
-			fontSize: fontSize * 1.1,
-			marginLeft: padding,
-			marginTop: 8,
-			marginBottom: 5,
-		},
-		hItemLabelDef: {
-			fontSize,
 		},
 	};
 };
