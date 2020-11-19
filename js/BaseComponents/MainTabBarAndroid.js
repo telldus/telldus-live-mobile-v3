@@ -91,7 +91,7 @@ class MainTabBarAndroid extends Component<Props, null> {
 		return (
 			<View
 				style={container}
-				level={11}>
+				level={19}>
 				<ScrollView
 					ref="scrollView"
 					contentContainerStyle={contentContainer}

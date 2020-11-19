@@ -413,12 +413,12 @@ const HeaderComponent = (props: Props): Object => {
 			{
 				(!forceHideStatus && Platform.OS === 'android' && hasStatusBar) ? (
 					<View
-						level={11}
+						level={19}
 						style={statusBar}/>
 				) : null
 			}
 			<View
-				level={11}
+				level={19}
 				style={[navbar, style]}>
 				{!!leftButton && renderLeftButton(leftButton)}
 				{renderChildren()}

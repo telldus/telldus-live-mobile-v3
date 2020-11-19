@@ -168,7 +168,7 @@ class MainTabsAndroid extends Component<Props, State> {
 				onPress={this.onTabPress}
 				onLayout={this.onLayout}>
 				<View
-					level={11}
+					level={19}
 					style={[styles.tabBar, tabBarStyle]}>
 					<Text
 						style={labelStyle}
