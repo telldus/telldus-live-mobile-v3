@@ -410,8 +410,9 @@ class SensorRow extends View<Props, State> {
 		} = Theme.Core;
 
 		const {
-			colorOffActiveBg,
+			sensorValueBGColor,
 			inAppBrandSecondary,
+			itemIconBGColor,
 		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -420,7 +421,8 @@ class SensorRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let backgroundColor = isGatewayActive ? colorOffActiveBg : Theme.Core.offlineColor;
+		let backgroundColor = isGatewayActive ? sensorValueBGColor : Theme.Core.offlineColor;
+		const backgroundColorIcon = isGatewayActive ? itemIconBGColor : Theme.Core.offlineColor;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const widthValueBlock = (buttonWidth * 2) + 6;
@@ -483,12 +485,13 @@ class SensorRow extends View<Props, State> {
 			},
 			sensorIcon: {
 				fontSize: 16,
+				color: colors.baseColor,
 			},
 			iconContainerStyle: {
 				borderRadius: 25,
 				width: 25,
 				height: 25,
-				backgroundColor,
+				backgroundColor: backgroundColorIcon,
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginHorizontal: 5,

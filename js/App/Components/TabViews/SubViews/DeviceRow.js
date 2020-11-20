@@ -183,6 +183,7 @@ class DeviceRow extends View<Props, State> {
 				'themeInApp',
 				'colorScheme',
 				'dark',
+				'selectedThemeSet',
 			]);
 			if (propsChange) {
 				return true;
@@ -299,6 +300,7 @@ class DeviceRow extends View<Props, State> {
 			onColorMultiplier,
 			dark,
 			colors,
+			selectedThemeSet,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -478,9 +480,14 @@ class DeviceRow extends View<Props, State> {
 								accessibilityLabel={accessibilityLabel}>
 								{showDeviceIcon && <BlockIcon
 									icon={icon}
-									style={styles.deviceIcon}
+									style={[
+										styles.deviceIcon,
+										{
+											color: selectedThemeSet.key === 2 ? colorDeviceIconBack : '#ffffff',
+										},
+									]}
 									containerStyle={[styles.iconContainerStyle, {
-										backgroundColor: colorDeviceIconBack,
+										backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : colorDeviceIconBack,
 									}]}/>}
 								{nameInfo}
 							</TouchableOpacity>
@@ -667,7 +674,6 @@ class DeviceRow extends View<Props, State> {
 			},
 			deviceIcon: {
 				fontSize: 18,
-				color: '#fff',
 			},
 			iconContainerStyle: {
 				backgroundColor,

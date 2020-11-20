@@ -250,7 +250,7 @@ class SensorDashboardTile extends View<Props, null> {
 		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
 		let iconContainerStyle = !isGatewayActive ? itemIconContainerOffline : itemIconContainerActive;
-		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? colors.colorOffActiveBg : Theme.Core.offlineColor) : 'transparent';
+		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? colors.sensorValueBGColor : Theme.Core.offlineColor) : 'transparent';
 
 		return (
 			<DashboardShadowTile
@@ -260,7 +260,7 @@ class SensorDashboardTile extends View<Props, null> {
 				info={info}
 				icon={'sensor'}
 				iconStyle={{
-					color: '#fff',
+					color: colors.baseColor,
 					fontSize: Math.floor(tileWidth / 6.5),
 					borderRadius: Math.floor(tileWidth / 8),
 					textAlign: 'center',
@@ -314,10 +314,12 @@ class SensorDashboardTile extends View<Props, null> {
 		const dotSize = tileWidth * 0.045;
 
 		const {
-			colorOffActiveBg,
+			sensorValueBGColor,
+			itemIconBGColor,
+			itemIconBGColorOffline,
 		} = colors;
 
-		const backgroundColor = isGatewayActive ? colorOffActiveBg : Theme.Core.offlineColor;
+		const backgroundColor = isGatewayActive ? sensorValueBGColor : Theme.Core.offlineColor;
 
 		return {
 			iconStyle: {
@@ -363,10 +365,10 @@ class SensorDashboardTile extends View<Props, null> {
 				marginLeft: 2 + (dotSize * 0.2),
 			},
 			itemIconContainerActive: {
-				backgroundColor: colorOffActiveBg,
+				backgroundColor: itemIconBGColor,
 			},
 			itemIconContainerOffline: {
-				backgroundColor: Theme.Core.offlineColor,
+				backgroundColor: itemIconBGColorOffline,
 			},
 		};
 	}

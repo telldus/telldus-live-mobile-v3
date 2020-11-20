@@ -34,6 +34,10 @@ import TextTicker from 'react-native-text-ticker';
 
 import { View, Text, BlockIcon, StyleSheet } from '../../../../BaseComponents';
 
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -54,6 +58,10 @@ const Title = memo<Object>(({
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { tileNameDisplayMode } = defaultSettings;
 
+	const {
+		colors,
+	} = useAppTheme();
+
 	const NameInfo = useMemo((): Object => {
 		return (
 			<TextTicker
@@ -67,6 +75,7 @@ const Title = memo<Object>(({
 					styles.name, {
 						fontSize: Math.floor(tileWidth / 10),
 						opacity: name ? 1 : 0.7,
+						color: colors.baseColorTwo,
 					},
 				]}
 				bounce={false}>
@@ -106,7 +115,7 @@ const Title = memo<Object>(({
 					alignSelf: 'center',
 				}}/>)}
 			{!!icon && (<BlockIcon
-				blockLevel={15}
+				blockLevel={21}
 				icon={icon}
 				containerStyle={iconContainerStyle}
 				style={iconStyle}/>)}
@@ -173,7 +182,6 @@ class DashboardShadowTile extends View<Props, null> {
 
 const styles = StyleSheet.create({
 	name: {
-		color: Theme.Core.rowTextColor,
 		textAlign: 'center',
 		textAlignVertical: 'center',
 	},

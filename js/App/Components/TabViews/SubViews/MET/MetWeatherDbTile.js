@@ -43,6 +43,9 @@ import {
 import {
 	updateAllMetWeatherDbTiles,
 } from '../../../../Actions/ThirdParties';
+import {
+	useAppTheme,
+} from '../../../../Hooks/Theme';
 
 import Theme from '../../../../Theme';
 
@@ -85,6 +88,10 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 		item,
 		tileWidth,
 	});
+
+	const {
+		colors,
+	} = useAppTheme();
 
 	const lastUpdated = dayjs(meta.updated_at).unix();
 	const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
@@ -149,7 +156,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id, onPress]);
 
-	let background = Object.keys(slideList).length === 0 ? Theme.Core.brandPrimary : 'transparent';
+	let background = Object.keys(slideList).length === 0 ? colors.sensorValueBGColor : 'transparent';
 
 	return (
 		<DashboardShadowTile
@@ -159,7 +166,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 			info={info}
 			icon={'sensor'}
 			iconStyle={{
-				color: '#fff',
+				color: colors.baseColor,
 				fontSize: Math.floor(tileWidth / 6.5),
 				borderRadius: Math.floor(tileWidth / 8),
 				textAlign: 'center',

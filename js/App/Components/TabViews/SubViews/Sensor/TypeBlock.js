@@ -81,7 +81,7 @@ const TypeBlock = ({
 			rippleDuration={rippleDuration}
 			rippleCentered={true}>
 			<View
-				level={15}
+				level={20}
 				style={valueCoverStyle}
 				importantForAccessibility="no-hide-descendants"
 				accessibilityElementsHidden={true}>

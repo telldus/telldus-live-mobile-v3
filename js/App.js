@@ -151,11 +151,13 @@ class App extends React.Component<Props> {
 			colorScheme,
 			themeInApp,
 			colors,
+			selectedThemeSet,
 		} = this.props;
 		const {
 			accessToken: accessTokenPrev = {},
 			colorScheme: colorSchemePrev,
 			themeInApp: themeInAppPrev,
+			selectedThemeSet: selectedThemeSetPrev,
 	 } = prevProps;
 		if (accessToken) {
 			// Update accesstoken at the widget side, when ever it is refreshed at the App.
@@ -164,7 +166,7 @@ class App extends React.Component<Props> {
 				// TODO: Do for iOS once widget is implemented.
 			}
 		}
-		if ((!isEqual(colorSchemePrev, colorScheme) || !isEqual(themeInAppPrev, themeInApp)) && Platform.OS === 'android' && StatusBar) {
+		if ((!isEqual(colorSchemePrev, colorScheme) || !isEqual(themeInAppPrev, themeInApp) || !isEqual(selectedThemeSetPrev, selectedThemeSet)) && Platform.OS === 'android' && StatusBar) {
 			StatusBar.setTranslucent(true);
 			StatusBar.setBackgroundColor(colors.safeAreaBG);
 		}
