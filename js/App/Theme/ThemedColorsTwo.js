@@ -272,7 +272,7 @@ export default {
 			return '#9C7D69';
 		},
 		get drawerBg() {
-			return '#80919E';
+			return '#000000';
 		},
 		get drawerBottomBg() {
 			return Core.appBackground;
@@ -549,7 +549,7 @@ export default {
 			return '#9C7D69';
 		},
 		get drawerBg() {
-			return '#424242';
+			return '#000000';
 		},
 		get drawerBottomBg() {
 			return '#424242';

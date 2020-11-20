@@ -65,7 +65,7 @@ const TabBar = (props: Props): Object => {
 
 	label = typeof label === 'string' ? label : intl.formatMessage(label);
 
-	const level = focused ? 9 : 1;
+	const level = focused ? 34 : 1;
 
 	return (
 		<View style={container} accessibilityLabel={accessibilityLabel}>

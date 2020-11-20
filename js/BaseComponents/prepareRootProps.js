@@ -265,6 +265,9 @@ const getTextColor = (props: Object): ?string => {
 		case 33: {
 			return colors.textInsidePoster;
 		}
+		case 34: {
+			return colors.activeTintOne;
+		}
 		default:
 			return;
 	}
