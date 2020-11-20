@@ -301,6 +301,21 @@ export default {
 		get headerLogoColor() {
 			return Core.brandSecondary;
 		},
+		get sensorValueBGColor() {
+			return Core.brandPrimary;
+		},
+		get itemIconBGColor() {
+			return Core.brandPrimary;
+		},
+		get itemIconBGColorOffline() {
+			return Core.offlineColor;
+		},
+		get baseColor() {
+			return '#ffffff';
+		},
+		get baseColorTwo() {
+			return Core.rowTextColor;
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -559,6 +574,21 @@ export default {
 		},
 		get headerLogoColor() {
 			return '#FFA450';
+		},
+		get sensorValueBGColor() {
+			return '#607D8B';
+		},
+		get itemIconBGColor() {
+			return '#607D8B';
+		},
+		get itemIconBGColorOffline() {
+			return Core.offlineColor;
+		},
+		get baseColor() {
+			return '#ffffff';
+		},
+		get baseColorTwo() {
+			return Core.rowTextColor;
 		},
 	},
 };

@@ -47,7 +47,7 @@ export default {
 	[LIGHT_THEME_KEY]: {
 		...common,
 		get safeAreaBG() {
-			return '#80919E';
+			return '#000000';
 		},
 		get text() {
 			return Core.inactiveTintColor;
@@ -301,12 +301,27 @@ export default {
 		get headerLogoColor() {
 			return '#ffffff';
 		},
+		get sensorValueBGColor() {
+			return '#000000';
+		},
+		get itemIconBGColor() {
+			return 'transparent';
+		},
+		get itemIconBGColorOffline() {
+			return 'transparent';
+		},
+		get baseColor() {
+			return '#000000';
+		},
+		get baseColorTwo() {
+			return '#000000';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
 		...common,
 		get safeAreaBG() {
-			return Core.grayPrimary;
+			return '#000000';
 		},
 		get text() {
 			return Core.textColorLabel;
@@ -559,6 +574,21 @@ export default {
 		},
 		get headerLogoColor() {
 			return '#ffffff';
+		},
+		get sensorValueBGColor() {
+			return '#000000';
+		},
+		get itemIconBGColor() {
+			return 'transparent';
+		},
+		get itemIconBGColorOffline() {
+			return 'transparent';
+		},
+		get baseColor() {
+			return '#000000';
+		},
+		get baseColorTwo() {
+			return Core.rowTextColor;
 		},
 	},
 };
