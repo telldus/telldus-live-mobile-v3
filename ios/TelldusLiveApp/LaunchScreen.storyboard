@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17124"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,22 +22,16 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.Logo" translatesAutoresizingMaskIntoConstraints="NO" id="sj6-WD-cxW">
                                 <rect key="frame" x="30" y="82.5" width="354" height="133.5"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_loading_icon" translatesAutoresizingMaskIntoConstraints="NO" id="uAO-hS-cOi">
-                                <rect key="frame" x="144.5" y="420" width="125.5" height="56.5"/>
-                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7Sf-lc-mH7"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="uAO-hS-cOi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="6s2-Bg-sSn"/>
                             <constraint firstItem="7Sf-lc-mH7" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sj6-WD-cxW" secondAttribute="bottom" constant="240" id="C8T-sz-rOY"/>
-                            <constraint firstItem="uAO-hS-cOi" firstAttribute="width" secondItem="iK7-8z-2oa" secondAttribute="width" multiplier="0.25" id="CZR-8b-KxY"/>
                             <constraint firstItem="7Sf-lc-mH7" firstAttribute="bottom" secondItem="iK7-8z-2oa" secondAttribute="bottom" constant="-34" id="FyH-TW-3Xv"/>
                             <constraint firstItem="sj6-WD-cxW" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" multiplier="1/2" constant="20" id="Nra-Iw-aBU"/>
                             <constraint firstItem="iK7-8z-2oa" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-64" id="UHq-v6-VDS"/>
                             <constraint firstItem="sj6-WD-cxW" firstAttribute="centerX" secondItem="7Sf-lc-mH7" secondAttribute="centerX" id="ZV1-So-Suw"/>
                             <constraint firstItem="sj6-WD-cxW" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="1/3" id="lSH-Lz-fXM"/>
-                            <constraint firstItem="uAO-hS-cOi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="vsx-9D-OTg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="iK7-8z-2oa" secondAttribute="trailing" constant="-64" id="wyA-Ln-azv"/>
                             <constraint firstItem="iK7-8z-2oa" firstAttribute="top" secondItem="7Sf-lc-mH7" secondAttribute="top" constant="-44" id="ydZ-Tl-G57"/>
                         </constraints>
@@ -51,6 +45,5 @@
     <resources>
         <image name="LaunchScreen.AspectFill" width="1024" height="1024"/>
         <image name="LaunchScreen.Logo" width="667" height="133.5"/>
-        <image name="splash_loading_icon" width="188" height="56.5"/>
     </resources>
 </document>
