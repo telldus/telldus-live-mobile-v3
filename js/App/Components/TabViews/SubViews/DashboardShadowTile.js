@@ -60,6 +60,7 @@ const Title = memo<Object>(({
 
 	const {
 		colors,
+		selectedThemeSet,
 	} = useAppTheme();
 
 	const NameInfo = useMemo((): Object => {
@@ -96,7 +97,6 @@ const Title = memo<Object>(({
 			}]}>
 			{!!iconRight && (<BlockIcon
 				onPress={onPressIconRight}
-				blockLevel={13}
 				icon={iconRight}
 				containerStyle={{
 					position: 'absolute',
@@ -107,8 +107,9 @@ const Title = memo<Object>(({
 					borderRadius: 5,
 					alignItems: 'center',
 					justifyContent: 'center',
+					backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : colors.inAppBrandSecondary,
 				}} style={{
-					color: '#fff',
+					color: colors.baseColorThree,
 					fontSize: Math.floor(tileWidth / 8),
 					borderRadius: 5,
 					textAlign: 'center',

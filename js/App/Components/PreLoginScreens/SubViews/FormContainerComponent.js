@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
 import { BackgroundImage, View } from '../../../../BaseComponents';
-import TelldusLogo from '../../TabViews/img/telldus_logo.svg';
+import TelldusLogoTwo from '../..//TabViews/img/telldus_logo_two.svg';
 
 import {
 	withTheme,
@@ -86,10 +86,8 @@ class FormContainerComponent extends View<Props, null> {
 							behavior="position"
 							style={{ justifyContent: 'center', alignItems: 'center' }}
 							contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
-							<TelldusLogo
-								colorHomeLogo={colors.inAppBrandSecondary}
-								colorTextLogo={dark ? '#ffffff' : '#000000'}
-								colorWaveLogo={'#ffffff'}
+							<TelldusLogoTwo
+								colorHomeLogo={'#ffffff'}
 								style={styles.logoStyle}
 								height={styles.logoHeight}
 								width={styles.logoWidth}/>
