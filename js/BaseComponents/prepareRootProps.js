@@ -120,6 +120,12 @@ const getBGColor = (props: Object): ?string => {
 		case 19: {
 			return colors.headerBG;
 		}
+		case 20: {
+			return colors.sensorValueBGColor;
+		}
+		case 21: {
+			return colors.itemIconBGColor;
+		}
 		default:
 			return 'transparent';
 	}
