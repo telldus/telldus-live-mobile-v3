@@ -316,6 +316,9 @@ export default {
 		get baseColorTwo() {
 			return Core.rowTextColor;
 		},
+		get baseColorThree() {
+			return '#ffffff';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -589,6 +592,9 @@ export default {
 		},
 		get baseColorTwo() {
 			return Core.rowTextColor;
+		},
+		get baseColorThree() {
+			return '#ffffff';
 		},
 	},
 };
