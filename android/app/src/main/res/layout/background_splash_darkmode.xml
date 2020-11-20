@@ -7,7 +7,7 @@
 		android:drawable="@drawable/telldusliveapp_launchscreen_darkmode"/>
 
 	<item>
-		<bitmap android:src="@drawable/logo_splash_darkmode"
+		<bitmap android:src="@drawable/logo_splash"
           android:gravity="center"/>
 	</item>
 
