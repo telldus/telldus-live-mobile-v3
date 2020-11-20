@@ -70,7 +70,6 @@ class FormContainerComponent extends View<Props, null> {
 			appLayout,
 			screen,
 			dark,
-			colors,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
