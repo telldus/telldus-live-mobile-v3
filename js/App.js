@@ -76,6 +76,7 @@ type Props = {
 	colors: Object,
 	colorScheme: string,
 	themeInApp: string,
+	selectedThemeSet: Object,
 };
 
 class App extends React.Component<Props> {
