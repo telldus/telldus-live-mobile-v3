@@ -130,7 +130,6 @@ const HeaderComponent = (props: Props): Object => {
 
 	const renderChildren = useCallback((): ?Object | ?Array<any> => {
 		if (!children) {
-			console.log('TEST selectedThemeSet', selectedThemeSet);
 			return (
 				<TouchableOpacity
 					disabled={!onPressLogo}
