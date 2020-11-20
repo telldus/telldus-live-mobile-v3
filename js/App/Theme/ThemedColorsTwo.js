@@ -101,7 +101,7 @@ export default {
 			return '#000';
 		},
 		get activeTintOne() {
-			return '#9C7D69';
+			return '#000';
 		},
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
@@ -378,7 +378,7 @@ export default {
 			return '#777777';
 		},
 		get activeTintOne() {
-			return '#9C7D69';
+			return '#000';
 		},
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
