@@ -4,7 +4,7 @@
 	android:layout_width="match_parent">
 
 	<item
-		android:drawable="@drawable/telldusliveapp_launchscreen_darkmode_landscape"/>
+		android:drawable="@drawable/telldusliveapp_launchscreen_landscape"/>
 
 	<item>
 		<bitmap android:src="@drawable/logo_splash"
