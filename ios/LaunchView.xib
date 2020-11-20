@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_1" orientation="landscape" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
@@ -11,25 +11,25 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.AspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="iK7-8z-2oa">
-                    <rect key="frame" x="-44" y="0.0" width="502" height="896"/>
+                    <rect key="frame" x="-4" y="-44" width="904" height="471"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.Logo" translatesAutoresizingMaskIntoConstraints="NO" id="sj6-WD-cxW">
-                    <rect key="frame" x="30" y="82.5" width="354" height="133.5"/>
+                    <rect key="frame" x="50" y="125" width="796" height="133.5"/>
                 </imageView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="7Sf-lc-mH7"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="7Sf-lc-mH7" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sj6-WD-cxW" secondAttribute="bottom" constant="240" id="C8T-sz-rOY"/>
                 <constraint firstItem="7Sf-lc-mH7" firstAttribute="bottom" secondItem="iK7-8z-2oa" secondAttribute="bottom" constant="-34" id="FyH-TW-3Xv"/>
+                <constraint firstItem="sj6-WD-cxW" firstAttribute="centerX" secondItem="iK7-8z-2oa" secondAttribute="centerX" id="Lh5-xg-N76"/>
                 <constraint firstItem="sj6-WD-cxW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" multiplier="1/2" constant="20" id="Nra-Iw-aBU"/>
                 <constraint firstItem="iK7-8z-2oa" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" constant="-64" id="UHq-v6-VDS"/>
+                <constraint firstItem="sj6-WD-cxW" firstAttribute="centerY" secondItem="iK7-8z-2oa" secondAttribute="centerY" id="YsY-ef-Tet"/>
                 <constraint firstItem="sj6-WD-cxW" firstAttribute="centerX" secondItem="7Sf-lc-mH7" secondAttribute="centerX" id="ZV1-So-Suw"/>
-                <constraint firstItem="sj6-WD-cxW" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" multiplier="1/3" id="lSH-Lz-fXM"/>
                 <constraint firstAttribute="trailingMargin" secondItem="iK7-8z-2oa" secondAttribute="trailing" constant="-64" id="wyA-Ln-azv"/>
                 <constraint firstItem="iK7-8z-2oa" firstAttribute="top" secondItem="7Sf-lc-mH7" secondAttribute="top" constant="-44" id="ydZ-Tl-G57"/>
             </constraints>
