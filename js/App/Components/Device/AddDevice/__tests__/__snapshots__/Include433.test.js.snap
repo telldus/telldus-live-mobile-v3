@@ -82,15 +82,24 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
             }
           }
         >
-          <View
-            fill="#9C7D69"
-            height={313}
-            style={
+          <Image
+            source={
               Object {
-                "marginTop": -2,
+                "uri": "telldus_header_bg",
               }
             }
-            width={750}
+            style={
+              Array [
+                Object {
+                  "height": 313,
+                  "tintColor": undefined,
+                  "width": 750,
+                },
+                Object {
+                  "marginTop": -2,
+                },
+              ]
+            }
           />
           <View
             style={
@@ -317,15 +326,24 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             }
           }
         >
-          <View
-            fill="#9C7D69"
-            height={313}
-            style={
+          <Image
+            source={
               Object {
-                "marginTop": -2,
+                "uri": "telldus_header_bg",
               }
             }
-            width={750}
+            style={
+              Array [
+                Object {
+                  "height": 313,
+                  "tintColor": undefined,
+                  "width": 750,
+                },
+                Object {
+                  "marginTop": -2,
+                },
+              ]
+            }
           />
           <View
             style={
@@ -762,15 +780,24 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
             }
           }
         >
-          <View
-            fill="#9C7D69"
-            height={313}
-            style={
+          <Image
+            source={
               Object {
-                "marginTop": -2,
+                "uri": "telldus_header_bg",
               }
             }
-            width={750}
+            style={
+              Array [
+                Object {
+                  "height": 313,
+                  "tintColor": undefined,
+                  "width": 750,
+                },
+                Object {
+                  "marginTop": -2,
+                },
+              ]
+            }
           />
           <View
             style={
