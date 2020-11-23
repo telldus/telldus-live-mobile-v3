@@ -142,6 +142,7 @@ class FormContainerComponent extends View<Props, null> {
 			contentContainerStyle: {
 				flexGrow: 1,
 				alignItems: 'center',
+				backgroundColor: '#00000030',
 			},
 			logoStyle: {
 				marginTop: deviceHeight * 0.1,
