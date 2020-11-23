@@ -21,7 +21,7 @@ exports[`renders ShortcutRow using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
-        "backgroundColor": "#fff",
+        "backgroundColor": "#f5f5f5",
         "borderRadius": 2,
         "elevation": 2,
         "height": 229,

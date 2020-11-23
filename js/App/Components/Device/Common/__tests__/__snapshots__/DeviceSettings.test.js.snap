@@ -36,7 +36,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
     style={
       Array [
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#f5f5f5",
           "borderRadius": 2,
           "elevation": 2,
           "marginTop": 10.416375,
@@ -124,7 +124,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             style={
               Object {
                 "backgroundColor": "transparent",
-                "color": "#e26901",
+                "color": "#9C7D69",
                 "fontFamily": "telldusicons",
                 "fontSize": 30,
               }
@@ -199,7 +199,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             style={
               Array [
                 Object {
-                  "color": "#e26901",
+                  "color": "#000000",
                   "fontSize": 30,
                 },
                 undefined,
@@ -225,7 +225,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
     style={
       Array [
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#f5f5f5",
           "borderRadius": 2,
           "elevation": 2,
           "marginTop": 10.416375,
@@ -313,7 +313,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             style={
               Object {
                 "backgroundColor": "transparent",
-                "color": "#e26901",
+                "color": "#9C7D69",
                 "fontFamily": "telldusicons",
                 "fontSize": 30,
               }
@@ -388,7 +388,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             style={
               Array [
                 Object {
-                  "color": "#e26901",
+                  "color": "#000000",
                   "fontSize": 30,
                 },
                 undefined,
@@ -446,7 +446,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
     style={
       Array [
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#f5f5f5",
           "borderRadius": 2,
           "elevation": 2,
           "marginTop": 10.416375,
@@ -534,7 +534,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             style={
               Object {
                 "backgroundColor": "transparent",
-                "color": "#e26901",
+                "color": "#9C7D69",
                 "fontFamily": "telldusicons",
                 "fontSize": 30,
               }
@@ -609,7 +609,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             style={
               Array [
                 Object {
-                  "color": "#e26901",
+                  "color": "#000000",
                   "fontSize": 30,
                 },
                 undefined,
@@ -635,7 +635,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
     style={
       Array [
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#f5f5f5",
           "borderRadius": 2,
           "elevation": 2,
           "marginTop": 10.416375,
@@ -723,7 +723,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             style={
               Object {
                 "backgroundColor": "transparent",
-                "color": "#e26901",
+                "color": "#9C7D69",
                 "fontFamily": "telldusicons",
                 "fontSize": 30,
               }
@@ -798,7 +798,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             style={
               Array [
                 Object {
-                  "color": "#e26901",
+                  "color": "#000000",
                   "fontSize": 30,
                 },
                 undefined,

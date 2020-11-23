@@ -198,7 +198,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled 1`]
     Object {
       "alignItems": "center",
       "alignSelf": "center",
-      "backgroundColor": "#e26901",
+      "backgroundColor": "#000000",
       "borderRadius": 44,
       "elevation": 2,
       "flexDirection": "row",
@@ -269,7 +269,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled and
     Object {
       "alignItems": "center",
       "alignSelf": "center",
-      "backgroundColor": "#e26901",
+      "backgroundColor": "#000000",
       "borderRadius": 44,
       "elevation": 2,
       "flexDirection": "row",
