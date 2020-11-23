@@ -109,18 +109,18 @@ function getAngleLengthToInitiate(currMode: string, currentValueInScreen: number
 	return	currentAngleLen;
 }
 
-const getModeAttributes = (cMode: Object, dark: boolean): Object => {
+const getModeAttributes = (cMode: Object, {
+	dark,
+	selectedThemeSet,
+}: Object): Object => {
 	const {
-		endColor,
-		startColor,
+		colors,
 		label,
 		minVal,
 		maxVal,
-		startColorD,
-		endColorD,
 	} = cMode;
-	const gradientColorFrom = dark ? startColorD : startColor;
-	const gradientColorTo = dark ? endColorD : endColor;
+	const gradientColorFrom = dark ? colors[selectedThemeSet.key].startColorD : colors[selectedThemeSet.key].startColor;
+	const gradientColorTo = dark ? colors[selectedThemeSet.key].endColorD : colors[selectedThemeSet.key].endColor;
 	return {
 		baseColor: gradientColorTo,
 		gradientColorFrom,
@@ -141,13 +141,16 @@ getValueFromAngle: (number, string) => Object;
 
 static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	const { controllingMode, setpointMode, preventReset } = state;
-	const { device: { methodRequested }, activeMode, dark } = props;
+	const { device: { methodRequested }, activeMode, dark, selectedThemeSet } = props;
 
 	let newValue = state.currentValue, newSetPointValue = state.setpointValueLocal, newModeAttributes = {};
 	props.modes.map((modeInfo: Object) => {
 		if (modeInfo.mode === controllingMode) {
 			newValue = modeInfo.value;
-			newModeAttributes = getModeAttributes(modeInfo, dark);
+			newModeAttributes = getModeAttributes(modeInfo, {
+				dark,
+				selectedThemeSet,
+			});
 		}
 		if (modeInfo.mode === setpointMode) {
 			newSetPointValue = modeInfo.value;
@@ -196,7 +199,10 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 		props.modes.map((modeInfo: Object) => {
 			if (modeInfo.mode === activeMode) {
 				newValue = modeInfo.value;
-				newModeAttributes = getModeAttributes(modeInfo, dark);
+				newModeAttributes = getModeAttributes(modeInfo, {
+					dark,
+					selectedThemeSet,
+				});
 			}
 		});
 		newState = {
@@ -214,7 +220,10 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 		props.modes.map((modeInfo: Object) => {
 			if (modeInfo.mode === activeMode) {
 				newValue = modeInfo.value;
-				newModeAttributes = getModeAttributes(modeInfo, dark);
+				newModeAttributes = getModeAttributes(modeInfo, {
+					dark,
+					selectedThemeSet,
+				});
 			}
 		});
 		newState = {
@@ -249,7 +258,12 @@ constructor(props: Props) {
 
 	this.initialAngle = Math.PI * 1.25;
 
-	let { modes, device, dark } = this.props;
+	let {
+		modes,
+		device,
+		dark,
+		selectedThemeSet,
+	} = this.props;
 	const { stateValues: {THERMOSTAT = {}}, methodRequested } = device;
 	const { mode } = THERMOSTAT;
 
@@ -269,8 +283,8 @@ constructor(props: Props) {
 		initialAngleLength = getAngleLengthToInitiate(cModeInfo.mode, currentValue, this.props.modes);
 	}
 
-	const gradientColorFrom = dark ? cModeInfo.startColorD : cModeInfo.startColor;
-	const gradientColorTo = dark ? cModeInfo.endColorD : cModeInfo.endColor;
+	const gradientColorFrom = dark ? cModeInfo.colors[selectedThemeSet.key].startColorD : cModeInfo.colors[selectedThemeSet.key].startColor;
+	const gradientColorTo = dark ? cModeInfo.colors[selectedThemeSet.key].endColorD : cModeInfo.colors[selectedThemeSet.key].endColor;
 
 	this.state = {
 		startAngle: this.initialAngle,
@@ -363,7 +377,7 @@ onControlThermostat = (mode: string, temp: number, changeMode: 1 | 0, requestedS
 
 onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
 	let cMode = {}, sPointValue;
-	const { modes, dark } = this.props;
+	const { modes, dark, selectedThemeSet } = this.props;
 	let controllingMode = changeMode ? controlType : this.state.activeModeLocal;
 	modes.map((mode: Object) => {
 		if (mode.mode === controllingMode) {
@@ -376,18 +390,15 @@ onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
 	const {
 		mode,
 		value,
-		endColor,
-		startColor,
-		startColorD,
-		endColorD,
+		colors,
 		label,
 		minVal,
 		maxVal,
 	} = cMode;
 	const initialAngleLength = getAngleLengthToInitiate(mode, value, modes);
 
-	const gradientColorFrom = dark ? startColorD : startColor;
-	const gradientColorTo = dark ? endColorD : endColor;
+	const gradientColorFrom = dark ? colors[selectedThemeSet.key].startColorD : colors[selectedThemeSet.key].startColor;
+	const gradientColorTo = dark ? colors[selectedThemeSet.key].endColorD : colors[selectedThemeSet.key].endColor;
 
 	this.setState({
 		controllingMode,
