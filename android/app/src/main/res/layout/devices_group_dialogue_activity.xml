@@ -14,7 +14,7 @@
             android:layout_height="40dp"
             android:scaleType="centerCrop"
             app:siShape="@drawable/shape_no_padding_top"
-            android:src="@drawable/telldus_geometric_header_bg"
+            android:src="@drawable/telldus_header_bg"
             app:siSquare="false"/>
         <TextView
             android:id="@+id/txtWidgetTitleDialogue"
