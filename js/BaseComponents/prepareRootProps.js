@@ -129,6 +129,9 @@ const getBGColor = (props: Object): ?string => {
 		case 22: {
 			return colors.buttonBGColor;
 		}
+		case 23: {
+			return colors.buttonBGColorTwo;
+		}
 		default:
 			return 'transparent';
 	}
@@ -273,6 +276,12 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 35: {
 			return colors.colorTwoButtonTextEnabled;
+		}
+		case 36: {
+			return colors.textOnLevelThreeView;
+		}
+		case 37: {
+			return colors.iconOnSettingsBlock;
 		}
 		default:
 			return;

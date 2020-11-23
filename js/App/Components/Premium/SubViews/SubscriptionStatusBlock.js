@@ -102,7 +102,7 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 				value={accStatus}
 				appLayout={layout}
 				iconValueRight={(isBasic && enable) ? <Text
-					level={23}
+					level={37}
 					style={upgradeSyle}>{formatMessage(i18n.upgrade)}</Text> : null}
 				onPress={false}
 				onPressIconValueRight={isBasic ? onPressUpgrade : null}

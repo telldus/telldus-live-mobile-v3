@@ -325,6 +325,15 @@ export default {
 		get buttonBGColor() {
 			return '#ffffff';
 		},
+		get buttonBGColorTwo() {
+			return '#000000';
+		},
+		get textOnLevelThreeView() {
+			return '#000000';
+		},
+		get iconOnSettingsBlock() {
+			return '#000000';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -607,6 +616,15 @@ export default {
 		},
 		get buttonBGColor() {
 			return '#9C7D69';
+		},
+		get textOnLevelThreeView() {
+			return '#FFA450';
+		},
+		get buttonBGColorTwo() {
+			return '#9C7D69';
+		},
+		get iconOnSettingsBlock() {
+			return '#FFA450';
 		},
 	},
 };

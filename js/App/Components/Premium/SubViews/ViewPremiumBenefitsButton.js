@@ -73,7 +73,7 @@ const ViewPremiumBenefitsButton = (props: Object): Object => {
 			/>
 				:
 				<Text
-					level={23}
+					level={36}
 					onPress={onPress}
 					style={[textStyle, linkTextStyle]}>
 					{formatMessage(i18n.viewBenefitsPremiumTwo)}

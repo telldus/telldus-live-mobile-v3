@@ -123,7 +123,7 @@ class TouchableButton extends Component<Props, void> {
 			cover,
 		} = this.getStyle();
 
-		const bLevel = buttonLevel || (disabled ? 7 : 13);
+		const bLevel = buttonLevel || (disabled ? 7 : 23);
 		const tLevel = textLevel || (disabled ? 13 : 12);
 		const thLevel = throbberLevel || 14;
 
