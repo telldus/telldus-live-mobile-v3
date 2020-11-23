@@ -116,7 +116,15 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item', 'sensorTypesInCurrentDb', 'themeInApp', 'colorScheme']);
+		return shouldUpdate(this.props, nextProps, [
+			'displayType',
+			'tileWidth',
+			'item',
+			'sensorTypesInCurrentDb',
+			'themeInApp',
+			'colorScheme',
+			'selectedThemeSet',
+		]);
 	}
 
 	getSlideList(item: Object): Object {

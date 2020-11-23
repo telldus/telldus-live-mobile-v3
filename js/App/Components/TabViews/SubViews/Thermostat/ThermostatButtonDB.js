@@ -96,6 +96,7 @@ class ThermostatButtonDB extends View<Props, State> {
 			'currentTemp',
 			'colorScheme',
 			'themeInApp',
+			'selectedThemeSet',
 		]);
 		if (propsChange) {
 			return true;

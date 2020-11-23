@@ -62,6 +62,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'appLayout',
 		'themeInApp',
 		'colorScheme',
+		'selectedThemeSet',
 	]);
 }
 

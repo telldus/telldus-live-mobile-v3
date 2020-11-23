@@ -161,6 +161,7 @@ class SensorRow extends View<Props, State> {
 				'gatewayId',
 				'themeInApp',
 				'colorScheme',
+				'selectedThemeSet',
 			]);
 			if (propsChange) {
 				return true;
@@ -176,6 +177,7 @@ class SensorRow extends View<Props, State> {
 		const themeHasChanged = shouldUpdate(otherProps, nextOtherProps, [
 			'themeInApp',
 			'colorScheme',
+			'selectedThemeSet',
 		]);
 		if (themeHasChanged) {
 			return true;

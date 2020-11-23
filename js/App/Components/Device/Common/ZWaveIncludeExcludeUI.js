@@ -117,6 +117,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'infoText',
 		'themeInApp',
 		'colorScheme',
+		'selectedThemeSet',
 	])) {
 		return true;
 	}

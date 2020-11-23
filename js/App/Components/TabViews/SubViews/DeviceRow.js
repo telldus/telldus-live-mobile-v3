@@ -200,6 +200,7 @@ class DeviceRow extends View<Props, State> {
 		const themeHasChanged = shouldUpdate(otherProps, nextOtherProps, [
 			'themeInApp',
 			'colorScheme',
+			'selectedThemeSet',
 		]);
 		if (themeHasChanged) {
 			return true;

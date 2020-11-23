@@ -313,11 +313,13 @@ class JobsPoster extends View<null, Props, State> {
 			return newDays || onDragChange || showInactiveChange || shouldUpdate(this.props, nextProps, [
 				'themeInApp',
 				'colorScheme',
+				'selectedThemeSet',
 			]);
 		}
 		const themeHasChanged = shouldUpdate(this.props, nextProps, [
 			'themeInApp',
 			'colorScheme',
+			'selectedThemeSet',
 		]);
 		if (themeHasChanged) {
 			return true;
