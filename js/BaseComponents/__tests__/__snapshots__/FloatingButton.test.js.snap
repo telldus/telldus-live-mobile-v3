@@ -146,7 +146,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled 1`] =
   onStartShouldSetResponder={[Function]}
   style={
     Object {
-      "backgroundColor": "#9C7D69",
+      "backgroundColor": "#000000",
       "borderRadius": 40,
       "bottom": 35.00000025,
       "elevation": 5,
@@ -195,7 +195,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled and l
   onStartShouldSetResponder={[Function]}
   style={
     Object {
-      "backgroundColor": "#9C7D69",
+      "backgroundColor": "#000000",
       "borderRadius": 40,
       "bottom": 35.00000025,
       "elevation": 5,
