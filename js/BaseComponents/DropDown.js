@@ -142,6 +142,7 @@ static defaultProps: DefaultProps = {
 			'colorScheme',
 			'themeInApp',
 			'dropdownOffsetTopCount',
+			'selectedThemeSet',
 		]);
 		if (propsChange) {
 			return true;
