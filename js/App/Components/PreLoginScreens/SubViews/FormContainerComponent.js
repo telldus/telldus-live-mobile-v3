@@ -69,13 +69,12 @@ class FormContainerComponent extends View<Props, null> {
 			children,
 			appLayout,
 			screen,
-			dark,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<BackgroundImage source={{uri: dark ? 'telldusliveapp_launchscreen_darkmode' : 'telldusliveapp_launchscreen'}} style={styles.container}>
+			<BackgroundImage source={{uri: 'telldusliveapp_launchscreen'}} style={styles.container}>
 				{!!appLayout.width && (
 					<ScrollView
 						keyboardShouldPersistTaps={'always'}
@@ -145,11 +144,10 @@ class FormContainerComponent extends View<Props, null> {
 				alignItems: 'center',
 			},
 			logoStyle: {
-				marginTop: deviceHeight * 0.16,
-				marginBottom: deviceHeight * 0.08,
+				marginTop: deviceHeight * 0.1,
+				marginBottom: deviceHeight * 0.04,
 			},
 			formContainer: {
-				backgroundColor: '#00000099',
 				padding: 10,
 				flexDirection: 'column',
 				justifyContent: 'center',
@@ -161,6 +159,7 @@ class FormContainerComponent extends View<Props, null> {
 				fontSize: headerFontSize,
 				color: baseColorPreloginScreen,
 				textAlign: 'center',
+				fontWeight: '900',
 			},
 			formCover: {
 				flex: 1,

@@ -176,7 +176,9 @@ class ForgotPasswordForm extends View<Props, State> {
 				<View style={{ height: 10 }}/>
 				<TouchableButton
 					onPress={this.onFormSubmit}
-					text={buttonLabel}/>
+					text={buttonLabel}
+					buttonLevel={this.state.isLoading ? 7 : 22}
+					textLevel={this.state.isLoading ? 13 : 35}/>
 			</View>
 		);
 	}

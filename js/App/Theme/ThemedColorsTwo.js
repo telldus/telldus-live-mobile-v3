@@ -178,6 +178,9 @@ export default {
 		get colorOneButtonTextDisabled() {
 			return '#f5f5f5';
 		},
+		get colorTwoButtonTextEnabled() {
+			return '#000000';
+		},
 		get colorOneThrobberButton() {
 			return '#ffffff';
 		},
@@ -319,6 +322,9 @@ export default {
 		get baseColorThree() {
 			return '#333333';
 		},
+		get buttonBGColor() {
+			return '#ffffff';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -454,6 +460,9 @@ export default {
 		},
 		get colorOneButtonTextDisabled() {
 			return '#f5f5f5';
+		},
+		get colorTwoButtonTextEnabled() {
+			return '#ffffff';
 		},
 		get colorOneThrobberButton() {
 			return '#ffffff';
@@ -595,6 +604,9 @@ export default {
 		},
 		get baseColorThree() {
 			return '#ffffff';
+		},
+		get buttonBGColor() {
+			return '#9C7D69';
 		},
 	},
 };

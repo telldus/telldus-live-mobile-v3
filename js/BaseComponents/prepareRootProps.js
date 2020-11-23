@@ -126,6 +126,9 @@ const getBGColor = (props: Object): ?string => {
 		case 21: {
 			return colors.itemIconBGColor;
 		}
+		case 22: {
+			return colors.buttonBGColor;
+		}
 		default:
 			return 'transparent';
 	}
@@ -267,6 +270,9 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 34: {
 			return colors.activeTintOne;
+		}
+		case 35: {
+			return colors.colorTwoButtonTextEnabled;
 		}
 		default:
 			return;
