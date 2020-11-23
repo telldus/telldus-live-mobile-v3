@@ -48,7 +48,7 @@ const getThemedColors = (selectedThemeSet: Object): Object => {
 		case 2:
 			return ThemedColorsTwo;
 		default:
-			return ThemedColorsOne;
+			return ThemedColorsTwo;
 	}
 };
 
@@ -65,7 +65,7 @@ const useAppTheme = (): Object => {
 		selectedThemeSet,
 	} = defaultSettings;
 	const options = getThemeSetOptions();
-	const _selectedThemeSet = (selectedThemeSet && selectedThemeSet.key) ? selectedThemeSet : options[0];
+	const _selectedThemeSet = (selectedThemeSet && selectedThemeSet.key) ? selectedThemeSet : options[1];
 	return React.useMemo((): Object => {
 		const ThemedColors = getThemedColors(_selectedThemeSet);
 		if (themeInApp === DEVICE_THEME_KEY) {
