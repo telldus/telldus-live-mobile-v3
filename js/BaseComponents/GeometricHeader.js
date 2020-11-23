@@ -26,11 +26,12 @@ import React, {
 	memo,
 } from 'react';
 
-import GeoHeader from '../App/Components/TabViews/img/telldus_geometric_bg.svg';
+// import GeoHeader from '../App/Components/TabViews/img/telldus_geometric_bg.svg';
+import ThemedImage from './ThemedImage';
 
-import {
-	useAppTheme,
-} from '../App/Hooks/Theme';
+// import {
+// 	useAppTheme,
+// } from '../App/Hooks/Theme';
 
 type Props = {
 	headerHeight: number,
@@ -61,16 +62,26 @@ const GeometricHeader = (props: Props): Object => {
 		width,
 	} = prepareSize;
 
-	const {
-		colors,
-	} = useAppTheme();
+	// const {
+	// 	colors,
+	// } = useAppTheme();
 
+	// return (
+	// 	<GeoHeader
+	// 		fill={colors.inAppBrandSecondary}
+	// 		style={style}
+	// 		height={height}
+	// 		width={width}/>
+	// );
 	return (
-		<GeoHeader
-			fill={colors.inAppBrandSecondary}
-			style={style}
-			height={height}
-			width={width}/>
+		<ThemedImage
+			source={{uri: 'telldus_header_bg'}}
+			style={[{
+				height,
+				width,
+			},
+			style]}
+		/>
 	);
 };
 
