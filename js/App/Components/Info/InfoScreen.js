@@ -282,7 +282,7 @@ render(): Object | null {
 				nestedScrollEnabled={true}>
 				<PosterWithText
 					appLayout={appLayout}
-					align={'right'}
+					align={'left'}
 					h1={posterH1}
 					h2={posterH2}
 					showLeftIcon={true}

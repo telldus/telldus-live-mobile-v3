@@ -157,7 +157,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={voucher ? capitalize(formatMessage(i18n.redeemCard)) : capitalize(formatMessage(i18n.premiumAccess))}
 				h2={voucher ? formatMessage(i18n.codeAccepted) : formatMessage(i18n.getMoreFeaturesAndBenefits)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={!success}
 				leftIcon={success ? undefined : 'close'}
 				navigation={navigation}

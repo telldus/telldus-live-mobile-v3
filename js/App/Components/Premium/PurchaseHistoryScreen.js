@@ -216,7 +216,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.purchaseHistory))} h2={formatMessage(i18n.yourTransactions)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}

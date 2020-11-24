@@ -280,7 +280,7 @@ render(testData: Object): Object {
 			<ScrollableNavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.labelHelpAndSupport))}
 				h2={formatMessage(i18n.weCanHelpYou)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}

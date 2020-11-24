@@ -305,7 +305,7 @@ const RegisterForPushScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.registerForPush))}
 				h2={formatMessage(i18n.receiveNotifications)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}

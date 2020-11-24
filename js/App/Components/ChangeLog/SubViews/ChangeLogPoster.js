@@ -50,7 +50,7 @@ class ChangeLogPoster extends View {
 		return (
 			<PosterWithText
 				appLayout={appLayout}
-				align={'right'}
+				align={'left'}
 				h1={h1}
 				h2={h2}
 				showLeftIcon={false}/>

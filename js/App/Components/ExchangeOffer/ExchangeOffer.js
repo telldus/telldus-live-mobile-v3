@@ -157,7 +157,7 @@ render(): Object | null {
 					contentContainerStyle={styles.SVContentContainerStyle}>
 					<PosterWithText
 						appLayout={appLayout}
-						align={'right'}
+						align={'left'}
 						h1={this.h1}
 						h2={this.h2}
 						navigation={navigation}/>

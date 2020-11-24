@@ -156,7 +156,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.redeemCard))} h2={formatMessage(i18n.applyVoucherCode)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}
