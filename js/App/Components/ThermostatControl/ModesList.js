@@ -33,6 +33,10 @@ import {
 } from '../../../BaseComponents';
 import ModeBlock from './ModeBlock';
 
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -75,6 +79,10 @@ const ModesList = memo<Object>((props: Props): Object => {
 	} = props;
 
 	const {
+		selectedThemeSet,
+	} = useAppTheme;
+
+	const {
 		modeHeaderStyle,
 		modesCover,
 	} = getStyles({
@@ -94,6 +102,7 @@ const ModesList = memo<Object>((props: Props): Object => {
 				minVal,
 				maxVal,
 				Icon,
+				Icon2,
 				IconActive,
 				onEditSubmitValue,
 				updateCurrentValueInScreen,
@@ -119,7 +128,7 @@ const ModesList = memo<Object>((props: Props): Object => {
 					mode={mode}
 					minVal={minVal}
 					maxVal={maxVal}
-					Icon={Icon}
+					Icon={selectedThemeSet && selectedThemeSet.key === 1 ? Icon : Icon2}
 					IconActive={IconActive}
 					onControlThermostat={onControlThermostat}
 					intl={intl}
@@ -133,7 +142,7 @@ const ModesList = memo<Object>((props: Props): Object => {
 					hideTemperatureControl={hideTemperatureControl}/>
 			);
 		});
-	}, [appLayout, controllingMode, currentValue, handleAddMinus, hideTemperatureControl, intl, modes, onControlThermostat, onPressRow, setpointMode, setpointValue, setpointValueLocal]);
+	}, [appLayout, controllingMode, currentValue, handleAddMinus, hideTemperatureControl, intl, modes, onControlThermostat, onPressRow, selectedThemeSet, setpointMode, setpointValue, setpointValueLocal]);
 
 	return (
 		<View style={[modesCover, modesCoverStyle]}>
