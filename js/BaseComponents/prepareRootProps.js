@@ -283,6 +283,9 @@ const getTextColor = (props: Object): ?string => {
 		case 37: {
 			return colors.iconOnSettingsBlock;
 		}
+		case 38: {
+			return colors.baseColorFour;
+		}
 		default:
 			return;
 	}

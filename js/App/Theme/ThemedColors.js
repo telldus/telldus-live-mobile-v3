@@ -346,6 +346,9 @@ export default {
 		get moreItemsIndicatorSelectedColor() {
 			return Core.brandSecondary;
 		},
+		get baseColorFive() {
+			return Core.brandSecondary;
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -648,6 +651,9 @@ export default {
 			return '#FFA450';
 		},
 		get baseColorFour() {
+			return '#FFA450';
+		},
+		get baseColorFive() {
 			return '#FFA450';
 		},
 	},

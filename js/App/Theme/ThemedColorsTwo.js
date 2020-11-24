@@ -110,13 +110,13 @@ export default {
 			return Core.inactiveGray;
 		},
 		get thumbColorActiveSwitch() {
-			return '#9C7D69';
+			return '#000000';
 		},
 		get thumbColorInActiveSwitch() {
 			return Core.inactiveSwitch;
 		},
 		get trackColorActiveSwitch() {
-			return '#e2690150';
+			return '#ccc';
 		},
 		get trackColorInActiveSwitch() {
 			return Core.inactiveSwitchBackground;
@@ -346,6 +346,9 @@ export default {
 		get baseColorFour() {
 			return '#333333';
 		},
+		get baseColorFive() {
+			return '#4F4F4F';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -414,13 +417,13 @@ export default {
 			return Core.inactiveGray;
 		},
 		get thumbColorActiveSwitch() {
-			return Core.brandSecondaryShadeOne;
+			return '#ffffff';
 		},
 		get thumbColorInActiveSwitch() {
 			return Core.inactiveSwitch;
 		},
 		get trackColorActiveSwitch() {
-			return '#e2690150';
+			return '#ccc';
 		},
 		get trackColorInActiveSwitch() {
 			return '#fff';
@@ -648,6 +651,9 @@ export default {
 			return '#ffffff';
 		},
 		get baseColorFour() {
+			return '#ffffff';
+		},
+		get baseColorFive() {
 			return '#ffffff';
 		},
 	},
