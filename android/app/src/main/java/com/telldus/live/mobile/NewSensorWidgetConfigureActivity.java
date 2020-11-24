@@ -64,14 +64,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd, button_cancel;
     private View btSelectSensor, btSelectDisplayItem, screenCover, btSelectPollInterval;
-    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor,
-    testText, sensorText, settingText, valueText, imgSensorType, imgSensorTypeEdit, sensorRepeatIntervalLabel;
+    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, navPosterh2, navPosterh1, sensorText, settingText, valueText, imgSensorType, imgSensorTypeEdit, sensorRepeatIntervalLabel;
     private AppWidgetManager widgetManager;
     private ProgressDialog pDialog;
     private PrefManager prefManager;
     Switch switch_background;
     ImageView backSensor;
-    private RelativeLayout mSensorBack;
+    private RelativeLayout navBackButton;
 
     CharSequence[] sensorDataList = null;
     CharSequence[] sensorNameList = null;
@@ -150,8 +149,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     }
 
     public void updateUI(String message) {
-        mSensorBack = (RelativeLayout )findViewById(R.id.sensorBack);
-        mSensorBack.setOnClickListener(new View.OnClickListener() {
+        navBackButton = (RelativeLayout )findViewById(R.id.navBackButton);
+        navBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -161,6 +160,14 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         View infoView = (View)findViewById(R.id.infoView);
         TextView infoText = (TextView)findViewById(R.id.infoText);
         screenCover = (View)findViewById(R.id.screenCover);
+
+        Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+        Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+        navPosterh1.setTypeface(titleFont);
+        navPosterh2.setTypeface(titleFont);
+        navPosterh1.setText(getResources().getString(R.string.reserved_widget_android_sensor_configure_header_one));
+        navPosterh2.setText(getResources().getString(R.string.reserved_widget_android_configure_header_two));
+
         if (sensorNameList == null) {
             infoView.setVisibility(View.VISIBLE);
             infoText.setText(message);
@@ -192,8 +199,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
             btAdd = (Button) findViewById(R.id.btAdd);
             button_cancel = (Button) findViewById(R.id.button_cancel);
-            chooseSettingSensor = (TextView) findViewById(R.id.chooseSettingSensor);
-            testText = (TextView) findViewById(R.id.testTextSensor);
+            navPosterh1 = (TextView) findViewById(R.id.navPosterh1);
+            navPosterh2 = (TextView) findViewById(R.id.navPosterh2);
             settingText = (TextView) findViewById(R.id.settingText);
             valueText = (TextView) findViewById(R.id.valueText);
             sensorText = (TextView) findViewById(R.id.sensorText);
@@ -237,10 +244,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 }
             });
 
-            Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-            Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
-            testText.setTypeface(titleFont);
-            chooseSettingSensor.setTypeface(titleFont);
             sensorName.setTypeface(subtitleFont);
             sensorDataName.setTypeface(subtitleFont);
             sensorHint.setTypeface(subtitleFont);

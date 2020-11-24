@@ -20,10 +20,10 @@
 
 	<style name="SCBSwitch" parent="Theme.AppCompat.Light">
         <!-- active thumb & track color (30% transparency) -->
-        <item name="colorControlActivated">#e26901</item>
+        <item name="colorControlActivated">#9C7D69</item>
 
         <!-- inactive thumb color -->
-        <item name="colorSwitchThumbNormal">#e26901
+        <item name="colorSwitchThumbNormal">#9C7D69
         </item>
 
         <!-- inactive track color (30% transparency) -->
@@ -41,8 +41,8 @@
 	</style>
 
 	<style name="ThemeOverlay.PrimaryPalette.Red" parent="Theme.MaterialComponents">
-		<item name="colorPrimary">#e26901</item>
-		<item name="colorPrimaryDark">#e26901</item>
+		<item name="colorPrimary">#9C7D69</item>
+		<item name="colorPrimaryDark">#9C7D69</item>
 	</style>
 
 </resources>

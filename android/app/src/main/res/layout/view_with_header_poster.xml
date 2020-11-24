@@ -14,9 +14,9 @@
         <RelativeLayout
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:id="@+id/deviceBack">
+            android:id="@+id/navBackButton">
             <ImageView
-                android:id="@+id/backdevice"
+                android:id="@+id/navBackButton"
                 android:layout_width="16dp"
                 android:layout_height="20dp"
                 android:src="@drawable/left_arrow_key"

@@ -80,7 +80,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd, btnCan;
     private View btSelectDevice, screenCover;
-    TextView deviceName, deviceHint, chooseSetting,textTest, deviceText, themeText;
+    TextView deviceName, deviceHint, navPosterh2,navPosterh1, deviceText, themeText;
     private AppWidgetManager widgetManager;
 
     private String accessToken;
@@ -89,7 +89,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
     String deviceCurrentState = null;
 
     private PrefManager prefManager;
-    private RelativeLayout mBackLayout;
+    private RelativeLayout navBackButton;
     TextView tvIcon1;
 
     View def_cover;
@@ -153,8 +153,8 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
 
     public void updateUI(String message) {
 
-        mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
-        mBackLayout.setOnClickListener(new View.OnClickListener() {
+        navBackButton = (RelativeLayout)findViewById(R.id.navBackButton);
+        navBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -164,6 +164,16 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
         View infoView = (View)findViewById(R.id.infoView);
         TextView infoText = (TextView)findViewById(R.id.infoText);
         screenCover = (View)findViewById(R.id.screenCover);
+
+        navPosterh1 = (TextView)findViewById(R.id.navPosterh1);
+        navPosterh2 = (TextView)findViewById(R.id.navPosterh2);
+        Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+        Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+        navPosterh1.setTypeface(titleFont);
+        navPosterh2.setTypeface(titleFont);
+        navPosterh1.setText(getResources().getString(R.string.reserved_widget_android_device_configure_header_one));
+        navPosterh2.setText(getResources().getString(R.string.reserved_widget_android_configure_header_two));
+
         if (DeviceInfoMap.size() == 0) {
             infoView.setVisibility(View.VISIBLE);
             infoText.setText(message);
@@ -174,8 +184,6 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
             infoView.setVisibility(View.GONE);
             screenCover.setVisibility(View.VISIBLE);
 
-            textTest = (TextView)findViewById(R.id.testText);
-            chooseSetting = (TextView)findViewById(R.id.chooseSetting);
             deviceName = (TextView) findViewById(R.id.txtDeviceName);
             deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
             deviceText = (TextView)findViewById(R.id.deviceText);
@@ -212,9 +220,6 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
             TextView settingText = (TextView) findViewById(R.id.settingText);
             View btSelectPollInterval = (View)findViewById(R.id.btSelectPollInterval);
             TextView sensorRepeatIntervalLabel = (TextView) findViewById(R.id.labelSelectPoll);
-
-            Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-            Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
 
             radio_def.setChecked(true);
             View def_cover = (View)findViewById(R.id.def_cover);
@@ -389,8 +394,6 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                 }
             });
             
-            textTest.setTypeface(titleFont);
-            chooseSetting.setTypeface(titleFont);
             deviceName.setTypeface(subtitleFont);
             deviceHint.setTypeface(subtitleFont);
             deviceText.setTypeface(subtitleFont);

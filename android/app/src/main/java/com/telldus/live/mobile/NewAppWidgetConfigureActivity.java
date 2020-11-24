@@ -88,7 +88,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
     private Button btAdd,btnCan;
     private View btSelectDevice, screenCover;
-    TextView deviceName, deviceHint, deviceOn, deviceOff, chooseSetting, textTest, deviceText, themeText, tvIcon1;
+    TextView deviceName, deviceHint, deviceOn, deviceOff, navPosterh2, navPosterh1, deviceText, themeText, tvIcon1;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
 
@@ -104,7 +104,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     private String sesID;
     MyDBHandler database = new MyDBHandler(this);
     private PrefManager prefManager;
-    private RelativeLayout mBackLayout;
+    private RelativeLayout navBackButton;
 
     View def_cover;
     View dark_cover;
@@ -152,8 +152,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
     }
 
     public void updateUI(String message) {
-        mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
-        mBackLayout.setOnClickListener(new View.OnClickListener() {
+        navBackButton = (RelativeLayout)findViewById(R.id.navBackButton);
+        navBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -163,6 +163,17 @@ public class NewAppWidgetConfigureActivity extends Activity {
         View infoView = (View)findViewById(R.id.infoView);
         TextView infoText = (TextView)findViewById(R.id.infoText);
         screenCover = (View)findViewById(R.id.screenCover);
+
+        navPosterh1 = (TextView)findViewById(R.id.navPosterh1);
+        navPosterh2 = (TextView)findViewById(R.id.navPosterh2);
+        Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+        Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+        navPosterh1.setTypeface(titleFont);
+        navPosterh2.setTypeface(titleFont);
+        navPosterh1.setText(getResources().getString(R.string.reserved_widget_android_device_configure_header_one));
+        navPosterh2.setText(getResources().getString(R.string.reserved_widget_android_configure_header_two));
+            
+
         if (DeviceInfoMap.size() == 0) {
             infoView.setVisibility(View.VISIBLE);
             infoText.setText(message);
@@ -173,8 +184,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
             infoView.setVisibility(View.GONE);
             screenCover.setVisibility(View.VISIBLE);
 
-            textTest = (TextView)findViewById(R.id.testText);
-            chooseSetting = (TextView)findViewById(R.id.chooseSetting);
             deviceName = (TextView) findViewById(R.id.txtDeviceName);
             deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
             btnCan = (Button)findViewById(R.id.btn_cancel);
@@ -327,12 +336,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 }
             });
 
-            Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-            Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
-            textTest.setTypeface(titleFont);
             deviceText.setText(getResources().getString(R.string.reserved_widget_android_labelDevice)+":");
             themeText.setText(getResources().getString(R.string.reserved_widget_android_theme)+":");
-            chooseSetting.setTypeface(titleFont);
         }
     }
 
