@@ -80,7 +80,7 @@ const ModesList = memo<Object>((props: Props): Object => {
 
 	const {
 		selectedThemeSet,
-	} = useAppTheme;
+	} = useAppTheme();
 
 	const {
 		modeHeaderStyle,
