@@ -495,7 +495,7 @@ export default {
 			return '#ffffff';
 		},
 		get checkBoxIconActiveOne() {
-			return Core.brandSecondaryShadeOne;
+			return '#000000';
 		},
 		get checkBoxIconInactiveOne() {
 			return 'transparent';
@@ -507,7 +507,7 @@ export default {
 			return 'transparent';
 		},
 		get checkBoxIconBorderActiveOne() {
-			return Core.brandSecondaryShadeOne;
+			return '#ffffff';
 		},
 		get checkBoxIconBorderInactiveOne() {
 			return '#ffffff';
@@ -531,7 +531,7 @@ export default {
 			return Core.brandSecondaryShadeOne;
 		},
 		get textInsidePoster() {
-			return '#424242';
+			return '#ffffff';
 		},
 		get headerIconColor() {
 			return Core.textColorLabel;
