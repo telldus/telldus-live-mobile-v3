@@ -349,6 +349,9 @@ export default {
 		get baseColorFive() {
 			return Core.brandSecondary;
 		},
+		get textColorInactive() {
+			return Core.inactiveTintColor;
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -655,6 +658,9 @@ export default {
 		},
 		get baseColorFive() {
 			return '#FFA450';
+		},
+		get textColorInactive() {
+			return Core.textColorLabel;
 		},
 	},
 };

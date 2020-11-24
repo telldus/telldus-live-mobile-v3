@@ -349,6 +349,9 @@ export default {
 		get baseColorFive() {
 			return '#4F4F4F';
 		},
+		get textColorInactive() {
+			return Core.inactiveTintColor;
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -655,6 +658,9 @@ export default {
 		},
 		get baseColorFive() {
 			return '#ffffff';
+		},
+		get textColorInactive() {
+			return '#CCCCCC';
 		},
 	},
 };

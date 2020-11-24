@@ -286,6 +286,9 @@ const getTextColor = (props: Object): ?string => {
 		case 38: {
 			return colors.baseColorFour;
 		}
+		case 39: {
+			return colors.textColorInactive;
+		}
 		default:
 			return;
 	}

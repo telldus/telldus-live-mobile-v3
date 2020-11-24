@@ -61,7 +61,7 @@ const MainTabBarIOS = React.memo<Object>((props: Object): Object => {
 		iconName,
 	});
 
-	const tintColor = focused ? colors.activeTintOne : colors.text;
+	const tintColor = focused ? colors.activeTintOne : colors.textColorInactive;
 
 	const accessibilityLabel = `${formatMessage(tabBarAccesibilityLabelIntl)}, ${postScript}`;
 
