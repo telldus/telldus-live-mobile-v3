@@ -334,6 +334,15 @@ export default {
 		get iconOnSettingsBlock() {
 			return '#000000';
 		},
+		get viewInsideLevelTwoView() {
+			return '#eeeeee';
+		},
+		get moreItemsIndicatorColor() {
+			return '#CCCCCC';
+		},
+		get moreItemsIndicatorSelectedColor() {
+			return '#ffffff';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -393,7 +402,7 @@ export default {
 			return '#777777';
 		},
 		get activeTintOne() {
-			return Core.brandSecondaryShadeOne;
+			return '#ffffff';
 		},
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
@@ -594,7 +603,7 @@ export default {
 			return Core.grayPrimary;
 		},
 		get headerLogoColor() {
-			return '#9C7D69';
+			return '#ffffff';
 		},
 		get sensorValueBGColor() {
 			return '#80919E';
@@ -618,13 +627,22 @@ export default {
 			return '#9C7D69';
 		},
 		get textOnLevelThreeView() {
-			return '#FFA450';
+			return '#ffffff';
 		},
 		get buttonBGColorTwo() {
-			return '#9C7D69';
+			return '#424242';
 		},
 		get iconOnSettingsBlock() {
 			return '#FFA450';
+		},
+		get viewInsideLevelTwoView() {
+			return '#424242';
+		},
+		get moreItemsIndicatorColor() {
+			return '#CCCCCC';
+		},
+		get moreItemsIndicatorSelectedColor() {
+			return '#ffffff';
 		},
 	},
 };

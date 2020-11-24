@@ -334,6 +334,15 @@ export default {
 		get iconOnSettingsBlock() {
 			return Core.brandSecondary;
 		},
+		get viewInsideLevelTwoView() {
+			return '#eeeeee';
+		},
+		get moreItemsIndicatorColor() {
+			return '#ffffff';
+		},
+		get moreItemsIndicatorSelectedColor() {
+			return Core.brandSecondary;
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -624,6 +633,15 @@ export default {
 			return '#FFA450';
 		},
 		get iconOnSettingsBlock() {
+			return '#FFA450';
+		},
+		get viewInsideLevelTwoView() {
+			return '#eeeeee';
+		},
+		get moreItemsIndicatorColor() {
+			return '#ffffff';
+		},
+		get moreItemsIndicatorSelectedColor() {
 			return '#FFA450';
 		},
 	},
