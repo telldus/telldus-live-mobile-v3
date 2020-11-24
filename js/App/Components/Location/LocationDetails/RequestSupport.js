@@ -307,7 +307,10 @@ render(testData: Object): Object {
 			{descLen < 50 && <View
 				level={2}
 				style={infoContainer}>
-				<IconTelldus icon={'info'} style={statusIconStyle}/>
+				<IconTelldus
+					level={36}
+					icon={'info'}
+					style={statusIconStyle}/>
 				<Text
 					level={26}
 					style={infoTextStyle}>
@@ -387,7 +390,6 @@ getStyles({
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
-			color: inAppBrandSecondary,
 		},
 		infoTextStyle: {
 			flex: 1,

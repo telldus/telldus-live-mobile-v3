@@ -350,7 +350,10 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 				{showInfo && <View
 					level={2}
 					style={infoContainer}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
+					<IconTelldus
+						level={36}
+						icon={'info'}
+						style={statusIconStyle}/>
 					<Text style={infoTextStyle}>
 						{!supportAutoRenew ?
 							formatMessage(i18n.autoRenewNotSupportedDescription)
@@ -510,7 +513,6 @@ const getStyles = ({
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
-			color: inAppBrandSecondary,
 		},
 		infoTextStyle: {
 			flex: 1,

@@ -689,7 +689,7 @@ render(): Object | null {
 }
 
 getStyles(): Object {
-	const { appLayout, source = '' } = this.props;
+	const { appLayout, source = '', colors } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -697,7 +697,6 @@ getStyles(): Object {
 	const {
 		paddingFactor,
 		shadow,
-		appBackground,
 		rowTextColor,
 	} = Theme.Core;
 
@@ -746,7 +745,7 @@ getStyles(): Object {
 		},
 		radius,
 		iconCommon: {
-			backgroundColor: appBackground,
+			backgroundColor: colors.viewInsideLevelTwoView,
 			height: iconCoverSize,
 			width: iconCoverSize,
 			borderRadius: iconBorderRadi,

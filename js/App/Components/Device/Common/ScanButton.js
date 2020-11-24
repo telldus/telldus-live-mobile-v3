@@ -94,6 +94,7 @@ const ScanButton = (props: Object): Object => {
 		scanButtonTextDefStyle,
 		touchableStyleDef,
 		level,
+		tLevel,
 	} = getStyles(layout, disabled);
 
 	function onPress() {
@@ -113,7 +114,9 @@ const ScanButton = (props: Object): Object => {
 			<View
 				level={level}
 				style={[scanButtonCoverDef, scanButtonCover]}>
-				<Text style={[scanButtonTextDefStyle, scanButtonTextStyle]}>
+				<Text
+					level={tLevel}
+					style={[scanButtonTextDefStyle, scanButtonTextStyle]}>
 					{text.toUpperCase()}
 				</Text>
 			</View>
@@ -136,10 +139,12 @@ const getStyles = (appLayout: Object, disabled: boolean): Object => {
 	const fontSize = Math.floor(deviceWidth * 0.03);
 	const heightCover = fontSize * 2.8;
 
-	const level = disabled ? 7 : 13;
+	const level = disabled ? 7 : 23;
+	const tLevel = disabled ? 13 : 12;
 
 	return {
 		level,
+		tLevel,
 		scanButtonCoverDef: {
 			height: heightCover,
 			...shadow,
@@ -150,7 +155,6 @@ const getStyles = (appLayout: Object, disabled: boolean): Object => {
 		},
 		scanButtonTextDefStyle: {
 			fontSize,
-			color: '#fff',
 		},
 		touchableStyleDef: {
 			flex: 0,

@@ -261,7 +261,7 @@ render(): Object {
 }
 
 getStyles(): Object {
-	const { appLayout } = this.props;
+	const { appLayout, colors } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -270,7 +270,6 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		rowTextColor,
-		appBackground,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -333,7 +332,7 @@ getStyles(): Object {
 		},
 		iconSize: deviceWidth * 0.08,
 		addRemoveIconCover: {
-			backgroundColor: appBackground,
+			backgroundColor: colors.viewInsideLevelTwoView,
 			height: iconCoverSize,
 			width: iconCoverSize,
 			borderRadius: iconBorderRadi,
