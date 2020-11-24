@@ -124,7 +124,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
               style={
                 Array [
                   Object {
-                    "alignItems": "flex-end",
+                    "alignItems": "flex-start",
                     "backgroundColor": "transparent",
                     "flex": 0,
                     "flexDirection": "column",
@@ -215,7 +215,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
             Array [
               Object {
                 "backgroundColor": "transparent",
-                "color": "#9C7D69",
+                "color": "#000000",
                 "fontFamily": "telldusicons",
                 "fontSize": 14.000000000000002,
               },
@@ -368,7 +368,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               style={
                 Array [
                   Object {
-                    "alignItems": "flex-end",
+                    "alignItems": "flex-start",
                     "backgroundColor": "transparent",
                     "flex": 0,
                     "flexDirection": "column",
@@ -668,7 +668,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   Array [
                     Object {
                       "backgroundColor": "transparent",
-                      "color": "#9C7D69",
+                      "color": "#000000",
                       "fontFamily": "telldusicons",
                       "fontSize": 14.000000000000002,
                     },
@@ -822,7 +822,7 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
               style={
                 Array [
                   Object {
-                    "alignItems": "flex-end",
+                    "alignItems": "flex-start",
                     "backgroundColor": "transparent",
                     "flex": 0,
                     "flexDirection": "column",
