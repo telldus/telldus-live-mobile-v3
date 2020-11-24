@@ -343,6 +343,9 @@ export default {
 		get moreItemsIndicatorSelectedColor() {
 			return '#ffffff';
 		},
+		get baseColorFour() {
+			return '#333333';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -642,6 +645,9 @@ export default {
 			return '#CCCCCC';
 		},
 		get moreItemsIndicatorSelectedColor() {
+			return '#ffffff';
+		},
+		get baseColorFour() {
 			return '#ffffff';
 		},
 	},

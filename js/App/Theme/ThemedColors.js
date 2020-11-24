@@ -322,6 +322,9 @@ export default {
 		get baseColorThree() {
 			return '#ffffff';
 		},
+		get baseColorFour() {
+			return Core.brandSecondary;
+		},
 		get buttonBGColor() {
 			return Core.brandSecondary;
 		},
@@ -642,6 +645,9 @@ export default {
 			return '#ffffff';
 		},
 		get moreItemsIndicatorSelectedColor() {
+			return '#FFA450';
+		},
+		get baseColorFour() {
 			return '#FFA450';
 		},
 	},
