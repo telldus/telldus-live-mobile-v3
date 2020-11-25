@@ -26,6 +26,7 @@ import React from 'react';
 import shouldUpdate from './shouldUpdate';
 
 const navigationRef = React.createRef<any>();
+const isReadyRef = React.createRef<any>();
 
 /**
  *
@@ -33,7 +34,7 @@ const navigationRef = React.createRef<any>();
  * screen/route.
  */
 function navigate(...args: any) {
-	if (navigationRef.current && navigationRef.current.navigate) {
+	if (isReadyRef.current && navigationRef.current && navigationRef.current.navigate) {
 		navigationRef.current.navigate(...args);
 	}
 }
@@ -163,6 +164,7 @@ const getCurrentRouteName = (): string => {
 module.exports = {
 	navigate,
 	navigationRef,
+	isReadyRef,
 	prepareNavigator,
 	shouldNavigatorUpdate,
 	getCurrentRouteName,

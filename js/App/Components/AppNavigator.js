@@ -108,6 +108,7 @@ import {
 	prepareNavigator,
 	shouldNavigatorUpdate,
 	getCurrentRouteName,
+	isReadyRef,
 } from '../Lib/NavigationService';
 
 import {
@@ -540,11 +541,16 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		addingNewLocation,
 	]);
 
+	const onReady = React.useCallback(() => {
+		isReadyRef.current = true;
+	}, []);
+
 	return (
 		<NavigationContainer
 			ref={navigationRef}
 			onStateChange={onNavigationStateChange}
-			theme={theme}>
+			theme={theme}
+			onReady={onReady}>
 			{Navigator}
 		</NavigationContainer>
 	);

@@ -41,6 +41,7 @@ import {
 	prepareNavigator,
 	shouldNavigatorUpdate,
 	getCurrentRouteName,
+	navigationRef,
 } from '../Lib/NavigationService';
 
 import {
@@ -110,6 +111,7 @@ const PreLoginNavigator = React.memo<Object>((props: Props): Object => {
 
 	return (
 		<NavigationContainer
+			ref={navigationRef}
 			onStateChange={onNavigationStateChange}
 			theme={theme}>
 			{Navigator}
