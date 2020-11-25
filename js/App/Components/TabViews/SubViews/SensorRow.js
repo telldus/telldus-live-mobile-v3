@@ -70,6 +70,7 @@ type Props = {
 	colors: Object,
 	colorScheme: string,
 	themeInApp: string,
+	selectedThemeSet: Object,
 
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
@@ -398,6 +399,7 @@ class SensorRow extends View<Props, State> {
 			isLast,
 			isNew,
 			colors,
+			selectedThemeSet,
 		} = this.props;
 		const { data = {} } = sensor;
 		const { height, width } = appLayout;
@@ -409,6 +411,7 @@ class SensorRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
+			offlineColor,
 		} = Theme.Core;
 
 		const {
@@ -423,8 +426,9 @@ class SensorRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let backgroundColor = isGatewayActive ? sensorValueBGColor : Theme.Core.offlineColor;
-		const backgroundColorIcon = isGatewayActive ? itemIconBGColor : Theme.Core.offlineColor;
+		let backgroundColor = isGatewayActive ? sensorValueBGColor : offlineColor;
+		const backgroundColorIcon = selectedThemeSet.key === 2 ? 'transparent' : isGatewayActive ? itemIconBGColor : offlineColor;
+		const iconColor = (selectedThemeSet.key === 2 && !isGatewayActive) ? offlineColor : colors.baseColor;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const widthValueBlock = (buttonWidth * 2) + 6;
@@ -487,7 +491,7 @@ class SensorRow extends View<Props, State> {
 			},
 			sensorIcon: {
 				fontSize: 16,
-				color: colors.baseColor,
+				color: iconColor,
 			},
 			iconContainerStyle: {
 				borderRadius: 25,

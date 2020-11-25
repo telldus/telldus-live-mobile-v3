@@ -58,6 +58,7 @@ type Props = {
 	colors: Object,
 	colorScheme: string,
 	themeInApp: string,
+	selectedThemeSet: Object,
 
 	style: Object,
 	onPress: (number, string) => void,
@@ -234,6 +235,7 @@ class SensorDashboardTile extends View<Props, null> {
 			colors,
 			themeInApp,
 			colorScheme,
+			selectedThemeSet,
 		} = this.props;
 		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
@@ -260,6 +262,8 @@ class SensorDashboardTile extends View<Props, null> {
 		let iconContainerStyle = !isGatewayActive ? itemIconContainerOffline : itemIconContainerActive;
 		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? colors.sensorValueBGColor : Theme.Core.offlineColor) : 'transparent';
 
+		const iconColor = (selectedThemeSet.key === 2 && !isGatewayActive) ? Theme.Core.offlineColor : colors.baseColor;
+
 		return (
 			<DashboardShadowTile
 				item={item}
@@ -268,7 +272,7 @@ class SensorDashboardTile extends View<Props, null> {
 				info={info}
 				icon={'sensor'}
 				iconStyle={{
-					color: colors.baseColor,
+					color: iconColor,
 					fontSize: Math.floor(tileWidth / 6.5),
 					borderRadius: Math.floor(tileWidth / 8),
 					textAlign: 'center',
