@@ -285,7 +285,6 @@ class UserAgreement extends View<Props, State> {
 				fontSize: Math.floor(deviceWidth * 0.04),
 				color: inAppBrandSecondary,
 				fontWeight: 'bold',
-				fontFamily: 'Roboto-Regular',
 			},
 			markupStyle: {
 				heading: {

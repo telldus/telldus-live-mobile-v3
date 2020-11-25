@@ -217,7 +217,6 @@ getStyles(appLayout: Object): Object {
 		h: {
 			color: '#fff',
 			backgroundColor: 'transparent',
-			fontFamily: Theme.Core.fonts.robotoLight,
 		},
 		h1: {
 			fontSize: isPortrait ? width * 0.08 : height * 0.08,
@@ -268,7 +267,6 @@ getStyles(appLayout: Object): Object {
 		footerText: {
 			fontSize: Math.floor(deviceWidth * 0.04),
 			fontWeight: 'bold',
-			fontFamily: 'Roboto-Regular',
 		},
 		markupStyle: {
 			heading: {

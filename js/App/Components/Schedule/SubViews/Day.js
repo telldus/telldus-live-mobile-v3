@@ -97,7 +97,6 @@ class Day extends View<null, Props, null> {
 			name: {
 				backgroundColor: 'transparent',
 				color: '#fff',
-				fontFamily: fonts.robotoMedium,
 				fontSize: deviceWidth * 0.05,
 			},
 		};

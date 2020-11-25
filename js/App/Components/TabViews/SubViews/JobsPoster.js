@@ -561,7 +561,6 @@ class JobsPoster extends View<null, Props, State> {
 				backgroundColor: 'transparent',
 				color: textInsidePoster,
 				fontSize: dayFontSize,
-				fontFamily: Theme.Core.fonts.robotoLight,
 				textAlign: 'center',
 				zIndex: -1,
 			},
@@ -655,7 +654,6 @@ class JobsPoster extends View<null, Props, State> {
 		const date = {
 			backgroundColor: 'transparent',
 			color: textInsidePoster,
-			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: Math.floor(deviceWidth * 0.052),
 			height,
 			width: '100%',

@@ -380,7 +380,6 @@ class GeoPosition extends View {
 			description: {
 				fontWeight: 'bold',
 				color: textFour,
-				fontFamily: 'Roboto-Regular',
 			},
 			mapViewCover: {
 				flex: 1,

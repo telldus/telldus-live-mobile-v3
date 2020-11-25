@@ -450,13 +450,11 @@ class DialogueBox extends Component<Props, null> {
 				color: negTextColorLevel ? undefined : _negTextColor,
 				fontSize,
 				fontWeight: 'bold',
-				fontFamily: 'Roboto-Regular',
 			},
 			notificationModalFooterPositiveText: {
 				color: posTextColorLevel ? undefined : _posTextColor,
 				fontSize,
 				fontWeight: 'bold',
-				fontFamily: 'Roboto-Regular',
 			},
 		};
 	}

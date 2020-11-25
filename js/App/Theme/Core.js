@@ -43,6 +43,7 @@ export default {
 			robotoMedium: 'Roboto-Medium',
 			robotoRegular: 'Roboto-Regular',
 			sfnsDisplay: 'SFNS Display',
+			suisseIntlRegular: 'SuisseIntl',
 		};
 	},
 

@@ -155,7 +155,6 @@ const ListRow: Object = React.memo<Object>((props: Props): Object => {
 			time: {
 				color: '#707070',
 				fontSize: Math.floor(deviceWidth * 0.046666667),
-				fontFamily: Theme.Core.fonts.robotoMedium,
 				textAlign: 'center',
 			},
 		};

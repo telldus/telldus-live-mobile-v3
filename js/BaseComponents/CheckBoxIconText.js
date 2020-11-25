@@ -147,7 +147,6 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 				marginLeft: 5 + (fontSize * 0.4),
 				fontSize: fontSize,
 				color: _checkBoxTextActiveOne,
-				fontFamily: Theme.Core.fonts.robotoLight,
 			},
 			checkIconCommon: {
 				borderWidth: 1,

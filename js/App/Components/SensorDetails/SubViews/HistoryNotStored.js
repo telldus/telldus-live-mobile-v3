@@ -121,14 +121,12 @@ getStyles(width: number): Object {
 			alignItems: 'center',
 		},
 		headerStyle: {
-			fontFamily: fonts.robotoRegular,
 			fontSize: fontSizeH,
 			marginBottom: 10,
 			textAlign: 'center',
 			paddingHorizontal: 5,
 		},
 		contentStyle: {
-			fontFamily: fonts.sfnsDisplay,
 			fontSize: fontSizeC,
 			textAlign: 'center',
 		},
