@@ -37,7 +37,7 @@
 
 	<style name="WidgetRadioButton" parent="Theme.AppCompat.Light">  
 		<item name="colorControlNormal">@color/brandPrimary</item>
-		<item name="colorControlActivated">@color/brandSecondary</item>
+		<item name="colorControlActivated">@color/black</item>
 	</style>
 
 	<style name="ThemeOverlay.PrimaryPalette.Red" parent="Theme.MaterialComponents">

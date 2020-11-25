@@ -233,8 +233,8 @@ public class NewRGBConfigureActivity extends Activity {
 
             radio_def.setChecked(true);
             View def_cover = (View)findViewById(R.id.def_cover);
-            def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
-            text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+            def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_black));
+            text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
 
             def_cover.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -526,7 +526,7 @@ public class NewRGBConfigureActivity extends Activity {
 
         text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
         text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-        text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+        text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
     }
 
     public void onPressDark() {
@@ -534,11 +534,11 @@ public class NewRGBConfigureActivity extends Activity {
         radio_light.setChecked(false);
 
         def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
-        dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+        dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_black));
         light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
 
         text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-        text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+        text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
         text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
     }
 
@@ -546,11 +546,11 @@ public class NewRGBConfigureActivity extends Activity {
         radio_dark.setChecked(false);
         radio_light.setChecked(false);
 
-        def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+        def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_black));
         dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
         light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
 
-        text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+        text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
         text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
         text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
     }

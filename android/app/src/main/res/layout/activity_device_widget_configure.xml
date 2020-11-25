@@ -111,7 +111,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/reserved_widget_android_device_select"
                                 android:textSize="25sp"
-                                android:textColor="@color/orange"/>
+                                android:textColor="@color/themeDark"/>
 
                         <TextView
                                 android:id="@+id/txtDeviceHint"
