@@ -66,6 +66,7 @@ type Props = {
 	styles: Object,
 	headerText: string,
 	socialAuthConfig: Object,
+	isSwitchingAccount: boolean,
 
 	onLoginSuccess?: () => void,
 	openDialogueBox: (string, ?Object) => void,
@@ -485,10 +486,12 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-function dispatchToProps(dispatch: Function): Object {
+function dispatchToProps(dispatch: Function, ownProps: Object): Object {
 	return {
 		loginToTelldus: (credential: Object, grantType: string): Promise<any> => {
-			return dispatch(loginToTelldus(credential, grantType));
+			return dispatch(loginToTelldus(credential, grantType, {
+				isSwitchingAccount: ownProps.isSwitchingAccount,
+			}));
 		},
 		dispatch,
 	};

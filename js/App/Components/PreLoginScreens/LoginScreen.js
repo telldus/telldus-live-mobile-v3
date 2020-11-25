@@ -52,6 +52,7 @@ type Props = {
 	isTokenValid: boolean,
 	dispatch: Function,
 	ScreenName: string,
+	route: Object,
 };
 
 type State = {
@@ -239,8 +240,12 @@ class LoginScreen extends View {
 	}
 
 	render(): Object {
-		let { appLayout, styles: commonStyles, screenProps, intl } = this.props;
+		let { appLayout, styles: commonStyles, screenProps, intl, route } = this.props;
 		let styles = this.getStyles(appLayout);
+
+		const {
+			isSwitchingAccount = false,
+		} = route.params;
 
 		const { source = 'prelogin' } = screenProps;
 
@@ -267,7 +272,8 @@ class LoginScreen extends View {
 						headerText={headerText}
 						styles={commonStyles}
 						openDialogueBox={this.openDialogueBox}
-						onLoginSuccess={source === 'postlogin' ? this._onLoginSuccess : undefined}/>
+						onLoginSuccess={source === 'postlogin' ? this._onLoginSuccess : undefined}
+						isSwitchingAccount={isSwitchingAccount}/>
 				}
 				{this.props.accessToken && !this.props.isTokenValid ?
 					null

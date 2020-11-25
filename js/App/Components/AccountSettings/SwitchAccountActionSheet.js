@@ -191,7 +191,9 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			}));
 			setShowAddNewAccount(false);
 			if (index === 0) {
-				navigate('LoginScreen');
+				navigate('LoginScreen', {
+					isSwitchingAccount: true,
+				});
 			} else if (index === 1) {
 				navigate('RegisterScreen');
 			}
