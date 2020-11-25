@@ -39,7 +39,7 @@
                         android:textSize="40sp"
                         android:layout_gravity="center|center"
                         android:gravity="center|center"
-                        android:textColor="@color/brandSecondary"
+                        android:textColor="@color/black"
                         android:fontFamily="@font/telldusicons"/>
                     <TextView
                         android:id="@+id/infoText"
@@ -276,7 +276,7 @@
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
                             android:textColor="@color/white"
-                            android:background="@drawable/orangebutton"
+                            android:background="@drawable/blackbutton"
                             android:text="@string/reserved_widget_android_label_save"/>
 
                         <Button

@@ -113,7 +113,7 @@
                                         android:paddingTop="10dp"
                                         android:paddingBottom="10dp"
                                         android:textColor="@color/white"
-                                        android:background="@drawable/orangebutton"
+                                        android:background="@drawable/blackbutton"
                                         android:text="@string/reserved_widget_android_error_tryAgain"/>
                                 <Button
                                         android:id="@+id/btnCancel"
@@ -123,7 +123,7 @@
                                         android:paddingTop="10dp"
                                         android:paddingBottom="10dp"
                                         android:textColor="@color/white"
-                                        android:background="@drawable/orangebutton"
+                                        android:background="@drawable/blackbutton"
                                         android:text="@string/reserved_widget_android_dialogueBox_defaultNegativeText"/>
                         </com.google.android.flexbox.FlexboxLayout>
                 </LinearLayout>

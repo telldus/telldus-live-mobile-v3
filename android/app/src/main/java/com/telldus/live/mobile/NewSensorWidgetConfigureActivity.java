@@ -163,6 +163,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
         Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
         Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+        navPosterh1 = (TextView) findViewById(R.id.navPosterh1);
+        navPosterh2 = (TextView) findViewById(R.id.navPosterh2);
         navPosterh1.setTypeface(titleFont);
         navPosterh2.setTypeface(titleFont);
         navPosterh1.setText(getResources().getString(R.string.reserved_widget_android_sensor_configure_header_one));
@@ -199,8 +201,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
             btAdd = (Button) findViewById(R.id.btAdd);
             button_cancel = (Button) findViewById(R.id.button_cancel);
-            navPosterh1 = (TextView) findViewById(R.id.navPosterh1);
-            navPosterh2 = (TextView) findViewById(R.id.navPosterh2);
             settingText = (TextView) findViewById(R.id.settingText);
             valueText = (TextView) findViewById(R.id.valueText);
             sensorText = (TextView) findViewById(R.id.sensorText);

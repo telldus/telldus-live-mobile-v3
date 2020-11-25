@@ -23,7 +23,7 @@
             android:textSize="40sp"
             android:layout_gravity="center|center"
             android:gravity="center|center"
-            android:textColor="@color/brandSecondary"
+            android:textColor="@color/black"
             android:fontFamily="@font/telldusicons"/>
         <TextView
             android:id="@+id/infoText"
