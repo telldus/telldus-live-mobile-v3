@@ -37,8 +37,6 @@ import {
 	getSensorInfo,
 } from '../../../Actions';
 
-import Theme from '../../../Theme';
-
 import i18n from '../../../Translations/common';
 
 type Props = {
