@@ -102,7 +102,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 						marginLeft: (key % 2 === 0) ? 0 : padding / 2,
 					}, selectedIndex === key ? {
 						borderWidth: 3,
-						borderColor: colors.inAppBrandSecondary,
+						borderColor: colors.textOnLevelThreeView,
 					} : undefined]}
 					onPress={onSelectOption}>
 					<View style={innerCoverStyle}>

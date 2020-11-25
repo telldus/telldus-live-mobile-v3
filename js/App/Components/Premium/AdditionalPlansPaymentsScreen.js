@@ -123,7 +123,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		infoTextStyle,
 		statusIconStyle,
 		footerHeight,
-		inAppBrandSecondary,
+		textOnLevelThreeView,
 	} = getStyles({
 		layout,
 		colors,
@@ -163,7 +163,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					style={[contentCover,
 						selectedIndex === index ? {
 							borderWidth: 3,
-							borderColor: inAppBrandSecondary,
+							borderColor: textOnLevelThreeView,
 						} : undefined,
 					]}>
 					<View style={headerCover}>
@@ -335,14 +335,14 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					iconStyle={recurring ?
 						{
 							color: '#fff',
-							backgroundColor: inAppBrandSecondary,
-							borderColor: inAppBrandSecondary,
+							backgroundColor: textOnLevelThreeView,
+							borderColor: textOnLevelThreeView,
 						}
 						:
 						{
 							color: 'transparent',
 							backgroundColor: 'transparent',
-							borderColor: inAppBrandSecondary,
+							borderColor: textOnLevelThreeView,
 						}
 					}
 				/>
@@ -395,12 +395,12 @@ const getStyles = ({
 	const footerHeight = Theme.Core.getFooterHeight(deviceWidth);
 
 	const {
-		inAppBrandSecondary,
+		textOnLevelThreeView,
 	} = colors;
 
 	return {
 		footerHeight,
-		inAppBrandSecondary,
+		textOnLevelThreeView,
 		container: {
 			flex: 1,
 		},
@@ -487,7 +487,7 @@ const getStyles = ({
 		},
 		textStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: inAppBrandSecondary,
+			color: textOnLevelThreeView,
 		},
 		checkButtonStyle: {
 			marginVertical: padding,
@@ -495,7 +495,7 @@ const getStyles = ({
 		backLinkStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
 			alignSelf: 'center',
-			color: inAppBrandSecondary,
+			color: textOnLevelThreeView,
 			padding: 10,
 			marginVertical: padding,
 		},
