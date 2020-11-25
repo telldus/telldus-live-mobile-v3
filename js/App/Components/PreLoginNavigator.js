@@ -37,10 +37,10 @@ import { FormContainerComponent } from './PreLoginScreens/SubViews';
 import {
 	screenChange,
 } from '../Actions/Navigation';
-import getRouteName from '../Lib/getRouteName';
 import {
 	prepareNavigator,
 	shouldNavigatorUpdate,
+	getCurrentRouteName,
 } from '../Lib/NavigationService';
 
 import {
@@ -96,8 +96,8 @@ const PreLoginNavigator = React.memo<Object>((props: Props): Object => {
 
 	const theme = useAppTheme();
 
-	const onNavigationStateChange = React.useCallback((currentState: Object) => {
-		const currentScreen = getRouteName(currentState);
+	const onNavigationStateChange = React.useCallback(() => {
+		const currentScreen = getCurrentRouteName();
 		dispatch(screenChange(currentScreen));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

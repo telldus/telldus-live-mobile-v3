@@ -139,10 +139,25 @@ const shouldNavigatorUpdate = (prevProps: Object, nextProps: Object, additionalS
 		'source',
 		...additionalScreenProps,
 	]);
-	const flag2 = shouldUpdate(prevProps, nextProps, [
-		'route',
+	const {
+		route = {},
+	} = nextProps;
+	const {
+		route: prevRoute = {},
+	} = prevProps;
+	const flag2 = shouldUpdate(route, prevRoute, [
+		'params',
+		'key',
+		'name',
 	]);
 	return !flag1 && !flag2;
+};
+
+const getCurrentRouteName = (): string => {
+	if (!navigationRef.current) {
+		return '';
+	}
+	return navigationRef.current.getCurrentRoute().name;
 };
 
 module.exports = {
@@ -150,4 +165,5 @@ module.exports = {
 	navigationRef,
 	prepareNavigator,
 	shouldNavigatorUpdate,
+	getCurrentRouteName,
 };

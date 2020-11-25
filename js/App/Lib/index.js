@@ -20,7 +20,6 @@
 
 'use strict';
 
-import getRouteName from './getRouteName';
 import getDeviceWidth from './getDeviceWidth';
 import hasStatusBar from './hasStatusBar';
 import DimmerUtils from './DimmerUtils';
@@ -58,7 +57,6 @@ import * as intlUtils from './intlUtils';
 import * as thirdPartyUtils from './thirdPartyUtils';
 
 module.exports = {
-	getRouteName,
 	getDeviceWidth,
 	hasStatusBar,
 	capitalize,
