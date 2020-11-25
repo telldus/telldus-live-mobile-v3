@@ -60,7 +60,7 @@ const SwitchOrAddAccountButton = (props: Props): Object => {
 	const onPress = React.useCallback(() => {
 		performAddOrSwitch();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [performAddOrSwitch]);
 
 	return (
 		<TouchableButton

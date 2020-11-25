@@ -216,6 +216,7 @@ const MoreOptionsTab = (props: Props): Object => {
 		enableGeoFenceFeature,
 		themeInApp,
 		consentLocationData,
+		performAddOrSwitch,
 	]);
 
 	return (
