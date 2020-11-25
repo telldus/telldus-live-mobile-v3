@@ -20,7 +20,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       Object {
         "backgroundColor": "transparent",
         "color": "#777777",
-        "fontFamily": "Roboto-Regular",
+        "fontFamily": "SuisseIntl",
         "fontSize": 33,
         "marginBottom": 5,
         "marginTop": 10.416375,
@@ -91,6 +91,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
               Object {
                 "backgroundColor": "transparent",
                 "color": "#000",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "justifyContent": "center",
               },
@@ -163,6 +164,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
                 "backgroundColor": "transparent",
                 "color": "#4C4C4C",
                 "flex": 1,
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "textAlign": "right",
                 "textAlignVertical": "center",
@@ -280,6 +282,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
               Object {
                 "backgroundColor": "transparent",
                 "color": "#000",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "justifyContent": "center",
               },
@@ -352,6 +355,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
                 "backgroundColor": "transparent",
                 "color": "#4C4C4C",
                 "flex": 1,
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "textAlign": "right",
                 "textAlignVertical": "center",
@@ -430,7 +434,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       Object {
         "backgroundColor": "transparent",
         "color": "#777777",
-        "fontFamily": "Roboto-Regular",
+        "fontFamily": "SuisseIntl",
         "fontSize": 33,
         "marginBottom": 5,
         "marginTop": 10.416375,
@@ -501,6 +505,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
               Object {
                 "backgroundColor": "transparent",
                 "color": "#000",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "justifyContent": "center",
               },
@@ -573,6 +578,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
                 "backgroundColor": "transparent",
                 "color": "#4C4C4C",
                 "flex": 1,
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "textAlign": "right",
                 "textAlignVertical": "center",
@@ -690,6 +696,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
               Object {
                 "backgroundColor": "transparent",
                 "color": "#000",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "justifyContent": "center",
               },
@@ -762,6 +769,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
                 "backgroundColor": "transparent",
                 "color": "#4C4C4C",
                 "flex": 1,
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "textAlign": "right",
                 "textAlignVertical": "center",

@@ -247,6 +247,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
                 "color": "#555555",
                 "flex": 1,
                 "flexWrap": "wrap",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 4.2,
                 "marginLeft": 2.7777,
               },
@@ -492,7 +493,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     Object {
                       "backgroundColor": "transparent",
                       "color": "#fff",
-                      "fontFamily": "Roboto-Regular",
+                      "fontFamily": "SuisseIntl",
                       "fontSize": 15.65,
                       "left": 18.779999999999998,
                       "position": "absolute",
@@ -531,7 +532,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                       "backgroundColor": "transparent",
                       "color": "#8e8e93",
                       "flexWrap": "wrap",
-                      "fontFamily": "Roboto-Regular",
+                      "fontFamily": "SuisseIntl",
                       "fontSize": 10.955000000000002,
                     }
                   }
@@ -553,7 +554,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   Object {
                     "backgroundColor": "transparent",
                     "color": "#8e8e93",
-                    "fontFamily": "Roboto-Regular",
+                    "fontFamily": "SuisseIntl",
                     "fontSize": 3,
                     "marginBottom": 4,
                   }
@@ -698,6 +699,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                       "color": "#555555",
                       "flex": 1,
                       "flexWrap": "wrap",
+                      "fontFamily": "SuisseIntl",
                       "fontSize": 4.2,
                       "marginLeft": 2.7777,
                     },
