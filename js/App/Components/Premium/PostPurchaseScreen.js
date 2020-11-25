@@ -188,7 +188,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 							<Text
 								level={26}
 								style={purchaseInfoText}>
-								{getInfo().toUpperCase()}
+								{getInfo()}
 							</Text>
 						</View>
 						}
@@ -197,7 +197,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 							<Text
 								level={26}
 								style={purchaseInfoText}>
-								{`${credits} `}{formatMessage(i18n.smsCredits).toUpperCase()}
+								{`${credits} `}{formatMessage(i18n.smsCredits)}
 							</Text>
 						</View>
 						}

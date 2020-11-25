@@ -220,7 +220,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						header: `${formatMessage(i18n.logout)}?`,
 						text: formatMessage(i18n.infoLogoutOnlyPremAccount),
 						showPositive: true,
-						positiveText: formatMessage(i18n.logout).toUpperCase(),
+						positiveText: formatMessage(i18n.logout),
 						onPressPositive: proceedWithLogout,
 						showNegative: true,
 						closeOnPressNegative: true,

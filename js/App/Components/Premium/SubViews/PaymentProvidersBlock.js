@@ -51,6 +51,7 @@ import {
 import {
 	getPaymentOptions,
 } from '../../../Lib/appUtils';
+import capitalize from '../../../Lib/capitalize';
 
 import Theme from '../../../Theme';
 
@@ -110,7 +111,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 								level={26}
 								style={nameStyle}
 								numberOfLines={1}>
-								{name.toUpperCase()}
+								{capitalize(name)}
 							</Text>
 						</View>
 						<IMAGE width={imageWidth} height={imageHeight}/>

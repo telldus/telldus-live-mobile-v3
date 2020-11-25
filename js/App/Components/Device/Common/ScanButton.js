@@ -117,7 +117,7 @@ const ScanButton = (props: Object): Object => {
 				<Text
 					level={tLevel}
 					style={[scanButtonTextDefStyle, scanButtonTextStyle]}>
-					{text.toUpperCase()}
+					{text}
 				</Text>
 			</View>
 		</TouchableOpacity>

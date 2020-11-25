@@ -122,7 +122,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 			text,
 			showPositive: true,
 			showNegative: true,
-			positiveText: formatMessage(i18n.confirm).toUpperCase(),
+			positiveText: formatMessage(i18n.confirm),
 			closeOnPressPositive: true,
 			closeOnPressNegative: true,
 			onPressPositive: onConfirm,
@@ -134,13 +134,13 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 		if (word.includes('%')) {
 			return (
 				<Text style={titleStyleOne} key={`${index}`}>
-					{` ${word.replace(/%/g, '').toUpperCase()}`}
+					{` ${word.replace(/%/g, '')} `}
 				</Text>
 			);
 		}
 		return (
 			<Text style={titleStyleTwo} key={`${index}`}>
-				{word.toUpperCase()}
+				{word}
 			</Text>
 		);
 	});

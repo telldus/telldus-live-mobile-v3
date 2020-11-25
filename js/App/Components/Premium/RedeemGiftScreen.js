@@ -132,7 +132,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 					<Text
 						level={26}
 						style={titleStyleTwo}>
-						{` ${word.replace(/%/g, '').toUpperCase()}`}
+						{` ${word.replace(/%/g, '')}`}
 					</Text>
 				);
 			}
@@ -140,7 +140,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 				<Text
 					level={26}
 					style={titleStyleOne}>
-					{word.toUpperCase()}
+					{word}
 				</Text>
 			);
 		});

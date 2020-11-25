@@ -485,9 +485,9 @@ class SettingsTab extends View {
 				...data,
 				show: true,
 				showHeader: true,
-				header: `${formatMessage(i18n.clearHistory).toUpperCase()}?`,
+				header: `${formatMessage(i18n.clearHistory)}?`,
 				text: formatMessage(i18n.messageClearHistory),
-				positiveText: formatMessage(i18n.labelClearHistory).toUpperCase(),
+				positiveText: formatMessage(i18n.labelClearHistory),
 				onPressPositive: this.onConfirmClearHistory,
 			};
 		}
@@ -496,9 +496,9 @@ class SettingsTab extends View {
 				...data,
 				show: true,
 				showHeader: true,
-				header: `${formatMessage(i18n.clearHistoryCache).toUpperCase()}?`,
+				header: `${formatMessage(i18n.clearHistoryCache)}?`,
 				text: formatMessage(i18n.messageClearCache),
-				positiveText: formatMessage(i18n.labelClearCache).toUpperCase(),
+				positiveText: formatMessage(i18n.labelClearCache),
 				onPressPositive: this.onConfirmClearHistoryCache,
 			};
 		}
@@ -507,9 +507,9 @@ class SettingsTab extends View {
 				...data,
 				show: true,
 				showHeader: true,
-				header: formatMessage(i18n.deleteSensorWarningTitle).toUpperCase(),
+				header: formatMessage(i18n.deleteSensorWarningTitle),
 				text: formatMessage(i18n.deleteSensorWarningContent),
-				positiveText: formatMessage(i18n.delete).toUpperCase(),
+				positiveText: formatMessage(i18n.delete),
 				onPressPositive: this.onConfirmDeleteSensor,
 				closeOnPressPositive: true,
 			};
@@ -518,9 +518,9 @@ class SettingsTab extends View {
 			...data,
 			show: true,
 			showHeader: true,
-			header: `${formatMessage(i18n.resetMaxMin).toUpperCase()}?`,
+			header: `${formatMessage(i18n.resetMaxMin)}?`,
 			text: formatMessage(i18n.messageResetMaxMin),
-			positiveText: formatMessage(i18n.labelResetMaxMin).toUpperCase(),
+			positiveText: formatMessage(i18n.labelResetMaxMin),
 			onPressPositive: this.onConfirmResetMaxMin,
 		};
 	}
@@ -560,7 +560,7 @@ class SettingsTab extends View {
 		const dialogueData = {
 			show: true,
 			showPositive: true,
-			positiveText: formatMessage(i18n.remove).toUpperCase(),
+			positiveText: formatMessage(i18n.remove),
 			showNegative: true,
 			header: `${formatMessage(i18n.labelRemoveFailed)}?`,
 			imageHeader: true,
@@ -624,11 +624,11 @@ class SettingsTab extends View {
 					const dialogueData = {
 						show: true,
 						showPositive: true,
-						positiveText: formatMessage(i18n.remove).toUpperCase(),
+						positiveText: formatMessage(i18n.remove),
 						onPressPositive: this.onPressRemoveFailedNode,
 						closeOnPressPositive: true,
 						showNegative: true,
-						negativeText: formatMessage(i18n.labelReplace).toUpperCase(),
+						negativeText: formatMessage(i18n.labelReplace),
 						onPressNegative: this.onPressReplaceFailedNode,
 						closeOnPressNegative: true,
 						negTextColorLevel: 23,
@@ -781,17 +781,17 @@ class SettingsTab extends View {
 									intl={intl}
 								/>
 								<TouchableButton
-									text={formatMessage(i18n.clearHistory).toUpperCase()}
+									text={formatMessage(i18n.clearHistory)}
 									onPress={this.clearHistory}
 									style={buttonStyle}
 									accessible={true}/>
 								<TouchableButton
-									text={formatMessage(i18n.resetMaxMin).toUpperCase()}
+									text={formatMessage(i18n.resetMaxMin)}
 									onPress={this.resetMaxMin}
 									style={buttonStyle}
 									accessible={true}/>
 								<TouchableButton
-									text={formatMessage(i18n.clearHistoryCache).toUpperCase()}
+									text={formatMessage(i18n.clearHistoryCache)}
 									onPress={this.clearHistoryCache}
 									style={buttonStyle}
 									accessible={true}/>
@@ -829,7 +829,7 @@ class SettingsTab extends View {
 													}]}
 													showThrobber={isMarking}/>
 												<TouchableButton
-													text={formatMessage(i18n.headerExclude).toUpperCase()}
+													text={formatMessage(i18n.headerExclude)}
 													onPress={this.onPressExcludeDevice}
 													disabled={!isGatewayReachable}
 													style={[buttonStyle, {
@@ -840,7 +840,7 @@ class SettingsTab extends View {
 									</>
 									:
 									<TouchableButton
-										text={formatMessage(i18n.deleteSensor).toUpperCase()}
+										text={formatMessage(i18n.deleteSensor)}
 										onPress={this.deleteSensor}
 										style={[buttonStyle, {
 											backgroundColor: brandDanger,

@@ -193,7 +193,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					</View>
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
 						{!!save && <Text style={saveTextStyle}>
-							{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
+							{`${formatMessage(i18n.saveLabel)} ${save}%`}
 						</Text>}
 						{!!prevTotal && <Text style={prevChargeTextStyle}>
 							{`€${formatNumber(prevTotal)}`}

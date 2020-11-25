@@ -182,7 +182,7 @@ getContents = (): Object => {
 	const { info = ''} = route.params || {};
 
 	const posterH1 = capitalize(formatMessage(i18n.getStarted)),
-		cancelLabel = formatMessage(i18n.labelNotNow).toUpperCase(),
+		cancelLabel = formatMessage(i18n.labelNotNow),
 		cancelOnPress = this.goBack;
 
 	switch (info) {

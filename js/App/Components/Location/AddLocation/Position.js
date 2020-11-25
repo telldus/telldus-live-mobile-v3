@@ -112,7 +112,7 @@ class Position extends View {
 		this.openDialogueBox({
 			header,
 			text: `${this.dlogPOne}\n\n${this.dlogPTwo}\n\n${this.dlogPThree}`,
-			positiveText: intl.formatMessage(i18n.dialoguePositiveText).toUpperCase(),
+			positiveText: intl.formatMessage(i18n.dialoguePositiveText),
 		});
 	}
 

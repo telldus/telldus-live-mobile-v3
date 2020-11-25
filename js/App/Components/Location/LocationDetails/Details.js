@@ -249,7 +249,7 @@ class Details extends View<Props, State> {
 		const dialogueData = {
 			show: true,
 			header: this.labelModalheaderOnDel,
-			positiveText: this.labelDelete.toUpperCase(),
+			positiveText: this.labelDelete,
 			showPositive: true,
 			showNegative: true,
 			onPressPositive: this.onConfirmRemoveLocation,

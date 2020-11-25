@@ -352,7 +352,7 @@ const HeaderComponent = (props: Props): Object => {
 					left = height - 35;
 				}
 			}
-			return {top, right, left, pos, text: intl.formatMessage(i18n.labelAddNewDevice).toUpperCase()};
+			return {top, right, left, pos, text: intl.formatMessage(i18n.labelAddNewDevice)};
 		};
 		const { top, right, left, pos, text } = getPropsAttentionCatcher();
 		return (

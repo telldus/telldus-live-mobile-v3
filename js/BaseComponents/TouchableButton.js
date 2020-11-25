@@ -145,7 +145,7 @@ class TouchableButton extends Component<Props, void> {
 						accessible={accessible}
 						importantForAccessibility={importantForAccessibility}
 						{...textProps}>
-						{typeof preScript === 'string' && preScript}{label.toUpperCase()}{postScript}
+						{typeof preScript === 'string' && preScript}{label}{postScript}
 					</Text>
 					{!!showThrobber &&
 					(
