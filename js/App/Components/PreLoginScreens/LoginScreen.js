@@ -240,12 +240,12 @@ class LoginScreen extends View {
 	}
 
 	render(): Object {
-		let { appLayout, styles: commonStyles, screenProps, intl, route } = this.props;
+		let { appLayout, styles: commonStyles, screenProps, intl, route = {} } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		const {
 			isSwitchingAccount = false,
-		} = route.params;
+		} = route.params || {};
 
 		const { source = 'prelogin' } = screenProps;
 
