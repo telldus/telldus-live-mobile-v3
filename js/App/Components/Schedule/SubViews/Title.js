@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { Text, View } from '../../../../BaseComponents';
-import Theme from '../../../Theme';
 
 import {
 	withTheme,

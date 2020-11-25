@@ -440,7 +440,6 @@ class JobRow extends View<null, Props, null> {
 
 	_getStyle = (appLayout: Object): Object => {
 		let {
-			fonts,
 			borderRadiusRow,
 			inactiveGray,
 		} = Theme.Core;

@@ -32,7 +32,6 @@ import {
 	PropsThemedComponent,
 } from '../App/Components/HOC/withTheme';
 
-import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
 type Props = PropsThemedComponent & {

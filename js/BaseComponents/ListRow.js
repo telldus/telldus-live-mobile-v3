@@ -26,7 +26,6 @@ import React from 'react';
 import View from './View';
 import BlockIcon from './BlockIcon';
 import RowWithTriangle from './RowWithTriangle';
-import Theme from '../App/Theme';
 import Text from './Text';
 
 import {

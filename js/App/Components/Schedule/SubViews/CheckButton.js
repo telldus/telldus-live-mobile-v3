@@ -66,7 +66,7 @@ export default class CheckButton extends View<null, Props, null> {
 
 	_getStyle = (appLayout: Object): Object => {
 		const { disabled } = this.props;
-		const { shadow: themeShadow, fonts } = Theme.Core;
+		const { shadow: themeShadow } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;

@@ -69,7 +69,6 @@ render(): Object {
 }
 
 getStyles(width: number): Object {
-	const { fonts } = Theme.Core;
 	const fontSizeH = width * 0.07;
 	const fontSizeC = width * 0.045;
 	return {

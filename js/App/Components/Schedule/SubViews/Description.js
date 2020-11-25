@@ -24,7 +24,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View } from '../../../../BaseComponents';
-import Theme from '../../../Theme';
 
 type Props = {
 	children: string | Array<any>,
