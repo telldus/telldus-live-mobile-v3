@@ -358,6 +358,9 @@ export default {
 		get textColorInactive() {
 			return Core.inactiveTintColor;
 		},
+		get iconColorInsidePoster() {
+			return '#4F4F4F';
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -673,6 +676,9 @@ export default {
 		},
 		get textColorInactive() {
 			return '#CCCCCC';
+		},
+		get iconColorInsidePoster() {
+			return '#4F4F4F';
 		},
 	},
 };

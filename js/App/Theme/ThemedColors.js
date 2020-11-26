@@ -358,6 +358,9 @@ export default {
 		get textColorInactive() {
 			return Core.inactiveTintColor;
 		},
+		get iconColorInsidePoster() {
+			return Core.brandSecondary;
+		},
 	},
 
 	[DARK_THEME_KEY]: {
@@ -673,6 +676,9 @@ export default {
 		},
 		get textColorInactive() {
 			return Core.textColorLabel;
+		},
+		get iconColorInsidePoster() {
+			return '#FFA450';
 		},
 	},
 };
