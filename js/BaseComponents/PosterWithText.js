@@ -217,7 +217,7 @@ render(): Object {
 					<View style={[posterItemsContainerDef, posterItemsContainerStyle]}>
 						{!!icon && (
 							<BlockIcon
-								iconLevel={23}
+								iconLevel={41}
 								blockLevel={18}
 								icon={icon}
 								style={iconStyle}
