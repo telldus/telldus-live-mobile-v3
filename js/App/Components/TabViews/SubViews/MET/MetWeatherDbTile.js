@@ -124,6 +124,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 				value,
 				unit,
 				label,
+				name: _name,
 			} = d;
 
 			const isLarge = (value !== null && typeof value !== 'undefined') ? checkIfLarge(value.toString()) : true;
@@ -134,7 +135,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 				label,
 				icon: 'sensor',
 				isLarge,
-				name: label,
+				name: _name,
 				value,
 				iconStyle,
 				valueUnitCoverStyle,
