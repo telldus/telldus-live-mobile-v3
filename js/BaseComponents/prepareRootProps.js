@@ -295,6 +295,9 @@ const getTextColor = (props: Object): ?string => {
 		case 40: {
 			return colors.colorButtonTextEnabledPreLogin;
 		}
+		case 41: {
+			return colors.iconColorInsidePoster;
+		}
 		default:
 			return;
 	}
