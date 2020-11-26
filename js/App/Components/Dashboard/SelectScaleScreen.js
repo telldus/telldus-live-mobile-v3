@@ -49,6 +49,9 @@ import {
 	getSensorInfo,
 	capitalize,
 } from '../../Lib';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 
@@ -67,6 +70,10 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 	const {
 		formatMessage,
 	} = useIntl();
+	const {
+		colors,
+		selectedThemeSet,
+	} = useAppTheme();
 
 	const {scalesInfoList, initialSelectedScales} = useMemo((): Object => {
 		let _scalesInfoList = {}, _initialSelectedScales = {};
@@ -141,6 +148,8 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 			const { label, icon } = scalesInfoList[key];
 			const selected = selectedScales[key];
 
+			const backgroundColor = selectedThemeSet.key === 2 ? 'transparent' : colors.inAppBrandPrimary;
+
 			return (
 				<ListRow
 					key={`${index}`}
@@ -149,10 +158,13 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 					label={label}
 					rowData={key}
 					leftIcon={icon}
+					iconContainerStyle={{
+						backgroundColor,
+					}}
 					rightIcon={selected ? 'favorite' : 'favorite-outline'}/>
 			);
 		});
-	}, [layout, onPress, scalesInfoList, selectedScales]);
+	}, [colors.inAppBrandPrimary, layout, onPress, scalesInfoList, selectedScales, selectedThemeSet.key]);
 
 	const onPressToggleAll = useCallback(() => {
 		if (hasSelected) {
