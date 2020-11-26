@@ -24,7 +24,7 @@
     "@formatjs/intl-pluralrules": "^3.2.5",
     "@formatjs/intl-relativetimeformat": "^7.0.0",
     "@invertase/react-native-apple-authentication": "^1.1.2",
-    "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/datetimepicker": "^3.0.2",
     "@react-native-community/google-signin": "^4.0.3",
     "@react-native-community/masked-view": "~0.1.10",
@@ -178,7 +178,7 @@
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|react-navigation|@react-native-firebase/|@react-native-community/push-notification-ios|@invertase/react-native-apple-authentication|@react-navigation/.*|@react-native-community/async-storage/(?!(lib))))"
+      "node_modules/(?!((jest-)?react-native|react-navigation|@react-native-firebase/|@react-native-community/push-notification-ios|@invertase/react-native-apple-authentication|@react-navigation/.*|@react-native-async-storage/async-storage/(?!(lib))))"
     ]
   },
   "@comment": {
