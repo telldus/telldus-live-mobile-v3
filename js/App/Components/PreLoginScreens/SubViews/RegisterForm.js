@@ -293,8 +293,8 @@ class RegisterForm extends View {
 					text={this.state.isLoading ? i18n.registering : i18n.register}
 					postScript={this.state.isLoading ? '...' : null}
 					accessible={buttonAccessible}
-					buttonLevel={this.state.isLoading ? 7 : 22}
-					textLevel={this.state.isLoading ? 13 : 35}
+					buttonLevel={this.state.isLoading ? 7 : 24}
+					textLevel={this.state.isLoading ? 13 : 40}
 				/>
 			</View>
 		);
