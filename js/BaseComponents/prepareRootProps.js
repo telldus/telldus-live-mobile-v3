@@ -132,6 +132,9 @@ const getBGColor = (props: Object): ?string => {
 		case 23: {
 			return colors.buttonBGColorTwo;
 		}
+		case 24: {
+			return colors.buttonBGColorPrelogin;
+		}
 		default:
 			return 'transparent';
 	}
@@ -288,6 +291,9 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 39: {
 			return colors.textColorInactive;
+		}
+		case 40: {
+			return colors.colorButtonTextEnabledPreLogin;
 		}
 		default:
 			return;
