@@ -87,7 +87,7 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	useEffect(() => {
-		onDidMount(formatMessage(i18n.setName));
+		onDidMount(formatMessage(i18n.setName), formatMessage(i18n.selectNameForDbItem));
 	}, [formatMessage, onDidMount]);
 
 	const {
