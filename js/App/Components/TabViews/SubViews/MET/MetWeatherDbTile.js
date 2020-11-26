@@ -92,6 +92,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 
 	const {
 		colors,
+		selectedThemeSet,
 	} = useAppTheme();
 
 	const lastUpdated = dayjs(meta.updated_at).unix();
@@ -164,6 +165,8 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 
 	let background = Object.keys(slideList).length === 0 ? colors.sensorValueBGColor : 'transparent';
 
+	const backgroundColor = selectedThemeSet.key === 2 ? 'transparent' : colors.itemIconBGColor;
+
 	return (
 		<DashboardShadowTile
 			item={item}
@@ -179,6 +182,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 				alignSelf: 'center',
 			}}
 			iconContainerStyle={{
+				backgroundColor,
 				width: Math.floor(tileWidth / 4),
 				height: Math.floor(tileWidth / 4),
 				borderRadius: Math.floor(tileWidth / 8),

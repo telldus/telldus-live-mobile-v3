@@ -262,7 +262,7 @@ class SensorDashboardTile extends View<Props, null> {
 		let iconContainerStyle = !isGatewayActive ? itemIconContainerOffline : itemIconContainerActive;
 		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? colors.sensorValueBGColor : Theme.Core.offlineColor) : 'transparent';
 
-		const iconColor = (selectedThemeSet.key === 2 && !isGatewayActive) ? Theme.Core.offlineColor : colors.baseColor;
+		const iconColor = selectedThemeSet.key === 1 ? colors.baseColor : (!isGatewayActive ? Theme.Core.offlineColor : colors.baseColor);
 
 		return (
 			<DashboardShadowTile
@@ -320,7 +320,7 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	getStyles(): Object {
-		const { tileWidth, isGatewayActive, item, colors } = this.props;
+		const { tileWidth, isGatewayActive, item, colors, selectedThemeSet } = this.props;
 		const { data = {}} = item;
 
 		const dotSize = tileWidth * 0.045;
@@ -377,10 +377,10 @@ class SensorDashboardTile extends View<Props, null> {
 				marginLeft: 2 + (dotSize * 0.2),
 			},
 			itemIconContainerActive: {
-				backgroundColor: itemIconBGColor,
+				backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : itemIconBGColor,
 			},
 			itemIconContainerOffline: {
-				backgroundColor: itemIconBGColorOffline,
+				backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : itemIconBGColorOffline,
 			},
 		};
 	}
