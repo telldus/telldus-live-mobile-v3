@@ -123,9 +123,10 @@ const getItemLayout = (appLayout: Object): any => {
 const getSectionHeaderFontSize = (deviceWidth: number): number => {
 	const {
 		maxSizeRowTextOne,
+		fontSizeFactorTwo,
 	} = Theme.Core;
 
-	let sectionHeaderFontSize = Math.floor(deviceWidth * 0.047);
+	let sectionHeaderFontSize = Math.floor(deviceWidth * fontSizeFactorTwo);
 	return sectionHeaderFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : sectionHeaderFontSize;
 };
 

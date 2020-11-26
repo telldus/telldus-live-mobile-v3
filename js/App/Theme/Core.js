@@ -328,4 +328,10 @@ export default {
 			bottom: 0.046666667,
 		};
 	},
+	get fontSizeFactorOne(): number {
+		return 0.047;
+	},
+	get fontSizeFactorTwo(): number {
+		return 0.0333;
+	},
 };
