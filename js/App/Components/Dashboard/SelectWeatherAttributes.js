@@ -163,7 +163,7 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 				/>
 			);
 		});
-	}, [layout, listData, onPress, selectedIndexes]);
+	}, [colors.inAppBrandPrimary, layout, listData, onPress, selectedIndexes, selectedThemeSet.key]);
 
 	const sLength = selectedIndexes.length;
 
