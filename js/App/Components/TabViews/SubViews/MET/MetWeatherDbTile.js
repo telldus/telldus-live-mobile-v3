@@ -39,6 +39,7 @@ import GenericSensor from '../Sensor/GenericSensor';
 import {
 	checkIfLarge,
 	MET_ID,
+	getSensorInfo,
 } from '../../../../Lib';
 import {
 	updateAllMetWeatherDbTiles,
@@ -128,13 +129,17 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 			} = d;
 
 			const isLarge = (value !== null && typeof value !== 'undefined') ? checkIfLarge(value.toString()) : true;
+			const {
+				icon,
+				formatOptions = {},
+			} = getSensorInfo(_name, -1, value, isLarge);
 
 			let sharedProps = {
 				key: property,
 				unit,
 				label,
-				icon: 'sensor',
-				isLarge,
+				icon: icon || 'sensor',
+				isLarge: false,
 				name: _name,
 				value,
 				iconStyle,
@@ -143,7 +148,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 				unitStyle,
 				labelStyle,
 				sensorValueCoverStyle,
-				formatOptions: {},
+				formatOptions: formatOptions,
 			};
 			_slideList[property] = <GenericSensor {...sharedProps}/>;
 		});
