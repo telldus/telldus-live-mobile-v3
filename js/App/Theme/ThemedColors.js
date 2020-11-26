@@ -175,6 +175,9 @@ export default {
 		get colorOneButtonTextEnabled() {
 			return '#ffffff';
 		},
+		get colorButtonTextEnabledPreLogin() {
+			return '#ffffff';
+		},
 		get colorOneButtonTextDisabled() {
 			return '#f5f5f5';
 		},
@@ -334,6 +337,9 @@ export default {
 		get buttonBGColorTwo() {
 			return Core.brandSecondary;
 		},
+		get buttonBGColorPrelogin() {
+			return Core.brandSecondary;
+		},
 		get iconOnSettingsBlock() {
 			return Core.brandSecondary;
 		},
@@ -483,6 +489,9 @@ export default {
 			return '#b5b5b5';
 		},
 		get colorOneButtonTextEnabled() {
+			return '#ffffff';
+		},
+		get colorButtonTextEnabledPreLogin() {
 			return '#ffffff';
 		},
 		get colorTwoButtonTextEnabled() {
@@ -639,6 +648,9 @@ export default {
 			return '#FFA450';
 		},
 		get buttonBGColorTwo() {
+			return '#FFA450';
+		},
+		get buttonBGColorPrelogin() {
 			return '#FFA450';
 		},
 		get iconOnSettingsBlock() {

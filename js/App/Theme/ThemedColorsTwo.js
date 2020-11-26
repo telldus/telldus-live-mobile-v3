@@ -175,6 +175,9 @@ export default {
 		get colorOneButtonTextEnabled() {
 			return '#ffffff';
 		},
+		get colorButtonTextEnabledPreLogin() {
+			return '#000000';
+		},
 		get colorOneButtonTextDisabled() {
 			return '#f5f5f5';
 		},
@@ -327,6 +330,9 @@ export default {
 		},
 		get buttonBGColorTwo() {
 			return '#000000';
+		},
+		get buttonBGColorPrelogin() {
+			return '#ffffff';
 		},
 		get textOnLevelThreeView() {
 			return '#000000';
@@ -485,6 +491,9 @@ export default {
 		get colorOneButtonTextEnabled() {
 			return '#ffffff';
 		},
+		get colorButtonTextEnabledPreLogin() {
+			return '#000000';
+		},
 		get colorOneButtonTextDisabled() {
 			return '#f5f5f5';
 		},
@@ -641,8 +650,11 @@ export default {
 		get buttonBGColorTwo() {
 			return '#424242';
 		},
+		get buttonBGColorPrelogin() {
+			return '#ffffff';
+		},
 		get iconOnSettingsBlock() {
-			return '#FFA450';
+			return '#ffffff';
 		},
 		get viewInsideLevelTwoView() {
 			return '#424242';
