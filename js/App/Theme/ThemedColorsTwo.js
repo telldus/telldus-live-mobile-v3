@@ -693,7 +693,7 @@ export default {
 			return '#000000';
 		},
 		get textColorInactive() {
-			return '#CCCCCC';
+			return '#999999';
 		},
 		get iconColorInsidePoster() {
 			return '#4F4F4F';
