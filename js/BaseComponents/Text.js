@@ -52,16 +52,17 @@ class TextComponent extends Base {
 			...others
 		} = this.props;
 		const props = prepareRootPropsText(others, {
-			style: Array.isArray(others) ?
+			style: Array.isArray(others.style) ?
 				[
 					{
-						fontFamily: Theme.Core.fonts.robotoRegular,
+						fontFamily: Theme.Core.fonts.suisseIntlRegular,
 					},
 				] :
 				{
-					fontFamily: Theme.Core.fonts.robotoRegular,
+					fontFamily: Theme.Core.fonts.suisseIntlRegular,
 				},
 		});
+
 		return (
 			<Text
 				{...props}

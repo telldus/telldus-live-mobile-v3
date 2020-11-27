@@ -27,10 +27,10 @@ const {
 
 const common = {
 	get primary() {
-		return Core.brandPrimary;
+		return '#80919E';
 	},
 	get secondary() {
-		return Core.brandSecondary;
+		return '#9C7D69';
 	},
 	get danger() {
 		return Core.brandDanger;
@@ -47,7 +47,7 @@ export default {
 	[LIGHT_THEME_KEY]: {
 		...common,
 		get safeAreaBG() {
-			return Core.brandPrimary;
+			return '#000000';
 		},
 		get text() {
 			return Core.inactiveTintColor;
@@ -101,7 +101,7 @@ export default {
 			return '#000';
 		},
 		get activeTintOne() {
-			return Core.brandSecondary;
+			return '#000';
 		},
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
@@ -110,13 +110,13 @@ export default {
 			return Core.inactiveGray;
 		},
 		get thumbColorActiveSwitch() {
-			return Core.brandSecondary;
+			return '#000000';
 		},
 		get thumbColorInActiveSwitch() {
 			return Core.inactiveSwitch;
 		},
 		get trackColorActiveSwitch() {
-			return '#e2690150';
+			return '#ccc';
 		},
 		get trackColorInActiveSwitch() {
 			return Core.inactiveSwitchBackground;
@@ -125,19 +125,19 @@ export default {
 			return '#f5f5f5';
 		},
 		get headerOneColorBlockEnabled() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get headerOneColorBlockDisabled() {
 			return '#999999';
 		},
 		get iconOneColorBlockEnabled() {
-			return '#1b365d';
+			return '#80919E';
 		},
 		get iconOneColorBlockDisabled() {
 			return '#bdbdbd';
 		},
 		get iconOneSubColorBlock() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get iconTwoColorBlock() {
 			return '#BDBDBD';
@@ -152,13 +152,13 @@ export default {
 			return Core.rowTextColor;
 		},
 		get headerIconColorBlock() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get colorTimeExpired() {
 			return '#990000';
 		},
 		get footerPrimary() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get footerSecondary() {
 			return '#fff';
@@ -167,7 +167,7 @@ export default {
 			return Core.rowTextColor;
 		},
 		get backgroundOneButtonEnabled() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get backgroundOneButtonDisabled() {
 			return '#b5b5b5';
@@ -175,14 +175,20 @@ export default {
 		get colorOneButtonTextEnabled() {
 			return '#ffffff';
 		},
+		get colorButtonTextEnabledPreLogin() {
+			return '#000000';
+		},
 		get colorOneButtonTextDisabled() {
 			return '#f5f5f5';
+		},
+		get colorTwoButtonTextEnabled() {
+			return '#000000';
 		},
 		get colorOneThrobberButton() {
 			return '#ffffff';
 		},
 		get checkBoxIconActiveOne() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get checkBoxIconInactiveOne() {
 			return 'transparent';
@@ -194,7 +200,7 @@ export default {
 			return 'transparent';
 		},
 		get checkBoxIconBorderActiveOne() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get checkBoxIconBorderInactiveOne() {
 			return '#ffffff';
@@ -215,7 +221,7 @@ export default {
 			return Core.rowTextColor;
 		},
 		get posterBG() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get textInsidePoster() {
 			return '#ffffff';
@@ -224,10 +230,10 @@ export default {
 			return '#ffffff';
 		},
 		get colorOnActiveBg() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get colorOffActiveBg() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get colorOnInActiveBg() {
 			return '#eeeeee';
@@ -242,16 +248,16 @@ export default {
 			return '#FFFFFF';
 		},
 		get colorOnInActiveIcon() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get colorOffInActiveIcon() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get inAppBrandSecondary() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get inAppBrandPrimary() {
-			return Core.brandPrimary;
+			return '#80919E';
 		},
 		get buttonSeparatorColor() {
 			return '#dddddd';
@@ -269,10 +275,10 @@ export default {
 			return '#ef5350';
 		},
 		get timeColor() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get drawerBg() {
-			return Core.brandPrimary;
+			return '#000000';
 		},
 		get drawerBottomBg() {
 			return Core.appBackground;
@@ -281,7 +287,7 @@ export default {
 			return '#6B6969';
 		},
 		get lightDrandSecDarkWhite() {
-			return Core.brandSecondary;
+			return '#9C7D69';
 		},
 		get badgeColor() {
 			return '#ED1727';
@@ -294,6 +300,66 @@ export default {
 		},
 		get statusRed() {
 			return '#F44336';
+		},
+		get headerBG() {
+			return '#000000';
+		},
+		get headerLogoColor() {
+			return '#ffffff';
+		},
+		get sensorValueBGColor() {
+			return '#000000';
+		},
+		get itemIconBGColor() {
+			return 'transparent';
+		},
+		get itemIconBGColorOffline() {
+			return 'transparent';
+		},
+		get baseColor() {
+			return '#000000';
+		},
+		get baseColorTwo() {
+			return '#000000';
+		},
+		get baseColorThree() {
+			return '#333333';
+		},
+		get buttonBGColor() {
+			return '#ffffff';
+		},
+		get buttonBGColorTwo() {
+			return '#000000';
+		},
+		get buttonBGColorPrelogin() {
+			return '#ffffff';
+		},
+		get textOnLevelThreeView() {
+			return '#000000';
+		},
+		get iconOnSettingsBlock() {
+			return '#000000';
+		},
+		get viewInsideLevelTwoView() {
+			return '#eeeeee';
+		},
+		get moreItemsIndicatorColor() {
+			return '#CCCCCC';
+		},
+		get moreItemsIndicatorSelectedColor() {
+			return '#ffffff';
+		},
+		get baseColorFour() {
+			return '#333333';
+		},
+		get baseColorFive() {
+			return '#4F4F4F';
+		},
+		get textColorInactive() {
+			return Core.inactiveTintColor;
+		},
+		get iconColorInsidePoster() {
+			return '#4F4F4F';
 		},
 	},
 
@@ -354,7 +420,7 @@ export default {
 			return '#777777';
 		},
 		get activeTintOne() {
-			return Core.brandSecondaryShadeOne;
+			return '#ffffff';
 		},
 		get inActiveTintOne() {
 			return Core.inactiveTintColor;
@@ -363,13 +429,13 @@ export default {
 			return Core.inactiveGray;
 		},
 		get thumbColorActiveSwitch() {
-			return Core.brandSecondaryShadeOne;
+			return '#ffffff';
 		},
 		get thumbColorInActiveSwitch() {
 			return Core.inactiveSwitch;
 		},
 		get trackColorActiveSwitch() {
-			return '#e2690150';
+			return '#ccc';
 		},
 		get trackColorInActiveSwitch() {
 			return '#fff';
@@ -428,14 +494,20 @@ export default {
 		get colorOneButtonTextEnabled() {
 			return '#ffffff';
 		},
+		get colorButtonTextEnabledPreLogin() {
+			return '#000000';
+		},
 		get colorOneButtonTextDisabled() {
 			return '#f5f5f5';
+		},
+		get colorTwoButtonTextEnabled() {
+			return '#ffffff';
 		},
 		get colorOneThrobberButton() {
 			return '#ffffff';
 		},
 		get checkBoxIconActiveOne() {
-			return Core.brandSecondaryShadeOne;
+			return '#000000';
 		},
 		get checkBoxIconInactiveOne() {
 			return 'transparent';
@@ -447,7 +519,7 @@ export default {
 			return 'transparent';
 		},
 		get checkBoxIconBorderActiveOne() {
-			return Core.brandSecondaryShadeOne;
+			return '#ffffff';
 		},
 		get checkBoxIconBorderInactiveOne() {
 			return '#ffffff';
@@ -471,16 +543,16 @@ export default {
 			return Core.brandSecondaryShadeOne;
 		},
 		get textInsidePoster() {
-			return '#424242';
+			return '#ffffff';
 		},
 		get headerIconColor() {
 			return Core.textColorLabel;
 		},
 		get colorOnActiveBg() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get colorOffActiveBg() {
-			return '#607D8B';
+			return '#80919E';
 		},
 		get colorOnInActiveBg() {
 			return '#424242';
@@ -495,16 +567,16 @@ export default {
 			return '#FFFFFF';
 		},
 		get colorOnInActiveIcon() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get colorOffInActiveIcon() {
-			return '#607D8B';
+			return '#80919E';
 		},
 		get inAppBrandSecondary() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get inAppBrandPrimary() {
-			return '#607D8B';
+			return '#80919E';
 		},
 		get buttonSeparatorColor() {
 			return Core.grayPrimary;
@@ -522,7 +594,7 @@ export default {
 			return '#ef5350'; // TODO: Confirm with Johannes
 		},
 		get timeColor() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get drawerBg() {
 			return '#424242';
@@ -543,10 +615,70 @@ export default {
 			return '#C5E1A5';
 		},
 		get statusOrange() {
-			return '#FFA450';
+			return '#9C7D69';
 		},
 		get statusRed() {
 			return '#EF5350';
+		},
+		get headerBG() {
+			return Core.grayPrimary;
+		},
+		get headerLogoColor() {
+			return '#ffffff';
+		},
+		get sensorValueBGColor() {
+			return '#80919E';
+		},
+		get itemIconBGColor() {
+			return '#80919E';
+		},
+		get itemIconBGColorOffline() {
+			return Core.offlineColor;
+		},
+		get baseColor() {
+			return '#ffffff';
+		},
+		get baseColorTwo() {
+			return Core.rowTextColor;
+		},
+		get baseColorThree() {
+			return '#ffffff';
+		},
+		get buttonBGColor() {
+			return '#9C7D69';
+		},
+		get textOnLevelThreeView() {
+			return '#ffffff';
+		},
+		get buttonBGColorTwo() {
+			return '#424242';
+		},
+		get buttonBGColorPrelogin() {
+			return '#ffffff';
+		},
+		get iconOnSettingsBlock() {
+			return '#ffffff';
+		},
+		get viewInsideLevelTwoView() {
+			return '#424242';
+		},
+		get moreItemsIndicatorColor() {
+			return '#CCCCCC';
+		},
+		get moreItemsIndicatorSelectedColor() {
+			return '#ffffff';
+		},
+		get baseColorFour() {
+			return '#ffffff';
+		},
+		get baseColorFive() {
+			return '#ffffff';
+		},
+		get textColorInactive() {
+			return '#CCCCCC';
+		},
+		get iconColorInsidePoster() {
+			return '#4F4F4F';
 		},
 	},
 };

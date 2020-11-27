@@ -38,7 +38,7 @@ function prepareNoZWaveSupportDialogueData(formatMessage: (Object) => string = (
 		text: formatMessage(i18n.noZWaveDialogueContent),
 		showPositive: true,
 		showNegative: true,
-		negativeText: formatMessage(i18n.labelGoToWebshop).toUpperCase(),
+		negativeText: formatMessage(i18n.labelGoToWebshop),
 		onPressNegative: () => {
 			goToWebShop(locale);
 		},
@@ -56,7 +56,7 @@ function prepareNo433MHzSupportDialogueData(formatMessage: (Object) => string = 
 		text: 'No 433MHz Gateways body',
 		showPositive: true,
 		showNegative: true,
-		negativeText: formatMessage(i18n.labelGoToWebshop).toUpperCase(),
+		negativeText: formatMessage(i18n.labelGoToWebshop),
 		onPressNegative: () => {
 			goToWebShop(locale);
 		},

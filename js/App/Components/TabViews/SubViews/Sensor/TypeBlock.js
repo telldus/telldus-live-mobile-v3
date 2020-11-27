@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+} from 'react';
 import { Animated } from 'react-native';
 import Ripple from 'react-native-material-ripple';
 
@@ -49,7 +51,7 @@ type Props = {
 	colors: Object,
 };
 
-const TypeBlock = ({
+const TypeBlock = memo<Object>(({
 	style,
 	valueCoverStyle,
 	dotStyle,
@@ -64,7 +66,8 @@ const TypeBlock = ({
 	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
 	const {
-		inAppBrandSecondary,
+		moreItemsIndicatorSelectedColor,
+		moreItemsIndicatorColor,
 	} = colors;
 
 	return (
@@ -81,7 +84,7 @@ const TypeBlock = ({
 			rippleDuration={rippleDuration}
 			rippleCentered={true}>
 			<View
-				level={15}
+				level={20}
 				style={valueCoverStyle}
 				importantForAccessibility="no-hide-descendants"
 				accessibilityElementsHidden={true}>
@@ -90,10 +93,10 @@ const TypeBlock = ({
 					<View style={dotCoverStyle}>
 						{
 							totalTypes.map((key: string, index: number): Object => {
-								const { backgroundColor: BG = '#fff', marginLeft: PL = 0, ...otherStyles } = dotStyle;
+								const { backgroundColor: BG = moreItemsIndicatorColor, marginLeft: PL = 0, ...otherStyles } = dotStyle;
 								let backgroundColor = BG, marginLeft = PL;
 								if (key === defaultType) {
-									backgroundColor = inAppBrandSecondary;
+									backgroundColor = moreItemsIndicatorSelectedColor;
 								}
 								if (index === 0) {
 									marginLeft = 0;
@@ -110,6 +113,6 @@ const TypeBlock = ({
 			</View>
 		</AnimatedTouchable>
 	);
-};
+});
 
 export default withTheme(TypeBlock);

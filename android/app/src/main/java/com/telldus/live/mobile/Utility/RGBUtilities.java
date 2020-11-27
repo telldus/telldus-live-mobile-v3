@@ -11,7 +11,7 @@ public class RGBUtilities {
 
     public static int getSettingColor(String transparent, Object colorControlledFromModalO, String primarySetting, Boolean isControllingRGB, Context context) {
 
-        int settingColor = Color.parseColor("#e26901");
+        int settingColor = Color.parseColor("#9C7D69");
         if (transparent.equals("default")) {
             if (!isControllingRGB) {
                 String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.brandSecondary));
@@ -54,13 +54,13 @@ public class RGBUtilities {
             // if (!deviceUtils.isLightColor(color)) {
                 settingColor = color;
             // } else {
-            //     settingColor = Color.parseColor("#e26901");
+            //     settingColor = Color.parseColor("#9C7D69");
             // }
         } else {
             // if (!deviceUtils.isLightColor(color)) {// TODO check for dark
                 settingColor = color;
             // } else {
-            //     settingColor = Color.parseColor("#e26901");
+            //     settingColor = Color.parseColor("#9C7D69");
             // }
         }
 

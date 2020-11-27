@@ -65,6 +65,7 @@ class DeviceHeader extends View<Props, null> {
 			'themeInApp',
 			'colorScheme',
 			'gateway',
+			'selectedThemeSet',
 		]);
 	}
 

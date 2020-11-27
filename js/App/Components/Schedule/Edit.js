@@ -220,7 +220,7 @@ class Edit extends View<null, Props, State> {
 				header: this.deleteScheduleDialogueHeader,
 				showPositive: true,
 				showNegative: true,
-				positiveText: formatMessage(i18n.delete).toUpperCase(),
+				positiveText: formatMessage(i18n.delete),
 				onPressPositive: this.onDeleteConfirm,
 				onPressNegative: this.onDeleteCancel,
 				showBackground: true,

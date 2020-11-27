@@ -105,13 +105,13 @@ const AutoRenewalBlock = (props: Object): Object => {
 				:
 				isAutoRenew ?
 					<IconTelldus
-						level={23}
+						level={37}
 						icon={'settings'}
 						style={upgradeSyle}/>
 					:
 					(enablePurchase && isNotiOS) ?
 						<Text
-							level={23}
+							level={37}
 							style={upgradeSyle}>{formatMessage(i18n.renew)}</Text>
 						:
 						undefined

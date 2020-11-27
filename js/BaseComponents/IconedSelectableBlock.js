@@ -146,7 +146,7 @@ const getStyles = ({
 		colorBlockDisabled,
 		iconOneColorBlockEnabled,
 		iconOneColorBlockDisabled,
-		headerOneColorBlockEnabled,
+		baseColorFour,
 		headerOneColorBlockDisabled,
 		infoOneColorBlockEnabled,
 		infoOneColorBlockDisabled,
@@ -157,7 +157,7 @@ const getStyles = ({
 	const rowHeight = deviceWidth * 0.27;
 
 	const colorBackground = enabled ? card : colorBlockDisabled;
-	const colorHeaderOneText = enabled ? headerOneColorBlockEnabled : headerOneColorBlockDisabled;
+	const colorHeaderOneText = enabled ? baseColorFour : headerOneColorBlockDisabled;
 	const colorIcon = enabled ? iconOneColorBlockEnabled : iconOneColorBlockDisabled;
 	const colorIconTwo = enabled ? iconTwoColorBlock : iconTwoColorBlockDisabled;
 

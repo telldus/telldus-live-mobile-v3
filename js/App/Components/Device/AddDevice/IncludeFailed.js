@@ -101,7 +101,7 @@ render(): Object {
 					level={2}
 					style={infoContainer}>
 					<IconTelldus
-						level={23}
+						level={36}
 						icon={'info'}
 						style={statusIconStyle}/>
 					<Text

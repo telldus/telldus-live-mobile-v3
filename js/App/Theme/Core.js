@@ -43,6 +43,7 @@ export default {
 			robotoMedium: 'Roboto-Medium',
 			robotoRegular: 'Roboto-Regular',
 			sfnsDisplay: 'SFNS Display',
+			suisseIntlRegular: 'SuisseIntl',
 		};
 	},
 
@@ -326,5 +327,11 @@ export default {
 			right: 0.034666667,
 			bottom: 0.046666667,
 		};
+	},
+	get fontSizeFactorOne(): number {
+		return 0.047;
+	},
+	get fontSizeFactorTwo(): number {
+		return 0.0333;
 	},
 };

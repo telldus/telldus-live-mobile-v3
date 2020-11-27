@@ -202,8 +202,6 @@ constructor(props: Props) {
 		'Sensors',
 		'Scheduler',
 		'MoreOptionsTab',
-		'themeInApp',
-		'colorScheme',
 	];
 
 	this.refSwitchAccountActionSheet = {};
@@ -471,6 +469,9 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showSwitchAccountAS',
 		'enableGeoFence',
 		'visibilityEula',
+		'themeInApp',
+		'colorScheme',
+		'selectedThemeSet',
 	]);
 	if (propsChange) {
 		return true;

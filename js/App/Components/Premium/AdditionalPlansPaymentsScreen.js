@@ -123,7 +123,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		infoTextStyle,
 		statusIconStyle,
 		footerHeight,
-		inAppBrandSecondary,
+		textOnLevelThreeView,
 	} = getStyles({
 		layout,
 		colors,
@@ -163,7 +163,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					style={[contentCover,
 						selectedIndex === index ? {
 							borderWidth: 3,
-							borderColor: inAppBrandSecondary,
+							borderColor: textOnLevelThreeView,
 						} : undefined,
 					]}>
 					<View style={headerCover}>
@@ -193,7 +193,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					</View>
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
 						{!!save && <Text style={saveTextStyle}>
-							{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
+							{`${formatMessage(i18n.saveLabel)} ${save}%`}
 						</Text>}
 						{!!prevTotal && <Text style={prevChargeTextStyle}>
 							{`€${formatNumber(prevTotal)}`}
@@ -308,7 +308,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.premiumAccess))}
 				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}
@@ -335,14 +335,14 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					iconStyle={recurring ?
 						{
 							color: '#fff',
-							backgroundColor: inAppBrandSecondary,
-							borderColor: inAppBrandSecondary,
+							backgroundColor: textOnLevelThreeView,
+							borderColor: textOnLevelThreeView,
 						}
 						:
 						{
 							color: 'transparent',
 							backgroundColor: 'transparent',
-							borderColor: inAppBrandSecondary,
+							borderColor: textOnLevelThreeView,
 						}
 					}
 				/>
@@ -350,7 +350,10 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 				{showInfo && <View
 					level={2}
 					style={infoContainer}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
+					<IconTelldus
+						level={36}
+						icon={'info'}
+						style={statusIconStyle}/>
 					<Text style={infoTextStyle}>
 						{!supportAutoRenew ?
 							formatMessage(i18n.autoRenewNotSupportedDescription)
@@ -392,12 +395,12 @@ const getStyles = ({
 	const footerHeight = Theme.Core.getFooterHeight(deviceWidth);
 
 	const {
-		inAppBrandSecondary,
+		textOnLevelThreeView,
 	} = colors;
 
 	return {
 		footerHeight,
-		inAppBrandSecondary,
+		textOnLevelThreeView,
 		container: {
 			flex: 1,
 		},
@@ -484,7 +487,7 @@ const getStyles = ({
 		},
 		textStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: inAppBrandSecondary,
+			color: textOnLevelThreeView,
 		},
 		checkButtonStyle: {
 			marginVertical: padding,
@@ -492,7 +495,7 @@ const getStyles = ({
 		backLinkStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
 			alignSelf: 'center',
-			color: inAppBrandSecondary,
+			color: textOnLevelThreeView,
 			padding: 10,
 			marginVertical: padding,
 		},
@@ -510,7 +513,6 @@ const getStyles = ({
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
-			color: inAppBrandSecondary,
 		},
 		infoTextStyle: {
 			flex: 1,

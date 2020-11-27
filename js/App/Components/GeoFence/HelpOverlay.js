@@ -114,13 +114,13 @@ const HelpOverlay = (props: Object): Object => {
 							<SvgXml xml={closeArrow} />
 							<Text
 								style={[infoTextStyle, closeTextStyle]}>
-								{formatMessage(i18n.dialoguePositiveText).toUpperCase()}
+								{formatMessage(i18n.dialoguePositiveText)}
 							</Text>
 						</View>
 						<View style={controlGFIconBoxStyle}>
 							<Text
 								style={[infoTextStyle, controlGFTextStyle]}>
-								{formatMessage(i18n.tapToTurnedOffGf).toUpperCase()}
+								{formatMessage(i18n.tapToTurnedOffGf)}
 							</Text>
 							<SvgXml xml={controlGFArrow} />
 						</View>
@@ -128,7 +128,7 @@ const HelpOverlay = (props: Object): Object => {
 							<SvgXml xml={currentLocationArrow} />
 							<Text
 								style={[infoTextStyle, currentLocationTextStyle]}>
-								{formatMessage(i18n.currentPosition).toUpperCase()}
+								{formatMessage(i18n.currentPosition)}
 							</Text>
 						</View>
 						)}
@@ -136,7 +136,7 @@ const HelpOverlay = (props: Object): Object => {
 							<SvgXml xml={geofenceArrow} />
 							<Text
 								style={[infoTextStyle, geofenceTextStyle]}>
-								{formatMessage(i18n.aGeoFence).toUpperCase()}
+								{formatMessage(i18n.aGeoFence)}
 							</Text>
 						</View>
 						)}
@@ -144,14 +144,14 @@ const HelpOverlay = (props: Object): Object => {
 							<SvgXml xml={currentPosArrow} />
 							<Text
 								style={[infoTextStyle, currentPosTextStyle]}>
-								{formatMessage(i18n.centerToCurrentPosition).toUpperCase()}
+								{formatMessage(i18n.centerToCurrentPosition)}
 							</Text>
 						</View>
 						<View style={addNewIconBoxStyle}>
 							<SvgXml xml={AddNewArrow} />
 							<Text
 								style={[infoTextStyle, addNewTextStyle]}>
-								{formatMessage(i18n.addNewGf).toUpperCase()}
+								{formatMessage(i18n.addNewGf)}
 							</Text>
 						</View>
 					</View>

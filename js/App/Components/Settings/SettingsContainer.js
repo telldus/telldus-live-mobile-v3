@@ -264,7 +264,7 @@ render(): Object {
 			<NavigationHeaderPoster
 				h1={h1} h2={h2}
 				navigation={navigation}
-				align={'right'}
+				align={'left'}
 				leftIcon={currentScreen === 'MainSettingsScreen' ? 'close' : undefined}
 				handleBackPress={this.handleBackPress}
 				{...screenProps}/>

@@ -48,7 +48,7 @@ const getThemedColors = (selectedThemeSet: Object): Object => {
 		case 2:
 			return ThemedColorsTwo;
 		default:
-			return ThemedColorsOne;
+			return ThemedColorsTwo;
 	}
 };
 
@@ -65,7 +65,7 @@ const useAppTheme = (): Object => {
 		selectedThemeSet,
 	} = defaultSettings;
 	const options = getThemeSetOptions();
-	const _selectedThemeSet = (selectedThemeSet && selectedThemeSet.key) ? selectedThemeSet : options[0];
+	const _selectedThemeSet = (selectedThemeSet && selectedThemeSet.key) ? selectedThemeSet : options[1];
 	return React.useMemo((): Object => {
 		const ThemedColors = getThemedColors(_selectedThemeSet);
 		if (themeInApp === DEVICE_THEME_KEY) {
@@ -73,6 +73,7 @@ const useAppTheme = (): Object => {
 				colorScheme,
 				dark: colorScheme === DARK_THEME_KEY,
 				themeInApp,
+				selectedThemeSet: _selectedThemeSet,
 				...getThemeData(colorScheme, ThemedColors),
 			};
 		}
@@ -80,6 +81,7 @@ const useAppTheme = (): Object => {
 			colorScheme,
 			dark: themeInApp === DARK_THEME_KEY,
 			themeInApp,
+			selectedThemeSet: _selectedThemeSet,
 			...getThemeData(themeInApp, ThemedColors),
 		};
 	}, [

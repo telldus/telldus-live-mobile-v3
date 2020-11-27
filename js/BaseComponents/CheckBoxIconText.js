@@ -32,7 +32,6 @@ import {
 	PropsThemedComponent,
 } from '../App/Components/HOC/withTheme';
 
-import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
 type Props = PropsThemedComponent & {
@@ -147,7 +146,6 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 				marginLeft: 5 + (fontSize * 0.4),
 				fontSize: fontSize,
 				color: _checkBoxTextActiveOne,
-				fontFamily: Theme.Core.fonts.robotoLight,
 			},
 			checkIconCommon: {
 				borderWidth: 1,

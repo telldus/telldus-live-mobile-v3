@@ -104,6 +104,7 @@ class ThermostatButton extends View<Props, State> {
 			'onPressOverride',
 			'colorScheme',
 			'themeInApp',
+			'selectedThemeSet',
 		]);
 		if (propsChange) {
 			return true;

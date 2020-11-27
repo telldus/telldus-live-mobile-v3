@@ -51,7 +51,7 @@ const InfoBlock = (props: Object): Object => {
 			style={[infoContainerDef, infoContainer]}>
 			<BlockIcon
 				icon={'info'}
-				iconLevel={23}
+				iconLevel={36}
 				style={[infoIconStyleDef, infoIconStyle]}
 				containerStyle={blockIconContainerStyle}/>
 			<View style={{

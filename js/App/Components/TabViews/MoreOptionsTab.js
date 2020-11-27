@@ -216,13 +216,14 @@ const MoreOptionsTab = (props: Props): Object => {
 		enableGeoFenceFeature,
 		themeInApp,
 		consentLocationData,
+		performAddOrSwitch,
 	]);
 
 	return (
 		<View style={outerCoverStyle} level={3}>
 			<PosterWithText
 				appLayout={layout}
-				align={'right'}
+				align={'left'}
 				showBackButton={false}
 				h1={formatMessage(i18n.more)}
 				h2={capitalize(formatMessage(i18n.featuresAndSettings))}/>

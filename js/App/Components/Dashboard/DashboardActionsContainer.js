@@ -81,7 +81,7 @@ const DashboardActionsContainer = memo<Object>((props: Props): Object => {
 			<NavigationHeaderPoster
 				h1={posterInfo.h1}
 				h2={posterInfo.h2}
-				align={'right'}
+				align={'left'}
 				navigation={navigation}
 				showLeftIcon={true}
 				leftIcon={leftIcon}

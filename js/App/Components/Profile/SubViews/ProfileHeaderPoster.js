@@ -114,7 +114,7 @@ class ProfileHeaderPoster extends View<Props, null> {
 				navigation={navigation}
 				handleBackPress={this.handleBackPress}
 				leftIcon={'close'}
-				align={'right'}
+				align={'left'}
 				onPressPoster={this.openHiddenCave}/>
 		);
 	}

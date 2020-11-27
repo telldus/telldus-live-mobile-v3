@@ -33,6 +33,7 @@ module.exports = function (incomingProps: Object, defaultProps: Object): Object 
 	delete incomingProps.themeInApp;
 	delete incomingProps.colorScheme;
 	delete incomingProps.level;
+	delete incomingProps.selectedThemeSet;
 
 	if (incomingProps) {
 		_.merge(computedProps, defaultProps, incomingProps);

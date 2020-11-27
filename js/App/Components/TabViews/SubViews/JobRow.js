@@ -449,7 +449,6 @@ class JobRow extends View<null, Props, null> {
 
 	_getStyle = (appLayout: Object): Object => {
 		let {
-			fonts,
 			borderRadiusRow,
 			inactiveGray,
 		} = Theme.Core;
@@ -527,7 +526,6 @@ class JobRow extends View<null, Props, null> {
 			title: {
 				color: !active ? inactiveGray : textTwo,
 				fontSize: deviceWidth * 0.04,
-				fontFamily: fonts.robotoRegular,
 				marginBottom: width * 0.008,
 			},
 			description: {

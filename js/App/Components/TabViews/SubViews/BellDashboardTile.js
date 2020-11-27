@@ -89,7 +89,13 @@ class BellDashboardTile extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item', 'themeInApp', 'colorScheme', 'local']);
+		const propsChange = shouldUpdate(others, othersN, [
+			'item',
+			'themeInApp',
+			'colorScheme',
+			'local',
+			'selectedThemeSet',
+		]);
 		if (propsChange) {
 			return true;
 		}

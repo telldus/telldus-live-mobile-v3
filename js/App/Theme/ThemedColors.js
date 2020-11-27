@@ -175,8 +175,14 @@ export default {
 		get colorOneButtonTextEnabled() {
 			return '#ffffff';
 		},
+		get colorButtonTextEnabledPreLogin() {
+			return '#ffffff';
+		},
 		get colorOneButtonTextDisabled() {
 			return '#f5f5f5';
+		},
+		get colorTwoButtonTextEnabled() {
+			return '#ffffff';
 		},
 		get colorOneThrobberButton() {
 			return '#ffffff';
@@ -294,6 +300,66 @@ export default {
 		},
 		get statusRed() {
 			return '#F44336';
+		},
+		get headerBG() {
+			return '#1b365d';
+		},
+		get headerLogoColor() {
+			return Core.brandSecondary;
+		},
+		get sensorValueBGColor() {
+			return Core.brandPrimary;
+		},
+		get itemIconBGColor() {
+			return Core.brandPrimary;
+		},
+		get itemIconBGColorOffline() {
+			return Core.offlineColor;
+		},
+		get baseColor() {
+			return '#ffffff';
+		},
+		get baseColorTwo() {
+			return Core.rowTextColor;
+		},
+		get baseColorThree() {
+			return '#ffffff';
+		},
+		get baseColorFour() {
+			return Core.brandSecondary;
+		},
+		get buttonBGColor() {
+			return Core.brandSecondary;
+		},
+		get textOnLevelThreeView() {
+			return Core.brandSecondary;
+		},
+		get buttonBGColorTwo() {
+			return Core.brandSecondary;
+		},
+		get buttonBGColorPrelogin() {
+			return Core.brandSecondary;
+		},
+		get iconOnSettingsBlock() {
+			return Core.brandSecondary;
+		},
+		get viewInsideLevelTwoView() {
+			return '#eeeeee';
+		},
+		get moreItemsIndicatorColor() {
+			return '#ffffff';
+		},
+		get moreItemsIndicatorSelectedColor() {
+			return Core.brandSecondary;
+		},
+		get baseColorFive() {
+			return Core.brandSecondary;
+		},
+		get textColorInactive() {
+			return Core.inactiveTintColor;
+		},
+		get iconColorInsidePoster() {
+			return Core.brandSecondary;
 		},
 	},
 
@@ -428,6 +494,12 @@ export default {
 		get colorOneButtonTextEnabled() {
 			return '#ffffff';
 		},
+		get colorButtonTextEnabledPreLogin() {
+			return '#ffffff';
+		},
+		get colorTwoButtonTextEnabled() {
+			return '#ffffff';
+		},
 		get colorOneButtonTextDisabled() {
 			return '#f5f5f5';
 		},
@@ -547,6 +619,66 @@ export default {
 		},
 		get statusRed() {
 			return '#EF5350';
+		},
+		get headerBG() {
+			return Core.grayPrimary;
+		},
+		get headerLogoColor() {
+			return '#FFA450';
+		},
+		get sensorValueBGColor() {
+			return '#607D8B';
+		},
+		get itemIconBGColor() {
+			return '#607D8B';
+		},
+		get itemIconBGColorOffline() {
+			return Core.offlineColor;
+		},
+		get baseColor() {
+			return '#ffffff';
+		},
+		get baseColorTwo() {
+			return Core.rowTextColor;
+		},
+		get baseColorThree() {
+			return '#ffffff';
+		},
+		get buttonBGColor() {
+			return '#FFA450';
+		},
+		get textOnLevelThreeView() {
+			return '#FFA450';
+		},
+		get buttonBGColorTwo() {
+			return '#FFA450';
+		},
+		get buttonBGColorPrelogin() {
+			return '#FFA450';
+		},
+		get iconOnSettingsBlock() {
+			return '#FFA450';
+		},
+		get viewInsideLevelTwoView() {
+			return '#eeeeee';
+		},
+		get moreItemsIndicatorColor() {
+			return '#ffffff';
+		},
+		get moreItemsIndicatorSelectedColor() {
+			return '#FFA450';
+		},
+		get baseColorFour() {
+			return '#FFA450';
+		},
+		get baseColorFive() {
+			return '#FFA450';
+		},
+		get textColorInactive() {
+			return Core.textColorLabel;
+		},
+		get iconColorInsidePoster() {
+			return '#FFA450';
 		},
 	},
 };

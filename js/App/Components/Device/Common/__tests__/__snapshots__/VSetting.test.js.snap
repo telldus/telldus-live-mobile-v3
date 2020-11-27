@@ -119,7 +119,7 @@ exports[`renders VSetting when isOneSelected is false using Snapshots 1`] = `
       Object {
         "backgroundColor": "transparent",
         "color": "#8e8e93",
-        "fontFamily": "Roboto-Regular",
+        "fontFamily": "SuisseIntl",
         "fontSize": 26.250000000000004,
         "marginLeft": 20.83275,
         "marginTop": 20.83275,
@@ -248,7 +248,7 @@ exports[`renders VSetting when isOneSelected using Snapshots 1`] = `
       Object {
         "backgroundColor": "transparent",
         "color": "#8e8e93",
-        "fontFamily": "Roboto-Regular",
+        "fontFamily": "SuisseIntl",
         "fontSize": 26.250000000000004,
         "marginLeft": 20.83275,
         "marginTop": 20.83275,

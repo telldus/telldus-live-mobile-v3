@@ -150,7 +150,7 @@ class AddLocationContainer extends View<null, Props, State> {
 						h1={h1} h2={h2}
 						infoButton={infoButton}
 						showLeftIcon={currentScreen !== 'Success'}
-						align={'right'}
+						align={'left'}
 						navigation={navigation}
 						{...screenProps}
 						leftIcon={currentScreen === 'LocationDetected' ? 'close' : undefined}/>

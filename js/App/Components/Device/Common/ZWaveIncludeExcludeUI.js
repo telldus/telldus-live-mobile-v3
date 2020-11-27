@@ -117,6 +117,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'infoText',
 		'themeInApp',
 		'colorScheme',
+		'selectedThemeSet',
 	])) {
 		return true;
 	}
@@ -253,7 +254,11 @@ render(): Object {
 				level={2}
 				style={infoContainer}>
 				<View style={blockLeft}>
-					<BlockIcon icon={'info'} style={infoIconStyle} containerStyle={blockIcontainerStyle}/>
+					<BlockIcon
+						level={36}
+						icon={'info'}
+						style={infoIconStyle}
+						containerStyle={blockIcontainerStyle}/>
 				</View>
 				<View style={{
 					flex: 1,
@@ -367,7 +372,6 @@ getStyles(): Object {
 		},
 		infoIconStyle: {
 			fontSize: blockIconContainerSize / 2,
-			color: inAppBrandSecondary,
 		},
 		blockIcontainerStyle: {
 			width: blockIconContainerSize,

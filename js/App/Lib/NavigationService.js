@@ -29,6 +29,7 @@ import {
 import shouldUpdate from './shouldUpdate';
 
 const navigationRef = React.createRef<any>();
+const isReadyRef = React.createRef<any>();
 
 /**
  *
@@ -36,7 +37,7 @@ const navigationRef = React.createRef<any>();
  * screen/route.
  */
 function navigate(...args: any) {
-	if (navigationRef.current && navigationRef.current.navigate) {
+	if (isReadyRef.current && navigationRef.current && navigationRef.current.navigate) {
 		navigationRef.current.navigate(...args);
 	}
 }
@@ -142,8 +143,16 @@ const shouldNavigatorUpdate = (prevProps: Object, nextProps: Object, additionalS
 		'source',
 		...additionalScreenProps,
 	]);
-	const flag2 = shouldUpdate(prevProps, nextProps, [
-		'route',
+	const {
+		route = {},
+	} = nextProps;
+	const {
+		route: prevRoute = {},
+	} = prevProps;
+	const flag2 = shouldUpdate(route, prevRoute, [
+		'params',
+		'key',
+		'name',
 	]);
 	return !flag1 && !flag2;
 };
@@ -185,10 +194,19 @@ const prepareVisibleTabs = (hiddenList: Array<string> = [], tabToCheck?: string 
 	};
 };
 
+const getCurrentRouteName = (): string => {
+	if (!navigationRef.current) {
+		return '';
+	}
+	return navigationRef.current.getCurrentRoute().name;
+};
+
 module.exports = {
 	navigate,
 	navigationRef,
+	isReadyRef,
 	prepareNavigator,
 	shouldNavigatorUpdate,
 	prepareVisibleTabs,
+	getCurrentRouteName,
 };

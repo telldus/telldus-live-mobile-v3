@@ -318,11 +318,11 @@ class SettingsTab extends View {
 					const dialogueData = {
 						show: true,
 						showPositive: true,
-						positiveText: formatMessage(i18n.remove).toUpperCase(),
+						positiveText: formatMessage(i18n.remove),
 						onPressPositive: this.onPressRemoveFailedNode,
 						closeOnPressPositive: true,
 						showNegative: true,
-						negativeText: formatMessage(i18n.labelReplace).toUpperCase(),
+						negativeText: formatMessage(i18n.labelReplace),
 						onPressNegative: this.onPressReplaceFailedNode,
 						closeOnPressNegative: true,
 						negTextColor: colors.inAppBrandSecondary,
@@ -364,7 +364,7 @@ class SettingsTab extends View {
 		const dialogueData = {
 			show: true,
 			showPositive: true,
-			positiveText: formatMessage(i18n.remove).toUpperCase(),
+			positiveText: formatMessage(i18n.remove),
 			showNegative: true,
 			header: `${formatMessage(i18n.labelRemoveFailed)}?`,
 			imageHeader: true,
@@ -389,7 +389,7 @@ class SettingsTab extends View {
 		const dialogueData = {
 			show: true,
 			showPositive: true,
-			positiveText: formatMessage(i18n.delete).toUpperCase(),
+			positiveText: formatMessage(i18n.delete),
 			showNegative: true,
 			header: formatMessage(i18n.deleteDeviceWarningTitle),
 			imageHeader: true,
@@ -1047,7 +1047,7 @@ class SettingsTab extends View {
 													}]}
 													showThrobber={isMarking}/>
 												<TouchableButton
-													text={formatMessage(i18n.headerExclude).toUpperCase()}
+													text={formatMessage(i18n.headerExclude)}
 													onPress={this.onPressExcludeDevice}
 													disabled={!isGatewayReachable}
 													style={[touchableButtonCommon, {
@@ -1060,7 +1060,7 @@ class SettingsTab extends View {
 								{
 									is433MHz && (
 										<TouchableButton
-											text={formatMessage(i18n.delete).toUpperCase()}
+											text={formatMessage(i18n.delete)}
 											onPress={this.onPressDelete433Device}
 											disabled={isDeleting433MHz || isSaving433MhzParams}
 											showThrobber={isDeleting433MHz}

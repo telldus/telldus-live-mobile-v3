@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { Text, View } from '../../../../BaseComponents';
-import Theme from '../../../Theme';
 
 import {
 	withTheme,
@@ -62,7 +61,6 @@ class Title extends View<Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 		return {
 			color: color || colors.inAppBrandSecondary,
-			fontFamily: Theme.Core.fonts.robotoRegular,
 			fontSize: deviceWidth * 0.053333333,
 			marginBottom: deviceWidth * 0.008,
 		};

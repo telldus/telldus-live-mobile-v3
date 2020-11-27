@@ -57,6 +57,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled 1`
           Object {
             "backgroundColor": "transparent",
             "color": "#f5f5f5",
+            "fontFamily": "SuisseIntl",
             "fontSize": 26,
             "textAlign": "center",
             "textAlignVertical": "center",
@@ -65,7 +66,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled 1`
         ]
       }
     >
-      TOUCHABLEBUTTON
+      TouchableButton
     </Text>
   </View>
 </View>
@@ -128,6 +129,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled an
           Object {
             "backgroundColor": "transparent",
             "color": "#f5f5f5",
+            "fontFamily": "SuisseIntl",
             "fontSize": 26,
             "textAlign": "center",
             "textAlignVertical": "center",
@@ -136,7 +138,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled an
         ]
       }
     >
-      TOUCHABLEBUTTON
+      TouchableButton
     </Text>
     <View
       style={
@@ -198,7 +200,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled 1`]
     Object {
       "alignItems": "center",
       "alignSelf": "center",
-      "backgroundColor": "#e26901",
+      "backgroundColor": "#000000",
       "borderRadius": 44,
       "elevation": 2,
       "flexDirection": "row",
@@ -238,6 +240,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled 1`]
           Object {
             "backgroundColor": "transparent",
             "color": "#ffffff",
+            "fontFamily": "SuisseIntl",
             "fontSize": 26,
             "textAlign": "center",
             "textAlignVertical": "center",
@@ -246,7 +249,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled 1`]
         ]
       }
     >
-      TOUCHABLEBUTTON
+      TouchableButton
     </Text>
   </View>
 </View>
@@ -269,7 +272,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled and
     Object {
       "alignItems": "center",
       "alignSelf": "center",
-      "backgroundColor": "#e26901",
+      "backgroundColor": "#000000",
       "borderRadius": 44,
       "elevation": 2,
       "flexDirection": "row",
@@ -309,6 +312,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled and
           Object {
             "backgroundColor": "transparent",
             "color": "#ffffff",
+            "fontFamily": "SuisseIntl",
             "fontSize": 26,
             "textAlign": "center",
             "textAlignVertical": "center",
@@ -317,7 +321,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled and
         ]
       }
     >
-      TOUCHABLEBUTTON
+      TouchableButton
     </Text>
     <View
       style={

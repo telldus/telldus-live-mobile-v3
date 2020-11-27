@@ -152,7 +152,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 				...sharedProps,
 				h1,
 				h2,
-				align: 'right',
+				align: 'left',
 				leftIcon: currentScreen === 'TestLocalControl' || currentScreen === 'RequestSupport' ? 'close' : undefined,
 			};
 

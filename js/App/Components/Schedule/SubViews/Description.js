@@ -24,7 +24,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View } from '../../../../BaseComponents';
-import Theme from '../../../Theme';
 
 type Props = {
 	children: string | Array<any>,
@@ -58,7 +57,6 @@ export default class Description extends View<null, Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		return {
-			fontFamily: Theme.Core.fonts.robotoRegular,
 			fontSize: deviceWidth * 0.04,
 			opacity: 0.87,
 		};

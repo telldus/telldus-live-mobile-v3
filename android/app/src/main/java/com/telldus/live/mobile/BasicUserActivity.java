@@ -50,8 +50,8 @@ public class BasicUserActivity extends Activity {
 
         setContentView(R.layout.view_with_header_poster);
 
-        RelativeLayout mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
-        mBackLayout.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout navBackButton = (RelativeLayout)findViewById(R.id.navBackButton);
+        navBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

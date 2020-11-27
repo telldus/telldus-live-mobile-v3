@@ -81,7 +81,7 @@ class Day extends View<null, Props, null> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const { inactiveGray, fonts } = Theme.Core;
+		const { inactiveGray } = Theme.Core;
 
 		const size = deviceWidth * 0.101333333;
 		const backgroundColor = isSelected ? inAppBrandSecondary : inactiveGray;
@@ -97,7 +97,6 @@ class Day extends View<null, Props, null> {
 			name: {
 				backgroundColor: 'transparent',
 				color: '#fff',
-				fontFamily: fonts.robotoMedium,
 				fontSize: deviceWidth * 0.05,
 			},
 		};

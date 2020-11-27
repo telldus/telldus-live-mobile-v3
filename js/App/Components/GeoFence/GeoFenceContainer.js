@@ -401,7 +401,7 @@ export class GeoFenceContainer extends View<Props, State> {
 				<NavigationHeaderPoster
 					h1={h1} h2={h2}
 					infoButton={infoButton}
-					align={'right'}
+					align={'left'}
 					navigation={navigation}
 					showLeftIcon={showLeftIcon}
 					leftIcon={leftIcon}

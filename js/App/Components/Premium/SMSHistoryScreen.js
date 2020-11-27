@@ -203,7 +203,7 @@ const SMSHistoryScreen = (props: Object): Object => {
 			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.smsHistory))} h2={formatMessage(i18n.labelSentSMS)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}

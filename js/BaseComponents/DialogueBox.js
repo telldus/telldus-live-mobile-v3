@@ -131,7 +131,7 @@ class DialogueBox extends Component<Props, null> {
 
 		this.defaultHeader = `${this.props.intl.formatMessage(i18n.defaultHeader)}!`;
 		this.defaultPositiveText = `${this.props.intl.formatMessage(i18n.defaultPositiveText)}`;
-		this.defaultNegativeText = `${this.props.intl.formatMessage(i18n.defaultNegativeText)}`;
+		this.defaultNegativeText = `${capitalize(this.props.intl.formatMessage(i18n.defaultNegativeText))}`;
 
 		this.labelButton = `${this.props.intl.formatMessage(i18n.button)}`;
 		this.labelButtondefaultDescription = `${this.props.intl.formatMessage(i18n.defaultDescriptionButton)}`;
@@ -450,13 +450,11 @@ class DialogueBox extends Component<Props, null> {
 				color: negTextColorLevel ? undefined : _negTextColor,
 				fontSize,
 				fontWeight: 'bold',
-				fontFamily: 'Roboto-Regular',
 			},
 			notificationModalFooterPositiveText: {
 				color: posTextColorLevel ? undefined : _posTextColor,
 				fontSize,
 				fontWeight: 'bold',
-				fontFamily: 'Roboto-Regular',
 			},
 		};
 	}

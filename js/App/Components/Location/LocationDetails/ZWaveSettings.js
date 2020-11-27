@@ -147,7 +147,7 @@ render(): Object {
 					onPressCancelExclude={this.onPressCancelExclude}/>
 			)}
 			{(!excludeActive && canExclude) && (<TouchableButton
-				text={intl.formatMessage(i18n.headerExclude).toUpperCase()}
+				text={intl.formatMessage(i18n.headerExclude)}
 				onPress={this.onPressExcludeDevice}
 				disabled={!(online && websocketOnline)}
 				style={{
