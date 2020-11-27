@@ -104,11 +104,11 @@ const HelpAndSupportBlock = (props: Object): Object => {
 							marginLeft: i === 0 ? 0 : padding / 2,
 						}]}>
 						<IconTelldus
-							level={23}
+							level={43}
 							icon={icon}
 							style={iconStyle}/>
 						<Text
-							level={23}
+							level={42}
 							style={textStyle}>
 							{text}
 						</Text>
@@ -125,7 +125,7 @@ const HelpAndSupportBlock = (props: Object): Object => {
 				level={2}
 				style={coverOneStyle}>
 				<Text
-					level={23}
+					level={42}
 					style={titleStyle}>
 					{formatMessage(i18n.labelHelpAndSupport)}
 				</Text>

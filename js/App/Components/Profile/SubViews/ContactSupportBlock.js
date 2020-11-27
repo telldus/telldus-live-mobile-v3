@@ -61,7 +61,7 @@ const ContactSupportBlock = (props: Object): Object => {
 				level={2}
 				style={coverOneStyle}>
 				<Text
-					level={23}
+					level={42}
 					style={titleStyle}>
 					{formatMessage(i18n.titleContactSupportBlock)}
 				</Text>

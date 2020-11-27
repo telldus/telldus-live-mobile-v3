@@ -158,7 +158,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 					<View style={tweetTextCover}>
 						<Text>
 							<Text
-								level={23}
+								level={42}
 								style={tweetDateStyle}>
 								{formatDate(created_at)}
 							</Text>
@@ -166,7 +166,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 								{'.'}
 							</Text>
 							<Text
-								level={23}
+								level={42}
 								style={tweetDateStyle}>
 								{formatTime(created_at, {
 									hour12,
@@ -174,7 +174,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 							</Text>
 						</Text>
 						<Text
-							level={3}
+							level={4}
 							style={tweetTextStyle}>
 							{text}
 						</Text>
