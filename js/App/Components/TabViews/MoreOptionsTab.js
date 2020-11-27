@@ -129,7 +129,7 @@ const MoreOptionsTab = (props: Props): Object => {
 				iconComponent: <ThemedMaterialIcon
 					style={iconStyle}
 					name={'group-add'}
-					level={23}/>,
+					level={43}/>,
 				text: capitalize(formatMessage(i18n.switchOrAddAccount)),
 				onPress: performAddOrSwitch,
 				enable: true,
@@ -152,7 +152,7 @@ const MoreOptionsTab = (props: Props): Object => {
 				iconComponent: <ThemedMaterialIcon
 					style={iconStyle}
 					name={'location-on'}
-					level={23}/>,
+					level={43}/>,
 				text: capitalize(formatMessage(i18n.manageGeoFence)),
 				onPress: () => {
 					let screen = 'AddEditGeoFence';
@@ -193,12 +193,12 @@ const MoreOptionsTab = (props: Props): Object => {
 						level={2}
 						style={rowCoverStyle} onPress={onPress} key={`${i}`}>
 						{!!icon && <IconTelldus
-							level={23}
+							level={43}
 							style={iconStyle}
 							icon={icon}/>}
 						{!!iconComponent && iconComponent}
 						<Text
-							level={23}
+							level={42}
 							style={labelStyle}>
 							{!!text && text}
 						</Text>
