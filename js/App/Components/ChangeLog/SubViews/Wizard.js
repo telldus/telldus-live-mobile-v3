@@ -102,7 +102,6 @@ export default class WizardOne extends PureComponent<Props, null> {
 						level={23}/>,
 					title: this.titleWTwo,
 					description: this.descriptionWTwo,
-					isPremiumFeature: true,
 				};
 			default:
 				return screenData;
