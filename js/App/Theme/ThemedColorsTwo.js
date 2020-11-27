@@ -361,6 +361,9 @@ export default {
 		get baseColorSeven() {
 			return '#000000';
 		},
+		get baseColorEight() {
+			return '#000000';
+		},
 		get textColorInactive() {
 			return Core.inactiveTintColor;
 		},
@@ -685,6 +688,9 @@ export default {
 		},
 		get baseColorSeven() {
 			return '#E4E4E4';
+		},
+		get baseColorEight() {
+			return '#000000';
 		},
 		get textColorInactive() {
 			return '#CCCCCC';

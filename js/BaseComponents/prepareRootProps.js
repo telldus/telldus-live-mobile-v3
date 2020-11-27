@@ -304,6 +304,12 @@ const getTextColor = (props: Object): ?string => {
 		case 43: {
 			return colors.baseColorSeven;
 		}
+		case 44: {
+			return colors.headerLogoColor;
+		}
+		case 45: {
+			return colors.baseColorEight;
+		}
 		default:
 			return;
 	}

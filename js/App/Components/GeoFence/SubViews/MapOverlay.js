@@ -23,7 +23,6 @@
 'use strict';
 
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
 	useSelector,
 } from 'react-redux';
@@ -31,6 +30,7 @@ import {
 import {
 	View,
 	Image,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 
 const MapOverlay = React.memo<Object>((props: Object): Object => {
@@ -63,9 +63,10 @@ const MapOverlay = React.memo<Object>((props: Object): Object => {
 			<View
 				style={markerOverlay}
 				pointerEvents={'none'}>
-				<Icon
+				<ThemedMaterialIcon
 					name={'place'}
-					style={marker}/>
+					style={marker}
+					level={45}/>
 			</View>
 		</View>
 	);
@@ -95,7 +96,6 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'center',
 		},
 		marker: {
-			color: '#1B365D',
 			fontSize: 28,
 			backgroundColor: 'rgba(0,0,0,0)',
 		},

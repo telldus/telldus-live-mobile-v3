@@ -361,6 +361,9 @@ export default {
 		get baseColorSeven() {
 			return Core.brandSecondary;
 		},
+		get baseColorEight() {
+			return '#1B365D';
+		},
 		get textColorInactive() {
 			return Core.inactiveTintColor;
 		},
@@ -685,6 +688,9 @@ export default {
 		},
 		get baseColorSeven() {
 			return '#FFA450';
+		},
+		get baseColorEight() {
+			return '#1B365D';
 		},
 		get textColorInactive() {
 			return Core.textColorLabel;
