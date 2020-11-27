@@ -28,8 +28,7 @@ import {
 	View,
 	FloatingButton,
 	Row,
-	Text,
-	IconTelldus,
+	InfoBlock,
 	ThemedScrollView,
 } from '../../../../BaseComponents';
 import { DeviceInfoBlock } from './SubViews';
@@ -117,19 +116,12 @@ render(): Object {
 						appLayout={appLayout}
 					/>
 				</Row>
-				<View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus
-						level={36}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text
-						level={26}
-						style={infoTextStyle}>
-						{formatMessage(i18n.messageDeviceAlreadyIncluded, {name: `"${name}"`})}
-					</Text>
-				</View>
+				<InfoBlock
+					text={formatMessage(i18n.messageDeviceAlreadyIncluded, {name: `"${name}"`})}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
 			</ThemedScrollView>
 			<FloatingButton
 				onPress={this.onPressNext}
