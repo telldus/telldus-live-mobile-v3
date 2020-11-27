@@ -398,8 +398,12 @@ class HistoryRow extends React.PureComponent<Props, null> {
 		const {
 			textTwo,
 		} = colors;
+		const {
+			fontSizeFactorFive,
+			paddingFactor,
+		} = Theme.Core;
 
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const padding = deviceWidth * paddingFactor;
 
 		return {
 			locationCover: {
@@ -457,8 +461,8 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			},
 			iconBackgroundMaskStyle: {
 				backgroundColor: item.successStatus !== 0 ? '#fff' : '#929292',
-				width: deviceWidth * 0.05,
-				height: deviceWidth * 0.05,
+				width: deviceWidth * fontSizeFactorFive,
+				height: deviceWidth * fontSizeFactorFive,
 				borderRadius: deviceWidth * 0.025,
 				position: 'absolute',
 			},

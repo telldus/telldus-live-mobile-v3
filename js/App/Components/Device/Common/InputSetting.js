@@ -152,10 +152,11 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		inactiveTintColor,
 		locationOnline,
+		fontSizeFactorFive,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const iconValueRightSize = deviceWidth * 0.05;
+	const iconValueRightSize = deviceWidth * fontSizeFactorFive;
 
 	return {
 		iconValueRightSize,

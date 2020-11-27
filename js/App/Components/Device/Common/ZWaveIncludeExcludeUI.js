@@ -292,6 +292,7 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		inactiveSwitchBackground,
+		fontSizeFactorFive,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -336,10 +337,10 @@ getStyles(): Object {
 			left: -(contPadding),
 			top: -(contPadding),
 			width: deviceWidth * 0.2,
-			height: Platform.OS === 'ios' ? deviceWidth * 0.05 : 0,
+			height: Platform.OS === 'ios' ? deviceWidth * fontSizeFactorFive : 0,
 			backgroundColor: 'transparent',
 			borderStyle: 'solid',
-			borderRightWidth: deviceWidth * 0.05,
+			borderRightWidth: deviceWidth * fontSizeFactorFive,
 			borderTopWidth: Platform.OS === 'ios' ? deviceWidth * 0.17 : deviceWidth * 0.1,
 			borderRightColor: 'transparent',
 			borderTopColor: inAppBrandPrimary,
@@ -347,7 +348,7 @@ getStyles(): Object {
 		},
 		markerText: {
 			position: 'absolute',
-			fontSize: deviceWidth * 0.05,
+			fontSize: deviceWidth * fontSizeFactorFive,
 			color: '#fff',
 			top: -(contPadding) + (deviceWidth * 0.025),
 			left: deviceWidth * 0.025,

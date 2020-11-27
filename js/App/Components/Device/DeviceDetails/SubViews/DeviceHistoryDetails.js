@@ -394,6 +394,7 @@ class DeviceHistoryDetails extends View {
 		const {
 			shadow,
 			paddingFactor,
+			fontSizeFactorFive,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -406,7 +407,7 @@ class DeviceHistoryDetails extends View {
 		let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
 		let screenSpaceRemaining = height - totalTop;
 
-		const closeIconSize = Math.floor(deviceWidth * 0.05);
+		const closeIconSize = Math.floor(deviceWidth * fontSizeFactorFive);
 		const closeIconCSize = closeIconSize;
 
 		const detailsRowWidth = width - (padding * 2);

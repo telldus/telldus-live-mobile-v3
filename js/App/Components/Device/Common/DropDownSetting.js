@@ -166,6 +166,7 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		shadow,
 		inactiveTintColor,
 		locationOnline,
+		fontSizeFactorFive,
 	} = Theme.Core;
 
 	const ddWidth = deviceWidth * 0.45;
@@ -174,7 +175,7 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 
 	const padding = deviceWidth * paddingFactor;
 
-	const iconValueRightSize = deviceWidth * 0.05;
+	const iconValueRightSize = deviceWidth * fontSizeFactorFive;
 
 	return {
 		inactiveTintColor,

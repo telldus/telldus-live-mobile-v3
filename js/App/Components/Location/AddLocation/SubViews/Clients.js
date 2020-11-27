@@ -86,8 +86,11 @@ export default class Clients extends View {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const {
+			fontSizeFactorFive,
+			paddingFactor,
+		} = Theme.Core;
+		const padding = deviceWidth * paddingFactor;
 		const iconRight = padding * 2;
 
 		return {
@@ -100,7 +103,7 @@ export default class Clients extends View {
 			},
 			image: {
 				tintColor: '#A59F9A90',
-				height: deviceWidth * 0.05,
+				height: deviceWidth * fontSizeFactorFive,
 				width: deviceWidth * 0.04,
 			},
 			locationDetails: {

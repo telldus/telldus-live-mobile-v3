@@ -336,12 +336,16 @@ getStyles({
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor } = Theme.Core;
+	const {
+		shadow,
+		paddingFactor,
+		fontSizeFactorFive,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeText = deviceWidth * 0.045;
-	const fontSizeTitle = deviceWidth * 0.05;
+	const fontSizeTitle = deviceWidth * fontSizeFactorFive;
 	const fontSizeBody = deviceWidth * 0.035;
 	const fontSizeLabel = deviceWidth * 0.038;
 

@@ -121,6 +121,7 @@ const getStyles = ({
 	const {
 		paddingFactor,
 		shadow,
+		fontSizeFactorFive,
 	} = Theme.Core;
 
 	const {
@@ -171,7 +172,7 @@ const getStyles = ({
 		},
 		markerText: {
 			position: 'absolute',
-			fontSize: deviceWidth * 0.05,
+			fontSize: deviceWidth * fontSizeFactorFive,
 			color: '#fff',
 			top: deviceWidth * 0.01,
 			left: deviceWidth * 0.06,

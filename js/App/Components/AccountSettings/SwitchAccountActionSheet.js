@@ -432,12 +432,13 @@ const getStyles = (appLayout: Object, {
 
 	const {
 		paddingFactor,
+		fontSizeFactorFive,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
-	const fontSizeActionSheetTitle = Math.floor(deviceWidth * 0.05);
+	const fontSizeActionSheetTitle = Math.floor(deviceWidth * fontSizeFactorFive);
 
 	const addIconSize = Math.floor(deviceWidth * 0.07);
 	const addIconCoverSize = addIconSize + 15;

@@ -316,6 +316,7 @@ getStyles(): Object {
 
 	const {
 		rowTextColor,
+		fontSizeFactorFive,
 	} = Theme.Core;
 
 	return {
@@ -361,7 +362,7 @@ getStyles(): Object {
 			color: rowTextColor,
 		},
 		cUnitStyle: {
-			fontSize: deviceWidth * 0.05,
+			fontSize: deviceWidth * fontSizeFactorFive,
 			color: rowTextColor,
 		},
 		lastUpdatedInfoStyle: {
