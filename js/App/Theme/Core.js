@@ -334,4 +334,13 @@ export default {
 	get fontSizeFactorTwo(): number {
 		return 0.0333;
 	},
+	get fontSizeFactorThree(): number {
+		return 0.039;
+	},
+	get fontSizeFactorFour(): number {
+		return 0.04;
+	},
+	get fontSizeFactorFive(): number {
+		return 0.05;
+	},
 };
