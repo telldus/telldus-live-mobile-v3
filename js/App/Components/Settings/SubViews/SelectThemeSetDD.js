@@ -62,7 +62,7 @@ const SelectThemeSetDD = (props: Props, ref: Object): Object => {
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	let { selectedThemeSet } = defaultSettings;
-	selectedThemeSet = (selectedThemeSet && selectedThemeSet.key) ? selectedThemeSet : options[0];
+	selectedThemeSet = (selectedThemeSet && selectedThemeSet.key) ? selectedThemeSet : options[1];
 
 	const {
 		dropDownContainerStyleDef,

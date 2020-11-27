@@ -115,7 +115,7 @@ class FloatingButton extends Component<Props, null> {
 			iconSize,
 		} = this._getStyle(appLayout);
 
-		const bLevel = buttonLevel || (disabled ? 7 : 13);
+		const bLevel = buttonLevel || (disabled ? 7 : 23);
 		const iLevel = iconLevel || (disabled ? 13 : 12);
 		const thLevel = throbberLevel || 14;
 

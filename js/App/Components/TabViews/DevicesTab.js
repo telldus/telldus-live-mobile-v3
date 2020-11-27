@@ -157,7 +157,7 @@ class DevicesTab extends View {
 		const labelDevice = formatMessage(i18n.labelDevice).toLowerCase();
 		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelDevice });
 		this.messageOnHide = formatMessage(i18n.messageOnHide, { type: labelDevice });
-		this.labelHide = formatMessage(i18n.hide).toUpperCase();
+		this.labelHide = formatMessage(i18n.hide);
 		this.defaultDescriptionButton = formatMessage(i18n.defaultDescriptionButton);
 
 		this.handleAddDeviceAttentionCapture = this.handleAddDeviceAttentionCapture.bind(this);

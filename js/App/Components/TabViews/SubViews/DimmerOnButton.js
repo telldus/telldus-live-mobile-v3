@@ -85,7 +85,17 @@ class DimmerOnButton extends View {
 			return true;
 		}
 		const propsChange = shouldUpdate(this.props, nextProps, [
-			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local', 'onButtonColor', 'iconOnColor', 'themeInApp', 'colorScheme',
+			'isInState',
+			'methodRequested',
+			'name',
+			'isGatewayActive',
+			'enabled',
+			'local',
+			'onButtonColor',
+			'iconOnColor',
+			'themeInApp',
+			'colorScheme',
+			'selectedThemeSet',
 		]);
 		if (propsChange) {
 			return true;

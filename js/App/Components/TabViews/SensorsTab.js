@@ -134,7 +134,7 @@ class SensorsTab extends View {
 		const labelSensor = formatMessage(i18n.labelSensor).toLowerCase();
 		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelSensor });
 		this.messageOnHide = formatMessage(i18n.messageOnHide, { type: labelSensor });
-		this.labelHide = formatMessage(i18n.hide).toUpperCase();
+		this.labelHide = formatMessage(i18n.hide);
 
 		this.openSensorDetail = this.openSensorDetail.bind(this);
 		this.setRef = this.setRef.bind(this);

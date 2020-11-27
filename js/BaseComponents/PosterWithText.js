@@ -49,7 +49,7 @@ type Props = {
 	icon: string,
     appLayout: Object,
     showBackButton?: boolean,
-    align?: 'right' | 'center',
+    align?: 'right' | 'center' | 'left',
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
 	leftIcon: string,
@@ -66,7 +66,7 @@ type Props = {
 
 type DefaultProps = {
     showBackButton: boolean,
-	align: 'right' | 'center',
+	align: 'right' | 'center' | 'left',
 	showLeftIcon: boolean,
 	leftIcon: string,
 };
@@ -217,7 +217,7 @@ render(): Object {
 					<View style={[posterItemsContainerDef, posterItemsContainerStyle]}>
 						{!!icon && (
 							<BlockIcon
-								iconLevel={23}
+								iconLevel={41}
 								blockLevel={18}
 								icon={icon}
 								style={iconStyle}
@@ -331,7 +331,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 				flex: 0,
 				width: width * 0.8,
 				marginRight: deviceWidth * 0.124,
-				alignItems: 'flex-end',
+				alignItems: 'flex-start',
 				justifyContent: 'center',
 				flexDirection: 'column',
 			},

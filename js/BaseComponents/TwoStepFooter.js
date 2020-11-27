@@ -143,7 +143,6 @@ const getStyles = (appLayout: Object): Object => {
 		footerText: {
 			fontSize: Math.floor(deviceWidth * 0.04),
 			fontWeight: 'bold',
-			fontFamily: 'Roboto-Regular',
 		},
 		f1IconStyle: {
 			fontSize: Math.floor(deviceWidth * 0.04),

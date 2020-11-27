@@ -92,7 +92,7 @@ public class NewRGBConfigureActivity extends Activity {
 
     private Button btAdd,btnCan;
     private View btSelectDevice, screenCover;
-    TextView deviceName, deviceHint, chooseSetting, textTest, deviceText, themeText, tvIcon1;
+    TextView deviceName, deviceHint, navPosterh2, navPosterh1, deviceText, themeText, tvIcon1;
     private AppWidgetManager widgetManager;
 
     private String accessToken;
@@ -103,7 +103,7 @@ public class NewRGBConfigureActivity extends Activity {
     private String sesID;
     MyDBHandler database = new MyDBHandler(this);
     private PrefManager prefManager;
-    private RelativeLayout mBackLayout;
+    private RelativeLayout navBackButton;
 
     View def_cover,
             dark_cover,
@@ -157,8 +157,8 @@ public class NewRGBConfigureActivity extends Activity {
     }
 
     public void updateUI(String message) {
-        mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
-        mBackLayout.setOnClickListener(new View.OnClickListener() {
+        navBackButton = (RelativeLayout)findViewById(R.id.navBackButton);
+        navBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -168,6 +168,16 @@ public class NewRGBConfigureActivity extends Activity {
         View infoView = (View)findViewById(R.id.infoView);
         TextView infoText = (TextView)findViewById(R.id.infoText);
         screenCover = (View)findViewById(R.id.screenCover);
+
+        navPosterh1 = (TextView)findViewById(R.id.navPosterh1);
+        navPosterh2 = (TextView)findViewById(R.id.navPosterh2);
+        Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+        Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+        navPosterh1.setTypeface(titleFont);
+        navPosterh2.setTypeface(titleFont);
+        navPosterh1.setText(getResources().getString(R.string.reserved_widget_android_device_configure_header_one));
+        navPosterh2.setText(getResources().getString(R.string.reserved_widget_android_configure_header_two));
+
         if (DeviceInfoMap.size() == 0) {
             infoView.setVisibility(View.VISIBLE);
             infoText.setText(message);
@@ -178,8 +188,6 @@ public class NewRGBConfigureActivity extends Activity {
             infoView.setVisibility(View.GONE);
             screenCover.setVisibility(View.VISIBLE);
 
-            textTest = (TextView)findViewById(R.id.testText);
-            chooseSetting = (TextView)findViewById(R.id.chooseSetting);
             deviceName = (TextView) findViewById(R.id.txtDeviceName);
             deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
             btnCan = (Button)findViewById(R.id.btn_cancel);
@@ -225,8 +233,8 @@ public class NewRGBConfigureActivity extends Activity {
 
             radio_def.setChecked(true);
             View def_cover = (View)findViewById(R.id.def_cover);
-            def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
-            text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+            def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_black));
+            text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
 
             def_cover.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -483,12 +491,8 @@ public class NewRGBConfigureActivity extends Activity {
                 }
             });
 
-            Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-            Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
-            textTest.setTypeface(titleFont);
             deviceText.setText(getResources().getString(R.string.reserved_widget_android_labelDevice)+":");
             themeText.setText(getResources().getString(R.string.reserved_widget_android_theme)+":");
-            chooseSetting.setTypeface(titleFont);
         }
     }
 
@@ -526,7 +530,7 @@ public class NewRGBConfigureActivity extends Activity {
 
         text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
         text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-        text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+        text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
     }
 
     public void onPressDark() {
@@ -534,11 +538,11 @@ public class NewRGBConfigureActivity extends Activity {
         radio_light.setChecked(false);
 
         def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
-        dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+        dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_black));
         light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
 
         text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-        text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+        text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
         text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
     }
 
@@ -546,11 +550,11 @@ public class NewRGBConfigureActivity extends Activity {
         radio_dark.setChecked(false);
         radio_light.setChecked(false);
 
-        def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+        def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_black));
         dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
         light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
 
-        text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+        text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
         text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
         text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
     }

@@ -103,11 +103,12 @@ import {
 	syncWithServer,
 } from '../Actions';
 
-import getRouteName from '../Lib/getRouteName';
 import {
 	navigationRef,
 	prepareNavigator,
 	shouldNavigatorUpdate,
+	getCurrentRouteName,
+	isReadyRef,
 } from '../Lib/NavigationService';
 
 import {
@@ -507,8 +508,8 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 
 	const theme = useAppTheme();
 
-	const onNavigationStateChange = React.useCallback((currentState: Object) => {
-		const currentScreen = getRouteName(currentState);
+	const onNavigationStateChange = React.useCallback(() => {
+		const currentScreen = getCurrentRouteName();
 
 		dispatch(syncWithServer(currentScreen));
 		dispatch(screenChange(currentScreen));
@@ -544,11 +545,16 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		defaultStartScreenKey,
 	]);
 
+	const onReady = React.useCallback(() => {
+		isReadyRef.current = true;
+	}, []);
+
 	return (
 		<NavigationContainer
 			ref={navigationRef}
 			onStateChange={onNavigationStateChange}
-			theme={theme}>
+			theme={theme}
+			onReady={onReady}>
 			{Navigator}
 		</NavigationContainer>
 	);

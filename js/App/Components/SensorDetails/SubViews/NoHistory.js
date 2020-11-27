@@ -29,8 +29,6 @@ import {
 	FormattedMessage,
 } from '../../../../BaseComponents';
 
-import Theme from '../../../Theme';
-
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -69,7 +67,6 @@ render(): Object {
 }
 
 getStyles(width: number): Object {
-	const { fonts } = Theme.Core;
 	const fontSizeH = width * 0.07;
 	const fontSizeC = width * 0.045;
 	return {
@@ -80,14 +77,12 @@ getStyles(width: number): Object {
 			alignItems: 'center',
 		},
 		headerStyle: {
-			fontFamily: fonts.robotoRegular,
 			fontSize: fontSizeH,
 			marginBottom: 10,
 			textAlign: 'center',
 			paddingHorizontal: 5,
 		},
 		contentStyle: {
-			fontFamily: fonts.sfnsDisplay,
 			fontSize: fontSizeC,
 			textAlign: 'center',
 		},

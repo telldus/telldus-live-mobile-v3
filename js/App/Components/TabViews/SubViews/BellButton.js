@@ -84,6 +84,7 @@ class BellButton extends View {
 			'iconColor',
 			'colorScheme',
 			'themeInApp',
+			'selectedThemeSet',
 		]);
 		if (propsChange) {
 			return true;

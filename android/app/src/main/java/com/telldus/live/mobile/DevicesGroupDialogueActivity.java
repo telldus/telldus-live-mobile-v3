@@ -624,7 +624,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             }
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equalsIgnoreCase("16")) {
-                int backgroundColorFlash = Color.parseColor("#e26901");
+                int backgroundColorFlash = Color.parseColor("#9C7D69");
 
                 int flashSize = (int) (7 * d);
                 Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
@@ -829,7 +829,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                 color_picker.setLayoutParams(paramsCPicker);
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
-                    int backgroundColorFlash = Color.parseColor("#e26901");
+                    int backgroundColorFlash = Color.parseColor("#9C7D69");
                     if (!deviceUtils.isLightColor(currentColorControlled)) {
                         backgroundColorFlash = currentColorControlled;
                     }
@@ -908,7 +908,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                     insertPoint.addView(swatch);
 
                     if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
-                        int backgroundColorFlash = Color.parseColor("#e26901");
+                        int backgroundColorFlash = Color.parseColor("#9C7D69");
                         if (!deviceUtils.isLightColor(currentColorControlled)) {
                             backgroundColorFlash = currentColorControlled;
                         }

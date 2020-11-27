@@ -187,7 +187,7 @@ class LocationDetails extends Component<Props, State> {
 					</View>
 					<View style={[locationTextContainer, infoContainerStyle]}>
 						<Text
-							level={23}
+							level={38}
 							numberOfLines={1}
 							style={[textHSH, h1Style]}>
 							{!!H1 && H1}

@@ -187,7 +187,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 			text: formatMessage(i18n.infoWhenAccessPremFromBasic),
 			showPositive: true,
 			showNegative: true,
-			positiveText: formatMessage(i18n.upgrade).toUpperCase(),
+			positiveText: formatMessage(i18n.upgrade),
 			onPressPositive: () => {
 				this.props.closeDrawer();
 				navigate('PremiumUpgradeScreen');

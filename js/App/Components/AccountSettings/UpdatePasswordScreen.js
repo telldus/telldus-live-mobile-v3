@@ -157,7 +157,7 @@ const UpdatePasswordScreen = (props: Object): Object => {
 		<>
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.changePassword))} h2={formatMessage(i18n.enterNewPassBelow)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}

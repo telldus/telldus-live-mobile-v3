@@ -86,7 +86,7 @@ class UserAgreement extends View<Props, State> {
 		let { formatMessage } = this.props.intl;
 		this.eula = formatMessage(i18n.eula);
 		this.header = capitalize(formatMessage(i18n.userAgreementHeaderPhrase, {eula: this.eula}));
-		this.footer = formatMessage(i18n.iAgree).toUpperCase();
+		this.footer = formatMessage(i18n.iAgree);
 
 		this.onAgree = this.onAgree.bind(this);
 	}
@@ -285,7 +285,6 @@ class UserAgreement extends View<Props, State> {
 				fontSize: Math.floor(deviceWidth * 0.04),
 				color: inAppBrandSecondary,
 				fontWeight: 'bold',
-				fontFamily: 'Roboto-Regular',
 			},
 			markupStyle: {
 				heading: {

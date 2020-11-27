@@ -150,6 +150,8 @@ render(): Object {
 		supportResume,
 		gatewayTimezone,
 		hideModeControl,
+		selectedThemeSet,
+		colors,
 	} = this.props;
 
 	const {
@@ -185,12 +187,15 @@ render(): Object {
 
 	const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdated));
 
+	const colorOne = selectedThemeSet.key === 1 ? (controllingMode === 'fan' ? inAppBrandSecondary : baseColor) : colors.baseColorFive;
+	const colorTwo = selectedThemeSet.key === 1 ? baseColor : colors.baseColorFive;
+
 	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined';
 	return (
 		<View style={InfoCover} pointerEvents="box-none">
 			<View style={box1}>
 				<Text style={[infoTitleStyle, {
-					color: controllingMode === 'fan' ? inAppBrandSecondary : baseColor,
+					color: colorOne,
 				}]}>
 					{!!title && hideModeControl ?
 						''
@@ -252,7 +257,7 @@ render(): Object {
 									textAlignVertical: 'center',
 								}} onPress={this.onPressEdit}>
 									<Text style={[sValueStyle, {
-										color: baseColor,
+										color: colorTwo,
 									}]}>
 										{cModevalue}
 									</Text>
@@ -260,7 +265,7 @@ render(): Object {
 								!
 									</Text>
 									<Text style={[sUnitStyle, {
-										color: baseColor,
+										color: colorTwo,
 									}]}>
 								°C
 									</Text>

@@ -18,6 +18,7 @@ exports[`renders FadeSetting when checked using Snapshots 1`] = `
         Object {
           "backgroundColor": "transparent",
           "color": "#8e8e93",
+          "fontFamily": "SuisseIntl",
           "fontSize": 26.250000000000004,
           "marginTop": 20.83275,
         },
@@ -94,6 +95,7 @@ exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
         Object {
           "backgroundColor": "transparent",
           "color": "#8e8e93",
+          "fontFamily": "SuisseIntl",
           "fontSize": 26.250000000000004,
           "marginTop": 20.83275,
         },

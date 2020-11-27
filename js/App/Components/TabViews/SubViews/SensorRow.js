@@ -70,6 +70,7 @@ type Props = {
 	colors: Object,
 	colorScheme: string,
 	themeInApp: string,
+	selectedThemeSet: Object,
 
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
@@ -161,6 +162,7 @@ class SensorRow extends View<Props, State> {
 				'gatewayId',
 				'themeInApp',
 				'colorScheme',
+				'selectedThemeSet',
 			]);
 			if (propsChange) {
 				return true;
@@ -176,6 +178,7 @@ class SensorRow extends View<Props, State> {
 		const themeHasChanged = shouldUpdate(otherProps, nextOtherProps, [
 			'themeInApp',
 			'colorScheme',
+			'selectedThemeSet',
 		]);
 		if (themeHasChanged) {
 			return true;
@@ -396,6 +399,7 @@ class SensorRow extends View<Props, State> {
 			isLast,
 			isNew,
 			colors,
+			selectedThemeSet,
 		} = this.props;
 		const { data = {} } = sensor;
 		const { height, width } = appLayout;
@@ -407,11 +411,13 @@ class SensorRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
+			offlineColor,
 		} = Theme.Core;
 
 		const {
-			colorOffActiveBg,
+			sensorValueBGColor,
 			inAppBrandSecondary,
+			itemIconBGColor,
 		} = colors;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -420,7 +426,9 @@ class SensorRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let backgroundColor = isGatewayActive ? colorOffActiveBg : Theme.Core.offlineColor;
+		let backgroundColor = isGatewayActive ? sensorValueBGColor : offlineColor;
+		const backgroundColorIcon = selectedThemeSet.key === 2 ? 'transparent' : isGatewayActive ? itemIconBGColor : offlineColor;
+		const iconColor = (selectedThemeSet.key === 2 && !isGatewayActive) ? offlineColor : colors.baseColor;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const widthValueBlock = (buttonWidth * 2) + 6;
@@ -483,12 +491,13 @@ class SensorRow extends View<Props, State> {
 			},
 			sensorIcon: {
 				fontSize: 16,
+				color: iconColor,
 			},
 			iconContainerStyle: {
 				borderRadius: 25,
 				width: 25,
 				height: 25,
-				backgroundColor,
+				backgroundColor: backgroundColorIcon,
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginHorizontal: 5,

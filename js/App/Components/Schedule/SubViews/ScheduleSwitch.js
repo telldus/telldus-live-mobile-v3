@@ -88,7 +88,6 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 			},
 			description: {
 				fontSize: deviceWidth * 0.037333333,
-				fontFamily: Theme.Core.fonts.robotoRegular,
 			},
 		};
 	};

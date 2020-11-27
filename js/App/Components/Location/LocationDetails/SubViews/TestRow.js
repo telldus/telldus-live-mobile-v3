@@ -62,6 +62,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'appLayout',
 		'themeInApp',
 		'colorScheme',
+		'selectedThemeSet',
 	]);
 }
 
@@ -112,7 +113,7 @@ getStyles(appLayout: Object): Object {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	const { rowTextColor } = Theme.Core;
@@ -145,7 +146,7 @@ getStyles(appLayout: Object): Object {
 		},
 		h1Style: {
 			fontSize: h1Size,
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 		},
 		h2Style: {
 			fontSize: h2Size,

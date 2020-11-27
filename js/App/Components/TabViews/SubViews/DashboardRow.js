@@ -67,6 +67,7 @@ type Props = {
 	themeInApp: string,
 	colorScheme: string,
 	dark: boolean,
+	selectedThemeSet: Object,
 
     style: Object,
 	setScrollEnabled: (boolean) => void,
@@ -121,6 +122,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'themeInApp',
 		'colorScheme',
 		'dark',
+		'selectedThemeSet',
 	]);
 	if (propsChange) {
 		return true;
@@ -326,7 +328,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 }
 
 render(): Object {
-	const { item, tileWidth, intl, appLayout, colors } = this.props;
+	const { item, tileWidth, intl, appLayout, colors, selectedThemeSet } = this.props;
 	const { showMoreActions } = this.state;
 	const { name, isInState } = item;
 	const deviceName = name ? name : intl.formatMessage(i18n.noName);
@@ -341,6 +343,11 @@ render(): Object {
 	const { iconContainerStyle, iconsName } = buttonsInfo[0];
 	const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
+	const {
+		backgroundColor,
+		...others
+	} = iconContainerStyle;
+
 	return (
 		<DashboardShadowTile
 			isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
@@ -348,18 +355,19 @@ render(): Object {
 			info={info}
 			icon={iconsName}
 			iconStyle={{
-				color: '#fff',
+				color: selectedThemeSet.key === 2 ? backgroundColor : '#fff',
 				fontSize: Math.floor(tileWidth / 5.7),
 				borderRadius: Math.floor(tileWidth / 8),
 				textAlign: 'center',
 				alignSelf: 'center',
 			}}
-			iconContainerStyle={[iconContainerStyle, {
+			iconContainerStyle={[others, {
 				width: Math.floor(tileWidth / 4),
 				height: Math.floor(tileWidth / 4),
 				borderRadius: Math.floor(tileWidth / 8),
 				alignItems: 'center',
 				justifyContent: 'center',
+				backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : backgroundColor,
 			}]}
 			iconRight={'history'}
 			onPressIconRight={this.onPressIconRight}

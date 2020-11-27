@@ -31,6 +31,7 @@ import { connect } from 'react-redux';
 
 import View from './View';
 import Text from './Text';
+import Theme from '../App/Theme';
 import shouldUpdate from '../App/Lib/shouldUpdate';
 
 type Props = {
@@ -72,19 +73,19 @@ class MainTabsAndroid extends Component<Props, State> {
 		const { intl } = this.props;
 
 		this.dashboard = {
-			label: intl.formatMessage(i18n.dashboard).toUpperCase(),
+			label: intl.formatMessage(i18n.dashboard),
 			accessibilityLabel: intl.formatMessage(i18n.dashboardTab),
 		};
 		this.devices = {
-			label: intl.formatMessage(i18n.devices).toUpperCase(),
+			label: intl.formatMessage(i18n.devices),
 			accessibilityLabel: intl.formatMessage(i18n.devicesTab),
 		};
 		this.sensors = {
-			label: intl.formatMessage(i18n.sensors).toUpperCase(),
+			label: intl.formatMessage(i18n.sensors),
 			accessibilityLabel: intl.formatMessage(i18n.sensorsTab),
 		};
 		this.scheduler = {
-			label: intl.formatMessage(i18n.scheduler).toUpperCase(),
+			label: intl.formatMessage(i18n.scheduler),
 			accessibilityLabel: intl.formatMessage(i18n.schedulerTab),
 		};
 
@@ -168,7 +169,7 @@ class MainTabsAndroid extends Component<Props, State> {
 				onPress={this.onTabPress}
 				onLayout={this.onLayout}>
 				<View
-					level={11}
+					level={19}
 					style={[styles.tabBar, tabBarStyle]}>
 					<Text
 						style={labelStyle}
@@ -190,6 +191,10 @@ class MainTabsAndroid extends Component<Props, State> {
 
 	getStyles(appLayout: Object): Object {
 
+		const {
+			fontSizeFactorOne,
+		} = Theme.Core;
+
 		let { heightLand, layout } = this.state;
 
 		const { height, width } = appLayout;
@@ -207,9 +212,9 @@ class MainTabsAndroid extends Component<Props, State> {
 					transform: [{rotateZ: '-90deg'}],
 				},
 			labelStyle: {
-				paddingHorizontal: isPortrait ? height * 0.0333 : 0,
+				paddingHorizontal: isPortrait ? height * fontSizeFactorOne * 0.5 : 0,
 				paddingVertical: isPortrait ? 15 : 0,
-				fontSize: isPortrait ? width * 0.0333 : height * 0.0333,
+				fontSize: isPortrait ? width * fontSizeFactorOne : height * fontSizeFactorOne,
 			},
 			indicatorPassiveStyle: {
 				backgroundColor: 'transparent',

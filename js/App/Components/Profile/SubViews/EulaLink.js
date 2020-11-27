@@ -67,7 +67,7 @@ const EulaLink = (props: Object): Object => {
 
 	return (
 		<Text
-			level={23}
+			level={36}
 			onPress={onPressEula}
 			style={buttonResubmit}>
 			{formatMessage(i18n.eula)}

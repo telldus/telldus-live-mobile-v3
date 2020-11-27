@@ -160,7 +160,7 @@ onPressDeleteToken() {
 		showPositive: true,
 		showNegative: true,
 		closeOnPressPositive: true,
-		positiveText: formatMessage(i18n.delete).toUpperCase(),
+		positiveText: formatMessage(i18n.delete),
 		onPressPositive: this.onConfirmDeleteToken,
 		text: formatMessage(i18n.labelRemovePushContent),
 	});

@@ -59,7 +59,7 @@ class LocationDetected extends View {
 
 		this.h1 = `1. ${capitalize(formatMessage(i18n.LDheaderOne))}`;
 		this.h2 = formatMessage(i18n.LDheaderTwo);
-		this.buttonLabel = formatMessage(i18n.manualActivation).toUpperCase();
+		this.buttonLabel = formatMessage(i18n.manualActivation);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 

@@ -164,6 +164,8 @@ class SessionLocked extends View {
 					onPress={this.onPressLogout}
 					text={buttonTwoLabel}
 					style={{marginTop: 10}}
+					buttonLevel={isLogginIn ? 7 : 24}
+					textLevel={isLogginIn ? 13 : 40}
 					accessible={!dialogueOpen}
 					accessibilityLabel={butTwoAccessibilityLabel}/>
 			</View>

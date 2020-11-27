@@ -212,7 +212,7 @@ public class NewSensorWidget extends AppWidgetProvider {
                     R.drawable.shape_circle_white_fill
                 );
 
-                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_blue);
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_black);
             }
         }
         if (isUpdating == null || isUpdating.equals("false")) {
@@ -228,7 +228,7 @@ public class NewSensorWidget extends AppWidgetProvider {
                 color = ContextCompat.getColor(context, R.color.white);
                 colorTitle = ContextCompat.getColor(context, R.color.white);
             } else {
-                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_blue);
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_black);
             }
         }
 

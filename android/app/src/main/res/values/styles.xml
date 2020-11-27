@@ -8,8 +8,8 @@
 	</style>
 	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 		<!-- Customize your theme here. -->
-		<item name="colorPrimary">@color/blue</item>
-		<item name="colorPrimaryDark">@color/blue</item>
+		<item name="colorPrimary">#000000</item>
+		<item name="colorPrimaryDark">#000000</item>
 		<item name="colorAccent">@color/colorAccent</item>
 		<item name="android:textColor">#000000</item>
 		<item name="android:editTextBackground">@android:color/transparent</item>
@@ -20,10 +20,10 @@
 
 	<style name="SCBSwitch" parent="Theme.AppCompat.Light">
         <!-- active thumb & track color (30% transparency) -->
-        <item name="colorControlActivated">#e26901</item>
+        <item name="colorControlActivated">#9C7D69</item>
 
         <!-- inactive thumb color -->
-        <item name="colorSwitchThumbNormal">#e26901
+        <item name="colorSwitchThumbNormal">#9C7D69
         </item>
 
         <!-- inactive track color (30% transparency) -->
@@ -37,12 +37,12 @@
 
 	<style name="WidgetRadioButton" parent="Theme.AppCompat.Light">  
 		<item name="colorControlNormal">@color/brandPrimary</item>
-		<item name="colorControlActivated">@color/brandSecondary</item>
+		<item name="colorControlActivated">@color/black</item>
 	</style>
 
 	<style name="ThemeOverlay.PrimaryPalette.Red" parent="Theme.MaterialComponents">
-		<item name="colorPrimary">#e26901</item>
-		<item name="colorPrimaryDark">#e26901</item>
+		<item name="colorPrimary">#9C7D69</item>
+		<item name="colorPrimaryDark">#9C7D69</item>
 	</style>
 
 </resources>

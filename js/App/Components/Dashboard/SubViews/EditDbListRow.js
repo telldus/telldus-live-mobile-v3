@@ -52,6 +52,7 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 
 	const {
 		colors,
+		selectedThemeSet,
 	} = useAppTheme();
 
 	const {
@@ -70,6 +71,8 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 		}
 	}, [onPress]);
 
+	const backgroundColor = selectedThemeSet.key === 2 ? 'transparent' : (selectedType === 'sensor' ? colors.inAppBrandPrimary : colors.inAppBrandSecondary);
+
 	return (
 		<ListRow
 			key={`${id}`}
@@ -77,7 +80,7 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 			onPress={_onPress}
 			label={name || formatMessage(i18n.noName)}
 			iconContainerStyle={{
-				backgroundColor: selectedType === 'sensor' ? colors.inAppBrandPrimary : colors.inAppBrandSecondary,
+				backgroundColor,
 			}}
 			rowData={item}
 			leftIcon={icon}

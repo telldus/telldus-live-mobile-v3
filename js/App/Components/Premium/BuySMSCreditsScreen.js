@@ -115,7 +115,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 						<Text
 							level={26}
 							style={validityTextStyle}>
-							{`${count} ${formatMessage(i18n.smsCredits).toUpperCase()}`}
+							{`${count} ${formatMessage(i18n.smsCredits)}`}
 						</Text>
 					</View>
 					<View style={bottomCover}>
@@ -126,7 +126,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 						</Text>
 						<View style={saveTextCoverStyle}>
 							{!!save && <Text style={saveTextStyle}>
-								{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
+								{`${formatMessage(i18n.saveLabel)} ${save}%`}
 							</Text>
 							}
 						</View>
@@ -183,7 +183,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.premiumAccess))}
 				h2={formatMessage(i18n.purchaseSMSCredits)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}

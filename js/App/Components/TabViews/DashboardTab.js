@@ -676,8 +676,9 @@ const getRows = createSelector(
 		({ app }: Object): Object => app,
 		({ user }: Object): Object => user,
 		({ thirdParties }: Object): Object => thirdParties,
+		({ intl }: Object): Object => intl,
 	],
-	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object, user: Object, thirdParties: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app, user, thirdParties)
+	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object, user: Object, thirdParties: Object, intl: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app, user, thirdParties, intl)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
@@ -702,7 +703,10 @@ function mapStateToProps(state: Object, props: Object): Object {
 	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
 
 	return {
-		rows: getRows(state),
+		rows: getRows({
+			...state,
+			intl: props.screenProps.intl,
+		}),
 		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0),
 		dbCarousel,
 		gateways: state.gateways.allIds,

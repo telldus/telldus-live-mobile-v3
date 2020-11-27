@@ -91,7 +91,7 @@ render(): Object {
 			style={blockContainerStyle}
 			onPress={this.onPress}>
 			{align === 'left' && (<View
-				level={13}
+				level={23}
 				style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
@@ -107,7 +107,7 @@ render(): Object {
 					style={dateStyle}/>
 			</View>
 			{align === 'right' && (<View
-				level={13}
+				level={23}
 				style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}

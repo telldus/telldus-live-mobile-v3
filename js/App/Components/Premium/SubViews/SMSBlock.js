@@ -97,7 +97,7 @@ const SMSBlock = (props: Object): Object => {
 					iconValueRight={
 						(enablePurchase && !isIos) ?
 							<Text
-								level={23}
+								level={37}
 								style={buyCreditsStyle}>
 								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}
 							</Text>
@@ -114,7 +114,7 @@ const SMSBlock = (props: Object): Object => {
 					labelTextStyle={labelTextStyle}/>
 			</View>
 			<Text
-				level={23}
+				level={36}
 				style={linkTextStyle}
 				onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
 		</>

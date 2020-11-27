@@ -42,7 +42,7 @@ type Props = {
 	icon: string,
     appLayout: Object,
     showBackButton?: boolean,
-    align?: 'right' | 'center',
+    align?: 'right' | 'center' | 'left',
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
 	leftIcon: string,
@@ -57,7 +57,7 @@ type Props = {
 
 type DefaultProps = {
     showBackButton: boolean,
-	align: 'right' | 'center',
+	align: 'right' | 'center' | 'left',
 	showLeftIcon: boolean,
 	leftIcon: string,
 };

@@ -31,10 +31,10 @@ exports[`renders CheckBoxIconText when checked 1`] = `
     style={
       Object {
         "backgroundColor": "#ffffff",
-        "borderColor": "#e26901",
+        "borderColor": "#9C7D69",
         "borderRadius": 2,
         "borderWidth": 1,
-        "color": "#e26901",
+        "color": "#9C7D69",
         "fontFamily": "telldusicons",
         "fontSize": 28,
         "overflow": "hidden",
@@ -53,7 +53,7 @@ exports[`renders CheckBoxIconText when checked 1`] = `
         Object {
           "backgroundColor": "transparent",
           "color": "#ffffff",
-          "fontFamily": "Roboto-Light",
+          "fontFamily": "SuisseIntl",
           "fontSize": 26,
           "marginLeft": 15.4,
         },
@@ -119,7 +119,7 @@ exports[`renders CheckBoxIconText when unchecked 1`] = `
         Object {
           "backgroundColor": "transparent",
           "color": "#ffffff",
-          "fontFamily": "Roboto-Light",
+          "fontFamily": "SuisseIntl",
           "fontSize": 26,
           "marginLeft": 15.4,
         },

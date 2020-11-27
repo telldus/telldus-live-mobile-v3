@@ -42,6 +42,9 @@ import {
 	getSupportedWeatherProviders,
 	capitalize,
 } from '../../Lib';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import {
 	ListRow,
@@ -96,6 +99,10 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 		container,
 		body,
 	} = getStyles({layout});
+	const {
+		colors,
+		selectedThemeSet,
+	} = useAppTheme();
 
 	const onPressNext = useCallback((params: Object) => {
 		const selectedAttributes = {};
@@ -139,6 +146,8 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 
 			const selected = selectedIndexes.indexOf(index) !== -1;
 
+			const backgroundColor = selectedThemeSet.key === 2 ? 'transparent' : colors.inAppBrandPrimary;
+
 			return (
 				<ListRow
 					key={`${index}`}
@@ -147,11 +156,14 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 					label={label}
 					rowData={index}
 					leftIcon={'sensor'}
+					iconContainerStyle={{
+						backgroundColor,
+					}}
 					rightIcon={selected ? 'favorite' : 'favorite-outline'}
 				/>
 			);
 		});
-	}, [layout, listData, onPress, selectedIndexes]);
+	}, [colors.inAppBrandPrimary, layout, listData, onPress, selectedIndexes, selectedThemeSet.key]);
 
 	const sLength = selectedIndexes.length;
 

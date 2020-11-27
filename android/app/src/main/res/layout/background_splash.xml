@@ -6,10 +6,9 @@
 	<item
 		android:drawable="@drawable/telldusliveapp_launchscreen"/>
 
-	<item
-		android:drawable="@drawable/logo_splash"/>
-
-	<item
-		android:drawable="@drawable/splash_loading_icon"/>
+	<item>
+		<bitmap android:src="@drawable/logo_splash"
+          android:gravity="center"/>
+	</item>
 
 </layer-list>

@@ -66,11 +66,11 @@ const LogoutAllAccButton = React.memo<Object>((props: Object): Object => {
 		toggleDialogueBox({
 			show: true,
 			showHeader: true,
-			notificationHeader: `${formatMessage(i18n.logout)}?`,
+			header: `${formatMessage(i18n.logout)}?`,
 			text: formatMessage(i18n.contentLogoutConfirm),
 			showPositive: true,
 			showNegative: true,
-			positiveText: formatMessage(i18n.logout).toUpperCase(),
+			positiveText: formatMessage(i18n.logout),
 			onPressPositive: onConfirmLogout,
 			closeOnPressPositive: true,
 		});

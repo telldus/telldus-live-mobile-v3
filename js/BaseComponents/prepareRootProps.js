@@ -117,6 +117,24 @@ const getBGColor = (props: Object): ?string => {
 		case 18: {
 			return colors.textInsidePoster;
 		}
+		case 19: {
+			return colors.headerBG;
+		}
+		case 20: {
+			return colors.sensorValueBGColor;
+		}
+		case 21: {
+			return colors.itemIconBGColor;
+		}
+		case 22: {
+			return colors.buttonBGColor;
+		}
+		case 23: {
+			return colors.buttonBGColorTwo;
+		}
+		case 24: {
+			return colors.buttonBGColorPrelogin;
+		}
 		default:
 			return 'transparent';
 	}
@@ -255,6 +273,30 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 33: {
 			return colors.textInsidePoster;
+		}
+		case 34: {
+			return colors.activeTintOne;
+		}
+		case 35: {
+			return colors.colorTwoButtonTextEnabled;
+		}
+		case 36: {
+			return colors.textOnLevelThreeView;
+		}
+		case 37: {
+			return colors.iconOnSettingsBlock;
+		}
+		case 38: {
+			return colors.baseColorFour;
+		}
+		case 39: {
+			return colors.textColorInactive;
+		}
+		case 40: {
+			return colors.colorButtonTextEnabledPreLogin;
+		}
+		case 41: {
+			return colors.iconColorInsidePoster;
 		}
 		default:
 			return;

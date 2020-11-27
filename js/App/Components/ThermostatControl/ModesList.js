@@ -21,7 +21,10 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+	useMemo,
+} from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 
 import {
@@ -29,6 +32,10 @@ import {
 	Text,
 } from '../../../BaseComponents';
 import ModeBlock from './ModeBlock';
+
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -53,21 +60,7 @@ type Props = {
 	handleAddMinus: (string, 0 | 1, number) => void,
 };
 
-class ModesList extends View<Props, null> {
-props: Props;
-
-constructor(props: Props) {
-	super(props);
-
-	this.maxALength = Math.PI * 1.5;
-	this.minALength = 0;
-}
-
-shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return true;
-}
-
-render(): Object {
+const ModesList = memo<Object>((props: Props): Object => {
 
 	const {
 		appLayout,
@@ -81,62 +74,75 @@ render(): Object {
 		setpointValueLocal,
 		handleAddMinus,
 		hideTemperatureControl,
-	} = this.props;
+		onControlThermostat,
+		onPressRow,
+	} = props;
+
+	const {
+		selectedThemeSet,
+	} = useAppTheme();
 
 	const {
 		modeHeaderStyle,
 		modesCover,
-	} = this.getStyles();
-
-	const modesL = modes.map((modeInfo: Object, i: number): Object => {
-		let {
-			label,
-			icon,
-			edit,
-			value,
-			scale,
-			unit,
-			mode,
-			minVal,
-			maxVal,
-			Icon,
-			IconActive,
-		} = modeInfo;
-		let active = false;
-
-		if (controllingMode === mode) {
-			active = true;
-		}
-		return (
-			<ModeBlock
-				key={i}
-				appLayout={appLayout}
-				label={label}
-				edit={edit}
-				icon={icon}
-				value={setpointMode === mode ? setpointValue : value}
-				controllingMode={controllingMode}
-				scale={scale}
-				unit={unit}
-				active={active}
-				onPressRow={this.props.onPressRow}
-				mode={mode}
-				minVal={minVal}
-				maxVal={maxVal}
-				Icon={Icon}
-				IconActive={IconActive}
-				onControlThermostat={this.props.onControlThermostat}
-				intl={intl}
-				onEditSubmitValue={this.props.onEditSubmitValue}
-				updateCurrentValueInScreen={this.props.updateCurrentValueInScreen}
-				currentValue={currentValue}
-				initialValue={value}
-				setpointMode={setpointMode}
-				setpointValueLocal={setpointValueLocal}
-				handleAddMinus={handleAddMinus}
-				hideTemperatureControl={hideTemperatureControl}/>
-		);
+	} = getStyles({
+		appLayout,
 	});
+
+	const modesL = useMemo((): Array<Object> => {
+		return modes.map((modeInfo: Object, i: number): Object => {
+			let {
+				label,
+				icon,
+				edit,
+				value,
+				scale,
+				unit,
+				mode,
+				minVal,
+				maxVal,
+				Icon,
+				Icon2,
+				IconActive,
+				onEditSubmitValue,
+				updateCurrentValueInScreen,
+			} = modeInfo;
+			let active = false;
+
+			if (controllingMode === mode) {
+				active = true;
+			}
+			return (
+				<ModeBlock
+					key={i}
+					appLayout={appLayout}
+					label={label}
+					edit={edit}
+					icon={icon}
+					value={setpointMode === mode ? setpointValue : value}
+					controllingMode={controllingMode}
+					scale={scale}
+					unit={unit}
+					active={active}
+					onPressRow={onPressRow}
+					mode={mode}
+					minVal={minVal}
+					maxVal={maxVal}
+					Icon={selectedThemeSet && selectedThemeSet.key === 1 ? Icon : Icon2}
+					IconActive={IconActive}
+					onControlThermostat={onControlThermostat}
+					intl={intl}
+					onEditSubmitValue={onEditSubmitValue}
+					updateCurrentValueInScreen={updateCurrentValueInScreen}
+					currentValue={currentValue}
+					initialValue={value}
+					setpointMode={setpointMode}
+					setpointValueLocal={setpointValueLocal}
+					handleAddMinus={handleAddMinus}
+					hideTemperatureControl={hideTemperatureControl}/>
+			);
+		});
+	}, [appLayout, controllingMode, currentValue, handleAddMinus, hideTemperatureControl, intl, modes, onControlThermostat, onPressRow, selectedThemeSet, setpointMode, setpointValue, setpointValueLocal]);
 
 	return (
 		<View style={[modesCover, modesCoverStyle]}>
@@ -148,10 +154,11 @@ render(): Object {
 			{modesL}
 		</View>
 	);
-}
+});
 
-getStyles(): Object {
-	const { appLayout } = this.props;
+const getStyles = ({
+	appLayout,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -171,7 +178,6 @@ getStyles(): Object {
 			fontSize: deviceWidth * 0.04,
 		},
 	};
-}
-}
+};
 
 module.exports = injectIntl(ModesList);

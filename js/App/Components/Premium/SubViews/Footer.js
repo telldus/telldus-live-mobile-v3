@@ -67,9 +67,9 @@ const Footer = (props: Object): Object => {
 
 	return (
 		<TwoStepFooter
-			f1={formatMessage(i18n.renewPremNow).toUpperCase()}
-			f2={formatMessage(i18n.labelDontShowAgain).toUpperCase()}
-			f3={formatMessage(i18n.labelNotNow).toUpperCase()}
+			f1={formatMessage(i18n.renewPremNow)}
+			f2={formatMessage(i18n.labelDontShowAgain)}
+			f3={formatMessage(i18n.labelNotNow)}
 			onPressF1={onPressF1}
 			onPressF2={onPressF2}
 			onPressF3={onPressF3}

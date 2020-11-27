@@ -85,6 +85,7 @@ class HeatInfoBlock extends View {
 			'currentValue',
 			'themeInApp',
 			'colorScheme',
+			'selectedThemeSet',
 		]);
 		if (propsChange) {
 			return true;

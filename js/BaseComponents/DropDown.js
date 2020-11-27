@@ -164,6 +164,7 @@ static defaultProps: DefaultProps = {
 			'showMax',
 			'onFocus',
 			'insets',
+			'selectedThemeSet',
 		]);
 		if (propsChange) {
 			return true;

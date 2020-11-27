@@ -193,7 +193,7 @@ class ScheduleScreen extends View<null, Props, State> {
 					<NavigationHeaderPoster
 						h1={h1} h2={h2}
 						infoButton={infoButton}
-						align={'right'}
+						align={'left'}
 						navigation={navigation}
 						{...screenProps}
 						currentScreen={currentScreen}

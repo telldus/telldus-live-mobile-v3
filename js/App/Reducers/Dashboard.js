@@ -32,9 +32,10 @@ import {
 import {
 	MET_ID,
 	getMetWeatherDataAttributes,
+	getSupportedWeatherProviders,
 } from '../Lib/thirdPartyUtils';
 
-export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}, thirdParties: Object = {}): Array<Object> {
+export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}, thirdParties: Object = {}, intl: Object): Array<Object> {
 
 	const { defaultSettings } = app;
 	const { activeDashboardId } = defaultSettings;
@@ -160,6 +161,8 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 	const userDbsAndMetWeatherById = metWeatherById[userId] || {};
 	const metWeatherByIdInCurrentDb = userDbsAndMetWeatherById[activeDashboardId] || {};
 
+	const providers = getSupportedWeatherProviders(intl.formatMessage);
+
 	let metItems = [], _metItems = {};
 	Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
 		const {
@@ -180,6 +183,11 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			formatMessage: () => {},
 			timeKey,
 		});
+
+		const {
+			supportedScales = {},
+		} = providers[selectedType] || {};
+
 		let _data = {};
 		for (let i = 0; i < listData.length; i++) {
 			if (timeKey === listData[i].key) {
@@ -193,11 +201,27 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 					property,
 					label,
 				} = selectedAttributes[selectedAttribute];
+				let unit = _meta.units[property];
+				let value = _data.instant.details[property];
+
+				const {
+					label: l,
+					name: n,
+					unitsConversion = {},
+				} = supportedScales[property] || {};
+				const convertor = unitsConversion[unit];
+				if (convertor) {
+					const result = convertor(value) || {};
+					unit = result.unit;
+					value = result.value;
+				}
+
 				return {
 					property,
-					label,
-					value: _data.instant.details[property],
-					unit: _meta.units[property],
+					label: l || label,
+					value,
+					unit,
+					name: n,
 				};
 			});
 			const data = {

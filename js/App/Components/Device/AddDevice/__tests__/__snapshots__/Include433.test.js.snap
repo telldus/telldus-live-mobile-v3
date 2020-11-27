@@ -82,15 +82,24 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
             }
           }
         >
-          <View
-            fill="#e26901"
-            height={313}
-            style={
+          <Image
+            source={
               Object {
-                "marginTop": -2,
+                "uri": "telldus_header_bg",
               }
             }
-            width={750}
+            style={
+              Array [
+                Object {
+                  "height": 313,
+                  "tintColor": undefined,
+                  "width": 750,
+                },
+                Object {
+                  "marginTop": -2,
+                },
+              ]
+            }
           />
           <View
             style={
@@ -115,7 +124,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
               style={
                 Array [
                   Object {
-                    "alignItems": "flex-end",
+                    "alignItems": "flex-start",
                     "backgroundColor": "transparent",
                     "flex": 0,
                     "flexDirection": "column",
@@ -150,7 +159,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
         Array [
           Object {
             "alignItems": "center",
-            "backgroundColor": "#fff",
+            "backgroundColor": "#f5f5f5",
             "borderRadius": 2,
             "elevation": 2,
             "flex": 1,
@@ -206,7 +215,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
             Array [
               Object {
                 "backgroundColor": "transparent",
-                "color": "#e26901",
+                "color": "#000000",
                 "fontFamily": "telldusicons",
                 "fontSize": 14.000000000000002,
               },
@@ -238,6 +247,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
                 "color": "#555555",
                 "flex": 1,
                 "flexWrap": "wrap",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 4.2,
                 "marginLeft": 2.7777,
               },
@@ -317,15 +327,24 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             }
           }
         >
-          <View
-            fill="#e26901"
-            height={313}
-            style={
+          <Image
+            source={
               Object {
-                "marginTop": -2,
+                "uri": "telldus_header_bg",
               }
             }
-            width={750}
+            style={
+              Array [
+                Object {
+                  "height": 313,
+                  "tintColor": undefined,
+                  "width": 750,
+                },
+                Object {
+                  "marginTop": -2,
+                },
+              ]
+            }
           />
           <View
             style={
@@ -350,7 +369,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               style={
                 Array [
                   Object {
-                    "alignItems": "flex-end",
+                    "alignItems": "flex-start",
                     "backgroundColor": "transparent",
                     "flex": 0,
                     "flexDirection": "column",
@@ -407,7 +426,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               Array [
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "#fff",
+                  "backgroundColor": "#f5f5f5",
                   "borderRadius": 2,
                   "elevation": 2,
                   "marginBottom": 4.3471005,
@@ -457,7 +476,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                       "borderRightColor": "transparent",
                       "borderRightWidth": 15.65,
                       "borderStyle": "solid",
-                      "borderTopColor": "#1b365d",
+                      "borderTopColor": "#80919E",
                       "borderTopLeftRadius": 2,
                       "borderTopWidth": 50.08,
                       "height": 0,
@@ -474,7 +493,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     Object {
                       "backgroundColor": "transparent",
                       "color": "#fff",
-                      "fontFamily": "Roboto-Regular",
+                      "fontFamily": "SuisseIntl",
                       "fontSize": 15.65,
                       "left": 18.779999999999998,
                       "position": "absolute",
@@ -513,7 +532,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                       "backgroundColor": "transparent",
                       "color": "#8e8e93",
                       "flexWrap": "wrap",
-                      "fontFamily": "Roboto-Regular",
+                      "fontFamily": "SuisseIntl",
                       "fontSize": 10.955000000000002,
                     }
                   }
@@ -535,7 +554,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   Object {
                     "backgroundColor": "transparent",
                     "color": "#8e8e93",
-                    "fontFamily": "Roboto-Regular",
+                    "fontFamily": "SuisseIntl",
                     "fontSize": 3,
                     "marginBottom": 4,
                   }
@@ -546,6 +565,12 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               <View
                 colorScheme="light"
                 dark={false}
+                selectedThemeSet={
+                  Object {
+                    "key": 2,
+                    "value": "Fred on vacation",
+                  }
+                }
                 style={
                   Array [
                     Object {
@@ -568,7 +593,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 <View
                   style={
                     Object {
-                      "backgroundColor": "#e26901",
+                      "backgroundColor": "#9C7D69",
                       "height": 4,
                       "transform": Array [
                         Object {
@@ -593,7 +618,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               Array [
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "#fff",
+                  "backgroundColor": "#f5f5f5",
                   "borderRadius": 2,
                   "elevation": 2,
                   "flex": 1,
@@ -644,7 +669,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   Array [
                     Object {
                       "backgroundColor": "transparent",
-                      "color": "#e26901",
+                      "color": "#000000",
                       "fontFamily": "telldusicons",
                       "fontSize": 14.000000000000002,
                     },
@@ -674,6 +699,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                       "color": "#555555",
                       "flex": 1,
                       "flexWrap": "wrap",
+                      "fontFamily": "SuisseIntl",
                       "fontSize": 4.2,
                       "marginLeft": 2.7777,
                     },
@@ -756,15 +782,24 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
             }
           }
         >
-          <View
-            fill="#e26901"
-            height={313}
-            style={
+          <Image
+            source={
               Object {
-                "marginTop": -2,
+                "uri": "telldus_header_bg",
               }
             }
-            width={750}
+            style={
+              Array [
+                Object {
+                  "height": 313,
+                  "tintColor": undefined,
+                  "width": 750,
+                },
+                Object {
+                  "marginTop": -2,
+                },
+              ]
+            }
           />
           <View
             style={
@@ -789,7 +824,7 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
               style={
                 Array [
                   Object {
-                    "alignItems": "flex-end",
+                    "alignItems": "flex-start",
                     "backgroundColor": "transparent",
                     "flex": 0,
                     "flexDirection": "column",

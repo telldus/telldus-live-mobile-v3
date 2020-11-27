@@ -162,7 +162,6 @@ class SliderComponent extends Component<Props, State> {
 		return {
 			backgroundColor: 'transparent',
 			color: '#555555',
-			fontFamily: Theme.Core.fonts.robotoMedium,
 			position: 'absolute',
 			left: 0,
 			top: 0,

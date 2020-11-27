@@ -267,7 +267,7 @@ const SettingsRow = (props: Props): Object => {
 								{typeof iconValueRight === 'string' ? <ThemedMaterialIcon
 									name={iconValueRight}
 									size={_iconValueRightSize}
-									level={23}/> : iconValueRight}
+									level={37}/> : iconValueRight}
 							</TouchableOpacity>
 						)}
 					</TouchableOpacity>
