@@ -598,7 +598,7 @@ class Details extends View<Props, State> {
 						<TouchableWithoutFeedback onPress={this.onPressGatewayInfo}>
 							<View style={boxItemsCover}>
 								<Text
-									level={23}
+									level={38}
 									style={textName}>
 									{type}
 								</Text>

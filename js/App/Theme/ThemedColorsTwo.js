@@ -125,7 +125,7 @@ export default {
 			return '#f5f5f5';
 		},
 		get headerOneColorBlockEnabled() {
-			return '#9C7D69';
+			return '#333333';
 		},
 		get headerOneColorBlockDisabled() {
 			return '#999999';
@@ -453,7 +453,7 @@ export default {
 			return '#202020';
 		},
 		get headerOneColorBlockEnabled() {
-			return Core.brandSecondaryShadeOne;
+			return '#ffffff';
 		},
 		get headerOneColorBlockDisabled() {
 			return '#666666';

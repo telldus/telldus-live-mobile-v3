@@ -103,7 +103,7 @@ class LocationDetails extends View {
 					<TouchableOpacity disabled={!onPress} onPress={this.onPress} accessible={accessible}>
 						<View style={[locationTextContainer, descriptionContainerStyle]}>
 							<Text
-								level={23}
+								level={38}
 								numberOfLines={1} style={[textHSH, h1Style]}>
 								{!!H1 && H1}
 							</Text>
