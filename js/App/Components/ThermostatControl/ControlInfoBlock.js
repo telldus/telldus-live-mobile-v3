@@ -317,6 +317,7 @@ getStyles(): Object {
 	const {
 		rowTextColor,
 		fontSizeFactorFive,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	return {
@@ -392,7 +393,7 @@ getStyles(): Object {
 			fontSize: deviceWidth * 0.1,
 		},
 		labelStyle: {
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 			textAlign: 'center',
 			textAlignVertical: 'bottom',
 			color: inAppBrandSecondary,
@@ -421,7 +422,7 @@ getStyles(): Object {
 		},
 		offInfoText: {
 			color: inAppBrandSecondary,
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 			textAlign: 'center',
 			marginTop: 5,
 		},

@@ -122,6 +122,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		eulaContentColor,
 		rowTextColor,
 		brandPrimary,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -182,7 +183,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		},
 		priceInfoTwo: {
 			marginTop: 3,
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			color: eulaContentColor,
 		},
 		priceInfoThree: {

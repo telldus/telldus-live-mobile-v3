@@ -167,11 +167,12 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		inactiveTintColor,
 		locationOnline,
 		fontSizeFactorFive,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const ddWidth = deviceWidth * 0.45;
 
-	const fontSizeText = Math.floor(deviceWidth * 0.04);
+	const fontSizeText = Math.floor(deviceWidth * fontSizeFactorFour);
 
 	const padding = deviceWidth * paddingFactor;
 

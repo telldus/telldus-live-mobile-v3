@@ -122,10 +122,11 @@ const getStyles = ({
 
 	const {
 		shadow,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
-	const fontSize2 = deviceWidth * 0.04;
+	const fontSize2 = deviceWidth * fontSizeFactorFour;
 
 	const thumbSize = fontSize2;
 

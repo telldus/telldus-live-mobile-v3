@@ -79,12 +79,13 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.04);
 
 	const {
 		paddingFactor,
 		shadow,
+		fontSizeFactorFour,
 	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 
 	const padding = deviceWidth * paddingFactor;
 

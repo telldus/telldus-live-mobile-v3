@@ -53,6 +53,7 @@ import {
 } from '../HOC/withTheme';
 import shouldUpdate from '../../Lib/shouldUpdate';
 import capitalize from '../../Lib/capitalize';
+import Theme from '../../Theme';
 
 type Props = PropsThemedComponent & {
 	showModal: boolean,
@@ -242,6 +243,9 @@ class UserAgreement extends View<Props, State> {
 		const footerHeight = Math.floor(deviceWidth * 0.13);
 
 		const {
+			fontSizeFactorFour,
+		} = Theme.Core;
+		const {
 			textFive,
 			inAppBrandSecondary,
 		} = colors;
@@ -282,7 +286,7 @@ class UserAgreement extends View<Props, State> {
 				justifyContent: 'center',
 			},
 			footerText: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 				color: inAppBrandSecondary,
 				fontWeight: 'bold',
 			},

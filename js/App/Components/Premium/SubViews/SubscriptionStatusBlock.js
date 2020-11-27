@@ -124,17 +124,18 @@ const getStyle = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		twine,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const fontSize = deviceWidth * 0.04;
+	const fontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		coverStyle: {
 			marginTop: padding,
 		},
 		upgradeSyle: {
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 		},
 		labelStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),

@@ -29,7 +29,7 @@ import { View, Text, IconTelldus } from '../../../../BaseComponents';
 import {
 	capitalize,
 } from '../../../Lib';
-
+import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 const TellStickExchangeLink = (props: Object): Object => {
@@ -71,10 +71,14 @@ const getStyles = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
+	const {
+		fontSizeFactorFour,
+	} = Theme.Core;
+
 	let iconSize = Math.floor(deviceWidth * 0.06);
 	iconSize = iconSize > 32 ? 32 : iconSize;
 
-	let textSize = Math.floor(deviceWidth * 0.04);
+	let textSize = Math.floor(deviceWidth * fontSizeFactorFour);
 	textSize = textSize > 28 ? 28 : textSize;
 
 	return {

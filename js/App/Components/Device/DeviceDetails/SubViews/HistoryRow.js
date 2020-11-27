@@ -401,6 +401,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 		const {
 			fontSizeFactorFive,
 			paddingFactor,
+			fontSizeFactorFour,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -436,7 +437,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				justifyContent: 'center',
 			},
 			containerStyle: {
-				paddingHorizontal: deviceWidth * 0.04,
+				paddingHorizontal: deviceWidth * fontSizeFactorFour,
 				marginTop: isFirst ? padding : padding / 2,
 				marginBottom: isLast ? padding : 0,
 				paddingTop: 0,
@@ -451,7 +452,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				zIndex: 1,
 			},
 			originTextStyle: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			roundIconContainerStyle: {
 				backgroundColor: item.successStatus !== 0 ? 'transparent' : '#929292',

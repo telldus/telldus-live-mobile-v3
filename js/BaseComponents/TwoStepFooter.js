@@ -104,6 +104,9 @@ const getStyles = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
+	const {
+		fontSizeFactorFour,
+	} = Theme.Core;
 	const footerHeight = Theme.Core.getFooterHeight(deviceWidth);
 
 	return {
@@ -141,11 +144,11 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 		},
 		footerText: {
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			fontWeight: 'bold',
 		},
 		f1IconStyle: {
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 		},
 	};
 };

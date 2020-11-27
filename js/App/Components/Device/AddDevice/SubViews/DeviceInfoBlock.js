@@ -120,6 +120,7 @@ class DeviceInfoBlock extends View<Props, null> {
 			paddingFactor,
 			eulaContentColor,
 			fontSizeFactorFive,
+			fontSizeFactorFour,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -145,11 +146,11 @@ class DeviceInfoBlock extends View<Props, null> {
 				fontSize: deviceWidth * fontSizeFactorFive,
 			},
 			h2Style: {
-				fontSize: deviceWidth * 0.04,
+				fontSize: deviceWidth * fontSizeFactorFour,
 				color: eulaContentColor,
 			},
 			h3Style: {
-				fontSize: deviceWidth * 0.04,
+				fontSize: deviceWidth * fontSizeFactorFour,
 				color: eulaContentColor,
 			},
 		};

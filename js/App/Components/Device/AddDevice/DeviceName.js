@@ -383,13 +383,18 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, editBoxPaddingFactor, shadow } = Theme.Core;
+	const {
+		paddingFactor,
+		editBoxPaddingFactor,
+		shadow,
+		fontSizeFactorFour,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const editBoxPadding = deviceWidth * editBoxPaddingFactor;
 
-	const infoTextFontSize = deviceWidth * 0.04;
+	const infoTextFontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		container: {

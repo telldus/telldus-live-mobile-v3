@@ -146,16 +146,22 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.04);
 
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+	const {
+		paddingFactor,
+		shadow,
+		fontSizeFactorFour,
+	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
+
+	const padding = deviceWidth * paddingFactor;
 
 	const blockWidth = (width - (padding * 3)) / 3;
 
 	return {
 		padding,
 		coverOneStyle: {
-			...Theme.Core.shadow,
+			...shadow,
 			justifyContent: 'center',
 			alignItems: 'center',
 			paddingHorizontal: padding,

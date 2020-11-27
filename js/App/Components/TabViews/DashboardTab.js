@@ -615,6 +615,7 @@ class DashboardTab extends View {
 
 		const {
 			androidLandMarginLeftFactor,
+			fontSizeFactorFour,
 		} = Theme.Core;
 
 		return {
@@ -630,7 +631,7 @@ class DashboardTab extends View {
 			},
 			noItemsContent: {
 				textAlign: 'center',
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				fontSize: isPortrait ? Math.floor(width * fontSizeFactorFour) : Math.floor(height * fontSizeFactorFour),
 			},
 			padding,
 			headerWidth: deviceWidth * 0.75,

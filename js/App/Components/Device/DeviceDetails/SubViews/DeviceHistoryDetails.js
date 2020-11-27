@@ -395,6 +395,7 @@ class DeviceHistoryDetails extends View {
 			shadow,
 			paddingFactor,
 			fontSizeFactorFive,
+			fontSizeFactorFour,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -471,21 +472,21 @@ class DeviceHistoryDetails extends View {
 				flexDirection: 'row',
 			},
 			titleText: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			statusIconSize: Math.floor(deviceWidth * 0.047),
 			detailsLabel: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			detailsText: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			detailsTextError: {
 				color: '#d32f2f',
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			timeText: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 		};
 	}

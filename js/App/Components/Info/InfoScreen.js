@@ -336,6 +336,7 @@ getStyles(appLayout: Object): Object {
 	const {
 		shadow,
 		paddingFactor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -370,7 +371,7 @@ getStyles(appLayout: Object): Object {
 		bodyStyle: {
 			marginTop: 10,
 			textAlign: 'left',
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 		},
 		buttonStyle: {
 			marginTop: padding * 2,

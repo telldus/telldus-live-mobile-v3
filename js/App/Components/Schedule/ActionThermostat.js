@@ -317,7 +317,11 @@ export default class ActionThermostat extends View<null, Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const outerPadding = deviceWidth * Theme.Core.paddingFactor;
+		const {
+			paddingFactor,
+			fontSizeFactorFour,
+		} = Theme.Core;
+		const outerPadding = deviceWidth * paddingFactor;
 
 		return {
 			outerPadding,
@@ -328,7 +332,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			tempLabelStyle: {
 				marginTop: outerPadding,
 				marginLeft: outerPadding,
-				fontSize: deviceWidth * 0.04,
+				fontSize: deviceWidth * fontSizeFactorFour,
 			},
 		};
 	};
