@@ -237,7 +237,7 @@ render(testData: Object): Object {
 		body,
 		label,
 		textField,
-		inAppBrandSecondary,
+		baseColorFour,
 		button,
 		fontSizeText,
 		rowTextColor,
@@ -306,8 +306,8 @@ render(testData: Object): Object {
 						autoCapitalize="none"
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={inAppBrandSecondary}
-						tintColor={inAppBrandSecondary}
+						baseColor={baseColorFour}
+						tintColor={baseColorFour}
 						returnKeyType={'done'}
 					/>
 					<Text style={label}>
@@ -341,8 +341,8 @@ render(testData: Object): Object {
 							autoCapitalize="sentences"
 							autoCorrect={false}
 							autoFocus={false}
-							baseColor={inAppBrandSecondary}
-							tintColor={inAppBrandSecondary}
+							baseColor={baseColorFour}
+							tintColor={baseColorFour}
 							returnKeyType={'done'}
 							multiline={true}
 						/>
@@ -391,11 +391,11 @@ getStyles(appLayout: Object): Object {
 	const fontSizeLabel = deviceWidth * 0.038;
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	return {
-		inAppBrandSecondary,
+		baseColorFour,
 		rowTextColor,
 		container: {
 			...shadow,
@@ -406,7 +406,7 @@ getStyles(appLayout: Object): Object {
 			borderRadius: 2,
 		},
 		title: {
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 			fontSize: fontSizeTitle,
 			alignSelf: 'center',
 		},
@@ -415,7 +415,7 @@ getStyles(appLayout: Object): Object {
 			marginTop: 10,
 		},
 		label: {
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 			fontSize: fontSizeLabel,
 			marginTop: 22,
 		},
