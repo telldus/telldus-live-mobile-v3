@@ -144,7 +144,7 @@ const SetSensorName = (props: Object): Object => {
 	}
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 		coverStyle,
 		textFieldStyle,
 		textFieldCoverStyle,
@@ -174,8 +174,8 @@ const SetSensorName = (props: Object): Object => {
 					value={name}
 					label={formatMessage(i18n.name)}
 					labelTextStyle={labelStyle}
-					baseColor={inAppBrandSecondary}
-					tintColor={inAppBrandSecondary}
+					baseColor={baseColorFour}
+					tintColor={baseColorFour}
 					style={textFieldStyle}
 					containerStyle={textFieldCoverStyle}
 					onChangeText={onChangeName}
@@ -206,7 +206,7 @@ const getStyles = ({
 
 	const {
 		card,
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	const {
@@ -222,7 +222,7 @@ const getStyles = ({
 	const blockWidth = Math.floor(width - (padding * 2));
 
 	return {
-		inAppBrandSecondary,
+		baseColorFour,
 		coverStyle: {
 			flex: 1,
 		},
@@ -240,7 +240,7 @@ const getStyles = ({
 		},
 		labelStyle: {
 			fontSize: fontSize,
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 		},
 		iconStyle: {
 			color: '#fff',
@@ -249,7 +249,7 @@ const getStyles = ({
 			marginRight: 5,
 			marginBottom: 4,
 			fontSize: fontSize * 1.2,
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 		},
 	};
 };
