@@ -64,10 +64,10 @@ const ScreenConfigs = [
 		name: 'AdministrationTab',
 		Component: AdministrationTab,
 		options: {
-			tabBarLabel: ({ color }: Object): Object => (
+			tabBarLabel: ({ focused }: Object): Object => (
 				<TabBar
 					icon="home"
-					tintColor={color}
+					focused={focused}
 					label={'Administration'} // TODO: Translate
 					accessibilityLabel={'AdministrationTab'}/>
 			),
