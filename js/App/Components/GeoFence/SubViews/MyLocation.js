@@ -67,18 +67,18 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		maxSizeFloatingButton,
-		floatingButtonSizefactor,
-		floatingButtonOffsetfactor,
+		floatingButtonSizeFactor,
+		floatingButtonOffsetFactor,
 	} = Theme.Core;
 
 	const {
 		bottom,
-	} = floatingButtonOffsetfactor;
+	} = floatingButtonOffsetFactor;
 
 	let iconSize = deviceWidth * 0.08;
 	iconSize = iconSize > (maxSizeFloatingButton - 3) ? (maxSizeFloatingButton - 3) : iconSize;
 
-	let buttonSize = deviceWidth * floatingButtonSizefactor;
+	let buttonSize = deviceWidth * floatingButtonSizeFactor;
 	buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
 
 	const offsetBottom = (deviceWidth * bottom) + (buttonSize * 1.2) + 10;

@@ -319,10 +319,10 @@ export default {
 	get headerButtonIconSizeFactor(): number {
 		return 0.06;
 	},
-	get floatingButtonSizefactor(): number {
+	get floatingButtonSizeFactor(): number {
 		return 0.134666667;
 	},
-	get floatingButtonOffsetfactor(): Object {
+	get floatingButtonOffsetFactor(): Object {
 		return {
 			right: 0.034666667,
 			bottom: 0.046666667,
