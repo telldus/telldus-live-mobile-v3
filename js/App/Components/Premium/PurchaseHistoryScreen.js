@@ -256,10 +256,15 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+	const {
+		fontSizeFactorThree,
+		paddingFactor,
+		shadow,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeRow = Math.floor(deviceWidth * 0.043);
-	const fontSizeSection = Math.floor(deviceWidth * 0.039);
+	const fontSizeSection = Math.floor(deviceWidth * fontSizeFactorThree);
 
 	return {
 		toIconSize: fontSizeRow * 1.2,
@@ -271,7 +276,7 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'space-between',
 			alignItems: 'center',
 			marginHorizontal: padding,
-			...Theme.Core.shadow,
+			...shadow,
 			padding: 10,
 			marginBottom: padding / 2,
 		},
@@ -279,7 +284,7 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			marginTop: padding,
 			marginHorizontal: padding,
-			...Theme.Core.shadow,
+			...shadow,
 			padding: padding * 2,
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -295,7 +300,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		sectionStyle: {
 			paddingHorizontal: padding,
-			...Theme.Core.shadow,
+			...shadow,
 			paddingVertical: 5,
 			marginTop: padding / 2,
 			marginBottom: padding,

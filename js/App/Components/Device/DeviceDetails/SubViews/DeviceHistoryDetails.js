@@ -396,6 +396,7 @@ class DeviceHistoryDetails extends View {
 			paddingFactor,
 			fontSizeFactorFive,
 			fontSizeFactorFour,
+			fontSizeFactorOne,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -474,7 +475,7 @@ class DeviceHistoryDetails extends View {
 			titleText: {
 				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
-			statusIconSize: Math.floor(deviceWidth * 0.047),
+			statusIconSize: Math.floor(deviceWidth * fontSizeFactorOne),
 			detailsLabel: {
 				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},

@@ -402,6 +402,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			fontSizeFactorFive,
 			paddingFactor,
 			fontSizeFactorFour,
+			fontSizeFactorOne,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -444,7 +445,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				paddingBottom: 0,
 			},
 			timeStyle: {
-				fontSize: deviceWidth * 0.047,
+				fontSize: deviceWidth * fontSizeFactorOne,
 				color: textTwo,
 			},
 			timeContainerStyle: {
@@ -467,10 +468,10 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				borderRadius: deviceWidth * 0.025,
 				position: 'absolute',
 			},
-			statusIconSize: Math.floor(deviceWidth * 0.047),
+			statusIconSize: Math.floor(deviceWidth * fontSizeFactorOne),
 			statusValueText: {
 				color: '#ffffff',
-				fontSize: Math.floor(deviceWidth * 0.047),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorOne),
 			},
 			stateValSecStyle: {
 				color: '#ffffff',

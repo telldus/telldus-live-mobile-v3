@@ -111,11 +111,12 @@ const getStyles = ({layout}: Object): Object => {
 		paddingFactor,
 		shadow,
 		maxSizeRowTextOne,
+		fontSizeFactorOne,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	let nameFontSize = Math.floor(deviceWidth * 0.047);
+	let nameFontSize = Math.floor(deviceWidth * fontSizeFactorOne);
 	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
 	return {

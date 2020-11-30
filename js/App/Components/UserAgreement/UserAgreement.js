@@ -244,6 +244,7 @@ class UserAgreement extends View<Props, State> {
 
 		const {
 			fontSizeFactorFour,
+			fontSizeFactorOne,
 		} = Theme.Core;
 		const {
 			textFive,
@@ -266,7 +267,7 @@ class UserAgreement extends View<Props, State> {
 				paddingVertical: 20,
 			},
 			headerText: {
-				fontSize: Math.floor(deviceWidth * 0.047),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorOne),
 				textAlign: 'center',
 			},
 			footer: {

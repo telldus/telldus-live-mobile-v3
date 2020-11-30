@@ -123,6 +123,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		rowTextColor,
 		brandPrimary,
 		fontSizeFactorFour,
+		fontSizeFactorOne,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -152,7 +153,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 			justifyContent: 'center',
 		},
 		h1Style: {
-			fontSize: Math.floor(deviceWidth * 0.047),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorOne),
 			color: eulaContentColor,
 			textAlign: 'center',
 			fontWeight: 'bold',

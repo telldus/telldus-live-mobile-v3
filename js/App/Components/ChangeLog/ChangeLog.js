@@ -345,6 +345,7 @@ class ChangeLogNavigator extends View {
 			maxSizeFloatingButton,
 			shadow: themeShadow,
 			paddingFactor,
+			fontSizeFactorThree,
 		} = Theme.Core;
 
 		let iconSize = Math.floor(deviceWidth * 0.07);
@@ -420,7 +421,7 @@ class ChangeLogNavigator extends View {
 			textSkip: {
 				paddingVertical: 10,
 				textAlign: 'center',
-				fontSize: Math.floor(deviceWidth * 0.039),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorThree),
 			},
 			stepIndicatorSize,
 		};
