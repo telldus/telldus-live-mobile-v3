@@ -31,8 +31,7 @@ import { connect } from 'react-redux';
 import {
 	View,
 	TouchableButton,
-	IconTelldus,
-	Text,
+	InfoBlock,
 	ThemedScrollView,
 } from '../../../../BaseComponents';
 import { ExcludeDevice } from '../Common';
@@ -169,19 +168,12 @@ render(): Object {
 				<View style={{
 					flex: 1,
 				}}>
-					<View
-						level={2}
-						style={infoContainer}>
-						<IconTelldus
-							level={23}
-							icon={'info'}
-							style={statusIconStyle}/>
-						<Text
-							level={26}
-							style={infoTextStyle}>
-							{intl.formatMessage(i18n.excludedSuccessfullyMessage)}
-						</Text>
-					</View>
+					<InfoBlock
+						text={intl.formatMessage(i18n.excludedSuccessfullyMessage)}
+						appLayout={appLayout}
+						infoContainer={infoContainer}
+						textStyle={infoTextStyle}
+						infoIconStyle={statusIconStyle}/>
 					<TouchableButton
 						text={i18n.includeDevice}
 						onPress={this.onPressInclude}
@@ -212,12 +204,17 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, shadow } = Theme.Core;
+	const {
+		paddingFactor,
+		shadow,
+		fontSizeFactorFour,
+		fontSizeFactorNine,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const innerPadding = 5 + padding;
 
-	const infoTextFontSize = deviceWidth * 0.04;
+	const infoTextFontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		buttonStyle: {
@@ -234,7 +231,7 @@ getStyles(): Object {
 			borderRadius: 2,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

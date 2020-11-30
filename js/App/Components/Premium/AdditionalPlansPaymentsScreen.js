@@ -46,6 +46,7 @@ import {
 	IconTelldus,
 	TouchableButton,
 	CheckBoxIconText,
+	InfoBlock,
 } from '../../../BaseComponents';
 import {
 	PaymentProvidersBlock,
@@ -123,7 +124,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		infoTextStyle,
 		statusIconStyle,
 		footerHeight,
-		inAppBrandSecondary,
+		textOnLevelThreeView,
 	} = getStyles({
 		layout,
 		colors,
@@ -163,7 +164,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					style={[contentCover,
 						selectedIndex === index ? {
 							borderWidth: 3,
-							borderColor: inAppBrandSecondary,
+							borderColor: textOnLevelThreeView,
 						} : undefined,
 					]}>
 					<View style={headerCover}>
@@ -193,7 +194,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					</View>
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
 						{!!save && <Text style={saveTextStyle}>
-							{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
+							{`${formatMessage(i18n.saveLabel)} ${save}%`}
 						</Text>}
 						{!!prevTotal && <Text style={prevChargeTextStyle}>
 							{`€${formatNumber(prevTotal)}`}
@@ -308,7 +309,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.premiumAccess))}
 				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}
@@ -335,31 +336,30 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					iconStyle={recurring ?
 						{
 							color: '#fff',
-							backgroundColor: inAppBrandSecondary,
-							borderColor: inAppBrandSecondary,
+							backgroundColor: textOnLevelThreeView,
+							borderColor: textOnLevelThreeView,
 						}
 						:
 						{
 							color: 'transparent',
 							backgroundColor: 'transparent',
-							borderColor: inAppBrandSecondary,
+							borderColor: textOnLevelThreeView,
 						}
 					}
 				/>
 				}
-				{showInfo && <View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
-					<Text style={infoTextStyle}>
-						{!supportAutoRenew ?
+				{showInfo && (
+					<InfoBlock
+						text={!supportAutoRenew ?
 							formatMessage(i18n.autoRenewNotSupportedDescription)
 							:
 							formatMessage(i18n.autoRenewDisabledDescription)
 						}
-					</Text>
-				</View>
-				}
+						appLayout={layout}
+						infoContainer={infoContainer}
+						textStyle={infoTextStyle}
+						infoIconStyle={statusIconStyle}/>
+				)}
 				<TouchableButton
 					onPress={onPress}
 					preScript={<IconTelldus icon={'cart'} style={cartIconStyle}/>}
@@ -385,6 +385,10 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const {
+		fontSizeFactorEight,
+		fontSizeFactorNine,
+	} = Theme.Core;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.036);
@@ -392,12 +396,12 @@ const getStyles = ({
 	const footerHeight = Theme.Core.getFooterHeight(deviceWidth);
 
 	const {
-		inAppBrandSecondary,
+		textOnLevelThreeView,
 	} = colors;
 
 	return {
 		footerHeight,
-		inAppBrandSecondary,
+		textOnLevelThreeView,
 		container: {
 			flex: 1,
 		},
@@ -483,16 +487,16 @@ const getStyles = ({
 			marginRight: 7,
 		},
 		textStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
-			color: inAppBrandSecondary,
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
+			color: textOnLevelThreeView,
 		},
 		checkButtonStyle: {
 			marginVertical: padding,
 		},
 		backLinkStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			alignSelf: 'center',
-			color: inAppBrandSecondary,
+			color: textOnLevelThreeView,
 			padding: 10,
 			marginVertical: padding,
 		},
@@ -509,8 +513,7 @@ const getStyles = ({
 			borderRadius: 2,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
-			color: inAppBrandSecondary,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

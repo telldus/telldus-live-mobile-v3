@@ -187,7 +187,7 @@ class LocationDetails extends Component<Props, State> {
 					</View>
 					<View style={[locationTextContainer, infoContainerStyle]}>
 						<Text
-							level={23}
+							level={38}
 							numberOfLines={1}
 							style={[textHSH, h1Style]}>
 							{!!H1 && H1}
@@ -216,10 +216,14 @@ class LocationDetails extends Component<Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			fontSizeFactorEight,
+		} = Theme.Core;
+
 		let textHSHSize = Math.floor(deviceWidth * 0.054);
 		textHSHSize = textHSHSize > 35 ? 35 : textHSHSize;
 
-		let textLocationSize = Math.floor(deviceWidth * 0.045);
+		let textLocationSize = Math.floor(deviceWidth * fontSizeFactorEight);
 		textLocationSize = textLocationSize > 29 ? 29 : textLocationSize;
 
 		const widthImage = isPortrait ? width * 0.22 : height * 0.22;

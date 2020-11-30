@@ -27,6 +27,7 @@ import React, {
 } from 'react';
 
 import GeoHeader from '../App/Components/TabViews/img/telldus_geometric_bg.svg';
+import ThemedImage from './ThemedImage';
 
 import {
 	useAppTheme,
@@ -63,7 +64,21 @@ const GeometricHeader = (props: Props): Object => {
 
 	const {
 		colors,
+		selectedThemeSet,
 	} = useAppTheme();
+
+	if (selectedThemeSet && selectedThemeSet.key === 2) {
+		return (
+			<ThemedImage
+				source={{uri: 'telldus_header_bg'}}
+				style={[{
+					height,
+					width,
+				},
+				style]}
+			/>
+		);
+	}
 
 	return (
 		<GeoHeader

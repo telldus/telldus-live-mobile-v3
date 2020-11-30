@@ -364,11 +364,12 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.04);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 
 	const switchCircleSize = deviceWidth * 0.06;
 

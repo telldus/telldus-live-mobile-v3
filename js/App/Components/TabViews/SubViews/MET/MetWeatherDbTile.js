@@ -39,10 +39,14 @@ import GenericSensor from '../Sensor/GenericSensor';
 import {
 	checkIfLarge,
 	MET_ID,
+	getSensorInfo,
 } from '../../../../Lib';
 import {
 	updateAllMetWeatherDbTiles,
 } from '../../../../Actions/ThirdParties';
+import {
+	useAppTheme,
+} from '../../../../Hooks/Theme';
 
 import Theme from '../../../../Theme';
 
@@ -86,6 +90,11 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 		tileWidth,
 	});
 
+	const {
+		colors,
+		selectedThemeSet,
+	} = useAppTheme();
+
 	const lastUpdated = dayjs(meta.updated_at).unix();
 	const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
@@ -117,17 +126,22 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 				value,
 				unit,
 				label,
+				name: _name,
 			} = d;
 
 			const isLarge = (value !== null && typeof value !== 'undefined') ? checkIfLarge(value.toString()) : true;
+			const {
+				icon,
+				formatOptions = {},
+			} = getSensorInfo(_name, -1, value, isLarge);
 
 			let sharedProps = {
 				key: property,
 				unit,
 				label,
-				icon: 'sensor',
-				isLarge,
-				name: label,
+				icon: icon || 'sensor',
+				isLarge: false,
+				name: _name,
 				value,
 				iconStyle,
 				valueUnitCoverStyle,
@@ -135,7 +149,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 				unitStyle,
 				labelStyle,
 				sensorValueCoverStyle,
-				formatOptions: {},
+				formatOptions: formatOptions,
 			};
 			_slideList[property] = <GenericSensor {...sharedProps}/>;
 		});
@@ -149,7 +163,9 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id, onPress]);
 
-	let background = Object.keys(slideList).length === 0 ? Theme.Core.brandPrimary : 'transparent';
+	let background = Object.keys(slideList).length === 0 ? colors.sensorValueBGColor : 'transparent';
+
+	const backgroundColor = selectedThemeSet.key === 2 ? 'transparent' : colors.itemIconBGColor;
 
 	return (
 		<DashboardShadowTile
@@ -159,13 +175,14 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 			info={info}
 			icon={'sensor'}
 			iconStyle={{
-				color: '#fff',
+				color: colors.baseColor,
 				fontSize: Math.floor(tileWidth / 6.5),
 				borderRadius: Math.floor(tileWidth / 8),
 				textAlign: 'center',
 				alignSelf: 'center',
 			}}
 			iconContainerStyle={{
+				backgroundColor,
 				width: Math.floor(tileWidth / 4),
 				height: Math.floor(tileWidth / 4),
 				borderRadius: Math.floor(tileWidth / 8),

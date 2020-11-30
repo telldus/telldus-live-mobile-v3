@@ -33,13 +33,13 @@ import {
 	LayoutAnimation,
 } from 'react-native';
 import { useSelector } from 'react-redux';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const isEqual = require('react-fast-compare');
 
 import {
 	View,
 	Text,
 	EmptyView,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 
 import {
@@ -78,7 +78,6 @@ const SupportedCommandClasses = (props: Props): Object => {
 		titleStyle,
 		iconStyle,
 		iconSize,
-		iconColor,
 		interviewLinkStyle,
 	} = getStyles(layout);
 
@@ -112,12 +111,19 @@ const SupportedCommandClasses = (props: Props): Object => {
 			const showInterview = admin === 1 || (!isFailed && version === 0 && listening);
 
 			return (
-				<View style={coverStyle} key={`${i}`}>
-					<Text style={textStyle}>
+				<View
+					level={2}
+					style={coverStyle}
+					key={`${i}`}>
+					<Text
+						level={4}
+						style={textStyle}>
 						{cmdName}
 					</Text>
 					{showInterview && (
-						<Text style={interviewLinkStyle} onPress={onPressInterview}>
+						<Text
+							level={23}
+							style={interviewLinkStyle} onPress={onPressInterview}>
 							Interview
 						</Text>
 					)}
@@ -140,18 +146,20 @@ const SupportedCommandClasses = (props: Props): Object => {
 	if (!id || !nodeInfo || !commands || commands.length === 0) {
 		return <EmptyView/>;
 	}
-
+	// TODO: Translate
 	return (
 		<>
 			<TouchableOpacity
 				style={titleCoverStyle}
 				onPress={onPressToggle}>
-				<MaterialIcons
+				<ThemedMaterialIcon
 					name={expand ? 'expand-more' : 'expand-less'}
 					size={iconSize}
-					color={iconColor}
-					style={iconStyle}/>
-				<Text style={titleStyle}>
+					style={iconStyle}
+					level={38}/>
+				<Text
+					level={2}
+					style={titleStyle}>
 					Supported Command Classes
 				</Text>
 			</TouchableOpacity>
@@ -171,16 +179,13 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	const {
-		rowTextColor,
 		paddingFactor,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	return {
 		iconSize: deviceWidth * 0.06,
-		iconColor: brandSecondary,
 		titleCoverStyle: {
 			flexDirection: 'row',
 			marginLeft: padding,
@@ -190,12 +195,10 @@ const getStyles = (appLayout: Object): Object => {
 		titleStyle: {
 			marginLeft: 8,
 			fontSize: deviceWidth * 0.04,
-			color: rowTextColor,
 		},
 		coverStyle: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			backgroundColor: '#fff',
 			marginTop: 2,
 			marginHorizontal: padding,
 			borderRadius: 2,
@@ -206,11 +209,9 @@ const getStyles = (appLayout: Object): Object => {
 			marginBottom: padding,
 		},
 		textStyle: {
-			color: rowTextColor,
 			fontSize,
 		},
 		interviewLinkStyle: {
-			color: brandSecondary,
 			fontSize,
 		},
 	};

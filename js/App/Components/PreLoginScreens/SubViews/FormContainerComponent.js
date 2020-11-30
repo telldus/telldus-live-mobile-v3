@@ -27,13 +27,16 @@ import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
 import { BackgroundImage, View } from '../../../../BaseComponents';
-import TelldusLogo from '../../TabViews/img/telldus_logo.svg';
+import TelldusLogoTwo from '../..//TabViews/img/telldus_logo_two.svg';
 
 import {
 	withTheme,
 	PropsThemedComponent,
 } from '../../HOC/withTheme';
-
+import {
+	getHeaderOneFontSize,
+	getTextFieldTextFontSize,
+} from '../../../Lib/styleUtils';
 import Theme from '../../../Theme';
 
 type Props = PropsThemedComponent & {
@@ -69,14 +72,12 @@ class FormContainerComponent extends View<Props, null> {
 			children,
 			appLayout,
 			screen,
-			dark,
-			colors,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<BackgroundImage source={{uri: dark ? 'telldusliveapp_launchscreen_darkmode' : 'telldusliveapp_launchscreen'}} style={styles.container}>
+			<BackgroundImage source={{uri: 'telldusliveapp_launchscreen'}} style={styles.container}>
 				{!!appLayout.width && (
 					<ScrollView
 						keyboardShouldPersistTaps={'always'}
@@ -86,10 +87,8 @@ class FormContainerComponent extends View<Props, null> {
 							behavior="position"
 							style={{ justifyContent: 'center', alignItems: 'center' }}
 							contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
-							<TelldusLogo
-								colorHomeLogo={colors.inAppBrandSecondary}
-								colorTextLogo={dark ? '#ffffff' : '#000000'}
-								colorWaveLogo={'#ffffff'}
+							<TelldusLogoTwo
+								colorHomeLogo={'#ffffff'}
 								style={styles.logoStyle}
 								height={styles.logoHeight}
 								width={styles.logoWidth}/>
@@ -123,17 +122,11 @@ class FormContainerComponent extends View<Props, null> {
 		let deviceHeight = isPortrait ? height : width;
 
 		const {
-			maxSizeTextButton,
 			baseColorPreloginScreen,
 		} = Theme.Core;
 
-		let headerFontSize = Math.floor(deviceWidth * 0.05);
-		let maxFontSize = maxSizeTextButton + 4;
-		headerFontSize = headerFontSize > maxFontSize ? maxFontSize : headerFontSize;
-
-		let textFieldFontSize = Math.floor(deviceWidth * 0.04);
-		let maxTextFieldFontSize = maxSizeTextButton - 4;
-		textFieldFontSize = textFieldFontSize > maxTextFieldFontSize ? maxTextFieldFontSize : textFieldFontSize;
+		const headerFontSize = getHeaderOneFontSize(deviceWidth);
+		const textFieldFontSize = getTextFieldTextFontSize(deviceWidth);
 
 		return {
 			logoHeight: Math.floor(deviceWidth * 0.3),
@@ -146,13 +139,13 @@ class FormContainerComponent extends View<Props, null> {
 			contentContainerStyle: {
 				flexGrow: 1,
 				alignItems: 'center',
+				backgroundColor: '#00000030',
 			},
 			logoStyle: {
-				marginTop: deviceHeight * 0.16,
-				marginBottom: deviceHeight * 0.08,
+				marginTop: deviceHeight * 0.1,
+				marginBottom: deviceHeight * 0.04,
 			},
 			formContainer: {
-				backgroundColor: '#00000099',
 				padding: 10,
 				flexDirection: 'column',
 				justifyContent: 'center',
@@ -164,6 +157,7 @@ class FormContainerComponent extends View<Props, null> {
 				fontSize: headerFontSize,
 				color: baseColorPreloginScreen,
 				textAlign: 'center',
+				fontWeight: '900',
 			},
 			formCover: {
 				flex: 1,

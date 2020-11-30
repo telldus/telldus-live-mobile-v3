@@ -111,9 +111,14 @@ getStyle(appLayout: Object, value: number): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { brandDanger, brandWarning, brandSuccess } = Theme.Core;
+	const {
+		brandDanger,
+		brandWarning,
+		brandSuccess,
+		fontSizeFactorFour,
+	} = Theme.Core;
 
-	const batteryHeight = Math.floor(deviceWidth * 0.04);
+	const batteryHeight = Math.floor(deviceWidth * fontSizeFactorFour);
 	const batteryWidth = Math.floor(deviceWidth * 0.07);
 
 	const { padding, borderWidth } = this.props;

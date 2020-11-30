@@ -41,6 +41,7 @@ import {
 } from '../../../Hooks/App';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 const PrivacyPolicyLink = (props: Object): Object => {
 	const { formatMessage } = useIntl();
@@ -76,7 +77,7 @@ const PrivacyPolicyLink = (props: Object): Object => {
 
 	return (
 		<Text
-			level={23}
+			level={36}
 			onPress={onPressPP}
 			style={buttonResubmit}>
 			{formatMessage(i18n.privacyPolicy)}
@@ -88,11 +89,14 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		buttonResubmit: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize,
 			alignSelf: 'center',
 			paddingVertical: 5,
 			marginBottom: fontSize / 2,

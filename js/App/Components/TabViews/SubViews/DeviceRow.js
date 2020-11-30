@@ -183,6 +183,7 @@ class DeviceRow extends View<Props, State> {
 				'themeInApp',
 				'colorScheme',
 				'dark',
+				'selectedThemeSet',
 			]);
 			if (propsChange) {
 				return true;
@@ -199,6 +200,7 @@ class DeviceRow extends View<Props, State> {
 		const themeHasChanged = shouldUpdate(otherProps, nextOtherProps, [
 			'themeInApp',
 			'colorScheme',
+			'selectedThemeSet',
 		]);
 		if (themeHasChanged) {
 			return true;
@@ -299,6 +301,7 @@ class DeviceRow extends View<Props, State> {
 			onColorMultiplier,
 			dark,
 			colors,
+			selectedThemeSet,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -478,9 +481,14 @@ class DeviceRow extends View<Props, State> {
 								accessibilityLabel={accessibilityLabel}>
 								{showDeviceIcon && <BlockIcon
 									icon={icon}
-									style={styles.deviceIcon}
+									style={[
+										styles.deviceIcon,
+										{
+											color: selectedThemeSet.key === 2 ? colorDeviceIconBack : '#ffffff',
+										},
+									]}
 									containerStyle={[styles.iconContainerStyle, {
-										backgroundColor: colorDeviceIconBack,
+										backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : colorDeviceIconBack,
 									}]}/>}
 								{nameInfo}
 							</TouchableOpacity>
@@ -541,7 +549,7 @@ class DeviceRow extends View<Props, State> {
 			<View style={coverStyle}>
 				<Text
 					level={25}
-					style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1}>
+					style={[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1}>
 					{deviceName}
 				</Text>
 				{!!info && (
@@ -586,6 +594,8 @@ class DeviceRow extends View<Props, State> {
 			shadow,
 			paddingFactor,
 			offlineColor,
+			fontSizeFactorOne,
+			fontSizeFactorThree,
 		} = Theme.Core;
 
 		const {
@@ -595,10 +605,10 @@ class DeviceRow extends View<Props, State> {
 			inAppBrandSecondary,
 		} = colors;
 
-		let nameFontSize = Math.floor(deviceWidth * 0.047);
+		let nameFontSize = Math.floor(deviceWidth * fontSizeFactorOne);
 		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
-		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		let infoFontSize = Math.floor(deviceWidth * fontSizeFactorThree);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
 		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? colorOffActiveBg : colorOnActiveBg;
@@ -667,7 +677,6 @@ class DeviceRow extends View<Props, State> {
 			},
 			deviceIcon: {
 				fontSize: 18,
-				color: '#fff',
 			},
 			iconContainerStyle: {
 				backgroundColor,

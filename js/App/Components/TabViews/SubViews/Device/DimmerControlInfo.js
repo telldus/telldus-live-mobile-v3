@@ -65,6 +65,7 @@ class DimmerControlInfo extends View<Props, null> {
 			'isOnline',
 			'themeInApp',
 			'colorScheme',
+			'selectedThemeSet',
 			'show',
 		]);
 	}

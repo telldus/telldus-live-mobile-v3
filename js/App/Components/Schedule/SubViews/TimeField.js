@@ -34,6 +34,7 @@ import {
 	withTheme,
 	PropsThemedComponent,
 } from '../../HOC/withTheme';
+import Theme from '../../../Theme';
 
 type Props = PropsThemedComponent & {
     appLayout: Object,
@@ -146,7 +147,7 @@ render(): Object {
 	const { value } = this.state;
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	const {
@@ -160,8 +161,8 @@ render(): Object {
 			<MaterialTextInput
 				label={this.minutes}
 				style={inputStyle}
-				baseColor={inAppBrandSecondary}
-				tintColor={inAppBrandSecondary}
+				baseColor={baseColorFour}
+				tintColor={baseColorFour}
 				autoFocus={false}
 				value={value}
 				onChangeText={this.onEdit}
@@ -191,7 +192,11 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const inputFontSize = deviceWidth * 0.04;
+	const {
+		fontSizeFactorFour,
+	} = Theme.Core;
+
+	const inputFontSize = deviceWidth * fontSizeFactorFour;
 	const iconFontSize = deviceWidth * 0.054;
 
 	return {

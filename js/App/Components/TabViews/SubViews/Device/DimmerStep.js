@@ -72,7 +72,7 @@ constructor(props: Props) {
 	this.onPressDim = this.onPressDim.bind(this);
 
 	let { formatMessage } = this.props.intl;
-	this.labelClose = formatMessage(i18n.labelClose).toUpperCase();
+	this.labelClose = formatMessage(i18n.labelClose);
 	this.labelButton = formatMessage(i18n.button);
 	this.defaultDescriptionButton = formatMessage(i18n.defaultDescriptionButton);
 }

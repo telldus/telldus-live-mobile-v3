@@ -186,7 +186,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			clearListenersIAP();
 			didFocusSubscription();
 		};
-	}, [clearListeners]);
+	}, [clearListeners, navigation]);
 
 	async function requestIapSubscription(id: string) {
 		try {
@@ -246,7 +246,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					<Text
 						level={26}
 						style={titleStyleTwo} key={`${i}`}>
-						{` ${word.replace(/%/g, '').toUpperCase()}`}
+						{` ${word.replace(/%/g, '')}`}
 					</Text>
 				);
 			}
@@ -254,7 +254,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 				<Text
 					level={26}
 					style={titleStyleOne} key={`${i}`}>
-					{word.toUpperCase()}
+					{word}
 				</Text>
 			);
 		});
@@ -311,7 +311,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.premiumAccess))}
 				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				goBack={onPressGoBack}
@@ -382,7 +382,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 						}
 					</View>
 					{!!save && <Text style={saveTextStyle}>
-						{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
+						{`${formatMessage(i18n.saveLabel)} ${save}%`}
 					</Text>}
 					<Text
 						level={26}

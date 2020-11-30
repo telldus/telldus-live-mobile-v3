@@ -92,12 +92,7 @@ const ThemedTabBar = withTheme(React.memo<Object>((props: Object): Object => {
 	const {
 		posterProps,
 		tabBarProps,
-		colors,
 	} = props;
-
-	const {
-		headerIconColor,
-	} = colors;
 
 	return (
 		<View style={{flex: 0}}>
@@ -105,7 +100,7 @@ const ThemedTabBar = withTheme(React.memo<Object>((props: Object): Object => {
 			<MaterialTopTabBar
 				{...tabBarProps}
 				indicatorStyle={{
-					backgroundColor: headerIconColor,
+					height: 0,
 				}}
 			/>
 		</View>

@@ -129,7 +129,7 @@ const MoreOptionsTab = (props: Props): Object => {
 				iconComponent: <ThemedMaterialIcon
 					style={iconStyle}
 					name={'group-add'}
-					level={23}/>,
+					level={43}/>,
 				text: capitalize(formatMessage(i18n.switchOrAddAccount)),
 				onPress: performAddOrSwitch,
 				enable: true,
@@ -152,7 +152,7 @@ const MoreOptionsTab = (props: Props): Object => {
 				iconComponent: <ThemedMaterialIcon
 					style={iconStyle}
 					name={'location-on'}
-					level={23}/>,
+					level={43}/>,
 				text: capitalize(formatMessage(i18n.manageGeoFence)),
 				onPress: () => {
 					let screen = 'AddEditGeoFence';
@@ -193,12 +193,12 @@ const MoreOptionsTab = (props: Props): Object => {
 						level={2}
 						style={rowCoverStyle} onPress={onPress} key={`${i}`}>
 						{!!icon && <IconTelldus
-							level={23}
+							level={43}
 							style={iconStyle}
 							icon={icon}/>}
 						{!!iconComponent && iconComponent}
 						<Text
-							level={23}
+							level={42}
 							style={labelStyle}>
 							{!!text && text}
 						</Text>
@@ -216,13 +216,14 @@ const MoreOptionsTab = (props: Props): Object => {
 		enableGeoFenceFeature,
 		themeInApp,
 		consentLocationData,
+		performAddOrSwitch,
 	]);
 
 	return (
 		<View style={outerCoverStyle} level={3}>
 			<PosterWithText
 				appLayout={layout}
-				align={'right'}
+				align={'left'}
 				showBackButton={false}
 				h1={formatMessage(i18n.more)}
 				h2={capitalize(formatMessage(i18n.featuresAndSettings))}/>
@@ -245,11 +246,12 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		shadow,
 		twine,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = Math.floor(deviceWidth * 0.045);
+	const fontSizeText = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		outerCoverStyle: {

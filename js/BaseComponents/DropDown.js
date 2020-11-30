@@ -164,6 +164,7 @@ static defaultProps: DefaultProps = {
 			'showMax',
 			'onFocus',
 			'insets',
+			'selectedThemeSet',
 		]);
 		if (propsChange) {
 			return true;
@@ -402,12 +403,16 @@ static defaultProps: DefaultProps = {
 			textFour,
 		} = colors;
 
-		const { shadow, paddingFactor } = Theme.Core;
+		const {
+			shadow,
+			paddingFactor,
+			fontSizeFactorFour,
+		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 
-		const fontSizeText = fontSize ? fontSize : deviceWidth * 0.04;
-		const fontSizeRightIcon = deviceWidth * 0.04;
+		const fontSizeText = fontSize ? fontSize : deviceWidth * fontSizeFactorFour;
+		const fontSizeRightIcon = deviceWidth * fontSizeFactorFour;
 
 		return {
 			pickerStyleDef: {

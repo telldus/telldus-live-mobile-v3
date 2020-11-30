@@ -1,6 +1,6 @@
 {
   "name": "TelldusLiveApp",
-  "version": "3.15.16",
+  "version": "3.16.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -24,7 +24,7 @@
     "@formatjs/intl-pluralrules": "^3.2.5",
     "@formatjs/intl-relativetimeformat": "^7.0.0",
     "@invertase/react-native-apple-authentication": "^1.1.2",
-    "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/datetimepicker": "^3.0.2",
     "@react-native-community/google-signin": "^4.0.3",
     "@react-native-community/masked-view": "~0.1.10",
@@ -52,7 +52,7 @@
     "intl": "~1.2.5",
     "jsc-android": "npm:@kudo-ci/jsc-android",
     "jwt-decode": "^2.2.0",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#c1ab244ad6aecfdf77c50b9ddfafb943a201b41b",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#d865d604c7f556c077c3cefbd816df4e36e867d2",
     "lodash": "~4.17.11",
     "node-forge": "~0.9.1",
     "react": "16.13.1",
@@ -180,7 +180,7 @@
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|react-navigation|@react-native-firebase/|@react-native-community/push-notification-ios|@invertase/react-native-apple-authentication|@react-navigation/.*|@react-native-community/async-storage/(?!(lib))))"
+      "node_modules/(?!((jest-)?react-native|react-navigation|@react-native-firebase/|@react-native-community/push-notification-ios|@invertase/react-native-apple-authentication|@react-navigation/.*|@react-native-async-storage/async-storage/(?!(lib))))"
     ]
   },
   "@comment": {

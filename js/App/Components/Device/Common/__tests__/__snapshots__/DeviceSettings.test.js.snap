@@ -20,7 +20,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       Object {
         "backgroundColor": "transparent",
         "color": "#777777",
-        "fontFamily": "Roboto-Regular",
+        "fontFamily": "SuisseIntl",
         "fontSize": 33,
         "marginBottom": 5,
         "marginTop": 10.416375,
@@ -36,7 +36,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
     style={
       Array [
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#f5f5f5",
           "borderRadius": 2,
           "elevation": 2,
           "marginTop": 10.416375,
@@ -91,6 +91,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
               Object {
                 "backgroundColor": "transparent",
                 "color": "#000",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "justifyContent": "center",
               },
@@ -124,7 +125,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             style={
               Object {
                 "backgroundColor": "transparent",
-                "color": "#e26901",
+                "color": "#9C7D69",
                 "fontFamily": "telldusicons",
                 "fontSize": 30,
               }
@@ -163,6 +164,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
                 "backgroundColor": "transparent",
                 "color": "#4C4C4C",
                 "flex": 1,
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "textAlign": "right",
                 "textAlignVertical": "center",
@@ -199,7 +201,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             style={
               Array [
                 Object {
-                  "color": "#e26901",
+                  "color": "#000000",
                   "fontSize": 30,
                 },
                 undefined,
@@ -225,7 +227,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
     style={
       Array [
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#f5f5f5",
           "borderRadius": 2,
           "elevation": 2,
           "marginTop": 10.416375,
@@ -280,6 +282,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
               Object {
                 "backgroundColor": "transparent",
                 "color": "#000",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "justifyContent": "center",
               },
@@ -313,7 +316,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             style={
               Object {
                 "backgroundColor": "transparent",
-                "color": "#e26901",
+                "color": "#9C7D69",
                 "fontFamily": "telldusicons",
                 "fontSize": 30,
               }
@@ -352,6 +355,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
                 "backgroundColor": "transparent",
                 "color": "#4C4C4C",
                 "flex": 1,
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "textAlign": "right",
                 "textAlignVertical": "center",
@@ -388,7 +392,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             style={
               Array [
                 Object {
-                  "color": "#e26901",
+                  "color": "#000000",
                   "fontSize": 30,
                 },
                 undefined,
@@ -430,7 +434,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       Object {
         "backgroundColor": "transparent",
         "color": "#777777",
-        "fontFamily": "Roboto-Regular",
+        "fontFamily": "SuisseIntl",
         "fontSize": 33,
         "marginBottom": 5,
         "marginTop": 10.416375,
@@ -446,7 +450,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
     style={
       Array [
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#f5f5f5",
           "borderRadius": 2,
           "elevation": 2,
           "marginTop": 10.416375,
@@ -501,6 +505,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
               Object {
                 "backgroundColor": "transparent",
                 "color": "#000",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "justifyContent": "center",
               },
@@ -534,7 +539,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             style={
               Object {
                 "backgroundColor": "transparent",
-                "color": "#e26901",
+                "color": "#9C7D69",
                 "fontFamily": "telldusicons",
                 "fontSize": 30,
               }
@@ -573,6 +578,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
                 "backgroundColor": "transparent",
                 "color": "#4C4C4C",
                 "flex": 1,
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "textAlign": "right",
                 "textAlignVertical": "center",
@@ -609,7 +615,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             style={
               Array [
                 Object {
-                  "color": "#e26901",
+                  "color": "#000000",
                   "fontSize": 30,
                 },
                 undefined,
@@ -635,7 +641,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
     style={
       Array [
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#f5f5f5",
           "borderRadius": 2,
           "elevation": 2,
           "marginTop": 10.416375,
@@ -690,6 +696,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
               Object {
                 "backgroundColor": "transparent",
                 "color": "#000",
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "justifyContent": "center",
               },
@@ -723,7 +730,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             style={
               Object {
                 "backgroundColor": "transparent",
-                "color": "#e26901",
+                "color": "#9C7D69",
                 "fontFamily": "telldusicons",
                 "fontSize": 30,
               }
@@ -762,6 +769,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
                 "backgroundColor": "transparent",
                 "color": "#4C4C4C",
                 "flex": 1,
+                "fontFamily": "SuisseIntl",
                 "fontSize": 30,
                 "textAlign": "right",
                 "textAlignVertical": "center",
@@ -798,7 +806,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             style={
               Array [
                 Object {
-                  "color": "#e26901",
+                  "color": "#000000",
                   "fontSize": 30,
                 },
                 undefined,

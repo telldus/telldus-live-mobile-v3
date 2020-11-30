@@ -182,7 +182,7 @@ getContents = (): Object => {
 	const { info = ''} = route.params || {};
 
 	const posterH1 = capitalize(formatMessage(i18n.getStarted)),
-		cancelLabel = formatMessage(i18n.labelNotNow).toUpperCase(),
+		cancelLabel = formatMessage(i18n.labelNotNow),
 		cancelOnPress = this.goBack;
 
 	switch (info) {
@@ -282,7 +282,7 @@ render(): Object | null {
 				nestedScrollEnabled={true}>
 				<PosterWithText
 					appLayout={appLayout}
-					align={'right'}
+					align={'left'}
 					h1={posterH1}
 					h2={posterH2}
 					showLeftIcon={true}
@@ -336,6 +336,8 @@ getStyles(appLayout: Object): Object {
 	const {
 		shadow,
 		paddingFactor,
+		fontSizeFactorFour,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -370,7 +372,7 @@ getStyles(appLayout: Object): Object {
 		bodyStyle: {
 			marginTop: 10,
 			textAlign: 'left',
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 		},
 		buttonStyle: {
 			marginTop: padding * 2,
@@ -378,7 +380,7 @@ getStyles(appLayout: Object): Object {
 		},
 		cancelStyle: {
 			marginTop: padding * 2,
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			fontWeight: '500',
 		},
 	};

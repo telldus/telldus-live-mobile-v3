@@ -31,7 +31,7 @@ import { View, Text, RoundedInfoButton, GeometricHeader } from '../../../../Base
 import GeoPosition from '../Common/GeoPosition';
 
 import capitalize from '../../../Lib/capitalize';
-
+import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -112,7 +112,7 @@ class Position extends View {
 		this.openDialogueBox({
 			header,
 			text: `${this.dlogPOne}\n\n${this.dlogPTwo}\n\n${this.dlogPThree}`,
-			positiveText: intl.formatMessage(i18n.dialoguePositiveText).toUpperCase(),
+			positiveText: intl.formatMessage(i18n.dialoguePositiveText),
 		});
 	}
 
@@ -202,6 +202,10 @@ class Position extends View {
 		const { appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const {
+			fontSizeFactorTwelve,
+		} = Theme.Core;
 
 		return {
 			dialogueHeader: {
@@ -227,7 +231,7 @@ class Position extends View {
 				textAlign: 'center',
 				textAlignVertical: 'center',
 				color: '#fff',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorTwelve),
 				paddingLeft: 10,
 			},
 		};

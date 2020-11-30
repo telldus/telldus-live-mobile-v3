@@ -267,7 +267,7 @@ const SettingsRow = (props: Props): Object => {
 								{typeof iconValueRight === 'string' ? <ThemedMaterialIcon
 									name={iconValueRight}
 									size={_iconValueRightSize}
-									level={23}/> : iconValueRight}
+									level={37}/> : iconValueRight}
 							</TouchableOpacity>
 						)}
 					</TouchableOpacity>
@@ -293,10 +293,11 @@ const getStyle = ({
 
 	const {
 		paddingFactor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const fontSize = deviceWidth * 0.04;
+	const fontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		ShowOnDashCover: {

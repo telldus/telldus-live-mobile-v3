@@ -33,6 +33,7 @@ import {
 } from '../App/Components/HOC/withTheme';
 
 import Theme from '../App/Theme';
+
 import i18n from '../App/Translations/common';
 
 type Props = PropsThemedComponent & {
@@ -133,8 +134,14 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 			_checkBoxTextActiveOne = textInsidePoster;
 		}
 
-		const fontSize = Math.floor(deviceWidth * 0.035);
-		const fontSizeIcon = Math.floor(deviceWidth * 0.038);
+		const {
+			fontSizeFactorFive,
+			fontSizeFactorTen,
+			fontSizeFactorEleven,
+		} = Theme.Core;
+
+		const fontSize = Math.floor(deviceWidth * fontSizeFactorTen);
+		const fontSizeIcon = Math.floor(deviceWidth * fontSizeFactorEleven);
 
 		return {
 			container: {
@@ -149,14 +156,13 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 				marginLeft: 5 + (fontSize * 0.4),
 				fontSize: fontSize,
 				color: _checkBoxTextActiveOne,
-				fontFamily: Theme.Core.fonts.robotoLight,
 			},
 			checkIconCommon: {
 				borderWidth: 1,
 				fontSize: fontSizeIcon,
 				textAlign: 'center',
 				textAlignVertical: 'center',
-				padding: fontSizeIcon * 0.05,
+				padding: fontSizeIcon * fontSizeFactorFive,
 				borderRadius: 2,
 				overflow: 'hidden',
 			},

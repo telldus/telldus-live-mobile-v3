@@ -157,7 +157,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={voucher ? capitalize(formatMessage(i18n.redeemCard)) : capitalize(formatMessage(i18n.premiumAccess))}
 				h2={voucher ? formatMessage(i18n.codeAccepted) : formatMessage(i18n.getMoreFeaturesAndBenefits)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={!success}
 				leftIcon={success ? undefined : 'close'}
 				navigation={navigation}
@@ -188,7 +188,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 							<Text
 								level={26}
 								style={purchaseInfoText}>
-								{getInfo().toUpperCase()}
+								{getInfo()}
 							</Text>
 						</View>
 						}
@@ -197,7 +197,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 							<Text
 								level={26}
 								style={purchaseInfoText}>
-								{`${credits} `}{formatMessage(i18n.smsCredits).toUpperCase()}
+								{`${credits} `}{formatMessage(i18n.smsCredits)}
 							</Text>
 						</View>
 						}
@@ -238,9 +238,12 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		container: {

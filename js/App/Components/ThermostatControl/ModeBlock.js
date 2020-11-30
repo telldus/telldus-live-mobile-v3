@@ -261,7 +261,7 @@ render(): Object {
 }
 
 getStyles(): Object {
-	const { appLayout } = this.props;
+	const { appLayout, colors } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -270,12 +270,13 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		rowTextColor,
-		appBackground,
+		fontSizeFactorFive,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const iconSizeAddRemove = deviceWidth * 0.05;
+	const iconSizeAddRemove = deviceWidth * fontSizeFactorFive;
 	const iconCoverSize = iconSizeAddRemove * 1.4;
 	const iconBorderRadi = iconCoverSize / 2;
 
@@ -300,7 +301,7 @@ getStyles(): Object {
 		},
 		labelStyle: {
 			color: rowTextColor,
-			fontSize: deviceWidth * 0.05,
+			fontSize: deviceWidth * fontSizeFactorFive,
 			textAlignVertical: 'center',
 			flex: 1,
 		},
@@ -322,7 +323,7 @@ getStyles(): Object {
 		},
 		unitStyle: {
 			color: rowTextColor,
-			fontSize: deviceWidth * 0.035,
+			fontSize: deviceWidth * fontSizeFactorTen,
 		},
 		iconBlockStyle: {
 			width: deviceWidth * 0.2,
@@ -333,7 +334,7 @@ getStyles(): Object {
 		},
 		iconSize: deviceWidth * 0.08,
 		addRemoveIconCover: {
-			backgroundColor: appBackground,
+			backgroundColor: colors.viewInsideLevelTwoView,
 			height: iconCoverSize,
 			width: iconCoverSize,
 			borderRadius: iconBorderRadi,

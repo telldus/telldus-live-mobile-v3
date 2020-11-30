@@ -33,6 +33,7 @@ import {
 } from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 const UpdatePasswordBlock = (props: Object): Object => {
 	const { navigation } = props;
@@ -66,7 +67,10 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		fontSize,

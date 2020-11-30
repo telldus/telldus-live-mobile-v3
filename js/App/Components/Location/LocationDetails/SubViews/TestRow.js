@@ -62,6 +62,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'appLayout',
 		'themeInApp',
 		'colorScheme',
+		'selectedThemeSet',
 	]);
 }
 
@@ -112,14 +113,18 @@ getStyles(appLayout: Object): Object {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
-	const { rowTextColor } = Theme.Core;
+	const {
+		rowTextColor,
+		fontSizeFactorFive,
+		fontSizeFactorTen,
+	} = Theme.Core;
 
 	const iconSize = Math.floor(deviceWidth * 0.09);
-	const h1Size = Math.floor(deviceWidth * 0.05);
-	const h2Size = Math.floor(deviceWidth * 0.035);
+	const h1Size = Math.floor(deviceWidth * fontSizeFactorFive);
+	const h2Size = Math.floor(deviceWidth * fontSizeFactorTen);
 
 	const {
 		statusGreen,
@@ -145,7 +150,7 @@ getStyles(appLayout: Object): Object {
 		},
 		h1Style: {
 			fontSize: h1Size,
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 		},
 		h2Style: {
 			fontSize: h2Size,

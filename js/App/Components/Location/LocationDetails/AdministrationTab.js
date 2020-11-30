@@ -69,9 +69,7 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 		location: {id},
 	} = route.params || {};
 
-	const {
-		intl,
-	} = useIntl();
+	const intl = useIntl();
 	const {
 		formatMessage,
 	} = intl;
@@ -176,7 +174,7 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 				infoIconStyle={infoIconErrorStyle}
 				textStyle={infoTextStyle}/>
 			<TouchableButton
-				text={'TRANSFER'}
+				text={'Transfer'}
 				onPress={onPressTransfer}
 				disabled={isLoading}
 				style={{

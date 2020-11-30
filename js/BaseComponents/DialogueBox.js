@@ -34,7 +34,7 @@ import DialogueHeader from './DialogueHeader';
 
 import capitalize from '../App/Lib/capitalize';
 import i18n from '../App/Translations/common';
-
+import Theme from '../App/Theme';
 import {
 	withTheme,
 	PropsThemedComponent,
@@ -131,7 +131,7 @@ class DialogueBox extends Component<Props, null> {
 
 		this.defaultHeader = `${this.props.intl.formatMessage(i18n.defaultHeader)}!`;
 		this.defaultPositiveText = `${this.props.intl.formatMessage(i18n.defaultPositiveText)}`;
-		this.defaultNegativeText = `${this.props.intl.formatMessage(i18n.defaultNegativeText)}`;
+		this.defaultNegativeText = `${capitalize(this.props.intl.formatMessage(i18n.defaultNegativeText))}`;
 
 		this.labelButton = `${this.props.intl.formatMessage(i18n.button)}`;
 		this.labelButtondefaultDescription = `${this.props.intl.formatMessage(i18n.defaultDescriptionButton)}`;
@@ -385,8 +385,12 @@ class DialogueBox extends Component<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			fontSizeFactorTwelve,
+		} = Theme.Core;
+
 		const fontSizeHeader = Math.floor(deviceWidth * 0.046);
-		const fontSize = Math.floor(deviceWidth * 0.042);
+		const fontSize = Math.floor(deviceWidth * fontSizeFactorTwelve);
 
 		const headerWidth = Math.ceil(deviceWidth * 0.75);
 		const headerHeight = Math.ceil(deviceWidth * 0.12);
@@ -450,13 +454,11 @@ class DialogueBox extends Component<Props, null> {
 				color: negTextColorLevel ? undefined : _negTextColor,
 				fontSize,
 				fontWeight: 'bold',
-				fontFamily: 'Roboto-Regular',
 			},
 			notificationModalFooterPositiveText: {
 				color: posTextColorLevel ? undefined : _posTextColor,
 				fontSize,
 				fontWeight: 'bold',
-				fontFamily: 'Roboto-Regular',
 			},
 		};
 	}

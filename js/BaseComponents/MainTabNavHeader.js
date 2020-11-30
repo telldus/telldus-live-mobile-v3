@@ -125,7 +125,7 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 					onPress: openDrawer,
 					iconComponent: <Icon
 						name="bars"
-						size={buttonSize > 22 ? buttonSize : 22}
+						size={buttonSize}
 						style={menuIconStyle}
 						level={22}/>,
 				},
@@ -136,7 +136,7 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 				accessibilityLabel: formatMessage(i18n.linkToCampaigns),
 				onPress: navigateToCampaign,
 				iconComponent: <CampaignIcon
-					size={buttonSize > 22 ? buttonSize : 22}
+					size={buttonSize}
 					style={campaingIconStyle}
 					level={22}/>,
 			},
@@ -248,19 +248,22 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceHeight = isPortrait ? height : width;
+	const deviceWidth = isPortrait ? width : height;
 
 	const {
 		headerHeightFactor,
+		fontSizeFactorFour,
+		fontSizeFactorSix,
 	} = Theme.Core;
 
 	const { land, port } = headerHeightFactor;
 
-	const buttonSize = isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04);
-	const size = Math.floor(deviceHeight * 0.025);
+	const buttonSize = Math.floor(deviceWidth * fontSizeFactorFour);
+	const size = Math.floor(deviceHeight * fontSizeFactorSix);
 	const fontSizeIcon = size < 20 ? 20 : size;
 
 	return {
-		buttonSize,
+		buttonSize: buttonSize > 22 ? buttonSize : 22,
 		fontSizeIcon,
 		style: {
 			...Platform.select({

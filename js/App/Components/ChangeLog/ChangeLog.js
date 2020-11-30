@@ -108,7 +108,7 @@ class ChangeLogNavigator extends View {
 		this.h1 = capitalize(formatMessage(i18n.changeLogHeaderOne));
 		this.h2 = `${formatMessage(i18n.changeLogHeaderTwo)} ${appVersion.substring(0, 4)}`;
 
-		this.skipButton = formatMessage(i18n.skipButton).toUpperCase();
+		this.skipButton = formatMessage(i18n.skipButton);
 
 		this.onPressNext = this.onPressNext.bind(this);
 		this.onPressPrev = this.onPressPrev.bind(this);
@@ -292,7 +292,7 @@ class ChangeLogNavigator extends View {
 							appLayout={appLayout}/>
 						<View style={styles.buttonCover}>
 							<Text
-								level={23}
+								level={36}
 								style={textSkip}
 								onPress={this.onPressSkip}>
 								{this.skipButton}
@@ -306,7 +306,7 @@ class ChangeLogNavigator extends View {
 								iconStyle={styles.buttonIconStyle}
 								innerContainer={innerContainer}
 								accessibilityLabel={this.prevLabel}
-								buttonInnerViewLevel={13}/>
+								buttonInnerViewLevel={23}/>
 							)}
 							{Screens.length > 1 && Screens.map((screen: number, index: number): Object => {
 								let level = Screens[index] === currentScreen ?
@@ -326,7 +326,7 @@ class ChangeLogNavigator extends View {
 								buttonStyle={[floatingCommon, floatingButtonRight]}
 								innerContainer={innerContainer}
 								accessibilityLabel={this.nextLabel}
-								buttonInnerViewLevel={13}/>
+								buttonInnerViewLevel={23}/>
 						</View>
 					</ScrollView>
 				</SafeAreaView>
@@ -345,6 +345,7 @@ class ChangeLogNavigator extends View {
 			maxSizeFloatingButton,
 			shadow: themeShadow,
 			paddingFactor,
+			fontSizeFactorThree,
 		} = Theme.Core;
 
 		let iconSize = Math.floor(deviceWidth * 0.07);
@@ -420,7 +421,7 @@ class ChangeLogNavigator extends View {
 			textSkip: {
 				paddingVertical: 10,
 				textAlign: 'center',
-				fontSize: Math.floor(deviceWidth * 0.039),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorThree),
 			},
 			stepIndicatorSize,
 		};

@@ -113,14 +113,15 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	const {
 		paddingFactor,
 		shadow,
 		subHeader,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const padding = deviceWidth * paddingFactor;
 
 	return {
@@ -128,7 +129,7 @@ const getStyles = (appLayout: Object): Object => {
 			marginBottom: fontSize / 2,
 		},
 		dropDownHeaderStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize,
 			color: subHeader,
 		},
 		fontSize,

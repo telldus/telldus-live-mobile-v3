@@ -118,12 +118,12 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 				[
 					{
 						fontFamily: Theme.Core.fonts.telldusIconFont,
-						fontSize: deviceWidth * 0.04,
+						fontSize: deviceWidth * Theme.Core.fontSizeFactorFour,
 					},
 				] :
 				{
 					fontFamily: Theme.Core.fonts.telldusIconFont,
-					fontSize: deviceWidth * 0.04,
+					fontSize: deviceWidth * Theme.Core.fontSizeFactorFour,
 				},
 		});
 

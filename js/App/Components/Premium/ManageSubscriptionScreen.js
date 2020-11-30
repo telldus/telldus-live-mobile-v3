@@ -122,7 +122,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 			text,
 			showPositive: true,
 			showNegative: true,
-			positiveText: formatMessage(i18n.confirm).toUpperCase(),
+			positiveText: formatMessage(i18n.confirm),
 			closeOnPressPositive: true,
 			closeOnPressNegative: true,
 			onPressPositive: onConfirm,
@@ -134,13 +134,13 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 		if (word.includes('%')) {
 			return (
 				<Text style={titleStyleOne} key={`${index}`}>
-					{` ${word.replace(/%/g, '').toUpperCase()}`}
+					{` ${word.replace(/%/g, '')} `}
 				</Text>
 			);
 		}
 		return (
 			<Text style={titleStyleTwo} key={`${index}`}>
-				{word.toUpperCase()}
+				{word}
 			</Text>
 		);
 	});
@@ -152,7 +152,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.premiumAccess))}
 				h2={formatMessage(i18n.manageSubscription)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}
@@ -189,9 +189,12 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		container: {

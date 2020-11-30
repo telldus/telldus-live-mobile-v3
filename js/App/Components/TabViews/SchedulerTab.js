@@ -236,13 +236,14 @@ class SchedulerTab extends View<null, Props, State> {
 
 		const {
 			androidLandMarginLeftFactor,
+			fontSizeFactorFive,
 		} = Theme.Core;
 
 		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.05) + (height * 0.13) : 0;
 		const marginLeft = (Platform.OS === 'android' && !isPortrait) ? (width * androidLandMarginLeftFactor) : 0;
 
 		const fontSizeNoData = deviceWidth * 0.03;
-		const iconSize = deviceWidth * 0.05;
+		const iconSize = deviceWidth * fontSizeFactorFive;
 
 		return {
 			container: {

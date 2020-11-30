@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+} from 'react';
 import {
 	useIntl,
 } from 'react-intl';
@@ -31,6 +33,8 @@ import View from './View';
 import Text from './Text';
 import IconTelldus from './IconTelldus';
 
+import Theme from '../App/Theme';
+
 type Props = {
 	icon: string,
 	tintColor?: string,
@@ -39,7 +43,7 @@ type Props = {
 	focused?: boolean,
 };
 
-const TabBar = (props: Props): Object => {
+const TabBar = memo<Object>((props: Props): Object => {
 
 	let {
 		icon,
@@ -65,7 +69,7 @@ const TabBar = (props: Props): Object => {
 
 	label = typeof label === 'string' ? label : intl.formatMessage(label);
 
-	const level = focused ? 9 : 1;
+	const level = focused ? 34 : 39;
 
 	return (
 		<View style={container} accessibilityLabel={accessibilityLabel}>
@@ -81,7 +85,7 @@ const TabBar = (props: Props): Object => {
 			</Text>
 		</View>
 	);
-};
+});
 
 const getStyles = ({
 	layout,
@@ -91,8 +95,13 @@ const getStyles = ({
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const iconSize = deviceWidth * 0.05;
-	const fontSize = deviceWidth * 0.03;
+	const {
+		fontSizeFactorFive,
+		fontSizeFactorTwo,
+	} = Theme.Core;
+
+	const iconSize = Math.floor(deviceWidth * fontSizeFactorFive);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorTwo);
 
 	return {
 		container: {

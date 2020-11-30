@@ -91,7 +91,7 @@ render(): Object {
 			style={blockContainerStyle}
 			onPress={this.onPress}>
 			{align === 'left' && (<View
-				level={13}
+				level={23}
 				style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
@@ -107,7 +107,7 @@ render(): Object {
 					style={dateStyle}/>
 			</View>
 			{align === 'right' && (<View
-				level={13}
+				level={23}
 				style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
@@ -120,15 +120,20 @@ getStyle(appLayout: Object, align: Align): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { paddingFactor, shadow } = Theme.Core;
+	const {
+		paddingFactor,
+		shadow,
+		fontSizeFactorFive,
+		fontSizeFactorTen,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const outerPadding = padding * 2;
 	const innerPadding = padding / 2;
 
 	const iconContainerSize = deviceWidth * 0.12;
-	const iconSize = deviceWidth * 0.05;
-	const fontSizeLabel = deviceWidth * 0.035;
+	const iconSize = deviceWidth * fontSizeFactorFive;
+	const fontSizeLabel = deviceWidth * fontSizeFactorTen;
 	const fontSizeDate = deviceWidth * 0.049;
 
 	return {

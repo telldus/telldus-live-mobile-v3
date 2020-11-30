@@ -152,8 +152,8 @@ render(): Object {
 					autoCapitalize={autoCapitalize}
 					autoCorrect={false}
 					autoFocus={autoFocus}
-					baseColor={styles.inAppBrandSecondary}
-					tintColor={styles.inAppBrandSecondary}
+					baseColor={styles.baseColorFour}
+					tintColor={styles.baseColorFour}
 					returnKeyType={'done'}
 					placeholder={placeholder}
 					placeholderTextColor={placeholderTextColor}
@@ -179,21 +179,25 @@ getStyle(appLayout: Object): Object {
 		colors,
 	} = this.props;
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { shadow, editBoxPaddingFactor } = Theme.Core;
+	const {
+		shadow,
+		editBoxPaddingFactor,
+		fontSizeFactorEight,
+	} = Theme.Core;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const iconSize = Math.floor(deviceWidth * 0.09);
 
 	const fontSizeText = deviceWidth * 0.06;
 	const padding = deviceWidth * editBoxPaddingFactor;
 
 	return {
-		inAppBrandSecondary,
+		baseColorFour,
 		container: {
 			width: '100%',
 			flexDirection: 'column',
@@ -210,7 +214,7 @@ getStyle(appLayout: Object): Object {
 			marginTop: Platform.OS === 'ios' ? 10 : 0,
 		},
 		label: {
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 			fontSize,
 		},
 		icon: {

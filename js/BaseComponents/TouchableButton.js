@@ -123,7 +123,7 @@ class TouchableButton extends Component<Props, void> {
 			cover,
 		} = this.getStyle();
 
-		const bLevel = buttonLevel || (disabled ? 7 : 13);
+		const bLevel = buttonLevel || (disabled ? 7 : 23);
 		const tLevel = textLevel || (disabled ? 13 : 12);
 		const thLevel = throbberLevel || 14;
 
@@ -145,7 +145,7 @@ class TouchableButton extends Component<Props, void> {
 						accessible={accessible}
 						importantForAccessibility={importantForAccessibility}
 						{...textProps}>
-						{typeof preScript === 'string' && preScript}{label.toUpperCase()}{postScript}
+						{typeof preScript === 'string' && preScript}{label}{postScript}
 					</Text>
 					{!!showThrobber &&
 					(
@@ -165,6 +165,7 @@ class TouchableButton extends Component<Props, void> {
 		const {
 			maxSizeTextButton,
 			shadow,
+			fontSizeFactorFour,
 		} = Theme.Core;
 		const { appLayout, disabled } = this.props;
 		const { height, width } = appLayout;
@@ -172,7 +173,7 @@ class TouchableButton extends Component<Props, void> {
 		const deviceWidth = isPortrait ? width : height;
 		const maxFontSize = maxSizeTextButton;
 
-		let fontSize = deviceWidth * 0.04;
+		let fontSize = deviceWidth * fontSizeFactorFour;
 		fontSize = fontSize > maxFontSize ? maxFontSize : fontSize;
 
 		const borderRadius = 18 + fontSize;

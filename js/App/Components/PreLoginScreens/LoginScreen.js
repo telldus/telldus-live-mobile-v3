@@ -32,10 +32,12 @@ import { LoginForm, SessionLocked } from './SubViews';
 import {
 	clearAppData,
 } from '../../Actions/AppData';
-
 import {
 	setSocialAuthConfig,
-} from './../../Actions/User';
+} from '../../Actions/User';
+import {
+	getLinkTextFontSize,
+} from '../../Lib/styleUtils';
 
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
@@ -52,6 +54,7 @@ type Props = {
 	isTokenValid: boolean,
 	dispatch: Function,
 	ScreenName: string,
+	route: Object,
 };
 
 type State = {
@@ -148,14 +151,14 @@ class LoginScreen extends View {
 			closeOnPressPositive;
 		if (this.props.accessToken && !this.props.isTokenValid) {
 			headerText = formatMessage(i18n.headerSessionLocked);
-			positiveText = formatMessage(i18n.logout).toUpperCase();
+			positiveText = formatMessage(i18n.logout);
 			notificationHeader = `${formatMessage(i18n.logout)}?`;
 			onPressPositive = this.onPressPositive;
 			onPressNegative = this.closeModal;
 			showNegative = true;
 		} else if (extras && extras.type === 'social_login_fail') {
-			positiveText = formatMessage(i18n.signIn).toUpperCase();
-			negativeText = formatMessage(i18n.createAccount).toUpperCase();
+			positiveText = formatMessage(i18n.signIn);
+			negativeText = formatMessage(i18n.createAccount);
 			notificationHeader = formatMessage(i18n.noLinkedAccount);
 			onPressPositive = this.loginPostSocialLoginFail;
 			onPressNegative = this.registerPostSocialLoginFail;
@@ -239,8 +242,12 @@ class LoginScreen extends View {
 	}
 
 	render(): Object {
-		let { appLayout, styles: commonStyles, screenProps, intl } = this.props;
+		let { appLayout, styles: commonStyles, screenProps, intl, route = {} } = this.props;
 		let styles = this.getStyles(appLayout);
+
+		const {
+			isSwitchingAccount = false,
+		} = route.params || {};
 
 		const { source = 'prelogin' } = screenProps;
 
@@ -267,7 +274,8 @@ class LoginScreen extends View {
 						headerText={headerText}
 						styles={commonStyles}
 						openDialogueBox={this.openDialogueBox}
-						onLoginSuccess={source === 'postlogin' ? this._onLoginSuccess : undefined}/>
+						onLoginSuccess={source === 'postlogin' ? this._onLoginSuccess : undefined}
+						isSwitchingAccount={isSwitchingAccount}/>
 				}
 				{this.props.accessToken && !this.props.isTokenValid ?
 					null
@@ -310,13 +318,10 @@ class LoginScreen extends View {
 		let deviceWidth = isPortrait ? width : height;
 
 		const {
-			maxSizeTextButton,
 			baseColorPreloginScreen,
 		} = Theme.Core;
 
-		let infoFontSize = Math.floor(deviceWidth * 0.039);
-		let maxFontSize = maxSizeTextButton - 2;
-		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
+		const infoFontSize = getLinkTextFontSize(deviceWidth);
 
 		return {
 			otherLinks: {

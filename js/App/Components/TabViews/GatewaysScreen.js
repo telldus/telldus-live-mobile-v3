@@ -236,7 +236,8 @@ class GatewaysScreen extends View {
 						renderItem={this.renderRow}
 						keyExtractor={this.keyExtractor}
 						contentContainerStyle={{
-							marginVertical: padding - (padding / 4),
+							paddingTop: padding - (padding / 4),
+							paddingBottom: padding,
 						}}
 						refreshControl={
 							<ThemedRefreshControl
@@ -255,7 +256,11 @@ class GatewaysScreen extends View {
 		const isPortrait = height > width;
 		const deviceHeight = isPortrait ? height : width;
 
-		const size = Math.floor(deviceHeight * 0.025);
+		const {
+			fontSizeFactorSix,
+		} = Theme.Core;
+
+		const size = Math.floor(deviceHeight * fontSizeFactorSix);
 		const fontSizeIcon = size < 20 ? 20 : size;
 
 		let leftIconSize = isPortrait ? width * 0.06 : height * 0.06;

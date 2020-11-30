@@ -43,6 +43,7 @@ export default {
 			robotoMedium: 'Roboto-Medium',
 			robotoRegular: 'Roboto-Regular',
 			sfnsDisplay: 'SFNS Display',
+			suisseIntlRegular: 'SuisseIntl',
 		};
 	},
 
@@ -318,13 +319,49 @@ export default {
 	get headerButtonIconSizeFactor(): number {
 		return 0.06;
 	},
-	get floatingButtonSizefactor(): number {
+	get floatingButtonSizeFactor(): number {
 		return 0.134666667;
 	},
-	get floatingButtonOffsetfactor(): Object {
+	get floatingButtonOffsetFactor(): Object {
 		return {
 			right: 0.034666667,
 			bottom: 0.046666667,
 		};
+	},
+	get fontSizeFactorOne(): number {
+		return 0.047;
+	},
+	get fontSizeFactorTwo(): number {
+		return 0.0333;
+	},
+	get fontSizeFactorThree(): number {
+		return 0.039;
+	},
+	get fontSizeFactorFour(): number {
+		return 0.04;
+	},
+	get fontSizeFactorFive(): number {
+		return 0.05;
+	},
+	get fontSizeFactorSix(): number {
+		return 0.025;
+	},
+	get fontSizeFactorSeven(): number {// Poster with text
+		return 0.047;
+	},
+	get fontSizeFactorEight(): number {
+		return 0.045;
+	},
+	get fontSizeFactorNine(): number {
+		return 0.16;
+	},
+	get fontSizeFactorTen(): number {
+		return 0.035;
+	},
+	get fontSizeFactorEleven(): number {
+		return 0.038;
+	},
+	get fontSizeFactorTwelve(): number {
+		return 0.042;
 	},
 };

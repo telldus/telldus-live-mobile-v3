@@ -207,8 +207,8 @@ const InAppDisclosureScreen = memo<Object>((props: Object): Object => {
 				{content}
 			</ThemedScrollView>
 			<TwoStepFooter
-				f2={formatMessage(i18n.disAllow).toUpperCase()}
-				f3={formatMessage(i18n.iAccept).toUpperCase()}
+				f2={formatMessage(i18n.disAllow)}
+				f3={formatMessage(i18n.iAccept)}
 				onPressF2={onPressF2}
 				onPressF3={onPressF3}
 				footersCoverStyle={footersCoverStyle}
@@ -233,6 +233,7 @@ const getStyles = ({
 	const {
 		paddingFactor,
 		getFooterHeight,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -261,7 +262,7 @@ const getStyles = ({
 			marginBottom: padding,
 		},
 		contentStyle: {
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			marginBottom: padding,
 		},
 	};

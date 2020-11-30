@@ -227,7 +227,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						header: `${formatMessage(i18n.logout)}?`,
 						text: formatMessage(i18n.infoLogoutOnlyPremAccount),
 						showPositive: true,
-						positiveText: formatMessage(i18n.logout).toUpperCase(),
+						positiveText: formatMessage(i18n.logout),
 						onPressPositive: proceedWithLogout,
 						showNegative: true,
 						closeOnPressNegative: true,
@@ -297,7 +297,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				{enable && (
 					<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
 						<Text
-							level={23}
+							level={36}
 							style={redeemTextSyle}>
 							{formatMessage(i18n.viewPurchaseHistory)}
 						</Text>
@@ -309,9 +309,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 							<IconTelldus
 								icon={'gift'}
 								style={redeemIconStyle}
-								level={23}/>
+								level={36}/>
 							<Text
-								level={23}
+								level={36}
 								style={redeemTextSyle}>
 								{capitalize(formatMessage(i18n.redeemCard))}
 							</Text>
@@ -327,7 +327,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					style={style}
 					enablePurchase={enable}/>
 				)}
-				{true && <ViewPremiumBenefitsButton
+				{(isBasic && enable) && <ViewPremiumBenefitsButton
 					navigation={navigation}/>}
 				{(hasMultipleAccounts && hasAPremAccount) && <LogoutButton
 					buttonAccessibleProp={true}
@@ -358,12 +358,13 @@ const getStyles = (appLayout: Object, {
 
 	const {
 		paddingFactor,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const paddingEditNameBlock = Math.floor(deviceWidth * 0.045);
+	const paddingEditNameBlock = Math.floor(deviceWidth * fontSizeFactorEight);
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		style: {

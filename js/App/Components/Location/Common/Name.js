@@ -135,7 +135,7 @@ class Name extends View {
 		} = this.props;
 
 		const {
-			inAppBrandSecondary,
+			baseColorFour,
 		} = colors;
 
 		const styles = this.getStyle(appLayout);
@@ -154,8 +154,8 @@ class Name extends View {
 						autoCapitalize="sentences"
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={inAppBrandSecondary}
-						tintColor={inAppBrandSecondary}
+						baseColor={baseColorFour}
+						tintColor={baseColorFour}
 						defaultValue={this.state.locationName}
 						labelOffset={{
 							x0: 5,

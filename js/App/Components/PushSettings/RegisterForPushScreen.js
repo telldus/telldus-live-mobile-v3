@@ -305,7 +305,7 @@ const RegisterForPushScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.registerForPush))}
 				h2={formatMessage(i18n.receiveNotifications)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}
@@ -354,9 +354,12 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		container: {

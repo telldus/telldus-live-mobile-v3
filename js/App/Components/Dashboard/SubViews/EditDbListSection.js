@@ -71,11 +71,12 @@ const getStyles = ({layout}: Object): Object => {
 	const {
 		paddingFactor,
 		shadow,
+		fontSizeFactorFive,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	let statusInfoSize = Math.floor(deviceWidth * 0.05);
+	let statusInfoSize = Math.floor(deviceWidth * fontSizeFactorFive);
 	statusInfoSize = statusInfoSize > 28 ? 28 : statusInfoSize;
 
 	return {

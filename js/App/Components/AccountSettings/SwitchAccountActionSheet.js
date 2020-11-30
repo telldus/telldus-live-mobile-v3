@@ -198,7 +198,9 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			}));
 			setShowAddNewAccount(false);
 			if (index === 0) {
-				navigate('LoginScreen');
+				navigate('LoginScreen', {
+					isSwitchingAccount: true,
+				});
 			} else if (index === 1) {
 				navigate('RegisterScreen');
 			}
@@ -438,12 +440,14 @@ const getStyles = (appLayout: Object, {
 
 	const {
 		paddingFactor,
+		fontSizeFactorFive,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
-	const fontSizeActionSheetTitle = Math.floor(deviceWidth * 0.05);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
+	const fontSizeActionSheetTitle = Math.floor(deviceWidth * fontSizeFactorFive);
 
 	const addIconSize = Math.floor(deviceWidth * 0.07);
 	const addIconCoverSize = addIconSize + 15;

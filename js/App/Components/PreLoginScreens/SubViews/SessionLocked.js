@@ -36,7 +36,9 @@ import i18n from '../../../Translations/common';
 import { logoutFromTelldus } from '../../../Actions';
 import { unregisterPushToken } from '../../../Actions/User';
 import { refreshAccessToken } from '../../../Lib';
-import Theme from '../../../Theme';
+import {
+	getLinkTextFontSize,
+} from '../../../Lib/styleUtils';
 
 type Props = {
 	refreshAccessToken: (Object) => Promise<any>,
@@ -164,6 +166,8 @@ class SessionLocked extends View {
 					onPress={this.onPressLogout}
 					text={buttonTwoLabel}
 					style={{marginTop: 10}}
+					buttonLevel={isLogginIn ? 7 : 24}
+					textLevel={isLogginIn ? 13 : 40}
 					accessible={!dialogueOpen}
 					accessibilityLabel={butTwoAccessibilityLabel}/>
 			</View>
@@ -175,9 +179,7 @@ class SessionLocked extends View {
 		const isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
 
-		let infoFontSize = Math.floor(deviceWidth * 0.039);
-		let maxFontSize = Theme.Core.maxSizeTextButton - 2;
-		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
+		const infoFontSize = getLinkTextFontSize(deviceWidth);
 
 		return {
 			bodyCover: {

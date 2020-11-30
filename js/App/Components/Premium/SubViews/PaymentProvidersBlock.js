@@ -51,6 +51,7 @@ import {
 import {
 	getPaymentOptions,
 } from '../../../Lib/appUtils';
+import capitalize from '../../../Lib/capitalize';
 
 import Theme from '../../../Theme';
 
@@ -101,7 +102,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 						marginLeft: (key % 2 === 0) ? 0 : padding / 2,
 					}, selectedIndex === key ? {
 						borderWidth: 3,
-						borderColor: colors.inAppBrandSecondary,
+						borderColor: colors.textOnLevelThreeView,
 					} : undefined]}
 					onPress={onSelectOption}>
 					<View style={innerCoverStyle}>
@@ -110,7 +111,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 								level={26}
 								style={nameStyle}
 								numberOfLines={1}>
-								{name.toUpperCase()}
+								{capitalize(name)}
 							</Text>
 						</View>
 						<IMAGE width={imageWidth} height={imageHeight}/>
@@ -142,9 +143,14 @@ const getStyle = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.04);
+	const {
+		fontSizeFactorFour,
+		paddingFactor,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
+
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 
 	const coverWidth = Math.floor((width - ((padding * 2) + (padding / 2))) / 2);
 	const imageWidth = (coverWidth - (padding * 2)) * 0.7;

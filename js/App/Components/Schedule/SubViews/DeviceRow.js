@@ -34,6 +34,7 @@ import {
 } from '../../HOC/withTheme';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 type Props = PropsThemedComponent & {
 	row: Object,
@@ -84,10 +85,13 @@ class DeviceRow extends View<null, Props, null> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+		const {
+			fontSizeFactorEight,
+		} = Theme.Core;
 
 		const iconSize = deviceWidth * 0.06;
 		const containerSize = deviceWidth * 0.09;
-		const borderRadius = deviceWidth * 0.045;
+		const borderRadius = deviceWidth * fontSizeFactorEight;
 
 		return {
 			row: {

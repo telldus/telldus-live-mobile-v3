@@ -47,10 +47,14 @@ import {
 	isBasicUser,
 } from '../../Lib/appUtils';
 import Theme from '../../Theme';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../HOC/withTheme';
 
 import i18n from '../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	addDevice: Object,
 	navigation: Object,
 	children: Object,
@@ -308,6 +312,8 @@ export class GeoFenceContainer extends View<Props, State> {
 			route,
 			currentScreen,
 			enableGeoFence,
+			selectedThemeSet,
+			colors,
 		} = this.props;
 		const { appLayout } = screenProps;
 		const {
@@ -354,7 +360,7 @@ export class GeoFenceContainer extends View<Props, State> {
 				style={helpIconCoverStyle}>
 				<BlockIcon
 					backgroundMaskStyle={backgroundMaskStyle}
-					iconLevel={23}
+					iconLevel={44}
 					backgroundMask
 					icon={'help'}
 					containerStyle={helpIconContainerStyle}
@@ -380,7 +386,7 @@ export class GeoFenceContainer extends View<Props, State> {
 							}}>
 								<ThemedSwitch
 									onValueChange={this.onValueChange}
-									backgroundActive={'#fff'}
+									backgroundActive={selectedThemeSet.key === 2 ? colors.trackColorActiveSwitch : '#fff'}
 									backgroundInactive={'#fff'}
 									value={enableGeoFence}
 									switchBorderRadius={30}
@@ -401,7 +407,7 @@ export class GeoFenceContainer extends View<Props, State> {
 				<NavigationHeaderPoster
 					h1={h1} h2={h2}
 					infoButton={infoButton}
-					align={'right'}
+					align={'left'}
 					navigation={navigation}
 					showLeftIcon={showLeftIcon}
 					leftIcon={leftIcon}
@@ -445,6 +451,9 @@ export class GeoFenceContainer extends View<Props, State> {
 	}
 
 	getStyles = (appLayout: Object): Object => {
+		const {
+			selectedThemeSet,
+		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -467,7 +476,7 @@ export class GeoFenceContainer extends View<Props, State> {
 			},
 			backgroundMaskStyle: {
 				position: 'absolute',
-				backgroundColor: '#fff',
+				backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : '#fff',
 				height: maskSize,
 				width: maskSize,
 				borderRadius: maskSize / 2,
@@ -514,4 +523,4 @@ export const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(GeoFenceContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(GeoFenceContainer));

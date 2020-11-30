@@ -193,7 +193,7 @@ const useSwitchOrAddAccountAction = (): Object => {
 				text: formatMessage(i18n.infoWhenAccessPremFromBasic),
 				showPositive: true,
 				showNegative: true,
-				positiveText: formatMessage(i18n.upgrade).toUpperCase(),
+				positiveText: formatMessage(i18n.upgrade),
 				onPressPositive: () => {
 					navigation.navigate('PremiumUpgradeScreen');
 				},

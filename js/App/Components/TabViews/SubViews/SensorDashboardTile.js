@@ -58,6 +58,7 @@ type Props = {
 	colors: Object,
 	colorScheme: string,
 	themeInApp: string,
+	selectedThemeSet: Object,
 
 	style: Object,
 	onPress: (number, string) => void,
@@ -116,7 +117,15 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item', 'sensorTypesInCurrentDb', 'themeInApp', 'colorScheme']);
+		return shouldUpdate(this.props, nextProps, [
+			'displayType',
+			'tileWidth',
+			'item',
+			'sensorTypesInCurrentDb',
+			'themeInApp',
+			'colorScheme',
+			'selectedThemeSet',
+		]);
 	}
 
 	getSlideList(item: Object): Object {
@@ -226,6 +235,7 @@ class SensorDashboardTile extends View<Props, null> {
 			colors,
 			themeInApp,
 			colorScheme,
+			selectedThemeSet,
 		} = this.props;
 		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
@@ -250,7 +260,9 @@ class SensorDashboardTile extends View<Props, null> {
 		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
 		let iconContainerStyle = !isGatewayActive ? itemIconContainerOffline : itemIconContainerActive;
-		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? colors.colorOffActiveBg : Theme.Core.offlineColor) : 'transparent';
+		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? colors.sensorValueBGColor : Theme.Core.offlineColor) : 'transparent';
+
+		const iconColor = selectedThemeSet.key === 1 ? colors.baseColor : (!isGatewayActive ? Theme.Core.offlineColor : colors.baseColor);
 
 		return (
 			<DashboardShadowTile
@@ -260,7 +272,7 @@ class SensorDashboardTile extends View<Props, null> {
 				info={info}
 				icon={'sensor'}
 				iconStyle={{
-					color: '#fff',
+					color: iconColor,
 					fontSize: Math.floor(tileWidth / 6.5),
 					borderRadius: Math.floor(tileWidth / 8),
 					textAlign: 'center',
@@ -308,16 +320,18 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	getStyles(): Object {
-		const { tileWidth, isGatewayActive, item, colors } = this.props;
+		const { tileWidth, isGatewayActive, item, colors, selectedThemeSet } = this.props;
 		const { data = {}} = item;
 
 		const dotSize = tileWidth * 0.045;
 
 		const {
-			colorOffActiveBg,
+			sensorValueBGColor,
+			itemIconBGColor,
+			itemIconBGColorOffline,
 		} = colors;
 
-		const backgroundColor = isGatewayActive ? colorOffActiveBg : Theme.Core.offlineColor;
+		const backgroundColor = isGatewayActive ? sensorValueBGColor : Theme.Core.offlineColor;
 
 		return {
 			iconStyle: {
@@ -363,10 +377,10 @@ class SensorDashboardTile extends View<Props, null> {
 				marginLeft: 2 + (dotSize * 0.2),
 			},
 			itemIconContainerActive: {
-				backgroundColor: colorOffActiveBg,
+				backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : itemIconBGColor,
 			},
 			itemIconContainerOffline: {
-				backgroundColor: Theme.Core.offlineColor,
+				backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : itemIconBGColorOffline,
 			},
 		};
 	}

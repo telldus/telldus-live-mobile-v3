@@ -97,7 +97,7 @@ const SMSBlock = (props: Object): Object => {
 					iconValueRight={
 						(enablePurchase && !isIos) ?
 							<Text
-								level={23}
+								level={37}
 								style={buyCreditsStyle}>
 								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}
 							</Text>
@@ -114,7 +114,7 @@ const SMSBlock = (props: Object): Object => {
 					labelTextStyle={labelTextStyle}/>
 			</View>
 			<Text
-				level={23}
+				level={36}
 				style={linkTextStyle}
 				onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
 		</>
@@ -125,8 +125,13 @@ const getStyle = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
-	const fontSize = deviceWidth * 0.04;
+
+	const {
+		fontSizeFactorFour,
+		paddingFactor,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
+	const fontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		coverStyle: {
@@ -141,7 +146,7 @@ const getStyle = (appLayout: Object): Object => {
 			padding: 5,
 		},
 		buyCreditsStyle: {
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 		},
 	};
 };

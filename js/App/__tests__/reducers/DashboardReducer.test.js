@@ -71,7 +71,12 @@ describe('Test Dashboard reducers', () => {
 			userId,
 		};
 
-		expect(parseDashboardForListView(dashboard, devices, sensors, gateways, app, user)).toEqual(state);
+		const thirdParties = {
+		};
+
+		const intl = {};
+
+		expect(parseDashboardForListView(dashboard, devices, sensors, gateways, app, user, thirdParties, intl)).toEqual(state);
 	});
 
 });

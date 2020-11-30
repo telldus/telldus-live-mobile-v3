@@ -61,14 +61,14 @@ constructor(props: Props) {
 	let { formatMessage } = this.props.intl;
 	this.eula = formatMessage(i18n.eula);
 	this.header = formatMessage(i18n.userAgreementHeaderPhrase, {eula: this.eula});
-	this.footer = formatMessage(i18n.iAgree).toUpperCase();
+	this.footer = formatMessage(i18n.iAgree);
 
 	this.h1 = capitalize(formatMessage(i18n.labelExchangeProgram));
 	this.h2 = `${formatMessage(i18n.labelUpgradeGateway)}!`;
 
-	this.f1 = formatMessage(i18n.labelReadAndOrder).toUpperCase();
-	this.f2 = formatMessage(i18n.labelNotNow).toUpperCase();
-	this.f3 = formatMessage(i18n.labelDontShowAgain).toUpperCase();
+	this.f1 = formatMessage(i18n.labelReadAndOrder);
+	this.f2 = formatMessage(i18n.labelNotNow);
+	this.f3 = formatMessage(i18n.labelDontShowAgain);
 
 	this.BLOCKS = [
 		{
@@ -78,7 +78,7 @@ constructor(props: Props) {
 			addTextOne: `${formatMessage(i18n.labelMsrp, {
 				value: '1299 SEK',
 			})}`,
-			addTextTwo: `${formatMessage(i18n.labelFreeShipping).toUpperCase()}!`,
+			addTextTwo: `${formatMessage(i18n.labelFreeShipping)}!`,
 		},
 		{
 			h1: formatMessage(i18n.exchangeOfferOneH1),
@@ -157,7 +157,7 @@ render(): Object | null {
 					contentContainerStyle={styles.SVContentContainerStyle}>
 					<PosterWithText
 						appLayout={appLayout}
-						align={'right'}
+						align={'left'}
 						h1={this.h1}
 						h2={this.h2}
 						navigation={navigation}/>
@@ -203,6 +203,7 @@ getStyles(appLayout: Object): Object {
 
 	const {
 		eulaContentColor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	return {
@@ -217,7 +218,6 @@ getStyles(appLayout: Object): Object {
 		h: {
 			color: '#fff',
 			backgroundColor: 'transparent',
-			fontFamily: Theme.Core.fonts.robotoLight,
 		},
 		h1: {
 			fontSize: isPortrait ? width * 0.08 : height * 0.08,
@@ -266,9 +266,8 @@ getStyles(appLayout: Object): Object {
 			justifyContent: 'center',
 		},
 		footerText: {
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			fontWeight: 'bold',
-			fontFamily: 'Roboto-Regular',
 		},
 		markupStyle: {
 			heading: {

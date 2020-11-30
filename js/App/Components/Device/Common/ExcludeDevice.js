@@ -477,12 +477,17 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, brandDanger } = Theme.Core;
+	const {
+		paddingFactor,
+		brandDanger,
+		fontSizeFactorFour,
+		fontSizeFactorNine,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const innerPadding = 5 + padding;
 
-	const infoTextFontSize = deviceWidth * 0.04;
+	const infoTextFontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		brandDanger,
@@ -492,7 +497,7 @@ getStyles(): Object {
 			padding: innerPadding,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

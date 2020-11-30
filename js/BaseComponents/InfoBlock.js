@@ -51,7 +51,7 @@ const InfoBlock = (props: Object): Object => {
 			style={[infoContainerDef, infoContainer]}>
 			<BlockIcon
 				icon={'info'}
-				iconLevel={23}
+				iconLevel={36}
 				style={[infoIconStyleDef, infoIconStyle]}
 				containerStyle={blockIconContainerStyle}/>
 			<View style={{
@@ -77,11 +77,12 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		shadow,
 		paddingFactor,
+		fontSizeFactorTwelve,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeBody = deviceWidth * 0.042;
+	const fontSizeBody = deviceWidth * fontSizeFactorTwelve;
 
 	return {
 		infoContainerDef: {

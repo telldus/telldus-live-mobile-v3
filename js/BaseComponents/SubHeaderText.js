@@ -28,6 +28,8 @@ import { useSelector } from 'react-redux';
 
 import Text from './Text';
 
+import Theme from '../App/Theme';
+
 type Props = {
 	textStyle?: Object,
 	text: string,
@@ -66,9 +68,13 @@ const getStyles = ({
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
+	const {
+		fontSizeFactorFive,
+	} = Theme.Core;
+
 	return {
 		textStyleDef: {
-			fontSize: Math.floor(deviceWidth * 0.05),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFive),
 		},
 	};
 };

@@ -314,11 +314,13 @@ class JobsPoster extends View<null, Props, State> {
 			return newDays || onDragChange || showInactiveChange || shouldUpdate(this.props, nextProps, [
 				'themeInApp',
 				'colorScheme',
+				'selectedThemeSet',
 			]);
 		}
 		const themeHasChanged = shouldUpdate(this.props, nextProps, [
 			'themeInApp',
 			'colorScheme',
+			'selectedThemeSet',
 		]);
 		if (themeHasChanged) {
 			return true;
@@ -560,7 +562,6 @@ class JobsPoster extends View<null, Props, State> {
 				backgroundColor: 'transparent',
 				color: textInsidePoster,
 				fontSize: dayFontSize,
-				fontFamily: Theme.Core.fonts.robotoLight,
 				textAlign: 'center',
 				zIndex: -1,
 			},
@@ -654,7 +655,6 @@ class JobsPoster extends View<null, Props, State> {
 		const date = {
 			backgroundColor: 'transparent',
 			color: textInsidePoster,
-			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: Math.floor(deviceWidth * 0.052),
 			height,
 			width: '100%',

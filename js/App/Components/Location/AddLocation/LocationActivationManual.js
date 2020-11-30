@@ -39,7 +39,7 @@ import {
 import LabelBox from '../Common/LabelBox';
 
 import i18n from '../../../Translations/common';
-
+import Theme from '../../../Theme';
 import capitalize from '../../../Lib/capitalize';
 
 import {
@@ -211,7 +211,7 @@ class LocationActivationManual extends View {
 		let importantForAccessibility = currentScreen === 'LocationActivationManual' ? 'no' : 'no-hide-descendants';
 
 		const {
-			inAppBrandSecondary,
+			baseColorFour,
 		} = colors;
 
 		return (
@@ -226,8 +226,8 @@ class LocationActivationManual extends View {
 						autoCapitalize="characters"
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={inAppBrandSecondary}
-						tintColor={inAppBrandSecondary}
+						baseColor={baseColorFour}
+						tintColor={baseColorFour}
 						defaultValue={this.state.activationCode}
 						labelOffset={{
 							x0: 5,
@@ -237,7 +237,9 @@ class LocationActivationManual extends View {
 						}}
 						renderLeftAccessory={<IconTelldus icon={'location'} size={styles.iconSize} color={'#A59F9A'}/>}
 					/>
-					<FormattedMessage style={styles.textBody} {...i18n.bodyContent}/>
+					<FormattedMessage
+						level={25}
+						style={styles.textBody} {...i18n.bodyContent}/>
 				</LabelBox>
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
@@ -256,12 +258,14 @@ class LocationActivationManual extends View {
 		const fontSize = deviceWidth * 0.06;
 
 		const iconSize = Math.floor(deviceWidth * 0.09);
+		const {
+			fontSizeFactorEleven,
+		} = Theme.Core;
 
 		return {
 			textBody: {
-				color: '#A59F9A',
 				textAlign: 'left',
-				fontSize: deviceWidth * 0.038,
+				fontSize: deviceWidth * fontSizeFactorEleven,
 				paddingLeft: 2,
 			},
 			textField: {

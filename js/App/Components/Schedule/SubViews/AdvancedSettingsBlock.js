@@ -96,11 +96,11 @@ render(): Object {
 				onPress={this.toggleAdvanced}
 				style={toggleAdvancedCover}>
 				<IconTelldus
-					level={23}
+					level={36}
 					icon={'settings'}
 					style={iconSettingsStyle}/>
 				<Text
-					level={23}
+					level={36}
 					style={settingsTextStyle}>
 					{showAdvanced ?
 						intl.formatMessage(i18n.labelHideAdvanced)

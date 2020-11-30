@@ -64,10 +64,10 @@ const ScreenConfigs = [
 		name: 'AdministrationTab',
 		Component: AdministrationTab,
 		options: {
-			tabBarLabel: ({ color }: Object): Object => (
+			tabBarLabel: ({ focused }: Object): Object => (
 				<TabBar
 					icon="home"
-					tintColor={color}
+					focused={focused}
 					label={'Administration'} // TODO: Translate
 					accessibilityLabel={'AdministrationTab'}/>
 			),
@@ -92,16 +92,11 @@ const ThemedTabBar = withTheme(React.memo<Object>((props: Object): Object => {
 	const {
 		posterProps,
 		tabBarProps = {},
-		colors,
 	} = props;
 
 	const {
 		indicatorStyle,
 	} = tabBarProps;
-
-	const {
-		headerIconColor,
-	} = colors;
 
 	return (
 		<View style={{flex: 0}}>
@@ -110,7 +105,7 @@ const ThemedTabBar = withTheme(React.memo<Object>((props: Object): Object => {
 				{...tabBarProps}
 				indicatorStyle={{
 					...indicatorStyle,
-					backgroundColor: headerIconColor,
+					height: 0,
 				}}
 			/>
 		</View>

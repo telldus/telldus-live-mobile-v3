@@ -66,6 +66,7 @@ type Props = {
 	styles: Object,
 	headerText: string,
 	socialAuthConfig: Object,
+	isSwitchingAccount: boolean,
 
 	onLoginSuccess?: () => void,
 	openDialogueBox: (string, ?Object) => void,
@@ -279,6 +280,8 @@ class LoginForm extends View {
 				<View style={{ height: 10 }}/>
 				<TouchableButton
 					onPress={this.onFormSubmit}
+					buttonLevel={disableAllSignin ? 7 : 24}
+					textLevel={disableAllSignin ? 13 : 40}
 					text={this.state.isLoading ? i18n.loggingin : i18n.login}
 					postScript={this.state.isLoading ? '...' : null}
 					accessible={buttonAccessible}
@@ -483,10 +486,12 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-function dispatchToProps(dispatch: Function): Object {
+function dispatchToProps(dispatch: Function, ownProps: Object): Object {
 	return {
 		loginToTelldus: (credential: Object, grantType: string): Promise<any> => {
-			return dispatch(loginToTelldus(credential, grantType));
+			return dispatch(loginToTelldus(credential, grantType, {
+				isSwitchingAccount: ownProps.isSwitchingAccount,
+			}));
 		},
 		dispatch,
 	};

@@ -6,7 +6,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
     Array [
       Object {
         "alignItems": "center",
-        "backgroundColor": "#1b365d",
+        "backgroundColor": "#000000",
         "flexDirection": "row",
         "height": 64,
         "justifyContent": "center",
@@ -85,9 +85,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
     }
   >
     <View
-      colorHomeLogo="#e26901"
-      colorTextLogo="#ffffff"
-      colorWaveLogo="#ffffff"
+      colorHomeLogo="#ffffff"
       height={35.00000025}
       width={230.49999975}
     />
@@ -101,7 +99,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
     Array [
       Object {
         "alignItems": "center",
-        "backgroundColor": "#1b365d",
+        "backgroundColor": "#000000",
         "flexDirection": "row",
         "height": 64,
         "justifyContent": "center",
@@ -180,9 +178,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
     }
   >
     <View
-      colorHomeLogo="#e26901"
-      colorTextLogo="#ffffff"
-      colorWaveLogo="#ffffff"
+      colorHomeLogo="#ffffff"
       height={35.00000025}
       width={230.49999975}
     />

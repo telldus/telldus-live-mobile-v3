@@ -39,7 +39,7 @@ import {
 	View,
 	NavigationHeaderPoster,
 	Text,
-	IconTelldus,
+	InfoBlock,
 	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import {
@@ -216,23 +216,18 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.purchaseHistory))} h2={formatMessage(i18n.yourTransactions)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}
 				{...screenProps}/>
-			{(!isLoading && listData.length === 0 ) ?
-				<View
-					level={2}
-					style={emptyCover}>
-					<IconTelldus
-						level={23}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text
-						level={23}
-						style={emptyInfo}>{formatMessage(i18n.noPurchaseHistory)}</Text>
-				</View>
+			{(!isLoading && listData.length === 0) ?
+				<InfoBlock
+					text={formatMessage(i18n.noPurchaseHistory)}
+					appLayout={layout}
+					infoContainer={emptyCover}
+					textStyle={emptyInfo}
+					infoIconStyle={statusIconStyle}/>
 				:
 				<SectionList
 					renderItem={renderItem}
@@ -256,10 +251,15 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+	const {
+		fontSizeFactorThree,
+		paddingFactor,
+		shadow,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeRow = Math.floor(deviceWidth * 0.043);
-	const fontSizeSection = Math.floor(deviceWidth * 0.039);
+	const fontSizeSection = Math.floor(deviceWidth * fontSizeFactorThree);
 
 	return {
 		toIconSize: fontSizeRow * 1.2,
@@ -271,7 +271,7 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'space-between',
 			alignItems: 'center',
 			marginHorizontal: padding,
-			...Theme.Core.shadow,
+			...shadow,
 			padding: 10,
 			marginBottom: padding / 2,
 		},
@@ -279,10 +279,11 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			marginTop: padding,
 			marginHorizontal: padding,
-			...Theme.Core.shadow,
+			...shadow,
 			padding: padding * 2,
 			justifyContent: 'center',
 			alignItems: 'center',
+			flex: 0,
 		},
 		emptyInfo: {
 			fontSize: fontSizeRow,
@@ -295,7 +296,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		sectionStyle: {
 			paddingHorizontal: padding,
-			...Theme.Core.shadow,
+			...shadow,
 			paddingVertical: 5,
 			marginTop: padding / 2,
 			marginBottom: padding,

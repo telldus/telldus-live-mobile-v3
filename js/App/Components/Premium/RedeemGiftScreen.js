@@ -76,7 +76,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 	});
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	const {
@@ -132,7 +132,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 					<Text
 						level={26}
 						style={titleStyleTwo}>
-						{` ${word.replace(/%/g, '').toUpperCase()}`}
+						{` ${word.replace(/%/g, '')}`}
 					</Text>
 				);
 			}
@@ -140,7 +140,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 				<Text
 					level={26}
 					style={titleStyleOne}>
-					{word.toUpperCase()}
+					{word}
 				</Text>
 			);
 		});
@@ -156,7 +156,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalize(formatMessage(i18n.redeemCard))} h2={formatMessage(i18n.applyVoucherCode)}
-				align={'right'}
+				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}
@@ -178,8 +178,8 @@ const RedeemGiftScreen = (props: Object): Object => {
 						value={code}
 						label={formatMessage(i18n.labelVoucherCode)}
 						labelTextStyle={labelStyle}
-						baseColor={inAppBrandSecondary}
-						tintColor={inAppBrandSecondary}
+						baseColor={baseColorFour}
+						tintColor={baseColorFour}
 						style={textFieldStyle}
 						containerStyle={textFieldCoverStyle}
 						onChangeText={onChangeText}
@@ -208,9 +208,12 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		container: {
@@ -258,7 +261,7 @@ const getStyles = ({
 		},
 		labelStyle: {
 			fontSize: fontSize,
-			color: colors.inAppBrandSecondary,
+			color: colors.baseColorFour,
 		},
 		buttonStyle: {
 			marginVertical: fontSize / 2,

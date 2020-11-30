@@ -66,7 +66,9 @@ type loginCredentialApple = {|
 	id_token: string,
 |};
 
-const loginToTelldus = (credential: loginCredential | loginCredentialSocial | loginCredentialApple, grantType?: GrantType = 'password'): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
+const loginToTelldus = (credential: loginCredential | loginCredentialSocial | loginCredentialApple, grantType?: GrantType = 'password', extras?: Object = {
+	isSwitchingAccount: false,
+}): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	return axios({
 		method: 'post',
 		headers: {
@@ -93,6 +95,17 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
 				} catch (e) {
 					throw e;
 				} finally {
+
+					const {
+						user: {
+							userProfile = {},
+						},
+					} = getState();
+					// Do not allow user to switch into same account multiple times
+					if (extras.isSwitchingAccount && userProfile.uuid && (responseUp.uuid === userProfile.uuid)) {
+						throw new Error('Already logged into this account.');
+					}
+
 					setBoolean('Password', 'true');
 					dispatch(updateAccessToken({
 						...response.data,

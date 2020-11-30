@@ -187,11 +187,12 @@ const getStyles = ({
 	const {
 		paddingFactor,
 		shadow,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = Math.floor(deviceWidth * 0.045);
+	const fontSizeText = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	const drawerWidth = getDrawerWidth(deviceWidth);
 

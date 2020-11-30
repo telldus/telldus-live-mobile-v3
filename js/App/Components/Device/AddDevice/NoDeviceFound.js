@@ -27,8 +27,7 @@ import React from 'react';
 import {
 	View,
 	TouchableButton,
-	Text,
-	IconTelldus,
+	InfoBlock,
 	ThemedScrollView,
 } from '../../../../BaseComponents';
 
@@ -86,7 +85,7 @@ onPressTryAgain() {
 }
 
 render(): Object {
-	const { intl } = this.props;
+	const { intl, appLayout } = this.props;
 	const { formatMessage } = intl;
 
 	const {
@@ -103,19 +102,12 @@ render(): Object {
 		<ThemedScrollView
 			level={3}>
 			<View style={container}>
-				<View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus
-						level={23}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text
-						level={26}
-						style={infoTextStyle}>
-						{formatMessage(i18n.noDeviceFoundMessageInclude)}
-					</Text>
-				</View>
+				<InfoBlock
+					text={formatMessage(i18n.noDeviceFoundMessageInclude)}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
 				<TouchableButton
 					text={i18n.tryAgain}
 					onPress={this.onPressTryAgain}
@@ -140,12 +132,18 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, shadow, brandDanger } = Theme.Core;
+	const {
+		paddingFactor,
+		shadow,
+		brandDanger,
+		fontSizeFactorFour,
+		fontSizeFactorNine,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const innerPadding = 5 + padding;
 
-	const infoTextFontSize = deviceWidth * 0.04;
+	const infoTextFontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		padding,
@@ -165,7 +163,7 @@ getStyles(): Object {
 			marginBottom: padding / 2,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

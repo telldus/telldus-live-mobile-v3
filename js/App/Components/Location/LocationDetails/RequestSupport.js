@@ -32,7 +32,7 @@ import {
 	Text,
 	TouchableButton,
 	MaterialTextInput,
-	IconTelldus,
+	InfoBlock,
 } from '../../../../BaseComponents';
 
 import capitalise from '../../../Lib/capitalize';
@@ -233,7 +233,7 @@ render(testData: Object): Object {
 		body,
 		label,
 		textField,
-		inAppBrandSecondary,
+		baseColorFour,
 		button,
 		infoContainer,
 		statusIconStyle,
@@ -270,8 +270,8 @@ render(testData: Object): Object {
 					autoCapitalize="sentences"
 					autoCorrect={false}
 					autoFocus={true}
-					baseColor={inAppBrandSecondary}
-					tintColor={inAppBrandSecondary}
+					baseColor={baseColorFour}
+					tintColor={baseColorFour}
 					returnKeyType={'done'}
 					multiline={true}
 				/>
@@ -285,8 +285,8 @@ render(testData: Object): Object {
 					autoCapitalize="sentences"
 					autoCorrect={false}
 					autoFocus={false}
-					baseColor={inAppBrandSecondary}
-					tintColor={inAppBrandSecondary}
+					baseColor={baseColorFour}
+					tintColor={baseColorFour}
 					returnKeyType={'done'}
 				/>
 				<Text style={label}>
@@ -299,22 +299,19 @@ render(testData: Object): Object {
 					autoCapitalize="none"
 					autoCorrect={false}
 					autoFocus={false}
-					baseColor={inAppBrandSecondary}
-					tintColor={inAppBrandSecondary}
+					baseColor={baseColorFour}
+					tintColor={baseColorFour}
 					returnKeyType={'done'}
 				/>
 			</View>
-			{descLen < 50 && <View
-				level={2}
-				style={infoContainer}>
-				<IconTelldus icon={'info'} style={statusIconStyle}/>
-				<Text
-					level={26}
-					style={infoTextStyle}>
-					{formatMessage(i18n.supportTicketDescriptionInfo)}
-				</Text>
-			</View>
-			}
+			{descLen < 50 && (
+				<InfoBlock
+					text={formatMessage(i18n.supportTicketDescriptionInfo)}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
+			)}
 			<TouchableButton
 				text={i18n.labelSend}
 				style={button}
@@ -333,28 +330,36 @@ getStyles({
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor } = Theme.Core;
+	const {
+		shadow,
+		paddingFactor,
+		fontSizeFactorFive,
+		fontSizeFactorEight,
+		fontSizeFactorNine,
+		fontSizeFactorTen,
+		fontSizeFactorEleven,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.045;
-	const fontSizeTitle = deviceWidth * 0.05;
-	const fontSizeBody = deviceWidth * 0.035;
-	const fontSizeLabel = deviceWidth * 0.038;
+	const fontSizeText = deviceWidth * fontSizeFactorEight;
+	const fontSizeTitle = deviceWidth * fontSizeFactorFive;
+	const fontSizeBody = deviceWidth * fontSizeFactorTen;
+	const fontSizeLabel = deviceWidth * fontSizeFactorEleven;
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	return {
-		inAppBrandSecondary,
+		baseColorFour,
 		container: {
 			...shadow,
 			marginVertical: padding,
 			padding: padding * 2,
 		},
 		title: {
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 			fontSize: fontSizeTitle,
 		},
 		body: {
@@ -362,7 +367,7 @@ getStyles({
 			marginTop: 10,
 		},
 		label: {
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 			fontSize: fontSizeLabel,
 			marginTop: 22,
 		},
@@ -386,8 +391,7 @@ getStyles({
 			borderRadius: 2,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
-			color: inAppBrandSecondary,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,
