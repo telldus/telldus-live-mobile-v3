@@ -189,13 +189,17 @@ const SensorBlock = React.memo<Object>((props: Props): Object => {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { paddingFactor, shadow } = Theme.Core;
+		const {
+			paddingFactor,
+			shadow,
+			fontSizeFactorNine,
+		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
 		const blockFullWidth = width - outerPadding;
 
-		const iconSize = deviceWidth * 0.16;
+		const iconSize = deviceWidth * fontSizeFactorNine;
 		const labelFontSize = deviceWidth * 0.031;
 		const valueFontSize = deviceWidth * 0.075;
 		const updateInfoFontSize = deviceWidth * 0.027;

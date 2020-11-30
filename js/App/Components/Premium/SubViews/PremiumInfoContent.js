@@ -72,7 +72,12 @@ const getStyle = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	const {
+		fontSizeFactorFour,
+		paddingFactor,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
 
 	return {
 		coverStyle: {
@@ -88,7 +93,7 @@ const getStyle = (appLayout: Object): Object => {
 		},
 		contentStyle: {
 			textAlign: 'center',
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			marginTop: 10,
 		},
 		iconStyle: {

@@ -31,6 +31,9 @@ import {
 	clearAppData,
 } from '../../Actions/AppData';
 
+import {
+	getLinkTextFontSize,
+} from '../../Lib/styleUtils';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -117,13 +120,10 @@ class WelcomeScreen extends View {
 		let deviceWidth = isPortrait ? width : height;
 
 		const {
-			maxSizeTextButton,
 			baseColorPreloginScreen,
 		} = Theme.Core;
 
-		let infoFontSize = Math.floor(deviceWidth * 0.039);
-		let maxFontSize = maxSizeTextButton - 2;
-		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
+		const infoFontSize = getLinkTextFontSize(deviceWidth);
 
 		return {
 			textBody: {

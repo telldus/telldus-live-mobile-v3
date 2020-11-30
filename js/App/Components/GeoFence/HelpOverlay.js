@@ -181,8 +181,9 @@ const getStyles = ({
 		headerHeightFactor,
 		headerButtonIconSizeFactor,
 		maxSizeFloatingButton,
-		floatingButtonSizefactor,
-		floatingButtonOffsetfactor,
+		floatingButtonSizeFactor,
+		floatingButtonOffsetFactor,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const { land } = headerHeightFactor;
@@ -192,7 +193,7 @@ const getStyles = ({
 		:
 		deviceHeight * land;
 
-	const fontSize = deviceWidth * 0.045;
+	const fontSize = deviceWidth * fontSizeFactorEight;
 	const iconSize = isPortrait ? width * headerButtonIconSizeFactor : height * headerButtonIconSizeFactor;
 
 	const left = (iconSize / 2) + headerButtonHorizontalPadding;
@@ -264,10 +265,10 @@ const getStyles = ({
 	const {
 		right,
 		bottom,
-	} = floatingButtonOffsetfactor;
+	} = floatingButtonOffsetFactor;
 	const offsetBottom = deviceWidth * bottom;
 	const offsetRight = deviceWidth * right;
-	let buttonSize = deviceWidth * floatingButtonSizefactor;
+	let buttonSize = deviceWidth * floatingButtonSizeFactor;
 	buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
 
 	const bottomBoxCurrPos = offsetBottom + (buttonSize * 1.2) + 10;

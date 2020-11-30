@@ -190,14 +190,14 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const fontSizeLabel = Math.floor(deviceWidth * 0.045);
-
 	const {
 		paddingFactor,
 		subHeader,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
+	const fontSizeLabel = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		container: {
@@ -212,7 +212,7 @@ getStyles(appLayout: Object): Object {
 			marginTop: padding * 2,
 		},
 		buttonResubmit: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			alignSelf: 'center',
 			paddingVertical: 5,
 		},

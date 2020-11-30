@@ -34,6 +34,7 @@ import {
 } from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 import {
 	deployStore,
@@ -89,12 +90,15 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		fontSize,
 		buttonResubmit: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize,
 			alignSelf: 'center',
 			paddingVertical: 5,
 			marginBottom: fontSize / 2,

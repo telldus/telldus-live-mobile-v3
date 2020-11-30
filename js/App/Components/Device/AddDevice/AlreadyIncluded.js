@@ -28,8 +28,7 @@ import {
 	View,
 	FloatingButton,
 	Row,
-	Text,
-	IconTelldus,
+	InfoBlock,
 	ThemedScrollView,
 } from '../../../../BaseComponents';
 import { DeviceInfoBlock } from './SubViews';
@@ -117,19 +116,12 @@ render(): Object {
 						appLayout={appLayout}
 					/>
 				</Row>
-				<View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus
-						level={36}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text
-						level={26}
-						style={infoTextStyle}>
-						{formatMessage(i18n.messageDeviceAlreadyIncluded, {name: `"${name}"`})}
-					</Text>
-				</View>
+				<InfoBlock
+					text={formatMessage(i18n.messageDeviceAlreadyIncluded, {name: `"${name}"`})}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
 			</ThemedScrollView>
 			<FloatingButton
 				onPress={this.onPressNext}
@@ -146,12 +138,17 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, shadow } = Theme.Core;
+	const {
+		paddingFactor,
+		shadow,
+		fontSizeFactorFour,
+		fontSizeFactorNine,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const innerPadding = 5 + padding;
 
-	const infoTextFontSize = deviceWidth * 0.04;
+	const infoTextFontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		container: {
@@ -181,7 +178,7 @@ getStyles(): Object {
 			borderRadius: 2,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

@@ -203,6 +203,7 @@ getStyles(appLayout: Object): Object {
 
 	const {
 		eulaContentColor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	return {
@@ -265,7 +266,7 @@ getStyles(appLayout: Object): Object {
 			justifyContent: 'center',
 		},
 		footerText: {
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			fontWeight: 'bold',
 		},
 		markupStyle: {

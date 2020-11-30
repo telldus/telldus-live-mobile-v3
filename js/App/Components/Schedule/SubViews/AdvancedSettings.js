@@ -31,6 +31,7 @@ import {
 } from '../../../../BaseComponents';
 
 import { LayoutAnimations } from '../../../Lib';
+import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
@@ -264,10 +265,12 @@ _getStyle = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-
+	const {
+		fontSizeFactorFive,
+	} = Theme.Core;
 
 	return {
-		iconValueRightSize: deviceWidth * 0.05,
+		iconValueRightSize: deviceWidth * fontSizeFactorFive,
 	};
 };
 

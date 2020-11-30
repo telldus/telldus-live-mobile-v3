@@ -165,6 +165,7 @@ const getStyles = ({
 
 	const {
 		paddingFactor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -175,7 +176,7 @@ const getStyles = ({
 		},
 		modeHeaderStyle: {
 			marginLeft: padding,
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 		},
 	};
 };

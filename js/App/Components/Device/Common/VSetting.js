@@ -99,11 +99,12 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		rowTextColor,
 		brandPrimary,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeText = deviceWidth * fontSizeFactorTen;
 
 	const outerPadding = padding * 2;
 

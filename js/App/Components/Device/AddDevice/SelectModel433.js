@@ -206,13 +206,14 @@ getStyles(): Object {
 	const {
 		shadow,
 		paddingFactor,
+		fontSizeFactorFive,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSize = deviceWidth * 0.036;
 	const imgW = deviceWidth * 0.035;
-	const imgH = deviceWidth * 0.05;
+	const imgH = deviceWidth * fontSizeFactorFive;
 
 	return {
 		padding,

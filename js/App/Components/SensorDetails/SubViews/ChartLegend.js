@@ -113,8 +113,11 @@ export default class ChartLegend extends View<Props, null> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+		const {
+			fontSizeFactorEleven,
+		} = Theme.Core;
 
-		const fontSizeLabel = deviceWidth * 0.038;
+		const fontSizeLabel = deviceWidth * fontSizeFactorEleven;
 		const fontSizeIcon = deviceWidth * 0.06;
 		const fontSizeFullscreenIcon = deviceWidth * 0.07;
 

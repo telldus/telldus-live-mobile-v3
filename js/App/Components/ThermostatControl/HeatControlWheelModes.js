@@ -698,6 +698,7 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		rowTextColor,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -714,7 +715,7 @@ getStyles(): Object {
 
 	const padConst = padding / 2;
 
-	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeText = deviceWidth * fontSizeFactorTen;
 
 	return {
 		segments,

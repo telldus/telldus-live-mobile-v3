@@ -358,12 +358,13 @@ const getStyles = (appLayout: Object, {
 
 	const {
 		paddingFactor,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const paddingEditNameBlock = Math.floor(deviceWidth * 0.045);
+	const paddingEditNameBlock = Math.floor(deviceWidth * fontSizeFactorEight);
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		style: {

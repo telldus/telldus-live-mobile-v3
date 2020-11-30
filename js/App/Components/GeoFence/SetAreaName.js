@@ -68,7 +68,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		colors,
 	} = useAppTheme();
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	const intl = useIntl();
@@ -123,8 +123,8 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 				label={formatMessage(i18n.name)}
 				containerStyle={containerStyleTF}
 				style={textField}
-				baseColor={inAppBrandSecondary}
-				tintColor={inAppBrandSecondary}
+				baseColor={baseColorFour}
+				tintColor={baseColorFour}
 				onChangeText={onChangeText}
 				autoCapitalize="sentences"
 				autoCorrect={false}

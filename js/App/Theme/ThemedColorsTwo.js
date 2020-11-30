@@ -125,7 +125,7 @@ export default {
 			return '#f5f5f5';
 		},
 		get headerOneColorBlockEnabled() {
-			return '#9C7D69';
+			return '#333333';
 		},
 		get headerOneColorBlockDisabled() {
 			return '#999999';
@@ -355,6 +355,15 @@ export default {
 		get baseColorFive() {
 			return '#4F4F4F';
 		},
+		get baseColorSix() {
+			return '#333333';
+		},
+		get baseColorSeven() {
+			return '#000000';
+		},
+		get baseColorEight() {
+			return '#000000';
+		},
 		get textColorInactive() {
 			return Core.inactiveTintColor;
 		},
@@ -444,7 +453,7 @@ export default {
 			return '#202020';
 		},
 		get headerOneColorBlockEnabled() {
-			return Core.brandSecondaryShadeOne;
+			return '#ffffff';
 		},
 		get headerOneColorBlockDisabled() {
 			return '#666666';
@@ -674,8 +683,17 @@ export default {
 		get baseColorFive() {
 			return '#ffffff';
 		},
+		get baseColorSix() {
+			return '#E4E4E4';
+		},
+		get baseColorSeven() {
+			return '#E4E4E4';
+		},
+		get baseColorEight() {
+			return '#000000';
+		},
 		get textColorInactive() {
-			return '#CCCCCC';
+			return '#999999';
 		},
 		get iconColorInsidePoster() {
 			return '#4F4F4F';

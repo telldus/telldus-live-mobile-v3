@@ -134,7 +134,7 @@ const SetDeviceName433 = (props: Object): Object => {
 	}, [name, widgetParams433Device]);
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 		coverStyle,
 		textFieldStyle,
 		textFieldCoverStyle,
@@ -164,8 +164,8 @@ const SetDeviceName433 = (props: Object): Object => {
 				<MaterialTextInput
 					value={name}
 					label={formatMessage(i18n.name)}
-					baseColor={inAppBrandSecondary}
-					tintColor={inAppBrandSecondary}
+					baseColor={baseColorFour}
+					tintColor={baseColorFour}
 					textColor={textFieldStyle.color}
 					fontSize={textFieldStyle.fontSize}
 					labelFontSize={labelStyle.fontSize}
@@ -200,19 +200,23 @@ const getStyles = ({
 
 	const {
 		card,
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
-	const { shadow, paddingFactor } = Theme.Core;
+	const {
+		shadow,
+		paddingFactor,
+		fontSizeFactorEight,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	const blockWidth = Math.floor(width - (padding * 2));
 
 	return {
-		inAppBrandSecondary,
+		baseColorFour,
 		coverStyle: {
 			flex: 1,
 		},
@@ -230,7 +234,7 @@ const getStyles = ({
 		},
 		labelStyle: {
 			fontSize: fontSize,
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 		},
 		iconStyle: {
 			color: '#fff',
@@ -239,7 +243,7 @@ const getStyles = ({
 			marginRight: 5,
 			marginBottom: 4,
 			fontSize: fontSize * 1.2,
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 		},
 	};
 };

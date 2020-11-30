@@ -41,6 +41,8 @@ import {
 	showToast,
 } from '../../../Actions/App';
 
+import Theme from '../../../Theme';
+
 import i18n from '../../../Translations/common';
 
 function usePrevious(value: string): ?string {
@@ -150,10 +152,12 @@ const getStyle = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-
+	const {
+		fontSizeFactorFive,
+	} = Theme.Core;
 
 	return {
-		iconValueRightSize: deviceWidth * 0.05,
+		iconValueRightSize: deviceWidth * fontSizeFactorFive,
 	};
 };
 

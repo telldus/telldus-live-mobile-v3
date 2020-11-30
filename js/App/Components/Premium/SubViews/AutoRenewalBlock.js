@@ -142,9 +142,13 @@ const getStyle = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
+	const {
+		fontSizeFactorFour,
+	} = Theme.Core;
+
 	return {
 		upgradeSyle: {
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 		},
 	};
 };

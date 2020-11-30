@@ -46,6 +46,7 @@ import {
 	IconTelldus,
 	TouchableButton,
 	CheckBoxIconText,
+	InfoBlock,
 } from '../../../BaseComponents';
 import {
 	PaymentProvidersBlock,
@@ -347,22 +348,18 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					}
 				/>
 				}
-				{showInfo && <View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus
-						level={36}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text style={infoTextStyle}>
-						{!supportAutoRenew ?
+				{showInfo && (
+					<InfoBlock
+						text={!supportAutoRenew ?
 							formatMessage(i18n.autoRenewNotSupportedDescription)
 							:
 							formatMessage(i18n.autoRenewDisabledDescription)
 						}
-					</Text>
-				</View>
-				}
+						appLayout={layout}
+						infoContainer={infoContainer}
+						textStyle={infoTextStyle}
+						infoIconStyle={statusIconStyle}/>
+				)}
 				<TouchableButton
 					onPress={onPress}
 					preScript={<IconTelldus icon={'cart'} style={cartIconStyle}/>}
@@ -388,6 +385,10 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const {
+		fontSizeFactorEight,
+		fontSizeFactorNine,
+	} = Theme.Core;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.036);
@@ -486,14 +487,14 @@ const getStyles = ({
 			marginRight: 7,
 		},
 		textStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			color: textOnLevelThreeView,
 		},
 		checkButtonStyle: {
 			marginVertical: padding,
 		},
 		backLinkStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			alignSelf: 'center',
 			color: textOnLevelThreeView,
 			padding: 10,
@@ -512,7 +513,7 @@ const getStyles = ({
 			borderRadius: 2,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

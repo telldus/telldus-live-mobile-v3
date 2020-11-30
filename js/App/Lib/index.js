@@ -55,6 +55,7 @@ import * as PushNotification from './PushNotification';
 import * as Timer from './Timer';
 import * as intlUtils from './intlUtils';
 import * as thirdPartyUtils from './thirdPartyUtils';
+import * as styleUtils from './styleUtils';
 
 module.exports = {
 	getDeviceWidth,
@@ -92,4 +93,5 @@ module.exports = {
 	...Timer,
 	...intlUtils,
 	...thirdPartyUtils,
+	...styleUtils,
 };

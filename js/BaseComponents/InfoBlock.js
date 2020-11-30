@@ -77,11 +77,12 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		shadow,
 		paddingFactor,
+		fontSizeFactorTwelve,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeBody = deviceWidth * 0.042;
+	const fontSizeBody = deviceWidth * fontSizeFactorTwelve;
 
 	return {
 		infoContainerDef: {

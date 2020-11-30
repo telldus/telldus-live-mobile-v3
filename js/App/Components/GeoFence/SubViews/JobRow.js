@@ -199,6 +199,7 @@ const getStyles = (appLayout: Object, {
 		maxSizeRowTextOne,
 		shadow,
 		paddingFactor,
+		fontSizeFactorOne,
 	} = Theme.Core;
 
 	const {
@@ -207,7 +208,7 @@ const getStyles = (appLayout: Object, {
 		textSeven,
 	} = colors;
 
-	let nameFontSize = Math.floor(deviceWidth * 0.047);
+	let nameFontSize = Math.floor(deviceWidth * fontSizeFactorOne);
 	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
 	const padding = deviceWidth * paddingFactor;

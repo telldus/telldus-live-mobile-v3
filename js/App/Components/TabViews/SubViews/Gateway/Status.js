@@ -27,7 +27,7 @@ import { View, Text, StyleSheet, IconTelldus } from '../../../../../BaseComponen
 import { hasTokenExpired, getControlIconColorLabel } from '../../../../Lib';
 
 import i18n from '../../../../Translations/common';
-
+import Theme from '../../../../Theme';
 import {
 	withTheme,
 	PropsThemedComponent,
@@ -116,8 +116,11 @@ getStyles(appLayout: Object, supportLocal: boolean): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const {
+		fontSizeFactorTwelve,
+	} = Theme.Core;
 
-	let textLocationSize = Math.floor(deviceWidth * 0.042);
+	let textLocationSize = Math.floor(deviceWidth * fontSizeFactorTwelve);
 	textLocationSize = textLocationSize > 28 ? 28 : textLocationSize;
 
 	let statusInfoSize = Math.floor(deviceWidth * 0.055);

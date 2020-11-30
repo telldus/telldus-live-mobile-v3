@@ -35,6 +35,7 @@ import {
 	FloatingButton,
 	Text,
 	IconTelldus,
+	InfoBlock,
 } from '../../../../BaseComponents';
 import { NameRow, DeviceInfoBlock } from './SubViews';
 
@@ -273,7 +274,11 @@ getNameRow({key, deviceName, id, label, header, placeholder, containerStyle, aut
 
 render(): Object {
 	const { rowData, isLoading } = this.state;
-	const { intl, route } = this.props;
+	const {
+		intl,
+		route,
+		appLayout,
+	} = this.props;
 
 	const {
 		container,
@@ -330,19 +335,12 @@ render(): Object {
 					{firstRow}
 					{rows.length !== 0 && (
 						<View style={rowsContainer}>
-							<View
-								level={2}
-								style={infoContainer}>
-								<IconTelldus
-									level={36}
-									icon={'info'}
-									style={infoIconStyle}/>
-								<Text
-									level={26}
-									style={infoTextStyle}>
-									{intl.formatMessage(i18n.setNameMultichannelInfo)}
-								</Text>
-							</View>
+							<InfoBlock
+								text={intl.formatMessage(i18n.setNameMultichannelInfo)}
+								appLayout={appLayout}
+								infoContainer={infoContainer}
+								textStyle={infoTextStyle}
+								infoIconStyle={infoIconStyle}/>
 							{rows}
 						</View>
 					)}
@@ -361,18 +359,12 @@ render(): Object {
 						</View>
 					)}
 					{!!hintMessage && (
-						<View
-							level={2}
-							style={infoContainer}>
-							<IconTelldus
-								level={23}
-								icon={'info'} style={statusIconStyle}/>
-							<Text
-								level={26}
-								style={infoTextStyle}>
-								{hintMessage}
-							</Text>
-						</View>
+						<InfoBlock
+							text={hintMessage}
+							appLayout={appLayout}
+							infoContainer={infoContainer}
+							textStyle={infoTextStyle}
+							infoIconStyle={statusIconStyle}/>
 					)}
 				</View>
 			</ScrollView>
@@ -392,13 +384,18 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, editBoxPaddingFactor, shadow } = Theme.Core;
+	const {
+		paddingFactor,
+		editBoxPaddingFactor,
+		shadow,
+		fontSizeFactorFour,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const editBoxPadding = deviceWidth * editBoxPaddingFactor;
 
-	const infoTextFontSize = deviceWidth * 0.04;
+	const infoTextFontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		container: {

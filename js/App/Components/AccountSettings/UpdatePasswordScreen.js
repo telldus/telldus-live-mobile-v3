@@ -62,7 +62,7 @@ const UpdatePasswordScreen = (props: Object): Object => {
 		colors,
 	} = useAppTheme();
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	const { formatMessage } = useIntl();
@@ -183,8 +183,8 @@ const UpdatePasswordScreen = (props: Object): Object => {
 						onChangeText={onChangeTextCurrent}
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={inAppBrandSecondary}
-						tintColor={inAppBrandSecondary}
+						baseColor={baseColorFour}
+						tintColor={baseColorFour}
 						returnKeyType={'done'}
 						secureTextEntry={true}
 					/>
@@ -234,13 +234,17 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.04);
+	const {
+		paddingFactor,
+		fontSizeFactorFour,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 
 	const {
 		textThree,
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	return {
@@ -258,7 +262,7 @@ const getStyles = ({
 		},
 		titleStyle: {
 			fontSize: fontSize * 1.6,
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 		},
 		bodyStyle: {
 			fontSize,
@@ -273,7 +277,7 @@ const getStyles = ({
 		},
 		currentLabelStyle: {
 			alignSelf: 'flex-start',
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 			fontSize,
 			marginTop: 20,
 		},

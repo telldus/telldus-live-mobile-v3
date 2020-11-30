@@ -103,7 +103,7 @@ class LocationDetails extends View {
 					<TouchableOpacity disabled={!onPress} onPress={this.onPress} accessible={accessible}>
 						<View style={[locationTextContainer, descriptionContainerStyle]}>
 							<Text
-								level={23}
+								level={38}
 								numberOfLines={1} style={[textHSH, h1Style]}>
 								{!!H1 && H1}
 							</Text>
@@ -131,10 +131,14 @@ class LocationDetails extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			fontSizeFactorEight,
+		} = Theme.Core;
+
 		let textHSHSize = Math.floor(deviceWidth * 0.054);
 		textHSHSize = textHSHSize > 25 ? 25 : textHSHSize;
 
-		let textLocationSize = Math.floor(deviceWidth * 0.045);
+		let textLocationSize = Math.floor(deviceWidth * fontSizeFactorEight);
 		textLocationSize = textLocationSize > 19 ? 19 : textLocationSize;
 
 		return {

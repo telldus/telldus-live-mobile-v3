@@ -397,6 +397,7 @@ const getStyles = ({
 		darkBG,
 		twine,
 		paddingFactor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const { height, width } = appLayout;
@@ -433,7 +434,7 @@ const getStyles = ({
 		premInfoTextStyle: {
 			color: '#fff',
 			marginLeft: padding,
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 		},
 		premIconStyle: {
 			color: twine,

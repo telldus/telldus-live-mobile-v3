@@ -30,6 +30,9 @@ import {
 } from '../../../BaseComponents';
 import { ForgotPasswordForm } from './SubViews';
 
+import {
+	getLinkTextFontSize,
+} from '../../Lib/styleUtils';
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 import { intlShape, injectIntl } from 'react-intl';
@@ -120,13 +123,10 @@ class ForgotPasswordScreen extends View<Props, null> {
 		let deviceWidth = isPortrait ? width : height;
 
 		const {
-			maxSizeTextButton,
 			baseColorPreloginScreen,
 		} = Theme.Core;
 
-		let infoFontSize = Math.floor(deviceWidth * 0.039);
-		let maxFontSize = maxSizeTextButton - 2;
-		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
+		const infoFontSize = getLinkTextFontSize(deviceWidth);
 
 		return {
 			accountExist: {
