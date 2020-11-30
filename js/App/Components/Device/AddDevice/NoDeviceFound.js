@@ -27,8 +27,7 @@ import React from 'react';
 import {
 	View,
 	TouchableButton,
-	Text,
-	IconTelldus,
+	InfoBlock,
 	ThemedScrollView,
 } from '../../../../BaseComponents';
 
@@ -86,7 +85,7 @@ onPressTryAgain() {
 }
 
 render(): Object {
-	const { intl } = this.props;
+	const { intl, appLayout } = this.props;
 	const { formatMessage } = intl;
 
 	const {
@@ -103,19 +102,12 @@ render(): Object {
 		<ThemedScrollView
 			level={3}>
 			<View style={container}>
-				<View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus
-						level={36}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text
-						level={26}
-						style={infoTextStyle}>
-						{formatMessage(i18n.noDeviceFoundMessageInclude)}
-					</Text>
-				</View>
+				<InfoBlock
+					text={formatMessage(i18n.noDeviceFoundMessageInclude)}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
 				<TouchableButton
 					text={i18n.tryAgain}
 					onPress={this.onPressTryAgain}

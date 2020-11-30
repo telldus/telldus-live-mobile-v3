@@ -30,8 +30,7 @@ import {
 import {
 	View,
 	TouchableButton,
-	Text,
-	IconTelldus,
+	InfoBlock,
 } from '../../../../BaseComponents';
 
 import capitalize from '../../../Lib/capitalize';
@@ -81,7 +80,7 @@ onPressExclude() {
 }
 
 render(): Object {
-	const { intl } = this.props;
+	const { intl, appLayout } = this.props;
 	const { formatMessage } = intl;
 
 	const {
@@ -97,19 +96,12 @@ render(): Object {
 	return (
 		<ScrollView>
 			<View style={container}>
-				<View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus
-						level={36}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text
-						level={26}
-						style={infoTextStyle}>
-						{formatMessage(i18n.includeFailedMessage)}
-					</Text>
-				</View>
+				<InfoBlock
+					text={formatMessage(i18n.includeFailedMessage)}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
 				<TouchableButton
 					text={i18n.headerExclude}
 					onPress={this.onPressExclude}

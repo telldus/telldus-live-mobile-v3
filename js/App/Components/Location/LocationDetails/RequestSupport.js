@@ -32,7 +32,7 @@ import {
 	Text,
 	TouchableButton,
 	MaterialTextInput,
-	IconTelldus,
+	InfoBlock,
 } from '../../../../BaseComponents';
 
 import capitalise from '../../../Lib/capitalize';
@@ -304,20 +304,14 @@ render(testData: Object): Object {
 					returnKeyType={'done'}
 				/>
 			</View>
-			{descLen < 50 && <View
-				level={2}
-				style={infoContainer}>
-				<IconTelldus
-					level={36}
-					icon={'info'}
-					style={statusIconStyle}/>
-				<Text
-					level={26}
-					style={infoTextStyle}>
-					{formatMessage(i18n.supportTicketDescriptionInfo)}
-				</Text>
-			</View>
-			}
+			{descLen < 50 && (
+				<InfoBlock
+					text={formatMessage(i18n.supportTicketDescriptionInfo)}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
+			)}
 			<TouchableButton
 				text={i18n.labelSend}
 				style={button}

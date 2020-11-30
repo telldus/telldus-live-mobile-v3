@@ -46,6 +46,7 @@ import {
 	IconTelldus,
 	TouchableButton,
 	CheckBoxIconText,
+	InfoBlock,
 } from '../../../BaseComponents';
 import {
 	PaymentProvidersBlock,
@@ -347,22 +348,18 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					}
 				/>
 				}
-				{showInfo && <View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus
-						level={36}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text style={infoTextStyle}>
-						{!supportAutoRenew ?
+				{showInfo && (
+					<InfoBlock
+						text={!supportAutoRenew ?
 							formatMessage(i18n.autoRenewNotSupportedDescription)
 							:
 							formatMessage(i18n.autoRenewDisabledDescription)
 						}
-					</Text>
-				</View>
-				}
+						appLayout={layout}
+						infoContainer={infoContainer}
+						textStyle={infoTextStyle}
+						infoIconStyle={statusIconStyle}/>
+				)}
 				<TouchableButton
 					onPress={onPress}
 					preScript={<IconTelldus icon={'cart'} style={cartIconStyle}/>}

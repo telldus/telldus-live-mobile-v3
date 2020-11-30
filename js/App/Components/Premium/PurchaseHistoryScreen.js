@@ -39,7 +39,7 @@ import {
 	View,
 	NavigationHeaderPoster,
 	Text,
-	IconTelldus,
+	InfoBlock,
 	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import {
@@ -221,18 +221,13 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 				leftIcon={'close'}
 				navigation={navigation}
 				{...screenProps}/>
-			{(!isLoading && listData.length === 0 ) ?
-				<View
-					level={2}
-					style={emptyCover}>
-					<IconTelldus
-						level={23}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text
-						level={23}
-						style={emptyInfo}>{formatMessage(i18n.noPurchaseHistory)}</Text>
-				</View>
+			{(!isLoading && listData.length === 0) ?
+				<InfoBlock
+					text={formatMessage(i18n.noPurchaseHistory)}
+					appLayout={layout}
+					infoContainer={emptyCover}
+					textStyle={emptyInfo}
+					infoIconStyle={statusIconStyle}/>
 				:
 				<SectionList
 					renderItem={renderItem}
@@ -288,6 +283,7 @@ const getStyles = (appLayout: Object): Object => {
 			padding: padding * 2,
 			justifyContent: 'center',
 			alignItems: 'center',
+			flex: 0,
 		},
 		emptyInfo: {
 			fontSize: fontSizeRow,

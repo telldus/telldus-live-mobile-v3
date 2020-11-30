@@ -30,8 +30,7 @@ import {
 import {
 	View,
 	TouchableButton,
-	Text,
-	IconTelldus,
+	InfoBlock,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -63,7 +62,7 @@ onPressExit() {
 }
 
 render(): Object {
-	const { infoMessage } = this.props;
+	const { infoMessage, appLayout } = this.props;
 
 	const {
 		container,
@@ -77,19 +76,12 @@ render(): Object {
 	return (
 		<ScrollView>
 			<View style={container}>
-				<View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus
-						level={36}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text
-						level={26}
-						style={infoTextStyle}>
-						{infoMessage}
-					</Text>
-				</View>
+				<InfoBlock
+					text={infoMessage}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
 				<TouchableButton
 					text={i18n.exit}
 					onPress={this.onPressExit}

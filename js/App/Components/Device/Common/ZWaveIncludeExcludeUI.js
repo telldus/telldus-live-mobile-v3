@@ -33,7 +33,7 @@ import {
 	View,
 	Text,
 	Image,
-	BlockIcon,
+	InfoBlock,
 	ProgressBarLinear,
 	Throbber,
 	Icon,
@@ -146,6 +146,7 @@ render(): Object {
 		infoText,
 		deviceImage,
 		onPressCancel,
+		appLayout,
 	} = this.props;
 	const { width } = this.state;
 	const {
@@ -155,7 +156,6 @@ render(): Object {
 		imageType,
 		textStyle,
 		infoIconStyle,
-		blockIcontainerStyle,
 		markerTextCover,
 		markerText,
 		timerStyle,
@@ -250,28 +250,13 @@ render(): Object {
 						unfilledColor={Theme.Core.inactiveSwitchBackground} />
 				</View>
 			</View>
-			{showInfo && (<View
-				level={2}
-				style={infoContainer}>
-				<View style={blockLeft}>
-					<BlockIcon
-						level={36}
-						icon={'info'}
-						style={infoIconStyle}
-						containerStyle={blockIcontainerStyle}/>
-				</View>
-				<View style={{
-					flex: 1,
-					flexDirection: 'row',
-					flexWrap: 'wrap',
-				}}>
-					<Text
-						level={25}
-						style={textStyle}>
-						{infoText}
-					</Text>
-				</View>
-			</View>
+			{showInfo && (
+				<InfoBlock
+					text={infoText}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={textStyle}
+					infoIconStyle={infoIconStyle}/>
 			)}
 		</View>
 	);
