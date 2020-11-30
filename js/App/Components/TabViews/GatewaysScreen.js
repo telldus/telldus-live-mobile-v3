@@ -236,7 +236,8 @@ class GatewaysScreen extends View {
 						renderItem={this.renderRow}
 						keyExtractor={this.keyExtractor}
 						contentContainerStyle={{
-							marginVertical: padding - (padding / 4),
+							paddingTop: padding - (padding / 4),
+							paddingBottom: padding,
 						}}
 						refreshControl={
 							<ThemedRefreshControl
