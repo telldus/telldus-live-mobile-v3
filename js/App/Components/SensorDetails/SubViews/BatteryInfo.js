@@ -78,11 +78,15 @@ export default class BatteryInfo extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { paddingFactor, shadow } = Theme.Core;
+		const {
+			paddingFactor,
+			shadow,
+			fontSizeFactorFive,
+		} = Theme.Core;
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
 
-		const textFontSize = deviceWidth * 0.05;
+		const textFontSize = deviceWidth * fontSizeFactorFive;
 		const labelFontSize = deviceWidth * 0.031;
 
 		return {

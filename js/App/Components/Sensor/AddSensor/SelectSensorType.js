@@ -242,11 +242,12 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		maxSizeTextButton,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const h2FontSize = deviceWidth * 0.035;
+	const h2FontSize = deviceWidth * fontSizeFactorTen;
 
 	let fontSize = deviceWidth * 0.065;
 	fontSize = fontSize > maxSizeTextButton ? maxSizeTextButton : fontSize;

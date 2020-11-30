@@ -32,6 +32,7 @@ import {
 } from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 const AppVersionBlock = (props: Object): Object => {
 	const { formatMessage } = useIntl();
@@ -58,7 +59,10 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		fontSize,

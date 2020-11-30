@@ -32,7 +32,7 @@ import {
 	Text,
 	TouchableButton,
 	MaterialTextInput,
-	IconTelldus,
+	InfoBlock,
 } from '../../../../BaseComponents';
 
 import capitalise from '../../../Lib/capitalize';
@@ -304,20 +304,14 @@ render(testData: Object): Object {
 					returnKeyType={'done'}
 				/>
 			</View>
-			{descLen < 50 && <View
-				level={2}
-				style={infoContainer}>
-				<IconTelldus
-					level={36}
-					icon={'info'}
-					style={statusIconStyle}/>
-				<Text
-					level={26}
-					style={infoTextStyle}>
-					{formatMessage(i18n.supportTicketDescriptionInfo)}
-				</Text>
-			</View>
-			}
+			{descLen < 50 && (
+				<InfoBlock
+					text={formatMessage(i18n.supportTicketDescriptionInfo)}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
+			)}
 			<TouchableButton
 				text={i18n.labelSend}
 				style={button}
@@ -336,14 +330,22 @@ getStyles({
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor } = Theme.Core;
+	const {
+		shadow,
+		paddingFactor,
+		fontSizeFactorFive,
+		fontSizeFactorEight,
+		fontSizeFactorNine,
+		fontSizeFactorTen,
+		fontSizeFactorEleven,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.045;
-	const fontSizeTitle = deviceWidth * 0.05;
-	const fontSizeBody = deviceWidth * 0.035;
-	const fontSizeLabel = deviceWidth * 0.038;
+	const fontSizeText = deviceWidth * fontSizeFactorEight;
+	const fontSizeTitle = deviceWidth * fontSizeFactorFive;
+	const fontSizeBody = deviceWidth * fontSizeFactorTen;
+	const fontSizeLabel = deviceWidth * fontSizeFactorEleven;
 
 	const {
 		inAppBrandSecondary,
@@ -389,7 +391,7 @@ getStyles({
 			borderRadius: 2,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

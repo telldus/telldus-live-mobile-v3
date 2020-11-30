@@ -539,7 +539,12 @@ class Details extends View<Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const fontSize = Math.floor(deviceWidth * 0.045);
+
+		const {
+			fontSizeFactorEight,
+		} = Theme.Core;
+
+		const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 		const iconSize = Math.floor(deviceWidth * 0.08);
 
 		if (!location) {
@@ -598,7 +603,7 @@ class Details extends View<Props, State> {
 						<TouchableWithoutFeedback onPress={this.onPressGatewayInfo}>
 							<View style={boxItemsCover}>
 								<Text
-									level={23}
+									level={38}
 									style={textName}>
 									{type}
 								</Text>
@@ -710,6 +715,7 @@ class Details extends View<Props, State> {
 			inactiveSwitchBackground,
 			btnPrimaryBg,
 			paddingFactor,
+			fontSizeFactorEight,
 		} = Theme.Core;
 
 		const fontSizeName = Math.floor(deviceWidth * 0.053333333);
@@ -748,7 +754,7 @@ class Details extends View<Props, State> {
 				fontSize: fontSizeName,
 			},
 			locationInfo: {
-				fontSize: Math.floor(deviceWidth * 0.045),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 				color: Theme.Core.rowTextColor,
 			},
 			padding,

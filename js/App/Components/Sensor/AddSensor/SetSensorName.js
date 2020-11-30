@@ -209,11 +209,15 @@ const getStyles = ({
 		inAppBrandSecondary,
 	} = colors;
 
-	const { shadow, paddingFactor } = Theme.Core;
+	const {
+		shadow,
+		paddingFactor,
+		fontSizeFactorEight,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	const blockWidth = Math.floor(width - (padding * 2));
 

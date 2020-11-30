@@ -25,7 +25,6 @@
 
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
@@ -41,6 +40,7 @@ import LabelBox from '../Common/LabelBox';
 import i18n from '../../../Translations/common';
 
 import capitalize from '../../../Lib/capitalize';
+import Theme from '../../../Theme';
 
 type Props = {
 	timeZone: string,
@@ -197,10 +197,15 @@ class TimeZone extends View<void, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const fontSizeTZ = deviceWidth * 0.06;
-		const fontSizeTZHint = deviceWidth * 0.038;
 
-		const fontSizeLabel = deviceWidth * 0.045;
+		const {
+			fontSizeFactorEight,
+			fontSizeFactorEleven,
+		} = Theme.Core;
+
+		const fontSizeTZ = deviceWidth * 0.06;
+		const fontSizeTZHint = deviceWidth * fontSizeFactorEleven;
+		const fontSizeLabel = deviceWidth * fontSizeFactorEight;
 
 		return {
 			timeZoneContainer: {
@@ -226,7 +231,7 @@ class TimeZone extends View<void, Props, State> {
 			iconStyle: {
 
 			},
-			iconSize: deviceWidth * 0.038,
+			iconSize: deviceWidth * fontSizeFactorEleven,
 			label: {
 				fontSize: fontSizeLabel,
 			},
@@ -234,4 +239,4 @@ class TimeZone extends View<void, Props, State> {
 	}
 }
 
-export default connect(null, null)(TimeZone);
+export default TimeZone;

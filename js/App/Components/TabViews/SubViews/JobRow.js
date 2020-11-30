@@ -468,6 +468,9 @@ class JobRow extends View<null, Props, null> {
 			colorOffActiveBg,
 		} = colors;
 
+		const {
+			fontSizeFactorFour,
+		} = Theme.Core;
 		const { land } = Theme.Core.headerHeightFactor;
 		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * land) + (height * 0.13) : 0;
 		width = width - headerHeight;
@@ -506,11 +509,11 @@ class JobRow extends View<null, Props, null> {
 			},
 			methodIcon: {
 				color: '#fff',
-				fontSize: action && action.name === 'Dim' ? deviceWidth * 0.04 : deviceWidth * 0.056,
+				fontSize: action && action.name === 'Dim' ? deviceWidth * fontSizeFactorFour : deviceWidth * 0.056,
 			},
 			thermostateModeControlIcon: {
 				color: '#fff',
-				fontSize: deviceWidth * 0.04,
+				fontSize: deviceWidth * fontSizeFactorFour,
 			},
 			thermostatInfo: {
 				color: '#fff',
@@ -525,7 +528,7 @@ class JobRow extends View<null, Props, null> {
 			},
 			title: {
 				color: !active ? inactiveGray : textTwo,
-				fontSize: deviceWidth * 0.04,
+				fontSize: deviceWidth * fontSizeFactorFour,
 				marginBottom: width * 0.008,
 			},
 			description: {

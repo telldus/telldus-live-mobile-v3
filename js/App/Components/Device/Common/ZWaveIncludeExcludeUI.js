@@ -33,7 +33,7 @@ import {
 	View,
 	Text,
 	Image,
-	BlockIcon,
+	InfoBlock,
 	ProgressBarLinear,
 	Throbber,
 	Icon,
@@ -146,6 +146,7 @@ render(): Object {
 		infoText,
 		deviceImage,
 		onPressCancel,
+		appLayout,
 	} = this.props;
 	const { width } = this.state;
 	const {
@@ -155,7 +156,6 @@ render(): Object {
 		imageType,
 		textStyle,
 		infoIconStyle,
-		blockIcontainerStyle,
 		markerTextCover,
 		markerText,
 		timerStyle,
@@ -250,28 +250,13 @@ render(): Object {
 						unfilledColor={Theme.Core.inactiveSwitchBackground} />
 				</View>
 			</View>
-			{showInfo && (<View
-				level={2}
-				style={infoContainer}>
-				<View style={blockLeft}>
-					<BlockIcon
-						level={36}
-						icon={'info'}
-						style={infoIconStyle}
-						containerStyle={blockIcontainerStyle}/>
-				</View>
-				<View style={{
-					flex: 1,
-					flexDirection: 'row',
-					flexWrap: 'wrap',
-				}}>
-					<Text
-						level={25}
-						style={textStyle}>
-						{infoText}
-					</Text>
-				</View>
-			</View>
+			{showInfo && (
+				<InfoBlock
+					text={infoText}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={textStyle}
+					infoIconStyle={infoIconStyle}/>
 			)}
 		</View>
 	);
@@ -292,11 +277,14 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		inactiveSwitchBackground,
+		fontSizeFactorFive,
+		fontSizeFactorEight,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeText = deviceWidth * fontSizeFactorTen;
 	const fontSizeStatus = deviceWidth * 0.03;
 	const blockIconContainerSize = deviceWidth * 0.26;
 
@@ -336,10 +324,10 @@ getStyles(): Object {
 			left: -(contPadding),
 			top: -(contPadding),
 			width: deviceWidth * 0.2,
-			height: Platform.OS === 'ios' ? deviceWidth * 0.05 : 0,
+			height: Platform.OS === 'ios' ? deviceWidth * fontSizeFactorFive : 0,
 			backgroundColor: 'transparent',
 			borderStyle: 'solid',
-			borderRightWidth: deviceWidth * 0.05,
+			borderRightWidth: deviceWidth * fontSizeFactorFive,
 			borderTopWidth: Platform.OS === 'ios' ? deviceWidth * 0.17 : deviceWidth * 0.1,
 			borderRightColor: 'transparent',
 			borderTopColor: inAppBrandPrimary,
@@ -347,7 +335,7 @@ getStyles(): Object {
 		},
 		markerText: {
 			position: 'absolute',
-			fontSize: deviceWidth * 0.05,
+			fontSize: deviceWidth * fontSizeFactorFive,
 			color: '#fff',
 			top: -(contPadding) + (deviceWidth * 0.025),
 			left: deviceWidth * 0.025,
@@ -380,7 +368,7 @@ getStyles(): Object {
 			backgroundColor: 'transparent',
 		},
 		timerStyle: {
-			fontSize: deviceWidth * 0.045,
+			fontSize: deviceWidth * fontSizeFactorEight,
 			color: inAppBrandSecondary,
 			textAlignVertical: 'center',
 			marginRight: 5,

@@ -594,6 +594,8 @@ class DeviceRow extends View<Props, State> {
 			shadow,
 			paddingFactor,
 			offlineColor,
+			fontSizeFactorOne,
+			fontSizeFactorThree,
 		} = Theme.Core;
 
 		const {
@@ -603,10 +605,10 @@ class DeviceRow extends View<Props, State> {
 			inAppBrandSecondary,
 		} = colors;
 
-		let nameFontSize = Math.floor(deviceWidth * 0.047);
+		let nameFontSize = Math.floor(deviceWidth * fontSizeFactorOne);
 		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
-		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		let infoFontSize = Math.floor(deviceWidth * fontSizeFactorThree);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
 		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? colorOffActiveBg : colorOnActiveBg;

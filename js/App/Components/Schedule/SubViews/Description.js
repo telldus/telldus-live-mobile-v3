@@ -25,6 +25,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View } from '../../../../BaseComponents';
 
+import Theme from '../../../Theme';
+
 type Props = {
 	children: string | Array<any>,
 	style?: Object,
@@ -56,8 +58,11 @@ export default class Description extends View<null, Props, null> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+		const {
+			fontSizeFactorFour,
+		} = Theme.Core;
 		return {
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 			opacity: 0.87,
 		};
 	};

@@ -125,8 +125,13 @@ const getStyle = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
-	const fontSize = deviceWidth * 0.04;
+
+	const {
+		fontSizeFactorFour,
+		paddingFactor,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
+	const fontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		coverStyle: {
@@ -141,7 +146,7 @@ const getStyle = (appLayout: Object): Object => {
 			padding: 5,
 		},
 		buyCreditsStyle: {
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 		},
 	};
 };

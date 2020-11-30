@@ -149,10 +149,11 @@ const getStyles = ({
 		paddingFactor,
 		rowTextColor,
 		shadow,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const fontSize = deviceWidth * 0.045;
+	const fontSize = deviceWidth * fontSizeFactorEight;
 
 	return {
 		container: {

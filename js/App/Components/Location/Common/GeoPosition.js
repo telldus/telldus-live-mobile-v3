@@ -358,8 +358,12 @@ class GeoPosition extends View {
 		const deviceWidth = isPortrait ? width : height;
 		const fontSize = deviceWidth * 0.06;
 
+		const {
+			fontSizeFactorEight,
+		} = Theme.Core;
+
 		const searchIconSize = deviceWidth * 0.09;
-		const fontSizeLabel = Math.floor(deviceWidth * 0.045);
+		const fontSizeLabel = Math.floor(deviceWidth * fontSizeFactorEight);
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const labelBoxPadding = deviceWidth * 0.07;

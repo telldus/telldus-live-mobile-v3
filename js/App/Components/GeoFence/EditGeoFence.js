@@ -366,10 +366,11 @@ const getStyles = ({
 		eulaContentColor,
 		rowTextColor,
 		shadow,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const fontSize = deviceWidth * 0.04;
+	const fontSize = deviceWidth * fontSizeFactorFour;
 
 	const fontSizeButtonLabel = deviceWidth * 0.033;
 

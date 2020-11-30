@@ -143,9 +143,14 @@ const getStyle = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.04);
+	const {
+		fontSizeFactorFour,
+		paddingFactor,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
+
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 
 	const coverWidth = Math.floor((width - ((padding * 2) + (padding / 2))) / 2);
 	const imageWidth = (coverWidth - (padding * 2)) * 0.7;

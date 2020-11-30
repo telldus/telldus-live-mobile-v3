@@ -412,6 +412,8 @@ class SensorRow extends View<Props, State> {
 			maxSizeRowTextTwo,
 			buttonWidth,
 			offlineColor,
+			fontSizeFactorOne,
+			fontSizeFactorThree,
 		} = Theme.Core;
 
 		const {
@@ -420,10 +422,10 @@ class SensorRow extends View<Props, State> {
 			itemIconBGColor,
 		} = colors;
 
-		let nameFontSize = Math.floor(deviceWidth * 0.047);
+		let nameFontSize = Math.floor(deviceWidth * fontSizeFactorOne);
 		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
-		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		let infoFontSize = Math.floor(deviceWidth * fontSizeFactorThree);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
 		let backgroundColor = isGatewayActive ? sensorValueBGColor : offlineColor;

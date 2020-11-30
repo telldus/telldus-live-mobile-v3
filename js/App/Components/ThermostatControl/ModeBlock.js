@@ -270,11 +270,13 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		rowTextColor,
+		fontSizeFactorFive,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const iconSizeAddRemove = deviceWidth * 0.05;
+	const iconSizeAddRemove = deviceWidth * fontSizeFactorFive;
 	const iconCoverSize = iconSizeAddRemove * 1.4;
 	const iconBorderRadi = iconCoverSize / 2;
 
@@ -299,7 +301,7 @@ getStyles(): Object {
 		},
 		labelStyle: {
 			color: rowTextColor,
-			fontSize: deviceWidth * 0.05,
+			fontSize: deviceWidth * fontSizeFactorFive,
 			textAlignVertical: 'center',
 			flex: 1,
 		},
@@ -321,7 +323,7 @@ getStyles(): Object {
 		},
 		unitStyle: {
 			color: rowTextColor,
-			fontSize: deviceWidth * 0.035,
+			fontSize: deviceWidth * fontSizeFactorTen,
 		},
 		iconBlockStyle: {
 			width: deviceWidth * 0.2,

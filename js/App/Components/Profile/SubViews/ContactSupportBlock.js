@@ -61,7 +61,7 @@ const ContactSupportBlock = (props: Object): Object => {
 				level={2}
 				style={coverOneStyle}>
 				<Text
-					level={23}
+					level={42}
 					style={titleStyle}>
 					{formatMessage(i18n.titleContactSupportBlock)}
 				</Text>
@@ -79,12 +79,14 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.04);
 
 	const {
 		paddingFactor,
 		shadow,
+		fontSizeFactorFour,
+		fontSizeFactorEight,
 	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -99,7 +101,7 @@ const getStyles = (appLayout: Object): Object => {
 			marginTop: padding / 2,
 		},
 		labelStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			marginTop: padding * 1.5,
 		},
 		titleStyle: {

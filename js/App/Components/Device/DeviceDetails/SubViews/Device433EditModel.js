@@ -248,15 +248,16 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.04);
 
 	const {
 		paddingFactor,
 		shadow,
 		rowTextColor,
 		eulaContentColor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 	const padding = deviceWidth * paddingFactor;
 
 	const itemSize = Math.ceil(fontSize * 1.61 + 8 * 2);

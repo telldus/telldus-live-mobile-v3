@@ -39,7 +39,7 @@ import {
 import LabelBox from '../Common/LabelBox';
 
 import i18n from '../../../Translations/common';
-
+import Theme from '../../../Theme';
 import capitalize from '../../../Lib/capitalize';
 
 import {
@@ -256,12 +256,15 @@ class LocationActivationManual extends View {
 		const fontSize = deviceWidth * 0.06;
 
 		const iconSize = Math.floor(deviceWidth * 0.09);
+		const {
+			fontSizeFactorEleven,
+		} = Theme.Core;
 
 		return {
 			textBody: {
 				color: '#A59F9A',
 				textAlign: 'left',
-				fontSize: deviceWidth * 0.038,
+				fontSize: deviceWidth * fontSizeFactorEleven,
 				paddingLeft: 2,
 			},
 			textField: {

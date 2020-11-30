@@ -82,6 +82,9 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 			iconContainerStyle={{
 				backgroundColor,
 			}}
+			leftIconStyle={{
+				color: colors.baseColor,
+			}}
 			rowData={item}
 			leftIcon={icon}
 			rightIcon={iconFav}/>

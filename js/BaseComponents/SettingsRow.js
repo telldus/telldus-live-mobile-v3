@@ -293,10 +293,11 @@ const getStyle = ({
 
 	const {
 		paddingFactor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const fontSize = deviceWidth * 0.04;
+	const fontSize = deviceWidth * fontSizeFactorFour;
 
 	return {
 		ShowOnDashCover: {

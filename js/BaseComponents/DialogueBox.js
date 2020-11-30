@@ -34,7 +34,7 @@ import DialogueHeader from './DialogueHeader';
 
 import capitalize from '../App/Lib/capitalize';
 import i18n from '../App/Translations/common';
-
+import Theme from '../App/Theme';
 import {
 	withTheme,
 	PropsThemedComponent,
@@ -385,8 +385,12 @@ class DialogueBox extends Component<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			fontSizeFactorTwelve,
+		} = Theme.Core;
+
 		const fontSizeHeader = Math.floor(deviceWidth * 0.046);
-		const fontSize = Math.floor(deviceWidth * 0.042);
+		const fontSize = Math.floor(deviceWidth * fontSizeFactorTwelve);
 
 		const headerWidth = Math.ceil(deviceWidth * 0.75);
 		const headerHeight = Math.ceil(deviceWidth * 0.12);

@@ -122,6 +122,9 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		eulaContentColor,
 		rowTextColor,
 		brandPrimary,
+		fontSizeFactorFour,
+		fontSizeFactorOne,
+		fontSizeFactorTwelve,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -151,18 +154,18 @@ const getStyles = (appLayout: Object, index: number): Object => {
 			justifyContent: 'center',
 		},
 		h1Style: {
-			fontSize: Math.floor(deviceWidth * 0.047),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorOne),
 			color: eulaContentColor,
 			textAlign: 'center',
 			fontWeight: 'bold',
 		},
 		h2Style: {
-			fontSize: Math.floor(deviceWidth * 0.042),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorTwelve),
 			marginTop: 8,
 			textAlign: 'center',
 		},
 		bodyStyle: {
-			fontSize: Math.floor(deviceWidth * 0.042),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorTwelve),
 			color: rowTextColor,
 			marginTop: 8,
 		},
@@ -182,11 +185,11 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		},
 		priceInfoTwo: {
 			marginTop: 3,
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			color: eulaContentColor,
 		},
 		priceInfoThree: {
-			fontSize: Math.floor(deviceWidth * 0.042),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorTwelve),
 			color: brandPrimary,
 			fontWeight: 'bold',
 		},

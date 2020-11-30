@@ -1086,11 +1086,12 @@ class SettingsTab extends View {
 			brandDanger,
 			btnDisabledBg,
 			subHeader,
+			fontSizeFactorFour,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 
-		const fontSize = deviceWidth * 0.04;
+		const fontSize = deviceWidth * fontSizeFactorFour;
 
 		const fontSize2 = Math.floor(deviceWidth * 0.03);
 		const heightCover = fontSize2 * 2.8;

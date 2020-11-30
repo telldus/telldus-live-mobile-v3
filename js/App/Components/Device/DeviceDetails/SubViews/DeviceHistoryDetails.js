@@ -394,6 +394,9 @@ class DeviceHistoryDetails extends View {
 		const {
 			shadow,
 			paddingFactor,
+			fontSizeFactorFive,
+			fontSizeFactorFour,
+			fontSizeFactorOne,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -406,7 +409,7 @@ class DeviceHistoryDetails extends View {
 		let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
 		let screenSpaceRemaining = height - totalTop;
 
-		const closeIconSize = Math.floor(deviceWidth * 0.05);
+		const closeIconSize = Math.floor(deviceWidth * fontSizeFactorFive);
 		const closeIconCSize = closeIconSize;
 
 		const detailsRowWidth = width - (padding * 2);
@@ -470,21 +473,21 @@ class DeviceHistoryDetails extends View {
 				flexDirection: 'row',
 			},
 			titleText: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
-			statusIconSize: Math.floor(deviceWidth * 0.047),
+			statusIconSize: Math.floor(deviceWidth * fontSizeFactorOne),
 			detailsLabel: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			detailsText: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			detailsTextError: {
 				color: '#d32f2f',
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			timeText: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 		};
 	}

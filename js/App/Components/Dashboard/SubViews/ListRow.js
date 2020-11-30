@@ -84,6 +84,7 @@ const ListRow = memo<Object>((props: Props): Object => {
 			style={[coverStyleDef, coverStyle]}>
 			{!!leftIcon && <BlockIcon
 				blockLevel={15}
+				iconLevel={46}
 				icon={leftIcon}
 				style={[leftIconStyleDef, leftIconStyle]}
 				containerStyle={[iconContainerStyleDef, iconContainerStyle]}/>}
@@ -110,11 +111,12 @@ const getStyles = ({layout}: Object): Object => {
 		paddingFactor,
 		shadow,
 		maxSizeRowTextOne,
+		fontSizeFactorOne,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	let nameFontSize = Math.floor(deviceWidth * 0.047);
+	let nameFontSize = Math.floor(deviceWidth * fontSizeFactorOne);
 	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
 	return {
@@ -130,7 +132,6 @@ const getStyles = ({layout}: Object): Object => {
 		},
 		leftIconStyleDef: {
 			fontSize: 18,
-			color: '#fff',
 		},
 		textStyleDef: {
 			flex: 1,

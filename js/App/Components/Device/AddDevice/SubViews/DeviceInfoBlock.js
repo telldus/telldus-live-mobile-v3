@@ -115,7 +115,13 @@ class DeviceInfoBlock extends View<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { rowTextColor, paddingFactor, eulaContentColor } = Theme.Core;
+		const {
+			rowTextColor,
+			paddingFactor,
+			eulaContentColor,
+			fontSizeFactorFive,
+			fontSizeFactorFour,
+		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const { imgWidth, imgHeight } = this.getImageDimensions(appLayout);
@@ -137,14 +143,14 @@ class DeviceInfoBlock extends View<Props, null> {
 				color: rowTextColor,
 			},
 			h1Style: {
-				fontSize: deviceWidth * 0.05,
+				fontSize: deviceWidth * fontSizeFactorFive,
 			},
 			h2Style: {
-				fontSize: deviceWidth * 0.04,
+				fontSize: deviceWidth * fontSizeFactorFour,
 				color: eulaContentColor,
 			},
 			h3Style: {
-				fontSize: deviceWidth * 0.04,
+				fontSize: deviceWidth * fontSizeFactorFour,
 				color: eulaContentColor,
 			},
 		};

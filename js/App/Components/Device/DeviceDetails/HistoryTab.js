@@ -363,8 +363,12 @@ class HistoryTab extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			fontSizeFactorFour,
+		} = Theme.Core;
+
 		const fontSizeNoData = Math.floor(deviceWidth * 0.03);
-		const fontSizeSectionText = Math.floor(deviceWidth * 0.04);
+		const fontSizeSectionText = Math.floor(deviceWidth * fontSizeFactorFour);
 		const iconSize = Math.floor(deviceWidth * 0.06);
 
 		return {

@@ -190,11 +190,12 @@ const getStyles = ({
 
 	const {
 		paddingFactor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.04);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 
 	return {
 		rowCover: {

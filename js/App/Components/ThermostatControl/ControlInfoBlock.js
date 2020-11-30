@@ -316,6 +316,9 @@ getStyles(): Object {
 
 	const {
 		rowTextColor,
+		fontSizeFactorFive,
+		fontSizeFactorFour,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	return {
@@ -334,7 +337,7 @@ getStyles(): Object {
 			height: '26%',
 		},
 		infoTitleStyle: {
-			fontSize: deviceWidth * 0.045,
+			fontSize: deviceWidth * fontSizeFactorEight,
 		},
 		box2: {
 			height: '26%',
@@ -361,7 +364,7 @@ getStyles(): Object {
 			color: rowTextColor,
 		},
 		cUnitStyle: {
-			fontSize: deviceWidth * 0.05,
+			fontSize: deviceWidth * fontSizeFactorFive,
 			color: rowTextColor,
 		},
 		lastUpdatedInfoStyle: {
@@ -391,7 +394,7 @@ getStyles(): Object {
 			fontSize: deviceWidth * 0.1,
 		},
 		labelStyle: {
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 			textAlign: 'center',
 			textAlignVertical: 'bottom',
 			color: inAppBrandSecondary,
@@ -420,7 +423,7 @@ getStyles(): Object {
 		},
 		offInfoText: {
 			color: inAppBrandSecondary,
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 			textAlign: 'center',
 			marginTop: 5,
 		},

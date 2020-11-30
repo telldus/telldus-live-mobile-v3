@@ -233,6 +233,7 @@ const getStyles = ({
 	const {
 		paddingFactor,
 		getFooterHeight,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -261,7 +262,7 @@ const getStyles = ({
 			marginBottom: padding,
 		},
 		contentStyle: {
-			fontSize: Math.floor(deviceWidth * 0.04),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			marginBottom: padding,
 		},
 	};

@@ -587,6 +587,7 @@ class SensorsTab extends View {
 
 		const {
 			androidLandMarginLeftFactor,
+			fontSizeFactorFour,
 		} = Theme.Core;
 
 		let hiddenListTextFontSize = Math.floor(deviceWidth * 0.049);
@@ -648,7 +649,7 @@ class SensorsTab extends View {
 			},
 			noItemsContent: {
 				textAlign: 'center',
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			sensorIconStyle: {
 				fontSize: Math.floor(deviceWidth * 0.12),

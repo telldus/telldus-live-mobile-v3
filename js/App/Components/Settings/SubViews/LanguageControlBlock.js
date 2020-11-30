@@ -40,6 +40,7 @@ import {
 	isDeviceLanguageAndHasChanged,
 	isDeviceLanguage,
 } from '../../../Lib/appUtils';
+import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
@@ -115,14 +116,17 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		dropDownContainerStyle: {
 			marginBottom: fontSize / 2,
 		},
 		dropDownHeaderStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize,
 		},
 		fontSize,
 	};

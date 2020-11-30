@@ -234,9 +234,13 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.04);
+	const {
+		paddingFactor,
+		fontSizeFactorFour,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 
 	const {
 		textThree,

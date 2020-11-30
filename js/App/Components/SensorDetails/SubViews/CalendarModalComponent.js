@@ -309,7 +309,10 @@ getStyle(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { offlineColor } = Theme.Core;
+	const {
+		offlineColor,
+		fontSizeFactorFive,
+	} = Theme.Core;
 
 	const adjustCelendar = !this.isTablet && !isPortrait;
 
@@ -317,7 +320,7 @@ getStyle(appLayout: Object): Object {
 
 	const fontSizePosterTextOne = posterHeight * 0.2;
 	const fontSizePosterTextTwo = posterHeight * 0.25;
-	const fontSizeFooterText = adjustCelendar ? deviceWidth * 0.03 : deviceWidth * 0.05;
+	const fontSizeFooterText = adjustCelendar ? deviceWidth * 0.03 : deviceWidth * fontSizeFactorFive;
 	const footerPadding = adjustCelendar ? fontSizeFooterText * 0.5 : fontSizeFooterText;
 
 	const {

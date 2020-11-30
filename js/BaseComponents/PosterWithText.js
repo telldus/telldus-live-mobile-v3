@@ -36,6 +36,7 @@ import Icon from './Icon';
 import ThemedMaterialIcon from './ThemedMaterialIcon';
 
 import { shouldUpdate } from '../App/Lib';
+import Theme from '../App/Theme';
 
 type InfoButton = {
 	onPress?: Function,
@@ -264,12 +265,12 @@ render(): Object {
 								<Icon
 									level={17}
 									name={leftIcon}
-									size={width * 0.047} />
+									size={width * Theme.Core.fontSizeFactorSeven} />
 								:
 								<ThemedMaterialIcon
 									level={17}
 									name={leftIcon}
-									size={width * 0.047} />
+									size={width * Theme.Core.fontSizeFactorSeven} />
 							}
 						</TouchableOpacity>
 					)}

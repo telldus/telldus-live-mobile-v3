@@ -398,8 +398,14 @@ class HistoryRow extends React.PureComponent<Props, null> {
 		const {
 			textTwo,
 		} = colors;
+		const {
+			fontSizeFactorFive,
+			paddingFactor,
+			fontSizeFactorFour,
+			fontSizeFactorOne,
+		} = Theme.Core;
 
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const padding = deviceWidth * paddingFactor;
 
 		return {
 			locationCover: {
@@ -432,14 +438,14 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				justifyContent: 'center',
 			},
 			containerStyle: {
-				paddingHorizontal: deviceWidth * 0.04,
+				paddingHorizontal: deviceWidth * fontSizeFactorFour,
 				marginTop: isFirst ? padding : padding / 2,
 				marginBottom: isLast ? padding : 0,
 				paddingTop: 0,
 				paddingBottom: 0,
 			},
 			timeStyle: {
-				fontSize: deviceWidth * 0.047,
+				fontSize: deviceWidth * fontSizeFactorOne,
 				color: textTwo,
 			},
 			timeContainerStyle: {
@@ -447,7 +453,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				zIndex: 1,
 			},
 			originTextStyle: {
-				fontSize: Math.floor(deviceWidth * 0.04),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 			},
 			roundIconContainerStyle: {
 				backgroundColor: item.successStatus !== 0 ? 'transparent' : '#929292',
@@ -457,15 +463,15 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			},
 			iconBackgroundMaskStyle: {
 				backgroundColor: item.successStatus !== 0 ? '#fff' : '#929292',
-				width: deviceWidth * 0.05,
-				height: deviceWidth * 0.05,
+				width: deviceWidth * fontSizeFactorFive,
+				height: deviceWidth * fontSizeFactorFive,
 				borderRadius: deviceWidth * 0.025,
 				position: 'absolute',
 			},
-			statusIconSize: Math.floor(deviceWidth * 0.047),
+			statusIconSize: Math.floor(deviceWidth * fontSizeFactorOne),
 			statusValueText: {
 				color: '#ffffff',
-				fontSize: Math.floor(deviceWidth * 0.047),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorOne),
 			},
 			stateValSecStyle: {
 				color: '#ffffff',

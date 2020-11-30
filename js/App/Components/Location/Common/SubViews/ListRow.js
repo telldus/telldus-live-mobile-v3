@@ -31,6 +31,8 @@ import {
 	Text,
 } from '../../../../../BaseComponents';
 
+import Theme from '../../../../Theme';
+
 type Props = {
 	item: string,
 	onPress: Function,
@@ -77,8 +79,11 @@ export default class ListRow extends View {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+		const {
+			fontSizeFactorTen,
+		} = Theme.Core;
 
-		const fontSize = deviceWidth * 0.035;
+		const fontSize = deviceWidth * fontSizeFactorTen;
 
 		return {
 			rowItems: {

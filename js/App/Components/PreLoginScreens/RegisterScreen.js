@@ -29,6 +29,9 @@ import { intlShape, injectIntl } from 'react-intl';
 import { FormattedMessage, View } from '../../../BaseComponents';
 import { RegisterForm } from './SubViews';
 
+import {
+	getLinkTextFontSize,
+} from '../../Lib/styleUtils';
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 
@@ -175,13 +178,10 @@ class RegisterScreen extends View<Props, State> {
 		let deviceWidth = isPortrait ? width : height;
 
 		const {
-			maxSizeTextButton,
 			baseColorPreloginScreen,
 		} = Theme.Core;
 
-		let infoFontSize = Math.floor(deviceWidth * 0.039);
-		let maxFontSize = maxSizeTextButton - 2;
-		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
+		const infoFontSize = getLinkTextFontSize(deviceWidth);
 
 		return {
 			accountExist: {

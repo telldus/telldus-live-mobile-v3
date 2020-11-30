@@ -72,8 +72,8 @@ const updateAllMetWeatherDbTiles = (): ThunkAction => {
 				const diff = currentDBIdWeatherData.lastFetchTimestamp ? Math.floor((ts - currentDBIdWeatherData.lastFetchTimestamp) / 60000) : MET_WEATHER_EXPIRE_TIME + 1;
 				if (diff > MET_WEATHER_EXPIRE_TIME) {
 					dispatch(getWeatherInfo(url, {
-						lon: latitude,
-						lat: longitude,
+						lon: longitude,
+						lat: latitude,
 					}, {
 						id: metDbId,
 						providerId: MET_ID,

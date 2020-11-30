@@ -36,9 +36,9 @@ import {
 	Text,
 	TouchableButton,
 	ScrollableNavigationHeaderPoster,
-	IconTelldus,
 	DropDown,
 	MaterialTextInput,
+	InfoBlock,
 } from '../../../BaseComponents';
 
 import shouldUpdate from '../../Lib/shouldUpdate';
@@ -237,7 +237,7 @@ render(testData: Object): Object {
 		body,
 		label,
 		textField,
-		inAppBrandSecondary,
+		baseColorFour,
 		button,
 		fontSizeText,
 		rowTextColor,
@@ -306,8 +306,8 @@ render(testData: Object): Object {
 						autoCapitalize="none"
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={inAppBrandSecondary}
-						tintColor={inAppBrandSecondary}
+						baseColor={baseColorFour}
+						tintColor={baseColorFour}
 						returnKeyType={'done'}
 					/>
 					<Text style={label}>
@@ -341,25 +341,21 @@ render(testData: Object): Object {
 							autoCapitalize="sentences"
 							autoCorrect={false}
 							autoFocus={false}
-							baseColor={inAppBrandSecondary}
-							tintColor={inAppBrandSecondary}
+							baseColor={baseColorFour}
+							tintColor={baseColorFour}
 							returnKeyType={'done'}
 							multiline={true}
 						/>
 					</View>
 				</View>
-				{descLen < 50 && <View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus
-						level={36}
-						icon={'info'}
-						style={statusIconStyle}/>
-					<Text style={infoTextStyle}>
-						{formatMessage(i18n.supportTicketDescriptionInfo)}
-					</Text>
-				</View>
-				}
+				{descLen < 50 && (
+					<InfoBlock
+						text={formatMessage(i18n.supportTicketDescriptionInfo)}
+						appLayout={appLayout}
+						infoContainer={infoContainer}
+						textStyle={infoTextStyle}
+						infoIconStyle={statusIconStyle}/>
+				)}
 				<TouchableButton
 					text={i18n.labelSend}
 					style={button}
@@ -379,21 +375,31 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, rowTextColor, eulaContentColor } = Theme.Core;
+	const {
+		shadow,
+		paddingFactor,
+		rowTextColor,
+		eulaContentColor,
+		fontSizeFactorFive,
+		fontSizeFactorEight,
+		fontSizeFactorNine,
+		fontSizeFactorTen,
+		fontSizeFactorEleven,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.045;
-	const fontSizeTitle = deviceWidth * 0.05;
-	const fontSizeBody = deviceWidth * 0.035;
-	const fontSizeLabel = deviceWidth * 0.038;
+	const fontSizeText = deviceWidth * fontSizeFactorEight;
+	const fontSizeTitle = deviceWidth * fontSizeFactorFive;
+	const fontSizeBody = deviceWidth * fontSizeFactorTen;
+	const fontSizeLabel = deviceWidth * fontSizeFactorEleven;
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	return {
-		inAppBrandSecondary,
+		baseColorFour,
 		rowTextColor,
 		container: {
 			...shadow,
@@ -404,7 +410,7 @@ getStyles(appLayout: Object): Object {
 			borderRadius: 2,
 		},
 		title: {
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 			fontSize: fontSizeTitle,
 			alignSelf: 'center',
 		},
@@ -413,7 +419,7 @@ getStyles(appLayout: Object): Object {
 			marginTop: 10,
 		},
 		label: {
-			color: inAppBrandSecondary,
+			color: baseColorFour,
 			fontSize: fontSizeLabel,
 			marginTop: 22,
 		},
@@ -470,7 +476,7 @@ getStyles(appLayout: Object): Object {
 			borderRadius: 2,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

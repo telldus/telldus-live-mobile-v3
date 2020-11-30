@@ -33,7 +33,10 @@ import {
 	withTheme,
 	PropsThemedComponent,
 } from '../../HOC/withTheme';
-
+import {
+	getHeaderOneFontSize,
+	getTextFieldTextFontSize,
+} from '../../../Lib/styleUtils';
 import Theme from '../../../Theme';
 
 type Props = PropsThemedComponent & {
@@ -119,17 +122,11 @@ class FormContainerComponent extends View<Props, null> {
 		let deviceHeight = isPortrait ? height : width;
 
 		const {
-			maxSizeTextButton,
 			baseColorPreloginScreen,
 		} = Theme.Core;
 
-		let headerFontSize = Math.floor(deviceWidth * 0.05);
-		let maxFontSize = maxSizeTextButton + 4;
-		headerFontSize = headerFontSize > maxFontSize ? maxFontSize : headerFontSize;
-
-		let textFieldFontSize = Math.floor(deviceWidth * 0.04);
-		let maxTextFieldFontSize = maxSizeTextButton - 4;
-		textFieldFontSize = textFieldFontSize > maxTextFieldFontSize ? maxTextFieldFontSize : textFieldFontSize;
+		const headerFontSize = getHeaderOneFontSize(deviceWidth);
+		const textFieldFontSize = getTextFieldTextFontSize(deviceWidth);
 
 		return {
 			logoHeight: Math.floor(deviceWidth * 0.3),
