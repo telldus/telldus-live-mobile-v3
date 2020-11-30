@@ -147,7 +147,7 @@ render(): Object {
 	const { value } = this.state;
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	const {
@@ -161,8 +161,8 @@ render(): Object {
 			<MaterialTextInput
 				label={this.minutes}
 				style={inputStyle}
-				baseColor={inAppBrandSecondary}
-				tintColor={inAppBrandSecondary}
+				baseColor={baseColorFour}
+				tintColor={baseColorFour}
 				autoFocus={false}
 				value={value}
 				onChangeText={this.onEdit}

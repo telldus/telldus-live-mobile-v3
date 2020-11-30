@@ -44,7 +44,7 @@ class LabelBox extends View {
 				style={[styles.container, containerStyle]}>
 				{!!label &&
 					<Text
-						level={23}
+						level={38}
 						style={styles.label}>
 						{label}
 					</Text>

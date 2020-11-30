@@ -76,7 +76,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 	});
 
 	const {
-		inAppBrandSecondary,
+		baseColorFour,
 	} = colors;
 
 	const {
@@ -178,8 +178,8 @@ const RedeemGiftScreen = (props: Object): Object => {
 						value={code}
 						label={formatMessage(i18n.labelVoucherCode)}
 						labelTextStyle={labelStyle}
-						baseColor={inAppBrandSecondary}
-						tintColor={inAppBrandSecondary}
+						baseColor={baseColorFour}
+						tintColor={baseColorFour}
 						style={textFieldStyle}
 						containerStyle={textFieldCoverStyle}
 						onChangeText={onChangeText}
@@ -261,7 +261,7 @@ const getStyles = ({
 		},
 		labelStyle: {
 			fontSize: fontSize,
-			color: colors.inAppBrandSecondary,
+			color: colors.baseColorFour,
 		},
 		buttonStyle: {
 			marginVertical: fontSize / 2,

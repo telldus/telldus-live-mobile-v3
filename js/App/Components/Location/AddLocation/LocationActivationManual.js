@@ -211,7 +211,7 @@ class LocationActivationManual extends View {
 		let importantForAccessibility = currentScreen === 'LocationActivationManual' ? 'no' : 'no-hide-descendants';
 
 		const {
-			inAppBrandSecondary,
+			baseColorFour,
 		} = colors;
 
 		return (
@@ -226,8 +226,8 @@ class LocationActivationManual extends View {
 						autoCapitalize="characters"
 						autoCorrect={false}
 						autoFocus={true}
-						baseColor={inAppBrandSecondary}
-						tintColor={inAppBrandSecondary}
+						baseColor={baseColorFour}
+						tintColor={baseColorFour}
 						defaultValue={this.state.activationCode}
 						labelOffset={{
 							x0: 5,
@@ -237,7 +237,9 @@ class LocationActivationManual extends View {
 						}}
 						renderLeftAccessory={<IconTelldus icon={'location'} size={styles.iconSize} color={'#A59F9A'}/>}
 					/>
-					<FormattedMessage style={styles.textBody} {...i18n.bodyContent}/>
+					<FormattedMessage
+						level={25}
+						style={styles.textBody} {...i18n.bodyContent}/>
 				</LabelBox>
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
@@ -262,7 +264,6 @@ class LocationActivationManual extends View {
 
 		return {
 			textBody: {
-				color: '#A59F9A',
 				textAlign: 'left',
 				fontSize: deviceWidth * fontSizeFactorEleven,
 				paddingLeft: 2,
