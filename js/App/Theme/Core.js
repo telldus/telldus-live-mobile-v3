@@ -355,4 +355,10 @@ export default {
 	get fontSizeFactorNine(): number {
 		return 0.16;
 	},
+	get fontSizeFactorTen(): number {
+		return 0.035;
+	},
+	get fontSizeFactorEleven(): number {
+		return 0.038;
+	},
 };

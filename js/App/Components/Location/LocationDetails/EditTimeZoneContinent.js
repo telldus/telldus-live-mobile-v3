@@ -36,7 +36,7 @@ import {
 	TouchableOpacity,
 } from '../../../../BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
-
+import Theme from '../../../Theme';
 import capitalize from '../../../Lib/capitalize';
 
 import i18n from '../../../Translations/common';
@@ -223,7 +223,11 @@ class EditTimeZoneContinent extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const fontSize = deviceWidth * 0.035;
+		const {
+			fontSizeFactorTen,
+		} = Theme.Core;
+
+		const fontSize = deviceWidth * fontSizeFactorTen;
 
 		return {
 			rowItems: {

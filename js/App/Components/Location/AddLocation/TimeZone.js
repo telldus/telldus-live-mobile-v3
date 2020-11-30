@@ -197,13 +197,14 @@ class TimeZone extends View<void, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const fontSizeTZ = deviceWidth * 0.06;
-		const fontSizeTZHint = deviceWidth * 0.038;
 
 		const {
 			fontSizeFactorEight,
+			fontSizeFactorEleven,
 		} = Theme.Core;
 
+		const fontSizeTZ = deviceWidth * 0.06;
+		const fontSizeTZHint = deviceWidth * fontSizeFactorEleven;
 		const fontSizeLabel = deviceWidth * fontSizeFactorEight;
 
 		return {
@@ -230,7 +231,7 @@ class TimeZone extends View<void, Props, State> {
 			iconStyle: {
 
 			},
-			iconSize: deviceWidth * 0.038,
+			iconSize: deviceWidth * fontSizeFactorEleven,
 			label: {
 				fontSize: fontSizeLabel,
 			},

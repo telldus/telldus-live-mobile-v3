@@ -271,6 +271,7 @@ getStyles(): Object {
 		shadow,
 		rowTextColor,
 		fontSizeFactorFive,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -322,7 +323,7 @@ getStyles(): Object {
 		},
 		unitStyle: {
 			color: rowTextColor,
-			fontSize: deviceWidth * 0.035,
+			fontSize: deviceWidth * fontSizeFactorTen,
 		},
 		iconBlockStyle: {
 			width: deviceWidth * 0.2,

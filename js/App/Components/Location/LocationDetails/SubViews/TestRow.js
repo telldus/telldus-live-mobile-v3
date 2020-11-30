@@ -119,11 +119,12 @@ getStyles(appLayout: Object): Object {
 	const {
 		rowTextColor,
 		fontSizeFactorFive,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const iconSize = Math.floor(deviceWidth * 0.09);
 	const h1Size = Math.floor(deviceWidth * fontSizeFactorFive);
-	const h2Size = Math.floor(deviceWidth * 0.035);
+	const h2Size = Math.floor(deviceWidth * fontSizeFactorTen);
 
 	const {
 		statusGreen,

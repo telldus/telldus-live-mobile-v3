@@ -38,6 +38,7 @@ import {
 	withTheme,
 	PropsThemedComponent,
 } from '../HOC/withTheme';
+import Theme from '../../Theme';
 
 type Props = PropsThemedComponent & {
 	gateway: Object,
@@ -132,10 +133,13 @@ class Gateway extends PureComponent<Props, null> {
 			inAppBrandSecondary,
 			textSeven,
 		} = colors;
+		const {
+			fontSizeFactorEleven,
+		} = Theme.Core;
 
 		const fontSizeH1 = Math.floor(drawerWidth * 0.048);
 		const fontSizeH2 = Math.floor(drawerWidth * 0.042);
-		const fontSizeH3 = Math.floor(drawerWidth * 0.038);
+		const fontSizeH3 = Math.floor(drawerWidth * fontSizeFactorEleven);
 		const iconSize = Math.floor(drawerWidth * 0.088);
 
 		const iconContainerWidth = iconSize + 15;

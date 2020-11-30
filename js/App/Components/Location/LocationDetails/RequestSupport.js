@@ -342,14 +342,16 @@ getStyles({
 		fontSizeFactorFive,
 		fontSizeFactorEight,
 		fontSizeFactorNine,
+		fontSizeFactorTen,
+		fontSizeFactorEleven,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeText = deviceWidth * fontSizeFactorEight;
 	const fontSizeTitle = deviceWidth * fontSizeFactorFive;
-	const fontSizeBody = deviceWidth * 0.035;
-	const fontSizeLabel = deviceWidth * 0.038;
+	const fontSizeBody = deviceWidth * fontSizeFactorTen;
+	const fontSizeLabel = deviceWidth * fontSizeFactorEleven;
 
 	const {
 		inAppBrandSecondary,

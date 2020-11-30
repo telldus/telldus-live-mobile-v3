@@ -122,6 +122,7 @@ const getStyles = ({
 		paddingFactor,
 		shadow,
 		fontSizeFactorFive,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const {
@@ -130,7 +131,7 @@ const getStyles = ({
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeText = deviceWidth * fontSizeFactorTen;
 
 	const markerH = Platform.OS === 'ios' ? deviceWidth * 0.16 : deviceWidth * 0.1;
 

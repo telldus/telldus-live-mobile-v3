@@ -124,6 +124,7 @@ getStyle(appLayout: Object, align: Align): Object {
 		paddingFactor,
 		shadow,
 		fontSizeFactorFive,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -132,7 +133,7 @@ getStyle(appLayout: Object, align: Align): Object {
 
 	const iconContainerSize = deviceWidth * 0.12;
 	const iconSize = deviceWidth * fontSizeFactorFive;
-	const fontSizeLabel = deviceWidth * 0.035;
+	const fontSizeLabel = deviceWidth * fontSizeFactorTen;
 	const fontSizeDate = deviceWidth * 0.049;
 
 	return {

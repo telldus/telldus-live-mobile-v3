@@ -34,6 +34,7 @@ import {
 	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 import { LayoutAnimations, shouldUpdate } from '../../../Lib';
+import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
@@ -302,8 +303,12 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
+	const {
+		fontSizeFactorTen,
+	} = Theme.Core;
+
 	const fontSizeH1 = Math.floor(deviceWidth * 0.058);
-	const fontSizeH2 = Math.floor(deviceWidth * 0.035);
+	const fontSizeH2 = Math.floor(deviceWidth * fontSizeFactorTen);
 
 	const phoneIconFontSize = fontSizeH1 + fontSizeH2 + 7;
 	const closeIconSize = Math.floor(deviceWidth * 0.052);

@@ -134,10 +134,12 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 
 		const {
 			fontSizeFactorFive,
+			fontSizeFactorTen,
+			fontSizeFactorEleven,
 		} = Theme.Core;
 
-		const fontSize = Math.floor(deviceWidth * 0.035);
-		const fontSizeIcon = Math.floor(deviceWidth * 0.038);
+		const fontSize = Math.floor(deviceWidth * fontSizeFactorTen);
+		const fontSizeIcon = Math.floor(deviceWidth * fontSizeFactorEleven);
 
 		return {
 			container: {

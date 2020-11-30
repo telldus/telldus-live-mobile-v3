@@ -439,11 +439,12 @@ getStyles(): Object {
 		paddingFactor,
 		rowTextColor,
 		red,
+		fontSizeFactorTen,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeText = deviceWidth * fontSizeFactorTen;
 	const fontSizeStatus = deviceWidth * 0.03;
 
 	return {
