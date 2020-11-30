@@ -233,6 +233,9 @@ class Success extends View<void, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+		const {
+			fontSizeFactorTwelve,
+		} = Theme.Core;
 
 		const iconCheckSize = deviceWidth * 0.13;
 		const iconContCheckSize = iconCheckSize * 0.96;
@@ -282,7 +285,7 @@ class Success extends View<void, Props, State> {
 				marginLeft: 20,
 				marginTop: 10,
 				color: '#A59F9A',
-				fontSize: Math.floor(deviceWidth * 0.042),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorTwelve),
 			},
 			hyperLinkButton: {
 				flexDirection: 'row',

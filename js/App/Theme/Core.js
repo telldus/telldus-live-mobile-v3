@@ -361,4 +361,7 @@ export default {
 	get fontSizeFactorEleven(): number {
 		return 0.038;
 	},
+	get fontSizeFactorTwelve(): number {
+		return 0.042;
+	},
 };

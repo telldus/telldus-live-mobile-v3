@@ -190,6 +190,7 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 		buttonWidth,
 		rowHeight,
 		maxSizeRowTextOne,
+		fontSizeFactorTwelve,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -198,7 +199,7 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 
 	const dotSize = rowHeight * 0.09;
 
-	let nameFontSize = Math.floor(deviceWidth * 0.042);
+	let nameFontSize = Math.floor(deviceWidth * fontSizeFactorTwelve);
 	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
 	return {

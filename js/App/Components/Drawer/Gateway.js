@@ -135,10 +135,11 @@ class Gateway extends PureComponent<Props, null> {
 		} = colors;
 		const {
 			fontSizeFactorEleven,
+			fontSizeFactorTwelve,
 		} = Theme.Core;
 
 		const fontSizeH1 = Math.floor(drawerWidth * 0.048);
-		const fontSizeH2 = Math.floor(drawerWidth * 0.042);
+		const fontSizeH2 = Math.floor(drawerWidth * fontSizeFactorTwelve);
 		const fontSizeH3 = Math.floor(drawerWidth * fontSizeFactorEleven);
 		const iconSize = Math.floor(drawerWidth * 0.088);
 

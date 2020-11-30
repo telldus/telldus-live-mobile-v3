@@ -124,6 +124,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		brandPrimary,
 		fontSizeFactorFour,
 		fontSizeFactorOne,
+		fontSizeFactorTwelve,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -159,12 +160,12 @@ const getStyles = (appLayout: Object, index: number): Object => {
 			fontWeight: 'bold',
 		},
 		h2Style: {
-			fontSize: Math.floor(deviceWidth * 0.042),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorTwelve),
 			marginTop: 8,
 			textAlign: 'center',
 		},
 		bodyStyle: {
-			fontSize: Math.floor(deviceWidth * 0.042),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorTwelve),
 			color: rowTextColor,
 			marginTop: 8,
 		},
@@ -188,7 +189,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 			color: eulaContentColor,
 		},
 		priceInfoThree: {
-			fontSize: Math.floor(deviceWidth * 0.042),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorTwelve),
 			color: brandPrimary,
 			fontWeight: 'bold',
 		},

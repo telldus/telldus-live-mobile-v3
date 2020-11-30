@@ -200,6 +200,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 		const {
 			shadow,
 			paddingFactor,
+			fontSizeFactorTwelve,
 		} = Theme.Core;
 		const titleFontSize = Math.floor(deviceWidth * 0.052);
 		const iconSize = Math.floor(deviceWidth * 0.315);
@@ -234,7 +235,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 				marginVertical: 10,
 			},
 			descriptionStyle: {
-				fontSize: Math.floor(deviceWidth * 0.042),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorTwelve),
 				textAlign: 'left',
 				marginBottom: 10,
 			},
