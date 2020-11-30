@@ -61,6 +61,8 @@ const Title = memo<Object>(({
 	const {
 		colors,
 		selectedThemeSet,
+		themeInApp,
+		colorScheme,
 	} = useAppTheme();
 
 	const NameInfo = useMemo((): Object => {
@@ -84,7 +86,7 @@ const Title = memo<Object>(({
 			</TextTicker>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [name, tileWidth, tileNameDisplayMode]);
+	}, [name, tileWidth, tileNameDisplayMode, selectedThemeSet.key, themeInApp, colorScheme]);
 
 	return (
 		<View
