@@ -310,6 +310,9 @@ const getTextColor = (props: Object): ?string => {
 		case 45: {
 			return colors.baseColorEight;
 		}
+		case 46: {
+			return colors.baseColor;
+		}
 		default:
 			return;
 	}

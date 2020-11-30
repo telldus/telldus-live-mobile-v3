@@ -84,6 +84,7 @@ const ListRow = memo<Object>((props: Props): Object => {
 			style={[coverStyleDef, coverStyle]}>
 			{!!leftIcon && <BlockIcon
 				blockLevel={15}
+				iconLevel={46}
 				icon={leftIcon}
 				style={[leftIconStyleDef, leftIconStyle]}
 				containerStyle={[iconContainerStyleDef, iconContainerStyle]}/>}
@@ -130,7 +131,6 @@ const getStyles = ({layout}: Object): Object => {
 		},
 		leftIconStyleDef: {
 			fontSize: 18,
-			color: '#fff',
 		},
 		textStyleDef: {
 			flex: 1,
