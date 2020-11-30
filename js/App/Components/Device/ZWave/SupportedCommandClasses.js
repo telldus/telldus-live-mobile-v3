@@ -133,7 +133,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 	if (!id || !nodeInfo || !commands || commands.length === 0) {
 		return <EmptyView/>;
 	}
-
+	// TODO: Translate
 	return (
 		<>
 			<TouchableOpacity
