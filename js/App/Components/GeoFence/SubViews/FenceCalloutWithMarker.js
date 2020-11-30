@@ -70,10 +70,10 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 		longitude,
 		title,
 		isAlwaysActive,
-		fromHr,
-		fromMin,
-		toHr,
-		toMin,
+		fromHr = 0,
+		fromMin = 0,
+		toHr = 0,
+		toMin = 0,
 	} = extras;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
