@@ -337,6 +337,7 @@ getStyles(appLayout: Object): Object {
 		shadow,
 		paddingFactor,
 		fontSizeFactorFour,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -379,7 +380,7 @@ getStyles(appLayout: Object): Object {
 		},
 		cancelStyle: {
 			marginTop: padding * 2,
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			fontWeight: '500',
 		},
 	};

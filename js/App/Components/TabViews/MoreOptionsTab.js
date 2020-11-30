@@ -246,11 +246,12 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		shadow,
 		twine,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = Math.floor(deviceWidth * 0.045);
+	const fontSizeText = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		outerCoverStyle: {

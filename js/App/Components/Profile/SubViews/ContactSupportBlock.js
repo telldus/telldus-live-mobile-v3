@@ -84,6 +84,7 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		shadow,
 		fontSizeFactorFour,
+		fontSizeFactorEight,
 	} = Theme.Core;
 	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
 
@@ -100,7 +101,7 @@ const getStyles = (appLayout: Object): Object => {
 			marginTop: padding / 2,
 		},
 		labelStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			marginTop: padding * 1.5,
 		},
 		titleStyle: {

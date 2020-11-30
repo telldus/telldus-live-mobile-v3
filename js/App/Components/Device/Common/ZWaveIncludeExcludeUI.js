@@ -293,6 +293,7 @@ getStyles(): Object {
 		shadow,
 		inactiveSwitchBackground,
 		fontSizeFactorFive,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -381,7 +382,7 @@ getStyles(): Object {
 			backgroundColor: 'transparent',
 		},
 		timerStyle: {
-			fontSize: deviceWidth * 0.045,
+			fontSize: deviceWidth * fontSizeFactorEight,
 			color: inAppBrandSecondary,
 			textAlignVertical: 'center',
 			marginRight: 5,

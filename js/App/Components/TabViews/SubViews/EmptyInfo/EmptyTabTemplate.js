@@ -110,12 +110,13 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeH = Math.floor(deviceWidth * 0.07);
-	const fontSizeB = Math.floor(deviceWidth * 0.045);
+	const fontSizeB = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		containerStyle: {

@@ -33,6 +33,7 @@ import {
 import i18n from '../../../Translations/common';
 
 import { showChangeLog } from '../../../Actions/User';
+import Theme from '../../../Theme';
 
 const WhatsNewLink = (props: Object): Object => {
 	const { formatMessage } = useIntl();
@@ -62,11 +63,14 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		buttonResubmit: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize,
 			alignSelf: 'center',
 			paddingVertical: 5,
 			marginBottom: fontSize / 2,

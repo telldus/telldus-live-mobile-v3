@@ -539,7 +539,12 @@ class Details extends View<Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const fontSize = Math.floor(deviceWidth * 0.045);
+
+		const {
+			fontSizeFactorEight,
+		} = Theme.Core;
+
+		const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 		const iconSize = Math.floor(deviceWidth * 0.08);
 
 		if (!location) {
@@ -748,7 +753,7 @@ class Details extends View<Props, State> {
 				fontSize: fontSizeName,
 			},
 			locationInfo: {
-				fontSize: Math.floor(deviceWidth * 0.045),
+				fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 				color: Theme.Core.rowTextColor,
 			},
 			padding,

@@ -147,9 +147,10 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		eulaContentColor,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
-	const fontSize = deviceWidth * 0.045;
+	const fontSize = deviceWidth * fontSizeFactorEight;
 
 	return {
 		container: {

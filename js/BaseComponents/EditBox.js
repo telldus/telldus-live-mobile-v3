@@ -182,9 +182,13 @@ getStyle(appLayout: Object): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { shadow, editBoxPaddingFactor } = Theme.Core;
+	const {
+		shadow,
+		editBoxPaddingFactor,
+		fontSizeFactorEight,
+	} = Theme.Core;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const iconSize = Math.floor(deviceWidth * 0.09);
 
 	const fontSizeText = deviceWidth * 0.06;

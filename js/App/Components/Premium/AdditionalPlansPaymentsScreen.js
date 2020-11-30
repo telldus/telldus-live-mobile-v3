@@ -388,6 +388,9 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.036);
@@ -486,14 +489,14 @@ const getStyles = ({
 			marginRight: 7,
 		},
 		textStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			color: textOnLevelThreeView,
 		},
 		checkButtonStyle: {
 			marginVertical: padding,
 		},
 		backLinkStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
+			fontSize: Math.floor(deviceWidth * fontSizeFactorEight),
 			alignSelf: 'center',
 			color: textOnLevelThreeView,
 			padding: 10,

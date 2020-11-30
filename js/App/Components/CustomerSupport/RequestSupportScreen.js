@@ -381,11 +381,12 @@ getStyles(appLayout: Object): Object {
 		rowTextColor,
 		eulaContentColor,
 		fontSizeFactorFive,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.045;
+	const fontSizeText = deviceWidth * fontSizeFactorEight;
 	const fontSizeTitle = deviceWidth * fontSizeFactorFive;
 	const fontSizeBody = deviceWidth * 0.035;
 	const fontSizeLabel = deviceWidth * 0.038;

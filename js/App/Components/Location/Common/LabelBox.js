@@ -62,7 +62,11 @@ class LabelBox extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const fontSize = Math.floor(deviceWidth * 0.045);
+		const {
+			fontSizeFactorEight,
+		} = Theme.Core;
+
+		const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 		const iconSize = Math.floor(deviceWidth * 0.09);
 
 		return {

@@ -318,6 +318,7 @@ getStyles(): Object {
 		rowTextColor,
 		fontSizeFactorFive,
 		fontSizeFactorFour,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	return {
@@ -336,7 +337,7 @@ getStyles(): Object {
 			height: '26%',
 		},
 		infoTitleStyle: {
-			fontSize: deviceWidth * 0.045,
+			fontSize: deviceWidth * fontSizeFactorEight,
 		},
 		box2: {
 			height: '26%',

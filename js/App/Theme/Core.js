@@ -346,7 +346,10 @@ export default {
 	get fontSizeFactorSix(): number {
 		return 0.025;
 	},
-	get fontSizeFactorSeven(): number {
+	get fontSizeFactorSeven(): number {// Poster with text
 		return 0.047;
+	},
+	get fontSizeFactorEight(): number {
+		return 0.045;
 	},
 };

@@ -88,13 +88,14 @@ const getStyles = (appLayout: Object, isLast: boolean): Object => {
 		shadow,
 		paddingFactor,
 		eulaContentColor,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const imageW = deviceWidth * 0.15;
 	let imageH = deviceWidth * 0.12;
 	let paddingVertical = padding / 2;
-	const fontSize = deviceWidth * 0.045;
+	const fontSize = deviceWidth * fontSizeFactorEight;
 
 	const sdw = isLast ? shadow : {};
 

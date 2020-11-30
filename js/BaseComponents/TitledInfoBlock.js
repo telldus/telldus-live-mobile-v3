@@ -129,11 +129,13 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	const {
 		shadow,
+		fontSizeFactorEight,
 	} = Theme.Core;
+
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		iconSize: Math.floor(deviceWidth * 0.08),

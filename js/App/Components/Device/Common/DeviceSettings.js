@@ -642,12 +642,13 @@ const getStyles = (appLayout: Object): Object => {
 		shadow,
 		subHeader,
 		fontSizeFactorFour,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeText = Math.floor(deviceWidth * fontSizeFactorFour);
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		padding,

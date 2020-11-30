@@ -131,10 +131,14 @@ class LocationDetails extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			fontSizeFactorEight,
+		} = Theme.Core;
+
 		let textHSHSize = Math.floor(deviceWidth * 0.054);
 		textHSHSize = textHSHSize > 25 ? 25 : textHSHSize;
 
-		let textLocationSize = Math.floor(deviceWidth * 0.045);
+		let textLocationSize = Math.floor(deviceWidth * fontSizeFactorEight);
 		textLocationSize = textLocationSize > 19 ? 19 : textLocationSize;
 
 		return {

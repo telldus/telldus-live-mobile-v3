@@ -183,6 +183,7 @@ const getStyles = ({
 		maxSizeFloatingButton,
 		floatingButtonSizeFactor,
 		floatingButtonOffsetFactor,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const { land } = headerHeightFactor;
@@ -192,7 +193,7 @@ const getStyles = ({
 		:
 		deviceHeight * land;
 
-	const fontSize = deviceWidth * 0.045;
+	const fontSize = deviceWidth * fontSizeFactorEight;
 	const iconSize = isPortrait ? width * headerButtonIconSizeFactor : height * headerButtonIconSizeFactor;
 
 	const left = (iconSize / 2) + headerButtonHorizontalPadding;
