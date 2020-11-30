@@ -715,6 +715,7 @@ class Details extends View<Props, State> {
 			inactiveSwitchBackground,
 			btnPrimaryBg,
 			paddingFactor,
+			fontSizeFactorEight,
 		} = Theme.Core;
 
 		const fontSizeName = Math.floor(deviceWidth * 0.053333333);
