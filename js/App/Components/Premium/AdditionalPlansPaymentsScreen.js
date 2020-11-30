@@ -390,6 +390,7 @@ const getStyles = ({
 	const deviceWidth = isPortrait ? width : height;
 	const {
 		fontSizeFactorEight,
+		fontSizeFactorNine,
 	} = Theme.Core;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
@@ -515,7 +516,7 @@ const getStyles = ({
 			borderRadius: 2,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

@@ -481,6 +481,7 @@ getStyles(): Object {
 		paddingFactor,
 		brandDanger,
 		fontSizeFactorFour,
+		fontSizeFactorNine,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -496,7 +497,7 @@ getStyles(): Object {
 			padding: innerPadding,
 		},
 		statusIconStyle: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * fontSizeFactorNine,
 		},
 		infoTextStyle: {
 			flex: 1,

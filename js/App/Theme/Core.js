@@ -352,4 +352,7 @@ export default {
 	get fontSizeFactorEight(): number {
 		return 0.045;
 	},
+	get fontSizeFactorNine(): number {
+		return 0.16;
+	},
 };
