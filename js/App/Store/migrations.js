@@ -25,6 +25,13 @@
 import {
 	DEFAULT_DASHBOARD_ID,
 } from '../Lib/dashboardUtils';
+import {
+	DEVICE_KEY,
+	SENSOR_KEY,
+} from '../Lib/dashboardUtils';
+import {
+	MET_ID,
+} from '../Lib/thirdPartyUtils';
 
 export default function migrations(state: Object = {}): Promise<any> {
 	const { tabs, ...withOutTabs } = state;
@@ -82,6 +89,8 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
+	const activeDashboardId = newState.user.activeDashboardId || DEFAULT_DASHBOARD_ID;
+
 	let { userId, userProfile = {} } = user || {};
 	if (!userId) {
 		const {
@@ -96,6 +105,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 			sensorsById = {},
 			sensorIds,
 			deviceIds,
+			dbExtras,
 		} = dashboard;
 
 		const prevDataType = [true, false];
@@ -130,6 +140,38 @@ export default function migrations(state: Object = {}): Promise<any> {
 				sensorIds: {
 					[userId]: {
 						[DEFAULT_DASHBOARD_ID]: sensorIds,
+					},
+				},
+			};
+		}
+
+		const _sIds = (newDashboard.sensorIds[userId] ? (newDashboard.sensorIds[userId][activeDashboardId] || []) : []).map((id: number): Object => {
+			return {
+				id,
+				objectType: SENSOR_KEY,
+			};
+		});
+		const _dIds = (newDashboard.deviceIds[userId] ? (newDashboard.deviceIds[userId][activeDashboardId] || []) : []).map((id: number): Object => {
+			return {
+				id,
+				objectType: DEVICE_KEY,
+			};
+		});
+		const _wIds = (newDashboard.metWeatherIds[userId] ? (newDashboard.metWeatherIds[userId][activeDashboardId] || []) : []).map((id: number): Object => {
+			return {
+				id,
+				objectType: MET_ID,
+			};
+		});
+		const customOrder = [..._dIds, ..._sIds, ..._wIds];
+		if (!dbExtras || !dbExtras[userId] || !dbExtras[userId][activeDashboardId] || !dbExtras[userId][activeDashboardId].customOrder || dbExtras[userId][activeDashboardId].customOrder.length !== customOrder.length) {
+			newDashboard = {
+				...newDashboard,
+				dbExtras: {
+					[userId]: {
+						[activeDashboardId]: {
+							customOrder,
+						},
 					},
 				},
 			};
