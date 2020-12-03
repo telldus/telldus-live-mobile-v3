@@ -157,7 +157,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 				objectType: DEVICE_KEY,
 			};
 		});
-		const _wIds = (newDashboard.metWeatherIds[userId] ? (newDashboard.metWeatherIds[userId][activeDashboardId] || []) : []).map((id: number): Object => {
+		const _wIds = (newDashboard.metWeatherIds ? (newDashboard.metWeatherIds[userId] ? (newDashboard.metWeatherIds[userId][activeDashboardId] || []) : []) : []).map((id: number): Object => {
 			return {
 				id,
 				objectType: MET_ID,
