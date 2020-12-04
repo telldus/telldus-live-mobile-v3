@@ -800,7 +800,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		defaultSettings,
 	} = state.app;
 
-	let { language = {}, enableGeoFence } = defaultSettings || {};
+	let { language = {}, enableGeoFence = false } = defaultSettings || {};
 	let locale = language.code;
 
 	let {
@@ -851,7 +851,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 		showLoadingIndicator,
 
-		enableGeoFence: typeof enableGeoFence === 'undefined' ? true : enableGeoFence,
+		enableGeoFence,
 	};
 }
 

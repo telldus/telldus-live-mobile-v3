@@ -502,11 +502,15 @@ export const mapStateToProps = (store: Object): Object => {
 		userProfile = {},
 	} = store.user;
 
+	const {
+		enableGeoFence = false,
+	} = defaultSettings;
+
 	return {
 		isBasic: isBasicUser(userProfile.pro),
 		currentScreen,
 		toggleFeatureGeoFence,
-		enableGeoFence: typeof defaultSettings.enableGeoFence === 'undefined' ? true : defaultSettings.enableGeoFence,
+		enableGeoFence,
 	};
 };
 
