@@ -226,7 +226,17 @@ getTicksY(): Array<number> {
 }
 
 findLowerLimit(): number {
-	let { min, min1, min2, max1, max2 } = this.props;
+	let {
+		min,
+		min1,
+		min2,
+		max1,
+		max2,
+		chartDataTwo,
+		chartDataOne,
+		showOne,
+		showTwo,
+	} = this.props;
 
 	if (min.value === 0) {
 		return 0;
@@ -240,6 +250,12 @@ findLowerLimit(): number {
 	const lowLimit1 = min1.value / max1.value;
 	const lowLimit2 = min2.value / max2.value;
 
+	if (chartDataOne.length <= 0 || !showOne) {
+		return lowLimit2;
+	}
+	if (chartDataTwo.length <= 0 || !showTwo) {
+		return lowLimit1;
+	}
 	if (lowLimit1 >= lowLimit2) {
 		return lowLimit2;
 	}
