@@ -4,7 +4,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled 1`] 
 <View
   accessibilityLabel="next button. Double tap to activate"
   accessible={true}
-  focusable={false}
+  focusable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -53,7 +53,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled and 
 <View
   accessibilityLabel="next button. Double tap to activate"
   accessible={true}
-  focusable={false}
+  focusable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -136,7 +136,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled 1`] =
 <View
   accessibilityLabel="next button. Double tap to activate"
   accessible={true}
-  focusable={false}
+  focusable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -185,7 +185,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled and l
 <View
   accessibilityLabel="next button. Double tap to activate"
   accessible={true}
-  focusable={false}
+  focusable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}

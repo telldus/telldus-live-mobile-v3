@@ -190,7 +190,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
     >
       <View
         accessible={true}
-        focusable={false}
+        focusable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -644,7 +644,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
           >
             <View
               accessible={true}
-              focusable={false}
+              focusable={true}
               onClick={[Function]}
               onResponderGrant={[Function]}
               onResponderMove={[Function]}
