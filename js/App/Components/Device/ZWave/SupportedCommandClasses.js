@@ -29,31 +29,43 @@ import React, {
 	useCallback,
 } from 'react';
 import {
-	TouchableOpacity,
 	LayoutAnimation,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
 
 import {
 	View,
 	Text,
 	EmptyView,
 	ThemedMaterialIcon,
+	TouchableOpacity,
 } from '../../../../BaseComponents';
 
 import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
+import {
+	sendSocketMessage,
+} from '../../../Actions/Websockets';
 
 import Theme from '../../../Theme';
 
 type Props = {
 	id: string,
+	clientDeviceId: string,
+	clientId: string,
 };
 
 const SupportedCommandClasses = (props: Props): Object => {
 	const {
 		id,
+		clientDeviceId,
+		clientId,
 	} = props;
+
+	const dispatch = useDispatch();
 
 	const [ expand, setExpand ] = useState(true);
 
@@ -76,14 +88,19 @@ const SupportedCommandClasses = (props: Props): Object => {
 		interviewLinkStyle,
 	} = getStyles(layout);
 
+	const onPressInterview = useCallback(({cmd}: Object) => {
+		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': 'interview',
+			'device': clientDeviceId,
+			'class': parseInt(cmd, 10),
+		}));
+	}, [clientDeviceId, clientId, dispatch]);
+
 	const commands = useMemo((): ?Array<Object> => {
 
 		if (!id || !nodeInfo) {
 			return;
-		}
-
-		function onPressInterview() {
-
 		}
 
 		const {
@@ -95,10 +112,11 @@ const SupportedCommandClasses = (props: Props): Object => {
 		const cmdClass = zWaveFunctions.supportedCommandClasses || [];
 
 		return cmdClass.map((cmdCls: Object, i: number): Object => {
-
 			const {
 				cmdName,
 				version,
+				secure,
+				cmd,
 			} = cmdCls;
 
 			const showInterview = admin === 1 || (!isFailed && version === 0 && listening);
@@ -114,10 +132,24 @@ const SupportedCommandClasses = (props: Props): Object => {
 						{cmdName}
 					</Text>
 					{showInterview && (
+						<TouchableOpacity
+							onPress={onPressInterview}
+							onPressData={{cmd}}
+							style={{
+								alignSelf: 'flex-end',
+							}}>
+							<Text
+								level={23}
+								style={interviewLinkStyle}>
+							Interview
+							</Text>
+						</TouchableOpacity>
+					)}
+					{secure === true && (
 						<Text
 							level={23}
-							style={interviewLinkStyle} onPress={onPressInterview}>
-							Interview
+							style={interviewLinkStyle}>
+							Secure
 						</Text>
 					)}
 				</View>
