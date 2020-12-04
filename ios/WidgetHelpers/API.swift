@@ -142,7 +142,7 @@ class API {
           var secData: Dictionary = authData!
           secData["accessToken"] = accessToken
           secData["expiresIn"] = expiresIn
-          let _ = WidgetModule().updateSecureData(data: Utilities().convertDictionaryToString(dict: secData))
+          let _ = SharedModule().updateSecureData(data: Utilities().convertDictionaryToString(dict: secData))
           completion(json)
           return
         }

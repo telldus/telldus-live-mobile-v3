@@ -25,9 +25,7 @@
 		2608B5C6253752AE00BF0A36 /* SensorDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B5C5253752AE00BF0A36 /* SensorDetails.swift */; };
 		2608B5CB253752DF00BF0A36 /* SensorWidgetUIViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B5CA253752DF00BF0A36 /* SensorWidgetUIViewProvider.swift */; };
 		260C09A0255BF71C00B2EA50 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260C099F255BF71C00B2EA50 /* WidgetModule.swift */; };
-		260C09A1255BF71C00B2EA50 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260C099F255BF71C00B2EA50 /* WidgetModule.swift */; };
 		260C09A7255BF73D00B2EA50 /* WidgetModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 260C09A6255BF73D00B2EA50 /* WidgetModuleBridge.m */; };
-		260C09B7255BFB3A00B2EA50 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260C099F255BF71C00B2EA50 /* WidgetModule.swift */; };
 		260C09BF255C30DF00B2EA50 /* PurchasePremiumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260C09BE255C30DF00B2EA50 /* PurchasePremiumUIView.swift */; };
 		260D619B253D578800115423 /* SQLiteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D619A253D578800115423 /* SQLiteError.swift */; };
 		260D619C253D578800115423 /* SQLiteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D619A253D578800115423 /* SQLiteError.swift */; };
@@ -49,6 +47,7 @@
 		260D61D8253D63DE00115423 /* SensorsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D61D5253D63DE00115423 /* SensorsAPI.swift */; };
 		260D61E3253D667B00115423 /* SensorDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B5C5253752AE00BF0A36 /* SensorDetails.swift */; };
 		260D61E7253D67B900115423 /* SensorDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608B5C5253752AE00BF0A36 /* SensorDetails.swift */; };
+		2611622C256EC49D009847F9 /* SuisseIntl-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2611622B256EC49D009847F9 /* SuisseIntl-Regular.ttf */; };
 		261AD8062546C8E400415713 /* DeviceDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD8052546C8E400415713 /* DeviceDetailsModel.swift */; };
 		261AD8072546C8E400415713 /* DeviceDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD8052546C8E400415713 /* DeviceDetailsModel.swift */; };
 		261AD8082546C8E400415713 /* DeviceDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD8052546C8E400415713 /* DeviceDetailsModel.swift */; };
@@ -62,7 +61,6 @@
 		261AD81C2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
 		261AD81D2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
 		261AE60125499EFC00084FAD /* NotSameAccountUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */; };
-		2611622C256EC49D009847F9 /* SuisseIntl-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2611622B256EC49D009847F9 /* SuisseIntl-Regular.ttf */; };
 		263988B425543CBA000015DF /* LaunchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 263988B325543CBA000015DF /* LaunchView.xib */; };
 		263988B725543CC3000015DF /* LaunchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 263988B325543CBA000015DF /* LaunchView.xib */; };
 		263A3515253D8CF7005D9875 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
@@ -87,6 +85,9 @@
 		2691878F254C281B00C3C569 /* SensorUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691878E254C281B00C3C569 /* SensorUtilities.swift */; };
 		26918790254C281B00C3C569 /* SensorUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691878E254C281B00C3C569 /* SensorUtilities.swift */; };
 		26918791254C281B00C3C569 /* SensorUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691878E254C281B00C3C569 /* SensorUtilities.swift */; };
+		269CD380257A01C3003DC5D2 /* SharedModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269CD37F257A01C3003DC5D2 /* SharedModule.swift */; };
+		269CD381257A01C3003DC5D2 /* SharedModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269CD37F257A01C3003DC5D2 /* SharedModule.swift */; };
+		269CD382257A01C3003DC5D2 /* SharedModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269CD37F257A01C3003DC5D2 /* SharedModule.swift */; };
 		26B0663C252E282E009C3325 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B024F93E1200DA89F5 /* WidgetKit.framework */; };
 		26B0663D252E282E009C3325 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B224F93E1200DA89F5 /* SwiftUI.framework */; };
 		26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0663F252E282E009C3325 /* HomescreenWidget.swift */; };
@@ -194,13 +195,12 @@
 		260D61C7253D608E00115423 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		260D61CE253D60E200115423 /* CI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CI.swift; sourceTree = "<group>"; };
 		260D61D5253D63DE00115423 /* SensorsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorsAPI.swift; sourceTree = "<group>"; };
+		2611622B256EC49D009847F9 /* SuisseIntl-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SuisseIntl-Regular.ttf"; path = "../assets/fonts/SuisseIntl-Regular.ttf"; sourceTree = "<group>"; };
 		261AD8052546C8E400415713 /* DeviceDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailsModel.swift; sourceTree = "<group>"; };
 		261AD80C2546C8F600415713 /* SensorDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDetailsModel.swift; sourceTree = "<group>"; };
 		261AD8132546C9B500415713 /* SQLTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLTable.swift; sourceTree = "<group>"; };
 		261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetStructure.swift; sourceTree = "<group>"; };
 		261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSameAccountUIView.swift; sourceTree = "<group>"; };
-		2611622B256EC49D009847F9 /* SuisseIntl-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SuisseIntl-Regular.ttf"; path = "../assets/fonts/SuisseIntl-Regular.ttf"; sourceTree = "<group>"; };
-		26117534244F315500731FA7 /* Widget-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Widget-Bridging-Header.h"; sourceTree = "<group>"; };
 		263988B325543CBA000015DF /* LaunchView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LaunchView.xib; sourceTree = "<group>"; };
 		264F3393244F459A0042BDEE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		2658A9302549C9F000D9E8B2 /* WidgetUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetUtils.swift; sourceTree = "<group>"; };
@@ -214,6 +214,7 @@
 		267D2ABF25429DD1002F49AE /* SensorClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorClass.swift; sourceTree = "<group>"; };
 		267D2AC92542D75D002F49AE /* SensorWidgetStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetStructure.swift; sourceTree = "<group>"; };
 		2691878E254C281B00C3C569 /* SensorUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorUtilities.swift; sourceTree = "<group>"; };
+		269CD37F257A01C3003DC5D2 /* SharedModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModule.swift; sourceTree = "<group>"; };
 		26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		26B0663F252E282E009C3325 /* HomescreenWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenWidget.swift; sourceTree = "<group>"; };
 		26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = DeviceWidgetIntent.intentdefinition; sourceTree = "<group>"; };
@@ -321,6 +322,7 @@
 				263988B325543CBA000015DF /* LaunchView.xib */,
 				260C099F255BF71C00B2EA50 /* WidgetModule.swift */,
 				260C09A6255BF73D00B2EA50 /* WidgetModuleBridge.m */,
+				269CD37F257A01C3003DC5D2 /* SharedModule.swift */,
 			);
 			name = TelldusLiveApp;
 			sourceTree = "<group>";
@@ -904,6 +906,7 @@
 				260381D7253DAF8700D4F8CA /* Utilities.swift in Sources */,
 				260D61AC253D5D3B00115423 /* API.swift in Sources */,
 				260C09A0255BF71C00B2EA50 /* WidgetModule.swift in Sources */,
+				269CD380257A01C3003DC5D2 /* SharedModule.swift in Sources */,
 				26035743253ED333000798D1 /* DevicesAPI.swift in Sources */,
 				264F3394244F459A0042BDEE /* File.swift in Sources */,
 				2675DA682536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */,
@@ -935,11 +938,11 @@
 				26C93D702536CDC6005191C2 /* SensorWidgetIntent.intentdefinition in Sources */,
 				260D61E3253D667B00115423 /* SensorDetails.swift in Sources */,
 				26918791254C281B00C3C569 /* SensorUtilities.swift in Sources */,
-				260C09B7255BFB3A00B2EA50 /* WidgetModule.swift in Sources */,
 				2658A9332549C9F000D9E8B2 /* WidgetUtils.swift in Sources */,
 				267D2ACC2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */,
 				260D619D253D578800115423 /* SQLiteError.swift in Sources */,
 				26FEC6F925417C680056EC71 /* CustomTypes.swift in Sources */,
+				269CD382257A01C3003DC5D2 /* SharedModule.swift in Sources */,
 				261AD8162546C9B500415713 /* SQLTable.swift in Sources */,
 				26F53BC62547DD060047F514 /* APICacher.swift in Sources */,
 				267D2AC225429DD1002F49AE /* SensorClass.swift in Sources */,
@@ -976,7 +979,6 @@
 				2675DA692536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */,
 				267D2AC125429DD1002F49AE /* SensorClass.swift in Sources */,
 				260D61D7253D63DE00115423 /* SensorsAPI.swift in Sources */,
-				260C09A1255BF71C00B2EA50 /* WidgetModule.swift in Sources */,
 				26FEC6F125417B720056EC71 /* CustomTypes.swift in Sources */,
 				261AD8072546C8E400415713 /* DeviceDetailsModel.swift in Sources */,
 				260D61C9253D608E00115423 /* Constants.swift in Sources */,
@@ -986,6 +988,7 @@
 				26FEC71C254198BA0056EC71 /* DWPreviewSmallUIView.swift in Sources */,
 				26FEC6D4254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift in Sources */,
 				26035744253ED333000798D1 /* DevicesAPI.swift in Sources */,
+				269CD381257A01C3003DC5D2 /* SharedModule.swift in Sources */,
 				2608B5C6253752AE00BF0A36 /* SensorDetails.swift in Sources */,
 				260D619C253D578800115423 /* SQLiteError.swift in Sources */,
 				261AD80E2546C8F600415713 /* SensorDetailsModel.swift in Sources */,

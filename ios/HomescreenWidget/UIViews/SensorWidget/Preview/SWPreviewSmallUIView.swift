@@ -21,7 +21,7 @@ struct SWPreviewSmallUIView: View {
     let isLarge = SensorUtilities().isValueLarge(value: value)
     let isUpdateTimeOld = SensorUtilities().isTooOld(lastUpdated: sensorWidgetStructure.luTime)
     
-    let sensorLastUpdatedMode = WidgetModule().getUserDefault(key: "sensorLastUpdatedModeKey")
+    let sensorLastUpdatedMode = SharedModule().getUserDefault(key: "sensorLastUpdatedModeKey")
     
     return VStack(spacing: 0) {
       VStack(alignment: .center, spacing: 0) {
