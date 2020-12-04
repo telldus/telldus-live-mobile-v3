@@ -93,7 +93,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 	let { fence } = useSelector((state: Object): Object => state.fences);
 
 	useEffect(() => {
-		onDidMount(`4. ${capitalize(formatMessage(i18n.activeTime))}`, formatMessage(i18n.selectTimeForFence));
+		onDidMount(`5. ${capitalize(formatMessage(i18n.activeTime))}`, formatMessage(i18n.selectTimeForFence));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

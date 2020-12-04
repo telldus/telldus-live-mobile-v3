@@ -56,7 +56,7 @@ const LeavingActions = React.memo<Object>((props: Props): Object => {
 
 	useEffect(() => {
 		const h = capitalize(formatMessage(i18n.leavingActions));
-		const h1 = `${isEdit ? h : `3. ${h}`}`;
+		const h1 = `${isEdit ? h : `4. ${h}`}`;
 		onDidMount(h1, formatMessage(i18n.selectActionLeave));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isEdit]);

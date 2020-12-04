@@ -148,6 +148,8 @@ class ChangeLogNavigator extends View {
 				});
 			}
 		}
+		this.animatedX.setValue(0);
+		this.animatedOpacity.setValue(1);
 	}
 
 	onPressNext() {
@@ -166,6 +168,8 @@ class ChangeLogNavigator extends View {
 			this.setState({
 				currentScreen: Screens[0],
 			});
+			this.animatedX.setValue(0);
+			this.animatedOpacity.setValue(1);
 		} else {
 			this.setState({
 				currentScreen: nextScreen,
@@ -228,6 +232,8 @@ class ChangeLogNavigator extends View {
 		this.setState({
 			currentScreen: Screens[0],
 		});
+		this.animatedX.setValue(0);
+		this.animatedOpacity.setValue(1);
 	}
 
 	render(): Object | null {
