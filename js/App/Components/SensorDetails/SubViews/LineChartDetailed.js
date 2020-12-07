@@ -171,10 +171,7 @@ getYOne(data: Object): number {
 	if (!data.value || !max1) {
 		return data.value;
 	}
-	const denom = (max1.value - min1.value);
-	if (!denom) {
-		return data.value;
-	}
+	const denom = (max1.value - min1.value) || 1;
 	return (data.value - min1.value) / denom;
 }
 
@@ -183,10 +180,7 @@ getYTwo(data: Object): number {
 	if (!data.value || !max2) {
 		return data.value;
 	}
-	const denom = (max2.value - min2.value);
-	if (!denom) {
-		return data.value;
-	}
+	const denom = (max2.value - min2.value) || 1;
 	return (data.value - min2.value) / denom;
 }
 
@@ -226,6 +220,23 @@ getDomainY(): Array<number> {
 	return [ticks[0], ticks[ticks.length - 1]];
 }
 
+prepareTicksAndY = (ticks: Array<number>, min: number, max: number): Object => {
+	const sum = min + max;
+	let mid = sum ? sum / 2 : sum;
+	if (min === max && min === mid) {
+		return {
+			[ticks[0]]: min,
+			[ticks[1]]: min + 1,
+			[ticks[2]]: min + 2,
+		};
+	}
+	return {
+		[ticks[0]]: min,
+		[ticks[1]]: mid,
+		[ticks[2]]: max,
+	};
+}
+
 getTicksY(): Object {
 	const {
 		max1,
@@ -234,20 +245,10 @@ getTicksY(): Object {
 		min2,
 	} = this.props;
 	const ticks = [0, 0.5, 1];
-	const sum1 = min1.value + max1.value;
-	const sum2 = min2.value + max2.value;
 	return {
 		ticks,
-		ticksAndYOne: {
-			[ticks[0]]: min1.value,
-			[ticks[1]]: sum1 ? sum1 / 2 : sum1,
-			[ticks[2]]: max1.value,
-		},
-		ticksAndYTwo: {
-			[ticks[0]]: min2.value,
-			[ticks[1]]: sum2 ? sum2 / 2 : sum2,
-			[ticks[2]]: max2.value,
-		},
+		ticksAndYOne: this.prepareTicksAndY(ticks, min1.value, max1.value),
+		ticksAndYTwo: this.prepareTicksAndY(ticks, min2.value, max2.value),
 	};
 }
 
