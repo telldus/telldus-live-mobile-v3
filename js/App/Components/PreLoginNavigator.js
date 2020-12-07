@@ -109,11 +109,20 @@ const PreLoginNavigator = React.memo<Object>((props: Props): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const onReady = React.useCallback(() => {
+		if (navigationRef && navigationRef.current && navigationRef.current.getCurrentRoute) {
+			const currentScreen = navigationRef.current.getCurrentRoute().name;
+			dispatch(screenChange(currentScreen));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	return (
 		<NavigationContainer
 			ref={navigationRef}
 			onStateChange={onNavigationStateChange}
-			theme={theme}>
+			theme={theme}
+			onReady={onReady}>
 			{Navigator}
 		</NavigationContainer>
 	);

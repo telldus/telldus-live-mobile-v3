@@ -547,6 +547,11 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 
 	const onReady = React.useCallback(() => {
 		isReadyRef.current = true;
+		if (navigationRef && navigationRef.current && navigationRef.current.getCurrentRoute) {
+			const currentScreen = navigationRef.current.getCurrentRoute().name;
+			dispatch(screenChange(currentScreen));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
