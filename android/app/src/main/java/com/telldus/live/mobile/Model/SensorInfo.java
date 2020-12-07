@@ -34,7 +34,7 @@ public class SensorInfo {
     String sensorIsUpdating;
 
     public SensorInfo(int widgetId, String sensorName, String sensorDisplayType, int sensorId, String sensorValue, String sensorUnit,
-    String sensorIcon, String sensorUpdate, String transparent, String userId, Integer updateInterval, String sensorIsUpdating) {
+                      String sensorIcon, String sensorUpdate, String transparent, String userId, Integer updateInterval, String sensorIsUpdating) {
         this.widgetId = widgetId;
         this.sensorName = sensorName;
         this.sensorDisplayType = sensorDisplayType;

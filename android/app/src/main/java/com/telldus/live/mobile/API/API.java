@@ -112,9 +112,9 @@ public class API {
                                 e.printStackTrace();
                                 callBack.onError(error);
                             };
-                       } else {
+                        } else {
                             callBack.onError(error);
-                       }
+                        }
                     }
                 });
     }
@@ -128,34 +128,34 @@ public class API {
         String Url = API_SERVER+"/oauth2/accessToken";
 
         AndroidNetworking.post(Url)
-            .addBodyParameter("client_id", clientId)
-            .addBodyParameter("client_secret", clientSecret)
-            .addBodyParameter("grant_type", "refresh_token")
-            .addBodyParameter("refresh_token", refreshToken)
-            .addHeaders("Content-Type", "application/json")
-            .addHeaders("Accept", "application/json")
-            .setPriority(Priority.LOW)
-            .build()
-            .getAsJSONObject(new JSONObjectRequestListener() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    String error = response.optString("error");
-                    if (!error.isEmpty() && error != null) {
-                        callBack.onSuccess(response);
-                    } else {
-                        String accessTokenN = response.optString("access_token");
-                        String expiresInN = response.optString("expires_in");
+                .addBodyParameter("client_id", clientId)
+                .addBodyParameter("client_secret", clientSecret)
+                .addBodyParameter("grant_type", "refresh_token")
+                .addBodyParameter("refresh_token", refreshToken)
+                .addHeaders("Content-Type", "application/json")
+                .addHeaders("Accept", "application/json")
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String error = response.optString("error");
+                        if (!error.isEmpty() && error != null) {
+                            callBack.onSuccess(response);
+                        } else {
+                            String accessTokenN = response.optString("access_token");
+                            String expiresInN = response.optString("expires_in");
 
-                        prefManager.setAccessDetails(accessTokenN, expiresInN, clientId, clientSecret, refreshToken);
+                            prefManager.setAccessDetails(accessTokenN, expiresInN, clientId, clientSecret, refreshToken);
 
-                        callBack.onSuccess(response);
+                            callBack.onSuccess(response);
+                        }
                     }
-                }
 
-                @Override
-                public void onError(ANError anError) {
-                    callBack.onError(anError);
-                }
-            });
+                    @Override
+                    public void onError(ANError anError) {
+                        callBack.onError(anError);
+                    }
+                });
     }
 }

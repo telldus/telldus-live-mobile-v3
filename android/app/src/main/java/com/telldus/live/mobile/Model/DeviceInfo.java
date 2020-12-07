@@ -44,7 +44,7 @@ public class DeviceInfo {
     }
 
     public DeviceInfo(String state, int widgetId, int deviceId, String deviceName, Integer methods,
-    String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested,
+                      String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested,
                       Integer isShowingStatus, Integer updateInterval, Integer clientDeviceId, Integer clientId,
                       String secondaryStateValue, String primarySetting, String secondarySetting,
                       String requestedStateValue, String requestedSecStateValue) {
@@ -197,7 +197,7 @@ public class DeviceInfo {
         this.primarySetting = primarySetting;
     }
 
-     public String getSecondarySetting() {
+    public String getSecondarySetting() {
         return secondarySetting;
     }
 

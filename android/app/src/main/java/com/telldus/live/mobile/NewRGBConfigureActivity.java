@@ -139,7 +139,7 @@ public class NewRGBConfigureActivity extends Activity {
         int pro = prefManager.getPro();
         long now = new Date().getTime() / 1000;
         if (pro == -1 || pro < now) {
-           Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+            Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
             mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             getApplicationContext().startActivity(mainActivity);
@@ -431,22 +431,22 @@ public class NewRGBConfigureActivity extends Activity {
                     }
 
                     DeviceInfo mInsert = new DeviceInfo(
-                        deviceCurrentState,
-                        mAppWidgetId,
-                        id,
-                        deviceName.getText().toString(),
-                        deviceSupportedMethods,
-                        deviceTypeCurrent,
-                        deviceStateValueCurrent,
-                        trans,
-                        currentUserId,
-                        methodRequested,
-                        0,
-                        0, // As of now required/handled only for thermostats
-                        -1, // As of now required/handled only for thermostats
-                        -1, // As of now required/handled only for thermostats
-                        secondaryStateValue,  // As of now required/handled only for thermostats
-                        primarySetting,
+                            deviceCurrentState,
+                            mAppWidgetId,
+                            id,
+                            deviceName.getText().toString(),
+                            deviceSupportedMethods,
+                            deviceTypeCurrent,
+                            deviceStateValueCurrent,
+                            trans,
+                            currentUserId,
+                            methodRequested,
+                            0,
+                            0, // As of now required/handled only for thermostats
+                            -1, // As of now required/handled only for thermostats
+                            -1, // As of now required/handled only for thermostats
+                            secondaryStateValue,  // As of now required/handled only for thermostats
+                            primarySetting,
                             secondarySetting,
                             requestedStateValue,
                             requestedSecStateValue
@@ -467,26 +467,26 @@ public class NewRGBConfigureActivity extends Activity {
                 public void onClick(View view) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewRGBConfigureActivity.this, R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.reserved_widget_android_pick_device)
-                        .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                selectedDeviceIndex = which;
-                                deviceName.setText(deviceNameList[which]);
-                                id = Integer.parseInt(String.valueOf(deviceIdList[which]));
+                            .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    selectedDeviceIndex = which;
+                                    deviceName.setText(deviceNameList[which]);
+                                    id = Integer.parseInt(String.valueOf(deviceIdList[which]));
 
-                                Map<String, Object> info = DeviceInfoMap.get(id);
+                                    Map<String, Object> info = DeviceInfoMap.get(id);
 
-                                deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
+                                    deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
 
-                                deviceTypeCurrent = info.get("deviceType").toString();
-                                deviceStateValueCurrent = info.get("stateValue").toString();
-                                deviceStateValueCurrent = deviceStateValueCurrent == "null" ? "" : deviceStateValueCurrent;
-                                String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
-                                tvIcon1.setText(deviceIcon);
-                                secondaryStateValue = info.get("secondaryStateValue").toString();
+                                    deviceTypeCurrent = info.get("deviceType").toString();
+                                    deviceStateValueCurrent = info.get("stateValue").toString();
+                                    deviceStateValueCurrent = deviceStateValueCurrent == "null" ? "" : deviceStateValueCurrent;
+                                    String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
+                                    tvIcon1.setText(deviceIcon);
+                                    secondaryStateValue = info.get("secondaryStateValue").toString();
 
-                                ad.dismiss();
-                            }
-                        });
+                                    ad.dismiss();
+                                }
+                            });
                     ad = builder.show();
                 }
             });

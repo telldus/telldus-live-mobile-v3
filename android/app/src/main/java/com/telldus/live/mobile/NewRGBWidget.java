@@ -168,14 +168,14 @@ public class NewRGBWidget extends AppWidgetProvider {
 
             Boolean isLastButton = true;
             CommonUtilities.handleBackgroundWhenIdleOne(
-                                "RGB",
-                                transparent,
-                                renderedButtonsCount,
-                                isLastButton,
-                                R.id.rgbActionCover,
-                                views,
-                                context
-                            );
+                    "RGB",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.rgbActionCover,
+                    views,
+                    context
+            );
             int iconSize = (int) (iconWidth * 0.7);
 
             int paletteIconColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(context, R.color.brandSecondary)));
@@ -300,7 +300,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             if (normalizeUI) {
                 CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_rgb);
             }
-            
+
             renderedButtonsCount++;
         }
 

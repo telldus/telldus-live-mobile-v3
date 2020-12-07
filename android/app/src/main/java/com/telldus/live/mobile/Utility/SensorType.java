@@ -32,13 +32,13 @@ public enum SensorType {
     uv("128"),
     watt("256"),
     lum("512");
-        /**
+    /**
      * Google's String representation of this language.
      */
     private  String language;
 
 //    private static Map map = new HashMap();
-       /**
+    /**
      * Enum constructor.
      *
      * @param pLanguage The language identifier.

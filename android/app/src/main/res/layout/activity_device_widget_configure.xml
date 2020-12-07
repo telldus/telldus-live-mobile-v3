@@ -105,21 +105,21 @@
                                 android:padding="10dp"
                                 android:layout_centerInParent="true">
 
-                        <TextView
-                                android:id="@+id/txtDeviceName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/reserved_widget_android_device_select"
-                                android:textSize="25sp"
-                                android:textColor="@color/themeDark"/>
+                                <TextView
+                                    android:id="@+id/txtDeviceName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/reserved_widget_android_device_select"
+                                    android:textSize="25sp"
+                                    android:textColor="@color/themeDark"/>
 
-                        <TextView
-                                android:id="@+id/txtDeviceHint"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/reserved_widget_android_device_tap_change_device"
-                                android:textSize="15sp"
-                                android:textColor="@color/darkGray"/>
+                                <TextView
+                                    android:id="@+id/txtDeviceHint"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/reserved_widget_android_device_tap_change_device"
+                                    android:textSize="15sp"
+                                    android:textColor="@color/darkGray"/>
 
 
                             </LinearLayout>
@@ -151,7 +151,7 @@
                         android:textColor="@color/darkGray"
                         android:visibility="gone"/>
                     <include
-                            layout="@layout/rgb_control_options"/>
+                        layout="@layout/rgb_control_options"/>
 
                     <TextView
                         android:id="@+id/dim_slider_label"
