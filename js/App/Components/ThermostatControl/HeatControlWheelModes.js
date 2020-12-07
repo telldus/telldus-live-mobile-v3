@@ -399,11 +399,14 @@ onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
 	const {
 		mode,
 		value,
-		colors,
+		colors = {},
 		label,
 		minVal,
 		maxVal,
 	} = cMode;
+	if (!mode) {
+		return;
+	}
 	const initialAngleLength = getAngleLengthToInitiate(mode, value, modes);
 
 	const gradientColorFrom = dark ? colors[key].startColorD : colors[key].startColor;
