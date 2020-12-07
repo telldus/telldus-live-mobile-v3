@@ -667,13 +667,16 @@ public class NewOnOffWidget extends AppWidgetProvider {
             );
 
             String moreActionsIcon = hasDIM ? "dim25" : "buttononoff";
+            int iWidth = iconWidth * 2;
+            int iHeight = (int) (iWidth);
+            int iFontSize = (int) (iWidth);
 
             views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
                     moreActionsIcon,
                     colorIdle,
-                    80,
-                    35,
-                    65,
+                    iWidth,
+                    iHeight,
+                    iFontSize,
                     context));
 
             views.setOnClickPendingIntent(R.id.onOffCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
@@ -693,9 +696,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
                         moreActionsIcon,
                         colorOnAction,
-                        80,
-                        35,
-                        65,
+                        iWidth,
+                        iHeight,
+                        iFontSize,
                         context));
             }
 
@@ -721,18 +724,18 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
                             ContextCompat.getColor(context, R.color.widgetGreen),
-                            160,
-                            85,
-                            85,
+                            iWidth,
+                            iHeight,
+                            iFontSize,
                             context));
                 } else {
                     views.setViewVisibility(R.id.moreActionsIcon, View.VISIBLE);
                     views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
                             "statusx",
                             ContextCompat.getColor(context, R.color.widgetRed),
-                            160,
-                            85,
-                            85,
+                            iWidth,
+                            iHeight,
+                            iFontSize,
                             context));
                 }
                 CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_on_off);
