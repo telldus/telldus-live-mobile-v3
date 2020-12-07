@@ -37,6 +37,9 @@ import {
 	useSelector,
 	useDispatch,
 } from 'react-redux';
+import {
+	useIntl,
+} from 'react-intl';
 
 import {
 	View,
@@ -58,6 +61,7 @@ import {
 } from '../../../Actions/WebsocketExtras';
 
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	id: string,
@@ -76,6 +80,10 @@ const SupportedCommandClasses = (props: Props): Object => {
 	} = props;
 
 	const dispatch = useDispatch();
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const [ expand, setExpand ] = useState(true);
 	const [ interviewStatusConf, setInterviewStatusConf ] = useState({
@@ -208,7 +216,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 							<Text
 								level={showFail ? 32 : (showSuccess ? 31 : (disableInterview ? 47 : 23))}
 								style={interviewLinkStyle}>
-							Interview
+								{formatMessage(i18n.interview)}
 							</Text>
 						</TouchableOpacity>
 					}
@@ -216,7 +224,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 						<Text
 							level={23}
 							style={interviewLinkStyle}>
-							Secure
+							{formatMessage(i18n.secure)}
 						</Text>
 					)}
 				</View>
@@ -241,7 +249,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 	if (!id || !nodeInfo || !commands || commands.length === 0) {
 		return <EmptyView/>;
 	}
-	// TODO: Translate
+
 	return (
 		<>
 			<TouchableOpacity
@@ -255,7 +263,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 				<Text
 					level={2}
 					style={titleStyle}>
-					Supported Command Classes
+					{formatMessage(i18n.supCmdClass)}
 				</Text>
 			</TouchableOpacity>
 			{!expand && commands}

@@ -68,8 +68,8 @@ const ScreenConfigs = [
 				<TabBar
 					icon="home"
 					focused={focused}
-					label={'Administration'} // TODO: Translate
-					accessibilityLabel={'AdministrationTab'}/>
+					label={i18n.administration}
+					accessibilityLabel={i18n.administration}/>
 			),
 		},
 	},

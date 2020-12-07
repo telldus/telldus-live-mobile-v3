@@ -62,6 +62,7 @@ import {
 	editSchedule,
 } from '../../../Actions/Schedule';
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	ScreenName: string,
@@ -83,6 +84,7 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 	const intl = useIntl();
 	const {
 		formatDate,
+		formatMessage,
 	} = intl;
 
 	const {
@@ -235,7 +237,6 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [supportedMethods, id]);
 
-	// TODO: Translate
 	return (
 		<View
 			level={3}
@@ -244,7 +245,7 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 				<View style={containerWhenNoData}>
 					<Icon name="exclamation-circle" size={iconSize} level={23} />
 					<Text style={textWhenNoData}>
-						No schedules for this device
+						{formatMessage(i18n.noSheduleDevice)}
 					</Text>
 				</View>
 				:

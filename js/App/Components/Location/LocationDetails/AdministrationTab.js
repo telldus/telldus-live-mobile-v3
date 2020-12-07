@@ -130,12 +130,12 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 
 		dispatch(transferGateway(id, targetEmail)).then(() => {
 			setIsLoading(false);
-			showDialogue('An email is sent to the entered address, please confirm.', {
-				header: 'Confirm gateway transfer',
-			}); // TODO: Translate
+			showDialogue(formatMessage(i18n.transferGConfirmM), {
+				header: formatMessage(i18n.transferGConfirmH),
+			});
 		}).catch((err: Object) => {
 			setIsLoading(false);
-			let message = 'Could not transfer gateway. Please try after sometime'; // TODO: Translate
+			let message = formatMessage(i18n.transferGErrorM);
 			if (err.message) {
 				message = err.message;
 			}
@@ -148,7 +148,6 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 		setTargetEmail(value);
 	}, []);
 
-	// TODO: Translate
 	return (
 		<ThemedScrollView
 			level={3}
@@ -157,7 +156,7 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 			<Text
 				level={2}
 				style={titleStyle}>
-					Transfer Gateway
+				{formatMessage(i18n.transferG)}
 			</Text>
 			<EditBox
 				value={targetEmail}
@@ -168,13 +167,13 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 				autoCapitalize={'none'}
 				containerStyle={eBcontainerStyle}/>
 			<InfoBlock
-				text={'Transfer your gateway to a new owner. Devices, sensors and schedules will be transfered. Events will not be transfered.'}
+				text={formatMessage(i18n.transferGInfo)}
 				appLayout={appLayout}
 				infoContainer={infoContainer}
 				infoIconStyle={infoIconErrorStyle}
 				textStyle={infoTextStyle}/>
 			<TouchableButton
-				text={'Transfer'}
+				text={formatMessage(i18n.transfer)}
 				onPress={onPressTransfer}
 				disabled={isLoading}
 				style={{

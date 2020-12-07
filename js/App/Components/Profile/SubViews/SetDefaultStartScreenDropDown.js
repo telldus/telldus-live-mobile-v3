@@ -152,7 +152,7 @@ const SetDefaultStartScreenDropDown = (props: Props, ref: Object): Object => {
 			<Text
 				level={3}
 				style={labelStyle} numberOfLine={1}>
-				{'Select default start page'} {/* TODO: Translate */}
+				{formatMessage(i18n.selectDefStartP)}
 			</Text>
 			<DropDown
 				ref={ddRef}
