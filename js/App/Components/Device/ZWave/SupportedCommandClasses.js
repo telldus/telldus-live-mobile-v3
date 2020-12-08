@@ -173,6 +173,18 @@ const SupportedCommandClasses = (props: Props): Object => {
 		}, 8000);
 	}, [_setInterviewStatusConf, clientDeviceId, clientId, dispatch, id]);
 
+	const [cWidth, setCWidth] = useState();
+	const onItemLayout = useCallback(({
+		nativeEvent,
+	}: Object) => {
+		const {
+			layout: l = {},
+		} = nativeEvent;
+		if (cWidth !== l.width) {
+			setCWidth(l.width);
+		}
+	}, [cWidth]);
+
 	const commands = useMemo((): ?Array<Object> => {
 
 		if (!id || !nodeInfo) {
@@ -203,32 +215,42 @@ const SupportedCommandClasses = (props: Props): Object => {
 						style={textStyle}>
 						{cmdName}
 					</Text>
-					{isTheOneCurrentlyInterviewing ?
-						<Throbber
-							throbberStyle={throbberStyle}
-							throbberContainerStyle={throbberContainerStyle}
-						/>
-						: <TouchableOpacity
-							onPress={onPressInterview}
-							onPressData={{cmd}}
-							style={{
-								alignSelf: 'flex-end',
-							}}
-							disabled={disableInterview}>
+					<View style={{
+						flexDirection: 'row',
+						justifyContent: 'flex-end',
+					}}>
+						{isTheOneCurrentlyInterviewing ?
+							<Throbber
+								throbberStyle={throbberStyle}
+								throbberContainerStyle={[
+									throbberContainerStyle,
+									{width: cWidth},
+								]}
+							/>
+							: <TouchableOpacity
+								onPress={onPressInterview}
+								onPressData={{cmd}}
+								style={{
+									alignSelf: 'flex-end',
+									marginRight: 5,
+								}}
+								disabled={disableInterview}>
+								<Text
+									level={showFail ? 32 : (showSuccess ? 31 : (disableInterview ? 47 : 23))}
+									style={interviewLinkStyle}
+									onLayout={onItemLayout}>
+									{formatMessage(i18n.interview)}
+								</Text>
+							</TouchableOpacity>
+						}
+						{secure === true && (
 							<Text
-								level={showFail ? 32 : (showSuccess ? 31 : (disableInterview ? 47 : 23))}
+								level={23}
 								style={interviewLinkStyle}>
-								{formatMessage(i18n.interview)}
+								{formatMessage(i18n.secure)}
 							</Text>
-						</TouchableOpacity>
-					}
-					{secure === true && (
-						<Text
-							level={23}
-							style={interviewLinkStyle}>
-							{formatMessage(i18n.secure)}
-						</Text>
-					)}
+						)}
+					</View>
 				</View>
 			);
 		});
@@ -241,6 +263,8 @@ const SupportedCommandClasses = (props: Props): Object => {
 		onPressInterview,
 		interviewingCommand,
 		interviewStatusConf,
+		onItemLayout,
+		cWidth,
 	]);
 
 	const onPressToggle = useCallback(() => {
@@ -314,6 +338,9 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		throbberContainerStyle: {
 			position: 'relative',
+			alignSelf: 'center',
+			justifyContent: 'center',
+			alignItems: 'center',
 		},
 		throbberStyle: {
 			fontSize,
