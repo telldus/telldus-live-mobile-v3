@@ -54,6 +54,7 @@ import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 import {
 	sendSocketMessage,
+	requestNodeInfo,
 } from '../../../Actions/Websockets';
 import {
 	startCommandClassInterview,
@@ -137,6 +138,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 
 	useEffect((): Function => {
 		if (interviewDoneData && interviewDoneData.cmdClass === interviewingCommand && interviewDoneData.data && interviewDoneData.data.interviewed) {
+			dispatch(requestNodeInfo(clientId, clientDeviceId));
 			_setInterviewStatusConf({
 				cmdClass: interviewDoneData.cmdClass,
 				status: KEY_SUCCESS,
@@ -144,7 +146,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 			dispatch(stopCommandClassInterview());
 			clearTimeout(timeoutInterviewRef.current);
 		}
-	}, [_setInterviewStatusConf, dispatch, interviewDoneData, interviewingCommand]);
+	}, [_setInterviewStatusConf, clientDeviceId, clientId, dispatch, interviewDoneData, interviewingCommand]);
 
 	const onPressInterview = useCallback(({cmd}: Object) => {
 		const cmdClass = parseInt(cmd, 10);
