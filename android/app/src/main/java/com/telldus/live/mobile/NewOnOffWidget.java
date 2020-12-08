@@ -352,7 +352,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
         }
 
-        if (hasRGB || hasDIM) {
+        if (hasRGB && hasDIM) {
             views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
 
             views.setViewVisibility(R.id.rgbActionCover, View.VISIBLE);
