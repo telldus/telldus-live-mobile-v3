@@ -40,6 +40,7 @@ import {
 
 import {
 	validateEmail,
+	capitalize,
 } from '../../../Lib';
 import {
 	transferGateway,
@@ -173,7 +174,7 @@ const AdministrationTab = memo<Object>((props: Props): Object => {
 				infoIconStyle={infoIconErrorStyle}
 				textStyle={infoTextStyle}/>
 			<TouchableButton
-				text={formatMessage(i18n.transfer)}
+				text={capitalize(formatMessage(i18n.transfer))}
 				onPress={onPressTransfer}
 				disabled={isLoading}
 				style={{
