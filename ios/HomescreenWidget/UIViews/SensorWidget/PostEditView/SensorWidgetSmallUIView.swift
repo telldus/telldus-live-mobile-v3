@@ -23,6 +23,16 @@ struct SensorWidgetSmallUIView: View {
     
     let sensorLastUpdatedMode = SharedModule().getUserDefault(key: "sensorLastUpdatedModeKey")
     
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    var formatteValue: String? = ""
+    if let locale = NSLocale.current.languageCode {
+      formatter.locale = Locale(identifier:locale)
+    }
+    if let d = Double(value) {
+      formatteValue = formatter.string(from: NSNumber(value:d))
+    }
+    
     return VStack(spacing: 0) {
       VStack(alignment: .center, spacing: 0) {
         Text("\u{e911}")
@@ -57,10 +67,12 @@ struct SensorWidgetSmallUIView: View {
         }
         VStack (alignment: .leading) {
           HStack (alignment: .lastTextBaseline) {
-            Text(value)
-              .foregroundColor(Color("widgetTextColorThree"))
-              .font(.system(size: 26))
-              .lineLimit(1)
+            if formatteValue != nil {
+              Text(formatteValue!)
+                .foregroundColor(Color("widgetTextColorThree"))
+                .font(.system(size: 26))
+                .lineLimit(1)
+            }
             Text(unit)
               .foregroundColor(Color("widgetTextColorThree"))
               .font(.system(size: 16))
