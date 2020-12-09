@@ -41,6 +41,7 @@ import java.text.DateFormat;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
+import com.telldus.live.mobile.Model.GatewayInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
@@ -62,6 +63,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
@@ -137,6 +139,14 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
+        Integer clientId = sensorWidgetInfo.getClientId();
+        String timezone = TimeZone.getDefault().getID();
+        GatewayInfo gatewayInfo = db.findCurrentAccountGatewaysInfo(clientId, "");
+        if (gatewayInfo != null) {
+            String tz = gatewayInfo.getTimezone();
+            timezone = tz != null ? tz : timezone;
+        }
+
         int pro = prefManager.getPro();
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
@@ -169,8 +179,11 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         Locale locale = Locale.getDefault();
         DateFormat dMWY = formatDate(locale);
+        dMWY.setTimeZone(TimeZone.getTimeZone(timezone));
         String formattedDate = dMWY.format(date);
-        String formattedTime = DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
+        DateFormat tMWY = (SimpleDateFormat) DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+        tMWY.setTimeZone(TimeZone.getTimeZone(timezone));
+        String formattedTime = tMWY.format(date);
 
         String formattedDT = isNearly1By1 ? formattedTime : formattedDate + " " + formattedTime;
 
