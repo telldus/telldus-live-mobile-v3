@@ -117,6 +117,7 @@ struct APICacher {
       //      try db?.createTable(table: DeviceDetailsModel.self) // TODO: Enable device widget
       try db?.createTable(table: SensorDetailsModel.self)
       try db?.createTable(table: SensorDataModel.self)
+      try db?.createTable(table: GatewayDetailsModel.self)
       
     } catch {
       completion()
@@ -131,6 +132,8 @@ struct APICacher {
     //    cacheDevicesData(db: db!) {// TODO: Enable device widget
     cacheSensorsData(db: db!) {
       completion()
+      cacheGatewaysData(db: db!){
+      }
     }
     //    }
   }
@@ -302,6 +305,49 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
           } catch {
           }
         }
+      } catch {
+      }
+    }
+    completion()
+  }
+}
+
+func cacheGatewaysData(db: SQLiteDatabase, completion: @escaping () -> Void) {
+  GatewaysAPI().getGatewaysList() {result in
+    guard let clients = result["clients"] as? Array<Dictionary<String, Any>> else {
+      completion()
+      return
+    }
+    guard let authData = result["authData"] as? Dictionary<String, Any> else {
+      completion()
+      return
+    }
+    let email = authData["email"] as? String
+    let uuid = authData["uuid"] as? String
+    guard email != nil && uuid != nil else {
+      completion()
+      return
+    }
+    
+    db.deleteAllRecordsCurrentAccount(table: GatewayDetailsModel.self, userId: uuid as! NSString)
+    
+    for client in clients {
+      let cid = client["id"] as? String;
+      guard cid != nil else {
+        continue
+      }
+      let id = Int(cid!)!
+      var timezone = client["timezone"] as? String;
+      if timezone == nil {
+        timezone = ""
+      }
+      let gatewayDetailsModel = GatewayDetailsModel(
+        id: id,
+        userId: uuid!,
+        timezone: timezone!
+      )
+      do {
+        try db.insertGatewayDetailsModel(gatewayDetailsModel: gatewayDetailsModel)
       } catch {
       }
     }
