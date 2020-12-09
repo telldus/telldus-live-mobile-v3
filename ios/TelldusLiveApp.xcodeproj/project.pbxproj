@@ -95,6 +95,12 @@
 		26B06645252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */; };
 		26B06646252E2832009C3325 /* DeviceWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */; };
 		26B06649252E2832009C3325 /* HomescreenWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 26B0663B252E282E009C3325 /* HomescreenWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		26B0AAFD2580C92800765A52 /* GatewaysAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0AAFC2580C92700765A52 /* GatewaysAPI.swift */; };
+		26B0AAFE2580C92800765A52 /* GatewaysAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0AAFC2580C92700765A52 /* GatewaysAPI.swift */; };
+		26B0AAFF2580C92800765A52 /* GatewaysAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0AAFC2580C92700765A52 /* GatewaysAPI.swift */; };
+		26B0AB042580CB3600765A52 /* GatewayDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0AB032580CB3600765A52 /* GatewayDetailsModel.swift */; };
+		26B0AB052580CB3600765A52 /* GatewayDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0AB032580CB3600765A52 /* GatewayDetailsModel.swift */; };
+		26B0AB062580CB3600765A52 /* GatewayDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0AB032580CB3600765A52 /* GatewayDetailsModel.swift */; };
 		26C7BEBA24977AEA007EC056 /* Caveat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB824977AEA007EC056 /* Caveat-Regular.ttf */; };
 		26C7BEBB24977AEA007EC056 /* Caveat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB924977AEA007EC056 /* Caveat-Bold.ttf */; };
 		26C93D702536CDC6005191C2 /* SensorWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA672536CBE000802815 /* SensorWidgetIntent.intentdefinition */; };
@@ -220,6 +226,8 @@
 		26B06641252E282E009C3325 /* DeviceWidgetIntent.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = DeviceWidgetIntent.intentdefinition; sourceTree = "<group>"; };
 		26B06642252E2832009C3325 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		26B06644252E2832009C3325 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26B0AAFC2580C92700765A52 /* GatewaysAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewaysAPI.swift; sourceTree = "<group>"; };
+		26B0AB032580CB3600765A52 /* GatewayDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayDetailsModel.swift; sourceTree = "<group>"; };
 		26BB28AF21622F8F0027C32A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		26BB28B1216230CA0027C32A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		26C7BEB824977AEA007EC056 /* Caveat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Caveat-Regular.ttf"; path = "../assets/fonts/Caveat-Regular.ttf"; sourceTree = "<group>"; };
@@ -371,6 +379,7 @@
 				26035742253ED333000798D1 /* DevicesAPI.swift */,
 				26F53BC32547DD060047F514 /* APICacher.swift */,
 				2691878E254C281B00C3C569 /* SensorUtilities.swift */,
+				26B0AAFC2580C92700765A52 /* GatewaysAPI.swift */,
 			);
 			path = WidgetHelpers;
 			sourceTree = "<group>";
@@ -383,6 +392,7 @@
 				261AD8052546C8E400415713 /* DeviceDetailsModel.swift */,
 				261AD80C2546C8F600415713 /* SensorDetailsModel.swift */,
 				261AD8132546C9B500415713 /* SQLTable.swift */,
+				26B0AB032580CB3600765A52 /* GatewayDetailsModel.swift */,
 			);
 			path = SQLiteHelpers;
 			sourceTree = "<group>";
@@ -913,6 +923,7 @@
 				26D2B622253ED4D800EB096F /* DeviceDetails.swift in Sources */,
 				2658A9312549C9F000D9E8B2 /* WidgetUtils.swift in Sources */,
 				261AD8142546C9B500415713 /* SQLTable.swift in Sources */,
+				26B0AB042580CB3600765A52 /* GatewayDetailsModel.swift in Sources */,
 				261AD80D2546C8F600415713 /* SensorDetailsModel.swift in Sources */,
 				260C09A7255BF73D00B2EA50 /* WidgetModuleBridge.m in Sources */,
 				2691878F254C281B00C3C569 /* SensorUtilities.swift in Sources */,
@@ -924,6 +935,7 @@
 				26F53BC42547DD060047F514 /* APICacher.swift in Sources */,
 				260D61CF253D60E200115423 /* CI.swift in Sources */,
 				267D2AC025429DD1002F49AE /* SensorClass.swift in Sources */,
+				26B0AAFD2580C92800765A52 /* GatewaysAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -944,6 +956,7 @@
 				26FEC6F925417C680056EC71 /* CustomTypes.swift in Sources */,
 				269CD382257A01C3003DC5D2 /* SharedModule.swift in Sources */,
 				261AD8162546C9B500415713 /* SQLTable.swift in Sources */,
+				26B0AAFF2580C92800765A52 /* GatewaysAPI.swift in Sources */,
 				26F53BC62547DD060047F514 /* APICacher.swift in Sources */,
 				267D2AC225429DD1002F49AE /* SensorClass.swift in Sources */,
 				261AD80F2546C8F600415713 /* SensorDetailsModel.swift in Sources */,
@@ -953,6 +966,7 @@
 				260D61A4253D57AC00115423 /* SQLiteDatabase.swift in Sources */,
 				26035745253ED333000798D1 /* DevicesAPI.swift in Sources */,
 				260D61AE253D5D3B00115423 /* API.swift in Sources */,
+				26B0AB062580CB3600765A52 /* GatewayDetailsModel.swift in Sources */,
 				260D61D8253D63DE00115423 /* SensorsAPI.swift in Sources */,
 				260D61CA253D608E00115423 /* Constants.swift in Sources */,
 			);
@@ -975,6 +989,8 @@
 				261AD81C2546E88400415713 /* DeviceWidgetStructure.swift in Sources */,
 				26B06640252E282E009C3325 /* HomescreenWidget.swift in Sources */,
 				26FEC73A25419EC00056EC71 /* SensorWidgetSmallUIView.swift in Sources */,
+				26B0AB052580CB3600765A52 /* GatewayDetailsModel.swift in Sources */,
+				26B0AAFE2580C92800765A52 /* GatewaysAPI.swift in Sources */,
 				26FEC7082541942C0056EC71 /* DeviceWidgetSmallUIView.swift in Sources */,
 				2675DA692536CBE000802815 /* SensorWidgetIntent.intentdefinition in Sources */,
 				267D2AC125429DD1002F49AE /* SensorClass.swift in Sources */,
