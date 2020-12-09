@@ -58,6 +58,7 @@ import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.API.GatewaysAPI;
 
 public class NewOnOffWidgetConfigureActivity extends Activity {
     private static final String ACTION_ON = "ACTION_ON";
@@ -138,6 +139,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
         setResult(RESULT_CANCELED);
         getAllDevices();
+        GatewaysAPI gatewaysAPI = new GatewaysAPI();
+        gatewaysAPI.cacheGateways(getApplicationContext());
         setContentView(R.layout.new_on_off_widget_configure);
 
         String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";

@@ -59,6 +59,7 @@ import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.API.GatewaysAPI;
 
 /**
  * The configuration screen for the {@link NewAppWidget NewAppWidget} AppWidget.
@@ -143,6 +144,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
         }
 
         createDeviceApi();
+        GatewaysAPI gatewaysAPI = new GatewaysAPI();
+        gatewaysAPI.cacheGateways(getApplicationContext());
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);

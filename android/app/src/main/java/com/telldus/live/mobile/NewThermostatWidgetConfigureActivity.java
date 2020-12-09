@@ -58,6 +58,7 @@ import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.API.GatewaysAPI;
 
 public class NewThermostatWidgetConfigureActivity extends Activity {
     private ProgressDialog pDialog;
@@ -145,6 +146,8 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
 
         setResult(RESULT_CANCELED);
         getAllSensorsAndDevices();
+        GatewaysAPI gatewaysAPI = new GatewaysAPI();
+        gatewaysAPI.cacheGateways(getApplicationContext());
         setContentView(R.layout.new_on_off_widget_configure);
 
         String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
