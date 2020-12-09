@@ -19,4 +19,5 @@ public struct SensorWidgetStructure {
   let luTime: Int
   let displayType: WidgetViewType
   let owningAccount: String
+  let timezone: String?
 }

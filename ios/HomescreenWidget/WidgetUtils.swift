@@ -21,7 +21,8 @@ struct WidgetUtils {
                                                                           unit: "°C",
                                                                           luTime: Int(Date().timeIntervalSince1970),
                                                                           displayType: WidgetViewType.postEditView,
-                                                                          owningAccount: "developer@telldus.com")
+                                                                          owningAccount: "developer@telldus.com",
+                                                                          timezone: nil)
   
   static func refreshAllWidgets() {
     if #available(iOS 14.0, *) {
@@ -38,6 +39,7 @@ struct WidgetUtils {
     let valueIdentifier = configuration.value?.identifier ?? ""
     var owningAccount = ""
     var owningUserId = ""
+    var timezone = TimeZone.current.identifier
     
     let dataDict = Utilities().getAuthData()
     if (dataDict == nil) {
@@ -50,7 +52,8 @@ struct WidgetUtils {
         unit: "",
         luTime: -1,
         displayType: .notLoggedInView,
-        owningAccount: owningAccount
+        owningAccount: owningAccount,
+        timezone: timezone
       ))
       return
     } else if (configuration.item?.identifier != nil) {
@@ -71,6 +74,11 @@ struct WidgetUtils {
             owningAccount = sensorDetails.userEmail
             owningUserId = sensorDetails.userId
             lastUpdated = sensorDetails.lastUpdated;
+            let clientId = sensorDetails.clientId;
+            if let gatewayDetails = db?.gatewayDetailsModel(gatewayId: Int32(clientId)) {
+              timezone = gatewayDetails.timezone
+            }
+            
             let activeUserId = dataDict?["uuid"] as? String
             if (owningUserId != activeUserId) {
               displayType = .notSameAccountView
@@ -102,7 +110,8 @@ struct WidgetUtils {
           unit: unit!,
           luTime: lastUpdated,
           displayType: displayType,
-          owningAccount: owningAccount
+          owningAccount: owningAccount,
+          timezone: timezone
         ))
         return
       }
@@ -118,7 +127,8 @@ struct WidgetUtils {
         unit: "",
         luTime: -1,
         displayType: _isBasicUser ? .upgradeToPremiumView : displayType,
-        owningAccount: owningAccount
+        owningAccount: owningAccount,
+        timezone:  timezone
       ))
     }
   }
