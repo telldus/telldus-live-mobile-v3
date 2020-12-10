@@ -75,7 +75,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public static final String TABLE_GATEWAYS_INFO = "GatewaysInfo";
     public static final String GATEWAYS_INFO_COLUMN_ID = "id";
-    public static final String GATEWAYS_INFO_COLUMN_USER_ID = "userId";
+    public static final String GATEWAYS_INFO_COLUMN_USER_UUID = "userUuid";
     public static final String GATEWAYS_INFO_COLUMN_TIMEZONE = "timezone";
 
     public MyDBHandler(Context context) {
@@ -112,7 +112,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public void createGatewaysInfoTable(SQLiteDatabase db) {
         String CREATE_GATEWAYS_INFO_TABLE = "CREATE TABLE " +
-                TABLE_GATEWAYS_INFO + "("+ GATEWAYS_INFO_COLUMN_ID + " INTEGER," + GATEWAYS_INFO_COLUMN_USER_ID
+                TABLE_GATEWAYS_INFO + "("+ GATEWAYS_INFO_COLUMN_ID + " INTEGER," + GATEWAYS_INFO_COLUMN_USER_UUID
                 + " TEXT," + GATEWAYS_INFO_COLUMN_TIMEZONE + " TEXT)";
         db.execSQL(CREATE_GATEWAYS_INFO_TABLE);
     }
@@ -347,7 +347,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(GATEWAYS_INFO_COLUMN_ID, gatewayInfo.getId());
-        values.put(GATEWAYS_INFO_COLUMN_USER_ID, gatewayInfo.getUserId());
+        values.put(GATEWAYS_INFO_COLUMN_USER_UUID, gatewayInfo.getUserUuid());
         values.put(GATEWAYS_INFO_COLUMN_TIMEZONE, gatewayInfo.getTimezone());
         db.insert(TABLE_GATEWAYS_INFO, null, values);
         db.close();
@@ -422,7 +422,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     public GatewayInfo findCurrentAccountGatewaysInfo(int id, String userId) {
-        String query = "Select * FROM " + TABLE_GATEWAYS_INFO + " WHERE " + GATEWAYS_INFO_COLUMN_ID + " =  \"" + id + "\""+ " AND " + GATEWAYS_INFO_COLUMN_USER_ID + " =  \"" + userId + "\"";
+        String query = "Select * FROM " + TABLE_GATEWAYS_INFO + " WHERE " + GATEWAYS_INFO_COLUMN_ID + " =  \"" + id + "\""+ " AND " + GATEWAYS_INFO_COLUMN_USER_UUID + " =  \"" + userId + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         GatewayInfo r = new GatewayInfo();
@@ -431,7 +431,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
             r.setId(cursor.getInt(0));
-            r.setUserId(cursor.getString(1));
+            r.setUserUuid(cursor.getString(1));
             r.setTimezone(cursor.getString(2));
 
             cursor.close();

@@ -25,6 +25,9 @@ public class GatewaysAPI {
                     JSONObject deviceData = new JSONObject(response.toString());
                     JSONArray clients = deviceData.getJSONArray("client");
 
+                    String userUuid = authData.get("userUuid");
+                    System.out.println("TEST GAPI userUuid"+ userUuid);
+
                     MyDBHandler db = new MyDBHandler(context);
 
                     for (int i = 0; i < clients.length(); i++) {
@@ -33,7 +36,7 @@ public class GatewaysAPI {
                         int id = curObj.getInt("id");
                         GatewayInfo gatewayInfo = new GatewayInfo(
                                 id,
-                                "",
+                                userUuid,
                                 timezone
                         );
                         db.addGatewaysInfo(gatewayInfo);

@@ -2,15 +2,15 @@ package com.telldus.live.mobile.Model;
 
 public class GatewayInfo {
     int id;
-    String userId;
+    String userUuid;
     String timezone;
 
     public GatewayInfo() {
     }
 
-    public GatewayInfo(int id, String userId, String timezone) {
+    public GatewayInfo(int id, String userUuid, String timezone) {
         this.id = id;
-        this.userId = userId;
+        this.userUuid = userUuid;
         this.timezone = timezone;
     }
 
@@ -22,12 +22,12 @@ public class GatewayInfo {
         return this.id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserUuid(String userUuid) {
+        this.userUuid = userUuid;
     }
 
-    public String getUserId() {
-        return this.userId;
+    public String getUserUuid() {
+        return this.userUuid;
     }
 
     public void setTimezone(String timezone) {
