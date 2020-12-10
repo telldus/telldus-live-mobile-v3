@@ -140,8 +140,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         Integer clientId = sensorWidgetInfo.getClientId();
+        String userUuid = sensorWidgetInfo.getUserUuid();
         String timezone = TimeZone.getDefault().getID();
-        GatewayInfo gatewayInfo = db.findCurrentAccountGatewaysInfo(clientId, "");
+        GatewayInfo gatewayInfo = db.findCurrentAccountGatewaysInfo(clientId, userUuid);
         if (gatewayInfo != null) {
             String tz = gatewayInfo.getTimezone();
             timezone = tz != null ? tz : timezone;
