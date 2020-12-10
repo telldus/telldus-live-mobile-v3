@@ -54,6 +54,13 @@ struct GatewayDetailsModel: SQLTable {
           """
   }
   
+  static var selectStatementCurrentAccountAndId: String {
+    return """
+          SELECT * FROM \(TABLE_NAME) WHERE
+          \(COLUMN_ID) = ? AND \(COLUMN_USER_ID) = ?;
+          """
+  }
+  
   static var selectAllStatement: String {
     return """
           SELECT * FROM \(TABLE_NAME);

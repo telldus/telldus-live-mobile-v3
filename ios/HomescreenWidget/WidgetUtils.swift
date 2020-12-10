@@ -75,7 +75,7 @@ struct WidgetUtils {
             owningUserId = sensorDetails.userId
             lastUpdated = sensorDetails.lastUpdated;
             let clientId = sensorDetails.clientId;
-            if let gatewayDetails = db?.gatewayDetailsModel(gatewayId: Int32(clientId)) {
+            if let gatewayDetails = db?.gatewayDetailsModelCurrentAccountAndId(userId: owningUserId as NSString, id: Int32(clientId)) {
               timezone = gatewayDetails.timezone
             }
             
