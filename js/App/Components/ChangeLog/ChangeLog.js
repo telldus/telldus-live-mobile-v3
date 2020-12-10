@@ -108,7 +108,7 @@ class ChangeLogNavigator extends View {
 		this.h1 = capitalize(formatMessage(i18n.changeLogHeaderOne));
 		this.h2 = `${formatMessage(i18n.changeLogHeaderTwo)} ${appVersion.substring(0, 4)}`;
 
-		this.skipButton = formatMessage(i18n.skipButton);
+		this.skipButton = capitalize(formatMessage(i18n.skipButton));
 
 		this.onPressNext = this.onPressNext.bind(this);
 		this.onPressPrev = this.onPressPrev.bind(this);
