@@ -420,6 +420,7 @@ public class NewRGBConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
+                    String currentUserUuid = prefManager.getUserUuid();
                     String methodRequested = null;
                     String deviceCurrentState = null;
                     String requestedStateValue = null;
@@ -452,7 +453,8 @@ public class NewRGBConfigureActivity extends Activity {
                         primarySetting,
                             secondarySetting,
                             requestedStateValue,
-                            requestedSecStateValue
+                            requestedSecStateValue,
+                            currentUserUuid
                     );
                     db.addWidgetDevice(mInsert);
                     NewRGBWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());

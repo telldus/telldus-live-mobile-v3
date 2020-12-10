@@ -269,6 +269,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
+                    String currentUserUuid = prefManager.getUserUuid();
                     String methodRequested = null;
                     String deviceCurrentState = null;
                     String requestedStateValue = null;
@@ -301,7 +302,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         null, // As of now set only for RGB[control option]
                             null, // As of now set only for RGB[control option]
                             requestedStateValue,
-                            requestedSecStateValue
+                            requestedSecStateValue,
+                            currentUserUuid
                     );
                     db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());

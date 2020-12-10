@@ -294,6 +294,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
+                    String currentUserUuid = prefManager.getUserUuid();
                     String methodRequested = null;
                     String requestedStateValue = null;
                     String requestedSecStateValue = null;
@@ -322,7 +323,8 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                         null, // As of now set only for RGB[control option]
                             null, // As of now set only for RGB[control option]
                             requestedStateValue,
-                            requestedSecStateValue
+                            requestedSecStateValue,
+                            currentUserUuid
                         );
                     db.addWidgetDevice(mInsert);
 

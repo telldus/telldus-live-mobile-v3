@@ -286,7 +286,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
-
+                    String currentUserUuid = prefManager.getUserUuid();
                     String trans = "default";
                     if (radio_dark.isChecked()) {
                         trans = "dark";
@@ -308,7 +308,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                             currentUserId,
                             selectInterval,
                             "false",
-                            clientId
+                            clientId,
+                            currentUserUuid
                     );
                     database.addWidgetSensor(mSensorInfo);
 
