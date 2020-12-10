@@ -34,8 +34,9 @@ const widgetConfigure = (): ThunkAction => {
 		const account = accounts[userId] || {};
 		const _email = account.email || email;
 		const { WidgetModule } = NativeModules;
+		const _uuid = userId || uuid;
 		if (Platform.OS === 'android') {
-			WidgetModule.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, _email, pro);
+			WidgetModule.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, _email, pro, _uuid);
 		} else {
 			WidgetModule.configureWidgetAuthData({
 				accessToken: access_token,
@@ -45,7 +46,7 @@ const widgetConfigure = (): ThunkAction => {
 				clientSecret: privateKey,
 				email: _email,
 				pro,
-				uuid: userId || uuid,
+				uuid: _uuid,
 			});
 		}
 	};

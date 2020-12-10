@@ -97,12 +97,13 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void configureWidgetAuthData(String accessToken, String refreshToken, String expiresIn, String clientId, String clientSecret, String userId, Integer pro) {
+  public void configureWidgetAuthData(String accessToken, String refreshToken, String expiresIn, String clientId, String clientSecret, String userId, Integer pro, String uuid) {
     Context context = getReactApplicationContext();
     prefManager = new PrefManager(context);
 
     prefManager.setAccessDetails(accessToken, expiresIn, clientId, clientSecret, refreshToken);
     prefManager.setUserId(userId, pro);
+    prefManager.setUserUuid(uuid);
     int widgetIdsSensor[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewSensorWidget.class));
     for (int widgetId : widgetIdsSensor) {
       wUpdater.updateUIWidgetSensor(widgetId, context, new HashMap());
