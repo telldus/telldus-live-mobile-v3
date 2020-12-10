@@ -977,7 +977,7 @@ public class DevicesGroupDialogueActivity extends Activity {
 
         deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 String error = response.optString("error");
                 if (!error.isEmpty() && error != null) {
                     String noDeviceMessage = "Device \""+deviceId+"\" not found!";
@@ -1035,7 +1035,7 @@ public class DevicesGroupDialogueActivity extends Activity {
 
         deviceAPI.setDeviceStateRGB(deviceId, method, rgb, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 String error = response.optString("error");
                 if (!error.isEmpty() && error != null) {
                     String noDeviceMessage = "Device \""+deviceId+"\" not found!";

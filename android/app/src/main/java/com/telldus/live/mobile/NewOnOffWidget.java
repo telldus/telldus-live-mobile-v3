@@ -912,7 +912,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String params = "/device/command?id="+deviceId+"&method="+method+"&value=null";
         deviceAPI.setDeviceState(deviceId, method, 0, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 String error = response.optString("error");
                 if (!error.isEmpty() && error != null) {
                     String noDeviceMessage = "Device \""+deviceId+"\" not found!";
@@ -966,7 +966,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         UserAPI userAPI = new UserAPI();
         userAPI.getUserProfile(context, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
                 wUpdater.updateAllWidgets(context, new HashMap());
             }

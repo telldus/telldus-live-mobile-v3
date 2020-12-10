@@ -33,6 +33,7 @@ import com.androidnetworking.error.ANError;
 
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -110,7 +111,7 @@ public class BasicUserActivity extends Activity {
                     getApplicationContext(),
                     new OnAPITaskComplete() {
                         @Override
-                        public void onSuccess(JSONObject response) {
+                        public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                             hideThrobber(throbber);
                             handleSuccess(response, "proyear");
                         }
@@ -165,7 +166,7 @@ public class BasicUserActivity extends Activity {
                     getApplicationContext(),
                     new OnAPITaskComplete() {
                         @Override
-                        public void onSuccess(JSONObject response) {
+                        public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                             hideThrobber(throbber);
                             handleSuccess(response, "prohalfyear");
                         }
@@ -208,7 +209,7 @@ public class BasicUserActivity extends Activity {
                     getApplicationContext(),
                     new OnAPITaskComplete() {
                         @Override
-                        public void onSuccess(JSONObject response) {
+                        public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                             hideThrobber(throbber);
                             handleSuccess(response, "promonth");
                         }

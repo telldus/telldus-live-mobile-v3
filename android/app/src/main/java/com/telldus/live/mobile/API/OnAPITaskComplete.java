@@ -22,7 +22,9 @@ package com.telldus.live.mobile.API;
 import com.androidnetworking.error.ANError;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public interface OnAPITaskComplete {
-    void onSuccess(JSONObject result);
+    void onSuccess(JSONObject result, HashMap<String, String> authData);
     void onError(ANError result);
 }

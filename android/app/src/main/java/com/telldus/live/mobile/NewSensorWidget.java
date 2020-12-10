@@ -438,7 +438,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         API endPoints = new API();
         endPoints.callEndPoint(context, params, API_TAG, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(final JSONObject response) {
+            public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
                 try {
                     SensorInfo sensorWidgetInfo = database.findWidgetInfoSensor(widgetId);
 
@@ -542,7 +542,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         UserAPI userAPI = new UserAPI();
         userAPI.getUserProfile(context, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
                 wUpdater.updateAllWidgets(context, new HashMap());
             }

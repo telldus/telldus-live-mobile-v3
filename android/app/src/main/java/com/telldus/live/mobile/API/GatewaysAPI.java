@@ -19,9 +19,8 @@ public class GatewaysAPI {
     public void cacheGateways(final Context context) {
         getGateways(context, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 try {
-                    DevicesUtilities deviceUtils = new DevicesUtilities();
 
                     JSONObject deviceData = new JSONObject(response.toString());
                     JSONArray clients = deviceData.getJSONArray("client");
@@ -54,8 +53,8 @@ public class GatewaysAPI {
         API endPoints = new API();
         endPoints.callEndPoint(context, params, "GatewaysList", new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
-                callBack.onSuccess(response);
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
+                callBack.onSuccess(response, authData);
             }
 
             @Override

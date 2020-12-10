@@ -472,7 +472,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
         UserAPI userAPI = new UserAPI();
         userAPI.getUserProfile(context, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
                 wUpdater.updateAllWidgets(context, new HashMap());
             }
@@ -497,12 +497,12 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
         sensorsAPI.getSensorsList(params, context, "SensorsApi", new OnAPITaskComplete() {
             @Override
-            public void onSuccess(final JSONObject response) {
+            public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
                     DevicesAPI devicessAPI = new DevicesAPI();
                     devicessAPI.getDeviceInfoGeneral(deviceId, context, new OnAPITaskComplete() {
 
                         @Override
-                        public void onSuccess(JSONObject result) {
+                        public void onSuccess(JSONObject result, HashMap<String, String> _authData) {
                             try {
 
                                 String state2 = state, stateValue2 = stateValue, secStateValue2 = secStateValue;
