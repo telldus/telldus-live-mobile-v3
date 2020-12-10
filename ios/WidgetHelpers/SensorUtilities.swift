@@ -292,6 +292,9 @@ struct SensorUtilities {
     let dateFormatter = DateFormatter()
     dateFormatter.timeStyle = DateFormatter.Style.short
     dateFormatter.dateStyle = DateFormatter.Style.short
+    if let locale = NSLocale.current.languageCode {
+      dateFormatter.locale = Locale(identifier:locale)
+    }
     dateFormatter.timeZone = timezone != nil ? TimeZone(identifier: timezone!) : .current
     return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(lastUpdated)))
   }
