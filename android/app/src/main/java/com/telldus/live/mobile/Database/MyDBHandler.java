@@ -115,7 +115,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public void createGatewaysInfoTable(SQLiteDatabase db) {
         String CREATE_GATEWAYS_INFO_TABLE = "CREATE TABLE " +
                 TABLE_GATEWAYS_INFO + "("+ GATEWAYS_INFO_COLUMN_ID + " INTEGER," + GATEWAYS_INFO_COLUMN_USER_UUID
-                + " TEXT," + GATEWAYS_INFO_COLUMN_TIMEZONE + " TEXT)";
+                + " TEXT," + GATEWAYS_INFO_COLUMN_TIMEZONE + " TEXT, UNIQUE(" + GATEWAYS_INFO_COLUMN_ID + ", " + GATEWAYS_INFO_COLUMN_USER_UUID + "))";
         db.execSQL(CREATE_GATEWAYS_INFO_TABLE);
     }
 
@@ -365,7 +365,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(GATEWAYS_INFO_COLUMN_ID, gatewayInfo.getId());
         values.put(GATEWAYS_INFO_COLUMN_USER_UUID, gatewayInfo.getUserUuid());
         values.put(GATEWAYS_INFO_COLUMN_TIMEZONE, gatewayInfo.getTimezone());
-        db.insert(TABLE_GATEWAYS_INFO, null, values);
+        db.replace(TABLE_GATEWAYS_INFO, null, values);
         db.close();
     }
 
