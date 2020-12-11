@@ -101,6 +101,7 @@ platform :ios do
     )
     upload_symbols_to_crashlytics(
       gsp_path: "ios/TelldusLiveApp/GoogleService-Info.plist",
+      binary_path: "ios/Pods/FirebaseCrashlytics/upload-symbols"
     )
   end
 end
