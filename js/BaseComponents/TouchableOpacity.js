@@ -21,7 +21,10 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+	useCallback,
+} from 'react';
 import { TouchableOpacity } from 'react-native';
 import {
 	prepareRootPropsView,
@@ -31,18 +34,27 @@ import {
 	withTheme,
 } from '../App/Components/HOC/withTheme';
 
-const TouchableOpacityComponent = (props: Object): Object => {
+const TouchableOpacityComponent = memo<Object>((props: Object): Object => {
 	const {
 		children,
+		onPress,
+		onPressData,
 		...others
 	} = props;
 
+	const _onPress = useCallback(() => {
+		if (onPress) {
+			onPress(onPressData);
+		}
+	}, [onPress, onPressData]);
+
 	return (
 		<TouchableOpacity
-			{...prepareRootPropsView(others)}>
+			{...prepareRootPropsView(others)}
+			onPress={_onPress}>
 			{children}
 		</TouchableOpacity>
 	);
-};
+});
 
 export default withTheme(TouchableOpacityComponent);

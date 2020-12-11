@@ -80,7 +80,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager,
             int appWidgetId,
             Map extraArgs
-            ) {
+    ) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
         // On log out, only prefManager is cleared and not DB, so we do not want sensor to show back again during the timed interval
@@ -196,10 +196,10 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (isUpdating != null && isUpdating.equals("true")) {
             if (transparent.equals("dark")) {
                 showFlashIndicator(
-                    view,
-                    R.id.flash_view_sensor,
-                    R.id.flashing_indicator_sensor,
-                    R.drawable.shape_circle_black_fill
+                        view,
+                        R.id.flash_view_sensor,
+                        R.id.flashing_indicator_sensor,
+                        R.drawable.shape_circle_black_fill
                 );
 
                 view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
@@ -208,10 +208,10 @@ public class NewSensorWidget extends AppWidgetProvider {
                 colorTitle = ContextCompat.getColor(context, R.color.themeDark);
             } else if (transparent.equals("light") || transparent.equals("true")) {
                 showFlashIndicator(
-                    view,
-                    R.id.flash_view_sensor,
-                    R.id.flashing_indicator_sensor,
-                    R.drawable.shape_circle_white_fill
+                        view,
+                        R.id.flash_view_sensor,
+                        R.id.flashing_indicator_sensor,
+                        R.drawable.shape_circle_white_fill
                 );
 
                 view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
@@ -220,10 +220,10 @@ public class NewSensorWidget extends AppWidgetProvider {
                 colorTitle = ContextCompat.getColor(context, R.color.white);
             } else {
                 showFlashIndicator(
-                    view,
-                    R.id.flash_view_sensor,
-                    R.id.flashing_indicator_sensor,
-                    R.drawable.shape_circle_white_fill
+                        view,
+                        R.id.flash_view_sensor,
+                        R.id.flashing_indicator_sensor,
+                        R.drawable.shape_circle_white_fill
                 );
 
                 view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_black);
@@ -534,8 +534,8 @@ public class NewSensorWidget extends AppWidgetProvider {
     public static DateFormat formatDate(Locale locale) {
         SimpleDateFormat formattedDate = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
         formattedDate.applyPattern(formattedDate.toPattern().replaceAll(
-            "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
-            ""));
+                "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
+                ""));
         return formattedDate;
     }
 

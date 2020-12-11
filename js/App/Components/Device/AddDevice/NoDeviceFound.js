@@ -109,7 +109,7 @@ render(): Object {
 					textStyle={infoTextStyle}
 					infoIconStyle={statusIconStyle}/>
 				<TouchableButton
-					text={i18n.tryAgain}
+					text={capitalize(formatMessage(i18n.tryAgain))}
 					onPress={this.onPressTryAgain}
 					style={buttonStyle}/>
 				<TouchableButton

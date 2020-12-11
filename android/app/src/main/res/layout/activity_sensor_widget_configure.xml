@@ -208,7 +208,7 @@
                         android:textColor="@color/darkGray"/>
 
                     <include
-                            layout="@layout/theme_sensor"/>
+                        layout="@layout/theme_sensor"/>
 
                     <TextView
                         android:id="@+id/settingText"
@@ -221,19 +221,19 @@
                         android:textColor="@color/darkGray"/>
 
                     <LinearLayout
-                            android:id="@+id/btSelectPollInterval"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.62"
-                            android:background="@drawable/shape"
-                            android:orientation="horizontal"
-                            android:paddingVertical="14dp"
-                            android:paddingHorizontal="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_gravity="center|center"
-                            android:gravity="center|center">
+                        android:id="@+id/btSelectPollInterval"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.62"
+                        android:background="@drawable/shape"
+                        android:orientation="horizontal"
+                        android:paddingVertical="14dp"
+                        android:paddingHorizontal="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center|center"
+                        android:gravity="center|center">
 
                         <TextView
                             android:id="@+id/labelSelectPoll"

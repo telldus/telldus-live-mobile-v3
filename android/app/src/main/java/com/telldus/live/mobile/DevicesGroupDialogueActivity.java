@@ -240,12 +240,12 @@ public class DevicesGroupDialogueActivity extends Activity {
             marginParams.setMargins(8, 8, 8, 8);
             bellCover.requestLayout();
             bellText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                "bell",
-                ContextCompat.getColor(context, R.color.brandSecondary),
-                160,
-                95,
-                95,
-                context));
+                    "bell",
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    160,
+                    95,
+                    95,
+                    context));
             bellCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -267,32 +267,32 @@ public class DevicesGroupDialogueActivity extends Activity {
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_BELL)) {
                 bellCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                 bellText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                    "bell",
-                    ContextCompat.getColor(context, R.color.white),
-                    160,
-                    95,
-                    95,
-                    context));
+                        "bell",
+                        ContextCompat.getColor(context, R.color.white),
+                        160,
+                        95,
+                        95,
+                        context));
 
                 showFlashIndicator(R.id.flash_view_bell, R.id.flashing_indicator_bell, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
                 if (state == null || !state.equals("4")) {
                     bellText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            160,
+                            95,
+                            95,
+                            context));
                 } else {
                     bellText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            160,
+                            95,
+                            95,
+                            context));
                 }
                 hideFlashIndicator(R.id.flashing_indicator_bell);
             }
@@ -307,12 +307,12 @@ public class DevicesGroupDialogueActivity extends Activity {
             upCover.setVisibility(View.VISIBLE);
             upCover.setElevation(5f);
             upText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                "up",
-                ContextCompat.getColor(context, R.color.brandSecondary),
-                160,
-                95,
-                95,
-                context));
+                    "up",
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    160,
+                    95,
+                    95,
+                    context));
 
             LayoutParams layoutParamsB = upCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -342,32 +342,32 @@ public class DevicesGroupDialogueActivity extends Activity {
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_UP)) {
                 upCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                 upText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                    "up",
-                    ContextCompat.getColor(context, R.color.white),
-                    160,
-                    95,
-                    95,
-                    context));
+                        "up",
+                        ContextCompat.getColor(context, R.color.white),
+                        160,
+                        95,
+                        95,
+                        context));
 
                 showFlashIndicator(R.id.flash_view_up, R.id.flashing_indicator_up, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("128")) {
                 if (state != null && state.equals("128")) {
                     upText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            160,
+                            95,
+                            95,
+                            context));
                 } else {
                     upText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            160,
+                            95,
+                            95,
+                            context));
                 }
                 hideFlashIndicator(R.id.flashing_indicator_up);
             }
@@ -382,12 +382,12 @@ public class DevicesGroupDialogueActivity extends Activity {
             downCover.setVisibility(View.VISIBLE);
             downCover.setElevation(5f);
             downText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                "down",
-                ContextCompat.getColor(context, R.color.brandSecondary),
-                160,
-                95,
-                95,
-                context));
+                    "down",
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    160,
+                    95,
+                    95,
+                    context));
 
             LayoutParams layoutParamsB = downCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -417,32 +417,32 @@ public class DevicesGroupDialogueActivity extends Activity {
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DOWN)) {
                 downCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                 downText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                    "down",
-                    ContextCompat.getColor(context, R.color.white),
-                    160,
-                    95,
-                    95,
-                    context));
+                        "down",
+                        ContextCompat.getColor(context, R.color.white),
+                        160,
+                        95,
+                        95,
+                        context));
 
                 showFlashIndicator(R.id.flash_view_down, R.id.flashing_indicator_down, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("256")) {
                 if (state != null && state.equals("256")) {
                     downText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            160,
+                            95,
+                            95,
+                            context));
                 } else {
                     downText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            160,
+                            95,
+                            95,
+                            context));
                 }
                 hideFlashIndicator(R.id.flashing_indicator_down);
             }
@@ -457,12 +457,12 @@ public class DevicesGroupDialogueActivity extends Activity {
             stopCover.setVisibility(View.VISIBLE);
             stopCover.setElevation(5f);
             stopText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                "stop",
-                ContextCompat.getColor(context, R.color.brandPrimary),
-                160,
-                95,
-                95,
-                context));
+                    "stop",
+                    ContextCompat.getColor(context, R.color.brandPrimary),
+                    160,
+                    95,
+                    95,
+                    context));
 
             LayoutParams layoutParamsB = stopCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -492,32 +492,32 @@ public class DevicesGroupDialogueActivity extends Activity {
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_STOP)) {
                 stopCover.setBackgroundResource(R.drawable.button_background_primary_fill);
                 stopText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                    "stop",
-                    ContextCompat.getColor(context, R.color.white),
-                    160,
-                    95,
-                    95,
-                    context));
+                        "stop",
+                        ContextCompat.getColor(context, R.color.white),
+                        160,
+                        95,
+                        95,
+                        context));
 
                 showFlashIndicator(R.id.flash_view_stop, R.id.flashing_indicator_stop, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("512")) {
                 if (state != null && state.equals("512")) {
                     stopText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            160,
+                            95,
+                            95,
+                            context));
                 } else {
                     stopText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            160,
+                            95,
+                            95,
+                            context));
                 }
                 hideFlashIndicator(R.id.flashing_indicator_stop);
             }
@@ -532,12 +532,12 @@ public class DevicesGroupDialogueActivity extends Activity {
             offCover.setVisibility(View.VISIBLE);
             offCover.setElevation(5f);
             offIcon.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                offActionIcon,
-                ContextCompat.getColor(context, R.color.brandPrimary),
-                160,
-                95,
-                95,
-                context));
+                    offActionIcon,
+                    ContextCompat.getColor(context, R.color.brandPrimary),
+                    160,
+                    95,
+                    95,
+                    context));
 
             LayoutParams layoutParamsB = offCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -567,32 +567,32 @@ public class DevicesGroupDialogueActivity extends Activity {
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_OFF)) {
                 offCover.setBackgroundResource(R.drawable.button_background_primary_fill);
                 offIcon.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                    offActionIcon,
-                    ContextCompat.getColor(context, R.color.white),
-                    160,
-                    95,
-                    95,
-                    context));
+                        offActionIcon,
+                        ContextCompat.getColor(context, R.color.white),
+                        160,
+                        95,
+                        95,
+                        context));
 
                 showFlashIndicator(R.id.flash_view_off, R.id.flashing_indicator_off, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
                 if (state != null && state.equals("2")) {
                     offIcon.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            160,
+                            95,
+                            95,
+                            context));
                 } else {
                     offIcon.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            160,
+                            95,
+                            95,
+                            context));
                 }
                 hideFlashIndicator(R.id.flashing_indicator_off);
             }
@@ -686,12 +686,12 @@ public class DevicesGroupDialogueActivity extends Activity {
             onCover.setVisibility(View.VISIBLE);
             onCover.setElevation(5f);
             onText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                onActionIcon,
-                ContextCompat.getColor(context, R.color.brandSecondary),
-                160,
-                95,
-                95,
-                context));
+                    onActionIcon,
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    160,
+                    95,
+                    95,
+                    context));
 
             LayoutParams layoutParamsB = onCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -723,32 +723,32 @@ public class DevicesGroupDialogueActivity extends Activity {
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_ON)) {
                 onCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                 onText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                    onActionIcon,
-                    ContextCompat.getColor(context, R.color.white),
-                    160,
-                    95,
-                    95,
-                    context));
+                        onActionIcon,
+                        ContextCompat.getColor(context, R.color.white),
+                        160,
+                        95,
+                        95,
+                        context));
 
                 showFlashIndicator(R.id.flash_view_on, R.id.flashing_indicator_on, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
                 if (state != null && state.equals("1")) {
                     onText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            160,
+                            95,
+                            95,
+                            context));
                 } else {
                     onText.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        160,
-                        95,
-                        95,
-                        context));
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            160,
+                            95,
+                            95,
+                            context));
                 }
                 hideFlashIndicator(R.id.flashing_indicator_on);
             }
@@ -946,14 +946,14 @@ public class DevicesGroupDialogueActivity extends Activity {
 
     public void hideAllFlashIndicators() {
         Integer[] primaryShadedButtons = new Integer[]{
-            R.id.flashing_indicator_on,
-            R.id.flashing_indicator_off,
-            R.id.flashing_indicator_bell,
-            R.id.flashing_indicator_up,
-            R.id.flashing_indicator_down,
-            R.id.flashing_indicator_stop,
-            R.id.flashing_indicator_common,
-            };
+                R.id.flashing_indicator_on,
+                R.id.flashing_indicator_off,
+                R.id.flashing_indicator_bell,
+                R.id.flashing_indicator_up,
+                R.id.flashing_indicator_down,
+                R.id.flashing_indicator_stop,
+                R.id.flashing_indicator_common,
+        };
 
         List<Integer> list = Arrays.asList(primaryShadedButtons);
 

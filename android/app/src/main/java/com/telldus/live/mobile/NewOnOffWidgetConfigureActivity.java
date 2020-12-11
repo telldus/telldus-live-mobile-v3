@@ -111,7 +111,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     private String deviceStateValue = null, secondaryStateValue;
 
     public static final String ROOT = "fonts/",
-    FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
+            FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -239,7 +239,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 mAppWidgetId = extras.getInt(
-                AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+                        AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             }
 
             // If this activity was started with an intent without an app widget ID, finish with an error.
@@ -276,22 +276,22 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     Map<String, Object> dInfoMap = DeviceInfoMap.get(id);
 
                     DeviceInfo mInsert = new DeviceInfo(
-                        deviceCurrentState,
-                        mAppWidgetId,
-                        id,
-                        deviceName.getText().toString(),
-                        deviceSupportedMethods,
-                        deviceTypeCurrent,
-                        deviceStateValue,
-                        trans,
-                        currentUserId,
-                        methodRequested,
-                        0,
-                        0, // As of now required/handled only for thermostats
-                        -1, // As of now required/handled only for thermostats
-                        -1, // As of now required/handled only for thermostats
-                        secondaryStateValue,  // As of now required/handled only for thermostats
-                        "full", // As of now set only for RGB[control option]
+                            deviceCurrentState,
+                            mAppWidgetId,
+                            id,
+                            deviceName.getText().toString(),
+                            deviceSupportedMethods,
+                            deviceTypeCurrent,
+                            deviceStateValue,
+                            trans,
+                            currentUserId,
+                            methodRequested,
+                            0,
+                            0, // As of now required/handled only for thermostats
+                            -1, // As of now required/handled only for thermostats
+                            -1, // As of now required/handled only for thermostats
+                            secondaryStateValue,  // As of now required/handled only for thermostats
+                            "full", // As of now set only for RGB[control option]
                             null, // As of now set only for RGB[control option]
                             requestedStateValue,
                             requestedSecStateValue,
@@ -317,33 +317,33 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this
                             ,R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.reserved_widget_android_pick_device)
-                        .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                selectedDeviceIndex = which;
-                                deviceName.setText(deviceNameList[which]);
-                                id = Integer.parseInt(String.valueOf(deviceIdList[which]));
+                            .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    selectedDeviceIndex = which;
+                                    deviceName.setText(deviceNameList[which]);
+                                    id = Integer.parseInt(String.valueOf(deviceIdList[which]));
 
-                                Map<String, Object> info = DeviceInfoMap.get(id);
+                                    Map<String, Object> info = DeviceInfoMap.get(id);
 
-                                deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
-                                deviceStateValue = info.get("deviceStateValue") == null ? null : info.get("deviceStateValue").toString();
+                                    deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
+                                    deviceStateValue = info.get("deviceStateValue") == null ? null : info.get("deviceStateValue").toString();
 
-                                deviceTypeCurrent = info.get("deviceType").toString();
-                                String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
-                                tvIcon1.setText(deviceIcon);
+                                    deviceTypeCurrent = info.get("deviceType").toString();
+                                    String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
+                                    tvIcon1.setText(deviceIcon);
 
-                                deviceCurrentState = info.get("state").toString();
-                                secondaryStateValue = info.get("secondaryStateValue").toString();
+                                    deviceCurrentState = info.get("state").toString();
+                                    secondaryStateValue = info.get("secondaryStateValue").toString();
 
-                                Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(deviceSupportedMethods);
-                                
-                                ad.dismiss();
-                            }
-                        });
+                                    Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(deviceSupportedMethods);
+
+                                    ad.dismiss();
+                                }
+                            });
                     ad = builder.show();
                 }
             });
-            
+
             deviceName.setTypeface(subtitleFont);
             deviceHint.setTypeface(subtitleFont);
             deviceText.setTypeface(subtitleFont);

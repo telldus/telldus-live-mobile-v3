@@ -167,7 +167,7 @@ const ShowHideTabsBlock = memo<Object>((props: Object): Object => {
 			<Text
 				level={2}
 				style={titleStyle}>
-				Menu tabs to display{/* TODO: Translate */}
+				{formatMessage(i18n.menuTabToDis)}
 			</Text>
 			{items}
 		</View>

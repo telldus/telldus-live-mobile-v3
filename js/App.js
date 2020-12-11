@@ -37,7 +37,6 @@ import {
 	PreLoginNavigator,
 	PostLoginNavigatorCommon,
 } from './App/Components';
-import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
 import { SafeAreaView, DialogueBox } from './BaseComponents';
 import {
 	setAppLayout,
@@ -60,7 +59,7 @@ import {
 } from './App/Components/HOC/withTheme';
 
 import Theme from './App/Theme';
-const changeLogVersion = '3.16';
+const changeLogVersion = '3.15';
 
 type Props = {
 	dispatch: Function,
@@ -68,7 +67,6 @@ type Props = {
 	accessToken: Object,
 	pushTokenRegistered: boolean,
 	prevChangeLogVersion: string,
-	forceShowChangeLog: boolean,
 	intl: Object,
 	locale: string,
 	deviceId?: string,
@@ -286,11 +284,10 @@ class App extends React.Component<Props> {
 			prevChangeLogVersion,
 			accessToken,
 			isTokenValid,
-			forceShowChangeLog,
 			dialogueData,
 		} = this.props;
 
-		let showChangeLog = (changeLogVersion !== prevChangeLogVersion) || forceShowChangeLog;
+		let showChangeLog = changeLogVersion !== prevChangeLogVersion;
 
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 
@@ -308,19 +305,17 @@ class App extends React.Component<Props> {
 						screenProps={{
 							source: 'prelogin',
 							toggleDialogueBox: this.toggleDialogueBox,
+							showChangeLog: showChangeLog,
+							changeLogVersion: changeLogVersion,
 						}}/>
 					:
 					<PostLoginNavigatorCommon
 						{...this.props}
 						toggleDialogueBox={this.toggleDialogueBox}
 						showChangeLog={showChangeLog}
+						changeLogVersion={changeLogVersion}
 						onLayout={this.onLayout}/>
 				}
-				<ChangeLogNavigator
-					changeLogVersion={changeLogVersion}
-					showChangeLog={showChangeLog}
-					forceShowChangeLog={forceShowChangeLog}
-					onLayout={this.onLayout}/>
 				<DialogueBox
 					{...others}
 					showDialogue={openModal && !showChangeLog}
@@ -341,7 +336,6 @@ function mapStateToProps(store: Object): Object {
 		pushToken,
 		isTokenValid,
 		pushTokenRegistered,
-		showChangeLog: forceShowChangeLog,
 		deviceId = null,
 	} = store.user;
 	let {
@@ -356,7 +350,6 @@ function mapStateToProps(store: Object): Object {
 		isTokenValid,
 		pushTokenRegistered,
 		prevChangeLogVersion,
-		forceShowChangeLog,
 		deviceId,
 		dialogueData: store.modal,
 		cachedLayout: layout,

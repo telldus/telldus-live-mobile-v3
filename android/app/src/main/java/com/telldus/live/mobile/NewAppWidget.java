@@ -98,7 +98,7 @@ public class NewAppWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager,
             int appWidgetId,
             Map extraArgs
-            ) {
+    ) {
 
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
@@ -205,64 +205,6 @@ public class NewAppWidget extends AppWidgetProvider {
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                                "BELL",
-                                transparent,
-                                renderedButtonsCount,
-                                isLastButton,
-                                R.id.bellCover,
-                                views,
-                                context
-                            );
-            views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
-                "bell",
-                colorIdle,
-                80,
-                95,
-                65,
-                context));
-
-            views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
-
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_BELL)) {
-                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                        "BELL",
-                                        transparent,
-                                        renderedButtonsCount,
-                                        isLastButton,
-                                        R.id.flash_view_bell,
-                                        R.id.flashing_indicator_bell,
-                                        R.id.bellCover,
-                                        views,
-                                        context
-                                    );
-                views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
-                    "bell",
-                    colorOnAction,
-                    80,
-                    95,
-                    65,
-                    context));
-            }
-            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
-                if (state == null || !state.equals("4")) {
-                    views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        80,
-                        95,
-                        65,
-                        context));
-                } else {
-                    views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        80,
-                        95,
-                        65,
-                        context));
-                }
-                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_bell);
-                CommonUtilities.handleBackgroundPostActionOne(
                     "BELL",
                     transparent,
                     renderedButtonsCount,
@@ -270,6 +212,64 @@ public class NewAppWidget extends AppWidgetProvider {
                     R.id.bellCover,
                     views,
                     context
+            );
+            views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
+                    "bell",
+                    colorIdle,
+                    80,
+                    95,
+                    65,
+                    context));
+
+            views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
+
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_BELL)) {
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
+                        "BELL",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.flash_view_bell,
+                        R.id.flashing_indicator_bell,
+                        R.id.bellCover,
+                        views,
+                        context
+                );
+                views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
+                        "bell",
+                        colorOnAction,
+                        80,
+                        95,
+                        65,
+                        context));
+            }
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
+                if (state == null || !state.equals("4")) {
+                    views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            80,
+                            95,
+                            65,
+                            context));
+                } else {
+                    views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            80,
+                            95,
+                            65,
+                            context));
+                }
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_bell);
+                CommonUtilities.handleBackgroundPostActionOne(
+                        "BELL",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.bellCover,
+                        views,
+                        context
                 );
             }
 
@@ -286,64 +286,6 @@ public class NewAppWidget extends AppWidgetProvider {
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                                "UP",
-                                transparent,
-                                renderedButtonsCount,
-                                isLastButton,
-                                R.id.upCover,
-                                views,
-                                context
-                            );
-            views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
-                "up",
-                colorIdle,
-                80,
-                95,
-                65,
-                context));
-
-            views.setOnClickPendingIntent(R.id.upCover, getPendingSelf(context, ACTION_UP, appWidgetId));
-
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_UP)) {
-                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                        "UP",
-                                        transparent,
-                                        renderedButtonsCount,
-                                        isLastButton,
-                                        R.id.flash_view_up,
-                                        R.id.flashing_indicator_up,
-                                        R.id.upCover,
-                                        views,
-                                        context
-                                    );
-                views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
-                    "up",
-                    colorOnAction,
-                    80,
-                    95,
-                    65,
-                    context));
-            }
-            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("128")) {
-                if (state != null && state.equals("128")) {
-                    views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        80,
-                        95,
-                        65,
-                        context));
-                } else {
-                    views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        80,
-                        95,
-                        65,
-                        context));
-                }
-                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_up);
-                CommonUtilities.handleBackgroundPostActionOne(
                     "UP",
                     transparent,
                     renderedButtonsCount,
@@ -351,6 +293,64 @@ public class NewAppWidget extends AppWidgetProvider {
                     R.id.upCover,
                     views,
                     context
+            );
+            views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
+                    "up",
+                    colorIdle,
+                    80,
+                    95,
+                    65,
+                    context));
+
+            views.setOnClickPendingIntent(R.id.upCover, getPendingSelf(context, ACTION_UP, appWidgetId));
+
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_UP)) {
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
+                        "UP",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.flash_view_up,
+                        R.id.flashing_indicator_up,
+                        R.id.upCover,
+                        views,
+                        context
+                );
+                views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
+                        "up",
+                        colorOnAction,
+                        80,
+                        95,
+                        65,
+                        context));
+            }
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("128")) {
+                if (state != null && state.equals("128")) {
+                    views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            80,
+                            95,
+                            65,
+                            context));
+                } else {
+                    views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            80,
+                            95,
+                            65,
+                            context));
+                }
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_up);
+                CommonUtilities.handleBackgroundPostActionOne(
+                        "UP",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.upCover,
+                        views,
+                        context
                 );
             }
 
@@ -367,64 +367,6 @@ public class NewAppWidget extends AppWidgetProvider {
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                                "DOWN",
-                                transparent,
-                                renderedButtonsCount,
-                                isLastButton,
-                                R.id.downCover,
-                                views,
-                                context
-                            );
-            views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
-                "down",
-                colorIdle,
-                80,
-                95,
-                65,
-                context));
-
-            views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
-
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DOWN)) {
-                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                        "DOWN",
-                                        transparent,
-                                        renderedButtonsCount,
-                                        isLastButton,
-                                        R.id.flash_view_down,
-                                        R.id.flashing_indicator_down,
-                                        R.id.downCover,
-                                        views,
-                                        context
-                                    );
-                views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
-                    "down",
-                    colorOnAction,
-                    80,
-                    95,
-                    65,
-                    context));
-            }
-            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("256")) {
-                if (state != null && state.equals("256")) {
-                    views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        80,
-                        95,
-                        65,
-                        context));
-                } else {
-                    views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        80,
-                        95,
-                        65,
-                        context));
-                }
-                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_down);
-                CommonUtilities.handleBackgroundPostActionOne(
                     "DOWN",
                     transparent,
                     renderedButtonsCount,
@@ -432,6 +374,64 @@ public class NewAppWidget extends AppWidgetProvider {
                     R.id.downCover,
                     views,
                     context
+            );
+            views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
+                    "down",
+                    colorIdle,
+                    80,
+                    95,
+                    65,
+                    context));
+
+            views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
+
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DOWN)) {
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
+                        "DOWN",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.flash_view_down,
+                        R.id.flashing_indicator_down,
+                        R.id.downCover,
+                        views,
+                        context
+                );
+                views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
+                        "down",
+                        colorOnAction,
+                        80,
+                        95,
+                        65,
+                        context));
+            }
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("256")) {
+                if (state != null && state.equals("256")) {
+                    views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            80,
+                            95,
+                            65,
+                            context));
+                } else {
+                    views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            80,
+                            95,
+                            65,
+                            context));
+                }
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_down);
+                CommonUtilities.handleBackgroundPostActionOne(
+                        "DOWN",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.downCover,
+                        views,
+                        context
                 );
             }
 
@@ -448,65 +448,6 @@ public class NewAppWidget extends AppWidgetProvider {
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                                "STOP",
-                                transparent,
-                                renderedButtonsCount,
-                                isLastButton,
-                                R.id.stopCover,
-                                views,
-                                context
-                            );
-            views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
-                "stop",
-                colorIdle,
-                80,
-                95,
-                65,
-                context));
-
-
-            views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
-
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_STOP)) {
-                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                        "STOP",
-                                        transparent,
-                                        renderedButtonsCount,
-                                        isLastButton,
-                                        R.id.flash_view_stop,
-                                        R.id.flashing_indicator_stop,
-                                        R.id.stopCover,
-                                        views,
-                                        context
-                                    );
-                views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
-                    "stop",
-                    colorOnAction,
-                    80,
-                    95,
-                    65,
-                    context));
-            }
-            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("512")) {
-                if (state != null && state.equals("512")) {
-                    views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        80,
-                        95,
-                        65,
-                        context));
-                } else {
-                    views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        80,
-                        95,
-                        65,
-                        context));
-                }
-                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_stop);
-                CommonUtilities.handleBackgroundPostActionOne(
                     "STOP",
                     transparent,
                     renderedButtonsCount,
@@ -514,6 +455,65 @@ public class NewAppWidget extends AppWidgetProvider {
                     R.id.stopCover,
                     views,
                     context
+            );
+            views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
+                    "stop",
+                    colorIdle,
+                    80,
+                    95,
+                    65,
+                    context));
+
+
+            views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
+
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_STOP)) {
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
+                        "STOP",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.flash_view_stop,
+                        R.id.flashing_indicator_stop,
+                        R.id.stopCover,
+                        views,
+                        context
+                );
+                views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
+                        "stop",
+                        colorOnAction,
+                        80,
+                        95,
+                        65,
+                        context));
+            }
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("512")) {
+                if (state != null && state.equals("512")) {
+                    views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            80,
+                            95,
+                            65,
+                            context));
+                } else {
+                    views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            80,
+                            95,
+                            65,
+                            context));
+                }
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_stop);
+                CommonUtilities.handleBackgroundPostActionOne(
+                        "STOP",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.stopCover,
+                        views,
+                        context
                 );
             }
 
@@ -530,67 +530,6 @@ public class NewAppWidget extends AppWidgetProvider {
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                                "OFF",
-                                transparent,
-                                renderedButtonsCount,
-                                isLastButton,
-                                R.id.offCover,
-                                views,
-                                context
-                            );
-            views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
-                offActionIcon,
-                colorIdle,
-                80,
-                95,
-                65,
-                context));
-
-
-            views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
-
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_OFF)) {
-
-                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                        "OFF",
-                                        transparent,
-                                        renderedButtonsCount,
-                                        isLastButton,
-                                        R.id.flash_view_off,
-                                        R.id.flashing_indicator_off,
-                                        R.id.offCover,
-                                        views,
-                                        context
-                                    );
-
-                views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
-                    offActionIcon,
-                    colorOnAction,
-                    80,
-                    95,
-                    65,
-                    context));
-            }
-            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
-                if (state != null && state.equals("2")) {
-                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        80,
-                        95,
-                        65,
-                        context));
-                } else {
-                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        80,
-                        95,
-                        65,
-                        context));
-                }
-                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_off);
-                CommonUtilities.handleBackgroundPostActionOne(
                     "OFF",
                     transparent,
                     renderedButtonsCount,
@@ -598,6 +537,67 @@ public class NewAppWidget extends AppWidgetProvider {
                     R.id.offCover,
                     views,
                     context
+            );
+            views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                    offActionIcon,
+                    colorIdle,
+                    80,
+                    95,
+                    65,
+                    context));
+
+
+            views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
+
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_OFF)) {
+
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
+                        "OFF",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.flash_view_off,
+                        R.id.flashing_indicator_off,
+                        R.id.offCover,
+                        views,
+                        context
+                );
+
+                views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                        offActionIcon,
+                        colorOnAction,
+                        80,
+                        95,
+                        65,
+                        context));
+            }
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
+                if (state != null && state.equals("2")) {
+                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            80,
+                            95,
+                            65,
+                            context));
+                } else {
+                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            80,
+                            95,
+                            65,
+                            context));
+                }
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_off);
+                CommonUtilities.handleBackgroundPostActionOne(
+                        "OFF",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.offCover,
+                        views,
+                        context
                 );
             }
 
@@ -623,21 +623,21 @@ public class NewAppWidget extends AppWidgetProvider {
 
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                                "DIM25",
-                                transparent,
-                                renderedButtonsCount,
-                                isLastButton,
-                                R.id.dimmer25Cover,
-                                views,
-                                context
-                            );
+                        "DIM25",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.dimmer25Cover,
+                        views,
+                        context
+                );
                 views.setImageViewBitmap(R.id.dimmer25, CommonUtilities.buildTelldusIcon(
-                    "dim25",
-                    colorIdle,
-                    80,
-                    35,
-                    65,
-                    context));
+                        "dim25",
+                        colorIdle,
+                        80,
+                        35,
+                        65,
+                        context));
                 views.setTextColor(R.id.txtDimmer25, colorIdle);
                 views.setTextViewTextSize(R.id.txtDimmer25, COMPLEX_UNIT_SP, fontSizeSix);
 
@@ -645,23 +645,23 @@ public class NewAppWidget extends AppWidgetProvider {
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
                     int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                            "DIM25",
-                                            transparent,
-                                            renderedButtonsCount,
-                                            isLastButton,
-                                            R.id.flash_view_dim25,
-                                            R.id.flashing_indicator_dim25,
-                                            R.id.dimmer25Cover,
-                                            views,
-                                            context
-                                        );
+                            "DIM25",
+                            transparent,
+                            renderedButtonsCount,
+                            isLastButton,
+                            R.id.flash_view_dim25,
+                            R.id.flashing_indicator_dim25,
+                            R.id.dimmer25Cover,
+                            views,
+                            context
+                    );
                     views.setImageViewBitmap(R.id.dimmer25, CommonUtilities.buildTelldusIcon(
-                        "dim25",
-                        colorOnAction,
-                        80,
-                        35,
-                        65,
-                        context));
+                            "dim25",
+                            colorOnAction,
+                            80,
+                            35,
+                            65,
+                            context));
                     views.setTextColor(R.id.txtDimmer25, colorOnAction);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
@@ -676,32 +676,32 @@ public class NewAppWidget extends AppWidgetProvider {
                             views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
                             views.setImageViewBitmap(R.id.iconCheck25, CommonUtilities.buildTelldusIcon(
-                                "statuscheck",
-                                ContextCompat.getColor(context, R.color.widgetGreen),
-                                80,
-                                95,
-                                65,
-                                context));
+                                    "statuscheck",
+                                    ContextCompat.getColor(context, R.color.widgetGreen),
+                                    80,
+                                    95,
+                                    65,
+                                    context));
                         } else {
                             views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
                             views.setImageViewBitmap(R.id.iconCheck25, CommonUtilities.buildTelldusIcon(
-                                "statusx",
-                                ContextCompat.getColor(context, R.color.widgetRed),
-                                80,
-                                95,
-                                65,
-                                context));
+                                    "statusx",
+                                    ContextCompat.getColor(context, R.color.widgetRed),
+                                    80,
+                                    95,
+                                    65,
+                                    context));
                         }
                         CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim25);
                         CommonUtilities.handleBackgroundPostActionOne(
-                            "DIM25",
-                            transparent,
-                            renderedButtonsCount,
-                            isLastButton,
-                            R.id.dimmer25Cover,
-                            views,
-                            context
+                                "DIM25",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.dimmer25Cover,
+                                views,
+                                context
                         );
                     }
                 }
@@ -714,21 +714,21 @@ public class NewAppWidget extends AppWidgetProvider {
 
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                                    "DIM50",
-                                    transparent,
-                                    renderedButtonsCount,
-                                    isLastButton,
-                                    R.id.dimmer50Cover,
-                                    views,
-                                    context
-                                );
+                        "DIM50",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.dimmer50Cover,
+                        views,
+                        context
+                );
                 views.setImageViewBitmap(R.id.dimmer50, CommonUtilities.buildTelldusIcon(
-                    "dim",
-                    colorIdle,
-                    80,
-                    35,
-                    65,
-                    context));
+                        "dim",
+                        colorIdle,
+                        80,
+                        35,
+                        65,
+                        context));
                 views.setTextColor(R.id.txtDimmer50, colorIdle);
                 views.setTextViewTextSize(R.id.txtDimmer50, COMPLEX_UNIT_SP, fontSizeSix);
 
@@ -736,23 +736,23 @@ public class NewAppWidget extends AppWidgetProvider {
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
                     int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                            "DIM50",
-                                            transparent,
-                                            renderedButtonsCount,
-                                            isLastButton,
-                                            R.id.flash_view_dim50,
-                                            R.id.flashing_indicator_dim50,
-                                            R.id.dimmer50Cover,
-                                            views,
-                                            context
-                                        );
+                            "DIM50",
+                            transparent,
+                            renderedButtonsCount,
+                            isLastButton,
+                            R.id.flash_view_dim50,
+                            R.id.flashing_indicator_dim50,
+                            R.id.dimmer50Cover,
+                            views,
+                            context
+                    );
                     views.setImageViewBitmap(R.id.dimmer50, CommonUtilities.buildTelldusIcon(
-                        "dim",
-                        colorOnAction,
-                        80,
-                        35,
-                        65,
-                        context));
+                            "dim",
+                            colorOnAction,
+                            80,
+                            35,
+                            65,
+                            context));
                     views.setTextColor(R.id.txtDimmer50, colorOnAction);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
@@ -766,32 +766,32 @@ public class NewAppWidget extends AppWidgetProvider {
                             views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
                             views.setImageViewBitmap(R.id.iconCheck50, CommonUtilities.buildTelldusIcon(
-                                "statuscheck",
-                                ContextCompat.getColor(context, R.color.widgetGreen),
-                                80,
-                                95,
-                                65,
-                                context));
+                                    "statuscheck",
+                                    ContextCompat.getColor(context, R.color.widgetGreen),
+                                    80,
+                                    95,
+                                    65,
+                                    context));
                         } else {
                             views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
                             views.setImageViewBitmap(R.id.iconCheck50, CommonUtilities.buildTelldusIcon(
-                                "statusx",
-                                ContextCompat.getColor(context, R.color.widgetRed),
-                                80,
-                                95,
-                                65,
-                                context));
+                                    "statusx",
+                                    ContextCompat.getColor(context, R.color.widgetRed),
+                                    80,
+                                    95,
+                                    65,
+                                    context));
                         }
                         CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim50);
                         CommonUtilities.handleBackgroundPostActionOne(
-                            "DIM50",
-                            transparent,
-                            renderedButtonsCount,
-                            isLastButton,
-                            R.id.dimmer50Cover,
-                            views,
-                            context
+                                "DIM50",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.dimmer50Cover,
+                                views,
+                                context
                         );
                     }
                 }
@@ -804,21 +804,21 @@ public class NewAppWidget extends AppWidgetProvider {
 
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                                    "DIM75",
-                                    transparent,
-                                    renderedButtonsCount,
-                                    isLastButton,
-                                    R.id.dimmer75Cover,
-                                    views,
-                                    context
-                                );
+                        "DIM75",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.dimmer75Cover,
+                        views,
+                        context
+                );
                 views.setImageViewBitmap(R.id.dimmer75, CommonUtilities.buildTelldusIcon(
-                    "dim75",
-                    colorIdle,
-                    80,
-                    35,
-                    65,
-                    context));
+                        "dim75",
+                        colorIdle,
+                        80,
+                        35,
+                        65,
+                        context));
                 views.setTextColor(R.id.txtDimmer75, colorIdle);
                 views.setTextViewTextSize(R.id.txtDimmer75, COMPLEX_UNIT_SP, fontSizeSix);
 
@@ -826,23 +826,23 @@ public class NewAppWidget extends AppWidgetProvider {
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
                     int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                            "DIM75",
-                                            transparent,
-                                            renderedButtonsCount,
-                                            isLastButton,
-                                            R.id.flash_view_dim75,
-                                            R.id.flashing_indicator_dim75,
-                                            R.id.dimmer75Cover,
-                                            views,
-                                            context
-                                        );
+                            "DIM75",
+                            transparent,
+                            renderedButtonsCount,
+                            isLastButton,
+                            R.id.flash_view_dim75,
+                            R.id.flashing_indicator_dim75,
+                            R.id.dimmer75Cover,
+                            views,
+                            context
+                    );
                     views.setImageViewBitmap(R.id.dimmer75, CommonUtilities.buildTelldusIcon(
-                        "dim75",
-                        colorOnAction,
-                        80,
-                        35,
-                        65,
-                        context));
+                            "dim75",
+                            colorOnAction,
+                            80,
+                            35,
+                            65,
+                            context));
                     views.setTextColor(R.id.txtDimmer75, colorOnAction);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
@@ -856,32 +856,32 @@ public class NewAppWidget extends AppWidgetProvider {
                             views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
                             views.setImageViewBitmap(R.id.iconCheck75, CommonUtilities.buildTelldusIcon(
-                                "statuscheck",
-                                ContextCompat.getColor(context, R.color.widgetGreen),
-                                80,
-                                95,
-                                65,
-                                context));
+                                    "statuscheck",
+                                    ContextCompat.getColor(context, R.color.widgetGreen),
+                                    80,
+                                    95,
+                                    65,
+                                    context));
                         } else {
                             views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
                             views.setImageViewBitmap(R.id.iconCheck75, CommonUtilities.buildTelldusIcon(
-                                "statusx",
-                                ContextCompat.getColor(context, R.color.widgetRed),
-                                80,
-                                95,
-                                65,
-                                context));
+                                    "statusx",
+                                    ContextCompat.getColor(context, R.color.widgetRed),
+                                    80,
+                                    95,
+                                    65,
+                                    context));
                         }
                         CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim75);
                         CommonUtilities.handleBackgroundPostActionOne(
-                            "DIM75",
-                            transparent,
-                            renderedButtonsCount,
-                            isLastButton,
-                            R.id.dimmer75Cover,
-                            views,
-                            context
+                                "DIM75",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.dimmer75Cover,
+                                views,
+                                context
                         );
                     }
                 }
@@ -901,65 +901,6 @@ public class NewAppWidget extends AppWidgetProvider {
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                                "ON",
-                                transparent,
-                                renderedButtonsCount,
-                                isLastButton,
-                                R.id.onCover,
-                                views,
-                                context
-                            );
-            views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
-                onActionIcon,
-                colorIdle,
-                80,
-                95,
-                65,
-                context));
-
-
-            views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
-
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_ON)) {
-                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                        "ON",
-                                        transparent,
-                                        renderedButtonsCount,
-                                        isLastButton,
-                                        R.id.flash_view_on,
-                                        R.id.flashing_indicator_on,
-                                        R.id.onCover,
-                                        views,
-                                        context
-                                    );
-                views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
-                    onActionIcon,
-                    colorOnAction,
-                    80,
-                    95,
-                    65,
-                    context));
-            }
-            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
-                if (state != null && state.equals("1")) {
-                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        80,
-                        95,
-                        65,
-                        context));
-                } else {
-                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        80,
-                        95,
-                        65,
-                        context));
-                }
-                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_on);
-                CommonUtilities.handleBackgroundPostActionOne(
                     "ON",
                     transparent,
                     renderedButtonsCount,
@@ -967,6 +908,65 @@ public class NewAppWidget extends AppWidgetProvider {
                     R.id.onCover,
                     views,
                     context
+            );
+            views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                    onActionIcon,
+                    colorIdle,
+                    80,
+                    95,
+                    65,
+                    context));
+
+
+            views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
+
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_ON)) {
+                int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
+                        "ON",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.flash_view_on,
+                        R.id.flashing_indicator_on,
+                        R.id.onCover,
+                        views,
+                        context
+                );
+                views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                        onActionIcon,
+                        colorOnAction,
+                        80,
+                        95,
+                        65,
+                        context));
+            }
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
+                if (state != null && state.equals("1")) {
+                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            80,
+                            95,
+                            65,
+                            context));
+                } else {
+                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            80,
+                            95,
+                            65,
+                            context));
+                }
+                CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_on);
+                CommonUtilities.handleBackgroundPostActionOne(
+                        "ON",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.onCover,
+                        views,
+                        context
                 );
             }
 
@@ -993,12 +993,12 @@ public class NewAppWidget extends AppWidgetProvider {
             }
 
             views.setImageViewBitmap(R.id.moreActions, CommonUtilities.buildTelldusIcon(
-                "overflow",
-                colorIcon,
-                80,
-                95,
-                65,
-                context));
+                    "overflow",
+                    colorIcon,
+                    80,
+                    95,
+                    65,
+                    context));
 
             views.setOnClickPendingIntent(R.id.moreActionsCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
         }

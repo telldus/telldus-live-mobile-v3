@@ -40,23 +40,23 @@ import com.telldus.live.mobile.R;
 public class SensorsUtilities {
 
     public static String[] WIND_DIR = new String[]{
-        "N",
-        "NNE",
-        "NE",
-        "ENE",
-        "E",
-        "ESE",
-        "SE",
-        "SSE",
-        "S",
-        "SSW",
-        "SW",
-        "WSW",
-        "W",
-        "WNW",
-        "NW",
-        "NNW",
-        "N",
+            "N",
+            "NNE",
+            "NE",
+            "ENE",
+            "E",
+            "ESE",
+            "SE",
+            "SSE",
+            "S",
+            "SSW",
+            "SW",
+            "WSW",
+            "W",
+            "WNW",
+            "NW",
+            "NNW",
+            "N",
     };
 
     public String getConstants(Context context) {
@@ -171,18 +171,18 @@ public class SensorsUtilities {
         }
         if (name.equals("rrate") || name.equals("rtot")) {
             String label = name.equals("rrate") ?
-            context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelRainRate)
-            :
-            context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelRainTotal);
+                    context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelRainRate)
+                    :
+                    context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelRainTotal);
             info.put("label", label);
             info.put("icon", "rain");
             return info;
         }
         if (name.equals("wgust") || name.equals("wavg") || name.equals("wdir")) {
             String label = name.equals("wgust") ?
-            context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWindGust)
-            :
-            context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWindAverage);
+                    context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWindGust)
+                    :
+                    context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWindAverage);
             info.put("icon", "wind");
             if (name.equals("wdir")) {
                 label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWindDirection);
@@ -202,8 +202,8 @@ public class SensorsUtilities {
             String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_energy);
             if (scale.equals("0")) {
                 label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_Accumulated)
-                +" "+
-                context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWatt);
+                        +" "+
+                        context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWatt);
             }
             if (scale.equals("2")) {
                 label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWatt);

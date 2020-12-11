@@ -48,6 +48,7 @@ import * as GeoFence from './GeoFence';
 import * as Firebase from './Firebase';
 import * as Auth from './Auth';
 import * as ThirdParties from './ThirdParties';
+import * as WebsocketExtras from './WebsocketExtras';
 
 module.exports = {
 	...GatewayActions,
@@ -76,4 +77,5 @@ module.exports = {
 	...Firebase,
 	...Auth,
 	...ThirdParties,
+	...WebsocketExtras,
 };

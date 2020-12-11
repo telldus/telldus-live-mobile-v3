@@ -31,6 +31,8 @@ import shouldUpdate from './shouldUpdate';
 const navigationRef = React.createRef<any>();
 const isReadyRef = React.createRef<any>();
 
+const navigationRefPrelogin = React.createRef<any>();
+const isReadyRefPrelogin = React.createRef<any>();
 /**
  *
  * Use this method inside any component that does not have the 'navigation' property, where you want to navigate to any registered
@@ -39,6 +41,12 @@ const isReadyRef = React.createRef<any>();
 function navigate(...args: any) {
 	if (isReadyRef.current && navigationRef.current && navigationRef.current.navigate) {
 		navigationRef.current.navigate(...args);
+	}
+}
+
+function navigatePrelogin(...args: any) {
+	if (isReadyRefPrelogin.current && navigationRefPrelogin.current && navigationRefPrelogin.current.navigate) {
+		navigationRefPrelogin.current.navigate(...args);
 	}
 }
 
@@ -209,4 +217,7 @@ module.exports = {
 	shouldNavigatorUpdate,
 	prepareVisibleTabs,
 	getCurrentRouteName,
+	navigatePrelogin,
+	isReadyRefPrelogin,
+	navigationRefPrelogin,
 };

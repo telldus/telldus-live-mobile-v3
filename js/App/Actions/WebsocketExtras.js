@@ -15,34 +15,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-package com.telldus.live.mobile;
+// @flow
 
-import com.facebook.react.ReactPackage;
-import com.facebook.react.bridge.NativeModule;
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.uimanager.ViewManager;
+'use strict';
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+// User actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { WebsocketExtras } = actions;
 
-public class WidgetPackage implements ReactPackage {
-
-  @Override
-  public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-    return Collections.emptyList();
-  }
-
-  @Override
-  public List<NativeModule> createNativeModules(
-          ReactApplicationContext reactContext) {
-    List<NativeModule> modules = new ArrayList<>();
-
-    modules.add(new WidgetModule(reactContext));
-
-    return modules;
-  }
-
-}
+module.exports = WebsocketExtras;

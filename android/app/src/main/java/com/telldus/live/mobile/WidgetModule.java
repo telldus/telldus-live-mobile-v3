@@ -288,7 +288,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
               wUpdater.updateUIWidgetDevice3By1(widgetId, context, new HashMap());
             }
             if (widgetType.equals(widgetDeviceRGB)) {
-                wUpdater.updateUIWidgetDeviceRGB(widgetId, context, new HashMap());
+              wUpdater.updateUIWidgetDeviceRGB(widgetId, context, new HashMap());
             }
             if (widgetType.equals(widgetDeviceThermo)) {
               wUpdater.updateUIWidgetDeviceThermo(widgetId, context, new HashMap());
@@ -420,7 +420,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   @ReactMethod(isBlockingSynchronousMethod = true)
   public Float getTextFontSizeFactor() {
     prefManager = new PrefManager(getReactApplicationContext());
-  
+
     return prefManager.getTextFontSizeFactor();
   }
 

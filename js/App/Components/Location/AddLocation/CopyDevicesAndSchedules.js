@@ -90,11 +90,12 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 		}
 	}, []);
 
-	useEffect((): Function => { // TODO: Translate
-		onDidMount('Copy Devices And Schedules', 'Select gateway');
+	useEffect((): Function => {
+		onDidMount(formatMessage(i18n.copyDAndS), formatMessage(i18n.selectGateway));
 		return () => {
 			clearAll();
 		};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [onDidMount, clearAll]);
 
 	const [ copyConfig, setCopyConfig ] = useState({
@@ -175,7 +176,7 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 				...copyConfig,
 				isCopying: false,
 				failedCopying: true,
-				errorMessage: 'Something went wrong while copying devices and schedules', // TODO: Translate
+				errorMessage: formatMessage(i18n.errorCopyDAndS),
 			});
 			return;
 		}
@@ -287,11 +288,10 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 						<Text
 							level={15}
 							style={progressText}>
-							{/* TODO: Translate */}
 							{progress === 100 ?
-								'Completed copying devices and schedules'
+								formatMessage(i18n.successCopyDAndS)
 								:
-								`Copying... (${progress}% ${formatMessage(i18n.done).toLowerCase()})`
+								`${formatMessage(i18n.copying)}... (${progress}% ${formatMessage(i18n.done).toLowerCase()})`
 							}
 						</Text>
 						<ProgressBarLinear
@@ -315,9 +315,8 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 					textStyle={infoTextStyle}/>
 			)
 			}
-			{/* TODO: Translate */}
 			<TouchableButton
-				text={isCopying ? 'COPYING...' : 'COPY'}
+				text={isCopying ? formatMessage(i18n.copying) : formatMessage(i18n.copy)}
 				onPress={onPressCopy}
 				disabled={isCopying}
 				showThrobber={isCopying}

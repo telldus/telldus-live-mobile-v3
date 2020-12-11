@@ -17,7 +17,7 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- package com.telldus.live.mobile;
+package com.telldus.live.mobile;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -75,10 +75,10 @@ public class NewThermostatWidget extends AppWidgetProvider {
     public static final String ACTION_AUTO_UPDATE = "com.telldus.live.mobile.AUTO_UPDATE";
 
     static void updateAppWidget(
-        Context context,
-        AppWidgetManager appWidgetManager,
-        int appWidgetId,
-        Map extraArgs
+            Context context,
+            AppWidgetManager appWidgetManager,
+            int appWidgetId,
+            Map extraArgs
     ) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
@@ -222,11 +222,11 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
             views.setImageViewBitmap(R.id.heaticon, CommonUtilities.buildTelldusIcon(
                     icon,
-                colorIdle,
-                iconWidth,
+                    colorIdle,
+                    iconWidth,
                     (int) (iconWidth * 0.8),
                     (int) (iconWidth * 0.8),
-                context));
+                    context));
 
             Boolean hasSecStateVal = secondaryStateValue != null && !secondaryStateValue.trim().isEmpty();
             Boolean hasStateVal = deviceStateValue != null && !deviceStateValue.trim().isEmpty();
@@ -282,12 +282,12 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
                 int iconInfoWidth = (int) (iconWidth / 2);
                 views.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
-                    "info",
-                colorIdle,
+                        "info",
+                        colorIdle,
                         iconInfoWidth,
-                    (int) (iconInfoWidth * 0.8),
-                    (int) (iconInfoWidth * 0.8),
-                context));
+                        (int) (iconInfoWidth * 0.8),
+                        (int) (iconInfoWidth * 0.8),
+                        context));
             } else {
                 views.setViewVisibility(R.id.heaticon, View.VISIBLE);
 
@@ -444,11 +444,11 @@ public class NewThermostatWidget extends AppWidgetProvider {
                 sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewThermostatWidget.class);
             }
 
-           WidgetModule.setOpenThermostatControl(deviceId);
-           Intent launchActivity = new Intent(context, MainActivity.class);
-           launchActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-           launchActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-           context.startActivity(launchActivity);
+            WidgetModule.setOpenThermostatControl(deviceId);
+            Intent launchActivity = new Intent(context, MainActivity.class);
+            launchActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(launchActivity);
         }
         if (intent.getAction().equals(ACTION_AUTO_UPDATE)) {
             int updateInterval = widgetInfo.getUpdateInterval();
@@ -498,112 +498,112 @@ public class NewThermostatWidget extends AppWidgetProvider {
         sensorsAPI.getSensorsList(params, context, "SensorsApi", new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
-                    DevicesAPI devicessAPI = new DevicesAPI();
-                    devicessAPI.getDeviceInfoGeneral(deviceId, context, new OnAPITaskComplete() {
+                DevicesAPI devicessAPI = new DevicesAPI();
+                devicessAPI.getDeviceInfoGeneral(deviceId, context, new OnAPITaskComplete() {
 
-                        @Override
-                        public void onSuccess(JSONObject result, HashMap<String, String> _authData) {
-                            try {
+                    @Override
+                    public void onSuccess(JSONObject result, HashMap<String, String> _authData) {
+                        try {
 
-                                String state2 = state, stateValue2 = stateValue, secStateValue2 = secStateValue;
+                            String state2 = state, stateValue2 = stateValue, secStateValue2 = secStateValue;
 
-                                JSONObject sensorData = new JSONObject(response.toString());
-                                JSONArray JsonsensorList = sensorData.getJSONArray("sensor");
+                            JSONObject sensorData = new JSONObject(response.toString());
+                            JSONArray JsonsensorList = sensorData.getJSONArray("sensor");
 
-                                DevicesUtilities deviceUtils = new DevicesUtilities();
-                                ArrayList<Map> modes = deviceUtils.getKnownModesThermostat(context);
+                            DevicesUtilities deviceUtils = new DevicesUtilities();
+                            ArrayList<Map> modes = deviceUtils.getKnownModesThermostat(context);
 
-                                if (JsonsensorList != null) {
+                            if (JsonsensorList != null) {
 
-                                    try {
-                                        JSONArray stateValues = result.getJSONArray("statevalues");
-                                        if (stateValues != null) {
-                                            for (int ii = 0; ii < stateValues.length(); ii++) {
-                                                try {
-                                                    JSONObject stateValuesObj = stateValues.getJSONObject(ii);
-                                                    String stateC = stateValuesObj.getString("state");
+                                try {
+                                    JSONArray stateValues = result.getJSONArray("statevalues");
+                                    if (stateValues != null) {
+                                        for (int ii = 0; ii < stateValues.length(); ii++) {
+                                            try {
+                                                JSONObject stateValuesObj = stateValues.getJSONObject(ii);
+                                                String stateC = stateValuesObj.getString("state");
 
-                                                    if (stateC.equalsIgnoreCase("2048")) {
-                                                        JSONObject valuesObj = stateValuesObj.getJSONObject("value");
-                                                        JSONObject setpointObj = valuesObj.getJSONObject("setpoint");
-                                                        String mode = valuesObj.getString("mode");
+                                                if (stateC.equalsIgnoreCase("2048")) {
+                                                    JSONObject valuesObj = stateValuesObj.getJSONObject("value");
+                                                    JSONObject setpointObj = valuesObj.getJSONObject("setpoint");
+                                                    String mode = valuesObj.getString("mode");
 
-                                                        for (int j = 0; j < modes.size(); j++) {
-                                                            Map m = modes.get(j);
-                                                            if (setpointObj != null && setpointObj.length() == 1 && mode == null) {
-                                                                Iterator<String> setpointKeys = setpointObj.keys();
-                                                                String setpointKey = setpointKeys.next();
-                                                                if (setpointKey.equalsIgnoreCase(m.get("mode").toString())) {
-                                                                    state2 = m.get("id").toString();
-                                                                    secStateValue2 = setpointObj.optString(setpointKey);
-                                                                }
-                                                            } else {
-                                                                if (mode.equalsIgnoreCase(m.get("mode").toString())) {
-                                                                    state2 = m.get("id").toString();
-                                                                    secStateValue2 = setpointObj.optString(stateValuesObj.getJSONObject("value").getString("mode"));
-                                                                }
+                                                    for (int j = 0; j < modes.size(); j++) {
+                                                        Map m = modes.get(j);
+                                                        if (setpointObj != null && setpointObj.length() == 1 && mode == null) {
+                                                            Iterator<String> setpointKeys = setpointObj.keys();
+                                                            String setpointKey = setpointKeys.next();
+                                                            if (setpointKey.equalsIgnoreCase(m.get("mode").toString())) {
+                                                                state2 = m.get("id").toString();
+                                                                secStateValue2 = setpointObj.optString(setpointKey);
+                                                            }
+                                                        } else {
+                                                            if (mode.equalsIgnoreCase(m.get("mode").toString())) {
+                                                                state2 = m.get("id").toString();
+                                                                secStateValue2 = setpointObj.optString(stateValuesObj.getJSONObject("value").getString("mode"));
                                                             }
                                                         }
                                                     }
-                                                } catch (Exception e) {
-
                                                 }
+                                            } catch (Exception e) {
+
                                             }
                                         }
-                                    } catch(Exception e) {
-
                                     }
+                                } catch(Exception e) {
 
-                                    for (int ii = 0; ii < JsonsensorList.length(); ii++) {
-                                        try {
-                                            JSONObject currObject = JsonsensorList.getJSONObject(ii);
-                                            Integer sensorId = currObject.getInt("sensorId");
-                                            if (clientDeviceId == sensorId && clientId == currObject.getInt("client")) {
-                                                JSONArray SensorData = currObject.getJSONArray("data");
-                                                for (int j = 0; j < SensorData.length(); j++) {
-                                                    JSONObject currData = SensorData.getJSONObject(j);
-
-                                                    String nameScale = currData.optString("name");
-                                                    Integer scale = currData.optInt("scale");
-                                                    String value = currData.optString("value");
-
-                                                    if (nameScale.equalsIgnoreCase("temp") && scale == 0) {
-                                                        stateValue2 = value;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        catch (Exception e) {
-                                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId, null, null);
-                                            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                            updateAppWidget(context, widgetManager, widgetId, new HashMap());
-                                        }
-                                    }
-
-                                    db.updateDeviceInfo(methReq, state2, stateValue2, 0, secStateValue2, widgetId, null, null);
-                                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                    updateAppWidget(context, widgetManager, widgetId, new HashMap());
-                                } else {
-                                    db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId, null, null);
-                                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                    updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 }
-                            } catch (JSONException e) {
-                                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId, null, null);
+
+                                for (int ii = 0; ii < JsonsensorList.length(); ii++) {
+                                    try {
+                                        JSONObject currObject = JsonsensorList.getJSONObject(ii);
+                                        Integer sensorId = currObject.getInt("sensorId");
+                                        if (clientDeviceId == sensorId && clientId == currObject.getInt("client")) {
+                                            JSONArray SensorData = currObject.getJSONArray("data");
+                                            for (int j = 0; j < SensorData.length(); j++) {
+                                                JSONObject currData = SensorData.getJSONObject(j);
+
+                                                String nameScale = currData.optString("name");
+                                                Integer scale = currData.optInt("scale");
+                                                String value = currData.optString("value");
+
+                                                if (nameScale.equalsIgnoreCase("temp") && scale == 0) {
+                                                    stateValue2 = value;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch (Exception e) {
+                                        db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId, null, null);
+                                        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                        updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                                    }
+                                }
+
+                                db.updateDeviceInfo(methReq, state2, stateValue2, 0, secStateValue2, widgetId, null, null);
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                 updateAppWidget(context, widgetManager, widgetId, new HashMap());
-
-                                e.printStackTrace();
+                            } else {
+                                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId, null, null);
+                                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                updateAppWidget(context, widgetManager, widgetId, new HashMap());
                             }
-                        }
-
-                        @Override
-                        public void onError(ANError result) {
+                        } catch (JSONException e) {
                             db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId, null, null);
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                             updateAppWidget(context, widgetManager, widgetId, new HashMap());
+
+                            e.printStackTrace();
                         }
-                    });
+                    }
+
+                    @Override
+                    public void onError(ANError result) {
+                        db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId, null, null);
+                        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                        updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    }
+                });
             }
             @Override
             public void onError(ANError error) {
