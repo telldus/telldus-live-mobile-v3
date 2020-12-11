@@ -116,6 +116,7 @@ type Props = {
 	addNewGatewayBool: boolean,
 
 	showChangeLog: boolean,
+	changeLogVersion: string,
 
 	screen: string,
 
@@ -242,7 +243,16 @@ actionsToPerformOnStart = async () => {
 		showLoadingIndicator,
 		enableGeoFence,
 		intl,
+		showChangeLog,
+		changeLogVersion,
 	} = this.props;
+
+	if (showChangeLog) {
+		navigate('ChangeLogScreen', {
+			forceShowChangeLog: false,
+			changeLogVersion,
+		});
+	}
 
 	try {
 		// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.

@@ -24,7 +24,10 @@ import React from 'react';
 import {
 	Platform,
 } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+	createStackNavigator,
+	CardStyleInterpolators,
+} from '@react-navigation/stack';
 import Orientation from 'react-native-orientation-locker';
 import { NavigationContainer } from '@react-navigation/native';
 import {
@@ -33,6 +36,7 @@ import {
 
 import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from './PreLoginScreens';
 import { FormContainerComponent } from './PreLoginScreens/SubViews';
+import ChangeLogScreen from './ChangeLog/ChangeLog';
 
 import {
 	screenChange,
@@ -70,6 +74,14 @@ const ScreenConfigs = [
 		Component: WelcomeScreen,
 		ContainerComponent: FormContainerComponent,
 	},
+	{
+		name: 'ChangeLogScreen',
+		Component: ChangeLogScreen,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+		},
+	},
 ];
 
 const NavigatorConfigs = {
@@ -81,10 +93,11 @@ const Stack = createStackNavigator();
 
 type Props = {
 	screenProps: Object,
+	changeLogVersion: string,
+	showChangeLog: boolean,
 };
 
-const PreLoginNavigator = React.memo<Object>((props: Props): Object => {
-
+const PreLoginNavigator = React.memo<Object>((props: Props = {}): Object => {
 	const dispatch = useDispatch();
 
 	React.useEffect((): Function => {
@@ -104,10 +117,17 @@ const PreLoginNavigator = React.memo<Object>((props: Props): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const {
+		showChangeLog,
+		changeLogVersion,
+	} = props.screenProps;
 	const Navigator = React.useMemo((): Object => {
 		return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
-		// NOTE: No 'props' passed to PreLoginNavigator from App is dynamically changed.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		showChangeLog,
+		changeLogVersion,
+	]);
 
 	const onReady = React.useCallback(() => {
 		isReadyRefPrelogin.current = true;
@@ -122,6 +142,9 @@ const PreLoginNavigator = React.memo<Object>((props: Props): Object => {
 			{Navigator}
 		</NavigationContainer>
 	);
-}, shouldNavigatorUpdate);
+}, (prevProps: Object, nextProps: Object): boolean => shouldNavigatorUpdate(prevProps, nextProps, [
+	'showChangeLog',
+	'changeLogVersion',
+]));
 
 module.exports = PreLoginNavigator;

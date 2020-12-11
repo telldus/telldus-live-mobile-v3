@@ -47,6 +47,8 @@ type Props = PropsThemedComponent & {
 	route: Object,
 	screen: string,
 	ScreenName: string,
+	showChangeLog: string,
+	changeLogVersion: boolean,
 };
 
 class FormContainerComponent extends View<Props, null> {
@@ -60,8 +62,21 @@ class FormContainerComponent extends View<Props, null> {
 		this.isTablet = DeviceInfo.isTablet();
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.ScreenName === nextProps.screen;
+	componentDidMount() {
+		const {
+			screenProps,
+			navigation,
+		} = this.props;
+		const {
+			showChangeLog,
+			changeLogVersion,
+		} = screenProps;
+		if (showChangeLog) {
+			navigation.navigate('ChangeLogScreen', {
+				forceShowChangeLog: false,
+				changeLogVersion: changeLogVersion,
+			});
+		}
 	}
 
 	render(): Object {

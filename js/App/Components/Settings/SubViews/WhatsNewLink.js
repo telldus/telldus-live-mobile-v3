@@ -24,7 +24,8 @@
 
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import {
 	Text,
@@ -32,23 +33,23 @@ import {
 
 import i18n from '../../../Translations/common';
 
-import { showChangeLog } from '../../../Actions/User';
 import Theme from '../../../Theme';
 
 const WhatsNewLink = (props: Object): Object => {
 	const { formatMessage } = useIntl();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const navigation = useNavigation();
 
 	const {
 		buttonResubmit,
 	} = getStyles(layout);
 
-	const dispatch = useDispatch();
 	const onPressWhatsNew = React.useCallback(() => {
-		dispatch(showChangeLog());
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+		navigation.navigate('ChangeLogScreen', {
+			forceShowChangeLog: true,
+		});
+	}, [navigation]);
 
 	return (
 		<Text
