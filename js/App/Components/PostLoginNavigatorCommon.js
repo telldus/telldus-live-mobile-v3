@@ -116,6 +116,7 @@ type Props = {
 	addNewGatewayBool: boolean,
 
 	showChangeLog: boolean,
+	changeLogVersion: string,
 
 	screen: string,
 
@@ -242,7 +243,16 @@ actionsToPerformOnStart = async () => {
 		showLoadingIndicator,
 		enableGeoFence,
 		intl,
+		showChangeLog,
+		changeLogVersion,
 	} = this.props;
+
+	if (showChangeLog) {
+		navigate('ChangeLogScreen', {
+			forceShowChangeLog: false,
+			changeLogVersion,
+		});
+	}
 
 	try {
 		// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
@@ -572,8 +582,11 @@ componentWillUnmount() {
 }
 
 doesAllowsToOverrideScreen = (extraScreens?: Object = []): boolean => {
-	const { screen } = this.props;
-	return this.screensAllowsNavigationOrModalOverride.concat(extraScreens).indexOf(screen) !== -1;
+	const {
+		screen,
+		showChangeLog,
+	} = this.props;
+	return !showChangeLog && this.screensAllowsNavigationOrModalOverride.concat(extraScreens).indexOf(screen) !== -1;
 }
 
 addNewLocation = () => {
@@ -736,7 +749,6 @@ render(): Object {
 		dimmer,
 		intl,
 		screenReaderEnabled,
-		showChangeLog,
 		showLoadingIndicator,
 		onLayout,
 		gateways,
@@ -747,10 +759,9 @@ render(): Object {
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-	const showEulaModal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen(visibilityEula ? ['ProfileTab'] : []);
-	const showUA = showEulaModal && !showChangeLog;
+	const showEulaModal = showEULA && !isDrawerOpen && this.doesAllowsToOverrideScreen(visibilityEula ? ['ProfileTab'] : []);
 
-	const showLoadingIndicatorFinal = showLoadingIndicator && !showUA && !showSwitchAccountAS;
+	const showLoadingIndicatorFinal = showLoadingIndicator && !showEulaModal && !showSwitchAccountAS;
 
 	return (
 		<View style={{flex: 1}}>
@@ -774,7 +785,7 @@ render(): Object {
 			/>
 			{screenReaderEnabled && (
 				<DimmerStep
-					showModal={showStep && !showUA}
+					showModal={showStep && !showEulaModal}
 					deviceId={deviceStep}
 					onDoneDimming={this.onDoneDimming}
 					intl={intl}
@@ -784,7 +795,7 @@ render(): Object {
 				ref={this.setRefSwitchAccountActionSheet}/>
 			<TransparentFullPageLoadingIndicator
 				isVisible={showLoadingIndicatorFinal}/>
-			<UserAgreement showModal={showUA} onLayout={onLayout}/>
+			<UserAgreement showModal={showEulaModal} onLayout={onLayout}/>
 		</View>
 	);
 }

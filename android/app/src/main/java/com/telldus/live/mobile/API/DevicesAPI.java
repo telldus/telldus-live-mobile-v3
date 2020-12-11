@@ -65,7 +65,6 @@ public class DevicesAPI {
             public void onSuccess(final JSONObject response) {
                 try {
                     String status = response.optString("status");
-                    String error = response.optString("error");
                     if (!status.isEmpty() && status != null && status.equalsIgnoreCase("success")) {
                         if (method.intValue() != 32) {
                             removeHandlerRunnablePair(deviceId, widgetId);
@@ -96,22 +95,18 @@ public class DevicesAPI {
                             handlerRunnableHashMap.put("HandlerRunnablePair", handlerRunnablePair);
                             deviceInfoPendingCheckList.put(key, handlerRunnableHashMap);
                         }
-                    }
-                    if (!error.isEmpty() && error != null) {
-                        MyDBHandler db = new MyDBHandler(context);
+                    } else {
                         Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                         callBack.onSuccess(response);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    MyDBHandler db = new MyDBHandler(context);
                     Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                     callBack.onSuccess(response);
                 };
             }
             @Override
             public void onError(ANError error) {
-                MyDBHandler db = new MyDBHandler(context);
                 Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                 callBack.onError(error);
             }
@@ -133,7 +128,6 @@ public class DevicesAPI {
 
                 try {
                     String status = response.optString("status");
-                    String error = response.optString("error");
                     if (!status.isEmpty() && status != null && status.equalsIgnoreCase("success")) {
                         if (method.intValue() != 32) {
                             removeHandlerRunnablePair(deviceId, widgetId);
@@ -162,22 +156,18 @@ public class DevicesAPI {
                             handlerRunnableHashMap.put("HandlerRunnablePair", handlerRunnablePair);
                             deviceInfoPendingCheckList.put(key, handlerRunnableHashMap);
                         }
-                    }
-                    if (!error.isEmpty() && error != null) {
-                        MyDBHandler db = new MyDBHandler(context);
+                    } else {
                         Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                         callBack.onSuccess(response);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    MyDBHandler db = new MyDBHandler(context);
                     Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                     callBack.onSuccess(response);
                 };
             }
             @Override
             public void onError(ANError error) {
-                MyDBHandler db = new MyDBHandler(context);
                 Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                 callBack.onError(error);
             }

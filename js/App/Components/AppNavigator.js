@@ -46,6 +46,7 @@ import ThermostatControl from './ThermostatControl/ThermostatFullControl';
 import ProfileNavigator from './Profile/ProfileNavigator';
 import AddSensorNavigator from './Sensor/AddSensor/AddSensorNavigator';
 import GeoFenceNavigator from './GeoFence/GeoFenceNavigator';
+import ChangeLogScreen from './ChangeLog/ChangeLog';
 
 import SettingsContainer from './Settings/SettingsContainer';
 import PushSettings from './PushSettings/PushSettings';
@@ -483,6 +484,13 @@ const ScreenConfigs = [
 		options: {
 			headerShown: false,
 			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+		},
+	},
+	{
+		name: 'ChangeLogScreen',
+		Component: ChangeLogScreen,
+		options: {
+			headerShown: false,
 		},
 	},
 ];

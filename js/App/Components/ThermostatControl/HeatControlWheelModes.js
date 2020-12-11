@@ -73,9 +73,9 @@ type State = {
 	startAngle: number,
 	currentValue: number,
 	controllingMode: string,
-	baseColor: string,
-	gradientColorFrom: string,
-	gradientColorTo: string,
+	baseColor?: string,
+	gradientColorFrom?: string,
+	gradientColorTo?: string,
 	title: string,
 	maxVal: number,
 	minVal: number,
@@ -114,13 +114,13 @@ const getModeAttributes = (cMode: Object, {
 	key,
 }: Object): Object => {
 	const {
-		colors,
+		colors = {},
 		label,
 		minVal,
 		maxVal,
 	} = cMode;
-	const gradientColorFrom = dark ? colors[key].startColorD : colors[key].startColor;
-	const gradientColorTo = dark ? colors[key].endColorD : colors[key].endColor;
+	const gradientColorFrom = colors[key] ? dark ? colors[key].startColorD : colors[key].startColor : undefined;
+	const gradientColorTo = colors[key] ? dark ? colors[key].endColorD : colors[key].endColor : undefined;
 	return {
 		baseColor: gradientColorTo,
 		gradientColorFrom,
@@ -281,6 +281,10 @@ constructor(props: Props) {
 		}
 	});
 
+	const {
+		colors = {},
+	} = cModeInfo || {};
+
 	const currentValue = cModeInfo.value;
 	const minVal = cModeInfo.minVal;
 	const maxVal = cModeInfo.maxVal;
@@ -289,8 +293,8 @@ constructor(props: Props) {
 		initialAngleLength = getAngleLengthToInitiate(cModeInfo.mode, currentValue, this.props.modes);
 	}
 
-	const gradientColorFrom = dark ? cModeInfo.colors[key].startColorD : cModeInfo.colors[key].startColor;
-	const gradientColorTo = dark ? cModeInfo.colors[key].endColorD : cModeInfo.colors[key].endColor;
+	const gradientColorFrom = colors[key] ? dark ? colors[key].startColorD : colors[key].startColor : undefined;
+	const gradientColorTo = colors[key] ? dark ? colors[key].endColorD : colors[key].endColor : undefined;
 
 	this.state = {
 		startAngle: this.initialAngle,
@@ -409,8 +413,8 @@ onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
 	}
 	const initialAngleLength = getAngleLengthToInitiate(mode, value, modes);
 
-	const gradientColorFrom = dark ? colors[key].startColorD : colors[key].startColor;
-	const gradientColorTo = dark ? colors[key].endColorD : colors[key].endColor;
+	const gradientColorFrom = colors[key] ? dark ? colors[key].startColorD : colors[key].startColor : undefined;
+	const gradientColorTo = colors[key] ? dark ? colors[key].endColorD : colors[key].endColor : undefined;
 
 	this.setState({
 		controllingMode,

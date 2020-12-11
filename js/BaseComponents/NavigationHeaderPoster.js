@@ -65,6 +65,8 @@ type Props = {
 	rightButton?: Object,
 	extraData?: Object,
 	onPressLogo?: Function,
+	topMargin?: boolean,
+	forceHideStatus?: boolean,
 };
 
 type DefaultProps = {
@@ -120,6 +122,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showPoster',
 		'extraData',
 		'scrollableH1',
+		'topMargin',
+		'forceHideStatus',
 	]);
 }
 
@@ -154,6 +158,8 @@ render(): Object {
 		rightButton,
 		onPressLogo,
 		scrollableH1,
+		topMargin,
+		forceHideStatus,
 	} = this.props;
 
 	return (
@@ -164,7 +170,9 @@ render(): Object {
 				leftIcon={leftIcon}
 				goBack={goBack}
 				rightButton={rightButton}
-				onPressLogo={onPressLogo}/>
+				onPressLogo={onPressLogo}
+				topMargin={topMargin}
+				forceHideStatus={forceHideStatus}/>
 			{showPoster && (
 				<TouchableOpacity
 					onPress={onPressPoster}
