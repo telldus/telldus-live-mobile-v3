@@ -41,7 +41,8 @@ import {
 	prepareNavigator,
 	shouldNavigatorUpdate,
 	getCurrentRouteName,
-	navigationRef,
+	navigationRefPrelogin,
+	isReadyRefPrelogin,
 } from '../Lib/NavigationService';
 
 import {
@@ -107,13 +108,17 @@ const PreLoginNavigator = React.memo<Object>((props: Props): Object => {
 		return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 		// NOTE: No 'props' passed to PreLoginNavigator from App is dynamically changed.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
+
+	const onReady = React.useCallback(() => {
+		isReadyRefPrelogin.current = true;
 	}, []);
 
 	return (
 		<NavigationContainer
-			ref={navigationRef}
+			ref={navigationRefPrelogin}
 			onStateChange={onNavigationStateChange}
-			theme={theme}>
+			theme={theme}
+			onReady={onReady}>
 			{Navigator}
 		</NavigationContainer>
 	);
