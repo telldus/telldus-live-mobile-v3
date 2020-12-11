@@ -131,11 +131,8 @@ const PreLoginNavigator = React.memo<Object>((props: Props = {}): Object => {
 
 	const onReady = React.useCallback(() => {
 		isReadyRefPrelogin.current = true;
-	}, []);
-
-	const onReady = React.useCallback(() => {
-		if (navigationRef && navigationRef.current && navigationRef.current.getCurrentRoute) {
-			const currentScreen = navigationRef.current.getCurrentRoute().name;
+		if (navigationRefPrelogin && navigationRefPrelogin.current && navigationRefPrelogin.current.getCurrentRoute) {
+			const currentScreen = navigationRefPrelogin.current.getCurrentRoute().name;
 			dispatch(screenChange(currentScreen));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
