@@ -177,7 +177,7 @@ const ProtectionConf = (props: Props): Object => {
 						style={hItemLabelDef}>
 						{'State: '}
 					</Text>
-					<DropDown
+					{!!options && options.length > 1 && (<DropDown
 						items={options}
 						value={selectedState.value}
 						onValueChange={saveProtection}
@@ -189,21 +189,24 @@ const ProtectionConf = (props: Props): Object => {
 						pickerContainerStyle={pickerContainerStyle}
 						pickerBaseCoverStyle={pickerBaseCoverStyle}
 						pickerBaseTextStyle={pickerBaseTextStyle}/>
+					)}
 				</View>
-				<DropDown
-					items={optionsRF}
-					value={selectedStateRF.value}
-					onValueChange={saveProtectionRF}
-					appLayout={layout}
-					intl={intl}
-					dropDownContainerStyle={dropDownContainerStyle}
-					dropDownHeaderStyle={dropDownHeaderStyle}
-					fontSize={fontSize}
-					pickerContainerStyle={[pickerContainerStyle, {
-						marginTop: 5,
-					}]}
-					pickerBaseCoverStyle={pickerBaseCoverStyle}
-					pickerBaseTextStyle={pickerBaseTextStyle}/>
+				{!!optionsRF && optionsRF.length > 1 && (
+					<DropDown
+						items={optionsRF}
+						value={selectedStateRF.value}
+						onValueChange={saveProtectionRF}
+						appLayout={layout}
+						intl={intl}
+						dropDownContainerStyle={dropDownContainerStyle}
+						dropDownHeaderStyle={dropDownHeaderStyle}
+						fontSize={fontSize}
+						pickerContainerStyle={[pickerContainerStyle, {
+							marginTop: 5,
+						}]}
+						pickerBaseCoverStyle={pickerBaseCoverStyle}
+						pickerBaseTextStyle={pickerBaseTextStyle}/>
+				)}
 			</View>
 		</View>
 	);
