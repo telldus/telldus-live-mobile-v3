@@ -144,7 +144,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		if (text) {
 			toggleDialogueBoxState({
 				show: true,
-				header: ' ',
+				header: ' ', // TODO: Need to confirm and set
 				showHeader: true,
 				imageHeader: true,
 				text,
