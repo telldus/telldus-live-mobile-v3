@@ -25,6 +25,7 @@
 import React from 'react';
 import { LayoutAnimation } from 'react-native';
 const isEqual = require('react-fast-compare');
+import { connect } from 'react-redux';
 
 import {
 	View,
@@ -34,6 +35,9 @@ import {
 import ZWaveIncludeExcludeUI from './ZWaveIncludeExcludeUI';
 import CantEnterInclusionExclusionUI from './CantEnterInclusionExclusionUI';
 import { widgetAndroidDisableWidget } from '../../../Actions/Widget';
+import {
+	getDeviceManufacturerInfo,
+} from '../../../Actions/Devices';
 
 import { LayoutAnimations } from '../../../Lib';
 
@@ -43,8 +47,10 @@ import Theme from '../../../Theme';
 
 type Props = {
     appLayout: Object,
-    clientId: number,
+	clientId: number,
+	manufacturerAttributes?: Object,
 
+	dispatch: Function,
     intl: Object,
 	onExcludeSuccess: () => void,
 	onExcludeSuccessImmediate: () => void,
@@ -64,6 +70,7 @@ type State = {
 	showThrobber: boolean,
 	cantEnterExclusion: boolean,
 	cantEnterLearnMode: boolean,
+	exclusionDescription?: string,
 };
 
 class ExcludeDevice extends View<Props, State> {
@@ -89,6 +96,7 @@ constructor(props: Props) {
 		showThrobber: false,
 		cantEnterExclusion: false,
 		cantEnterLearnMode: false,
+		exclusionDescription: undefined,
 	};
 
 	this.onPressCancelExclude = this.onPressCancelExclude.bind(this);
@@ -106,7 +114,11 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
-	const { registerForWebSocketEvents } = this.props;
+	const {
+		registerForWebSocketEvents,
+		manufacturerAttributes = {},
+		dispatch,
+	} = this.props;
 
 	const callbacks = {
 		callbackOnOpen: this.callbackOnOpen,
@@ -119,6 +131,24 @@ componentDidMount() {
 	} = registerForWebSocketEvents(callbacks);
 	this.sendSocketMessageMeth = sendSocketMessage;
 	this.destroyInstanceWebSocket = destroyInstance;
+
+	const {
+		manufacturerId,
+		productId,
+		productTypeId,
+	} = manufacturerAttributes;
+	if (typeof manufacturerId !== 'undefined') {
+		dispatch(getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)).then((res: Object = {}) => {
+			const {
+				ExclusionDescription,
+			} = res;
+			if (ExclusionDescription) {
+				this.setState({
+					exclusionDescription: ExclusionDescription,
+				});
+			}
+		});
+	}
 }
 
 callbackOnOpen = () => {
@@ -394,7 +424,16 @@ onPressOkay() {
 
 render(): Object {
 	const { intl, appLayout } = this.props;
-	const { timer, status, progress, excludeSucces, showTimer, showThrobber, cantEnterExclusion } = this.state;
+	const {
+		timer,
+		status,
+		progress,
+		excludeSucces,
+		showTimer,
+		showThrobber,
+		cantEnterExclusion,
+		exclusionDescription,
+	} = this.state;
 	const { formatMessage } = intl;
 
 	let timerText = (timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSeconds).toLowerCase()}` : ' ';
@@ -440,7 +479,8 @@ render(): Object {
 						intl={intl}
 						appLayout={appLayout}
 						action={'exclude'}
-						showThrobber={showThrobber}/>
+						showThrobber={showThrobber}
+						actionsDescription={exclusionDescription}/>
 					<TouchableButton
 						text={excludeSucces ? formatMessage(i18n.defaultPositiveText) : formatMessage(i18n.defaultNegativeText)}
 						onPress={excludeSucces ? this.onPressOkay : this.onPressCancelExclude}
@@ -509,4 +549,10 @@ getStyles(): Object {
 }
 }
 
-export default ExcludeDevice;
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		dispatch,
+	};
+}
+
+export default connect(null, mapDispatchToProps)(ExcludeDevice);

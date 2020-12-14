@@ -58,6 +58,7 @@ type Props = PropsThemedComponent & {
 	showThrobber?: boolean,
 	infoText?: string,
 	deviceImage: string,
+	actionsDescription?: string,
 
     action: 'include' | 'exclude',
 	intl: Object,
@@ -118,6 +119,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'themeInApp',
 		'colorScheme',
 		'selectedThemeSet',
+		'actionsDescription',
 	])) {
 		return true;
 	}
@@ -147,6 +149,7 @@ render(): Object {
 		deviceImage,
 		onPressCancel,
 		appLayout,
+		actionsDescription,
 	} = this.props;
 	const { width } = this.state;
 	const {
@@ -201,18 +204,31 @@ render(): Object {
 						</Text>,
 						<Text key={'1'}/>]
 					)}
-					<Text
-						level={25}
-						style={textStyle}>
-						{this.messageOne}
-					</Text>
-					<Text/>
-					<Text
-						level={25}
-						style={textStyle}>
-						{this.messageTwo}
-					</Text>
-					<Text/>
+					{actionsDescription ?
+						<>
+							<Text
+								level={25}
+								style={textStyle}>
+								{actionsDescription}
+							</Text>
+							<Text/>
+						</>
+						:
+						<>
+							<Text
+								level={25}
+								style={textStyle}>
+								{this.messageOne}
+							</Text>
+							<Text/>
+							<Text
+								level={25}
+								style={textStyle}>
+								{this.messageTwo}
+							</Text>
+							<Text/>
+						</>
+					}
 					{showThrobber ?
 						<Throbber throbberContainerStyle={throbberContainerStyle} throbberStyle={timerStyle}/>
 						:

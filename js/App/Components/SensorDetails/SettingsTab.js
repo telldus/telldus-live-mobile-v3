@@ -64,7 +64,11 @@ import { clearHistory } from '../../Actions/LocalStorage';
 
 import { requestNodeInfo } from '../../Actions/Websockets';
 
-import { shouldUpdate, LayoutAnimations } from '../../Lib';
+import {
+	shouldUpdate,
+	LayoutAnimations,
+	ZWaveFunctions,
+} from '../../Lib';
 
 import Theme from '../../Theme';
 
@@ -714,6 +718,7 @@ class SettingsTab extends View {
 
 		const isZWave = protocol.trim().toLowerCase() === 'zwave';
 		const { isFailed = false } = nodeInfo;
+		const manufacturerAttributes = nodeInfo ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC] : {};
 
 		return (
 			<ThemedScrollView
@@ -725,6 +730,7 @@ class SettingsTab extends View {
 				{excludeActive ?
 					<ExcludeDevice
 						clientId={clientId}
+						manufacturerAttributes={manufacturerAttributes}
 						appLayout={appLayout}
 						intl={intl}
 						showToast={this._showToast}

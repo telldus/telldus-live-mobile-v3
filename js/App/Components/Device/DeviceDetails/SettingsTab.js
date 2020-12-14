@@ -79,6 +79,7 @@ import {
 	supportsScan,
 	prepare433MHzDeviceDefaultValueForParams,
 	doesSupportEditModel,
+	ZWaveFunctions,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -928,6 +929,7 @@ class SettingsTab extends View {
 		const isZWave = transport === 'zwave';
 		const is433MHz = is433MHzTransport(transport) || transport === 'egroup';
 		const { isFailed = false } = nodeInfo;
+		const manufacturerAttributes = nodeInfo ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC] : {};
 
 		const transportsArray = transports.split(',');
 		const showScan = supportsScan(transportsArray) && scannable;
@@ -942,6 +944,7 @@ class SettingsTab extends View {
 					<ExcludeDevice
 						clientId={clientId}
 						appLayout={appLayout}
+						manufacturerAttributes={manufacturerAttributes}
 						intl={intl}
 						showToast={this.props.showToast}
 						onExcludeSuccess={this.goBack}
