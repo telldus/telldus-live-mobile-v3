@@ -109,12 +109,18 @@ class OverviewTab extends View<Props, null> {
 			dispatch(getDeviceManufacturerInfo(manufacturerId, productTypeId, productId))
 				.then((res: Object) => {
 					if (res && res.Name) {
-						const { Image, Name, Brand } = res;
+						const {
+							Image,
+							Name,
+							Brand,
+							ManualUrl,
+						} = res;
 						const payload = {
 							Image,
 							Name,
 							Brand,
 							deviceId: id,
+							ManualUrl,
 						};
 						dispatch(deviceZWaveInfo(payload));
 					}
