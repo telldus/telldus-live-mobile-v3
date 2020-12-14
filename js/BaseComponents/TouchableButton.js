@@ -29,6 +29,9 @@ import Text from './Text';
 import Throbber from './Throbber';
 import View from './View';
 import TouchableOpacity from './TouchableOpacity';
+
+import capitalize from '../App/Lib/capitalize';
+
 import Theme from '../App/Theme';
 
 type Props = {
@@ -145,7 +148,7 @@ class TouchableButton extends Component<Props, void> {
 						accessible={accessible}
 						importantForAccessibility={importantForAccessibility}
 						{...textProps}>
-						{typeof preScript === 'string' && preScript}{label}{postScript}
+						{typeof preScript === 'string' && preScript}{capitalize(label)}{postScript}
 					</Text>
 					{!!showThrobber &&
 					(
