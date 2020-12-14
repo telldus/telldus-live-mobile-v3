@@ -24,10 +24,12 @@ import * as AppHooks from './App';
 import * as DialogueboxHooks from './Dialoguebox';
 import * as iApHooks from './IAP';
 import * as Navigation from './Navigation';
+import * as Device from './Device';
 
 module.exports = {
 	...AppHooks,
 	...DialogueboxHooks,
 	...iApHooks,
 	...Navigation,
+	...Device,
 };

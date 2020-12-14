@@ -30,6 +30,11 @@ const { images: {DEVICES} } = utils;
 
 import {
 	SupportedCommandClasses,
+	BatteryFunctions,
+	Associations,
+	Configuration,
+	BasicSettings,
+	TelldusInfo,
 } from '../ZWave';
 import {
 	ThemedScrollView,
@@ -54,6 +59,7 @@ import {
 	shouldUpdate,
 	prepare433ModelName,
 } from '../../../Lib';
+import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 
 import {
 	DeviceActionDetails,
@@ -104,12 +110,18 @@ class OverviewTab extends View<Props, null> {
 			dispatch(getDeviceManufacturerInfo(manufacturerId, productTypeId, productId))
 				.then((res: Object) => {
 					if (res && res.Name) {
-						const { Image, Name, Brand } = res;
+						const {
+							Image,
+							Name,
+							Brand,
+							ManualUrl,
+						} = res;
 						const payload = {
 							Image,
 							Name,
 							Brand,
 							deviceId: id,
+							ManualUrl,
 						};
 						dispatch(deviceZWaveInfo(payload));
 					}
@@ -199,6 +211,12 @@ class OverviewTab extends View<Props, null> {
 			return null;
 		}
 
+		const {
+			nodeInfo = {},
+			clientId,
+			clientDeviceId,
+		} = device;
+
 		const locationImageUrl = getLocationImageUrl(gatewayType);
 		const locationData = {
 			title: this.boxTitle,
@@ -210,6 +228,18 @@ class OverviewTab extends View<Props, null> {
 		const deviceInfo = this.getDeviceInfo(device);
 
 		const styles = this.getStyles(appLayout);
+
+		const supportsWakeup = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_WAKEUP] : false;
+		const showBatteryFunctions = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_BATTERY] ||
+		supportsWakeup) : false;
+
+		const showAssociations = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_ASSOCIATION] : false;
+
+		const showConfiguration = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_CONFIGURATION] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_INDICATOR] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_SWITCH_ALL]) :
+			false;
 
 		return (
 			<ThemedScrollView
@@ -236,10 +266,41 @@ class OverviewTab extends View<Props, null> {
 					style={[styles.LocationDetail, {
 						marginBottom: styles.padding * 2,
 					}]}/>
-				<SupportedCommandClasses
-					id={device.id}
-					clientDeviceId={device.clientDeviceId}
-					clientId={device.clientId}/>
+				{!!nodeInfo.cmdClasses && (
+					<BasicSettings
+						id={device.id}
+						clientDeviceId={device.clientDeviceId}
+						clientId={device.clientId}/>
+				)}
+				{!!nodeInfo.cmdClasses && (
+					<SupportedCommandClasses
+						id={device.id}
+						clientDeviceId={device.clientDeviceId}
+						clientId={device.clientId}/>
+				)}
+				{!!showAssociations && (
+					<Associations
+						id={device.id}
+						clientId={clientId}
+						gatewayTimezone={gatewayTimezone}
+						clientDeviceId={clientDeviceId}/>
+				)}
+				{!!showBatteryFunctions && (
+					<BatteryFunctions
+						id={device.id}
+						clientId={clientId}
+						gatewayTimezone={gatewayTimezone}/>
+				)}
+				{!!showConfiguration && (
+					<Configuration
+						id={device.id}
+						clientId={clientId}
+						gatewayTimezone={gatewayTimezone}/>
+				)}
+				{!!nodeInfo.cmdClasses && (
+					<TelldusInfo
+						id={device.id}/>
+				)}
 			</ThemedScrollView>
 		);
 	}

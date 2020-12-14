@@ -56,6 +56,7 @@ import * as Timer from './Timer';
 import * as intlUtils from './intlUtils';
 import * as thirdPartyUtils from './thirdPartyUtils';
 import * as styleUtils from './styleUtils';
+import ZWaveFunctions from './ZWaveFunctions';
 
 module.exports = {
 	getDeviceWidth,
@@ -94,4 +95,5 @@ module.exports = {
 	...intlUtils,
 	...thirdPartyUtils,
 	...styleUtils,
+	ZWaveFunctions,
 };

@@ -22,7 +22,19 @@
 
 
 import SupportedCommandClasses from './SupportedCommandClasses';
+import BatteryFunctions from './BatteryFunctions';
+import BatteryInfoItem from './BatteryInfoItem';
+import Associations from './Associations';
+import Configuration from './Configuration';
+import BasicSettings from './BasicSettings';
+import TelldusInfo from './TelldusInfo';
 
 module.exports = {
 	SupportedCommandClasses,
+	BatteryFunctions,
+	BatteryInfoItem,
+	Associations,
+	Configuration,
+	BasicSettings,
+	TelldusInfo,
 };

@@ -33,6 +33,7 @@ import React, {
 import {
 	LayoutAnimation,
 } from 'react-native';
+const isEqual = require('react-fast-compare');
 import {
 	useSelector,
 	useDispatch,
@@ -50,6 +51,9 @@ import {
 	Throbber,
 } from '../../../../BaseComponents';
 
+import {
+	usePreviousValue,
+} from '../../../Hooks/App';
 import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 import {
@@ -108,6 +112,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 	} = manualInterviewConf;
 
 	const {
+		itemsCoverStyle,
 		titleCoverStyle,
 		coverStyle,
 		textStyle,
@@ -119,6 +124,8 @@ const SupportedCommandClasses = (props: Props): Object => {
 		throbberStyle,
 	} = getStyles(layout);
 
+	const prevNodeInfo = usePreviousValue(nodeInfo);
+	const isNodeInfoEqual = isEqual(prevNodeInfo, nodeInfo);
 	const timeoutInterviewRef = useRef(null);
 	useEffect((): Function => {
 		return () => {
@@ -256,7 +263,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
-		nodeInfo,
+		isNodeInfoEqual,
 		layout,
 		id,
 		isOnline,
@@ -292,7 +299,11 @@ const SupportedCommandClasses = (props: Props): Object => {
 					{formatMessage(i18n.supCmdClass)}
 				</Text>
 			</TouchableOpacity>
-			{!expand && commands}
+			{!expand && (
+				<View style={itemsCoverStyle}>
+				 {commands}
+				</View>
+			)}
 		</>
 	);
 };
@@ -301,12 +312,13 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	const {
 		paddingFactor,
+		fontSizeFactorEight,
+		fontSizeFactorFour,
 	} = Theme.Core;
-
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const padding = deviceWidth * paddingFactor;
 
 	return {
@@ -319,7 +331,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			marginLeft: 8,
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 		},
 		coverStyle: {
 			flexDirection: 'row',
@@ -329,6 +341,9 @@ const getStyles = (appLayout: Object): Object => {
 			borderRadius: 2,
 			paddingHorizontal: padding,
 			paddingVertical: padding / 2,
+		},
+		itemsCoverStyle: {
+			marginBottom: padding,
 		},
 		textStyle: {
 			fontSize,

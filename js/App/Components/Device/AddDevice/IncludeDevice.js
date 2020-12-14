@@ -669,6 +669,7 @@ navigateToNext(deviceManufactInfo: Object, routeName: string | null) {
 		statusIcon,
 		interviewPartialStatusMessage,
 		sensors: this.sensors,
+		deviceProdInfo: this.deviceProdInfo,
 	});
 }
 

@@ -159,6 +159,7 @@ render(): Object {
 
 	const {
 		gateway = {},
+		deviceProdInfo,
 	} = route.params || {};
 
 	return (
@@ -193,7 +194,8 @@ render(): Object {
 					onExcludeSuccessImmediate={this.onExcludeSuccessImmediate}
 					onExcludeTimedoutImmediate={this.onExcludeTimedoutImmediate}
 					onPressCancelExclude={this.onPressCancelExclude}
-					onCantEnterExclusionTimeout={this.onCantEnterExclusionTimeout}/>
+					onCantEnterExclusionTimeout={this.onCantEnterExclusionTimeout}
+					manufacturerAttributes={deviceProdInfo}/>
 			}
 		</ThemedScrollView>
 	);
