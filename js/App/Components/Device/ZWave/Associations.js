@@ -259,7 +259,7 @@ const Associations = (props: Props): Object => {
 				<ThemedMaterialIcon
 					name={expand ? 'expand-more' : 'expand-less'}
 					size={iconSize}
-					level={23}
+					level={38}
 					style={iconStyle}/>
 				<Text
 					level={2}

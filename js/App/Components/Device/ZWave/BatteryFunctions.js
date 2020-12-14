@@ -339,7 +339,7 @@ This device is running on battery. To save as much power as possible this device
 					name={expand ? 'expand-more' : 'expand-less'}
 					size={iconSize}
 					style={iconStyle}
-					level={23}/>
+					level={38}/>
 				<Text
 					level={2}
 					style={titleStyle}>
