@@ -38,6 +38,7 @@ import {
 	TouchableOpacity,
 	ThemedMaterialIcon,
 	Text,
+	View,
 } from '../../../../BaseComponents';
 import ProtectionConf from './ProtectionConf';
 import AdvancedConf from './AdvancedConf';
@@ -69,6 +70,7 @@ const Configuration = (props: Props): Object => {
 		titleStyle,
 		iconStyle,
 		iconSize,
+		padding,
 	} = getStyles(layout);
 
 	const protectionClass = nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION];
@@ -105,7 +107,7 @@ const Configuration = (props: Props): Object => {
 		setExpand(!expand);
 	}, [expand]);
 
-	if (!id || !nodeInfo) {
+	if (!id || !nodeInfo || !protection || !configuration) {
 		return <EmptyView/>;
 	}
 
@@ -119,17 +121,19 @@ const Configuration = (props: Props): Object => {
 					size={iconSize}
 					style={iconStyle}
 					level={38}/>
-				<Text
+				<Text // TODO: Translate
 					level={2}
 					style={titleStyle}>
 					Configuration
 				</Text>
 			</TouchableOpacity>
 			{!expand && (
-				<>
+				<View style={{
+					marginBottom: padding / 2,
+				}}>
 					{!!protection && protection}
 					{!!configuration && configuration}
-				</>
+				</View>
 			)}
 		</>
 	);
