@@ -206,10 +206,17 @@ render(): Object {
 					)}
 					{actionsDescription ?
 						<>
-							<Text
-								level={25}
-								style={textStyle}>
-								{actionsDescription}
+							<Text>
+								<Text
+									level={4}
+									style={textStyle}>
+									{'Information from the manufacturer: '}
+								</Text>
+								<Text
+									level={25}
+									style={textStyle}>
+									{actionsDescription}
+								</Text>
 							</Text>
 							<Text/>
 						</>
