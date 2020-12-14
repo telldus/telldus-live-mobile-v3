@@ -82,7 +82,7 @@ const GenericConfSetting = (props: Object): Object => {
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				text: `Please set value between: ${min}-${max}`,
+				text: `Please set value between: ${min}-${max}`, // TODO: Translate
 				showPositive: true,
 			});
 			return;
