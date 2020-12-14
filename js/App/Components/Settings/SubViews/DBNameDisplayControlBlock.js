@@ -38,14 +38,14 @@ import { changeDBTileNameDisplayMode } from '../../../Actions';
 
 import Theme from '../../../Theme';
 
-// import i18n from '../../../Translations/common';
+import i18n from '../../../Translations/common';
 
 const DBNameDisplayControlBlock = (props: Object): Object => {
 	const {
 		dropDownContainerStyle,
 	} = props;
 	const intl = useIntl();
-	// const { formatMessage } = intl;
+	const { formatMessage } = intl;
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { tileNameDisplayMode: tileNameDisplayModeCurrent } = defaultSettings;
@@ -70,10 +70,10 @@ const DBNameDisplayControlBlock = (props: Object): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const trunc = 'Truncate';
-	const scroll = 'Scroll';
+	const trunc = formatMessage(i18n.truncate);
+	const scroll = formatMessage(i18n.scroll);
 
-	const labelNameDisplayControlDB = 'Tile name display mode';
+	const labelNameDisplayControlDB = formatMessage(i18n.tileNameDisplayMode);
 
 	return (
 		<View

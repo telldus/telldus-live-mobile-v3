@@ -143,13 +143,13 @@ getTickConfigX(): Object {
 	const { fromTimestamp, toTimestamp } = this.props.timestamp;
 	const from = dayjs.unix(fromTimestamp);
 	const to = dayjs.unix(toTimestamp);
-	const domainX = Math.abs(from.diff(to, 'days'));
+	const domainX = Math.abs(from.diff(to, 'day'));
 
 	let ticks = [], day = from;
 	ticks.push(fromTimestamp);
 	for (let i = 1; i <= domainX; i++) {
-		let d = day.add(1, 'd');
-		ticks.push(d.unix());
+		day = day.add(1, 'd');
+		ticks.push(day.unix());
 	}
 	return { ticks };
 }
