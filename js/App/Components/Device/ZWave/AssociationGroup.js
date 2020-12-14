@@ -97,6 +97,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		selectListCover,
 		selectListText,
 		inAppBrandSecondary,
+		infoOneColorBlockDisabled,
 	} = getStyles({
 		layout,
 		colors,
@@ -179,7 +180,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 					}}>
 						<Text
 							numberOfLines={1}
-							level={3}
+							level={associationWarningDisabled ? 19 : 3}
 							style={selectListText}>
 							{name}
 						</Text>
@@ -208,19 +209,19 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 						iconStyle={{
 							backgroundColor: isChecked ? inAppBrandSecondary : 'transparent',
 							color: isChecked ? '#fff' : 'transparent',
-							borderColor: inAppBrandSecondary,
+							borderColor: associationWarningDisabled ? infoOneColorBlockDisabled : inAppBrandSecondary,
 						}}
 						style={{
 							overflow: 'visible',
 						}}
-						onToggleCheckBox={onToggleCheckBox}
+						onToggleCheckBox={associationWarningDisabled ? undefined : onToggleCheckBox}
 						intl={intl}/>
 				</View>
 			);
 		}
 		return list;
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isNodeListEqual, layout, inAppBrandSecondary, selectedList, onToggleCheckBox, onPressInfo]);
+	}, [isNodeListEqual, layout, inAppBrandSecondary, selectedList, onToggleCheckBox, onPressInfo, infoOneColorBlockDisabled]);
 
 	const [ editActive, setEditActive ] = useState(false);
 	const toggleEditSave = useCallback(() => {
@@ -295,6 +296,7 @@ const getStyles = ({
 	} = Theme.Core;
 	const {
 		inAppBrandSecondary,
+		infoOneColorBlockDisabled,
 	} = colors;
 	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const padding = deviceWidth * paddingFactor;
@@ -304,6 +306,7 @@ const getStyles = ({
 	fontSizeButtonText = fontSizeButtonText > maxSizeTextButton ? maxSizeTextButton : fontSizeButtonText;
 
 	return {
+		infoOneColorBlockDisabled,
 		inAppBrandSecondary,
 		verticalCoverDef: {
 			marginHorizontal: padding,
