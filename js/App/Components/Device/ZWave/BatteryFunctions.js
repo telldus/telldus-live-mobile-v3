@@ -56,6 +56,9 @@ import {
 	useAppTheme,
 } from '../../../Hooks/Theme';
 import {
+	useDialogueBox,
+} from '../../../Hooks/Dialoguebox';
+import {
 	getDeviceManufacturerInfo,
 	sendSocketMessage,
 } from '../../../Actions';
@@ -69,6 +72,8 @@ type Props = {
 	gatewayTimezone: string,
 	clientId: string,
 };
+
+const infoKeyBatteryLevel = '1';
 
 function usePreviousNodeInfo(value: Object): Object {
 	const ref = useRef();
@@ -180,12 +185,31 @@ const BatteryFunctions = (props: Props): Object => {
 		minimumWakeupInterval,
 		wakeupIntervalStep,
 		queue,
+		lastReceived,
 	} = zWaveFunctions ? zWaveFunctions.batteryInfo() : {};
 
 	let storedWakeupInterval = wakeupInterval;
 	if (typeof queue === 'number') {
 		storedWakeupInterval = queue;
 	}
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
+	const onPressInfo = useCallback(({infoKey}: Object) => {
+		if (infoKey === infoKeyBatteryLevel) {
+			const lastReceivedDateTime = new Date(lastReceived * 1000);
+			toggleDialogueBoxState({
+				show: true,
+				header: ' ', // TODO: Need to confirm and set
+				showHeader: true,
+				imageHeader: true, // TODO: Translate
+				text: `Battery level was received ${formatDate(lastReceivedDateTime)} ${formatTime(lastReceivedDateTime)}.`,
+				showPositive: true,
+			});
+		}
+	}, [formatDate, formatTime, lastReceived, toggleDialogueBoxState]);
 
 	const getWakeUpIntervalValue = useCallback((value: number): Object => {
 		value = value < 0 ? 0 : value;
@@ -289,7 +313,10 @@ This device is running on battery. To save as much power as possible this device
 				)}
 				<BatteryInfoItem
 					label={'Battery level: '}
-					value={`${level}%`}/>
+					value={`${level}%`}
+					showInfo={true}
+					onPressInfo={onPressInfo}
+					infoKey={infoKeyBatteryLevel}/>
 				{(!!batteryType && !!batteryCount) && (
 					<BatteryInfoItem
 						label={'Battery type: '}
@@ -305,21 +332,23 @@ This device is running on battery. To save as much power as possible this device
 						<BatteryInfoItem
 							label={'Wakeup interval: '}
 							value={wakeUpIntervalValue.timeString}/>
-						<Slider
-							minimumValue= {0}
-							maximumValue={maximumValue}
-							value={sliderValue}
-							step={10}
-							onValueChange={onValueChange}
-							onSlidingComplete={onSlidingComplete}
-							minimumTrackTintColor={minimumTrackTintColor}
-							trackStyle={slider.track}
-							thumbStyle={slider.thumb}/>
+						{!isNaN(sliderValue) && !isNaN(maximumValue) && (
+							<Slider
+								minimumValue= {0}
+								maximumValue={maximumValue}
+								value={sliderValue}
+								step={10}
+								onValueChange={onValueChange}
+								onSlidingComplete={onSlidingComplete}
+								minimumTrackTintColor={minimumTrackTintColor}
+								trackStyle={slider.track}
+								thumbStyle={slider.thumb}/>
+						)}
 					</>
 				)}
 			</View>
 		);
-	}, [id, coverStyle, supportsWakeup, textStyle, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, nextWakeupDateTime, level, batteryType, batteryCount, wakeUpIntervalValue, maximumValue, sliderValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
+	}, [id, coverStyle, supportsWakeup, textStyle, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, maximumValue, sliderValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));

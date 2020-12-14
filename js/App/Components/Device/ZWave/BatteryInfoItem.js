@@ -32,19 +32,26 @@ import {
 import {
 	View,
 	Text,
+	RoundedInfoButton,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
 
 type Props = {
     label: string,
-    value: string,
+	value: string,
+	showInfo?: boolean,
+	onPressInfo: Function,
+	infoKey: string,
 };
 
 const BatteryInfoItem = memo<Object>((props: Props): Object => {
 	const {
 		label,
 		value,
+		showInfo = false,
+		onPressInfo,
+		infoKey,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -71,6 +78,22 @@ const BatteryInfoItem = memo<Object>((props: Props): Object => {
 					{value}
 				</Text>
 			</Text>
+			{!!showInfo && (
+				<RoundedInfoButton
+					iconLevel={6}
+					buttonProps={{
+						infoButtonContainerStyle: {
+							position: 'relative',
+							right: undefined,
+							bottom: undefined,
+							marginLeft: 5,
+						},
+						onPress: onPressInfo,
+						onPressData: {
+							infoKey,
+						},
+					}}/>
+			)}
 		</View>
 	);
 });
@@ -93,6 +116,7 @@ const getStyles = ({
 		horizontalCoverDef: {
 			flexDirection: 'row',
 			marginTop: padding,
+			alignItems: 'center',
 		},
 		hItemLabelDef: {
 			fontSize,
