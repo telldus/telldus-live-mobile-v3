@@ -259,7 +259,9 @@ class OverviewTab extends View<Props, null> {
 						marginBottom: styles.padding * 2,
 					}]}/>
 				<SupportedCommandClasses
-					id={device.id}/>
+					id={device.id}
+					clientDeviceId={device.clientDeviceId}
+					clientId={device.clientId}/>
 				{!!showAssociations && (
 					<Associations
 						id={device.id}

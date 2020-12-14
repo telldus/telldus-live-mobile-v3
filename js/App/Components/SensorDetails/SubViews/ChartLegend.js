@@ -74,7 +74,7 @@ export default class ChartLegend extends View<Props, null> {
 		} = this.getStyles(appLayout);
 
 		return (
-			<View style={containerStyle}>
+			<View pointerEvents={'box-none'} style={containerStyle}>
 				<View style={legendsContainerStyle}>
 					{legendData.map((item: Object, index: number): Object | null => {
 						const { icon, onPress, value, color } = item;

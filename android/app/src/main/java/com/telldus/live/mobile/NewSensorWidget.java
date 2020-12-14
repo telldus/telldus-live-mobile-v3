@@ -41,6 +41,7 @@ import java.text.DateFormat;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
+import com.telldus.live.mobile.Model.GatewayInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
@@ -62,6 +63,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
@@ -78,7 +80,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager,
             int appWidgetId,
             Map extraArgs
-            ) {
+    ) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
         // On log out, only prefManager is cleared and not DB, so we do not want sensor to show back again during the timed interval
@@ -137,6 +139,15 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
+        Integer clientId = sensorWidgetInfo.getClientId();
+        String userUuid = sensorWidgetInfo.getUserUuid();
+        String timezone = TimeZone.getDefault().getID();
+        GatewayInfo gatewayInfo = db.findCurrentAccountGatewaysInfo(clientId, userUuid);
+        if (gatewayInfo != null) {
+            String tz = gatewayInfo.getTimezone();
+            timezone = tz != null ? tz : timezone;
+        }
+
         int pro = prefManager.getPro();
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
@@ -169,8 +180,11 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         Locale locale = Locale.getDefault();
         DateFormat dMWY = formatDate(locale);
+        dMWY.setTimeZone(TimeZone.getTimeZone(timezone));
         String formattedDate = dMWY.format(date);
-        String formattedTime = DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
+        DateFormat tMWY = (SimpleDateFormat) DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+        tMWY.setTimeZone(TimeZone.getTimeZone(timezone));
+        String formattedTime = tMWY.format(date);
 
         String formattedDT = isNearly1By1 ? formattedTime : formattedDate + " " + formattedTime;
 
@@ -182,10 +196,10 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (isUpdating != null && isUpdating.equals("true")) {
             if (transparent.equals("dark")) {
                 showFlashIndicator(
-                    view,
-                    R.id.flash_view_sensor,
-                    R.id.flashing_indicator_sensor,
-                    R.drawable.shape_circle_black_fill
+                        view,
+                        R.id.flash_view_sensor,
+                        R.id.flashing_indicator_sensor,
+                        R.drawable.shape_circle_black_fill
                 );
 
                 view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
@@ -194,10 +208,10 @@ public class NewSensorWidget extends AppWidgetProvider {
                 colorTitle = ContextCompat.getColor(context, R.color.themeDark);
             } else if (transparent.equals("light") || transparent.equals("true")) {
                 showFlashIndicator(
-                    view,
-                    R.id.flash_view_sensor,
-                    R.id.flashing_indicator_sensor,
-                    R.drawable.shape_circle_white_fill
+                        view,
+                        R.id.flash_view_sensor,
+                        R.id.flashing_indicator_sensor,
+                        R.drawable.shape_circle_white_fill
                 );
 
                 view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
@@ -206,10 +220,10 @@ public class NewSensorWidget extends AppWidgetProvider {
                 colorTitle = ContextCompat.getColor(context, R.color.white);
             } else {
                 showFlashIndicator(
-                    view,
-                    R.id.flash_view_sensor,
-                    R.id.flashing_indicator_sensor,
-                    R.drawable.shape_circle_white_fill
+                        view,
+                        R.id.flash_view_sensor,
+                        R.id.flashing_indicator_sensor,
+                        R.drawable.shape_circle_white_fill
                 );
 
                 view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_black);
@@ -425,7 +439,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         API endPoints = new API();
         endPoints.callEndPoint(context, params, API_TAG, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(final JSONObject response) {
+            public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
                 try {
                     SensorInfo sensorWidgetInfo = database.findWidgetInfoSensor(widgetId);
 
@@ -520,8 +534,8 @@ public class NewSensorWidget extends AppWidgetProvider {
     public static DateFormat formatDate(Locale locale) {
         SimpleDateFormat formattedDate = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
         formattedDate.applyPattern(formattedDate.toPattern().replaceAll(
-            "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
-            ""));
+                "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
+                ""));
         return formattedDate;
     }
 
@@ -529,7 +543,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         UserAPI userAPI = new UserAPI();
         userAPI.getUserProfile(context, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
                 wUpdater.updateAllWidgets(context, new HashMap());
             }

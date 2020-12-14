@@ -59,6 +59,7 @@ import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.API.GatewaysAPI;
 
 /**
  * The configuration screen for the {@link NewAppWidget NewAppWidget} AppWidget.
@@ -134,7 +135,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
         int pro = prefManager.getPro();
         long now = new Date().getTime() / 1000;
         if (pro == -1 || pro < now) {
-           Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+            Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
             mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             getApplicationContext().startActivity(mainActivity);
@@ -143,6 +144,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
         }
 
         createDeviceApi();
+        GatewaysAPI gatewaysAPI = new GatewaysAPI();
+        gatewaysAPI.cacheGateways(getApplicationContext());
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
@@ -172,7 +175,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
         navPosterh2.setTypeface(titleFont);
         navPosterh1.setText(getResources().getString(R.string.reserved_widget_android_device_configure_header_one));
         navPosterh2.setText(getResources().getString(R.string.reserved_widget_android_configure_header_two));
-            
+
 
         if (DeviceInfoMap.size() == 0) {
             infoView.setVisibility(View.VISIBLE);
@@ -266,6 +269,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
+                    String currentUserUuid = prefManager.getUserUuid();
                     String methodRequested = null;
                     String deviceCurrentState = null;
                     String requestedStateValue = null;
@@ -280,25 +284,26 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     }
 
                     DeviceInfo mInsert = new DeviceInfo(
-                        deviceCurrentState,
-                        mAppWidgetId,
-                        id,
-                        deviceName.getText().toString(),
-                        deviceSupportedMethods,
-                        deviceTypeCurrent,
-                        deviceStateValueCurrent,
-                        trans,
-                        currentUserId,
-                        methodRequested,
-                        0,
-                        0, // As of now required/handled only for thermostats
-                        -1, // As of now required/handled only for thermostats
-                        -1, // As of now required/handled only for thermostats
-                        null,  // As of now required/handled only for thermostats
-                        null, // As of now set only for RGB[control option]
+                            deviceCurrentState,
+                            mAppWidgetId,
+                            id,
+                            deviceName.getText().toString(),
+                            deviceSupportedMethods,
+                            deviceTypeCurrent,
+                            deviceStateValueCurrent,
+                            trans,
+                            currentUserId,
+                            methodRequested,
+                            0,
+                            0, // As of now required/handled only for thermostats
+                            -1, // As of now required/handled only for thermostats
+                            -1, // As of now required/handled only for thermostats
+                            null,  // As of now required/handled only for thermostats
+                            null, // As of now set only for RGB[control option]
                             null, // As of now set only for RGB[control option]
                             requestedStateValue,
-                            requestedSecStateValue
+                            requestedSecStateValue,
+                            currentUserUuid
                     );
                     db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());
@@ -317,25 +322,25 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 public void onClick(View view) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewAppWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.reserved_widget_android_pick_device)
-                        .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                selectedDeviceIndex = which;
-                                deviceName.setText(deviceNameList[which]);
-                                id = Integer.parseInt(String.valueOf(deviceIdList[which]));
+                            .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    selectedDeviceIndex = which;
+                                    deviceName.setText(deviceNameList[which]);
+                                    id = Integer.parseInt(String.valueOf(deviceIdList[which]));
 
-                                Map<String, Object> info = DeviceInfoMap.get(id);
+                                    Map<String, Object> info = DeviceInfoMap.get(id);
 
-                                deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
+                                    deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
 
-                                deviceTypeCurrent = info.get("deviceType").toString();
-                                deviceStateValueCurrent = info.get("stateValue").toString();
-                                deviceStateValueCurrent = deviceStateValueCurrent == "null" ? "" : deviceStateValueCurrent;
-                                String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
-                                tvIcon1.setText(deviceIcon);
+                                    deviceTypeCurrent = info.get("deviceType").toString();
+                                    deviceStateValueCurrent = info.get("stateValue").toString();
+                                    deviceStateValueCurrent = deviceStateValueCurrent == "null" ? "" : deviceStateValueCurrent;
+                                    String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
+                                    tvIcon1.setText(deviceIcon);
 
-                                ad.dismiss();
-                            }
-                        });
+                                    ad.dismiss();
+                                }
+                            });
                     ad = builder.show();
                 }
             });
@@ -413,7 +418,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, "DeviceApi1", new OnAPITaskComplete() {
             @Override
-            public void onSuccess(final JSONObject response) {
+            public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_3);
                 try {
 

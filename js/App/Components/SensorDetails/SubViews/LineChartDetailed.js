@@ -167,19 +167,21 @@ getY(data: Object): number {
 }
 
 getYOne(data: Object): number {
-	const { max1 } = this.props;
+	const { max1, min1 } = this.props;
 	if (!data.value || !max1) {
 		return data.value;
 	}
-	return data.value / max1.value;
+	const denom = (max1.value - min1.value) || 1;
+	return (data.value - min1.value) / denom;
 }
 
 getYTwo(data: Object): number {
-	const { max2 } = this.props;
+	const { max2, min2 } = this.props;
 	if (!data.value || !max2) {
 		return data.value;
 	}
-	return data.value / max2.value;
+	const denom = (max2.value - min2.value) || 1;
+	return (data.value - min2.value) / denom;
 }
 
 getX(data: Object): number {
@@ -191,22 +193,20 @@ formatXTick(tick: number): string {
 }
 
 formatYTickOne(tick: number): number {
-	const { max1 } = this.props;
-	if (!max1) {
-		return tick;
-	}
-	return parseFloat(parseFloat(tick * max1.value).toFixed(1));
+	const {
+		ticksAndYOne = {},
+	} = this.getTicksY();
+	const y = ticksAndYOne[tick];
+	return parseFloat(parseFloat(y).toFixed(1));
 }
 
 formatYTickTwo(tick: number): number {
-	const { max2, y2Tick } = this.props;
-	if (!max2) {
-		if (tick.toString().length > y2Tick.length) {
-			this.props.setLargeYTick(tick.toString());
-		}
-		return tick;
-	}
-	const formattedTick = parseFloat(parseFloat(tick * max2.value).toFixed(1));
+	const {
+		ticksAndYTwo = {},
+	} = this.getTicksY();
+	const y = ticksAndYTwo[tick];
+	const { y2Tick } = this.props;
+	const formattedTick = parseFloat(parseFloat(y).toFixed(1));
 	if (formattedTick.toString().length > y2Tick.length) {
 		this.props.setLargeYTick(formattedTick.toString());
 	}
@@ -214,36 +214,42 @@ formatYTickTwo(tick: number): number {
 }
 
 getDomainY(): Array<number> {
-	const ticks = this.getTicksY();
+	const {
+		ticks,
+	} = this.getTicksY();
 	return [ticks[0], ticks[ticks.length - 1]];
 }
 
-getTicksY(): Array<number> {
-	const lowLimit = this.findLowerLimit();
-	const part = (1 - lowLimit) / 2;
-	const mid = lowLimit + part;
-	return [lowLimit, mid, 1];
+prepareTicksAndY = (ticks: Array<number>, min: number, max: number): Object => {
+	const sum = min + max;
+	let mid = sum ? sum / 2 : sum;
+	if (min === max && min === mid) {
+		return {
+			[ticks[0]]: min,
+			[ticks[1]]: min + 1,
+			[ticks[2]]: min + 2,
+		};
+	}
+	return {
+		[ticks[0]]: min,
+		[ticks[1]]: mid,
+		[ticks[2]]: max,
+	};
 }
 
-findLowerLimit(): number {
-	let { min, min1, min2, max1, max2 } = this.props;
-
-	if (min.value === 0) {
-		return 0;
-	}
-	if (max1.value === 0) {
-		max1 = {value: 0.01}; // To prevent divide by zero error.
-	}
-	if (max2.value === 0) {
-		max2 = {value: 0.01}; // To prevent divide by zero error.
-	}
-	const lowLimit1 = min1.value / max1.value;
-	const lowLimit2 = min2.value / max2.value;
-
-	if (lowLimit1 >= lowLimit2) {
-		return lowLimit2;
-	}
-	return lowLimit1;
+getTicksY(): Object {
+	const {
+		max1,
+		min1,
+		max2,
+		min2,
+	} = this.props;
+	const ticks = [0, 0.5, 1];
+	return {
+		ticks,
+		ticksAndYOne: this.prepareTicksAndY(ticks, min1.value, max1.value),
+		ticksAndYTwo: this.prepareTicksAndY(ticks, min2.value, max2.value),
+	};
 }
 
 renderAxis(d: Array<Object>, i: number, styles: Object): null | Object {
@@ -269,7 +275,7 @@ renderAxis(d: Array<Object>, i: number, styles: Object): null | Object {
 		chartLineStyle,
 	} = styles;
 
-	const tickValues = this.getTicksY();
+	const {ticks: tickValues} = this.getTicksY();
 
 	return (
 		<VictoryAxis dependentAxis

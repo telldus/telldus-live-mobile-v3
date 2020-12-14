@@ -31,6 +31,7 @@ import type { ThunkAction, TicketData, Action } from './Types';
 
 import { osTicketKey } from '../../Config';
 import { hasTokenExpired } from '../Lib';
+import i18n from '../Translations/common';
 
 import { ticketTopicIds } from '../../Constants';
 const {
@@ -234,18 +235,18 @@ const checkForInAppUpdates = (): ThunkAction => {
 const addInAppStatusUpdateListener = ({intl}: Object): ThunkAction => {
 	return (dispatch: Function, getState: Function): Function => {
 		const callback = (data: Object = {}) => {
-			// const {
-			// 	formatMessage,
-			// } = intl;
+			const {
+				formatMessage,
+			} = intl;
 			const {
 				status,
 			} = data;
 			if (status === InAppUpdates.UPDATE_STATUS.UPDATE_DOWNLOADED) {
 				Snackbar.show({
-					text: 'Telldus Live! just downloaded an update', // TODO : Translate
+					text: `Telldus Live! ${formatMessage(i18n.downloadedAnUpdate)}`,
 					duration: Snackbar.LENGTH_INDEFINITE,
 					action: {
-						text: 'Reload', // TODO : Translate
+						text: formatMessage(i18n.reload),
 						textColor: 'green',
 						onPress: () => {
 							InAppUpdatesInstance.installUpdate();

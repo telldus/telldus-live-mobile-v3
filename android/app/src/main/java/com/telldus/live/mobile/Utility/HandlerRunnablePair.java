@@ -20,7 +20,6 @@
 package com.telldus.live.mobile.Utility;
 
 import android.os.Handler;
-import android.os.Looper;
 
 public class HandlerRunnablePair {
     private Handler handler;

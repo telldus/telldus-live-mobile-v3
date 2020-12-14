@@ -37,7 +37,7 @@ struct Utilities {
   }
   
   func getAuthData() -> Dictionary<String?, Any>? {
-    let data: String? = WidgetModule().getSecureData()
+    let data: String? = SharedModule().getSecureData()
     guard data != nil else {
       return nil
     }

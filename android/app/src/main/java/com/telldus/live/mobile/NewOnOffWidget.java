@@ -1,23 +1,23 @@
 /**
  * Copyright 2016-present Telldus Technologies AB.
- *
+ * <p>
  * This file is part of the Telldus Live! app.
- *
+ * <p>
  * Telldus Live! app is free : you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * Telldus Live! app is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- package com.telldus.live.mobile;
+package com.telldus.live.mobile;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -28,7 +28,9 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.core.content.ContextCompat;
+
 import android.view.View;
 import android.widget.RemoteViews;
 import android.os.Handler;
@@ -83,11 +85,12 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
     Handler handlerResetDeviceStateToNull;
     Runnable runnableResetDeviceStateToNull;
+
     static void updateAppWidget(
-        Context context,
-        AppWidgetManager appWidgetManager,
-        int appWidgetId,
-        Map extraArgs
+            Context context,
+            AppWidgetManager appWidgetManager,
+            int appWidgetId,
+            Map extraArgs
     ) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
@@ -202,12 +205,12 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     context
             );
             views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
-                "bell",
-                colorIdle,
-                80,
-                60,
-                40,
-                context));
+                    "bell",
+                    colorIdle,
+                    80,
+                    60,
+                    40,
+                    context));
 
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("4")) {
                 int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
@@ -222,31 +225,31 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         context
                 );
                 views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
-                    "bell",
-                    colorOnAction,
-                    80,
-                    60,
-                    40,
-                    context));
+                        "bell",
+                        colorOnAction,
+                        80,
+                        60,
+                        40,
+                        context));
             }
 
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
                 if (state == null || !state.equals("4")) {
                     views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
-                        "statusx",
-                        ContextCompat.getColor(context, R.color.widgetRed),
-                        80,
-                        60,
-                        40,
-                        context));
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            80,
+                            60,
+                            40,
+                            context));
                 } else {
                     views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
-                        "statuscheck",
-                        ContextCompat.getColor(context, R.color.widgetGreen),
-                        80,
-                        60,
-                        40,
-                        context));
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            80,
+                            60,
+                            40,
+                            context));
                 }
                 CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_on);
                 CommonUtilities.handleBackgroundPostActionOne(
@@ -349,7 +352,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
         }
 
-        if (hasRGB) {
+        if (hasRGB && hasDIM) {
             views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
 
             views.setViewVisibility(R.id.rgbActionCover, View.VISIBLE);
@@ -373,55 +376,65 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     (int) (iconWidth * 0.7),
                     context));
 
-            if (methodRequested != null && isShowingStatus != 1 && state == null && (methodRequested.equals(String.valueOf(METHOD_RGB)))) {
-                Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
-                int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting, methodRequested.equals(String.valueOf(METHOD_RGB)), context);
+            if (methodRequested != null && isShowingStatus != 1 && state == null) {
+                Boolean requestedRGB = methodRequested.equals(String.valueOf(METHOD_RGB));
+                Boolean requestedDIM = methodRequested.equals(String.valueOf(METHOD_DIM));
+                if (requestedRGB || requestedDIM) {
+                    Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
+                    int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting, requestedRGB, context);
 
-                String cD = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
-                String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
+                    String cD = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
+                    String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
 
-                int bgColor = settingColor, flashColor = Color.parseColor(cL);
-                if (transparent.equals("dark")) {
-                    bgColor = Color.parseColor(cD);
+                    int bgColor = settingColor, flashColor = Color.parseColor(cL);
+                    if (transparent.equals("dark")) {
+                        bgColor = Color.parseColor(cD);
 
-                    flashColor = Color.parseColor(cL);
-                } else if (transparent.equals("light") || transparent.equals("true")) {
-                    bgColor = Color.parseColor(cL);
+                        flashColor = Color.parseColor(cL);
+                    } else if (transparent.equals("light") || transparent.equals("true")) {
+                        bgColor = Color.parseColor(cL);
 
-                    flashColor = Color.parseColor(cD);
+                        flashColor = Color.parseColor(cD);
+                    }
+
+                    float d = context.getResources().getDisplayMetrics().density;
+                    int flashSize = (int) (7 * d);
+                    Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, flashColor);
+
+                    views.setViewVisibility(R.id.rgb_dynamic_background, View.VISIBLE);
+                    CommonUtilities.showFlashIndicatorRGB(
+                            views,
+                            R.id.flash_view_rgb,
+                            R.id.flashing_indicator_rgb,
+                            backgroundFlash
+                    );
+                    views.setImageViewResource(R.id.rgb_dynamic_background, R.drawable.shape_rgb_mask_no_radi);
+                    views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
+                            "palette",
+                            flashColor,
+                            iconWidth,
+                            (int) (iconWidth * 0.7),
+                            (int) (iconWidth * 0.7),
+                            context));
+                    views.setInt(R.id.rgb_dynamic_background, "setColorFilter", bgColor);
                 }
-
-                float d = context.getResources().getDisplayMetrics().density;
-                int flashSize = (int) (7 * d);
-                Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, flashColor);
-
-                views.setViewVisibility(R.id.rgb_dynamic_background, View.VISIBLE);
-                CommonUtilities.showFlashIndicatorRGB(
-                        views,
-                        R.id.flash_view_rgb,
-                        R.id.flashing_indicator_rgb,
-                        backgroundFlash
-                );
-                views.setImageViewResource(R.id.rgb_dynamic_background, R.drawable.shape_rgb_mask_no_radi);
-                views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
-                        "palette",
-                        flashColor,
-                        iconWidth,
-                        (int) (iconWidth * 0.7),
-                        (int) (iconWidth * 0.7),
-                        context));
-                views.setInt(R.id.rgb_dynamic_background,"setColorFilter", bgColor);
             }
 
             if (methodRequested != null && isShowingStatus == 1) {
-                if (methodRequested.equals(String.valueOf(METHOD_RGB))) {
-                    Boolean wasSuccess = state != null && state.equals(String.valueOf(METHOD_RGB));
-                    if (secondaryStateValue != null && requestedSecStateValue != null) {
+                Boolean requestedRGB = methodRequested.equals(String.valueOf(METHOD_RGB));
+                Boolean requestedDIM = methodRequested.equals(String.valueOf(METHOD_DIM));
+                if (requestedRGB || requestedDIM) {
+                    Boolean stateRGB = state.equals(String.valueOf(METHOD_RGB));
+                    Boolean stateDIM = state.equals(String.valueOf(METHOD_DIM));
+                    Boolean wasSuccess = state != null && stateRGB || stateDIM;
+                    if (requestedRGB && secondaryStateValue != null && requestedSecStateValue != null) {
                         int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
                         int requestedColor = Integer.parseInt(requestedSecStateValue, 10);
                         int _r = Color.red(currentColor), _g = Color.green(currentColor), _b = Color.blue(currentColor);
                         int r = Color.red(requestedColor), g = Color.green(requestedColor), b = Color.blue(requestedColor);
                         wasSuccess = r == _r && g == _g && b == _b;
+                    } else if (requestedDIM && deviceStateValue != null && requestedStateValue != null) {
+                        wasSuccess = deviceStateValue.equals(requestedStateValue);
                     }
                     if (wasSuccess) {
                         views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
@@ -440,7 +453,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                 85,
                                 context));
                     }
-                    CommonUtilities. hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+                    CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_rgb);
                     views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
                     CommonUtilities.handleBackgroundPostActionOne(
                             "RGB",
@@ -464,28 +477,28 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
 
         // DIM
-        if (hasDIM) {
+        if (hasDIM && !hasRGB) {
             views.setViewVisibility(R.id.iconCheck, View.GONE);
             views.setViewVisibility(R.id.dimmerCoverLinear, View.VISIBLE);
             views.setViewVisibility(R.id.dimmerCover, View.VISIBLE);
 
             Boolean isLastButton = false;
             int colorIdle = CommonUtilities.handleBackgroundWhenIdleOne(
-                            "DIM",
-                            transparent,
-                            renderedButtonsCount,
-                            isLastButton,
-                            R.id.dimmerCover,
-                            views,
-                            context
-                        );
+                    "DIM",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.dimmerCover,
+                    views,
+                    context
+            );
             views.setImageViewBitmap(R.id.dimmer, CommonUtilities.buildTelldusIcon(
-                "dim25",
-                colorIdle,
-                80,
-                35,
-                65,
-                context));
+                    "dim25",
+                    colorIdle,
+                    80,
+                    35,
+                    65,
+                    context));
             views.setTextColor(R.id.txtDimmer, colorIdle);
             views.setTextViewTextSize(R.id.txtDimmer, COMPLEX_UNIT_SP, fontSizeSix);
 
@@ -493,23 +506,23 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf((METHOD_DIM)))) {
                 int colorOnAction = CommonUtilities.handleBackgroundOnActionOne(
-                                        "DIM",
-                                        transparent,
-                                        renderedButtonsCount,
-                                        isLastButton,
-                                        R.id.flash_view_dim,
-                                        R.id.flashing_indicator_dim,
-                                        R.id.dimmerCover,
-                                        views,
-                                        context
-                                    );
+                        "DIM",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.flash_view_dim,
+                        R.id.flashing_indicator_dim,
+                        R.id.dimmerCover,
+                        views,
+                        context
+                );
                 views.setImageViewBitmap(R.id.dimmer, CommonUtilities.buildTelldusIcon(
-                    "dim25",
-                    colorOnAction,
-                    80,
-                    35,
-                    65,
-                    context));
+                        "dim25",
+                        colorOnAction,
+                        80,
+                        35,
+                        65,
+                        context));
                 views.setTextColor(R.id.txtDimmer, colorOnAction);
             }
 
@@ -523,22 +536,22 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
                         views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
                         views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
-                            "statuscheck",
-                            ContextCompat.getColor(context, R.color.widgetGreen),
+                                "statuscheck",
+                                ContextCompat.getColor(context, R.color.widgetGreen),
                                 160,
                                 85,
                                 85,
-                            context));
+                                context));
                     } else {
                         views.setViewVisibility(R.id.iconCheck, View.VISIBLE);
                         views.setViewVisibility(R.id.dimmerCoverLinear, View.GONE);
                         views.setImageViewBitmap(R.id.iconCheck, CommonUtilities.buildTelldusIcon(
-                            "statusx",
-                            ContextCompat.getColor(context, R.color.widgetRed),
-                            160,
-                            85,
-                            85,
-                            context));
+                                "statusx",
+                                ContextCompat.getColor(context, R.color.widgetRed),
+                                160,
+                                85,
+                                85,
+                                context));
                     }
                     CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_dim);
                     CommonUtilities.handleBackgroundPostActionOne(
@@ -667,13 +680,16 @@ public class NewOnOffWidget extends AppWidgetProvider {
             );
 
             String moreActionsIcon = hasDIM ? "dim25" : "buttononoff";
+            int iWidth = iconWidth * 2;
+            int iHeight = (int) (iWidth);
+            int iFontSize = (int) (iWidth);
 
             views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
                     moreActionsIcon,
                     colorIdle,
-                    80,
-                    35,
-                    65,
+                    iWidth,
+                    iHeight,
+                    iFontSize,
                     context));
 
             views.setOnClickPendingIntent(R.id.onOffCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
@@ -693,9 +709,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
                         moreActionsIcon,
                         colorOnAction,
-                        80,
-                        35,
-                        65,
+                        iWidth,
+                        iHeight,
+                        iFontSize,
                         context));
             }
 
@@ -721,18 +737,18 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
                             ContextCompat.getColor(context, R.color.widgetGreen),
-                            160,
-                            85,
-                            85,
+                            iWidth,
+                            iHeight,
+                            iFontSize,
                             context));
                 } else {
                     views.setViewVisibility(R.id.moreActionsIcon, View.VISIBLE);
                     views.setImageViewBitmap(R.id.moreActionsIcon, CommonUtilities.buildTelldusIcon(
                             "statusx",
                             ContextCompat.getColor(context, R.color.widgetRed),
-                            160,
-                            85,
-                            85,
+                            iWidth,
+                            iHeight,
+                            iFontSize,
                             context));
                 }
                 CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_on_off);
@@ -785,7 +801,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static PendingIntent getPendingSelf(Context context, String action, int id) {
         Intent intent = new Intent(context, NewOnOffWidget.class);
         intent.setAction(action);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
         return PendingIntent.getBroadcast(context, id, intent, 0);
     }
 
@@ -833,7 +849,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             return;
         }
 
-        int widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+        int widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             return;
         }
@@ -907,15 +923,15 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
     void createDeviceActionApi(final Context context, final int deviceId, int method, final int widgetId, final MyDBHandler db, final String action) {
         PrefManager prefManager = new PrefManager(context);
-        String  accessToken = prefManager.getAccessToken();
+        String accessToken = prefManager.getAccessToken();
 
-        String params = "/device/command?id="+deviceId+"&method="+method+"&value=null";
+        String params = "/device/command?id=" + deviceId + "&method=" + method + "&value=null";
         deviceAPI.setDeviceState(deviceId, method, 0, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 String error = response.optString("error");
                 if (!error.isEmpty() && error != null) {
-                    String noDeviceMessage = "Device \""+deviceId+"\" not found!";
+                    String noDeviceMessage = "Device \"" + deviceId + "\" not found!";
                     if (String.valueOf(error).trim().equalsIgnoreCase(noDeviceMessage.trim())) {
                         db.updateDeviceIdDeviceWidget(-1, widgetId);
                     }
@@ -926,6 +942,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }
+
             @Override
             public void onError(ANError error) {
                 db.updateIsShowingStatus(1, widgetId);
@@ -966,10 +983,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
         UserAPI userAPI = new UserAPI();
         userAPI.getUserProfile(context, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
                 wUpdater.updateAllWidgets(context, new HashMap());
             }
+
             @Override
             public void onError(ANError error) {
             }

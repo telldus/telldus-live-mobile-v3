@@ -31,7 +31,8 @@ import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.BuildConfig;
 
-import java.util.concurrent.Callable;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -42,6 +43,12 @@ public class API {
     public void callEndPoint(final Context context, final String params, String tag, final OnAPITaskComplete callBack) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
+        String userEmail = prefManager.getUserId();
+        String userUuid = prefManager.getUserUuid();
+
+        HashMap<String, String> authData = new HashMap<String, String>();
+        authData.put("userEmail", userEmail);
+        authData.put("userUuid", userUuid);
 
         String Url = API_SERVER+"/oauth2"+params;
         AndroidNetworking.get(Url)
@@ -60,25 +67,25 @@ public class API {
                             if ((error.equalsIgnoreCase("invalid_token")) || (error.equalsIgnoreCase("expired_token"))) {
                                 refreshAccessToken(context, new OnAPITaskComplete() {
                                     @Override
-                                    public void onSuccess(final JSONObject responseRefreshToken) {
+                                    public void onSuccess(final JSONObject responseRefreshToken, HashMap<String, String> _authData) {
 
                                         String error = responseRefreshToken.optString("error");
                                         if (!error.isEmpty() && error != null) {
-                                            callBack.onSuccess(response);
+                                            callBack.onSuccess(response, authData);
                                         } else {
                                             callEndPoint(context, params, tag, callBack);
                                         }
                                     }
                                     @Override
                                     public void onError(ANError errorRefreshToken) {
-                                        callBack.onSuccess(response);
+                                        callBack.onSuccess(response, authData);
                                     }
                                 });
                             } else {
-                                callBack.onSuccess(response);
+                                callBack.onSuccess(response, authData);
                             }
                         } else {
-                            callBack.onSuccess(response);
+                            callBack.onSuccess(response, authData);
                         }
                     }
 
@@ -92,7 +99,7 @@ public class API {
                                 if (hasMessage && (errorMessage.equalsIgnoreCase("invalid_token")) || (errorMessage.equalsIgnoreCase("expired_token"))) {
                                     refreshAccessToken(context, new OnAPITaskComplete() {
                                         @Override
-                                        public void onSuccess(final JSONObject responseRefreshToken) {
+                                        public void onSuccess(final JSONObject responseRefreshToken, HashMap<String, String> _authData) {
                                             String errorRefreshToken = responseRefreshToken.optString("error");
                                             if (!errorRefreshToken.isEmpty() && errorRefreshToken != null) {
                                                 callBack.onError(error);
@@ -124,6 +131,12 @@ public class API {
         final String clientId = prefManager.getClientID();
         final String clientSecret = prefManager.getClientSecret();
         final String refreshToken = prefManager.getRefreshToken();
+        String userEmail = prefManager.getUserId();
+        String userUuid = prefManager.getUserUuid();
+
+        HashMap<String, String> authData = new HashMap<String, String>();
+        authData.put("userEmail", userEmail);
+        authData.put("userUuid", userUuid);
 
         String Url = API_SERVER+"/oauth2/accessToken";
 
@@ -141,14 +154,14 @@ public class API {
                 public void onResponse(JSONObject response) {
                     String error = response.optString("error");
                     if (!error.isEmpty() && error != null) {
-                        callBack.onSuccess(response);
+                        callBack.onSuccess(response, authData);
                     } else {
                         String accessTokenN = response.optString("access_token");
                         String expiresInN = response.optString("expires_in");
 
                         prefManager.setAccessDetails(accessTokenN, expiresInN, clientId, clientSecret, refreshToken);
 
-                        callBack.onSuccess(response);
+                        callBack.onSuccess(response, authData);
                     }
                 }
 

@@ -123,29 +123,33 @@ constructor(props: Props) {
 
 	this.destroyInstanceWebSocket = null;
 	this.sendSocketMessageMeth = null;
+	this.unsubscribeFocusListener = null;
 }
 
 componentDidMount() {
-	const { onDidMount, intl, actions } = this.props;
+	const { onDidMount, intl, actions, navigation } = this.props;
 
-	const callbacks = {
-		callbackOnOpen: this.callbackOnOpen,
-		callbackOnMessage: this.callbackOnMessage,
-	};
+	this.unsubscribeFocusListener = navigation.addListener('focus', () => {
+		const callbacks = {
+			callbackOnOpen: this.callbackOnOpen,
+			callbackOnMessage: this.callbackOnMessage,
+		};
 
-	let {
-		sendSocketMessage,
-		destroyInstance,
-	} = actions.registerForWebSocketEvents(this.gatewayId, callbacks);
-	this.sendSocketMessageMeth = sendSocketMessage;
-	this.destroyInstanceWebSocket = destroyInstance;
+		let {
+			sendSocketMessage,
+			destroyInstance,
+		} = actions.registerForWebSocketEvents(this.gatewayId, callbacks);
+		this.sendSocketMessageMeth = sendSocketMessage;
+		this.destroyInstanceWebSocket = destroyInstance;
+
+		this.devices = [];
+
+		this.startEnterInclusionModeTimeout();
+		this.startShowThrobberTimeout();
+	});
 
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.labelInclude), formatMessage(i18n.AddZDIncludeHeaderTwo));
-	this.devices = [];
-
-	this.startEnterInclusionModeTimeout();
-	this.startShowThrobberTimeout();
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -256,6 +260,9 @@ callbackOnMessage = (msg: Object) => {
 				if (this.inclusionTimer) {
 					clearInterval(this.inclusionTimer);
 				}
+				this.setState({
+					status: `${formatMessage(i18n.addNodeToNetworkOne)}...`,
+				});
 				this.inclusionTimer = setInterval(() => {
 					this.runInclusionTimer(data);
 				}, 1000);
@@ -672,6 +679,9 @@ componentWillUnmount() {
 	if (this.destroyInstanceWebSocket) {
 		this.destroyInstanceWebSocket();
 	}
+	if (this.unsubscribeFocusListener) {
+		this.unsubscribeFocusListener();
+	}
 }
 
 startSleepCheckTimer = () => {
@@ -816,10 +826,12 @@ clearTimer() {
 }
 
 onPressCancel = () => {
+	this.stopAddDevice();
 	this.setState({
 		timer: null,
-		showThrobber: false,
+		showThrobber: true,
 		cantEnterLearnMode: false,
+		status: null,
 	}, () => {
 		clearTimeout(this.sleepCheckTimeout);
 		clearTimeout(this.partialInclusionCheckTimeout);

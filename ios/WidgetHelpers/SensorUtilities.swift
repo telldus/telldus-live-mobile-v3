@@ -285,14 +285,17 @@ struct SensorUtilities {
     return Date(timeIntervalSince1970: TimeInterval(lastUpdated))
   }
   
-  func getLastUpdatedString(lastUpdated: Int) -> String {
+  func getLastUpdatedString(lastUpdated: Int, timezone: String?) -> String {
     guard lastUpdated != -1 else {
       return ""
     }
     let dateFormatter = DateFormatter()
     dateFormatter.timeStyle = DateFormatter.Style.short
     dateFormatter.dateStyle = DateFormatter.Style.short
-    dateFormatter.timeZone = .current
+    if let locale = NSLocale.current.languageCode {
+      dateFormatter.locale = Locale(identifier:locale)
+    }
+    dateFormatter.timeZone = timezone != nil ? TimeZone(identifier: timezone!) : .current
     return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(lastUpdated)))
   }
   

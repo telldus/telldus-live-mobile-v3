@@ -58,6 +58,7 @@ import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.API.GatewaysAPI;
 
 public class NewThermostatWidgetConfigureActivity extends Activity {
     private ProgressDialog pDialog;
@@ -108,7 +109,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
     private String deviceStateValue = null;
 
     public static final String ROOT = "fonts/",
-    FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
+            FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
 
 
     CharSequence[] intervalOptionsValues = {
@@ -145,6 +146,8 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
 
         setResult(RESULT_CANCELED);
         getAllSensorsAndDevices();
+        GatewaysAPI gatewaysAPI = new GatewaysAPI();
+        gatewaysAPI.cacheGateways(getApplicationContext());
         setContentView(R.layout.new_on_off_widget_configure);
 
         String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
@@ -262,7 +265,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 mAppWidgetId = extras.getInt(
-                AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+                        AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             }
 
             // If this activity was started with an intent without an app widget ID, finish with an error.
@@ -291,6 +294,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
+                    String currentUserUuid = prefManager.getUserUuid();
                     String methodRequested = null;
                     String requestedStateValue = null;
                     String requestedSecStateValue = null;
@@ -301,25 +305,26 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                     String secondaryStateValue = dInfoMap.get("secondaryStateValue") != null ? dInfoMap.get("secondaryStateValue").toString() : null;
 
                     DeviceInfo mInsert = new DeviceInfo(
-                        deviceCurrentState,
-                        mAppWidgetId,
-                        id,
-                        deviceName.getText().toString(),
-                        deviceSupportedMethods,
-                        deviceTypeCurrent,
-                        deviceStateValue,
-                        trans,
-                        currentUserId,
-                        methodRequested,
-                        0,
-                        selectInterval,
-                        clientDeviceId,
-                        clientId,
-                        secondaryStateValue,
-                        null, // As of now set only for RGB[control option]
+                            deviceCurrentState,
+                            mAppWidgetId,
+                            id,
+                            deviceName.getText().toString(),
+                            deviceSupportedMethods,
+                            deviceTypeCurrent,
+                            deviceStateValue,
+                            trans,
+                            currentUserId,
+                            methodRequested,
+                            0,
+                            selectInterval,
+                            clientDeviceId,
+                            clientId,
+                            secondaryStateValue,
+                            null, // As of now set only for RGB[control option]
                             null, // As of now set only for RGB[control option]
                             requestedStateValue,
-                            requestedSecStateValue
+                            requestedSecStateValue,
+                            currentUserUuid
                         );
                     db.addWidgetDevice(mInsert);
 
@@ -341,29 +346,29 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewThermostatWidgetConfigureActivity.this
                             ,R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.reserved_widget_android_pick_device)
-                        .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                selectedDeviceIndex = which;
-                                deviceName.setText(deviceNameList[which]);
-                                id = Integer.parseInt(String.valueOf(deviceIdList[which]));
+                            .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    selectedDeviceIndex = which;
+                                    deviceName.setText(deviceNameList[which]);
+                                    id = Integer.parseInt(String.valueOf(deviceIdList[which]));
 
-                                Map<String, Object> info = DeviceInfoMap.get(id);
+                                    Map<String, Object> info = DeviceInfoMap.get(id);
 
-                                deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
-                                deviceStateValue = info.get("deviceStateValue") == null ? null : info.get("deviceStateValue").toString();
+                                    deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
+                                    deviceStateValue = info.get("deviceStateValue") == null ? null : info.get("deviceStateValue").toString();
 
-                                deviceTypeCurrent = info.get("deviceType").toString();
-                                String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
-                                tvIcon1.setText(deviceIcon);
+                                    deviceTypeCurrent = info.get("deviceType").toString();
+                                    String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
+                                    tvIcon1.setText(deviceIcon);
 
-                                deviceCurrentState = info.get("state").toString();
+                                    deviceCurrentState = info.get("state").toString();
 
-                                Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(deviceSupportedMethods);
-                                Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
-                                
-                                ad.dismiss();
-                            }
-                        });
+                                    Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(deviceSupportedMethods);
+                                    Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
+
+                                    ad.dismiss();
+                                }
+                            });
                     ad = builder.show();
                 }
             });
@@ -380,8 +385,8 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
 
                 @Override
                 public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(NewThermostatWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NewThermostatWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
+                    builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             sensorRepeatIntervalLabel.setText(intervalOptions[which]);
@@ -397,7 +402,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                     ad = builder.show();
                 }
             });
-            
+
             deviceName.setTypeface(subtitleFont);
             deviceHint.setTypeface(subtitleFont);
             deviceText.setTypeface(subtitleFont);
@@ -477,7 +482,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, "DeviceApi2", new OnAPITaskComplete() {
             @Override
-            public void onSuccess(final JSONObject response) {
+            public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_2);
                 try {
 
@@ -615,7 +620,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
         SensorsAPI sensorsAPI = new SensorsAPI();
         sensorsAPI.getSensorsList(params, getApplicationContext(), "SensorsApi", new OnAPITaskComplete() {
             @Override
-            public void onSuccess(final JSONObject response) {
+            public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
                 try {
                     JSONObject sensorData = new JSONObject(response.toString());
                     JsonsensorList = sensorData.getJSONArray("sensor");

@@ -168,14 +168,14 @@ public class NewRGBWidget extends AppWidgetProvider {
 
             Boolean isLastButton = true;
             CommonUtilities.handleBackgroundWhenIdleOne(
-                                "RGB",
-                                transparent,
-                                renderedButtonsCount,
-                                isLastButton,
-                                R.id.rgbActionCover,
-                                views,
-                                context
-                            );
+                    "RGB",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.rgbActionCover,
+                    views,
+                    context
+            );
             int iconSize = (int) (iconWidth * 0.7);
 
             int paletteIconColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(context, R.color.brandSecondary)));
@@ -300,7 +300,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             if (normalizeUI) {
                 CommonUtilities.hideFlashIndicator(views, R.id.flashing_indicator_rgb);
             }
-            
+
             renderedButtonsCount++;
         }
 
@@ -464,7 +464,7 @@ public class NewRGBWidget extends AppWidgetProvider {
         UserAPI userAPI = new UserAPI();
         userAPI.getUserProfile(context, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
                 wUpdater.updateAllWidgets(context, new HashMap());
             }
@@ -477,7 +477,7 @@ public class NewRGBWidget extends AppWidgetProvider {
     void createDeviceActionRGB(final Context context, final int deviceId, int method, final Map rgb, final int widgetId, final MyDBHandler db) {
         deviceAPI.setDeviceStateRGB(deviceId, method, rgb, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 String error = response.optString("error");
                 if (!error.isEmpty() && error != null) {
                     String noDeviceMessage = "Device \""+deviceId+"\" not found!";
@@ -520,7 +520,7 @@ public class NewRGBWidget extends AppWidgetProvider {
 
         deviceAPI.setDeviceState(deviceId, METHOD_DIM, dimValue, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
                 createDeviceActionRGB(context, deviceId, METHOD_RGB, rgb, widgetId, db);
             }
             @Override

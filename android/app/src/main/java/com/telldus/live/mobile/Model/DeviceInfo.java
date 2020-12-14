@@ -39,15 +39,18 @@ public class DeviceInfo {
     String secondarySetting;
     String requestedStateValue;
     String requestedSecStateValue;
+    String userUuid;
 
     public DeviceInfo() {
     }
 
     public DeviceInfo(String state, int widgetId, int deviceId, String deviceName, Integer methods,
-    String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested,
+                      String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested,
                       Integer isShowingStatus, Integer updateInterval, Integer clientDeviceId, Integer clientId,
                       String secondaryStateValue, String primarySetting, String secondarySetting,
-                      String requestedStateValue, String requestedSecStateValue) {
+                      String requestedStateValue,
+                      String requestedSecStateValue,
+                      String userUuid) {
         this.state = state;
         this.widgetId = widgetId;
         this.deviceId = deviceId;
@@ -67,6 +70,7 @@ public class DeviceInfo {
         this.secondarySetting = secondarySetting;
         this.requestedStateValue = requestedStateValue;
         this.requestedSecStateValue = requestedSecStateValue;
+        this.userUuid = userUuid;
     }
 
     public String getState() {
@@ -197,7 +201,7 @@ public class DeviceInfo {
         this.primarySetting = primarySetting;
     }
 
-     public String getSecondarySetting() {
+    public String getSecondarySetting() {
         return secondarySetting;
     }
 
@@ -219,5 +223,13 @@ public class DeviceInfo {
 
     public void setRequestedSecStateValue(String requestedSecStateValue) {
         this.requestedSecStateValue = requestedSecStateValue;
+    }
+
+    public void setUserUuid(String userUuid) {
+        this.userUuid = userUuid;
+    }
+
+    public String getUserUuid() {
+        return this.userUuid;
     }
 }

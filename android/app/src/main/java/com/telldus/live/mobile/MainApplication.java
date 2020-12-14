@@ -66,15 +66,15 @@ public class MainApplication extends Application implements ReactApplication {
 
 	@Override
 	public ReactNativeHost getReactNativeHost() {
-			return mReactNativeHost;
+		return mReactNativeHost;
 	}
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+	@Override
+	public void onCreate() {
+		super.onCreate();
 		// saving current locale of the user inorder to reload the app(inside MainActivity) on locale change.
 		MainActivity.currentLocale = getResources().getConfiguration().locale.toString();
 
-        SoLoader.init(this, /* native exopackage */ false);
-    }
+		SoLoader.init(this, /* native exopackage */ false);
+	}
 }

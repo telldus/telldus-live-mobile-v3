@@ -313,6 +313,9 @@ const getTextColor = (props: Object): ?string => {
 		case 46: {
 			return colors.baseColor;
 		}
+		case 47: {
+			return colors.backgroundOneButtonDisabled;
+		}
 		default:
 			return;
 	}

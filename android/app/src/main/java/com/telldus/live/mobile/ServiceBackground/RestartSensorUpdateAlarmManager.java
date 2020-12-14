@@ -61,7 +61,7 @@ public class RestartSensorUpdateAlarmManager extends Service {
         NotificationCompat.Builder notificationBuilder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
-            CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                    CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(notificationChannel);
             notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
         } else {

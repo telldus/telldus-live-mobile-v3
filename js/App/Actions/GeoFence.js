@@ -900,7 +900,9 @@ function addGeofence(override?: boolean = false): ThunkAction {
 				},
 			} = getState();
 
-			const enableGeoFence = typeof defaultSettings.enableGeoFence === 'undefined' ? true : defaultSettings.enableGeoFence;
+			const {
+				enableGeoFence = false,
+			} = defaultSettings;
 			const {
 				identifier,
 				radius,

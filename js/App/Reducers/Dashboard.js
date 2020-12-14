@@ -260,7 +260,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 	const userDbExtras = dbExtras[userId] || {};
 	const { customOrder } = userDbExtras[activeDashboardId] || {};
 
-	if (!customOrder) {
+	if (!customOrder || customOrder.length <= 0) {
 		return orderedList;
 	}
 

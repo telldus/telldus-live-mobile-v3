@@ -81,7 +81,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	} = useDialogueBox();
 
 	useEffect(() => {
-		onDidMount(`5. ${formatMessage(i18n.name)}`, formatMessage(i18n.selectNameForArea));
+		onDidMount(`2. ${formatMessage(i18n.name)}`, formatMessage(i18n.selectNameForArea));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

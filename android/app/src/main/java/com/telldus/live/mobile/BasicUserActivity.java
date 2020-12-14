@@ -33,6 +33,7 @@ import com.androidnetworking.error.ANError;
 
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -104,21 +105,21 @@ public class BasicUserActivity extends Activity {
                 TextView throbber = (TextView) p_p_1.findViewById(R.id.throbber);
                 showThrobber(throbber);
                 userAPI.createTransaction(
-                    "proyear",
-                    "1",
-                    Constants.PURCHASE_SUCCESS_URL,
-                    getApplicationContext(),
-                    new OnAPITaskComplete() {
-                        @Override
-                        public void onSuccess(JSONObject response) {
-                            hideThrobber(throbber);
-                            handleSuccess(response, "proyear");
+                        "proyear",
+                        "1",
+                        Constants.PURCHASE_SUCCESS_URL,
+                        getApplicationContext(),
+                        new OnAPITaskComplete() {
+                            @Override
+                            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
+                                hideThrobber(throbber);
+                                handleSuccess(response, "proyear");
+                            }
+                            @Override
+                            public void onError(ANError error) {
+                                hideThrobber(throbber);
+                            }
                         }
-                        @Override
-                        public void onError(ANError error) {
-                            hideThrobber(throbber);
-                        }
-                    }
                 );
             }
         });
@@ -159,21 +160,21 @@ public class BasicUserActivity extends Activity {
                 TextView throbber = (TextView) p_p_2.findViewById(R.id.throbber);
                 showThrobber(throbber);
                 userAPI.createTransaction(
-                    "prohalfyear",
-                    "1",
-                    Constants.PURCHASE_SUCCESS_URL,
-                    getApplicationContext(),
-                    new OnAPITaskComplete() {
-                        @Override
-                        public void onSuccess(JSONObject response) {
-                            hideThrobber(throbber);
-                            handleSuccess(response, "prohalfyear");
+                        "prohalfyear",
+                        "1",
+                        Constants.PURCHASE_SUCCESS_URL,
+                        getApplicationContext(),
+                        new OnAPITaskComplete() {
+                            @Override
+                            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
+                                hideThrobber(throbber);
+                                handleSuccess(response, "prohalfyear");
+                            }
+                            @Override
+                            public void onError(ANError error) {
+                                hideThrobber(throbber);
+                            }
                         }
-                        @Override
-                        public void onError(ANError error) {
-                            hideThrobber(throbber);
-                        }
-                    }
                 );
             }
         });
@@ -202,21 +203,21 @@ public class BasicUserActivity extends Activity {
                 TextView throbber = (TextView) p_p_3.findViewById(R.id.throbber);
                 showThrobber(throbber);
                 userAPI.createTransaction(
-                    "promonth",
-                    "1",
-                    Constants.PURCHASE_SUCCESS_URL,
-                    getApplicationContext(),
-                    new OnAPITaskComplete() {
-                        @Override
-                        public void onSuccess(JSONObject response) {
-                            hideThrobber(throbber);
-                            handleSuccess(response, "promonth");
+                        "promonth",
+                        "1",
+                        Constants.PURCHASE_SUCCESS_URL,
+                        getApplicationContext(),
+                        new OnAPITaskComplete() {
+                            @Override
+                            public void onSuccess(JSONObject response, HashMap<String, String> authData) {
+                                hideThrobber(throbber);
+                                handleSuccess(response, "promonth");
+                            }
+                            @Override
+                            public void onError(ANError error) {
+                                hideThrobber(throbber);
+                            }
                         }
-                        @Override
-                        public void onError(ANError error) {
-                            hideThrobber(throbber);
-                        }
-                    }
                 );
             }
         });

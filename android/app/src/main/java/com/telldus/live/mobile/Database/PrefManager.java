@@ -95,4 +95,13 @@ public class PrefManager {
     public Float getTextFontSizeFactor() {
         return pref.getFloat("fontSizeFactor", BASE_FONT_SIZE_FACTOR);
     }
+
+    public String getUserUuid() {
+        return pref.getString("userUuid", null);
+    }
+
+    public void setUserUuid(String uuid) {
+        editor.putString("userUuid", uuid);
+        editor.apply();
+    }
 }

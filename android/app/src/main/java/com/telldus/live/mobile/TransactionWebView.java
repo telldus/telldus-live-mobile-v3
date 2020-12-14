@@ -35,6 +35,9 @@ public class TransactionWebView extends Activity {
         setContentView(R.layout.transaction_webview);
 
         Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            return;
+        }
         String url = extras.getString("URL");
         String pack = extras.getString("pack");
 

@@ -23,7 +23,8 @@ struct SensorProvider: IntentTimelineProvider {
       unit: "",
       luTime: -1,
       displayType: WidgetViewType.preEditView,
-      owningAccount: ""
+      owningAccount: "",
+      timezone: nil
     ))
   }
   
@@ -41,7 +42,8 @@ struct SensorProvider: IntentTimelineProvider {
       unit: WidgetUtils.previewPostEditSensorWidgetStructure.unit,
       luTime: WidgetUtils.previewPostEditSensorWidgetStructure.luTime,
       displayType: WidgetUtils.previewPostEditSensorWidgetStructure.displayType,
-      owningAccount: WidgetUtils.previewPostEditSensorWidgetStructure.owningAccount
+      owningAccount: WidgetUtils.previewPostEditSensorWidgetStructure.owningAccount,
+      timezone: nil
     ))
     completion(entry)
   }

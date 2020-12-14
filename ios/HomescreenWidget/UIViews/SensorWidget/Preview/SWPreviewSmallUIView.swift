@@ -17,11 +17,11 @@ struct SWPreviewSmallUIView: View {
     let value = sensorWidgetStructure.value
     let unit = sensorWidgetStructure.unit
     let luTime = SensorUtilities().getLastUpdatedDate(lastUpdated: sensorWidgetStructure.luTime)
-    let luTimeString = SensorUtilities().getLastUpdatedString(lastUpdated: sensorWidgetStructure.luTime)
+    let luTimeString = SensorUtilities().getLastUpdatedString(lastUpdated: sensorWidgetStructure.luTime, timezone: sensorWidgetStructure.timezone)
     let isLarge = SensorUtilities().isValueLarge(value: value)
     let isUpdateTimeOld = SensorUtilities().isTooOld(lastUpdated: sensorWidgetStructure.luTime)
     
-    let sensorLastUpdatedMode = WidgetModule().getUserDefault(key: "sensorLastUpdatedModeKey")
+    let sensorLastUpdatedMode = SharedModule().getUserDefault(key: "sensorLastUpdatedModeKey")
     
     return VStack(spacing: 0) {
       VStack(alignment: .center, spacing: 0) {

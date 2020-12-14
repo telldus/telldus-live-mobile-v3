@@ -53,11 +53,11 @@ public class UserAPI {
         API endPoints = new API();
         endPoints.callEndPoint(context, params, "UserProfile", new OnAPITaskComplete() {
             @Override
-            public void onSuccess(final JSONObject response) {
+            public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
                 try {
                     String error = response.optString("error");
                     if (!error.isEmpty() && error != null) {
-                        callBack.onSuccess(response);
+                        callBack.onSuccess(response, authData);
                     } else {
                         int proNew = response.optInt("pro");
                         String email = response.optString("email");
@@ -68,10 +68,10 @@ public class UserAPI {
                         if (pro != proNew) {
                             prefManager.setUserId(email, proNew);
                         }
-                        callBack.onSuccess(response);
+                        callBack.onSuccess(response, authData);
                     }
                 } catch (Exception e) {
-                    callBack.onSuccess(response);
+                    callBack.onSuccess(response, authData);
                 };
             }
             @Override
@@ -86,8 +86,8 @@ public class UserAPI {
         API endPoints = new API();
         endPoints.callEndPoint(context, params, "CreateTransaction", new OnAPITaskComplete() {
             @Override
-            public void onSuccess(final JSONObject response) {
-                callBack.onSuccess(response);
+            public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
+                callBack.onSuccess(response, authData);
             }
             @Override
             public void onError(ANError error) {

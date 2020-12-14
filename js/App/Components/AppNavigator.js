@@ -46,6 +46,7 @@ import ThermostatControl from './ThermostatControl/ThermostatFullControl';
 import ProfileNavigator from './Profile/ProfileNavigator';
 import AddSensorNavigator from './Sensor/AddSensor/AddSensorNavigator';
 import GeoFenceNavigator from './GeoFence/GeoFenceNavigator';
+import ChangeLogScreen from './ChangeLog/ChangeLog';
 
 import SettingsContainer from './Settings/SettingsContainer';
 import PushSettings from './PushSettings/PushSettings';
@@ -485,6 +486,13 @@ const ScreenConfigs = [
 			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
+	{
+		name: 'ChangeLogScreen',
+		Component: ChangeLogScreen,
+		options: {
+			headerShown: false,
+		},
+	},
 ];
 
 const NavigatorConfigs = {
@@ -558,6 +566,11 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 
 	const onReady = React.useCallback(() => {
 		isReadyRef.current = true;
+		if (navigationRef && navigationRef.current && navigationRef.current.getCurrentRoute) {
+			const currentScreen = navigationRef.current.getCurrentRoute().name;
+			dispatch(screenChange(currentScreen));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

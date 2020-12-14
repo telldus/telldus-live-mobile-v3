@@ -1,0 +1,2 @@
+- Bug fix, dashboard gone empty on upgrading to 3.16
+

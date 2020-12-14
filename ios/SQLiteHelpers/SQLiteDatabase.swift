@@ -147,6 +147,25 @@ class SQLiteDatabase {
     }
   }
   
+  func insertGatewayDetailsModel(gatewayDetailsModel: GatewayDetailsModel) throws {
+    let insertStatement = try prepareStatement(sql: GatewayDetailsModel.insertStatement)
+    defer {
+      sqlite3_finalize(insertStatement)
+    }
+    let userId: NSString = gatewayDetailsModel.userId as NSString
+    let timezone: NSString = gatewayDetailsModel.timezone as NSString
+    guard
+      sqlite3_bind_int(insertStatement, 1, Int32(gatewayDetailsModel.id)) == SQLITE_OK  &&
+        sqlite3_bind_text(insertStatement, 2, userId.utf8String, -1, nil) == SQLITE_OK &&
+        sqlite3_bind_text(insertStatement, 3, timezone.utf8String, -1, nil) == SQLITE_OK
+    else {
+      throw SQLiteError.Bind(message: errorMessage)
+    }
+    guard sqlite3_step(insertStatement) == SQLITE_DONE else {
+      throw SQLiteError.Step(message: errorMessage)
+    }
+  }
+  
   func deviceDetailsModel(deviceId: Int32) -> DeviceDetailsModel? {
     guard let queryStatement = try? prepareStatement(sql: DeviceDetailsModel.selectStatement) else {
       return nil
@@ -304,6 +323,36 @@ class SQLiteDatabase {
     return data;
   }
   
+  func gatewayDetailsModel(gatewayId: Int32) -> GatewayDetailsModel? {
+    guard let queryStatement = try? prepareStatement(sql: GatewayDetailsModel.selectStatement) else {
+      return nil
+    }
+    defer {
+      sqlite3_finalize(queryStatement)
+    }
+    guard sqlite3_bind_int(queryStatement, 1, gatewayId) == SQLITE_OK else {
+      return nil
+    }
+    guard sqlite3_step(queryStatement) == SQLITE_ROW else {
+      return nil
+    }
+    let id = sqlite3_column_int(queryStatement, 0)
+    guard let queryResultCol1 = sqlite3_column_text(queryStatement, 1) else {
+      return nil
+    }
+    let userId = String(cString: queryResultCol1)
+    guard let queryResultCol2 = sqlite3_column_text(queryStatement, 2) else {
+      return nil
+    }
+    let timezone = String(cString: queryResultCol2)
+    
+    return GatewayDetailsModel(
+      id: Int(id),
+      userId: userId,
+      timezone: timezone
+    )
+  }
+  
   func deviceDetailsModels() -> Array<DeviceDetailsModel?> {
     let data: Array<DeviceDetailsModel?> = []
     guard let queryStatement = try? prepareStatement(sql: DeviceDetailsModel.selectAllStatement) else {
@@ -326,6 +375,18 @@ class SQLiteDatabase {
     }
     
     return getSensorDetailsModels(queryStatement: queryStatement);
+  }
+  
+  func gatewayDetailsModels() -> Array<GatewayDetailsModel?> {
+    let data: Array<GatewayDetailsModel?> = []
+    guard let queryStatement = try? prepareStatement(sql: GatewayDetailsModel.selectAllStatement) else {
+      return data
+    }
+    defer {
+      sqlite3_finalize(queryStatement)
+    }
+    
+    return getGatewayDetailsModels(queryStatement: queryStatement);
   }
   
   func deviceDetailsModelsCurrentAccount(userId: NSString) -> Array<DeviceDetailsModel?> {
@@ -354,6 +415,54 @@ class SQLiteDatabase {
       return data
     }
     return getSensorDetailsModels(queryStatement: queryStatement);
+  }
+  
+  func gatewayDetailsModelsCurrentAccount(userId: NSString) -> Array<GatewayDetailsModel?> {
+    let data: Array<GatewayDetailsModel?> = []
+    guard let queryStatement = try? prepareStatement(sql: GatewayDetailsModel.selectStatementCurrentAccount) else {
+      return data
+    }
+    defer {
+      sqlite3_finalize(queryStatement)
+    }
+    guard sqlite3_bind_text(queryStatement, 1, userId.utf8String, -1, nil) == SQLITE_OK else {
+      return data
+    }
+    return getGatewayDetailsModels(queryStatement: queryStatement);
+  }
+  
+  func gatewayDetailsModelCurrentAccountAndId(userId: NSString, id: Int32) -> GatewayDetailsModel? {
+    let data: GatewayDetailsModel? = nil
+    guard let queryStatement = try? prepareStatement(sql: GatewayDetailsModel.selectStatementCurrentAccountAndId) else {
+      return data
+    }
+    defer {
+      sqlite3_finalize(queryStatement)
+    }
+    guard sqlite3_bind_int(queryStatement, 1, id) == SQLITE_OK &&
+            sqlite3_bind_text(queryStatement, 2, userId.utf8String, -1, nil) == SQLITE_OK
+    else {
+      return data
+    }
+    guard sqlite3_step(queryStatement) == SQLITE_ROW else {
+      return data
+    }
+    
+    let id = sqlite3_column_int(queryStatement, 0)
+    guard let queryResultCol1 = sqlite3_column_text(queryStatement, 1) else {
+      return data
+    }
+    let userId = String(cString: queryResultCol1)
+    guard let queryResultCol2 = sqlite3_column_text(queryStatement, 2) else {
+      return data
+    }
+    let timezone = String(cString: queryResultCol2)
+    
+    return GatewayDetailsModel(
+      id: Int(id),
+      userId: userId,
+      timezone: timezone
+    )
   }
   
   func getDeviceDetailsModels(queryStatement: OpaquePointer) -> Array<DeviceDetailsModel?> {
@@ -437,6 +546,27 @@ class SQLiteDatabase {
           sensorProtocol: sensorProtocol,
           isUpdating: Int(isUpdating),
           userEmail: userEmail
+        ))
+      }
+    }
+    return data;
+  }
+  
+  func getGatewayDetailsModels(queryStatement: OpaquePointer) -> Array<GatewayDetailsModel?> {
+    var data: Array<GatewayDetailsModel?> = []
+    while sqlite3_step(queryStatement) == SQLITE_ROW {
+      let id = sqlite3_column_int(queryStatement, 0)
+      if let queryResultCol1 = sqlite3_column_text(queryStatement, 1),
+         let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
+      {
+        
+        let userId = String(cString: queryResultCol1)
+        let timezone = String(cString: queryResultCol2)
+        
+        data.append(GatewayDetailsModel(
+          id: Int(id),
+          userId: userId,
+          timezone: timezone
         ))
       }
     }

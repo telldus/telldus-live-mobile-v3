@@ -30,11 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Model.GatewayInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "Telldus.db";
 
     private static final String TABLE_WIDGET_INFO_DEVICE = "WidgetInfoDevice";
@@ -58,6 +59,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public static final String CLIENT_DEVICE_ID = "clientDeviceId";
     public static final String CLIENT_ID = "clientId";
+    public static final String COLUMN_USER_UUID = "userUuid";
 
     public static final String TABLE_WIDGET_INFO_SENSOR = "WidgetInfoSensor";
     public static final String WIDGET_ID_SENSOR = "widgetIdSensor";
@@ -71,6 +73,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String SENSOR_ICON = "sensorIcon";
     public static final String SENSOR_UPDATE_INTERVAL = "sensorUpdateInterval";
     public static final String SENSOR_IS_UPDATING = "sensorIsUpdating";
+
+    public static final String TABLE_GATEWAYS_INFO = "GatewaysInfo";
+    public static final String GATEWAYS_INFO_COLUMN_ID = "id";
+    public static final String GATEWAYS_INFO_COLUMN_USER_UUID = "userUuid";
+    public static final String GATEWAYS_INFO_COLUMN_TIMEZONE = "timezone";
 
     public MyDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -91,16 +98,25 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 + " TEXT,"+ DEVICE_IS_SHOWING_STATUS + " INTEGER," + SENSOR_UPDATE_INTERVAL + " INTEGER," +
                 CLIENT_DEVICE_ID + " INTEGER," + CLIENT_ID + " INTEGER," +  DEVICE_SECONDARY_STATE_VALUE + " TEXT," +
                 PRIMARY_SETTING + " TEXT," + SECONDARY_SETTING + " TEXT," + REQUESTED_DEVICE_STATE_VALUE + " TEXT," +
-                REQUESTED_DEVICE_SECONDARY_STATE_VALUE + " TEXT" + ")";
+                REQUESTED_DEVICE_SECONDARY_STATE_VALUE + " TEXT," + COLUMN_USER_UUID + " TEXT)";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_SENSOR + "("+ WIDGET_ID_SENSOR + " INTEGER," + SENSOR_ID
                 + " INTEGER," + SENSOR_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT," + SENSOR_UPDATE
                 + " TEXT,"+ SENSOR_VALUE + " TEXT," +  SENSOR_UNIT + " TEXT," +  SENSOR_ICON + " TEXT," + TRANSPARENT
-                + " TEXT," + WIDGET_SENSOR_USER_ID + " TEXT," + SENSOR_UPDATE_INTERVAL + " INTEGER," + SENSOR_IS_UPDATING + " TEXT)";
+                + " TEXT," + WIDGET_SENSOR_USER_ID + " TEXT," + SENSOR_UPDATE_INTERVAL + " INTEGER," +
+                SENSOR_IS_UPDATING +" TEXT," + CLIENT_ID + " INTEGER," + COLUMN_USER_UUID + " TEXT)";
 
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_SENSOR_TABLE);
+        this.createGatewaysInfoTable(db);
+    }
+
+    public void createGatewaysInfoTable(SQLiteDatabase db) {
+        String CREATE_GATEWAYS_INFO_TABLE = "CREATE TABLE " +
+                TABLE_GATEWAYS_INFO + "("+ GATEWAYS_INFO_COLUMN_ID + " INTEGER," + GATEWAYS_INFO_COLUMN_USER_UUID
+                + " TEXT," + GATEWAYS_INFO_COLUMN_TIMEZONE + " TEXT, UNIQUE(" + GATEWAYS_INFO_COLUMN_ID + ", " + GATEWAYS_INFO_COLUMN_USER_UUID + "))";
+        db.execSQL(CREATE_GATEWAYS_INFO_TABLE);
     }
 
     @Override
@@ -180,6 +196,55 @@ public class MyDBHandler extends SQLiteOpenHelper {
             addRequestedStatevalueToDevicesTable(db);
             addRequestedSecStatevalueToDevicesTable(db);
         }
+
+        if (oldVersion == 1 && newVersion == 6) {
+            addColumnIsUpdatingToSensorsTable(db);
+            addUpdateIntervalToDevicesTable(db);
+            addClientDeviceIdToDevicesTable(db);
+            addClientIdToDevicesTable(db);
+            addSecondaryStateValueTable(db);
+            addPrimarySettingToDevicesTable(db);
+            addSecondarySettingToDevicesTable(db);
+            addRequestedStatevalueToDevicesTable(db);
+            addRequestedSecStatevalueToDevicesTable(db);
+            this.createGatewaysInfoTable(db);
+            this.addClientIdToSensorsTable(db);
+            this.addUserUuidToBothTables(db);
+        }
+        if (oldVersion == 2 && newVersion == 6) {
+            addUpdateIntervalToDevicesTable(db);
+            addClientDeviceIdToDevicesTable(db);
+            addClientIdToDevicesTable(db);
+            addSecondaryStateValueTable(db);
+            addPrimarySettingToDevicesTable(db);
+            addSecondarySettingToDevicesTable(db);
+            addRequestedStatevalueToDevicesTable(db);
+            addRequestedSecStatevalueToDevicesTable(db);
+            this.createGatewaysInfoTable(db);
+            this.addClientIdToSensorsTable(db);
+            this.addUserUuidToBothTables(db);
+        }
+        if (oldVersion == 3 && newVersion == 6) {
+            addPrimarySettingToDevicesTable(db);
+            addSecondarySettingToDevicesTable(db);
+            addRequestedStatevalueToDevicesTable(db);
+            addRequestedSecStatevalueToDevicesTable(db);
+            this.createGatewaysInfoTable(db);
+            this.addClientIdToSensorsTable(db);
+            this.addUserUuidToBothTables(db);
+        }
+        if (oldVersion == 4 && newVersion == 6) {
+            addRequestedStatevalueToDevicesTable(db);
+            addRequestedSecStatevalueToDevicesTable(db);
+            this.createGatewaysInfoTable(db);
+            this.addClientIdToSensorsTable(db);
+            this.addUserUuidToBothTables(db);
+        }
+        if (oldVersion == 5 && newVersion == 6) {
+            this.createGatewaysInfoTable(db);
+            this.addClientIdToSensorsTable(db);
+            this.addUserUuidToBothTables(db);
+        }
     }
 
     public void addColumnIsUpdatingToSensorsTable(SQLiteDatabase db) {
@@ -227,6 +292,18 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(ALTER_TABLE_DEVICE);
     }
 
+    public void addClientIdToSensorsTable(SQLiteDatabase db) {
+        String ALTER_TABLE_SENSOR = "ALTER TABLE " + TABLE_WIDGET_INFO_SENSOR + " ADD COLUMN " + CLIENT_ID + " INTEGER";
+        db.execSQL(ALTER_TABLE_SENSOR);
+    }
+
+    public void addUserUuidToBothTables(SQLiteDatabase db) {
+        String ALTER_TABLE_DEVICE = "ALTER TABLE " + TABLE_WIDGET_INFO_DEVICE + " ADD COLUMN " + COLUMN_USER_UUID + " TEXT";
+        db.execSQL(ALTER_TABLE_DEVICE);
+        String ALTER_TABLE_SENSOR = "ALTER TABLE " + TABLE_WIDGET_INFO_SENSOR + " ADD COLUMN " + COLUMN_USER_UUID + " TEXT";
+        db.execSQL(ALTER_TABLE_SENSOR);
+    }
+
     public void addWidgetDevice(DeviceInfo mDeviceInfo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -250,6 +327,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(SECONDARY_SETTING, mDeviceInfo.getSecondarySetting());
         values.put(REQUESTED_DEVICE_STATE_VALUE, mDeviceInfo.getRequestedStateValue());
         values.put(REQUESTED_DEVICE_SECONDARY_STATE_VALUE, mDeviceInfo.getRequestedSecStateValue());
+        values.put(COLUMN_USER_UUID, mDeviceInfo.getUserUuid());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_DEVICE, null, values);
@@ -272,9 +350,22 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(WIDGET_SENSOR_USER_ID, mSensorInfo.getUserId());
         values.put(SENSOR_UPDATE_INTERVAL, mSensorInfo.getUpdateInterval());
         values.put(SENSOR_IS_UPDATING, mSensorInfo.getIsUpdating());
+        values.put(CLIENT_ID, mSensorInfo.getClientId());
+        values.put(COLUMN_USER_UUID, mSensorInfo.getUserUuid());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_SENSOR, null, values);
+        db.close();
+    }
+
+    public void addGatewaysInfo(GatewayInfo gatewayInfo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(GATEWAYS_INFO_COLUMN_ID, gatewayInfo.getId());
+        values.put(GATEWAYS_INFO_COLUMN_USER_UUID, gatewayInfo.getUserUuid());
+        values.put(GATEWAYS_INFO_COLUMN_TIMEZONE, gatewayInfo.getTimezone());
+        db.replace(TABLE_GATEWAYS_INFO, null, values);
         db.close();
     }
 
@@ -306,6 +397,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setSecondarySetting(cursor.getString(16));
             r.setRequestedStateValue(cursor.getString(17));
             r.setRequestedSecStateValue(cursor.getString(18));
+            r.setUserUuid(cursor.getString(19));
 
             cursor.close();
         } else {
@@ -336,6 +428,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setUserId(cursor.getString(9));
             r.setUpdateInterval(cursor.getInt(10));
             r.setIsUpdating(cursor.getString(11));
+            r.setClientId(cursor.getInt(12));
+            r.setUserUuid(cursor.getString(13));
 
             cursor.close();
         } else {
@@ -344,6 +438,28 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
         return r;
     }
+
+    public GatewayInfo findCurrentAccountGatewaysInfo(int id, String userId) {
+        String query = "Select * FROM " + TABLE_GATEWAYS_INFO + " WHERE " + GATEWAYS_INFO_COLUMN_ID + " =  \"" + id + "\""+ " AND " + GATEWAYS_INFO_COLUMN_USER_UUID + " =  \"" + userId + "\"";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        GatewayInfo r = new GatewayInfo();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+
+            r.setId(cursor.getInt(0));
+            r.setUserUuid(cursor.getString(1));
+            r.setTimezone(cursor.getString(2));
+
+            cursor.close();
+        } else {
+            r = null;
+        }
+        db.close();
+        return r;
+    }
+
     public ArrayList<SensorInfo> findWidgetInfoSensorWithSensorId(int id) {
         String selectQuery = "Select * FROM " + TABLE_WIDGET_INFO_SENSOR + " WHERE " + SENSOR_ID + " =  \"" + id + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
@@ -358,6 +474,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setSensorName(cursor.getString(2));
                 r.setSensorDisplayType(cursor.getString(3));
                 r.setUpdateInterval(cursor.getInt(10));
+                r.setClientId(cursor.getInt(12));
+                r.setUserUuid(cursor.getString(13));
                 mSensorInfo.add(r);
             } while (cursor.moveToNext());
         }
@@ -547,6 +665,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setSecondarySetting(cursor.getString(16));
                 r.setRequestedStateValue(cursor.getString(17));
                 r.setRequestedSecStateValue(cursor.getString(18));
+                r.setUserUuid(cursor.getString(19));
 
                 list.add(r);
             } while (cursor.moveToNext());
@@ -583,6 +702,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setTransparent(cursor.getString(8));
                 r.setUserId(cursor.getString(9));
                 r.setUpdateInterval(cursor.getInt(10));
+                r.setClientId(cursor.getInt(12));
+                r.setUserUuid(cursor.getString(13));
 
                 list.add(r);
             } while (cursor.moveToNext());

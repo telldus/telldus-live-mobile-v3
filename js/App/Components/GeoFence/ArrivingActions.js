@@ -56,7 +56,7 @@ const ArrivingActions = React.memo<Object>((props: Props): Object => {
 
 	useEffect(() => {
 		const h = capitalize(formatMessage(i18n.arrivingActions));
-		const h1 = `${isEdit ? h : `2. ${h}`}`;
+		const h1 = `${isEdit ? h : `3. ${h}`}`;
 		onDidMount(h1, formatMessage(i18n.selectActionArrive));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isEdit]);

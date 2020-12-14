@@ -15,16 +15,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-package com.telldus.live.mobile.API;
+// @flow
 
-import com.androidnetworking.error.ANError;
-import org.json.JSONObject;
+'use strict';
 
-import java.util.HashMap;
+// User actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { WebsocketExtras } = actions;
 
-public interface OnAPITaskComplete {
-    void onSuccess(JSONObject result, HashMap<String, String> authData);
-    void onError(ANError result);
-}
+module.exports = WebsocketExtras;

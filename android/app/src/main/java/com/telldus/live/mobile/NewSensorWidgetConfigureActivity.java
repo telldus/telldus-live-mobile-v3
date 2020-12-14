@@ -58,6 +58,7 @@ import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.API.GatewaysAPI;
 
 public class NewSensorWidgetConfigureActivity extends Activity {
 
@@ -75,15 +76,17 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     CharSequence[] sensorDataList = null;
     CharSequence[] sensorNameList = null;
     CharSequence[] sensorIdList = null;
+    CharSequence[] clientIdList = null;
     CharSequence[] intervalOptionsValues = {
-        "5", "10", "30", "60",
+            "5", "10", "30", "60",
     };
     int multiplierMilli = 60000;
 
     List<String> nameListItems = new ArrayList<String>();
     List<String> idList = new ArrayList<String>();
+    List<String> clientidList = new ArrayList<String>();
 
-    private Integer id, selectInterval = multiplierMilli * Integer.parseInt(intervalOptionsValues[0].toString());
+    private Integer id, selectInterval = multiplierMilli * Integer.parseInt(intervalOptionsValues[0].toString()), clientId;
 
     Map<String, Map> SensorInfoMap = new HashMap<String, Map>();
 
@@ -140,6 +143,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         }
 
         createSensorsApi();
+        GatewaysAPI gatewaysAPI = new GatewaysAPI();
+        gatewaysAPI.cacheGateways(getApplicationContext());
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_sensor_widget_configure);
@@ -281,7 +286,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
-
+                    String currentUserUuid = prefManager.getUserUuid();
                     String trans = "default";
                     if (radio_dark.isChecked()) {
                         trans = "dark";
@@ -291,19 +296,21 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
 
                     SensorInfo mSensorInfo = new SensorInfo(
-                        appWidgetId,
-                        sensorName.getText().toString(),
-                        sensorDataName.getText().toString(),
-                        id,
-                        senValue,
-                        senUnit,
-                        senIcon,
-                        lastUp,
-                        trans,
-                        currentUserId,
-                        selectInterval,
-                        "false"
-                        );
+                            appWidgetId,
+                            sensorName.getText().toString(),
+                            sensorDataName.getText().toString(),
+                            id,
+                            senValue,
+                            senUnit,
+                            senIcon,
+                            lastUp,
+                            trans,
+                            currentUserId,
+                            selectInterval,
+                            "false",
+                            clientId,
+                            currentUserUuid
+                    );
                     database.addWidgetSensor(mSensorInfo);
 
                     NewSensorWidget.updateAppWidget(getApplicationContext(), widgetManager, appWidgetId, new HashMap());
@@ -323,78 +330,79 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.reserved_widget_android_pick_sensor)
-                        .setSingleChoiceItems(sensorNameList, selectedSensorIndex, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Reset the previously chosen sensor value, when user choose a different sensor
-                                Boolean isSame = String.valueOf(which).equals(String.valueOf(selectedSensorIndex));
-                                if ((selectedSensorIndex != -1) && (selectedSensorValueIndex != -1) && !isSame) {
-                                    imgSensorTypeEdit.setVisibility(View.VISIBLE);
-                                    imgSensorType.setVisibility(View.GONE);
+                            .setSingleChoiceItems(sensorNameList, selectedSensorIndex, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Reset the previously chosen sensor value, when user choose a different sensor
+                                    Boolean isSame = String.valueOf(which).equals(String.valueOf(selectedSensorIndex));
+                                    if ((selectedSensorIndex != -1) && (selectedSensorValueIndex != -1) && !isSame) {
+                                        imgSensorTypeEdit.setVisibility(View.VISIBLE);
+                                        imgSensorType.setVisibility(View.GONE);
 
-                                    sensorDataName.setText(R.string.reserved_widget_android_sensor_select_value);
-                                    sensorDataHint.setText(R.string.reserved_widget_android_sensor_tap_change_value);
+                                        sensorDataName.setText(R.string.reserved_widget_android_sensor_select_value);
+                                        sensorDataHint.setText(R.string.reserved_widget_android_sensor_tap_change_value);
 
-                                    senValue = null;
-                                    selectedSensorValueIndex = -1;
-                                }
+                                        senValue = null;
+                                        selectedSensorValueIndex = -1;
+                                    }
 
-                                selectedSensorIndex = which;
-                                sensorName.setText(sensorNameList[which]);
+                                    selectedSensorIndex = which;
+                                    sensorName.setText(sensorNameList[which]);
 
-                                id = Integer.parseInt(String.valueOf(sensorIdList[which]));
-                                String str = String.valueOf(sensorNameList[which]);
-                                String name = null;
-                                String scale = null;
-                                String value = null;
-                                List<String> sensorValue = new ArrayList<String>();
-                                searchObject = new JSONObject();
-                                SensorsUtilities sc = new SensorsUtilities();
+                                    id = Integer.parseInt(String.valueOf(sensorIdList[which]));
+                                    clientId = Integer.parseInt(String.valueOf(clientIdList[which]));
+                                    String str = String.valueOf(sensorNameList[which]);
+                                    String name = null;
+                                    String scale = null;
+                                    String value = null;
+                                    List<String> sensorValue = new ArrayList<String>();
+                                    searchObject = new JSONObject();
+                                    SensorsUtilities sc = new SensorsUtilities();
 
-                                Object unit = "";
-                                Map<String, Object> info = new HashMap<String, Object>();
-                                for (int i = 0; i < JsonsensorList.length(); i++) {
-                                    try {
-                                        JSONObject currObject = JsonsensorList.getJSONObject(i);
-                                        Integer sensorId = currObject.getInt("id");
-                                        if (id.intValue() == sensorId.intValue()) {
-                                            searchObject = currObject;
-                                            JSONArray SensorData = searchObject.getJSONArray("data");
-                                            for (int j = 0; j < SensorData.length(); j++) {
-                                                JSONObject currData = SensorData.getJSONObject(j);
+                                    Object unit = "";
+                                    Map<String, Object> info = new HashMap<String, Object>();
+                                    for (int i = 0; i < JsonsensorList.length(); i++) {
+                                        try {
+                                            JSONObject currObject = JsonsensorList.getJSONObject(i);
+                                            Integer sensorId = currObject.getInt("id");
+                                            if (id.intValue() == sensorId.intValue()) {
+                                                searchObject = currObject;
+                                                JSONArray SensorData = searchObject.getJSONArray("data");
+                                                for (int j = 0; j < SensorData.length(); j++) {
+                                                    JSONObject currData = SensorData.getJSONObject(j);
 
-                                                lastUp = currData.optString("lastUpdated");
-                                                name = currData.optString("name");
-                                                scale = currData.optString("scale");
-                                                value = currData.optString("value");
+                                                    lastUp = currData.optString("lastUpdated");
+                                                    name = currData.optString("name");
+                                                    scale = currData.optString("scale");
+                                                    value = currData.optString("value");
 
-                                                info = sc.getSensorInfo(name, scale, value, getApplicationContext());
-                                                Object label = info.get("label").toString();
-                                                unit = info.get("unit").toString();
-                                                String labelUnit = label+"("+unit+")";
-                                                sensorValue.add(labelUnit);
-                                                sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
+                                                    info = sc.getSensorInfo(name, scale, value, getApplicationContext());
+                                                    Object label = info.get("label").toString();
+                                                    unit = info.get("unit").toString();
+                                                    String labelUnit = label+"("+unit+")";
+                                                    sensorValue.add(labelUnit);
+                                                    sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
+                                                }
                                             }
                                         }
+                                        catch (Exception e) {
+                                        }
                                     }
-                                    catch (Exception e) {
+                                    if (sensorValue.size() == 1) {
+                                        selectedSensorValueIndex = 0;
+                                        sensorDataName.setText(sensorDataList[0]);
+
+                                        senIcon = info.get("icon").toString();
+                                        senValue = info.get("value").toString();
+                                        senUnit = String.valueOf(unit);
+
+                                        imgSensorTypeEdit.setVisibility(View.GONE);
+                                        imgSensorType.setText(senIcon);
+                                        imgSensorType.setVisibility(View.VISIBLE);
                                     }
+                                    ad.dismiss();
                                 }
-                                if (sensorValue.size() == 1) {
-                                    selectedSensorValueIndex = 0;
-                                    sensorDataName.setText(sensorDataList[0]);
-
-                                    senIcon = info.get("icon").toString();
-                                    senValue = info.get("value").toString();
-                                    senUnit = String.valueOf(unit);
-
-                                    imgSensorTypeEdit.setVisibility(View.GONE);
-                                    imgSensorType.setText(senIcon);
-                                    imgSensorType.setVisibility(View.VISIBLE);
-                                }
-                                ad.dismiss();
-                            }
-                        });
+                            });
                     ad = builder.show();
                 }
             });
@@ -405,54 +413,54 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.reserved_widget_android_pick_sensor_data)
-                        .setSingleChoiceItems(sensorDataList, selectedSensorValueIndex, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                selectedSensorValueIndex = i;
-                                sensorDataName.setText(sensorDataList[i]);
+                            .setSingleChoiceItems(sensorDataList, selectedSensorValueIndex, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    selectedSensorValueIndex = i;
+                                    sensorDataName.setText(sensorDataList[i]);
 
-                                SensorsUtilities sc = new SensorsUtilities();
+                                    SensorsUtilities sc = new SensorsUtilities();
 
-                                try {
-                                    String iconName = "";
-                                    String chosenLabel = sensorDataList[i].toString();
-                                    JSONArray SensorData = searchObject.getJSONArray("data");
-                                    for (int j = 0; j < SensorData.length(); j++) {
-                                        JSONObject currData = SensorData.getJSONObject(j);
+                                    try {
+                                        String iconName = "";
+                                        String chosenLabel = sensorDataList[i].toString();
+                                        JSONArray SensorData = searchObject.getJSONArray("data");
+                                        for (int j = 0; j < SensorData.length(); j++) {
+                                            JSONObject currData = SensorData.getJSONObject(j);
 
-                                        String lastUp = currData.optString("lastUpdated");
-                                        String name = currData.optString("name");
-                                        String scale = currData.optString("scale");
-                                        String value = currData.optString("value");
+                                            String lastUp = currData.optString("lastUpdated");
+                                            String name = currData.optString("name");
+                                            String scale = currData.optString("scale");
+                                            String value = currData.optString("value");
 
-                                        Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
-                                        Object label = info.get("label").toString();
-                                        Object unit = info.get("unit").toString();
-                                        String labelUnit = label+"("+unit+")";
-                                        if (labelUnit.trim().equalsIgnoreCase(chosenLabel.trim())) {
-                                            senIcon = info.get("icon").toString();
-                                            senValue = info.get("value").toString();
-                                            senUnit = String.valueOf(unit);
+                                            Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
+                                            Object label = info.get("label").toString();
+                                            Object unit = info.get("unit").toString();
+                                            String labelUnit = label+"("+unit+")";
+                                            if (labelUnit.trim().equalsIgnoreCase(chosenLabel.trim())) {
+                                                senIcon = info.get("icon").toString();
+                                                senValue = info.get("value").toString();
+                                                senUnit = String.valueOf(unit);
+                                            }
                                         }
+                                        imgSensorTypeEdit.setVisibility(View.GONE);
+                                        imgSensorType.setText(senIcon);
+                                        imgSensorType.setVisibility(View.VISIBLE);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
                                     }
-                                    imgSensorTypeEdit.setVisibility(View.GONE);
-                                    imgSensorType.setText(senIcon);
-                                    imgSensorType.setVisibility(View.VISIBLE);
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
+                                    ad1.dismiss();
                                 }
-                                ad1.dismiss();
-                            }
-                        });
+                            });
                     ad1 = builder.show();
                 }
             });
 
             final CharSequence[] intervalOptions = {
-                getResources().getString(R.string.reserved_widget_android_label_update_interval_0),
-                getResources().getString(R.string.reserved_widget_android_label_update_interval_1),
-                getResources().getString(R.string.reserved_widget_android_label_update_interval_2),
-                getResources().getString(R.string.reserved_widget_android_label_update_interval_3),
+                    getResources().getString(R.string.reserved_widget_android_label_update_interval_0),
+                    getResources().getString(R.string.reserved_widget_android_label_update_interval_1),
+                    getResources().getString(R.string.reserved_widget_android_label_update_interval_2),
+                    getResources().getString(R.string.reserved_widget_android_label_update_interval_3),
             };
 
             btSelectPollInterval = (View) findViewById(R.id.btSelectPollInterval);
@@ -461,8 +469,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
                 @Override
                 public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
+                    builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             sensorRepeatIntervalLabel.setText(intervalOptions[which]);
@@ -550,7 +558,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         SensorsAPI sensorsAPI = new SensorsAPI();
         sensorsAPI.getSensorsList(params, getApplicationContext(), "SensorsApi", new OnAPITaskComplete() {
             @Override
-            public void onSuccess(final JSONObject response) {
+            public void onSuccess(final JSONObject response, HashMap<String, String> authData) {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_sensor);
                 try {
                     JSONObject sensorData = new JSONObject(response.toString());
@@ -558,15 +566,18 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     for (int i = 0; i < JsonsensorList.length(); i++) {
                         JSONObject curObj = JsonsensorList.getJSONObject(i);
                         String name = curObj.getString("name");
+                        Integer clientId = curObj.getInt("client");
                         if (name != null) {
                             Integer id = curObj.getInt("id");
                             String last = String.valueOf(curObj.getLong("lastUpdated"));
                             nameListItems.add(name);
                             idList.add(id.toString());
+                            clientidList.add(clientId.toString());
                         }
                     }
                     sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                     sensorIdList = idList.toArray(new CharSequence[idList.size()]);
+                    clientIdList = clientidList.toArray(new CharSequence[clientidList.size()]);
 
                     message = sensorNameList == null ? message : null;
                     updateUI(message);
