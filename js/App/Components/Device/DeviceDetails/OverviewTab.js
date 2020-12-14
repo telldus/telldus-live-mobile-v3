@@ -34,6 +34,7 @@ import {
 	Associations,
 	Configuration,
 	BasicSettings,
+	TelldusInfo,
 } from '../ZWave';
 import {
 	ThemedScrollView,
@@ -265,14 +266,18 @@ class OverviewTab extends View<Props, null> {
 					style={[styles.LocationDetail, {
 						marginBottom: styles.padding * 2,
 					}]}/>
-				<BasicSettings
-					id={device.id}
-					clientDeviceId={device.clientDeviceId}
-					clientId={device.clientId}/>
-				<SupportedCommandClasses
-					id={device.id}
-					clientDeviceId={device.clientDeviceId}
-					clientId={device.clientId}/>
+				{!!nodeInfo.cmdClasses && (
+					<BasicSettings
+						id={device.id}
+						clientDeviceId={device.clientDeviceId}
+						clientId={device.clientId}/>
+				)}
+				{!!nodeInfo.cmdClasses && (
+					<SupportedCommandClasses
+						id={device.id}
+						clientDeviceId={device.clientDeviceId}
+						clientId={device.clientId}/>
+				)}
 				{!!showAssociations && (
 					<Associations
 						id={device.id}
@@ -291,6 +296,10 @@ class OverviewTab extends View<Props, null> {
 						id={device.id}
 						clientId={clientId}
 						gatewayTimezone={gatewayTimezone}/>
+				)}
+				{!!nodeInfo.cmdClasses && (
+					<TelldusInfo
+						id={device.id}/>
 				)}
 			</ThemedScrollView>
 		);
