@@ -26,6 +26,7 @@ import BatteryFunctions from './BatteryFunctions';
 import BatteryInfoItem from './BatteryInfoItem';
 import Associations from './Associations';
 import Configuration from './Configuration';
+import BasicSettings from './BasicSettings';
 
 module.exports = {
 	SupportedCommandClasses,
@@ -33,4 +34,5 @@ module.exports = {
 	BatteryInfoItem,
 	Associations,
 	Configuration,
+	BasicSettings,
 };

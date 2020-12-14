@@ -33,6 +33,7 @@ import {
 	BatteryFunctions,
 	Associations,
 	Configuration,
+	BasicSettings,
 } from '../ZWave';
 import {
 	ThemedScrollView,
@@ -258,6 +259,10 @@ class OverviewTab extends View<Props, null> {
 					style={[styles.LocationDetail, {
 						marginBottom: styles.padding * 2,
 					}]}/>
+				<BasicSettings
+					id={device.id}
+					clientDeviceId={device.clientDeviceId}
+					clientId={device.clientId}/>
 				<SupportedCommandClasses
 					id={device.id}
 					clientDeviceId={device.clientDeviceId}
