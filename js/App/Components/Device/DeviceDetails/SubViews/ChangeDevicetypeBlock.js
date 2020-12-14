@@ -43,10 +43,11 @@ import {
 	findDeviceTypeInfo,
 	getDeviceIcons,
 } from '../../../../Lib/DeviceUtils';
+import capitalize from '../../../../Lib/capitalize';
 
 import Theme from '../../../../Theme';
 
-// import i18n from '../../../../Translations/common';
+import i18n from '../../../../Translations/common';
 
 const ChangeDevicetypeBlock = (props: Object): Object => {
 	const {
@@ -56,7 +57,7 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 		onValueChange,
 	} = props;
 	const intl = useIntl();
-	// const { formatMessage } = intl;
+	const { formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -120,7 +121,7 @@ const ChangeDevicetypeBlock = (props: Object): Object => {
 		}
 	}, [onValueChange]);
 
-	const labelDeviceType = 'Device type';
+	const labelDeviceType = capitalize(formatMessage(i18n.labelDeviceType));
 
 	const renderItem = useCallback((_props: Object): Object | null => {
 		const {
