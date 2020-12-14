@@ -389,9 +389,12 @@ onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
 	let cMode = {}, sPointValue;
 	const { modes, dark, selectedThemeSet = {} } = this.props;
 	const {
+		activeModeLocal,
+	} = this.state;
+	const {
 		key = 2,
 	} = selectedThemeSet;
-	let controllingMode = changeMode ? controlType : this.state.activeModeLocal;
+	let controllingMode = !changeMode && activeModeLocal ? activeModeLocal : controlType;
 	modes.map((mode: Object) => {
 		if (mode.mode === controllingMode) {
 			cMode = mode;
