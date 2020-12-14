@@ -929,7 +929,7 @@ class SettingsTab extends View {
 		const isZWave = transport === 'zwave';
 		const is433MHz = is433MHzTransport(transport) || transport === 'egroup';
 		const { isFailed = false } = nodeInfo;
-		const manufacturerAttributes = nodeInfo ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC] : {};
+		const manufacturerAttributes = nodeInfo && nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC] : {};
 
 		const transportsArray = transports.split(',');
 		const showScan = supportsScan(transportsArray) && scannable;
