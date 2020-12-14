@@ -162,7 +162,7 @@ const ProtectionConf = (props: Props): Object => {
 	return (
 		<View
 			style={verticalCover}>
-			<Text
+			<Text // TODO: Translate
 				level={2}
 				style={subTitleTextStyle}>
                 Protection
@@ -172,7 +172,7 @@ const ProtectionConf = (props: Props): Object => {
 				style={horizontalCoverStyle}>
 				<View
 					style={coverStyle}>
-					<Text
+					<Text // TODO: Translate
 						level={3}
 						style={hItemLabelDef}>
 						{'State: '}

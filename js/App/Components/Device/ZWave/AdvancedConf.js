@@ -245,7 +245,7 @@ const AdvancedConf = (props: Props): Object => {
 	return (
 		<View
 			style={verticalCover}>
-			<Text
+			<Text // TODO: Translate
 				level={2}
 				style={subTitleTextStyle}>
                  Advanced settings

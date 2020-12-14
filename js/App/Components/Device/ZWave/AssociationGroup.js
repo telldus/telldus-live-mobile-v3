@@ -228,7 +228,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		setEditActive(!editActive);
 	}, [editActive]);
-
+	// TODO: Translate
 	return (
 		<View
 			level={2}

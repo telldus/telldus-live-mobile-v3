@@ -275,7 +275,7 @@ const Associations = (props: Props): Object => {
 				{hasChanged &&
 				<TouchableButton
 					style={buttonStyle}
-					text={'Save new associations'}
+					text={'Save new associations'} // TODO: Translate
 					onPress={onPressSave}/>
 				}
 			</View>
