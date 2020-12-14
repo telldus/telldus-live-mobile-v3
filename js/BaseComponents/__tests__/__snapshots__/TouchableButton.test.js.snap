@@ -66,7 +66,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled 1`
         ]
       }
     >
-      TouchableButton
+      Touchablebutton
     </Text>
   </View>
 </View>
@@ -138,7 +138,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled an
         ]
       }
     >
-      TouchableButton
+      Touchablebutton
     </Text>
     <View
       style={
@@ -249,7 +249,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled 1`]
         ]
       }
     >
-      TouchableButton
+      Touchablebutton
     </Text>
   </View>
 </View>
@@ -321,7 +321,7 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled and
         ]
       }
     >
-      TouchableButton
+      Touchablebutton
     </Text>
     <View
       style={
