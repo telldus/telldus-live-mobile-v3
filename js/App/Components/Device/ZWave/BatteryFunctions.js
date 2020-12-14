@@ -358,16 +358,17 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	const {
 		paddingFactor,
 		shadow,
+		fontSizeFactorEight,
+		fontSizeFactorFour,
 	} = Theme.Core;
 	const {
 		inAppBrandSecondary,
 	} = colors;
-
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const padding = deviceWidth * paddingFactor;
 	const thumbSize = fontSize;
 
@@ -382,7 +383,7 @@ const getStyles = ({
 		},
 		titleStyle: {
 			marginLeft: 8,
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 		},
 		coverStyle: {
 			justifyContent: 'space-between',
@@ -390,6 +391,7 @@ const getStyles = ({
 			marginHorizontal: padding,
 			borderRadius: 2,
 			padding,
+			marginBottom: padding,
 			...shadow,
 		},
 		textStyle: {

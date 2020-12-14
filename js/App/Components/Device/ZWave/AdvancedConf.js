@@ -270,10 +270,11 @@ const getStyles = ({
 	const {
 		paddingFactor,
 		shadow,
+		fontSizeFactorEight,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		coverStyle: {

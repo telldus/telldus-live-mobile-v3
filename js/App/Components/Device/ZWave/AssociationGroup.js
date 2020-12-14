@@ -286,17 +286,17 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	const {
 		paddingFactor,
 		shadow,
 		maxSizeTextButton,
+		fontSizeFactorEight,
 	} = Theme.Core;
 	const {
 		inAppBrandSecondary,
 	} = colors;
-
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const padding = deviceWidth * paddingFactor;
 	const buttonWidth = width - (padding * 9);
 

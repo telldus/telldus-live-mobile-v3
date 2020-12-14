@@ -142,6 +142,7 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -158,7 +159,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			marginLeft: 8,
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * fontSizeFactorFour,
 		},
 		buttonStyle: {
 			marginTop: padding / 2,

@@ -45,6 +45,7 @@ import {
 import {
 	useDialogueBox,
 } from '../../../Hooks/Dialoguebox';
+import Theme from '../../../Theme';
 
 const GenericConfSetting = (props: Object): Object => {
 	const {
@@ -113,8 +114,10 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-
-	const fontSize = Math.floor(deviceWidth * 0.045);
+	const {
+		fontSizeFactorEight,
+	} = Theme.Core;
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		textFieldStyle: {
