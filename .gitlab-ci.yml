@@ -142,6 +142,8 @@ testflight: &testflight
     - tags
   script:
     - fastlane ios beta --verbose
+    - yarn install --quiet
+    - cd ios && pod install && pod update && cd ..
     - fastlane ios refresh_dsyms --verbose
 
 testflight (master):
