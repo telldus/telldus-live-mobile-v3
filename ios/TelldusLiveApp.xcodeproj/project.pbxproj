@@ -1183,7 +1183,7 @@
 				PODS_CONFIGURATION_BUILD_DIR = "";
 				PODS_PODFILE_DIR_PATH = "";
 				PODS_ROOT = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidgetIntentExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.homescreenwidget.intentextension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -1231,7 +1231,7 @@
 				PODS_CONFIGURATION_BUILD_DIR = "";
 				PODS_PODFILE_DIR_PATH = "";
 				PODS_ROOT = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidgetIntentExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.homescreenwidget.intentextension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "";
@@ -1284,7 +1284,7 @@
 				PODS_CONFIGURATION_BUILD_DIR = "";
 				PODS_PODFILE_DIR_PATH = "";
 				PODS_ROOT = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.homescreenwidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -1337,7 +1337,7 @@
 				PODS_CONFIGURATION_BUILD_DIR = "";
 				PODS_PODFILE_DIR_PATH = "";
 				PODS_ROOT = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.homescreenwidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "";
