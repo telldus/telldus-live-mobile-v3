@@ -39,7 +39,12 @@ import HeatControlWheelModes from '../../../ThermostatControl/HeatControlWheelMo
 import ButtonLoadingIndicator from '../../../TabViews/SubViews/ButtonLoadingIndicator';
 
 import { getDeviceActionIcon } from '../../../../Lib/DeviceUtils';
-import { getSupportedModes } from '../../../../Lib/thermostatUtils';
+import {
+	getSupportedModes,
+	shouldHaveMode,
+	getSetPoints,
+	getCurrentSetPoint,
+} from '../../../../Lib/thermostatUtils';
 
 import Theme from '../../../../Theme';
 
@@ -176,7 +181,7 @@ class DeviceActionDetails extends View {
 
 		const newButtonStyle = buttons.length > 4 ? buttonStyle : {...buttonStyle, flex: 1};
 
-		let supportedModes = [], activeMode, supportResume = false;
+		let supportedModes = [], activeMode, supportResume = false, _shouldHaveMode = false;
 		if (THERMOSTAT) {
 			const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
 			activeMode = mode;
@@ -192,6 +197,15 @@ class DeviceActionDetails extends View {
 					});
 				}
 			});
+			let currentSetPoint;
+			_shouldHaveMode = shouldHaveMode(device);
+			if (!_shouldHaveMode) {
+				supportedModes = getSetPoints(parameter, setpoint, intl);
+				if (supportedModes) {
+					currentSetPoint = getCurrentSetPoint(supportedModes, mode);
+					activeMode = currentSetPoint.mode;
+				}
+			}
 		}
 
 		return (
@@ -208,7 +222,8 @@ class DeviceActionDetails extends View {
 						currentTemp={currentTemp}
 						supportResume={supportResume}
 						gatewayTimezone={gatewayTimezone}
-						intl={intl}/>
+						intl={intl}
+						shouldHaveMode={_shouldHaveMode}/>
 				}
 				{buttons.length > 0 &&
 				<View

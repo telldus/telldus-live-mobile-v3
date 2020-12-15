@@ -62,6 +62,7 @@ type Props = PropsThemedComponent & {
 	timeoutPlusMinus?: number,
 	gradientColorFromOverride?: string,
 	gradientColorToOverride?: string,
+	shouldHaveMode: boolean,
 
 	intl: Object,
 	modesCoverStyle: Array<any> | Object,
@@ -517,27 +518,6 @@ hasValidMinMax = (): boolean => {
 	return typeof minVal === 'number' && typeof maxVal === 'number';
 }
 
-shouldHaveMode = (): boolean => {
-	const {
-		device = {},
-	} = this.props;
-	const {
-		parameter = [],
-	} = device;
-	let shouldHaveMode = false;
-	for (let i = 0; i < parameter.length; i++) {
-		const {
-			name,
-			value = {},
-		} = parameter[i];
-		if (name && name === 'thermostat') {
-			shouldHaveMode = value.modes && value.modes.length > 0;
-			break;
-		}
-	}
-	return shouldHaveMode;
-}
-
 render(): Object | null {
 
 	const {
@@ -555,6 +535,7 @@ render(): Object | null {
 		gradientColorToOverride,
 		gradientColorFromOverride,
 		source,
+		shouldHaveMode,
 	} = this.props;
 
 	const {
@@ -574,7 +555,6 @@ render(): Object | null {
 		infoTextStyle,
 	} = this.getStyles();
 
-	let shouldHaveMode = this.shouldHaveMode();
 	const hasModes = modes && modes.length > 0;
 
 	if (shouldHaveMode && (!modes || modes.length === 0)) {
@@ -615,7 +595,7 @@ render(): Object | null {
 
 	const SVGKey = hasValidMinMax ? `${controllingMode}8` : `${controllingMode}88`;
 
-	const titleInfoBlock = shouldHaveMode ? ((activeMode && title) ? title : `${intl.formatMessage(i18n.mode)} N/A`) : '';
+	const titleInfoBlock = (activeMode && title) ? title : (shouldHaveMode ? `${intl.formatMessage(i18n.mode)} N/A` : '');
 
 	return (
 		<>
@@ -691,7 +671,6 @@ render(): Object | null {
 						supportResume={supportResume}
 						gatewayTimezone={gatewayTimezone}
 						hideModeControl={hideModeControl}
-						shouldHaveMode={shouldHaveMode}
 					/>
 					{showControlIcons ?
 						<TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
@@ -707,7 +686,7 @@ render(): Object | null {
 				:
 				<EmptyView/>
 			}
-			{(!hideModeControl && hasModes) ?
+			{(!hideModeControl && shouldHaveMode && hasModes) ?
 				<ModesList
 					appLayout={appLayout}
 					onPressRow={this.onPressRow}
