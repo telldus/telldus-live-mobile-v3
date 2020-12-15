@@ -14,7 +14,7 @@ class SharedModule {
   let KEYCHAIN_SERVICE = "TelldusKeychain";
   let KEYCHAIN_ACCOUNT = "widgetData";
   
-  var userDefaults = UserDefaults(suiteName: "group.com.telldus.live.mobile")!
+  var userDefaults = UserDefaults(suiteName: "group.com.telldus.live.mobile.appwidget")!
   
   func configureWidgetAuthData(authData: Dictionary<String, Any>) -> Void {
     let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
