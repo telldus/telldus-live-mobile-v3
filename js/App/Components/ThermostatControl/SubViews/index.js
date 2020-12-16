@@ -23,8 +23,10 @@
 
 import LabelBlock from './LabelBlock';
 import ModeIconBlock from './ModeIconBlock';
+import InfoActionQueuedOnWakeUp from './InfoActionQueuedOnWakeUp';
 
 module.exports = {
 	LabelBlock,
 	ModeIconBlock,
+	InfoActionQueuedOnWakeUp,
 };
