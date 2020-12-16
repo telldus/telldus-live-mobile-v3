@@ -79,7 +79,9 @@ platform :ios do
       workspace: "ios/TelldusLiveApp.xcworkspace",
       configuration: "Release",
       codesigning_identity: "iPhone Distribution",
+      export_method: "app-store",
       export_options: {
+        signingStyle: "manual",
         method: "app-store",
         provisioningProfiles: { 
           "com.telldus.live.mobile" => "match AppStore com.telldus.live.mobile",
