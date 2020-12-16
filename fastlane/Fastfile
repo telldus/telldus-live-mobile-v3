@@ -73,7 +73,7 @@ platform :ios do
     match(type: "appstore", app_identifier: "com.telldus.live.mobile")
     match(type: "appstore", app_identifier: "com.telldus.live.mobile.HomescreenWidget")
     match(type: "appstore", app_identifier: "com.telldus.live.mobile.HomescreenWidgetIntentExtension")
-    disable_automatic_code_signing(path: "ios/TelldusLiveApp.xcodeproj")
+    update_code_signing_settings(use_automatic_signing: false, path: "ios/TelldusLiveApp.xcodeproj")
     gym(
       scheme: "TelldusLiveApp",
       workspace: "ios/TelldusLiveApp.xcworkspace",
