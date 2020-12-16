@@ -86,6 +86,7 @@ class DeviceActionDetails extends View {
 			stateValues = {},
 			parameter = [],
 			methodRequested,
+			actionsQueueThermostat = {},
 		} = device;
 		const {
 			TURNON,
@@ -223,7 +224,8 @@ class DeviceActionDetails extends View {
 						supportResume={supportResume}
 						gatewayTimezone={gatewayTimezone}
 						intl={intl}
-						shouldHaveMode={_shouldHaveMode}/>
+						shouldHaveMode={_shouldHaveMode}
+						actionsQueueThermostat={actionsQueueThermostat}/>
 				}
 				{buttons.length > 0 &&
 				<View

@@ -123,6 +123,7 @@ render(): Object | null {
 		name,
 		parameter = [],
 		stateValues,
+		actionsQueueThermostat = {},
 	} = device;
 
 	let supportResume = false;
@@ -196,7 +197,8 @@ render(): Object | null {
 						intl={intl}
 						source="ThermostatFullControl"
 						timeoutPlusMinus={timeoutPlusMinus}
-						shouldHaveMode={_shouldHaveMode}/>
+						shouldHaveMode={_shouldHaveMode}
+						actionsQueueThermostat={actionsQueueThermostat}/>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</View>
