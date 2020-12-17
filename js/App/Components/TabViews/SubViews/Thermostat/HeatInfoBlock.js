@@ -126,7 +126,7 @@ class HeatInfoBlock extends View {
 		let {
 			methodRequested,
 			name,
-			actionsQueueThermostat,
+			actionsQueueThermostat = {},
 		} = device;
 
 		let dotColor = colors.lightDrandSecDarkWhite;
@@ -147,6 +147,7 @@ class HeatInfoBlock extends View {
 
 		const showModelabel = currentMode !== 'off';
 		const itemInQueue = actionsQueueThermostat[currentMode];
+		const showQueueInfo = Object.keys(actionsQueueThermostat).length > 0;
 		const actionQueuedOnWakeup = !!itemInQueue;
 		const value = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseInt(itemInQueue.queue, 10) : currentValue;
 
@@ -174,7 +175,7 @@ class HeatInfoBlock extends View {
 
 								<Text style={textTwoStyle}>°C</Text>
 							</Text>
-							{actionQueuedOnWakeup && (
+							{showQueueInfo && (
 								<InfoActionQueuedOnWakeUp
 									iconStyle={infoIconStyle}/>
 							)}
@@ -188,7 +189,7 @@ class HeatInfoBlock extends View {
 							<Text style={textThreeStyle}>
 								{!!currentModeLabel && currentModeLabel.toUpperCase()}
 							</Text>
-							{actionQueuedOnWakeup && !showValue && (
+							{showQueueInfo && !showValue && (
 								<InfoActionQueuedOnWakeUp
 									iconStyle={infoIconStyle}/>
 							)}

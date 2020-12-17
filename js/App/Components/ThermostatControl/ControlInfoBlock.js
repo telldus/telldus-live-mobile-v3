@@ -197,8 +197,7 @@ render(): Object {
 	const colorTwo = selectedThemeSet.key === 1 ? baseColor : colors.baseColorFive;
 
 	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined';
-	const itemInQueue = actionsQueueThermostat[controllingMode];
-	const actionQueuedOnWakeup = !!itemInQueue && (itemInQueue.queue !== undefined && parseFloat(itemInQueue.queue) === currentValueInScreen);
+	const showQueueInfo = Object.keys(actionsQueueThermostat).length > 0;
 
 	return (
 		<View style={InfoCover} pointerEvents="box-none">
@@ -216,7 +215,7 @@ render(): Object {
 							title.toUpperCase()
 						}
 					</Text>
-					{!!title && !hideModeControl && actionQueuedOnWakeup && (
+					{!!title && !hideModeControl && showQueueInfo && (
 						<InfoActionQueuedOnWakeUp
 							iconStyle={[infoIconStyle, {color: colorOne}]}/>
 					)}
@@ -291,7 +290,7 @@ render(): Object {
 								°C
 										</Text>
 									</Text>
-									{!title && actionQueuedOnWakeup && (
+									{!title && showQueueInfo && (
 										<InfoActionQueuedOnWakeUp
 											iconStyle={[infoIconStyle, {color: colorOne}]}/>
 									)}
