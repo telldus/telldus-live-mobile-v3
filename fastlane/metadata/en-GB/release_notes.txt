@@ -6,4 +6,5 @@
 - Show command classes for Z-Wave devices
 - Copy 433 MHz devices and their schedules to a new gatway
 - Check if user has latest version
+- Fixes for sleeping thermostats
 

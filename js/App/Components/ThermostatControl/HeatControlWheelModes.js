@@ -62,6 +62,8 @@ type Props = PropsThemedComponent & {
 	timeoutPlusMinus?: number,
 	gradientColorFromOverride?: string,
 	gradientColorToOverride?: string,
+	shouldHaveMode: boolean,
+	actionsQueueThermostat: Object,
 
 	intl: Object,
 	modesCoverStyle: Array<any> | Object,
@@ -141,7 +143,10 @@ getValueFromAngle: (number, string) => Object;
 
 static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	const { controllingMode, setpointMode, preventReset } = state;
-	const { device: { methodRequested }, activeMode, dark, selectedThemeSet = {} } = props;
+	const { device: {
+		methodRequested,
+		actionsQueueThermostat = {},
+	}, activeMode, dark, selectedThemeSet = {} } = props;
 	const {
 		key = 2,
 	} = selectedThemeSet;
@@ -171,13 +176,17 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 		};
 	}
 	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.currentValueInScreen) !== parseFloat(newValue)) {
+		const itemInQueue = actionsQueueThermostat[activeMode];
+		const actionQueuedOnWakeup = !!itemInQueue;
+		const currentValueInScreen = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseFloat(itemInQueue.queue) : newValue;
+
 		newState = {
 			...newState,
 			...newModeAttributes,
 			currentValue: newValue,
-			currentValueInScreen: newValue,
+			currentValueInScreen: currentValueInScreen,
 			methodRequested,
-			angleLength: getAngleLengthToInitiate(state.controllingMode, newValue, props.modes),
+			angleLength: getAngleLengthToInitiate(state.controllingMode, currentValueInScreen, props.modes),
 		};
 	}
 
@@ -229,6 +238,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 				});
 			}
 		});
+
 		newState = {
 			...newState,
 			...newModeAttributes,
@@ -270,7 +280,11 @@ constructor(props: Props) {
 	const {
 		key = 2,
 	} = selectedThemeSet;
-	const { stateValues: {THERMOSTAT = {}}, methodRequested } = device;
+	const {
+		stateValues: {THERMOSTAT = {}},
+		methodRequested,
+		actionsQueueThermostat = {},
+	} = device;
 	const { mode } = THERMOSTAT;
 
 	modes = modes && modes.length > 0 ? modes : [{}];
@@ -286,11 +300,14 @@ constructor(props: Props) {
 	} = cModeInfo || {};
 
 	const currentValue = cModeInfo.value;
+	const itemInQueue = actionsQueueThermostat[cModeInfo.mode];
+	const actionQueuedOnWakeup = !!itemInQueue;
+	const currentValueInScreen = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseFloat(itemInQueue.queue) : currentValue;
 	const minVal = cModeInfo.minVal;
 	const maxVal = cModeInfo.maxVal;
 	let initialAngleLength = 0;
 	if (modes && modes.length > 0) {
-		initialAngleLength = getAngleLengthToInitiate(cModeInfo.mode, currentValue, this.props.modes);
+		initialAngleLength = getAngleLengthToInitiate(cModeInfo.mode, currentValueInScreen, this.props.modes);
 	}
 
 	const gradientColorFrom = colors[key] ? dark ? colors[key].startColorD : colors[key].startColor : undefined;
@@ -300,7 +317,7 @@ constructor(props: Props) {
 		startAngle: this.initialAngle,
 		angleLength: initialAngleLength,
 		currentValue,
-		currentValueInScreen: currentValue,
+		currentValueInScreen: currentValueInScreen,
 		controllingMode: cModeInfo.mode,
 		baseColor: gradientColorTo,
 		gradientColorFrom,
@@ -313,7 +330,7 @@ constructor(props: Props) {
 		activeModeLocal: cModeInfo.mode,
 		setpointMode: cModeInfo.mode,
 		setpointValue: currentValue,
-		setpointValueLocal: currentValue,
+		setpointValueLocal: !isNaN(currentValueInScreen) ? currentValueInScreen.toString() : currentValue,
 		preventReset: false,
 	};
 
@@ -389,9 +406,12 @@ onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
 	let cMode = {}, sPointValue;
 	const { modes, dark, selectedThemeSet = {} } = this.props;
 	const {
+		activeModeLocal,
+	} = this.state;
+	const {
 		key = 2,
 	} = selectedThemeSet;
-	let controllingMode = changeMode ? controlType : this.state.activeModeLocal;
+	let controllingMode = !changeMode && activeModeLocal ? activeModeLocal : controlType;
 	modes.map((mode: Object) => {
 		if (mode.mode === controllingMode) {
 			cMode = mode;
@@ -531,6 +551,8 @@ render(): Object | null {
 		gradientColorToOverride,
 		gradientColorFromOverride,
 		source,
+		shouldHaveMode,
+		actionsQueueThermostat,
 	} = this.props;
 
 	const {
@@ -550,7 +572,9 @@ render(): Object | null {
 		infoTextStyle,
 	} = this.getStyles();
 
-	if (!modes || modes.length === 0) {
+	const hasModes = modes && modes.length > 0;
+
+	if (shouldHaveMode && (!modes || modes.length === 0)) {
 		return <InfoBlock
 			text={`${intl.formatMessage(i18n.noThermostatSettings)}.`}
 			appLayout={appLayout}
@@ -588,11 +612,11 @@ render(): Object | null {
 
 	const SVGKey = hasValidMinMax ? `${controllingMode}8` : `${controllingMode}88`;
 
-	const titleInfoBlock = (activeMode && title) ? title : `${intl.formatMessage(i18n.mode)} N/A`;
+	const titleInfoBlock = (activeMode && title) ? title : (shouldHaveMode ? `${intl.formatMessage(i18n.mode)} N/A` : '');
 
 	return (
 		<>
-			{typeof activeMode !== 'string' ? <InfoBlock
+			{(shouldHaveMode && typeof activeMode !== 'string') ? <InfoBlock
 				text={intl.formatMessage(i18n.infoNoThermostatMode)}
 				appLayout={appLayout}
 				infoContainer={infoContainer}
@@ -664,6 +688,7 @@ render(): Object | null {
 						supportResume={supportResume}
 						gatewayTimezone={gatewayTimezone}
 						hideModeControl={hideModeControl}
+						actionsQueueThermostat={actionsQueueThermostat}
 					/>
 					{showControlIcons ?
 						<TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
@@ -679,7 +704,7 @@ render(): Object | null {
 				:
 				<EmptyView/>
 			}
-			{!hideModeControl ?
+			{(!hideModeControl && shouldHaveMode && hasModes) ?
 				<ModesList
 					appLayout={appLayout}
 					onPressRow={this.onPressRow}

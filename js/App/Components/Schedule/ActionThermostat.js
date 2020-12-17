@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
 	ScrollView,
 	LayoutAnimation,
@@ -42,6 +41,9 @@ import {
 	getSupportedModes,
 	shouldUpdate,
 	LayoutAnimations,
+	shouldHaveMode,
+	getSetPoints,
+	getCurrentSetPoint,
 } from '../../Lib';
 
 import Theme from '../../Theme';
@@ -57,14 +59,7 @@ type State = {
 
 export default class ActionThermostat extends View<null, Props, State> {
 
-	static propTypes = {
-		navigation: PropTypes.object,
-		actions: PropTypes.object,
-		onDidMount: PropTypes.func,
-		schedule: PropTypes.object,
-		paddingRight: PropTypes.number,
-		isEditMode: PropTypes.func,
-	};
+	_shouldHaveMode: boolean;
 
 	constructor(props: Props) {
 		super(props);
@@ -132,6 +127,15 @@ export default class ActionThermostat extends View<null, Props, State> {
 		const { THERMOSTAT: { setpoint = {} } } = stateValues;
 
 		this.supportedModes = getSupportedModes(parameter, setpoint, intl, true);
+		this._shouldHaveMode = shouldHaveMode(this.device);
+		let currentSetPoint;
+		if (!this._shouldHaveMode) {
+			this.supportedModes = getSetPoints(parameter, setpoint, intl);
+			if (this.supportedModes) {
+				currentSetPoint = getCurrentSetPoint(this.supportedModes, mode);
+				this.currentMode = currentSetPoint.mode;
+			}
+		}
 		this.supportedModes = this.supportedModes.map((sm: Object): Object => {
 			if (sm.mode === this.currentMode && typeof this.currentValue === 'undefined') {
 				const changeTemp = sm.value !== null && typeof sm.value !== 'undefined';
@@ -149,7 +153,13 @@ export default class ActionThermostat extends View<null, Props, State> {
 			}
 			return sm;
 		});
-
+		if (!this._shouldHaveMode) {
+			this.methodValue = {
+				...this.methodValue,
+				changeMode: false,
+				mode: this.currentMode,
+			};
+		}
 		this.state = {
 			methodValue: this.methodValue,
 		};
@@ -274,7 +284,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 						alignItems: 'stretch',
 					}}
 					keyboardShouldPersistTaps={'always'}>
-					{(!modes || modes.length === 0) ?
+					{(!this._shouldHaveMode || !modes || modes.length === 0) ?
 						<EmptyView/>
 						:
 						<ActionThermostatTwo
@@ -302,7 +312,8 @@ export default class ActionThermostat extends View<null, Props, State> {
 						hideTemperatureControl={hideTemperatureControl}
 						intl={intl}
 						source="Schedule_ActionThermostat"
-						timeoutPlusMinus={0}/>
+						timeoutPlusMinus={0}
+						shouldHaveMode={true}/>
 				</ScrollView>
 				{(this.supportedModes && this.supportedModes.length > 0) ? <FloatingButton
 					onPress={this.selectAction}

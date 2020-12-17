@@ -96,6 +96,20 @@ class RegisterForm extends View {
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 	}
 
+	componentDidMount() {
+		const {
+			email,
+			fullName = {},
+		} = this.props.socialAuthConfig;
+		const {
+			fn = '',
+			ln = '',
+		} = fullName;
+		if (!!fn && !!ln && !!email) {
+			this.onFormSubmit();
+		}
+	}
+
 	postSubmit() {
 		this.setState({
 			isLoading: false,
