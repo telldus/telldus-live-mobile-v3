@@ -149,7 +149,7 @@ class HeatInfoBlock extends View {
 		const itemInQueue = actionsQueueThermostat[currentMode];
 		const showQueueInfo = Object.keys(actionsQueueThermostat).length > 0;
 		const actionQueuedOnWakeup = !!itemInQueue;
-		const value = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseInt(itemInQueue.queue, 10) : currentValue;
+		const value = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseFloat(itemInQueue.queue) : currentValue;
 
 		return (
 			<View style={[styles.button, this.props.style, heatInfoBlockStyle, {
