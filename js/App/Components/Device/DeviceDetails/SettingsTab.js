@@ -566,7 +566,7 @@ class SettingsTab extends View {
 		const isDeviceTypeEqual = this.isDeviceTypeEqual(device.deviceType, devicetypeNext);
 		if (!isDeviceTypeEqual) {
 			promises.push(
-				dispatch(setMetadata(id, 'deviceType', devicetypeNext)),
+				dispatch(setMetadata(id, 'devicetype', devicetypeNext)),
 				dispatch(setDeviceParameter(id, 'devicetype', devicetypeNext))
 			);
 		}
