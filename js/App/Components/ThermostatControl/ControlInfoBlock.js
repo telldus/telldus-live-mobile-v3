@@ -32,6 +32,9 @@ import {
 	IconTelldus,
 } from '../../../BaseComponents';
 import LastUpdatedInfo from '../TabViews/SubViews/Sensor/LastUpdatedInfo';
+import {
+	InfoActionQueuedOnWakeUp,
+} from './SubViews';
 
 import { LayoutAnimations, formatModeValue } from '../../Lib';
 import Theme from '../../Theme';
@@ -56,6 +59,7 @@ type Props = PropsThemedComponent & {
 	supportResume: boolean,
 	gatewayTimezone: string,
 	hideModeControl: boolean,
+	actionsQueueThermostat: Object,
 
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: intlShape,
@@ -152,6 +156,7 @@ render(): Object {
 		hideModeControl,
 		selectedThemeSet,
 		colors,
+		actionsQueueThermostat,
 	} = this.props;
 
 	const {
@@ -181,6 +186,7 @@ render(): Object {
 		box2,
 		box1,
 		inAppBrandSecondary,
+		infoIconStyle,
 	} = this.getStyles();
 
 	const cModevalue = this.formatModeValue(currentValueInScreen);
@@ -191,18 +197,29 @@ render(): Object {
 	const colorTwo = selectedThemeSet.key === 1 ? baseColor : colors.baseColorFive;
 
 	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined';
+	const showQueueInfo = Object.keys(actionsQueueThermostat).length > 0;
+
 	return (
 		<View style={InfoCover} pointerEvents="box-none">
 			<View style={box1}>
-				<Text style={[infoTitleStyle, {
-					color: colorOne,
-				}]}>
-					{!!title && hideModeControl ?
-						''
-						:
-						title.toUpperCase()
-					}
-				</Text>
+				<View style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+				}}>
+					<Text style={[infoTitleStyle, {
+						color: colorOne,
+					}]}>
+						{!!title && hideModeControl ?
+							''
+							:
+							title.toUpperCase()
+						}
+					</Text>
+					{!!title && !hideModeControl && showQueueInfo && (
+						<InfoActionQueuedOnWakeUp
+							iconStyle={[infoIconStyle, {color: colorOne}]}/>
+					)}
+				</View>
 			</View>
 			{editValue ?
 				<View style={[box2, {
@@ -253,23 +270,31 @@ render(): Object {
 							</View>
 							:
 							<View style={box2}>
-								<Text style={{
-									textAlignVertical: 'center',
-								}} onPress={this.onPressEdit}>
-									<Text style={[sValueStyle, {
-										color: colorTwo,
-									}]}>
-										{cModevalue}
-									</Text>
-									<Text style={Theme.Styles.hiddenText}>
+								<View style={{
+									flexDirection: 'row',
+								}}>
+									<Text style={{
+										textAlignVertical: 'center',
+									}} onPress={this.onPressEdit}>
+										<Text style={[sValueStyle, {
+											color: colorTwo,
+										}]}>
+											{cModevalue}
+										</Text>
+										<Text style={Theme.Styles.hiddenText}>
 								!
-									</Text>
-									<Text style={[sUnitStyle, {
-										color: colorTwo,
-									}]}>
+										</Text>
+										<Text style={[sUnitStyle, {
+											color: colorTwo,
+										}]}>
 								°C
+										</Text>
 									</Text>
-								</Text>
+									{!title && showQueueInfo && (
+										<InfoActionQueuedOnWakeUp
+											iconStyle={[infoIconStyle, {color: colorOne}]}/>
+									)}
+								</View>
 							</View>
 					}
 				</>
@@ -431,6 +456,10 @@ getStyles(): Object {
 			color: '#999999',
 			fontSize: deviceWidth * 0.13,
 			marginTop: 5,
+		},
+		infoIconStyle: {
+			fontSize: deviceWidth * fontSizeFactorEight,
+			marginLeft: 2,
 		},
 	};
 }

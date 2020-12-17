@@ -38,6 +38,9 @@ import {
 	getSupportedModes,
 	getLastUpdated,
 	getThermostatValue,
+	getSetPoints,
+	getCurrentSetPoint,
+	shouldHaveMode,
 } from '../../Lib';
 
 type Props = {
@@ -120,6 +123,7 @@ render(): Object | null {
 		name,
 		parameter = [],
 		stateValues,
+		actionsQueueThermostat = {},
 	} = device;
 
 	let supportResume = false;
@@ -135,10 +139,21 @@ render(): Object | null {
 	});
 
 	const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
+	let activeMode = mode;
 
-	const supportedModes = getSupportedModes(parameter, setpoint, intl);
+	let supportedModes = getSupportedModes(parameter, setpoint, intl);
 
 	const { timeoutPlusMinus } = route.params || {};
+
+	let currentSetPoint;
+	let _shouldHaveMode = shouldHaveMode(device);
+	if (!_shouldHaveMode) {
+		supportedModes = getSetPoints(parameter, setpoint, intl);
+		if (supportedModes) {
+			currentSetPoint = getCurrentSetPoint(supportedModes, mode);
+			activeMode = currentSetPoint.mode;
+		}
+	}
 
 	return (
 		<View
@@ -173,7 +188,7 @@ render(): Object | null {
 						appLayout={appLayout}
 						modes={supportedModes}
 						device={device}
-						activeMode={mode}
+						activeMode={activeMode}
 						lastUpdated={lastUpdated}
 						currentTemp={currentTemp}
 						deviceSetStateThermostat={this._deviceSetStateThermostat}
@@ -181,7 +196,9 @@ render(): Object | null {
 						gatewayTimezone={gatewayTimezone}
 						intl={intl}
 						source="ThermostatFullControl"
-						timeoutPlusMinus={timeoutPlusMinus}/>
+						timeoutPlusMinus={timeoutPlusMinus}
+						shouldHaveMode={_shouldHaveMode}
+						actionsQueueThermostat={actionsQueueThermostat}/>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</View>

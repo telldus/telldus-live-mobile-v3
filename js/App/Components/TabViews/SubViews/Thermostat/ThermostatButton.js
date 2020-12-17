@@ -160,7 +160,8 @@ class ThermostatButton extends View<Props, State> {
 			textOneStyle={styles.textOneStyle}
 			textTwoStyle={styles.textTwoStyle}
 			textThreeStyle={styles.textThreeStyle}
-			disableActionIndicator={disableActionIndicator}/>;
+			disableActionIndicator={disableActionIndicator}
+			infoIconStyle={styles.infoIconStyle}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
 			mode === 'off' ? colors.colorOffActiveBg : colors.colorOnActiveBg;
@@ -212,6 +213,12 @@ const styles = StyleSheet.create({
 		textAlign: 'left',
 		fontSize: Theme.Core.rowHeight * 0.19,
 		height: Theme.Core.rowHeight * 0.3,
+		color: '#fff',
+	},
+	infoIconStyle: {
+		fontSize: Theme.Core.rowHeight * 0.19,
+		marginBottom: Theme.Core.rowHeight * 0.06,
+		marginLeft: 2,
 		color: '#fff',
 	},
 });

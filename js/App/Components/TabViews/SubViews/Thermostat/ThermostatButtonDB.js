@@ -159,7 +159,12 @@ class ThermostatButtonDB extends View<Props, State> {
 			textThreeStyle={[styles.textThreeStyle, {
 				fontSize: tileWidth * 0.09,
 				height: tileWidth * 0.12,
-			}]}/>;
+			}]}
+			infoIconStyle={{
+				fontSize: tileWidth * 0.1,
+				marginLeft: 2,
+				color: '#fff',
+			}}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
 			mode === 'off' ? colors.colorOffActiveBg : colors.colorOnActiveBg;

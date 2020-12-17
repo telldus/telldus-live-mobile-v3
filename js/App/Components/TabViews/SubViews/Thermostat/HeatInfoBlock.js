@@ -23,9 +23,17 @@
 
 import React from 'react';
 
-import { View, Text, IconTelldus, FormattedNumber } from '../../../../../BaseComponents';
+import {
+	View,
+	Text,
+	IconTelldus,
+	FormattedNumber,
+} from '../../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
+import {
+	InfoActionQueuedOnWakeUp,
+} from '../../../ThermostatControl/SubViews';
 
 import {
 	withTheme,
@@ -56,6 +64,7 @@ type Props = PropsThemedComponent & {
 	textOneStyle: number | Object,
 	textTwoStyle: number | Object,
 	textThreeStyle: number | Object,
+	infoIconStyle: number | Object,
 	closeSwipeRow: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDeviceAction?: () => void,
@@ -112,8 +121,13 @@ class HeatInfoBlock extends View {
 			iconSize,
 			disableActionIndicator,
 			colors,
+			infoIconStyle,
 		} = this.props;
-		let { methodRequested, name } = device;
+		let {
+			methodRequested,
+			name,
+			actionsQueueThermostat = {},
+		} = device;
 
 		let dotColor = colors.lightDrandSecDarkWhite;
 
@@ -132,6 +146,10 @@ class HeatInfoBlock extends View {
 		const showValue = currentMode !== 'off' && currentMode !== 'fan' && currentValue;
 
 		const showModelabel = currentMode !== 'off';
+		const itemInQueue = actionsQueueThermostat[currentMode];
+		const showQueueInfo = Object.keys(actionsQueueThermostat).length > 0;
+		const actionQueuedOnWakeup = !!itemInQueue;
+		const value = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseFloat(itemInQueue.queue) : currentValue;
 
 		return (
 			<View style={[styles.button, this.props.style, heatInfoBlockStyle, {
@@ -144,20 +162,39 @@ class HeatInfoBlock extends View {
 					<IconTelldus icon={icon} size={iconSize} style={iconStyle}/>
 				}
 				<View style={{alignItems: 'flex-start', marginLeft: 2}}>
-					{showValue && <Text style={{textAlign: 'left'}}>
-						<FormattedNumber
-							formatterFunction={this.formatterFunction}
-							style={textOneStyle}
-							value={currentValue}
-							minimumFractionDigits={1}/>
+					{showValue && (
+						<View style={{
+							flexDirection: 'row',
+						}}>
+							<Text style={{textAlign: 'left'}}>
+								<FormattedNumber
+									formatterFunction={this.formatterFunction}
+									style={textOneStyle}
+									value={value}
+									minimumFractionDigits={1}/>
 
-						<Text style={textTwoStyle}>°C</Text>
-					</Text>
-					}
-					{showModelabel && <Text style={textThreeStyle}>
-						{!!currentModeLabel && currentModeLabel.toUpperCase()}
-					</Text>
-					}
+								<Text style={textTwoStyle}>°C</Text>
+							</Text>
+							{showQueueInfo && (
+								<InfoActionQueuedOnWakeUp
+									iconStyle={infoIconStyle}/>
+							)}
+						</View>
+					)}
+					{showModelabel && (
+						<View style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+						}}>
+							<Text style={textThreeStyle}>
+								{!!currentModeLabel && currentModeLabel.toUpperCase()}
+							</Text>
+							{showQueueInfo && !showValue && (
+								<InfoActionQueuedOnWakeUp
+									iconStyle={infoIconStyle}/>
+							)}
+						</View>
+					)}
 				</View>
 				{
 					!disableActionIndicator && methodRequested === 'THERMOSTAT' ?

@@ -91,6 +91,7 @@ exec('git diff-index --quiet HEAD --')
 	.then((inAppUpdatePriority) => {
 		let filename = 'fastlane/metadata/android/release_configs.json';
 		fs.writeFileSync(filename, `${'{' + '"inAppUpdatePriority"' + ':'}${inAppUpdatePriority}}`);
+		return exec(`git add ${filename}`);
 	})
 	.then(() => {
 		// Let the user edit the changelog before commiting
