@@ -198,7 +198,7 @@ render(): Object {
 
 	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined';
 	const itemInQueue = actionsQueueThermostat[controllingMode];
-	const actionQueuedOnWakeup = !!itemInQueue && (itemInQueue.queue !== undefined && parseInt(itemInQueue.queue, 10) === currentValueInScreen);
+	const actionQueuedOnWakeup = !!itemInQueue && (itemInQueue.queue !== undefined && parseFloat(itemInQueue.queue) === currentValueInScreen);
 
 	return (
 		<View style={InfoCover} pointerEvents="box-none">

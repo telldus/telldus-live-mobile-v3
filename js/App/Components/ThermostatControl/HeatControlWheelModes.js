@@ -178,7 +178,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.currentValueInScreen) !== parseFloat(newValue)) {
 		const itemInQueue = actionsQueueThermostat[activeMode];
 		const actionQueuedOnWakeup = !!itemInQueue;
-		const currentValueInScreen = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseInt(itemInQueue.queue, 10) : newValue;
+		const currentValueInScreen = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseFloat(itemInQueue.queue) : newValue;
 
 		newState = {
 			...newState,
@@ -302,7 +302,7 @@ constructor(props: Props) {
 	const currentValue = cModeInfo.value;
 	const itemInQueue = actionsQueueThermostat[cModeInfo.mode];
 	const actionQueuedOnWakeup = !!itemInQueue;
-	const currentValueInScreen = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseInt(itemInQueue.queue, 10) : currentValue;
+	const currentValueInScreen = (actionQueuedOnWakeup && itemInQueue.queue !== undefined) ? parseFloat(itemInQueue.queue) : currentValue;
 	const minVal = cModeInfo.minVal;
 	const maxVal = cModeInfo.maxVal;
 	let initialAngleLength = 0;
