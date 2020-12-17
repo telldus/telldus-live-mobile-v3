@@ -78,18 +78,9 @@ platform :ios do
       scheme: "TelldusLiveApp",
       workspace: "ios/TelldusLiveApp.xcworkspace",
       configuration: "Release",
+      clean: true,
       codesigning_identity: "iPhone Distribution",
-      export_method: "app-store",
-      export_options: {
-        signingStyle: "manual",
-        method: "app-store",
-        provisioningProfiles: { 
-          "com.telldus.live.mobile" => "match AppStore com.telldus.live.mobile",
-          "com.telldus.live.mobile.HomescreenWidget" => "match AppStore com.telldus.live.mobile.HomescreenWidget",
-          "com.telldus.live.mobile.HomescreenWidgetIntentExtension" => "match AppStore com.telldus.live.mobile.HomescreenWidgetIntentExtension"
-        }
-      },
-      xcargs: "PROVISIONING_PROFILE_SPECIFIER='match AppStore com.telldus.live.mobile'"
+      xcargs: "PROVISIONING_PROFILE_APP='match AppStore com.telldus.live.mobile' PROVISIONING_PROFILE_WIDGET='match AppStore com.telldus.live.mobile.HomescreenWidget' PROVISIONING_PROFILE_WIDGET_INTENT='match AppStore com.telldus.live.mobile.HomescreenWidgetIntentExtension'"
     )
   end
 
