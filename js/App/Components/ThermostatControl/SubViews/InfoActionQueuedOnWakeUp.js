@@ -25,6 +25,7 @@ import React from 'react';
 import {
 	TouchableOpacity,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	ThemedMaterialIcon,
@@ -34,6 +35,8 @@ import {
 	useDialogueBox,
 } from '../../../Hooks/Dialoguebox';
 
+import i18n from '../../../Translations/common';
+
 const InfoActionQueuedOnWakeUp = (props: Object): Object => {
 	const {
 		iconStyle,
@@ -42,18 +45,21 @@ const InfoActionQueuedOnWakeUp = (props: Object): Object => {
 	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
+	const {
+		formatMessage,
+	} = useIntl();
 
 	const onPress = React.useCallback(() => {
 		toggleDialogueBoxState({
 			show: true,
 			showHeader: true,
-			text: 'This setting has been saved and will take effect the next time this device is awake',
-			header: 'Header',
+			text: formatMessage(i18n.settingInQueueInfo),
+			header: formatMessage(i18n.settingInQueueHeader),
 			showPositive: true,
 			positiveText: null,
 			showNegative: false,
 		});
-	}, [toggleDialogueBoxState]);
+	}, [formatMessage, toggleDialogueBoxState]);
 
 	return (
 		<TouchableOpacity
