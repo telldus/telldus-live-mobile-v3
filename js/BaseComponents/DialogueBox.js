@@ -27,10 +27,12 @@ import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Modal from 'react-native-modal';
 import { intlShape, injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
+const isEqual = require('react-fast-compare');
 
 import View from './View';
 import Text from './Text';
 import DialogueHeader from './DialogueHeader';
+import Throbber from './Throbber';
 
 import capitalize from '../App/Lib/capitalize';
 import i18n from '../App/Translations/common';
@@ -43,7 +45,9 @@ import {
 type Props = PropsThemedComponent & {
 	showDialogue?: boolean,
 	appLayout: Object,
+	extraData?: Object,
 
+	showThrobberOnNegative?: boolean,
 	backdropOpacity?: number,
 	showIconOnHeader?: boolean,
 	imageHeader?: boolean,
@@ -82,6 +86,8 @@ type defaultProps = {
 	backdropOpacity: number,
 	showHeader: boolean,
 	capitalizeHeader: boolean,
+	extraData: Object,
+	showThrobberOnNegative: boolean,
 };
 
 class DialogueBox extends Component<Props, null> {
@@ -98,6 +104,8 @@ class DialogueBox extends Component<Props, null> {
 		backdropOpacity: 0.60,
 		showHeader: true,
 		capitalizeHeader: true,
+		extraData: {},
+		showThrobberOnNegative: false,
 	}
 
 	renderHeader: (Object) => void;
@@ -143,12 +151,16 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object): boolean {
-		const { showDialogue, appLayout } = this.props;
+		const { showDialogue, appLayout, extraData } = this.props;
 		if (showDialogue !== nextProps.showDialogue) {
 			return true;
 		}
 
 		if (appLayout.width !== nextProps.appLayout.width) {
+			return true;
+		}
+
+		if (!isEqual(nextProps.extraData, extraData)) {
 			return true;
 		}
 
@@ -247,6 +259,7 @@ class DialogueBox extends Component<Props, null> {
 			notificationModalFooterPositiveTextCoverStyle,
 			negTextColorLevel,
 			posTextColorLevel,
+			showThrobberOnNegative = false,
 		} = this.props;
 		if (!showNegative && !showPositive) {
 			return null;
@@ -268,9 +281,16 @@ class DialogueBox extends Component<Props, null> {
 					}]}
 					onPress={this.onPressNegative}
 					accessibilityLabel={accessibilityLabelNegative}>
-						<Text
-							level={negTextColorLevel}
-							style={styles.notificationModalFooterNegativeText}>{nText}</Text>
+						{showThrobberOnNegative ?
+							<Throbber
+								throbberContainerStyle={{
+									position: 'relative',
+								}}/>
+							:
+							<Text
+								level={negTextColorLevel}
+								style={styles.notificationModalFooterNegativeText}>{nText}</Text>
+						}
 					</TouchableOpacity>
 					:
 					null
