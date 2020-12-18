@@ -446,7 +446,6 @@ getStyles(appLayout: Object): Object {
 			marginBottom: fontSizeText / 2,
 		},
 		pickerStyle: {
-			backgroundColor: colors.backgroundColorOne,
 		},
 		pickerBaseCoverStyle: {
 			padding: 0,
