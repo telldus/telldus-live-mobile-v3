@@ -1,0 +1,3 @@
+- Fix for Sign in with Apple
+- Fix for Support from app
+

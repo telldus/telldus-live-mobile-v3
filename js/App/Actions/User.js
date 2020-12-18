@@ -162,19 +162,28 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 		}
 	)
 		.then((response: Object): Object => response.json())
-		.then((responseData: Object): any => {
+		.then(async (responseData: Object): any => {
 			if (responseData.error) {
 				throw responseData;
 			}
 			setBoolean('Email', 'true');
-			dispatch({
-				type: 'USER_REGISTER',
-				accessToken: {
-					...responseData,
-					userId: responseData.uuid,
-				},
-			});
-			return responseData;
+			let responseUp = {};
+			try {
+				responseUp = await dispatch(getUserProfile(responseData, {
+					performPostSuccess: false,
+				}));
+			} catch (e) {
+				throw e;
+			} finally {
+				dispatch({
+					type: 'USER_REGISTER',
+					accessToken: {
+						...responseData,
+						userId: responseUp.uuid,
+					},
+				});
+				return responseData;
+			}
 		}).catch((e: Object): any => {
 			setBoolean('Email', 'false');
 			throw e;
