@@ -108,6 +108,8 @@ class WelcomeScreen extends View {
 				<TouchableButton
 					style={styles.button}
 					onPress={this.onPressOK}
+					buttonLevel={24}
+					textLevel={40}
 					text={i18n.welcomeButton}
 				/>
 			</View>
