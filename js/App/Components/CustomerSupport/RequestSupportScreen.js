@@ -97,10 +97,8 @@ constructor(props: Props) {
 	super(props);
 
 	this.onChangeText = this.onChangeText.bind(this);
-	this.showDialogue = this.showDialogue.bind(this);
 	this.onSubmitEditing = this.onSubmitEditing.bind(this);
 	this.contactSupport = this.contactSupport.bind(this);
-	this.onPressPositive = this.onPressPositive.bind(this);
 
 	this.onChangeTextEmail = this.onChangeTextEmail.bind(this);
 }
@@ -153,7 +151,12 @@ contactSupport() {
 			};
 			actions.createSupportTicketGeneral(gatewayId, ticketData).then((ticketNum: number) => {
 				if (ticketNum && typeof ticketNum === 'number') {
-					this.showDialogue(formatMessage(i18n.labelSupportTicketCreated), formatMessage(i18n.messageSupportTicket, {ticketNum}));
+					this.showDialogue(
+						formatMessage(i18n.labelSupportTicketCreated),
+						formatMessage(i18n.messageSupportTicket, {ticketNum}),
+						{
+							onPressPositive: this.onPressPositive,
+						});
 				} else {
 					this.showDialogue(errorH, errorB);
 				}
@@ -174,7 +177,9 @@ contactSupport() {
 	}
 }
 
-showDialogue(header: string, text: string) {
+showDialogue = (header: string, text: string, {
+	onPressPositive,
+}: Object = {}) => {
 	const { screenProps } = this.props;
 	const { toggleDialogueBox } = screenProps;
 
@@ -186,14 +191,14 @@ showDialogue(header: string, text: string) {
 		text,
 		showHeader: true,
 		closeOnPressPositive: true,
-		onPressPositive: this.onPressPositive,
 		capitalizeHeader: false,
+		onPressPositive,
 		timeoutToCallPositive: 200,
 	};
 	toggleDialogueBox(dialogueData);
 }
 
-onPressPositive() {
+onPressPositive = () => {
 	const { navigation } = this.props;
 	navigation.popToTop();
 }
