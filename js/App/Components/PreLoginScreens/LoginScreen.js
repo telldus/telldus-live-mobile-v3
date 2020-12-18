@@ -35,9 +35,12 @@ import {
 import {
 	setSocialAuthConfig,
 } from '../../Actions/User';
+import { registerUser } from '../../Actions/User';
+
 import {
 	getLinkTextFontSize,
 } from '../../Lib/styleUtils';
+import { validateEmail } from '../../Lib/UserUtils';
 
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
@@ -55,12 +58,15 @@ type Props = {
 	dispatch: Function,
 	ScreenName: string,
 	route: Object,
+	socialAuthConfig: Object,
+	onFormSubmit: Function,
 };
 
 type State = {
 	notificationText?: string,
 	onPressLogout: boolean,
 	showModal: boolean,
+	isRegistering: boolean,
 };
 
 class LoginScreen extends View {
@@ -69,7 +75,7 @@ class LoginScreen extends View {
 
 	onForgotPassword: () => void;
 	onNeedAccount: () => void;
-	closeModal: () => void;
+	closeModal: (?Function) => void;
 	onPressPositive: () => void;
 	toggleOnPressLogout: (boolean) => void;
 
@@ -80,6 +86,7 @@ class LoginScreen extends View {
 			notificationText: false,
 			onPressLogout: false,
 			showModal: false,
+			isRegistering: false,
 		};
 
 		this.onForgotPassword = this.onForgotPassword.bind(this);
@@ -98,9 +105,12 @@ class LoginScreen extends View {
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
 		this.labelForgotPassword = `${this.labelLink} ${this.forgotPassword} ${this.labelButtondefaultDescription}`;
 		this.labelNeedAccount = `${this.labelLink} ${this.needAccount} ${this.labelButtondefaultDescription}`;
+
+		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 	}
 
-	closeModal() {
+	closeModal(callback?: Function) {
 		const { screenProps } = this.props;
 		const { toggleDialogueBox } = screenProps;
 		const dialogueData = {
@@ -108,8 +118,12 @@ class LoginScreen extends View {
 		};
 		this.setState({
 			showModal: false,
+			isRegistering: false,
 		}, () => {
 			toggleDialogueBox(dialogueData);
+			if (callback) {
+				callback();
+			}
 		});
 	}
 
@@ -135,6 +149,9 @@ class LoginScreen extends View {
 		const {
 			formatMessage,
 		} = intl;
+		const {
+			isRegistering,
+		} = this.state;
 
 		let headerText = formatMessage(i18n.login),
 			notificationHeader = false,
@@ -148,7 +165,9 @@ class LoginScreen extends View {
 			showIconOnHeader = false,
 			onPressHeader,
 			closeOnPressNegative,
-			closeOnPressPositive;
+			closeOnPressPositive,
+			showThrobberOnNegative = false,
+			extraData = {};
 		if (this.props.accessToken && !this.props.isTokenValid) {
 			headerText = formatMessage(i18n.headerSessionLocked);
 			positiveText = formatMessage(i18n.logout);
@@ -166,8 +185,12 @@ class LoginScreen extends View {
 			timeoutToCallPositive = 200;
 			showIconOnHeader = true;
 			onPressHeader = this.closeDialoguePostSocialLoginFail;
-			closeOnPressNegative = true;
-			closeOnPressPositive = true;
+			closeOnPressNegative = false;
+			closeOnPressPositive = !isRegistering;
+			showThrobberOnNegative = isRegistering;
+			extraData = {
+				isRegistering,
+			};
 		}
 		return {
 			headerText,
@@ -184,6 +207,8 @@ class LoginScreen extends View {
 			onPressHeader,
 			closeOnPressNegative,
 			closeOnPressPositive,
+			showThrobberOnNegative,
+			extraData,
 		};
 	}
 
@@ -204,6 +229,42 @@ class LoginScreen extends View {
 		});
 	}
 
+	openDialogueBoxAfterClosing = (body: string, header?: Object) => {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = {
+			show: true,
+			showHeader: true,
+			header: header,
+			text: body,
+			onPressNegative: this.closeDialoguePostSocialLoginFail,
+			onPressPositive: this.closeDialoguePostSocialLoginFail,
+			showPositive: true,
+			showNegative: false,
+		};
+		toggleDialogueBox({
+			show: false,
+		});
+		this.closeModelTimeout = setTimeout(() => {
+			this.setState({
+				showModal: true,
+			}, () => {
+				toggleDialogueBox(dialogueData);
+			});
+		}, 500);
+	}
+
+	showDialoguePostSocialAuthFail = () => {
+		this.openDialogueBox(this.props.intl.formatMessage(i18n.noLinkedAccountInfo),
+			{
+				type: 'social_login_fail',
+			});
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.closeModelTimeout);
+	}
+
 	goBack = () => {
 		this.props.navigation.goBack();
 	}
@@ -220,15 +281,71 @@ class LoginScreen extends View {
 	}
 
 	loginPostSocialLoginFail = () => {
+		const {
+			isRegistering,
+		} = this.state;
+		if (isRegistering) {
+			return;
+		}
 		this.setState({
 			showModal: false,
 		});
 	}
 
 	registerPostSocialLoginFail = () => {
-		this.setState({
-			showModal: false,
-		}, () => {
+		const {
+			isRegistering,
+		} = this.state;
+		if (isRegistering) {
+			return;
+		}
+		let {
+			onFormSubmit,
+			socialAuthConfig,
+			navigation,
+		} = this.props;
+		const {
+			email = '',
+			fullName = {},
+		} = socialAuthConfig;
+		const {
+			fn = '',
+			ln = '',
+		} = fullName;
+		let em = email, cem = email;
+		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
+			let isConfirmEmailValid = validateEmail(cem);
+			let isEmailValid = validateEmail(em);
+			if (isConfirmEmailValid && isEmailValid) {
+				this.setState({
+					isRegistering: true,
+				}, () => {
+					this.showDialoguePostSocialAuthFail();
+					onFormSubmit(em, fn, ln)
+						.then((response: Object) => {
+							this.closeModal(() => {
+								this.postSubmit(() => {
+									if (response && response.access_token) {
+										navigation.navigate('Welcome');
+									}
+								});
+							});
+						})
+						.catch((err: Object) => {
+							this.postSubmit();
+							this.handleRegisterError(err);
+						});
+				});
+			} else {
+				this.navigateToRegister();
+			}
+		} else {
+			this.navigateToRegister();
+		}
+	}
+
+	navigateToRegister = () => {
+		this.closeModal(() => {
 			const {
 				navigation,
 			} = this.props;
@@ -236,7 +353,26 @@ class LoginScreen extends View {
 		});
 	}
 
+	postSubmit = (callback?: Function): Object => {
+		this.setState({
+			isRegistering: false,
+		}, callback);
+	}
+
+	handleRegisterError(error: Object) {
+		let data = !error.error_description && error.message === 'Network request failed' ?
+			this.networkFailed : error.error_description ?
+				error.error_description : error.error ? error.error : this.unknownError;
+		this.openDialogueBoxAfterClosing(data);
+	}
+
 	closeDialoguePostSocialLoginFail = () => {
+		const {
+			isRegistering,
+		} = this.state;
+		if (isRegistering) {
+			return;
+		}
 		this.closeModal();
 		this.props.dispatch(setSocialAuthConfig({}));
 	}
@@ -351,14 +487,21 @@ class LoginScreen extends View {
 }
 
 function mapStateToProps(store: Object): Object {
+	const {
+		socialAuthConfig = {},
+	} = store.user;
 	return {
 		accessToken: store.user.accessToken,
 		isTokenValid: store.user.isTokenValid,
+		socialAuthConfig,
 	};
 }
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
+		onFormSubmit: (email: string, firstName: string, LastName: string): Promise<any> => {
+			return dispatch(registerUser(email, firstName, LastName));
+		},
 		dispatch,
 	};
 }

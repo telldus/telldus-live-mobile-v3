@@ -7,4 +7,6 @@
 - Copy 433 MHz devices and their schedules to a new gatway
 - Check if user has latest version
 - Fixes for sleeping thermostats
+- Fix for Sign in with Apple
+- Fix for Support from app
 
