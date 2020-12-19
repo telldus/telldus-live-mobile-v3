@@ -49,6 +49,10 @@ import {
 	AdditionalPlansPayments,
 	Footer,
 } from './SubViews';
+import {
+	PrivacyPolicyLink,
+	TermsOfService,
+} from '../Profile/SubViews';
 
 import {
 	getSubscriptionPlans,
@@ -120,6 +124,8 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		expireNotifCover,
 		expireNotifHeader,
 		expireNotifContent,
+		contentStyle,
+		subsInfoCoverStyle,
 	} = getStyles(layout, premAboutExpire);
 
 	const {
@@ -410,6 +416,16 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					navigation={navigation}
 					button={false}
 					linkTextStyle={linkTextStyle}/>
+				<View
+					style={subsInfoCoverStyle}>
+					<Text
+						level={25}
+						style={contentStyle}>
+						{formatMessage(i18n.subscriptionAutoRenewInfo)}
+					</Text>
+					<TermsOfService/>
+					<PrivacyPolicyLink/>
+				</View>
 			</ScrollView>
 			{isHeadsUp && <Footer
 				navigation={navigation}
@@ -426,6 +442,7 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 	const {
 		shadow,
 		paddingFactor,
+		fontSizeFactorFour,
 	} = Theme.Core;
 	const padding = deviceWidth * paddingFactor;
 
@@ -543,6 +560,16 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 			fontSize: fontSize * 1.1,
 			marginTop: 5,
 			textAlign: 'center',
+		},
+		contentStyle: {
+			textAlign: 'center',
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
+			marginTop: 10,
+			marginBottom: 5,
+		},
+		subsInfoCoverStyle: {
+			marginHorizontal: padding,
+			padding,
 		},
 	};
 };
