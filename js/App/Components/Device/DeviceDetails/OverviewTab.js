@@ -115,6 +115,7 @@ class OverviewTab extends View<Props, null> {
 							Name,
 							Brand,
 							ManualUrl,
+							ConfigurationParameters,
 						} = res;
 						const payload = {
 							Image,
@@ -122,6 +123,7 @@ class OverviewTab extends View<Props, null> {
 							Brand,
 							deviceId: id,
 							ManualUrl,
+							ConfigurationParameters,
 						};
 						dispatch(deviceZWaveInfo(payload));
 					}
