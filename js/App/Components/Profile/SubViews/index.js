@@ -33,6 +33,7 @@ import SwitchOrAddAccountButton from './SwitchOrAddAccountButton';
 import ThemesBlock from './ThemesBlock';
 import ShowHideTabsBlock from './ShowHideTabsBlock';
 import SetDefaultStartScreenDropDown from './SetDefaultStartScreenDropDown';
+import TermsOfService from './TermsOfService';
 
 module.exports = {
 	EditNameBlock,
@@ -46,4 +47,5 @@ module.exports = {
 	ThemesBlock,
 	ShowHideTabsBlock,
 	SetDefaultStartScreenDropDown,
+	TermsOfService,
 };

@@ -1,0 +1,2 @@
+- Clearer explanation about auto-renewing subscriptions
+
