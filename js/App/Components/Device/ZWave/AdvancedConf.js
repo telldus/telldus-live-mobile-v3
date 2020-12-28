@@ -151,6 +151,8 @@ const AdvancedConf = (props: Props): Object => {
 			let max = null;
 			let steps = 0;
 			let _values = [];
+			// TODO: Unlike xml used at web, JSON response in app do not
+			// have a type attribute, so confirm the type inference logic.
 			let type = values.length > 0 ? 'bitset' : undefined;
 
 			for (let i = 0; i < values.length; ++i) {
