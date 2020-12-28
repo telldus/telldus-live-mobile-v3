@@ -25,7 +25,6 @@
 import React, {
 	memo,
 	useCallback,
-	useState,
 	useMemo,
 } from 'react';
 import {
@@ -39,13 +38,13 @@ import {
 	RoundedInfoButton,
 } from '../../../../BaseComponents';
 import GenericConfSetting from './GenericConfSetting';
+import BitsetConfSetting from './BitsetConfSetting';
+import RangeConfSetting from './RangeConfSetting';
+import RangeMappedConfSetting from './RangeMappedConfSetting';
 
 // import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import Theme from '../../../Theme';
 
-import {
-	useManufacturerInfo,
-} from '../../../Hooks';
 import {
 	useDialogueBox,
 } from '../../../Hooks/Dialoguebox';
@@ -56,12 +55,13 @@ import {
 type Props = {
 	parameters: Object,
 	manufacturerAttributes: Object,
+	configurationParameters: Array<Object>,
 };
 
 const AdvancedConf = (props: Props): Object => {
 	const {
 		parameters = {},
-		manufacturerAttributes,
+		configurationParameters,
 	} = props;
 
 	const {
@@ -82,12 +82,6 @@ const AdvancedConf = (props: Props): Object => {
 		colors,
 	});
 
-	const [ manufacturerInfo, setManufacturerInfo ] = useState();
-	const callback = useCallback((info: Object) => {
-		setManufacturerInfo(info);
-	}, []);
-	useManufacturerInfo(manufacturerAttributes, callback);
-
 	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
@@ -103,15 +97,29 @@ const AdvancedConf = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const {
-		ConfigurationParameters = [],
-	} = manufacturerInfo || {};
-
 	const getConfSettings = useCallback(({
 		type,
 		...others
 	}: Object): Object => {
 		switch (type) {
+			case 'bitset': {
+				return (
+					<BitsetConfSetting
+						{...others}/>
+				);
+			}
+			case 'range': {
+				return (
+					<RangeConfSetting
+						{...others}/>
+				);
+			}
+			case 'rangemapped': {
+				return (
+					<RangeMappedConfSetting
+						{...others}/>
+				);
+			}
 			default:
 				return (
 					<GenericConfSetting
@@ -121,10 +129,10 @@ const AdvancedConf = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const cParamsLength = ConfigurationParameters.length;
+	const cParamsLength = configurationParameters.length;
 	const paramsLen = Object.keys(parameters);
 	const configurationSettings = useMemo((): Array<Object> => {
-		const _configurationSettings = ConfigurationParameters.map((cp: Object, index: number): Object => {
+		const _configurationSettings = configurationParameters.map((cp: Object, index: number): Object => {
 			const {
 				Name,
 				ParameterNumber,

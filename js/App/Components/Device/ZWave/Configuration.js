@@ -63,7 +63,11 @@ const Configuration = (props: Props): Object => {
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		nodeInfo,
+		zwaveInfo = {},
 	} = useSelector((state: Object): Object => state.devices.byId[id]) || {};
+	const {
+		ConfigurationParameters = [],
+	} = zwaveInfo;
 
 	const {
 		titleCoverStyle,
@@ -97,17 +101,18 @@ const Configuration = (props: Props): Object => {
 		return (
 			<AdvancedConf
 				{...configurationClass}
-				manufacturerAttributes={manufacturerAttributes}/>
+				manufacturerAttributes={manufacturerAttributes}
+				configurationParameters={ConfigurationParameters}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasConfiguration, manufacturerAttributes]);
+	}, [hasConfiguration, manufacturerAttributes, ConfigurationParameters]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		setExpand(!expand);
 	}, [expand]);
 
-	if (!id || !nodeInfo || !protection || !configuration) {
+	if (!id || !nodeInfo || (!protection && (!configuration || ConfigurationParameters.length === 0))) {
 		return <EmptyView/>;
 	}
 
