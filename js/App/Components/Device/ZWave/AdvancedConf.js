@@ -42,7 +42,6 @@ import BitsetConfSetting from './BitsetConfSetting';
 import RangeConfSetting from './RangeConfSetting';
 import RangeMappedConfSetting from './RangeMappedConfSetting';
 
-// import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import Theme from '../../../Theme';
 
 import {
@@ -77,6 +76,11 @@ const AdvancedConf = (props: Props): Object => {
 		horizontalCover,
 		leftBlock,
 		rightBlock,
+		leftBlockMultiple,
+		verticalBlockCoverMultiple,
+		horizontalBlockCoverMultiple,
+		horizontalCoverMultiple,
+		rightBlockMultiple,
 	} = getStyles({
 		layout,
 		colors,
@@ -133,13 +137,13 @@ const AdvancedConf = (props: Props): Object => {
 	const paramsLen = Object.keys(parameters);
 	const configurationSettings = useMemo((): Array<Object> => {
 		const _configurationSettings = configurationParameters.map((cp: Object, index: number): Object => {
+			// TODO: Move to shared data
 			const {
 				Name,
 				ParameterNumber,
 				Description,
 				ConfigurationParameterValues: values = [],
 				Size,
-				Type,
 				DefaultValue,
 			} = cp;
 
@@ -147,9 +151,18 @@ const AdvancedConf = (props: Props): Object => {
 			let max = null;
 			let steps = 0;
 			let _values = [];
+			let type = values.length > 0 ? 'bitset' : undefined;
+
 			for (let i = 0; i < values.length; ++i) {
-				let from = parseInt(values[i].From, 16);
-				let to = parseInt(values[i].To, 16);
+				const {
+					From,
+					To,
+				} = values[i];
+				if (From !== To) {
+					type = undefined;
+				}
+				let from = parseInt(From, 16);
+				let to = parseInt(To, 16);
 				let signed = false;
 				if (from > to) {
 					// eslint-disable-next-line no-bitwise
@@ -193,15 +206,89 @@ const AdvancedConf = (props: Props): Object => {
 			if (ParameterNumber in parameters) {
 				defaultValue = typeof parameters[ParameterNumber].queue === 'number' ? parameters[ParameterNumber].queue : parameters[ParameterNumber].value;
 			}
+
+			const hasMultiple = Size > 1 && values.length > 1 && values.length === Size;
+			if (hasMultiple) {
+				let row = [];
+				values.forEach((v: Object) => {
+					const {
+						Description: d,
+					} = v;
+					const setting = getConfSettings({
+						values: _values,
+						type,
+						stepsTot: steps,
+						defaultValue: defaultValue.toString(),
+						min,
+						max,
+						Size,
+						ConfigurationParameterValues: values,
+					});
+					row.push(
+						<View
+							style={horizontalBlockCoverMultiple}>
+							<Text
+								level={3}
+								style={hItemLabelDef}>
+								{`${d}`}
+							</Text>
+							<View
+								style={rightBlockMultiple}>
+								{setting}
+							</View>
+						</View>
+					);
+				});
+				return (
+					<View
+						key={`${index}-${ParameterNumber}`}
+						style={horizontalCoverMultiple}>
+						<View
+							style={leftBlockMultiple}>
+							<Text
+								level={3}
+								style={hItemLabelDef}>
+								{`${ParameterNumber}`}
+							</Text>
+							{!!Description && (
+								<>
+									<Text style={Theme.Styles.hiddenText}>
+										{' '}
+									</Text>
+									<RoundedInfoButton
+										iconLevel={6}
+										buttonProps={{
+											infoButtonContainerStyle: {
+												position: 'relative',
+												right: undefined,
+												bottom: undefined,
+												marginLeft: 5,
+											},
+											onPress: onPressInfo,
+											onPressData: {
+												Description,
+											},
+										}}/>
+								</>
+							)}
+						</View>
+						<View
+							style={verticalBlockCoverMultiple}>
+							{row}
+						</View>
+					</View>
+				);
+			}
 			const setting = getConfSettings({
 				values: _values,
-				type: Type,
+				type,
 				stepsTot: steps,
 				defaultValue: defaultValue.toString(),
 				min,
 				max,
+				Size,
+				ConfigurationParameterValues: values,
 			});
-
 			return (
 				<View
 					key={`${index}-${ParameterNumber}`}
@@ -309,15 +396,42 @@ const getStyles = ({
 			marginTop: padding,
 			justifyContent: 'space-between',
 		},
+		horizontalCoverMultiple: {
+			flex: 1,
+			flexDirection: 'row',
+			marginTop: padding,
+			justifyContent: 'space-between',
+		},
 		leftBlock: {
 			flexDirection: 'row',
 			width: '60%',
 			alignItems: 'center',
 		},
+		verticalBlockCoverMultiple: {
+			flex: 1,
+			flexDirection: 'column',
+			paddingLeft: 8,
+		},
+		horizontalBlockCoverMultiple: {
+			flex: 1,
+			flexDirection: 'row',
+			marginTop: 2,
+			justifyContent: 'space-between',
+		},
+		leftBlockMultiple: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		rightBlockMultiple: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'flex-end',
+		},
 		rightBlock: {
 			flexDirection: 'row',
 			width: '30%',
 			alignItems: 'center',
+			justifyContent: 'flex-end',
 		},
 	};
 };

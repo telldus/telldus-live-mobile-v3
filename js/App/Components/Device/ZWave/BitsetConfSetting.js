@@ -25,85 +25,55 @@
 import React, {
 	memo,
 	useCallback,
-	useState,
 } from 'react';
 import {
 	useSelector,
 } from 'react-redux';
-import {
-	Platform,
-	KeyboardAvoidingView,
-} from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
-	ThemedTextInput,
+	CheckBoxIconText,
 } from '../../../../BaseComponents';
 
 import {
 	useAppTheme,
 } from '../../../Hooks/Theme';
-import {
-	useDialogueBox,
-} from '../../../Hooks/Dialoguebox';
 import Theme from '../../../Theme';
 
 const BitsetConfSetting = (props: Object): Object => {
-	const {
-		defaultValue,
-		min,
-		max,
-	} = props;
 
-	const [ value, setValue ] = useState(defaultValue);
+	const intl = useIntl();
 
 	const {
 		colors,
 	} = useAppTheme();
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
-		textFieldStyle,
+		checkBoxIconStyle,
+		checkBoxTextStyle,
+		inAppBrandPrimary,
+		containerStyle,
 	} = getStyles({
 		layout,
 		colors,
 	});
 
-	const {
-		toggleDialogueBoxState,
-	} = useDialogueBox();
-
-	const _onChangeText = useCallback((v: string) => {
-		setValue(v);
+	const onToggleCheckBox = useCallback((v: string) => {
 	}, []);
 
-	const _onSubmitEditing = useCallback(() => {
-		let asNum = parseInt(value, 10);
-		if (isNaN(asNum) || asNum > max || asNum < min) {
-			toggleDialogueBoxState({
-				show: true,
-				showHeader: true,
-				imageHeader: true,
-				text: `Please set value between: ${min}-${max}`, // TODO: Translate
-				showPositive: true,
-			});
-			return;
-		}
-	}, [value, max, min, toggleDialogueBoxState]);
+	const isChecked = false;
 
 	return (
-		<KeyboardAvoidingView
-			style={{flex: 1}}>
-			<ThemedTextInput
-				level={23}
-				value={value}
-				style={textFieldStyle}
-				onChangeText={_onChangeText}
-				onSubmitEditing={_onSubmitEditing}
-				autoCorrect={false}
-				autoFocus={false}
-				returnKeyType={'done'}
-				keyboardType={Platform.OS === 'ios' ? 'phone-pad' : 'decimal-pad'}
-			/>
-		</KeyboardAvoidingView>
+		<CheckBoxIconText
+			isChecked={isChecked}
+			iconStyle={{...checkBoxIconStyle,
+				backgroundColor: isChecked ? inAppBrandPrimary : '#fff',
+				color: isChecked ? '#fff' : 'transparent',
+			}}
+			style={containerStyle}
+			textStyle={checkBoxTextStyle}
+			onToggleCheckBox={onToggleCheckBox}
+			intl={intl}/>
 	);
 };
 
@@ -118,8 +88,20 @@ const getStyles = ({
 		fontSizeFactorEight,
 	} = Theme.Core;
 	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
+	const {
+		inAppBrandSecondary,
+		inAppBrandPrimary,
+	} = colors;
 
 	return {
+		inAppBrandPrimary,
+		containerStyle: {
+			overflow: 'visible',
+		},
+		checkBoxIconStyle: {
+			borderColor: inAppBrandPrimary,
+			overflow: 'visible',
+		},
 		textFieldStyle: {
 			flex: 1,
 			paddingBottom: 0,
@@ -127,7 +109,7 @@ const getStyles = ({
 			fontSize,
 			textAlign: 'right',
 			borderBottomWidth: 1,
-			borderBottomColor: colors.inAppBrandSecondary,
+			borderBottomColor: inAppBrandSecondary,
 		},
 	};
 };
