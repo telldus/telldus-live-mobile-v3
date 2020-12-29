@@ -51,7 +51,8 @@ import {
 import Theme from '../../Theme';
 
 type Props = {
-    onDidMount: Function,
+	onDidMount: Function,
+	navigation: Object,
 };
 
 const EventsList = memo<Object>((props: Props): Object => {
