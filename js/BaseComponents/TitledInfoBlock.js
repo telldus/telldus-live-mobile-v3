@@ -144,6 +144,7 @@ const getStyles = (appLayout: Object): Object => {
 			alignItems: 'stretch',
 			justifyContent: 'center',
 			marginBottom: 10,
+			borderRadius: 2,
 		},
 		titleStyle: {
 			marginBottom: 5,
@@ -155,6 +156,7 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'space-between',
 			...shadow,
 			padding: fontSize,
+			borderRadius: 2,
 		},
 		infoLabel: {
 			fontSize,
