@@ -176,6 +176,16 @@ const MoreOptionsTab = (props: Props): Object => {
 				},
 				enable: true,
 			},
+			{
+				icon: 'faq',
+				text: 'Manage events', // TODO: Translate
+				onPress: () => {
+					navigation.navigate('EventsNavigator', {
+						screen: 'EventsList',
+					});
+				},
+				enable: true,
+			},
 		];
 
 		let components = [];

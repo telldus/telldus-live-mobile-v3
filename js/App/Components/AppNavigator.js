@@ -90,6 +90,8 @@ import SelectWeatherAttributes from './Dashboard/SelectWeatherAttributes';
 import SelectWeatherForecastDay from './Dashboard/SelectWeatherForecastDay';
 import SetNameMetWeather from './Dashboard/SetNameMetWeather';
 
+import EventsNavigator from './Events/EventsNavigator';
+
 import {
 	RegisterScreen,
 	LoginScreen,
@@ -489,6 +491,13 @@ const ScreenConfigs = [
 	{
 		name: 'ChangeLogScreen',
 		Component: ChangeLogScreen,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'EventsNavigator',
+		Component: EventsNavigator,
 		options: {
 			headerShown: false,
 		},
