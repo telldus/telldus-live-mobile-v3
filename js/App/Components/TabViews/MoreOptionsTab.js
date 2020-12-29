@@ -30,6 +30,7 @@ import {
 } from 'react-native';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -48,6 +49,9 @@ import {
 	useCampaignAction,
 	useSwitchOrAddAccountAction,
 } from '../../Hooks/App';
+import {
+	eventReset,
+} from '../../Actions/Event';
 
 import Theme from '../../Theme';
 
@@ -66,6 +70,7 @@ const MoreOptionsTab = (props: Props): Object => {
 	const {
 		formatMessage,
 	} = intl;
+	const dispatch = useDispatch();
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const {
@@ -180,6 +185,7 @@ const MoreOptionsTab = (props: Props): Object => {
 				icon: 'faq',
 				text: 'Manage events', // TODO: Translate
 				onPress: () => {
+					dispatch(eventReset());
 					navigation.navigate('EventsNavigator', {
 						screen: 'EventsList',
 					});

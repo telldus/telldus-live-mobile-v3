@@ -25,11 +25,56 @@
 import EventsContainer from './EventsContainer';
 
 import EventsList from './EventsList';
+import SetEventName from './SetEventName';
+import AddEventTriggers from './AddEventTriggers';
+import AddEventConditions from './AddEventConditions';
+import AddEventActions from './AddEventActions';
+import EditEvent from './EditEvent';
 
 const EventsScreenConfigs = [
 	{
-		name: 'AddEditGeoFence',
+		name: 'EventsList',
 		Component: EventsList,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SetEventName',
+		Component: SetEventName,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'AddEventTriggers',
+		Component: AddEventTriggers,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'AddEventConditions',
+		Component: AddEventConditions,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'AddEventActions',
+		Component: AddEventActions,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'EditEvent',
+		Component: EditEvent,
 		ContainerComponent: EventsContainer,
 		options: {
 			headerShown: false,

@@ -30,6 +30,7 @@ const isEqual = require('react-fast-compare');
 import {
 	View,
 	NavigationHeaderPoster,
+	ThemedImage,
 } from '../../../BaseComponents';
 
 import {
@@ -66,9 +67,6 @@ export class EventsContainer extends View<Props, State> {
 	_keyboardDidShow: () => void;
 	_keyboardDidHide: () => void;
 
-	pointsToHiddenCave: number;
-	openCaveTimeout: any;
-
 	state = {
 		h1: '',
 		h2: '',
@@ -83,9 +81,6 @@ export class EventsContainer extends View<Props, State> {
 		this.handleBackPress = this.handleBackPress.bind(this);
 		this._keyboardDidShow = this._keyboardDidShow.bind(this);
 		this._keyboardDidHide = this._keyboardDidHide.bind(this);
-
-		this.pointsToHiddenCave = 0;
-		this.openCaveTimeout = null;
 	}
 
 	componentDidMount() {
@@ -125,7 +120,6 @@ export class EventsContainer extends View<Props, State> {
 		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 		this.keyboardDidShowListener.remove();
 		this.keyboardDidHideListener.remove();
-		this.clearOpenCaveTimeout();
 	}
 
 	handleBackPress(): boolean {
@@ -188,26 +182,11 @@ export class EventsContainer extends View<Props, State> {
 		return isEditMode;
 	}
 
-	clearOpenCaveTimeout = () => {
-		clearTimeout(this.openCaveTimeout);
-		this.openCaveTimeout = null;
-	}
-
-	onPressLogo = () => {
-		this.pointsToHiddenCave++;
-
-		if (this.openCaveTimeout) {
-			this.clearOpenCaveTimeout();
-		}
-
-		this.openCaveTimeout = setTimeout(() => {
-			this.pointsToHiddenCave = 0;
-		}, 500);
-
-		if (this.pointsToHiddenCave >= 5) {
-			this.pointsToHiddenCave = 0;
-			this.props.navigation.navigate('AdvancedSettings');
-		}
+	onAddNewEvent = () => {
+		const {
+			navigation,
+		} = this.props;
+		navigation.navigate('SetEventName');
 	}
 
 	render(): Object {
@@ -228,6 +207,9 @@ export class EventsContainer extends View<Props, State> {
 		} = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const {
+			addIconStyle,
+		} = this.getStyles(appLayout);
 
 		const deviceWidth = isPortrait ? width : height;
 
@@ -237,6 +219,14 @@ export class EventsContainer extends View<Props, State> {
 		const leftIcon = this.getLeftIcon(currentScreen);
 		const goBack = this.getLeftIconPressAction(currentScreen);
 		const showPoster = this.shouldShowPoster(currentScreen);
+		const rightIcon = {
+			component: <ThemedImage
+				source={{uri: 'icon_plus'}}
+				style={addIconStyle}
+				level={4}
+			/>,
+			onPress: this.onAddNewEvent,
+		};
 
 		return (
 			<View
@@ -251,6 +241,7 @@ export class EventsContainer extends View<Props, State> {
 					navigation={navigation}
 					showLeftIcon={showLeftIcon}
 					leftIcon={leftIcon}
+					rightButton={currentScreen === 'EventsList' ? rightIcon : undefined}
 					goBack={goBack}
 					showPoster={showPoster}
 					{...screenProps}/>
@@ -281,8 +272,21 @@ export class EventsContainer extends View<Props, State> {
 	}
 
 	getStyles = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+		const {
+			fontSizeFactorSix,
+		} = Theme.Core;
+
+		const size = Math.floor(deviceHeight * fontSizeFactorSix);
+		const fontSizeIcon = size < 20 ? 20 : size;
 
 		return {
+			addIconStyle: {
+				height: fontSizeIcon,
+				width: fontSizeIcon,
+			},
 		};
 	}
 }
