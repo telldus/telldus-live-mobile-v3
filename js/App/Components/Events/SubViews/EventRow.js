@@ -39,6 +39,9 @@ type Props = {
 	group: string,
 	minRepeatInterval: number,
 	active: boolean,
+	trigger?: Object,
+	condition?: Object,
+	action?: Object,
 };
 
 const EventRow = memo<Object>((props: Props): Object => {
@@ -50,6 +53,9 @@ const EventRow = memo<Object>((props: Props): Object => {
 		group,
 		minRepeatInterval,
 		active,
+		trigger,
+		condition,
+		action,
 	} = props;
 
 	const onPressPushSettings = useCallback(() => {
@@ -59,8 +65,11 @@ const EventRow = memo<Object>((props: Props): Object => {
 			group,
 			minRepeatInterval,
 			active,
+			trigger,
+			condition,
+			action,
 		});
-	}, [onPress, id, description, group, minRepeatInterval, active]);
+	}, [onPress, id, description, group, minRepeatInterval, active, trigger, condition, action]);
 
 	return (
 		<TitledInfoBlock

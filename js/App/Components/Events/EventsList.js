@@ -115,6 +115,9 @@ const EventsList = memo<Object>((props: Props): Object => {
 		group,
 		minRepeatInterval,
 		active,
+		trigger,
+		condition,
+		action,
 	}: Object) => {
 		dispatch(eventSetEdit({
 			id,
@@ -122,6 +125,9 @@ const EventsList = memo<Object>((props: Props): Object => {
 			group,
 			minRepeatInterval,
 			active,
+			trigger,
+			condition,
+			action,
 		}));
 		navigation.navigate('EditEvent');
 	}, [dispatch, navigation]);
@@ -145,6 +151,9 @@ const EventsList = memo<Object>((props: Props): Object => {
 			group,
 			minRepeatInterval,
 			active,
+			trigger,
+			condition,
+			action,
 		} = rowData.item || {};
 		return (
 			<EventRow
@@ -154,6 +163,9 @@ const EventsList = memo<Object>((props: Props): Object => {
 				minRepeatInterval={minRepeatInterval}
 				active={active}
 				onPress={onPress}
+				trigger={trigger}
+				condition={condition}
+				action={action}
 				blockContainerStyle={blockContainerStyle}/>
 		);
 	}, [blockContainerStyle, onPress]);

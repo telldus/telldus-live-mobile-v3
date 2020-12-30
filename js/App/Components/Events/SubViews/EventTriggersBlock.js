@@ -26,6 +26,7 @@
 import React, {
 	memo,
 	useCallback,
+	useMemo,
 } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -38,6 +39,7 @@ import {
 	Text,
 	TouchableButton,
 } from '../../../../BaseComponents';
+import TriggerBlock from './TriggerBlock';
 
 import Theme from '../../../Theme';
 
@@ -58,9 +60,24 @@ const EventTriggersBlock = memo<Object>((props: Props): Object => {
 		bodyContainerStyle,
 	} = getStyle(layout);
 
+	const {
+		trigger,
+	} = useSelector((state: Object): Object => state.event) || {};
+
 	const onPress = useCallback(() => {
 
 	}, []);
+
+	const triggers = useMemo((): Array<Object> => {
+		return trigger.map((t: Object, i: number): Object => {
+			return (
+				<TriggerBlock
+					key={`${i}`}
+					{...t}
+					isLast={i === trigger.length - 1}/>
+			);
+		});
+	}, [trigger]);
 
 	return (
 		<View
@@ -73,6 +90,7 @@ const EventTriggersBlock = memo<Object>((props: Props): Object => {
                 Triggers
 				</Text>
 			</View>
+			{triggers}
 			<View
 				style={bodyContainerStyle}>
 				<TouchableButton

@@ -58,6 +58,10 @@ const EventActionsBlock = memo<Object>((props: Props): Object => {
 		bodyContainerStyle,
 	} = getStyle(layout);
 
+	// const {
+	// 	action,
+	// } = useSelector((state: Object): Object => state.event) || {};
+
 	const onPress = useCallback(() => {
 
 	}, []);

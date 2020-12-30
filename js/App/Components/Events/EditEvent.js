@@ -244,6 +244,7 @@ const getStyles = ({
 			flex: 1,
 		},
 		contentContainerStyle: {
+			flexGrow: 1,
 			paddingVertical: padding,
 			justifyContent: 'center',
 		},
