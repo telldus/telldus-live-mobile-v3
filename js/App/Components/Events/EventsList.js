@@ -27,18 +27,22 @@ import React, {
 	useEffect,
 	useCallback,
 	useState,
+	useMemo,
 } from 'react';
 import {
 	useSelector,
 	useDispatch,
 } from 'react-redux';
 import {
-	FlatList,
+	SectionList,
 } from 'react-native';
+import groupBy from 'lodash/groupBy';
+import reduce from 'lodash/reduce';
 
 import {
 	View,
 	ThemedRefreshControl,
+	Text,
 } from '../../../BaseComponents';
 
 import {
@@ -53,6 +57,10 @@ import {
 import {
 	getEvents,
 } from '../../Actions/Events';
+import {
+	getSectionHeaderFontSize,
+	getSectionHeaderHeight,
+} from '../../Lib';
 
 import Theme from '../../Theme';
 
@@ -75,6 +83,16 @@ const EventsList = memo<Object>((props: Props): Object => {
 	} = useAppTheme();
 
 	const events = useSelector((state: Object): Object => state.events);
+	const sections = useMemo((): Array<Object> => {
+		const ev = groupBy(events, (it: Object): string => it.group);
+		return reduce(ev, (acc: Array<any>, next: Object, index: number): Array<any> => {
+			acc.push({
+				data: next,
+				header: index,
+			});
+			return acc;
+		}, []);
+	}, [events]);
 
 	useEffect(() => {
 		onDidMount('Events', 'Manage and add events'); // TODO: Translate
@@ -84,6 +102,8 @@ const EventsList = memo<Object>((props: Props): Object => {
 		container,
 		contentContainerStyle,
 		blockContainerStyle,
+		sectionHeaderCoverStyle,
+		sectionHeaderTextStyle,
 	} = getStyle({
 		layout,
 		colors,
@@ -105,6 +125,18 @@ const EventsList = memo<Object>((props: Props): Object => {
 		}));
 		navigation.navigate('EditEvent');
 	}, [dispatch, navigation]);
+
+	const renderSectionHeader = useCallback(({section}: Object = {}): Object => {
+		return (
+			<View
+				style={sectionHeaderCoverStyle}>
+				<Text
+					style={sectionHeaderTextStyle}>
+					{section.header}
+				</Text>
+			</View>
+		);
+	}, [sectionHeaderCoverStyle, sectionHeaderTextStyle]);
 
 	const renderRow = useCallback((rowData: Object = {}): Object => {
 		const {
@@ -148,11 +180,12 @@ const EventsList = memo<Object>((props: Props): Object => {
 		<View
 			level={3}
 			style={container}>
-			<FlatList
+			<SectionList
+				sections={sections}
 				contentContainerStyle={contentContainerStyle}
-				data={events}
+				renderSectionHeader={renderSectionHeader}
+				stickySectionHeadersEnabled={true}
 				renderItem={renderRow}
-				numColumns={1}
 				keyExtractor={keyExtractor}
 				extraData={layout.width}
 				refreshControl={
@@ -176,20 +209,35 @@ const getStyle = ({
 
 	const {
 		paddingFactor,
+		shadow,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
+	let nameFontSize = getSectionHeaderFontSize(deviceWidth);
 
 	return {
 		container: {
 			flex: 1,
 		},
 		contentContainerStyle: {
-			padding: padding,
+			paddingBottom: padding,
+			paddingHorizontal: padding,
 			justifyContent: 'center',
 		},
 		blockContainerStyle: {
 			marginBottom: padding / 2,
+		},
+		sectionHeaderCoverStyle: {
+			flexDirection: 'row',
+			height: getSectionHeaderHeight(nameFontSize),
+			alignItems: 'center',
+			paddingLeft: 5 + (nameFontSize * 0.2),
+			justifyContent: 'flex-start',
+			marginBottom: padding / 2,
+			...shadow,
+		},
+		sectionHeaderTextStyle: {
+			fontSize: nameFontSize,
 		},
 	};
 };
