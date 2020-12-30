@@ -24,8 +24,10 @@
 
 import EventRow from './EventRow';
 import EditEventNameBlock from './EditEventNameBlock';
+import EventActiveSwichBlock from './EventActiveSwichBlock';
 
 module.exports = {
 	EventRow,
 	EditEventNameBlock,
+	EventActiveSwichBlock,
 };
