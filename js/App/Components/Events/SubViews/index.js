@@ -26,10 +26,16 @@ import EventRow from './EventRow';
 import EditEventNameBlock from './EditEventNameBlock';
 import EventActiveSwichBlock from './EventActiveSwichBlock';
 import EventAdvancedSettingsBlock from './EventAdvancedSettingsBlock';
+import EventActionsBlock from './EventActionsBlock';
+import EventTriggersBlock from './EventTriggersBlock';
+import EventConditionsBlock from './EventConditionsBlock';
 
 module.exports = {
 	EventRow,
 	EditEventNameBlock,
 	EventActiveSwichBlock,
 	EventAdvancedSettingsBlock,
+	EventConditionsBlock,
+	EventTriggersBlock,
+	EventActionsBlock,
 };
