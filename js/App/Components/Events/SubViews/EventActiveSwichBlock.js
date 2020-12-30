@@ -23,8 +23,16 @@
 
 'use strict';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {
+	useState,
+	useEffect,
+	useRef,
+	useCallback,
+} from 'react';
+import {
+	useDispatch,
+	useSelector,
+} from 'react-redux';
 import { useIntl } from 'react-intl';
 
 import {

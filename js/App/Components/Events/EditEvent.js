@@ -41,6 +41,7 @@ import {
 import {
 	EditEventNameBlock,
 	EventActiveSwichBlock,
+	EventAdvancedSettingsBlock,
 } from './SubViews';
 
 import {
@@ -190,6 +191,9 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 				toggleDialogueBox={toggleDialogueBoxState}/>
 			<EventActiveSwichBlock
 				value={active}/>
+			<EventAdvancedSettingsBlock
+				minRepeatInterval={minRepeatInterval}
+				toggleDialogueBox={toggleDialogueBoxState}/>
 			<TouchableButton
 				text={i18n.confirmAndSave}
 				style={[buttonStyle, save]}
