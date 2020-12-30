@@ -40,6 +40,7 @@ import {
 } from '../../../BaseComponents';
 import {
 	EditEventNameBlock,
+	EventActiveSwichBlock,
 } from './SubViews';
 
 import {
@@ -187,6 +188,8 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 			<EditEventNameBlock
 				description={description}
 				toggleDialogueBox={toggleDialogueBoxState}/>
+			<EventActiveSwichBlock
+				value={active}/>
 			<TouchableButton
 				text={i18n.confirmAndSave}
 				style={[buttonStyle, save]}
