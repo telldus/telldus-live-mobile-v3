@@ -26,9 +26,9 @@ import React, {
 	useCallback,
 	useState,
 } from 'react';
-// import {
-// 	useDispatch,
-// } from 'react-redux';
+import {
+	useDispatch,
+} from 'react-redux';
 import { useIntl } from 'react-intl';
 import {
 	useSelector,
@@ -48,6 +48,10 @@ import {
 import {
 	useAppTheme,
 } from '../../Hooks/Theme';
+import {
+	setEvent,
+	getEvents,
+} from '../../Actions/Events';
 
 import Theme from '../../Theme';
 
@@ -71,6 +75,10 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 	} = useAppTheme();
 	const {
 		description,
+		id,
+		group = '',
+		minRepeatInterval,
+		active,
 	} = useSelector((state: Object): Object => state.event) || {};
 
 	const [isDeleting, setIsDeleting] = useState(false);
@@ -90,12 +98,46 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
 	const onSaveEvent = useCallback(() => {
-		setIsSaving(true);
-		navigation.popToTop();
-	}, [navigation]);
+		(async () => {
+			setIsSaving(true);
+			const promises = [
+				dispatch(setEvent(id, {
+					description,
+					group,
+					minRepeatInterval,
+					active: active ? 1 : 0,
+				})),
+			];
+			try {
+				await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
+					return promise.then((res: Object): Object => {
+						return res;
+					}).catch((err: Object): Object => {
+						return err;
+					});
+				}));
+				setIsSaving(false);
+				navigation.popToTop();
+			} catch {
+				toggleDialogueBoxState({
+					show: true,
+					showHeader: true,
+					showPositive: true,
+					onPressPositive: () => {
+						closeDialogue();
+						setIsSaving(false);
+					},
+					showBackground: true,
+					text: 'Some settings could not be saved. Please try again.',
+				});
+			} finally {
+				dispatch(getEvents());
+			}
+		})();
+	}, [active, closeDialogue, description, dispatch, group, id, minRepeatInterval, navigation, toggleDialogueBoxState]);
 
 	const closeDialogue = useCallback(() => {
 		toggleDialogueBoxState({
