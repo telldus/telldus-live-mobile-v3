@@ -129,6 +129,7 @@ const EventAdvancedSettingsBlock = memo<Object>((props: Props): Object => {
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
+		containerStyle,
 		settingsTextStyle,
 		iconSettingsStyle,
 		toggleAdvancedCover,
@@ -137,7 +138,7 @@ const EventAdvancedSettingsBlock = memo<Object>((props: Props): Object => {
 
 	return (
 		<View
-			style={{flex: 1}}>
+			style={containerStyle}>
 			<TouchableOpacity
 				onPress={toggleAdvanced}
 				style={toggleAdvancedCover}>
@@ -191,6 +192,10 @@ const getStyles = ({
 
 	const padding = deviceWidth * paddingFactor;
 	return {
+		containerStyle: {
+			flex: 1,
+			marginHorizontal: padding,
+		},
 		toggleAdvancedCover: {
 			flexDirection: 'row',
 			justifyContent: 'center',

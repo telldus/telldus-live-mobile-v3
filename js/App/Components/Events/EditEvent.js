@@ -42,6 +42,9 @@ import {
 	EditEventNameBlock,
 	EventActiveSwichBlock,
 	EventAdvancedSettingsBlock,
+	EventConditionsBlock,
+	EventTriggersBlock,
+	EventActionsBlock,
 } from './SubViews';
 
 import {
@@ -194,6 +197,9 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 			<EventAdvancedSettingsBlock
 				minRepeatInterval={minRepeatInterval}
 				toggleDialogueBox={toggleDialogueBoxState}/>
+			<EventTriggersBlock/>
+			<EventConditionsBlock/>
+			<EventActionsBlock/>
 			<TouchableButton
 				text={i18n.confirmAndSave}
 				style={[buttonStyle, save]}
@@ -238,7 +244,7 @@ const getStyles = ({
 			flex: 1,
 		},
 		contentContainerStyle: {
-			padding: padding,
+			paddingVertical: padding,
 			justifyContent: 'center',
 		},
 		buttonStyle: {

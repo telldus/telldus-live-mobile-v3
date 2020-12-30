@@ -29,6 +29,7 @@ import { useIntl } from 'react-intl';
 
 import {
 	SettingsRow,
+	View,
 } from '../../../../BaseComponents';
 
 import {
@@ -106,24 +107,28 @@ const EditEventNameBlock = (props: Object): Object => {
 
 	const {
 		iconValueRightSize,
+		containerStyle,
 	} = getStyle(layout);
 
 	return (
-		<SettingsRow
-			type={'text'}
-			edit={false}
-			inLineEditActive={inLineEditActive}
-			label={formatMessage(i18n.name)}
-			value={nameEditValue}
-			appLayout={layout}
-			iconValueRight={inLineEditActive ? 'done' : 'edit'}
-			onPress={false}
-			iconValueRightSize={inLineEditActive ? iconValueRightSize : null}
-			onPressIconValueRight={toggleEdit}
-			onChangeText={onChangeText}
-			onSubmitEditing={onDoneEdit}
-			intl={intl}
-			keyboardTypeInLineEdit={'default'}/>
+		<View
+			style={containerStyle}>
+			<SettingsRow
+				type={'text'}
+				edit={false}
+				inLineEditActive={inLineEditActive}
+				label={formatMessage(i18n.name)}
+				value={nameEditValue}
+				appLayout={layout}
+				iconValueRight={inLineEditActive ? 'done' : 'edit'}
+				onPress={false}
+				iconValueRightSize={inLineEditActive ? iconValueRightSize : null}
+				onPressIconValueRight={toggleEdit}
+				onChangeText={onChangeText}
+				onSubmitEditing={onDoneEdit}
+				intl={intl}
+				keyboardTypeInLineEdit={'default'}/>
+		</View>
 	);
 };
 
@@ -133,9 +138,14 @@ const getStyle = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 	const {
 		fontSizeFactorFive,
+		paddingFactor,
 	} = Theme.Core;
-
+	const padding = deviceWidth * paddingFactor;
 	return {
+		containerStyle: {
+			flex: 1,
+			marginHorizontal: padding,
+		},
 		iconValueRightSize: deviceWidth * fontSizeFactorFive,
 	};
 };

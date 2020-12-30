@@ -37,11 +37,14 @@ import { useIntl } from 'react-intl';
 
 import {
 	SettingsRow,
+	View,
 } from '../../../../BaseComponents';
 
 import {
 	eventSetActive,
 } from '../../../Actions/Event';
+
+import Theme from '../../../Theme';
 
 // import i18n from '../../../Translations/common';
 
@@ -79,17 +82,40 @@ const EventActiveSwichBlock = (props: Object): Object => {
 		dispatch(eventSetActive(next));
 	}, [dispatch, value]);
 
+	const {
+		containerStyle,
+	} = getStyle(layout);
+
 	return (
-		<SettingsRow
-			type={'switch'}
-			edit={false}
-			label={'Event active'}
-			value={valueInscreen}
-			appLayout={layout}
-			onPress={false}
-			onValueChange={onValueChange}
-			intl={intl}/>
+		<View
+			style={containerStyle}>
+			<SettingsRow
+				type={'switch'}
+				edit={false}
+				label={'Event active'}
+				value={valueInscreen}
+				appLayout={layout}
+				onPress={false}
+				onValueChange={onValueChange}
+				intl={intl}/>
+		</View>
 	);
+};
+
+const getStyle = (appLayout: Object): Object => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+	const {
+		paddingFactor,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
+	return {
+		containerStyle: {
+			flex: 1,
+			marginHorizontal: padding,
+		},
+	};
 };
 
 export default React.memo<Object>(EventActiveSwichBlock);
