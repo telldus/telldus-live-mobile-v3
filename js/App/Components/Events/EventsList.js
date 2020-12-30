@@ -26,6 +26,7 @@ import React, {
 	memo,
 	useEffect,
 	useCallback,
+	useState,
 } from 'react';
 import {
 	useSelector,
@@ -37,6 +38,7 @@ import {
 
 import {
 	View,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 
 import {
@@ -48,6 +50,10 @@ import {
 import {
 	eventSetEdit,
 } from '../../Actions/Event';
+import {
+	getEvents,
+} from '../../Actions/Events';
+
 import Theme from '../../Theme';
 
 type Props = {
@@ -86,10 +92,16 @@ const EventsList = memo<Object>((props: Props): Object => {
 	const onPress = useCallback(({
 		id,
 		description,
+		group,
+		minRepeatInterval,
+		active,
 	}: Object) => {
 		dispatch(eventSetEdit({
 			id,
 			description,
+			group,
+			minRepeatInterval,
+			active,
 		}));
 		navigation.navigate('EditEvent');
 	}, [dispatch, navigation]);
@@ -98,11 +110,17 @@ const EventsList = memo<Object>((props: Props): Object => {
 		const {
 			description,
 			id,
+			group,
+			minRepeatInterval,
+			active,
 		} = rowData.item || {};
 		return (
 			<EventRow
 				id={id}
 				description={description}
+				group={group}
+				minRepeatInterval={minRepeatInterval}
+				active={active}
 				onPress={onPress}
 				blockContainerStyle={blockContainerStyle}/>
 		);
@@ -111,6 +129,20 @@ const EventsList = memo<Object>((props: Props): Object => {
 	const keyExtractor = useCallback((data: Object): string => {
 		return `${data.id}`;
 	}, []);
+
+	const [isRefreshing, setIsRefreshing] = useState(false);
+	const onRefresh = useCallback(() => {
+		(async () => {
+			setIsRefreshing(true);
+			try {
+				await dispatch(getEvents());
+			} catch {
+				// Ignore
+			} finally {
+				setIsRefreshing(false);
+			}
+		})();
+	}, [dispatch]);
 
 	return (
 		<View
@@ -122,7 +154,14 @@ const EventsList = memo<Object>((props: Props): Object => {
 				renderItem={renderRow}
 				numColumns={1}
 				keyExtractor={keyExtractor}
-				extraData={layout.width}/>
+				extraData={layout.width}
+				refreshControl={
+					<ThemedRefreshControl
+						enabled={true}
+						refreshing={isRefreshing}
+						onRefresh={onRefresh}
+					/>
+				}/>
 		</View>
 	);
 });

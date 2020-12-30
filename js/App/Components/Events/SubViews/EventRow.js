@@ -35,7 +35,10 @@ type Props = {
     onPress: Function,
     description: string,
     blockContainerStyle: Object,
-    id: number,
+	id: number,
+	group: string,
+	minRepeatInterval: number,
+	active: boolean,
 };
 
 const EventRow = memo<Object>((props: Props): Object => {
@@ -44,14 +47,20 @@ const EventRow = memo<Object>((props: Props): Object => {
 		onPress,
 		blockContainerStyle,
 		id,
+		group,
+		minRepeatInterval,
+		active,
 	} = props;
 
 	const onPressPushSettings = useCallback(() => {
 		onPress({
 			id,
 			description,
+			group,
+			minRepeatInterval,
+			active,
 		});
-	}, [id, description, onPress]);
+	}, [onPress, id, description, group, minRepeatInterval, active]);
 
 	return (
 		<TitledInfoBlock
