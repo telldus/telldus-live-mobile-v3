@@ -101,6 +101,12 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 
 	const dispatch = useDispatch();
 
+	const closeDialogue = useCallback(() => {
+		toggleDialogueBoxState({
+			show: false,
+		});
+	}, [toggleDialogueBoxState]);
+
 	const onSaveEvent = useCallback(() => {
 		(async () => {
 			setIsSaving(true);
@@ -139,12 +145,6 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 			}
 		})();
 	}, [active, closeDialogue, description, dispatch, group, id, minRepeatInterval, navigation, toggleDialogueBoxState]);
-
-	const closeDialogue = useCallback(() => {
-		toggleDialogueBoxState({
-			show: false,
-		});
-	}, [toggleDialogueBoxState]);
 
 	const onDeleteEvent = useCallback(() => {
 		toggleDialogueBoxState({
