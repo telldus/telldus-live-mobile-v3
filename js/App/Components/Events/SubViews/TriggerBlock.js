@@ -59,6 +59,9 @@ type Props = {
 
 	sunStatus?: string,
 	offset?: string,
+
+	hour?: string,
+	minute?: string,
 };
 
 const prepareInfoFromTriggerData = (type: string, {
@@ -155,8 +158,22 @@ const prepareInfoFromTriggerData = (type: string, {
 			leftIcon: 'sunset',
 		};
 	} else if (type === 'time') {
+		const {
+			minute,
+			hour,
+		} = others;
+		const leftIcon = 'time';
+		if (hour === '-1') {
+			let m = minute.length === 1 ? `0${minute}` : minute;
+			return {
+				label: `Every hour when the minute is ${m}`,
+				leftIcon,
+			};
+		}
+		const date = `01/01/2017 ${hour}:${minute}`;
 		return {
-			label: 'time',
+			label: `When time is ${formatTime(date)}`,
+			leftIcon,
 		};
 	} else if (type === 'blockheater') {
 		return {
@@ -182,6 +199,8 @@ const TriggerBlock = memo<Object>((props: Props): Object => {
 		sunStatus,
 		offset,
 		clientId,
+		hour,
+		minute,
 	} = props;
 	const intl = useIntl();
 
@@ -209,8 +228,11 @@ const TriggerBlock = memo<Object>((props: Props): Object => {
 			client,
 			sunStatus,
 			offset,
+
+			minute,
+			hour,
 		});
-	}, [client, device, edge, intl, method, offset, scale, sensor, sunStatus, type, value, valueType]);
+	}, [client, device, edge, hour, intl, method, minute, offset, scale, sensor, sunStatus, type, value, valueType]);
 
 	return (
 		<BlockItem
