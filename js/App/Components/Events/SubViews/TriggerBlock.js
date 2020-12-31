@@ -25,6 +25,7 @@
 
 import React, {
 	memo,
+	useMemo,
 } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -45,6 +46,8 @@ type Props = {
 	type: string,
 	isLast: boolean,
 
+	clientId?: string,
+
 	deviceId?: string,
 	method?: string,
 
@@ -53,10 +56,15 @@ type Props = {
 	valueType?: string,
 	edge?: string,
 	scale?: string,
+
+	sunStatus?: string,
+	offset?: string,
 };
 
 const prepareInfoFromTriggerData = (type: string, {
 	formatMessage,
+	formatDate,
+	formatTime,
 	device,
 	method,
 	sensor,
@@ -125,9 +133,26 @@ const prepareInfoFromTriggerData = (type: string, {
 			label: `${label} of ${sName} is equal to ${value}${unit}`,
 			leftIcon,
 		};
-	} else if (type === 'suntime') {
+	} else if (type === 'suntime' && others.client) {
+		const {
+			client = {},
+			sunStatus,
+		} = others;
+		const {
+			sunrise,
+			sunset,
+		} = client;
+		if (sunStatus === '1') {
+			let date = new Date(sunrise * 1000);
+			return {
+				label: `When the sun goes up. Today at ${formatTime(date)}`,
+				leftIcon: 'sunrise',
+			};
+		}
+		let date = new Date(sunset * 1000);
 		return {
-			label: 'suntime',
+			label: `When the sun goes down. Today at ${formatTime(date)}`,
+			leftIcon: 'sunset',
 		};
 	} else if (type === 'time') {
 		return {
@@ -154,28 +179,38 @@ const TriggerBlock = memo<Object>((props: Props): Object => {
 		valueType,
 		edge,
 		scale,
+		sunStatus,
+		offset,
+		clientId,
 	} = props;
-	const {
-		formatMessage,
-	} = useIntl();
+	const intl = useIntl();
 
 	const { byId } = useSelector((state: Object): Object => state.devices);
 	const device = byId[deviceId];
 	const { byId: sById } = useSelector((state: Object): Object => state.sensors);
 	const sensor = sById[sensorId];
+	const { byId: cById } = useSelector((state: Object): Object => state.gateways);
+	const client = cById[clientId];
 	const {
 		label,
 		leftIcon,
-	} = prepareInfoFromTriggerData(type, {
-		formatMessage,
-		device,
-		method,
-		sensor,
-		value,
-		valueType,
-		edge,
-		scale,
-	});
+	} = useMemo((): Object => {
+		return prepareInfoFromTriggerData(type, {
+			...intl,
+			device,
+			method,
+
+			sensor,
+			value,
+			valueType,
+			edge,
+			scale,
+
+			client,
+			sunStatus,
+			offset,
+		});
+	}, [client, device, edge, intl, method, offset, scale, sensor, sunStatus, type, value, valueType]);
 
 	return (
 		<BlockItem
