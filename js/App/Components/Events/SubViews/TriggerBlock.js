@@ -26,7 +26,7 @@
 import React, {
 	memo,
 } from 'react';
-// import { useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 import BlockItem from './BlockItem';
@@ -34,21 +34,34 @@ import BlockItem from './BlockItem';
 import {
 	getDeviceActionIcon,
 } from '../../../Lib/DeviceUtils';
+import {
+	getSensorInfo,
+} from '../../../Lib/SensorUtils';
 
 // import i18n from '../../../Translations/common';
 
 
 type Props = {
-	deviceId: number,
-	method: number,
 	type: string,
 	isLast: boolean,
+
+	deviceId?: string,
+	method?: string,
+
+	sensorId?: string,
+	value?: string,
+	valueType?: string,
+	edge?: string,
+	scale?: string,
 };
 
 const prepareInfoFromTriggerData = (type: string, {
+	formatMessage,
 	device,
 	method,
-}: Object): Object => {
+	sensor,
+	...others
+}: Object): Object => { // TODO: Translate
 	if (type === 'device' && device) {
 		const {
 			deviceType,
@@ -87,9 +100,30 @@ const prepareInfoFromTriggerData = (type: string, {
 				};
 			}
 		}
-	} else if (type === 'sensor') {
+	} else if (type === 'sensor' && sensor) {
+		const {
+			value = '',
+			edge,
+			scale,
+			valueType,
+		} = others;
+		const sName = sensor.name || '';
+		const { label = '', unit = '', icon } = getSensorInfo(valueType, scale, value, false, formatMessage);
+		let leftIcon = icon;
+		if (edge === '-1') {
+			return {
+				label: `${label} of ${sName} goes below ${value}${unit}`,
+				leftIcon,
+			};
+		} else if (edge === '1') {
+			return {
+				label: `${label} of ${sName} goes over ${value}${unit}`,
+				leftIcon,
+			};
+		}
 		return {
-			label: 'sensor',
+			label: `${label} of ${sName} is equal to ${value}${unit}`,
+			leftIcon,
 		};
 	} else if (type === 'suntime') {
 		return {
@@ -115,16 +149,32 @@ const TriggerBlock = memo<Object>((props: Props): Object => {
 		method,
 		type,
 		isLast,
+		sensorId,
+		value,
+		valueType,
+		edge,
+		scale,
 	} = props;
+	const {
+		formatMessage,
+	} = useIntl();
 
 	const { byId } = useSelector((state: Object): Object => state.devices);
 	const device = byId[deviceId];
+	const { byId: sById } = useSelector((state: Object): Object => state.sensors);
+	const sensor = sById[sensorId];
 	const {
 		label,
 		leftIcon,
 	} = prepareInfoFromTriggerData(type, {
+		formatMessage,
 		device,
 		method,
+		sensor,
+		value,
+		valueType,
+		edge,
+		scale,
 	});
 
 	return (
