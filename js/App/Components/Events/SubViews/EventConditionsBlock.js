@@ -26,11 +26,13 @@
 import React, {
 	memo,
 	useCallback,
+	useMemo,
 } from 'react';
 import { useSelector } from 'react-redux';
 import {
 	StyleSheet,
 } from 'react-native';
+import groupBy from 'lodash/groupBy';
 // import { useIntl } from 'react-intl';
 
 import {
@@ -38,6 +40,7 @@ import {
 	Text,
 	TouchableButton,
 } from '../../../../BaseComponents';
+import ConditionBlock from './ConditionBlock';
 
 import Theme from '../../../Theme';
 
@@ -58,13 +61,35 @@ const EventConditionsBlock = memo<Object>((props: Props): Object => {
 		bodyContainerStyle,
 	} = getStyle(layout);
 
-	// const {
-	// 	condition,
-	// } = useSelector((state: Object): Object => state.event) || {};
-
+	const {
+		condition,
+	} = useSelector((state: Object): Object => state.event) || {};
 	const onPress = useCallback(() => {
-
 	}, []);
+
+	const conditions = useMemo((): Array<Object> => {
+		const grouped = groupBy(condition, (c: Object): boolean => c.group);
+		let pG, seperatorText = 'and';
+		return Object.keys(grouped).map((g: string, gi: number): Array<Object> => {
+			return grouped[g].map((data: Object, i: number): Object => {
+				if (pG !== g) {
+					seperatorText = 'or';
+				} else {
+					seperatorText = 'and';
+				}
+				pG = g;
+				return (
+					<ConditionBlock
+						key={i}
+						{...data}
+						isLast={gi === Object.keys(grouped).length - 1 && i === grouped[g].length - 1}
+						isFirst={gi === 0 && i === 0}
+						seperatorText={seperatorText}
+					/>
+				);
+			});
+		});
+	}, [condition]);
 
 	return (
 		<View
@@ -77,6 +102,7 @@ const EventConditionsBlock = memo<Object>((props: Props): Object => {
                 Conditions
 				</Text>
 			</View>
+			{!!conditions && conditions}
 			<View
 				style={bodyContainerStyle}>
 				<TouchableButton
