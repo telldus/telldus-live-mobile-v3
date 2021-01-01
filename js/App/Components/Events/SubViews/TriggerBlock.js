@@ -170,18 +170,56 @@ const prepareInfoFromTriggerData = (type: string, {
 				leftIcon,
 			};
 		}
-		const date = `01/01/2017 ${hour}:${minute}`;
+		const date = Date.parse(`01/01/2017 ${hour}:${minute}`);
 		return {
 			label: `When time is ${formatTime(date)}`,
 			leftIcon,
 		};
 	} else if (type === 'blockheater') {
+		const {
+			minute,
+			hour,
+		} = others;
+		const {
+			data = {},
+		} = sensor || {};
+		const leftIcon = 'motorheater';
+		const date = Date.parse(`01/01/2017 ${hour}:${minute}`);
+		let tempInfo;
+		for (let i = 0; i < Object.keys(data).length; i++) {
+			const it = data[Object.keys(data)[i]];
+			if (it && it.name === 'temp') {
+				tempInfo = it;
+				break;
+			}
+		}
+		const prefix = `Departure time ${formatTime(date)}.`;
+		if (tempInfo && tempInfo.value) {
+			const temp = parseFloat(tempInfo.value);
+			if (temp > 10) {
+				return {
+					label: `${prefix} Temperature is currently over 10 degrees so this will not be triggered.`,
+					leftIcon,
+				};
+			}
+			let dateT = new Date();
+			dateT.setHours(hour);
+			let offset = 60 + 100 * temp / (temp - 35);
+			offset = Math.min(120, offset);
+			dateT.setMinutes(minute - offset);
+			return {
+				label: `${prefix} At current temperature this will be triggered around ${formatTime(dateT)}.`,
+				leftIcon,
+			};
+		}
 		return {
-			label: 'blockheater',
+			label: `${prefix}`,
+			leftIcon,
 		};
 	}
 	return {
 		label: 'unknown',
+		leftIcon: 'sensor',
 	};
 };
 
