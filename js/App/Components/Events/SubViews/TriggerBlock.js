@@ -45,6 +45,7 @@ import {
 type Props = {
 	type: string,
 	isLast: boolean,
+	isFirst: boolean,
 
 	clientId?: string,
 
@@ -239,6 +240,7 @@ const TriggerBlock = memo<Object>((props: Props): Object => {
 		clientId,
 		hour,
 		minute,
+		isFirst,
 	} = props;
 	const intl = useIntl();
 
@@ -277,7 +279,8 @@ const TriggerBlock = memo<Object>((props: Props): Object => {
 			label={label}
 			leftIcon={leftIcon}
 			isLast={isLast}
-			seperatorText={'or'}/>
+			seperatorText={'or'}
+			isFirst={isFirst}/>
 	);
 });
 

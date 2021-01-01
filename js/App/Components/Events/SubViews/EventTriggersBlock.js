@@ -74,7 +74,8 @@ const EventTriggersBlock = memo<Object>((props: Props): Object => {
 				<TriggerBlock
 					key={i}
 					{...t}
-					isLast={i === trigger.length - 1}/>
+					isLast={i === trigger.length - 1}
+					isFirst={i === 0}/>
 			);
 		});
 	}, [trigger]);
@@ -90,7 +91,7 @@ const EventTriggersBlock = memo<Object>((props: Props): Object => {
                 Triggers
 				</Text>
 			</View>
-			{triggers}
+			{!!triggers && triggers}
 			<View
 				style={bodyContainerStyle}>
 				<TouchableButton
