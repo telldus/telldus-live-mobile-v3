@@ -135,6 +135,8 @@ const getStyle = ({
 			fontSize,
 			marginLeft: padding,
 			paddingVertical: Platform.OS === 'ios' ? 8 : 6,
+			flex: 1,
+			flexWrap: 'wrap',
 		},
 		leftIconStyle: {
 			fontSize: fontSize * 1.2,
