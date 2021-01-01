@@ -72,6 +72,7 @@ const EventTriggersBlock = memo<Object>((props: Props): Object => {
 		return trigger.map((t: Object, i: number): Object => {
 			return (
 				<TriggerBlock
+					key={i}
 					{...t}
 					isLast={i === trigger.length - 1}/>
 			);
