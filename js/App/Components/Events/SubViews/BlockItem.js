@@ -47,7 +47,8 @@ type Props = {
     leftIcon?: string,
     label?: string,
     isLast: boolean,
-    seperatorText?: string,
+	seperatorText?: string,
+	isFirst: boolean,
 };
 
 const BlockItem = memo<Object>((props: Props): Object => {
@@ -56,6 +57,7 @@ const BlockItem = memo<Object>((props: Props): Object => {
 		label,
 		isLast,
 		seperatorText,
+		isFirst,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -73,6 +75,16 @@ const BlockItem = memo<Object>((props: Props): Object => {
 
 	return (
 		<View style={{flex: 1}}>
+			{!isFirst && seperatorText && (
+				<View
+					style={seperatorContainerStyle}>
+					<Text
+						level={3}
+						style={seperatorTextStyle}>
+						{seperatorText}
+					</Text>
+				</View>
+			)}
 			<View
 				level={2}
 				style={containerStyle}>
@@ -86,16 +98,6 @@ const BlockItem = memo<Object>((props: Props): Object => {
 					{label}
 				</Text>
 			</View>
-			{!isLast && seperatorText && (
-				<View
-					style={seperatorContainerStyle}>
-					<Text
-						level={3}
-						style={seperatorTextStyle}>
-						{seperatorText}
-					</Text>
-				</View>
-			)}
 		</View>
 	);
 });
