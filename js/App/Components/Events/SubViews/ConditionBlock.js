@@ -64,6 +64,11 @@ type Props = {
 	hour?: string,
 	minute?: string,
 
+	fromHour?: string,
+    fromMinute?: string,
+    toHour?: string,
+    toMinute?: string,
+
 	seperatorText: string,
 };
 
