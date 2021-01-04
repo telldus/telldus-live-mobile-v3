@@ -15,29 +15,54 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // @flow
 
 'use strict';
 
-import EventRow from './EventRow';
-import EditEventNameBlock from './EditEventNameBlock';
-import EventActiveSwichBlock from './EventActiveSwichBlock';
-import EventAdvancedSettingsBlock from './EventAdvancedSettingsBlock';
-import EventActionsBlock from './EventActionsBlock';
-import EventTriggersBlock from './EventTriggersBlock';
-import EventConditionsBlock from './EventConditionsBlock';
-import TypeBlock from './TypeBlock';
+import React, {
+	memo,
+	useCallback,
+} from 'react';
 
-module.exports = {
-	EventRow,
-	EditEventNameBlock,
-	EventActiveSwichBlock,
-	EventAdvancedSettingsBlock,
-	EventConditionsBlock,
-	EventTriggersBlock,
-	EventActionsBlock,
-	TypeBlock,
+import {
+	IconedSelectableBlock,
+} from '../../../../BaseComponents';
+
+type Props = {
+    onPress: (number) => void,
+    h1: string,
+    index: number,
+    icon: string,
+    h2: string,
 };
+
+const TypeBlock = memo<Object>((props: Props): Object => {
+
+	const {
+		onPress,
+		h1,
+		index,
+		icon,
+		h2,
+	} = props;
+
+	const _onPress = useCallback(() => {
+		if (onPress) {
+			onPress(index);
+		}
+	}, [onPress, index]);
+
+	return (
+		<IconedSelectableBlock
+			onPress={_onPress}
+			h1={h1}
+			h2={h2}
+			icon={icon}
+			enabled
+		/>
+	);
+});
+
+export default TypeBlock;
