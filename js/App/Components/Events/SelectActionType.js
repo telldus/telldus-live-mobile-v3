@@ -52,31 +52,31 @@ const TYPES = [
 	{
 		h1: 'Device',
 		h2: 'Turn on or off an device when this event executes',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectDeviceAction',
 		icon: 'device-alt',
 	},
 	{
 		h1: 'Email',
 		h2: 'Send an email when this event executes',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectEmailAction',
 		icon: 'email',
 	},
 	{
 		h1: 'Push',
 		h2: 'Send a push notification when this event executes',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectPushAction',
 		icon: 'push',
 	},
 	{
 		h1: 'SMS',
 		h2: 'Send an sms when this event executes',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectSMSAction',
 		icon: 'sms',
 	},
 	{
 		h1: 'URL',
 		h2: 'Execute an http request to a custom url when this event executes',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectUrlAction',
 		icon: 'httprequest',
 	},
 ];

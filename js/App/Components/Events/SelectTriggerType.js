@@ -52,31 +52,31 @@ const TYPES = [
 	{
 		h1: 'Device',
 		h2: 'Execute this event when the state of a device sets',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectDeviceTrigger',
 		icon: 'device-alt',
 	},
 	{
 		h1: 'Sensor',
 		h2: 'Execute this event when the value of a sensor goes over or under a set value',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectSensorTrigger',
 		icon: 'sensor',
 	},
 	{
 		h1: 'Sun time',
 		h2: 'Execute this event when the sun goes up or down',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectSuntimeTrigger',
 		icon: 'sunrise',
 	},
 	{
 		h1: 'Time',
 		h2: 'Execute this event on a specific time',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectTimeTrigger',
 		icon: 'time',
 	},
 	{
 		h1: 'Block heater',
 		h2: 'Execute this event when it\'s time to start a block heater depending on the temperature',
-		screenName: 'DeviceTrigger',
+		screenName: 'SelectBlockHeaterTrigger',
 		icon: 'motorheater',
 	},
 ];

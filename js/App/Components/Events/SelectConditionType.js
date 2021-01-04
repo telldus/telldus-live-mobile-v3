@@ -52,31 +52,31 @@ const TYPES = [
 	{
 		h1: 'Device',
 		h2: 'Only execute the actions of this event if a device is either on or off',
-		screenName: 'DeviceCondition',
+		screenName: 'SelectDeviceCondition',
 		icon: 'device-alt',
 	},
 	{
 		h1: 'Sensor',
 		h2: 'Only execute the actions of this event if a sensor is under or over a specific value',
-		screenName: 'DeviceCondition',
+		screenName: 'SelectSensorCondition',
 		icon: 'sensor',
 	},
 	{
 		h1: 'Sun time',
 		h2: 'Only execute the actions of this event if the sun is either up or down',
-		screenName: 'DeviceCondition',
+		screenName: 'SelectSuntimeCondition',
 		icon: 'sunrise',
 	},
 	{
 		h1: 'Time',
 		h2: 'Only execute the actions of this event if the current time is within an interval',
-		screenName: 'DeviceCondition',
+		screenName: 'SelectTimeCondition',
 		icon: 'time',
 	},
 	{
 		h1: 'Week day',
 		h2: 'Only execute the actions of this event if the current day of week is a specific day',
-		screenName: 'DeviceCondition',
+		screenName: 'SelectWeekdayCondition',
 		icon: 'day',
 	},
 ];

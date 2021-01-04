@@ -34,6 +34,24 @@ import SelectTriggerType from './SelectTriggerType';
 import SelectConditionType from './SelectConditionType';
 import SelectActionType from './SelectActionType';
 
+import SelectBlockHeaterTrigger from './SelectBlockHeaterTrigger';
+import SelectTimeTrigger from './SelectTimeTrigger';
+import SelectSensorTrigger from './SelectSensorTrigger';
+import SelectDeviceTrigger from './SelectDeviceTrigger';
+import SelectSuntimeTrigger from './SelectSuntimeTrigger';
+
+import SelectWeekdayCondition from './SelectWeekdayCondition';
+import SelectTimeCondition from './SelectTimeCondition';
+import SelectSensorCondition from './SelectSensorCondition';
+import SelectDeviceCondition from './SelectDeviceCondition';
+import SelectSuntimeCondition from './SelectSuntimeCondition';
+
+import SelectDeviceAction from './SelectDeviceAction';
+import SelectSMSAction from './SelectSMSAction';
+import SelectEmailAction from './SelectEmailAction';
+import SelectUrlAction from './SelectUrlAction';
+import SelectPushAction from './SelectPushAction';
+
 const EventsScreenConfigs = [
 	{
 		name: 'EventsList',
@@ -102,6 +120,126 @@ const EventsScreenConfigs = [
 	{
 		name: 'SelectActionType',
 		Component: SelectActionType,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectBlockHeaterTrigger',
+		Component: SelectBlockHeaterTrigger,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectTimeTrigger',
+		Component: SelectTimeTrigger,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectSensorTrigger',
+		Component: SelectSensorTrigger,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectDeviceTrigger',
+		Component: SelectDeviceTrigger,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectSuntimeTrigger',
+		Component: SelectSuntimeTrigger,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectSuntimeCondition',
+		Component: SelectSuntimeCondition,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectDeviceCondition',
+		Component: SelectDeviceCondition,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectSensorCondition',
+		Component: SelectSensorCondition,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectTimeCondition',
+		Component: SelectTimeCondition,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectWeekdayCondition',
+		Component: SelectWeekdayCondition,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectPushAction',
+		Component: SelectPushAction,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectUrlAction',
+		Component: SelectUrlAction,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectEmailAction',
+		Component: SelectEmailAction,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectSMSAction',
+		Component: SelectSMSAction,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectDeviceAction',
+		Component: SelectDeviceAction,
 		ContainerComponent: EventsContainer,
 		options: {
 			headerShown: false,
