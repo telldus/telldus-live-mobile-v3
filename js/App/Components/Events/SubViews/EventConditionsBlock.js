@@ -48,9 +48,13 @@ import Theme from '../../../Theme';
 
 
 type Props = {
+	navigation: Object,
 };
 
 const EventConditionsBlock = memo<Object>((props: Props): Object => {
+	const {
+		navigation,
+	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -65,7 +69,8 @@ const EventConditionsBlock = memo<Object>((props: Props): Object => {
 		condition,
 	} = useSelector((state: Object): Object => state.event) || {};
 	const onPress = useCallback(() => {
-	}, []);
+		navigation.navigate('SelectConditionType');
+	}, [navigation]);
 
 	const conditions = useMemo((): Array<Object> => {
 		const grouped = groupBy(condition, (c: Object): boolean => c.group);

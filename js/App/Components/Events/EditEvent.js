@@ -197,9 +197,12 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 			<EventAdvancedSettingsBlock
 				minRepeatInterval={minRepeatInterval}
 				toggleDialogueBox={toggleDialogueBoxState}/>
-			<EventTriggersBlock/>
-			<EventConditionsBlock/>
-			<EventActionsBlock/>
+			<EventTriggersBlock
+				navigation={navigation}/>
+			<EventConditionsBlock
+				navigation={navigation}/>
+			<EventActionsBlock
+				navigation={navigation}/>
 			<TouchableButton
 				text={i18n.confirmAndSave}
 				style={[buttonStyle, save]}

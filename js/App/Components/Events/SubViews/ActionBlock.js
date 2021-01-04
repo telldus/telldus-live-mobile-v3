@@ -134,7 +134,7 @@ const prepareInfoFromTriggerData = (type: string, {
 		} = others;
 		return {
 			label: `Call url: ${url}`,
-			leftIcon: 'push',
+			leftIcon: 'httprequest',
 		};
 	}
 	return {
