@@ -26,6 +26,7 @@
 import React, {
 	memo,
 	useCallback,
+	useMemo,
 } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -38,6 +39,7 @@ import {
 	Text,
 	TouchableButton,
 } from '../../../../BaseComponents';
+import ActionBlock from './ActionBlock';
 
 import Theme from '../../../Theme';
 
@@ -58,13 +60,26 @@ const EventActionsBlock = memo<Object>((props: Props): Object => {
 		bodyContainerStyle,
 	} = getStyle(layout);
 
-	// const {
-	// 	action,
-	// } = useSelector((state: Object): Object => state.event) || {};
+	const {
+		action,
+	} = useSelector((state: Object): Object => state.event) || {};
 
 	const onPress = useCallback(() => {
 
 	}, []);
+
+	const actions = useMemo((): Array<Object> => {
+		return action.map((t: Object, i: number): Object => {
+			return (
+				<ActionBlock
+					key={i}
+					{...t}
+					isLast={i === action.length - 1}
+					isFirst={i === 0}
+					seperatorText={'and'}/>
+			);
+		});
+	}, [action]);
 
 	return (
 		<View
@@ -77,6 +92,7 @@ const EventActionsBlock = memo<Object>((props: Props): Object => {
 					Actions
 				</Text>
 			</View>
+			{!!actions && actions}
 			<View
 				style={bodyContainerStyle}>
 				<TouchableButton
