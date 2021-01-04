@@ -50,9 +50,13 @@ export const getWeekends = (formatDate: Function): string[] => {
 	return DAYS.slice(5, 8);
 };
 // If passed 'formatDate' function from 'intl', will return formatted/translated weekdays.
-export const getSelectedDays = (storedSelectedDays: number[], formatDate?: Function | null = null, {
-	formatDateConfigWeekday = 'long',
-}: ?Object): string[] => {
+export const getSelectedDays = (storedSelectedDays: number[], formatDate?: Function | null = null, extras: ?Object = {
+	formatDateConfigWeekday: 'long',
+}): string[] => {
+	let formatDateConfigWeekday = 'long';
+	if (extras && extras.formatDateConfigWeekday) {
+		formatDateConfigWeekday = extras.formatDateConfigWeekday;
+	}
 	const selectedDays: string[] = [];
 	if (formatDate) {
 		for (let i = 0; i < storedSelectedDays.length; i++) {

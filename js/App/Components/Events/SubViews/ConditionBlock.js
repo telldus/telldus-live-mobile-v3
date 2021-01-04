@@ -231,6 +231,7 @@ const prepareInfoFromTriggerData = (type: string, {
 		} = others;
 		const prefix = 'If today is';
 		let _weekdays = weekdays.split(',');
+		_weekdays = _weekdays.map((w: string): number => parseInt(w, 10));
 		let days: string[] = getSelectedDays(_weekdays, formatDate, {
 			formatDateConfigWeekday: 'short',
 		});
