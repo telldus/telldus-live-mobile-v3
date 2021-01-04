@@ -43,7 +43,6 @@ import {
 	View,
 	ThemedRefreshControl,
 	Text,
-	ListRow,
 } from '../../../BaseComponents';
 
 import {
@@ -105,15 +104,7 @@ const EventsList = memo<Object>((props: Props): Object => {
 		blockContainerStyle,
 		sectionHeaderCoverStyle,
 		sectionHeaderTextStyle,
-		roundIconStyle,
-		roundIconContainerStyle,
-		timeStyle,
-		rowContainerStyle,
-		rowWithTriangleContainerStyle,
-		triangleColor,
-		line,
-		rowStyle,
-		containerStyle,
+		pauseIconStyle,
 	} = getStyle({
 		layout,
 		colors,
@@ -166,43 +157,23 @@ const EventsList = memo<Object>((props: Props): Object => {
 			action,
 		} = rowData.item || {};
 		return (
-			<ListRow
-				roundIcon={!active ? 'pause' : ''}
-				roundIconStyle={roundIconStyle}
-				roundIconContainerStyle={{
-					...roundIconContainerStyle,
-					opacity: active ? 1 : 0.5,
-				}}
-				timeFormat= {{
-					hour: 'numeric',
-					minute: 'numeric',
-				}}
-				timeStyle={timeStyle}
-				rowStyle={rowStyle}
-				containerStyle={containerStyle}
-				rowContainerStyle={rowContainerStyle}
-				rowWithTriangleContainerStyle={{
-					...rowWithTriangleContainerStyle,
-					opacity: active ? 1 : 0.5,
-				}}
-				triangleColor={triangleColor}
-				showShadow={active}
-				isFirst={rowData.index === 0}
-				appLayout={layout}>
-				<EventRow
-					id={id}
-					description={description}
-					group={group}
-					minRepeatInterval={minRepeatInterval}
-					active={active}
-					onPress={onPress}
-					trigger={trigger}
-					condition={condition}
-					action={action}
-					blockContainerStyle={blockContainerStyle}/>
-			</ListRow>
+			<EventRow
+				id={id}
+				description={description}
+				group={group}
+				minRepeatInterval={minRepeatInterval}
+				active={active}
+				onPress={onPress}
+				trigger={trigger}
+				condition={condition}
+				action={action}
+				iconStyle={pauseIconStyle}
+				blockContainerStyle={{
+					...blockContainerStyle,
+					opacity: active ? 1 : 0.6,
+				}}/>
 		);
-	}, [blockContainerStyle, containerStyle, layout, onPress, roundIconContainerStyle, roundIconStyle, rowContainerStyle, rowStyle, rowWithTriangleContainerStyle, timeStyle, triangleColor]);
+	}, [blockContainerStyle, onPress, pauseIconStyle]);
 
 	const keyExtractor = useCallback((data: Object): string => {
 		return `${data.id}`;
@@ -226,7 +197,6 @@ const EventsList = memo<Object>((props: Props): Object => {
 		<View
 			level={3}
 			style={container}>
-			<View style={line}/>
 			<SectionList
 				sections={sections}
 				contentContainerStyle={contentContainerStyle}
@@ -262,18 +232,16 @@ const getStyle = ({
 	const padding = deviceWidth * paddingFactor;
 	let nameFontSize = getSectionHeaderFontSize(deviceWidth);
 
-	const roundIconSize = deviceWidth * 0.044;
-
 	return {
 		container: {
 			flex: 1,
 		},
 		contentContainerStyle: {
 			paddingBottom: padding,
+			paddingHorizontal: padding,
 			justifyContent: 'center',
 		},
 		blockContainerStyle: {
-			flex: 1,
 			marginBottom: padding / 2,
 		},
 		sectionHeaderCoverStyle: {
@@ -288,49 +256,10 @@ const getStyle = ({
 		sectionHeaderTextStyle: {
 			fontSize: nameFontSize,
 		},
-		line: {
-			backgroundColor: '#929292',
-			height: '100%',
-			width: 1,
-			position: 'absolute',
-			left: (padding * 1.5) + (roundIconSize * 0.6),
-			top: 0,
-			zIndex: -1,
+		pauseIconStyle: {
+			fontSize: nameFontSize * 1.2,
+			marginRight: padding * 3,
 		},
-		roundIconStyle: {
-			fontSize: roundIconSize,
-		},
-		roundIconContainerStyle: {
-			marginLeft: padding / 2,
-		},
-		timeStyle: {
-
-		},
-		rowStyle: {
-			overflow: 'visible',
-		},
-		containerStyle: {
-			marginLeft: padding,
-		},
-		rowContainerStyle: {
-			flex: 1,
-			elevation: 0,
-			shadowColor: undefined,
-			backgroundColor: 'transparent',
-			shadowRadius: 0,
-			shadowOpacity: 0,
-			shadowOffset: {
-				width: 0,
-				height: 0,
-			},
-			marginRight: padding,
-		},
-		rowWithTriangleContainerStyle: {
-			flex: 1,
-			marginLeft: padding,
-			opacity: 0.5,
-		},
-		triangleColor: colors.inAppBrandSecondary,
 	};
 };
 

@@ -29,6 +29,7 @@ import React, {
 
 import {
 	TitledInfoBlock,
+	IconTelldus,
 } from '../../../../BaseComponents';
 
 type Props = {
@@ -42,6 +43,7 @@ type Props = {
 	trigger?: Object,
 	condition?: Object,
 	action?: Object,
+	iconStyle: Object,
 };
 
 const EventRow = memo<Object>((props: Props): Object => {
@@ -56,6 +58,7 @@ const EventRow = memo<Object>((props: Props): Object => {
 		trigger,
 		condition,
 		action,
+		iconStyle,
 	} = props;
 
 	const onPressPushSettings = useCallback(() => {
@@ -71,12 +74,21 @@ const EventRow = memo<Object>((props: Props): Object => {
 		});
 	}, [onPress, id, description, group, minRepeatInterval, active, trigger, condition, action]);
 
+	const renderRightComponent = useCallback((): Object => {
+		return (
+			<IconTelldus
+				icon={'pause'}
+				style={iconStyle}/>
+		);
+	}, [iconStyle]);
+
 	return (
 		<TitledInfoBlock
 			label={description}
 			icon={'angle-right'}
 			onPress={onPressPushSettings}
 			blockContainerStyle={blockContainerStyle}
+			renderRightComponent={active ? undefined : renderRightComponent}
 		/>
 	);
 });
