@@ -30,6 +30,9 @@ import AddEventTriggers from './AddEventTriggers';
 import AddEventConditions from './AddEventConditions';
 import AddEventActions from './AddEventActions';
 import EditEvent from './EditEvent';
+import SelectTriggerType from './SelectTriggerType';
+import SelectConditionType from './SelectConditionType';
+import SelectActionType from './SelectActionType';
 
 const EventsScreenConfigs = [
 	{
@@ -75,6 +78,30 @@ const EventsScreenConfigs = [
 	{
 		name: 'EditEvent',
 		Component: EditEvent,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectTriggerType',
+		Component: SelectTriggerType,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectConditionType',
+		Component: SelectConditionType,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectActionType',
+		Component: SelectActionType,
 		ContainerComponent: EventsContainer,
 		options: {
 			headerShown: false,
