@@ -22,97 +22,34 @@
 'use strict';
 
 import React, {
-	useEffect,
-	// useCallback,
+	useCallback,
 } from 'react';
-// import { useIntl } from 'react-intl';
+import {
+	CommonDevicesList,
+} from './SubViews';
 
 import {
-	ThemedScrollView,
-	Text,
-} from '../../../BaseComponents';
-import {
-	useAppTheme,
-} from '../../Hooks/Theme';
-
-import Theme from '../../Theme';
-
-// import i18n from '../../Translations/common';
+} from '../../Actions';
 
 type Props = {
 	navigation: Object,
-	appLayout: Object,
-	onDidMount: (string, string, ?string) => void,
 };
 
 const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
 	const {
-		// navigation,
-		appLayout,
-		onDidMount,
+		navigation,
 	} = props;
 
-	const {
-		colors,
-	} = useAppTheme();
-
-	// const intl = useIntl();
-	// const {
-	// 	formatMessage,
-	// } = intl;
-
-	useEffect(() => {
-		onDidMount('Device', 'Add device action'); // TODO: Translate
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	// const onPressNext = useCallback((index: number) => {
-	// 	navigation.navigate('');
-	// }, [navigation]);
-
-	const {
-		container,
-		contentContainerStyle,
-	} = getStyles({
-		appLayout,
-		colors,
-	});
+	const onPressNext = useCallback(() => {
+		navigation.goBack();
+	}, [navigation]);
 
 	return (
-		<ThemedScrollView
-			level={2}
-			style={container}
-			contentContainerStyle={contentContainerStyle}>
-			<Text>
-				Device
-			</Text>
-		</ThemedScrollView>
+		<CommonDevicesList
+			navigation={navigation}
+			onPressNext={onPressNext}
+		/>
 	);
 });
-
-const getStyles = ({
-	appLayout,
-	colors,
-}: Object): Object => {
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
-
-	const {
-		paddingFactor,
-	} = Theme.Core;
-
-	const padding = deviceWidth * paddingFactor;
-
-	return {
-		container: {
-			flex: 1,
-		},
-		contentContainerStyle: {
-			flexGrow: 1,
-			paddingVertical: padding,
-		},
-	};
-};
 
 export default SelectDeviceAction;
