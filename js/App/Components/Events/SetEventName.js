@@ -81,7 +81,7 @@ const SetEventName = React.memo<Object>((props: Props): Object => {
 	} = useDialogueBox();
 
 	useEffect(() => {
-		onDidMount(`2. ${formatMessage(i18n.name)}`, 'Set name for the event'); // TODO: Translate
+		onDidMount(formatMessage(i18n.name), 'Set name for the event'); // TODO: Translate
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
