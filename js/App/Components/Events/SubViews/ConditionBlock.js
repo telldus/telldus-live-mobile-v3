@@ -64,9 +64,6 @@ type Props = {
 	sunStatus?: string,
 	offset?: string,
 
-	hour?: string,
-	minute?: string,
-
 	fromHour?: string,
     fromMinute?: string,
     toHour?: string,
@@ -184,47 +181,6 @@ const prepareInfoFromTriggerData = (type: string, {
 			label: `If current time is between ${formatTime(dateFrom)} and ${formatTime(dateTo)}.`,
 			leftIcon,
 		};
-	} else if (type === 'blockheater') {
-		const {
-			minute,
-			hour,
-		} = others;
-		const {
-			data = {},
-		} = sensor || {};
-		const leftIcon = 'motorheater';
-		const date = Date.parse(`01/01/2017 ${hour}:${minute}`);
-		let tempInfo;
-		for (let i = 0; i < Object.keys(data).length; i++) {
-			const it = data[Object.keys(data)[i]];
-			if (it && it.name === 'temp') {
-				tempInfo = it;
-				break;
-			}
-		}
-		const prefix = `Departure time ${formatTime(date)}.`;
-		if (tempInfo && tempInfo.value) {
-			const temp = parseFloat(tempInfo.value);
-			if (temp > 10) {
-				return {
-					label: `${prefix} Temperature is currently over 10 degrees so this will not be triggered.`,
-					leftIcon,
-				};
-			}
-			let dateT = new Date();
-			dateT.setHours(hour);
-			let offset = 60 + 100 * temp / (temp - 35);
-			offset = Math.min(120, offset);
-			dateT.setMinutes(minute - offset);
-			return {
-				label: `${prefix} At current temperature this will be triggered around ${formatTime(dateT)}.`,
-				leftIcon,
-			};
-		}
-		return {
-			label: `${prefix}`,
-			leftIcon,
-		};
 	} else if (type === 'weekdays') {
 		const {
 			weekdays = '',
@@ -265,8 +221,6 @@ const ConditionBlock = memo<Object>((props: Props): Object => {
 		sunStatus,
 		offset,
 		clientId,
-		hour,
-		minute,
 		seperatorText,
 		isFirst,
 		fromHour,
@@ -302,8 +256,6 @@ const ConditionBlock = memo<Object>((props: Props): Object => {
 			sunStatus,
 			offset,
 
-			minute,
-			hour,
 			fromHour,
 			fromMinute,
 			toHour,
@@ -311,7 +263,7 @@ const ConditionBlock = memo<Object>((props: Props): Object => {
 
 			weekdays,
 		});
-	}, [client, device, edge, fromHour, fromMinute, hour, intl, method, minute, offset, scale, sensor, sunStatus, toHour, toMinute, type, value, valueType, weekdays]);
+	}, [client, device, edge, fromHour, fromMinute, intl, method, offset, scale, sensor, sunStatus, toHour, toMinute, type, value, valueType, weekdays]);
 
 	return (
 		<BlockItem
