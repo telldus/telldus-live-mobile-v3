@@ -38,6 +38,9 @@ import {
 import {
 	getSensorInfo,
 } from '../../../Lib/SensorUtils';
+import {
+	getSelectedDays,
+} from '../../../Lib/getDays';
 
 // import i18n from '../../../Translations/common';
 
@@ -70,6 +73,8 @@ type Props = {
     toMinute?: string,
 
 	seperatorText: string,
+
+	weekdays?: string,
 };
 
 const prepareInfoFromTriggerData = (type: string, {
@@ -97,24 +102,24 @@ const prepareInfoFromTriggerData = (type: string, {
 			case '00000004-0001-1000-2005-ACCA54000000': {
 				if (method === 1) {
 					return {
-						label: `${name} is opened`,
+						label: `If ${name} is opened.`,
 						leftIcon: TURNON,
 					};
 				}
 				return {
-					label: `${name} is closed`,
+					label: `If ${name} is closed.`,
 					leftIcon: TURNOFF,
 				};
 			}
 			default: {
 				if (method === 1) {
 					return {
-						label: `${name} is turned on`,
+						label: `If ${name} is turned on.`,
 						leftIcon: TURNON,
 					};
 				}
 				return {
-					label: `${name} is turned off`,
+					label: `If ${name} is turned off.`,
 					leftIcon: TURNOFF,
 				};
 			}
@@ -131,17 +136,17 @@ const prepareInfoFromTriggerData = (type: string, {
 		let leftIcon = icon;
 		if (edge === '-1') {
 			return {
-				label: `${label} of ${sName} goes below ${value}${unit}`,
+				label: `If ${label} of ${sName} goes below ${value}${unit}.`,
 				leftIcon,
 			};
 		} else if (edge === '1') {
 			return {
-				label: `${label} of ${sName} goes over ${value}${unit}`,
+				label: `If ${label} of ${sName} goes over ${value}${unit}.`,
 				leftIcon,
 			};
 		}
 		return {
-			label: `${label} of ${sName} is equal to ${value}${unit}`,
+			label: `If ${label} of ${sName} is equal to ${value}${unit}.`,
 			leftIcon,
 		};
 	} else if (type === 'suntime' && others.client) {
@@ -156,13 +161,13 @@ const prepareInfoFromTriggerData = (type: string, {
 		if (sunStatus === '1') {
 			let date = new Date(sunrise * 1000);
 			return {
-				label: `When the sun goes up. Today at ${formatTime(date)}`,
+				label: `When the sun goes up. Today at ${formatTime(date)}.`,
 				leftIcon: 'sunrise',
 			};
 		}
 		let date = new Date(sunset * 1000);
 		return {
-			label: `When the sun goes down. Today at ${formatTime(date)}`,
+			label: `When the sun goes down. Today at ${formatTime(date)}.`,
 			leftIcon: 'sunset',
 		};
 	} else if (type === 'time') {
@@ -220,6 +225,24 @@ const prepareInfoFromTriggerData = (type: string, {
 			label: `${prefix}`,
 			leftIcon,
 		};
+	} else if (type === 'weekdays') {
+		const {
+			weekdays = '',
+		} = others;
+		const prefix = 'If today is';
+		let _weekdays = weekdays.split(',');
+		let days: string[] = getSelectedDays(_weekdays, formatDate, {
+			formatDateConfigWeekday: 'short',
+		});
+		let _days = '';
+		days.forEach((d: string) => {
+			_days += `${d}, `;
+		});
+		_days = _days.slice(0, -2);
+		return {
+			label: `${prefix} ${_days}.`,
+			leftIcon: 'day',
+		};
 	}
 	return {
 		label: 'unknown',
@@ -249,6 +272,7 @@ const ConditionBlock = memo<Object>((props: Props): Object => {
 		fromMinute,
 		toHour,
 		toMinute,
+		weekdays,
 	} = props;
 	const intl = useIntl();
 
@@ -283,8 +307,10 @@ const ConditionBlock = memo<Object>((props: Props): Object => {
 			fromMinute,
 			toHour,
 			toMinute,
+
+			weekdays,
 		});
-	}, [client, device, edge, fromHour, fromMinute, hour, intl, method, minute, offset, scale, sensor, sunStatus, toHour, toMinute, type, value, valueType]);
+	}, [client, device, edge, fromHour, fromMinute, hour, intl, method, minute, offset, scale, sensor, sunStatus, toHour, toMinute, type, value, valueType, weekdays]);
 
 	return (
 		<BlockItem
