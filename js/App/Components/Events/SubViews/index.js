@@ -30,6 +30,7 @@ import EventActionsBlock from './EventActionsBlock';
 import EventTriggersBlock from './EventTriggersBlock';
 import EventConditionsBlock from './EventConditionsBlock';
 import TypeBlock from './TypeBlock';
+import CommonDevicesList from './CommonDevicesList';
 
 module.exports = {
 	EventRow,
@@ -40,4 +41,5 @@ module.exports = {
 	EventTriggersBlock,
 	EventActionsBlock,
 	TypeBlock,
+	CommonDevicesList,
 };
