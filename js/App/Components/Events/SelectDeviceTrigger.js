@@ -25,11 +25,17 @@ import React, {
 	useCallback,
 } from 'react';
 import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
+
+import {
 	CommonDevicesList,
 } from './SubViews';
 
 import {
-} from '../../Actions';
+	eventSetDeviceTrigger,
+} from '../../Actions/Event';
 
 type Props = {
 	navigation: Object,
@@ -39,10 +45,29 @@ const SelectDeviceTrigger = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 	} = props;
+	const dispatch = useDispatch();
+	const {
+		id,
+	} = useSelector((state: Object): Object => state.event) || {};
 
-	const onPressNext = useCallback(() => {
-		navigation.goBack();
-	}, [navigation]);
+	const onPressNext = useCallback(({selectedDevices}: Object = {}) => {
+		let data = [];
+		Object.keys(selectedDevices).forEach((deviceId: string) => {
+			const {
+				method,
+			} = selectedDevices[deviceId] || {};
+			data.push({
+				id: '',
+				eventId: id,
+				deviceId,
+				method,
+				type: 'device',
+				local: true,
+			});
+		});
+		dispatch(eventSetDeviceTrigger(data));
+		navigation.navigate('EditEvent');
+	}, [dispatch, id, navigation]);
 
 	return (
 		<CommonDevicesList

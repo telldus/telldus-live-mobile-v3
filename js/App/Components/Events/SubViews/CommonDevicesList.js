@@ -261,6 +261,10 @@ const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 		return `${item.id}${index}`;
 	}, []);
 
+	const _onPressNext = useCallback(() => {
+		onPressNext(selectedItems);
+	}, [onPressNext, selectedItems]);
+
 	let makeRowAccessible = 0;
 	if (screenReaderEnabled) {
 		makeRowAccessible = 1;
@@ -296,7 +300,7 @@ const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 				scrollEnabled={scrollEnabled}
 			/>
 			<FloatingButton
-				onPress={onPressNext}
+				onPress={_onPressNext}
 				iconName={'checkmark'}
 			/>
 		</View>

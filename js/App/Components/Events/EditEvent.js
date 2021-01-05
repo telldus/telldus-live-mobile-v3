@@ -56,6 +56,7 @@ import {
 import {
 	setEvent,
 	getEvents,
+	setEventDeviceTrigger,
 } from '../../Actions/Events';
 
 import Theme from '../../Theme';
@@ -84,6 +85,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		group = '',
 		minRepeatInterval,
 		active,
+		trigger,
 	} = useSelector((state: Object): Object => state.event) || {};
 
 	const [isDeleting, setIsDeleting] = useState(false);
@@ -122,6 +124,24 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 					active: active ? 1 : 0,
 				})),
 			];
+			trigger.forEach((t: Object) => {
+				const {
+					id: _id,
+					eventId,
+					deviceId,
+					method,
+					local,
+				} = t;
+				if (local) {
+					promises.push(dispatch(setEventDeviceTrigger({
+						id: _id,
+						eventId,
+						deviceId,
+						method,
+					})));
+				}
+			});
+
 			try {
 				await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
 					return promise.then((res: Object): Object => {
@@ -148,7 +168,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 				dispatch(getEvents());
 			}
 		})();
-	}, [active, closeDialogue, description, dispatch, group, id, minRepeatInterval, navigation, toggleDialogueBoxState]);
+	}, [active, closeDialogue, description, dispatch, group, id, minRepeatInterval, navigation, toggleDialogueBoxState, trigger]);
 
 	const onDeleteEvent = useCallback(() => {
 		toggleDialogueBoxState({

@@ -49,6 +49,7 @@ import * as Firebase from './Firebase';
 import * as Auth from './Auth';
 import * as ThirdParties from './ThirdParties';
 import * as WebsocketExtras from './WebsocketExtras';
+import * as Event from './Event';
 
 module.exports = {
 	...GatewayActions,
@@ -78,4 +79,5 @@ module.exports = {
 	...Auth,
 	...ThirdParties,
 	...WebsocketExtras,
+	...Event,
 };
