@@ -74,7 +74,13 @@ const prepareInfoFromTriggerData = (type: string, {
 	sensor,
 	...others
 }: Object): Object => { // TODO: Translate
-	if (type === 'device' && device) {
+	if (type === 'device') {
+		if (!device) {
+			return {
+				label: 'Device not found',
+				leftIcon: 'device-alt',
+			};
+		}
 		const {
 			deviceType,
 			name,
@@ -112,7 +118,13 @@ const prepareInfoFromTriggerData = (type: string, {
 				};
 			}
 		}
-	} else if (type === 'sensor' && sensor) {
+	} else if (type === 'sensor') {
+		if (!sensor) {
+			return {
+				label: 'Sensor not found',
+				leftIcon: 'sensor',
+			};
+		}
 		const {
 			value = '',
 			edge,
@@ -177,6 +189,12 @@ const prepareInfoFromTriggerData = (type: string, {
 			leftIcon,
 		};
 	} else if (type === 'blockheater') {
+		if (!sensor) {
+			return {
+				label: 'Sensor not found',
+				leftIcon: 'sensor',
+			};
+		}
 		const {
 			minute,
 			hour,
@@ -219,8 +237,8 @@ const prepareInfoFromTriggerData = (type: string, {
 		};
 	}
 	return {
-		label: 'unknown',
-		leftIcon: 'sensor',
+		label: 'Device not found',
+		leftIcon: 'device-alt',
 	};
 };
 

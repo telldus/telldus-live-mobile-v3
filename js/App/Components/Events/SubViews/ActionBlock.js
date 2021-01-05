@@ -66,7 +66,13 @@ const prepareInfoFromTriggerData = (type: string, {
 	method,
 	...others
 }: Object): Object => { // TODO: Translate
-	if (type === 'device' && device) {
+	if (type === 'device') {
+		if (!device) {
+			return {
+				label: 'Device not found',
+				leftIcon: 'device-alt',
+			};
+		}
 		const {
 			deviceType,
 			name,
@@ -138,7 +144,7 @@ const prepareInfoFromTriggerData = (type: string, {
 		};
 	}
 	return {
-		label: 'unknown.',
+		label: 'Device not found',
 		leftIcon: 'device-alt',
 	};
 };
