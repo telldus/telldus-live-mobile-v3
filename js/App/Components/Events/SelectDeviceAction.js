@@ -40,6 +40,7 @@ import {
 
 type Props = {
 	navigation: Object,
+	onDidMount: Function,
 };
 
 const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
