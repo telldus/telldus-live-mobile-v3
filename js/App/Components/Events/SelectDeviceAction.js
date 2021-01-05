@@ -23,13 +23,20 @@
 
 import React, {
 	useCallback,
+	useEffect,
 } from 'react';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
+
 import {
 	CommonDevicesList,
 } from './SubViews';
 
 import {
-} from '../../Actions';
+	eventSetDeviceAction,
+} from '../../Actions/Event';
 
 type Props = {
 	navigation: Object,
@@ -38,12 +45,43 @@ type Props = {
 const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
+		onDidMount,
 	} = props;
 
-	const onPressNext = useCallback(() => {
-		navigation.goBack();
-	}, [navigation]);
+	useEffect(() => {
+		onDidMount('Add device action', 'Turn on or off an device when this event executes'); // TODO: Translate
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
+	const dispatch = useDispatch();
+	const {
+		id,
+		actionRepeats,
+		actionDelay,
+		actionDelayPolicy,
+	} = useSelector((state: Object): Object => state.event) || {};
+	const onPressNext = useCallback(({selectedDevices}: Object = {}) => {
+		let data = [];
+		Object.keys(selectedDevices).forEach((deviceId: string) => {
+			const {
+				method,
+			} = selectedDevices[deviceId] || {};
+			data.push({
+				id: '',
+				eventId: id,
+				deviceId,
+				method,
+				type: 'device',
+				local: true,
+				value: '',
+				repeats: actionRepeats,
+				delay: actionDelay,
+				delayPolicy: actionDelayPolicy,
+			});
+		});
+		dispatch(eventSetDeviceAction(data));
+		navigation.navigate('EditEvent');
+	}, [actionDelay, actionDelayPolicy, actionRepeats, dispatch, id, navigation]);
 	return (
 		<CommonDevicesList
 			navigation={navigation}

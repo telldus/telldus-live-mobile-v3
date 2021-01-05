@@ -57,6 +57,8 @@ import {
 	setEvent,
 	getEvents,
 	setEventDeviceTrigger,
+	setEventDeviceCondition,
+	setEventDeviceAction,
 } from '../../Actions/Events';
 
 import Theme from '../../Theme';
@@ -86,6 +88,8 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		minRepeatInterval,
 		active,
 		trigger,
+		action,
+		condition,
 	} = useSelector((state: Object): Object => state.event) || {};
 
 	const [isDeleting, setIsDeleting] = useState(false);
@@ -141,6 +145,50 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 					})));
 				}
 			});
+			condition.forEach((c: Object) => {
+				const {
+					id: _id,
+					eventId,
+					deviceId,
+					method,
+					local,
+					group: _group,
+				} = c;
+				if (local) {
+					promises.push(dispatch(setEventDeviceCondition({
+						id: _id,
+						eventId,
+						deviceId,
+						method,
+						group: _group,
+					})));
+				}
+			});
+			action.forEach((a: Object) => {
+				const {
+					id: _id,
+					eventId,
+					deviceId,
+					method,
+					local,
+					value,
+					repeats,
+					delay,
+					delayPolicy,
+				} = a;
+				if (local) {
+					promises.push(dispatch(setEventDeviceAction({
+						id: _id,
+						eventId,
+						deviceId,
+						method,
+						value,
+						repeats,
+						delay,
+						delayPolicy,
+					})));
+				}
+			});
 
 			try {
 				await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
@@ -168,7 +216,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 				dispatch(getEvents());
 			}
 		})();
-	}, [active, closeDialogue, description, dispatch, group, id, minRepeatInterval, navigation, toggleDialogueBoxState, trigger]);
+	}, [action, active, closeDialogue, condition, description, dispatch, group, id, minRepeatInterval, navigation, toggleDialogueBoxState, trigger]);
 
 	const onDeleteEvent = useCallback(() => {
 		toggleDialogueBoxState({
@@ -196,7 +244,6 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		contentContainerStyle,
 		buttonStyle,
 		save,
-		labelStyle,
 	} = getStyles({
 		appLayout,
 		colors,
@@ -226,7 +273,6 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 			<TouchableButton
 				text={i18n.confirmAndSave}
 				style={[buttonStyle, save]}
-				labelStyle={labelStyle}
 				onPress={onSaveEvent}
 				accessible={true}
 				disabled={disable}
@@ -236,7 +282,6 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 				text={i18n.delete}
 				style={buttonStyle}
 				buttonLevel={isDeleting ? undefined : 10}
-				labelStyle={labelStyle}
 				onPress={onDeleteEvent}
 				accessible={true}
 				disabled={disable}

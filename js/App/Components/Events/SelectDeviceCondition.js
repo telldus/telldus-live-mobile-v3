@@ -23,26 +23,61 @@
 
 import React, {
 	useCallback,
+	useEffect,
 } from 'react';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
+
 import {
 	CommonDevicesList,
 } from './SubViews';
 
 import {
-} from '../../Actions';
+	eventSetDeviceCondition,
+} from '../../Actions/Event';
 
 type Props = {
 	navigation: Object,
+	onDidMount: Function,
 };
 
 const SelectDeviceCondition = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
+		onDidMount,
 	} = props;
 
-	const onPressNext = useCallback(() => {
-		navigation.goBack();
-	}, [navigation]);
+	useEffect(() => {
+		onDidMount('Add device action', 'Only execute the actions of this event if a device is either on or off'); // TODO: Translate
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const dispatch = useDispatch();
+	const {
+		id,
+		conditionGroup,
+	} = useSelector((state: Object): Object => state.event) || {};
+	const onPressNext = useCallback(({selectedDevices}: Object = {}) => {
+		let data = [];
+		Object.keys(selectedDevices).forEach((deviceId: string) => {
+			const {
+				method,
+			} = selectedDevices[deviceId] || {};
+			data.push({
+				id: '',
+				eventId: id,
+				deviceId,
+				method,
+				type: 'device',
+				local: true,
+				group: conditionGroup,
+			});
+		});
+		dispatch(eventSetDeviceCondition(data));
+		navigation.navigate('EditEvent');
+	}, [conditionGroup, dispatch, id, navigation]);
 
 	return (
 		<CommonDevicesList
