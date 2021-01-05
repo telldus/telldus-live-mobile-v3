@@ -52,6 +52,9 @@ import SelectEmailAction from './SelectEmailAction';
 import SelectUrlAction from './SelectUrlAction';
 import SelectPushAction from './SelectPushAction';
 
+import SelectGroupEvent from './SelectGroupEvent';
+import SetEventGroupName from './SetEventGroupName';
+
 const EventsScreenConfigs = [
 	{
 		name: 'EventsList',
@@ -240,6 +243,22 @@ const EventsScreenConfigs = [
 	{
 		name: 'SelectDeviceAction',
 		Component: SelectDeviceAction,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectGroupEvent',
+		Component: SelectGroupEvent,
+		ContainerComponent: EventsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SetEventGroupName',
+		Component: SetEventGroupName,
 		ContainerComponent: EventsContainer,
 		options: {
 			headerShown: false,
