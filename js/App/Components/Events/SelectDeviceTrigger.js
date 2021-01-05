@@ -23,6 +23,7 @@
 
 import React, {
 	useCallback,
+	useEffect,
 } from 'react';
 import {
 	useSelector,
@@ -39,12 +40,20 @@ import {
 
 type Props = {
 	navigation: Object,
+	onDidMount: Function,
 };
 
 const SelectDeviceTrigger = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
+		onDidMount,
 	} = props;
+
+	useEffect(() => {
+		onDidMount('Add device trigger', 'Execute this event when the state of a device sets'); // TODO: Translate
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	const dispatch = useDispatch();
 	const {
 		id,
