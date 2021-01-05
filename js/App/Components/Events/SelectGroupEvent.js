@@ -42,6 +42,7 @@ import Theme from '../../Theme';
 
 type Props = {
     onDidMount: Function,
+    navigation: Object,
 };
 
 const BLOCKS = [
@@ -83,8 +84,8 @@ const SelectGroupEvent = memo<Object>((props: Props): Object => {
 		navigation.navigate(screenName);
 	}, [navigation]);
 
-	const Blocks = useMemo((): Object => {
-		return BLOCKS.map((b: Object, i: number): Array<Object> => {
+	const Blocks = useMemo((): Array<Object> => {
+		return BLOCKS.map((b: Object, i: number): Object => {
 			const {
 				screenName,
 				label,
