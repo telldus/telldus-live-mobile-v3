@@ -32,7 +32,7 @@ import {
 import { useIntl } from 'react-intl';
 
 import {
-	View,
+	ThemedScrollView,
 	MaterialTextInput,
 	FloatingButton,
 } from '../../../BaseComponents';
@@ -130,7 +130,9 @@ const SetEventGroupName = React.memo<Object>((props: Props): Object => {
 	}, []);
 
 	return (
-		<View style={container}>
+		<ThemedScrollView
+			level={2}
+			style={container}>
 			<MaterialTextInput
 				label={formatMessage(i18n.name)}
 				containerStyle={containerStyleTF}
@@ -145,7 +147,7 @@ const SetEventGroupName = React.memo<Object>((props: Props): Object => {
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'right_arrow_key'}}/>
-		</View>
+		</ThemedScrollView>
 	);
 });
 
