@@ -31,6 +31,7 @@ import EventTriggersBlock from './EventTriggersBlock';
 import EventConditionsBlock from './EventConditionsBlock';
 import TypeBlock from './TypeBlock';
 import CommonDevicesList from './CommonDevicesList';
+import SelectGroupDD from './SelectGroupDD';
 
 module.exports = {
 	EventRow,
@@ -42,4 +43,5 @@ module.exports = {
 	EventActionsBlock,
 	TypeBlock,
 	CommonDevicesList,
+	SelectGroupDD,
 };
