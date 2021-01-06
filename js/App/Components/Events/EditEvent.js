@@ -61,6 +61,7 @@ import {
 	setEventDeviceCondition,
 	setEventDeviceAction,
 	getEventGroupsList,
+	removeEvent,
 } from '../../Actions/Events';
 
 import Theme from '../../Theme';
@@ -237,6 +238,26 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		})();
 	}, [action, active, closeDialogue, condition, description, dispatch, group, id, minRepeatInterval, navigation, toggleDialogueBoxState, trigger]);
 
+	const onConfirmDeleteEven = useCallback(() => {
+		setIsDeleting(true);
+		dispatch(removeEvent(id)).then((res: Object) => {
+			if (res && res.status === 'success') {
+				dispatch(getEvents());
+				navigation.goBack();
+			}
+			setIsDeleting(false);
+		}).catch((err: Object) => {
+			setIsDeleting(false);
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: err.message || formatMessage(i18n.unknownError),
+				showPositive: true,
+			});
+		});
+	}, [dispatch, formatMessage, id, navigation, toggleDialogueBoxState]);
+
 	const onDeleteEvent = useCallback(() => {
 		toggleDialogueBoxState({
 			show: true,
@@ -247,7 +268,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 			positiveText: formatMessage(i18n.delete),
 			onPressPositive: () => {
 				closeDialogue();
-				setIsDeleting(true);
+				onConfirmDeleteEven();
 			},
 			onPressNegative: () => {
 				closeDialogue();
@@ -256,7 +277,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 			showBackground: true,
 			text: 'You sure that you want to delete this event?',
 		});
-	}, [closeDialogue, formatMessage, toggleDialogueBoxState]);
+	}, [closeDialogue, formatMessage, onConfirmDeleteEven, toggleDialogueBoxState]);
 
 	const {
 		container,
@@ -268,7 +289,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		colors,
 	});
 
-	const disable = false;
+	const disable = isDeleting || isSaving;
 
 	return (
 		<ThemedScrollView
@@ -277,20 +298,27 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 			contentContainerStyle={contentContainerStyle}>
 			<EditEventNameBlock
 				description={description}
-				toggleDialogueBox={toggleDialogueBoxState}/>
+				toggleDialogueBox={toggleDialogueBoxState}
+				disable={disable}/>
 			<EventActiveSwichBlock
-				value={active}/>
+				value={active}
+				disable={disable}/>
 			<EventAdvancedSettingsBlock
 				minRepeatInterval={minRepeatInterval}
-				toggleDialogueBox={toggleDialogueBoxState}/>
+				toggleDialogueBox={toggleDialogueBoxState}
+				disable={disable}/>
 			<EventTriggersBlock
-				navigation={navigation}/>
+				navigation={navigation}
+				disable={disable}/>
 			<EventConditionsBlock
-				navigation={navigation}/>
+				navigation={navigation}
+				disable={disable}/>
 			<EventActionsBlock
-				navigation={navigation}/>
+				navigation={navigation}
+				disable={disable}/>
 			<SelectGroupDD
-				groupsList={groupsList}/>
+				groupsList={groupsList}
+				disable={disable}/>
 			<TouchableButton
 				text={i18n.confirmAndSave}
 				style={[buttonStyle, save]}

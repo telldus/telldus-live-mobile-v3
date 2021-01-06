@@ -49,11 +49,13 @@ import Theme from '../../../Theme';
 
 type Props = {
 	navigation: Object,
+	disable: boolean,
 };
 
 const EventConditionsBlock = memo<Object>((props: Props): Object => {
 	const {
 		navigation,
+		disable,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -114,6 +116,7 @@ const EventConditionsBlock = memo<Object>((props: Props): Object => {
 					text={'Add condition'}
 					onPress={onPress}
 					accessible={true}
+					disabled={disable}
 				/>
 			</View>
 		</View>

@@ -48,11 +48,13 @@ import Theme from '../../../Theme';
 
 type Props = {
 	navigation: Object,
+	disable: boolean,
 };
 
 const EventTriggersBlock = memo<Object>((props: Props): Object => {
 	const {
 		navigation,
+		disable,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -102,6 +104,7 @@ const EventTriggersBlock = memo<Object>((props: Props): Object => {
 					text={'Add trigger'}
 					onPress={onPress}
 					accessible={true}
+					disabled={disable}
 				/>
 			</View>
 		</View>
