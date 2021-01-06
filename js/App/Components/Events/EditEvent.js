@@ -45,6 +45,7 @@ import {
 	EventConditionsBlock,
 	EventTriggersBlock,
 	EventActionsBlock,
+	SelectGroupDD,
 } from './SubViews';
 
 import {
@@ -59,6 +60,7 @@ import {
 	setEventDeviceTrigger,
 	setEventDeviceCondition,
 	setEventDeviceAction,
+	getEventGroupsList,
 } from '../../Actions/Events';
 
 import Theme from '../../Theme';
@@ -104,7 +106,24 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
 
+	const [groupsList, setGroupsList] = useState([]);
+	const refreshGroups = useCallback((refreshing?: true) => {
+		dispatch(getEventGroupsList()).then((res: Object) => {
+			if (res && res.group) {
+				const gl = res.group.map((g: Object): Object => {
+					return {
+						key: g.id,
+						value: g.name,
+					};
+				});
+				setGroupsList(gl);
+			}
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	useEffect(() => {
+		refreshGroups();
 		onDidMount('Event settings', description); // TODO: Translate
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -270,6 +289,8 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 				navigation={navigation}/>
 			<EventActionsBlock
 				navigation={navigation}/>
+			<SelectGroupDD
+				groupsList={groupsList}/>
 			<TouchableButton
 				text={i18n.confirmAndSave}
 				style={[buttonStyle, save]}
