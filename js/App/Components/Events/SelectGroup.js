@@ -29,15 +29,27 @@ import React, {
 } from 'react';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
-import { useIntl } from 'react-intl';
+import {
+	RefreshControl,
+} from 'react-native';
 
 import {
 	FloatingButton,
 	ThemedScrollView,
 	View,
-	DropDown,
 } from '../../../BaseComponents';
+import {
+	SelectGroupDD,
+} from './SubViews';
+
+import {
+	getEventGroupsList,
+} from '../../Actions/Events';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 
@@ -46,23 +58,37 @@ type Props = {
     navigation: Object,
 };
 
-const NONE_KEY = 'none';
-const BLOCKS = [
-	{
-		key: NONE_KEY,
-		value: 'None',
-	},
-];
-
 const SelectGroup = memo<Object>((props: Props): Object => {
 	const {
 		onDidMount,
 		navigation,
 	} = props;
 
-	const intl = useIntl();
+	const dispatch = useDispatch();
+
+	const [groupsList, setGroupsList] = useState([]);
+	const [isRefreshing, setIsRefreshing] = useState(false);
+	const refreshGroups = useCallback((refreshing?: boolean = true) => {
+		setIsRefreshing(refreshing);
+		dispatch(getEventGroupsList()).then((res: Object) => {
+			setIsRefreshing(false);
+			if (res && res.group) {
+				const gl = res.group.map((g: Object): Object => {
+					return {
+						key: g.id,
+						value: g.name,
+					};
+				});
+				setGroupsList(gl);
+			}
+		}).catch(() => {
+			setIsRefreshing(false);
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	useEffect(() => {
+		refreshGroups(true);
 		onDidMount('Add the event to a group', 'Add the event to a group by selecting one'); // TODO: Translate
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -71,30 +97,35 @@ const SelectGroup = memo<Object>((props: Props): Object => {
 		layout,
 	} = useSelector((state: Object): Object => state.app) || {};
 	const {
-		dropDownHeaderStyle,
-		dropDownContainerStyleDef,
 		coverStyle,
 	} = getStyles({
 		layout,
 	});
-
-	const [ value, setValue ] = useState(BLOCKS[0].value);
-
 	const _onPressNext = useCallback(() => {
 		navigation.navigate('SelectTriggerType');
 	}, [navigation]);
 
-	const items = [...BLOCKS];
-
-	const onValueChange = useCallback((v: string, itemIndex: number, data: Array<any>) => {
-		setValue(data[itemIndex].value);
-	}, []);
+	const {
+		colors,
+	} = useAppTheme();
+	const {
+		inAppBrandSecondary,
+	} = colors;
 
 	return (
 		<View
 			level={2}
 			style={{flex: 1}}>
 			<ThemedScrollView
+				refreshControl={
+					<RefreshControl
+						enabled={true}
+						refreshing={isRefreshing}
+						onRefresh={refreshGroups}
+						colors={[inAppBrandSecondary]}
+						tintColor={inAppBrandSecondary}
+					/>
+				}
 				level={2}
 				style={{
 					flex: 1,
@@ -105,17 +136,8 @@ const SelectGroup = memo<Object>((props: Props): Object => {
 				<View
 					level={2}
 					style={coverStyle}>
-					<DropDown
-						dropDownPosition={'bottom'}
-						showMax
-						label={'Select group'}
-						items={items}
-						value={value}
-						appLayout={layout}
-						intl={intl}
-						dropDownContainerStyle={dropDownContainerStyleDef}
-						dropDownHeaderStyle={dropDownHeaderStyle}
-						onValueChange={onValueChange}/>
+					<SelectGroupDD
+						groupsList={groupsList}/>
 				</View>
 			</ThemedScrollView>
 			<FloatingButton
@@ -133,30 +155,13 @@ const getStyles = ({layout}: Object): Object => {
 
 	const {
 		paddingFactor,
-		fontSizeFactorFour,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * fontSizeFactorFour);
-
 	return {
 		coverStyle: {
 			marginVertical: padding,
-			width: width - (padding * 2),
-			alignSelf: 'center',
-		},
-		dropDownHeaderStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
-		},
-		dropDownContainerStyleDef: {
-			marginBottom: 0,
-			flex: 1,
-		},
-		labelStyle: {
-			flex: 0,
-			fontSize,
-			flexWrap: 'wrap',
 		},
 	};
 };
