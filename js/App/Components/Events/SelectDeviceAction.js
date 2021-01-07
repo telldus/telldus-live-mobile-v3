@@ -66,7 +66,9 @@ const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
 		Object.keys(selectedDevices).forEach((deviceId: string) => {
 			const {
 				method,
+				stateValues = {},
 			} = selectedDevices[deviceId] || {};
+			const value = stateValues[method] || '';
 			data.push({
 				id: '',
 				eventId: id,
@@ -74,7 +76,7 @@ const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
 				method,
 				type: 'device',
 				local: true,
-				value: '',
+				value,
 				repeats: actionRepeats,
 				delay: actionDelay,
 				delayPolicy: actionDelayPolicy,
