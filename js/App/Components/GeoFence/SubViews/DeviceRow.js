@@ -84,6 +84,8 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		checkBoxId,
 		isLast,
 		dark,
+		showPalette = true,
+		showThermostatHeat = true,
 	} = props;
 	const {
 		supportedMethods = {},
@@ -257,6 +259,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
 				preparedMainColorRgb={preparedMainColorRgb}
+				showPalette={showPalette}
 			/>
 		);
 	}
@@ -267,6 +270,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 				key={8}
 				style={thermostat}
 				openThermostatControl={openThermostatControl}
+				showThermostatHeat={showThermostatHeat}
 			/>
 		);
 	}

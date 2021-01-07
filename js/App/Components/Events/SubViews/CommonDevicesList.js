@@ -206,7 +206,9 @@ const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 				onChangeSelection={onChangeSelection}
 				checkBoxId={checkBoxId}
 				isChecked={!!selectedDevices[checkBoxId]}
-				setScrollEnabled={_setScrollEnabled}/>
+				setScrollEnabled={_setScrollEnabled}
+				showPalette={false}
+				showThermostatHeat={false}/>
 		);
 	}, [_setScrollEnabled, onChangeSelection, onDeviceValueChange, openRGBControl, openThermostatControl, selectedDevices]);
 
