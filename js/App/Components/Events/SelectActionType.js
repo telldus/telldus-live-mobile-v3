@@ -30,6 +30,8 @@ import React, {
 
 import {
 	ThemedScrollView,
+	View,
+	FloatingButton,
 } from '../../../BaseComponents';
 import {
 	TypeBlock,
@@ -46,6 +48,8 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	route: Object,
+	isEditMode: Function,
 };
 
 const TYPES = [
@@ -86,7 +90,12 @@ const SelectActionType = React.memo<Object>((props: Props): Object => {
 		navigation,
 		appLayout,
 		onDidMount,
+		route,
+		isEditMode,
 	} = props;
+	const {
+		params = {},
+	} = route;
 
 	const {
 		colors,
@@ -106,8 +115,10 @@ const SelectActionType = React.memo<Object>((props: Props): Object => {
 		const {
 			screenName,
 		} = TYPES[index];
-		navigation.navigate(screenName);
-	}, [navigation]);
+		navigation.navigate(screenName, {
+			...params,
+		});
+	}, [navigation, params]);
 
 	const {
 		container,
@@ -131,13 +142,27 @@ const SelectActionType = React.memo<Object>((props: Props): Object => {
 		});
 	}, [onPressNext]);
 
+	const _onPressNext = useCallback(() => {
+		// DONE ?
+	}, []);
+
+	const isEdit = isEditMode();
+
 	return (
-		<ThemedScrollView
-			level={2}
-			style={container}
-			contentContainerStyle={contentContainerStyle}>
-			{types}
-		</ThemedScrollView>
+		<View style={{flex: 1}}>
+			<ThemedScrollView
+				level={2}
+				style={container}
+				contentContainerStyle={contentContainerStyle}>
+				{types}
+			</ThemedScrollView>
+			{!isEdit && (
+				<FloatingButton
+					onPress={_onPressNext}
+					iconName={'checkmark'}
+				/>
+			)}
+		</View>
 	);
 });
 

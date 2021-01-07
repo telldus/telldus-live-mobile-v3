@@ -55,14 +55,19 @@ import Theme from '../../Theme';
 
 type Props = {
     onDidMount: Function,
-    navigation: Object,
+	navigation: Object,
+	route: Object,
 };
 
 const SelectGroup = memo<Object>((props: Props): Object => {
 	const {
 		onDidMount,
 		navigation,
+		route,
 	} = props;
+	const {
+		params = {},
+	} = route;
 
 	const dispatch = useDispatch();
 
@@ -102,8 +107,10 @@ const SelectGroup = memo<Object>((props: Props): Object => {
 		layout,
 	});
 	const _onPressNext = useCallback(() => {
-		navigation.navigate('SelectTriggerType');
-	}, [navigation]);
+		navigation.navigate('SelectTriggerType', {
+			...params,
+		});
+	}, [navigation, params]);
 
 	const {
 		colors,

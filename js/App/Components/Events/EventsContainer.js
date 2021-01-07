@@ -186,7 +186,9 @@ export class EventsContainer extends View<Props, State> {
 		const {
 			navigation,
 		} = this.props;
-		navigation.navigate('SelectGroupEvent');
+		navigation.navigate('SelectGroupEvent', {
+			isEditMode: false,
+		});
 	}
 
 	render(): Object {

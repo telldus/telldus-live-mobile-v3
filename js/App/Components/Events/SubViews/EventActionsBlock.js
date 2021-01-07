@@ -49,13 +49,18 @@ import Theme from '../../../Theme';
 type Props = {
 	navigation: Object,
 	disable: boolean,
+	route: Object,
 };
 
 const EventActionsBlock = memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		disable,
+		route,
 	} = props;
+	const {
+		params = {},
+	} = route;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -71,8 +76,10 @@ const EventActionsBlock = memo<Object>((props: Props): Object => {
 	} = useSelector((state: Object): Object => state.event) || {};
 
 	const onPress = useCallback(() => {
-		navigation.navigate('SelectActionType');
-	}, [navigation]);
+		navigation.navigate('SelectActionType', {
+			...params,
+		});
+	}, [navigation, params]);
 
 	const actions = useMemo((): Array<Object> => {
 		return action.map((t: Object, i: number): Object => {

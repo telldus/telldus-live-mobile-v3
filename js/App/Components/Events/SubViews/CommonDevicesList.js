@@ -65,13 +65,18 @@ import Theme from '../../../Theme';
 type Props = {
 	navigation: Object,
 	onPressNext: Function,
+	route: Object,
 };
 
 const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		onPressNext,
+		route,
 	} = props;
+	const {
+		params = {},
+	} = route;
 
 	const intl = useIntl();
 
@@ -153,10 +158,11 @@ const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 			return;
 		}
 		navigation.navigate('RGBControl', {
+			...params,
 			id,
 			onPressOverride: onDeviceValueChange,
 		});
-	}, [navigation, onDeviceValueChange, selectedDevices]);
+	}, [navigation, onDeviceValueChange, params, selectedDevices]);
 
 	const openThermostatControl = useCallback((id: number) => {
 		const isSelected = !!selectedDevices[id];
@@ -164,11 +170,12 @@ const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 			return;
 		}
 		navigation.navigate('ThermostatControl', {
+			...params,
 			id,
 			onPressOverride: onDeviceValueChange,
 			timeoutPlusMinus: 0,
 		});
-	}, [navigation, onDeviceValueChange, selectedDevices]);
+	}, [navigation, onDeviceValueChange, params, selectedDevices]);
 
 	const onChangeSelection = useCallback((type: 'device' | 'schedule' | 'event', id: string, data: Object) => {
 		let newSelected = {...selectedItems};

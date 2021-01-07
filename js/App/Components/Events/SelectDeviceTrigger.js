@@ -41,13 +41,20 @@ import {
 type Props = {
 	navigation: Object,
 	onDidMount: Function,
+	route: Object,
+	isEditMode: Function,
 };
 
 const SelectDeviceTrigger = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		onDidMount,
+		route,
+		isEditMode,
 	} = props;
+	const {
+		params = {},
+	} = route;
 
 	useEffect(() => {
 		onDidMount('Add device trigger', 'Execute this event when the state of a device sets'); // TODO: Translate
@@ -75,13 +82,20 @@ const SelectDeviceTrigger = React.memo<Object>((props: Props): Object => {
 			});
 		});
 		dispatch(eventSetDeviceTrigger(data));
-		navigation.navigate('EditEvent');
-	}, [dispatch, id, navigation]);
+		if (isEditMode()) {
+			navigation.navigate('EditEvent', {
+				...params,
+			});
+		} else {
+			navigation.goBack();
+		}
+	}, [dispatch, id, isEditMode, navigation, params]);
 
 	return (
 		<CommonDevicesList
 			navigation={navigation}
 			onPressNext={onPressNext}
+			route={route}
 		/>
 	);
 });

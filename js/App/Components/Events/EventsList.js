@@ -67,13 +67,18 @@ import Theme from '../../Theme';
 type Props = {
 	onDidMount: Function,
 	navigation: Object,
+	route: Object,
 };
 
 const EventsList = memo<Object>((props: Props): Object => {
 	const {
 		onDidMount,
 		navigation,
+		route,
 	} = props;
+	const {
+		params = {},
+	} = route;
 
 	const dispatch = useDispatch();
 
@@ -130,8 +135,11 @@ const EventsList = memo<Object>((props: Props): Object => {
 			condition,
 			action,
 		}));
-		navigation.navigate('EditEvent');
-	}, [dispatch, navigation]);
+		navigation.navigate('EditEvent', {
+			...params,
+			isEditMode: true,
+		});
+	}, [dispatch, navigation, params]);
 
 	const renderSectionHeader = useCallback(({section}: Object = {}): Object => {
 		return (

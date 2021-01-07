@@ -72,6 +72,7 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	route: Object,
 };
 
 const EditEvent = React.memo<Object>((props: Props): Object => {
@@ -79,6 +80,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		navigation,
 		appLayout,
 		onDidMount,
+		route,
 	} = props;
 
 	const {
@@ -308,12 +310,15 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 				toggleDialogueBox={toggleDialogueBoxState}
 				disable={disable}/>
 			<EventTriggersBlock
+				route={route}
 				navigation={navigation}
 				disable={disable}/>
 			<EventConditionsBlock
+				route={route}
 				navigation={navigation}
 				disable={disable}/>
 			<EventActionsBlock
+				route={route}
 				navigation={navigation}
 				disable={disable}/>
 			<SelectGroupDD

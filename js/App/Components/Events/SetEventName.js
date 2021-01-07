@@ -55,6 +55,7 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	route: Object,
 };
 
 const SetEventName = React.memo<Object>((props: Props): Object => {
@@ -62,7 +63,11 @@ const SetEventName = React.memo<Object>((props: Props): Object => {
 		navigation,
 		appLayout,
 		onDidMount,
+		route,
 	} = props;
+	const {
+		params = {},
+	} = route;
 
 	const {
 		colors,
@@ -101,8 +106,10 @@ const SetEventName = React.memo<Object>((props: Props): Object => {
 		}
 
 		dispatch(eventSetName(name));
-		navigation.navigate('SelectGroup');
-	}, [dispatch, formatMessage, name, navigation, toggleDialogueBoxState]);
+		navigation.navigate('SelectGroup', {
+			...params,
+		});
+	}, [dispatch, formatMessage, name, navigation, params, toggleDialogueBoxState]);
 
 	const {
 		container,

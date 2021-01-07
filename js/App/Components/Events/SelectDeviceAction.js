@@ -41,13 +41,20 @@ import {
 type Props = {
 	navigation: Object,
 	onDidMount: Function,
+	route: Object,
+	isEditMode: Function,
 };
 
 const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		onDidMount,
+		route,
+		isEditMode,
 	} = props;
+	const {
+		params = {},
+	} = route;
 
 	useEffect(() => {
 		onDidMount('Add device action', 'Turn on or off an device when this event executes'); // TODO: Translate
@@ -83,12 +90,19 @@ const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
 			});
 		});
 		dispatch(eventSetDeviceAction(data));
-		navigation.navigate('EditEvent');
-	}, [actionDelay, actionDelayPolicy, actionRepeats, dispatch, id, navigation]);
+		if (isEditMode()) {
+			navigation.navigate('EditEvent', {
+				...params,
+			});
+		} else {
+			navigation.goBack();
+		}
+	}, [actionDelay, actionDelayPolicy, actionRepeats, dispatch, id, isEditMode, navigation, params]);
 	return (
 		<CommonDevicesList
 			navigation={navigation}
 			onPressNext={onPressNext}
+			route={route}
 		/>
 	);
 });

@@ -42,7 +42,8 @@ import Theme from '../../Theme';
 
 type Props = {
     onDidMount: Function,
-    navigation: Object,
+	navigation: Object,
+	route: Object,
 };
 
 const BLOCKS = [
@@ -60,7 +61,11 @@ const SelectGroupEvent = memo<Object>((props: Props): Object => {
 	const {
 		onDidMount,
 		navigation,
+		route,
 	} = props;
+	const {
+		params = {},
+	} = route;
 
 	useEffect(() => {
 		onDidMount('Select type', 'Select group or event to add'); // TODO: Translate
@@ -81,8 +86,10 @@ const SelectGroupEvent = memo<Object>((props: Props): Object => {
 	const onPress = useCallback(({
 		screenName,
 	}: Object) => {
-		navigation.navigate(screenName);
-	}, [navigation]);
+		navigation.navigate(screenName, {
+			...params,
+		});
+	}, [navigation, params]);
 
 	const Blocks = useMemo((): Array<Object> => {
 		return BLOCKS.map((b: Object, i: number): Object => {
