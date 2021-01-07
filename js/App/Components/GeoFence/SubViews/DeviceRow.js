@@ -264,15 +264,25 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		);
 	}
 	if (THERMOSTAT) {
-		button.unshift(
-			<ThermostatButton
-				{...sharedProps}
-				key={8}
-				style={thermostat}
-				openThermostatControl={openThermostatControl}
-				showThermostatHeat={showThermostatHeat}
-			/>
-		);
+		if (showThermostatHeat) {
+			button.unshift(
+				<ThermostatButton
+					{...sharedProps}
+					key={8}
+					style={thermostat}
+					openThermostatControl={openThermostatControl}
+					showThermostatHeat={showThermostatHeat}
+				/>
+			);
+		} else if (TURNON || TURNON) {
+			button.unshift(
+				<ToggleButton
+					{...sharedProps}
+					style={toggle}
+					key={3}
+				/>
+			);
+		}
 	}
 	if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP && !RGB && !THERMOSTAT) {
 		button.unshift(
