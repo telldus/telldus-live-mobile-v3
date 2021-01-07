@@ -92,28 +92,69 @@ const prepareInfoFromTriggerData = (type: string, {
 			TURNOFF,
 		} = getDeviceActionIcon(deviceType, method, supportedMethods);
 		switch (deviceType) {
-			case '0000004-0001-1000-2005-ACCA54000000':
-			case '00000004-0001-1000-2005-ACCA54000000': {
-				if (method === 1) {
-					return {
-						label: `${name} is opened`,
-						leftIcon: TURNON,
-					};
-				}
+			case 1: {
 				return {
-					label: `${name} is closed`,
-					leftIcon: TURNOFF,
+					label: `When ${name} is turned on`,
+					leftIcon: TURNON,
+				};
+			}
+			case 2: {
+				return {
+					label: `When ${name} is turned off`,
+					leftIcon: TURNON,
+				};
+			}
+			case 4: {
+				return {
+					label: `When ${name} bell`,
+					leftIcon: TURNON,
+				};
+			}
+			case 16: {
+				return {
+					label: `When ${name} dim`,
+					leftIcon: TURNON,
+				};
+			}
+			case 64: {
+				return {
+					label: `When ${name} executes`,
+					leftIcon: TURNON,
+				};
+			}
+			case 128: {
+				return {
+					label: `When ${name} goes up`,
+					leftIcon: TURNON,
+				};
+			}
+			case 256: {
+				return {
+					label: `When ${name} goes down`,
+					leftIcon: TURNON,
+				};
+			}
+			case 512: {
+				return {
+					label: `When ${name} stop`,
+					leftIcon: TURNON,
+				};
+			}
+			case 1024: {
+				return {
+					label: `When ${name} color change`,
+					leftIcon: TURNON,
+				};
+			}
+			case 2048: {
+				return {
+					label: `When ${name} mode/value change`,
+					leftIcon: TURNON,
 				};
 			}
 			default: {
-				if (method === 1) {
-					return {
-						label: `${name} is turned on`,
-						leftIcon: TURNON,
-					};
-				}
 				return {
-					label: `${name} is turned off`,
+					label: `When ${name} is turned on`,
 					leftIcon: TURNOFF,
 				};
 			}
