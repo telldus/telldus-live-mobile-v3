@@ -33,17 +33,10 @@ import { useSelector } from 'react-redux';
 import BlockItem from './BlockItem';
 
 import {
-	getDeviceActionIcon,
-} from '../../../Lib/DeviceUtils';
-import {
-	getSensorInfo,
-} from '../../../Lib/SensorUtils';
-import {
-	getSelectedDays,
-} from '../../../Lib/getDays';
+	prepareInfoFromConditionData,
+} from '../../../Lib/eventUtils';
 
 // import i18n from '../../../Translations/common';
-
 
 type Props = {
 	type: string,
@@ -72,192 +65,6 @@ type Props = {
 	seperatorText: string,
 
 	weekdays?: string,
-};
-
-const prepareInfoFromTriggerData = (type: string, {
-	formatMessage,
-	formatDate,
-	formatTime,
-	device,
-	method,
-	sensor,
-	...others
-}: Object): Object => { // TODO: Translate
-	if (type === 'device') {
-		if (!device) {
-			return {
-				label: 'Device not found',
-				leftIcon: 'device-alt',
-			};
-		}
-		const {
-			deviceType,
-			name,
-			supportedMethods = {},
-		} = device;
-		method = parseInt(method, 10);
-		const {
-			TURNON,
-			TURNOFF,
-		} = getDeviceActionIcon(deviceType, method, supportedMethods);
-		switch (deviceType) {
-			case 1: {
-				return {
-					label: `If ${name} is turned on`,
-					leftIcon: TURNON,
-				};
-			}
-			case 2: {
-				return {
-					label: `If ${name} is turned off`,
-					leftIcon: TURNON,
-				};
-			}
-			case 4: {
-				return {
-					label: `If ${name} bell`,
-					leftIcon: TURNON,
-				};
-			}
-			case 16: {
-				return {
-					label: `If ${name} dim`,
-					leftIcon: TURNON,
-				};
-			}
-			case 64: {
-				return {
-					label: `If ${name} executes`,
-					leftIcon: TURNON,
-				};
-			}
-			case 128: {
-				return {
-					label: `If ${name} goes up`,
-					leftIcon: TURNON,
-				};
-			}
-			case 256: {
-				return {
-					label: `If ${name} goes down`,
-					leftIcon: TURNON,
-				};
-			}
-			case 512: {
-				return {
-					label: `If ${name} stop`,
-					leftIcon: TURNON,
-				};
-			}
-			case 1024: {
-				return {
-					label: `If ${name} color change`,
-					leftIcon: TURNON,
-				};
-			}
-			case 2048: {
-				return {
-					label: `If ${name} mode/value change`,
-					leftIcon: TURNON,
-				};
-			}
-			default: {
-				return {
-					label: `If ${name} is turned on`,
-					leftIcon: TURNOFF,
-				};
-			}
-		}
-	} else if (type === 'sensor') {
-		if (!sensor) {
-			return {
-				label: 'Sensor not found',
-				leftIcon: 'sensor',
-			};
-		}
-		const {
-			value = '',
-			edge,
-			scale,
-			valueType,
-		} = others;
-		const sName = sensor.name || '';
-		const { label = '', unit = '', icon } = getSensorInfo(valueType, scale, value, false, formatMessage);
-		let leftIcon = icon;
-		if (edge === '-1') {
-			return {
-				label: `If ${label} of ${sName} goes below ${value}${unit}.`,
-				leftIcon,
-			};
-		} else if (edge === '1') {
-			return {
-				label: `If ${label} of ${sName} goes over ${value}${unit}.`,
-				leftIcon,
-			};
-		}
-		return {
-			label: `If ${label} of ${sName} is equal to ${value}${unit}.`,
-			leftIcon,
-		};
-	} else if (type === 'suntime' && others.client) {
-		const {
-			client = {},
-			sunStatus,
-		} = others;
-		const {
-			sunrise,
-			sunset,
-		} = client;
-		if (sunStatus === '1') {
-			let date = new Date(sunrise * 1000);
-			return {
-				label: `When the sun goes up. Today at ${formatTime(date)}.`,
-				leftIcon: 'sunrise',
-			};
-		}
-		let date = new Date(sunset * 1000);
-		return {
-			label: `When the sun goes down. Today at ${formatTime(date)}.`,
-			leftIcon: 'sunset',
-		};
-	} else if (type === 'time') {
-		const {
-			fromHour,
-			fromMinute,
-			toHour,
-			toMinute,
-		} = others;
-		const leftIcon = 'time';
-		const dateFrom = Date.parse(`01/01/2017 ${fromHour}:${fromMinute}`);
-		const dateTo = Date.parse(`01/01/2017 ${toHour}:${toMinute}`);
-		return {
-			label: `If current time is between ${formatTime(dateFrom)} and ${formatTime(dateTo)}.`,
-			leftIcon,
-		};
-	} else if (type === 'weekdays') {
-		const {
-			weekdays = '',
-		} = others;
-		const prefix = 'If today is';
-		let _weekdays = weekdays.split(',');
-		_weekdays = _weekdays.map((w: string): number => parseInt(w, 10));
-		let days: string[] = getSelectedDays(_weekdays, formatDate, {
-			formatDateConfigWeekday: 'short',
-		});
-		let _days = '';
-		days.forEach((d: string) => {
-			_days += `${d}, `;
-		});
-		_days = _days.slice(0, -2);
-		return {
-			label: `${prefix} ${_days}.`,
-			leftIcon: 'day',
-		};
-	}
-	return {
-		label: 'Device not found',
-		leftIcon: 'device-alt',
-	};
 };
 
 const ConditionBlock = memo<Object>((props: Props): Object => {
@@ -294,7 +101,7 @@ const ConditionBlock = memo<Object>((props: Props): Object => {
 		label,
 		leftIcon,
 	} = useMemo((): Object => {
-		return prepareInfoFromTriggerData(type, {
+		return prepareInfoFromConditionData(type, {
 			...intl,
 			device,
 			method,

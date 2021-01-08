@@ -33,11 +33,10 @@ import { useSelector } from 'react-redux';
 import BlockItem from './BlockItem';
 
 import {
-	getDeviceActionIcon,
-} from '../../../Lib/DeviceUtils';
+	prepareInfoFromActionData,
+} from '../../../Lib/eventUtils';
 
 // import i18n from '../../../Translations/common';
-
 
 type Props = {
 	type: string,
@@ -56,138 +55,6 @@ type Props = {
 	phoneId?: string,
 
 	url?: string,
-};
-
-const prepareInfoFromTriggerData = (type: string, {
-	formatMessage,
-	formatDate,
-	formatTime,
-	device,
-	method,
-	...others
-}: Object): Object => { // TODO: Translate
-	if (type === 'device') {
-		if (!device) {
-			return {
-				label: 'Device not found',
-				leftIcon: 'device-alt',
-			};
-		}
-		const {
-			deviceType,
-			name,
-			supportedMethods = {},
-		} = device;
-		method = parseInt(method, 10);
-		const {
-			TURNON,
-			TURNOFF,
-		} = getDeviceActionIcon(deviceType, method, supportedMethods);
-		switch (deviceType) {
-			case 1: {
-				return {
-					label: `Turned on ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			case 2: {
-				return {
-					label: `Turned off ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			case 4: {
-				return {
-					label: `Bell ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			case 16: {
-				return {
-					label: `Dim ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			case 64: {
-				return {
-					label: `Execute ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			case 128: {
-				return {
-					label: `Turn up ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			case 256: {
-				return {
-					label: `Turn down ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			case 512: {
-				return {
-					label: `Stop ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			case 1024: {
-				return {
-					label: `Change color of ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			case 2048: {
-				return {
-					label: `Change mode/value of ${name}`,
-					leftIcon: TURNON,
-				};
-			}
-			default: {
-				return {
-					label: `Turn on ${name}`,
-					leftIcon: TURNOFF,
-				};
-			}
-		}
-	} else if (type === 'sms') {
-		const {
-			to,
-		} = others;
-		return {
-			label: `Send SMS to ${to}.`,
-			leftIcon: 'sms',
-		};
-	} else if (type === 'email') {
-		const {
-			address,
-		} = others;
-		return {
-			label: `Send email to ${address}`,
-			leftIcon: 'email',
-		};
-	} else if (type === 'push') {
-		const {
-			phoneId,
-		} = others;
-		return {
-			label: `Send push notification to ${phoneId}.`,
-			leftIcon: 'push',
-		};
-	} else if (type === 'url') {
-		const {
-			url,
-		} = others;
-		return {
-			label: `Call url: ${url}`,
-			leftIcon: 'httprequest',
-		};
-	}
-	return {
-		label: 'Device not found',
-		leftIcon: 'device-alt',
-	};
 };
 
 const ActionBlock = memo<Object>((props: Props): Object => {
@@ -211,7 +78,7 @@ const ActionBlock = memo<Object>((props: Props): Object => {
 		label,
 		leftIcon,
 	} = useMemo((): Object => {
-		return prepareInfoFromTriggerData(type, {
+		return prepareInfoFromActionData(type, {
 			...intl,
 			device,
 			method,
