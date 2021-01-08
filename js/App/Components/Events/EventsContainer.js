@@ -35,6 +35,7 @@ import {
 
 import {
 	showToast,
+	eventReset,
 } from '../../Actions';
 import Theme from '../../Theme';
 import {
@@ -185,7 +186,9 @@ export class EventsContainer extends View<Props, State> {
 	onAddNewEvent = () => {
 		const {
 			navigation,
+			actions,
 		} = this.props;
+		actions.eventReset();
 		navigation.navigate('SelectGroupEvent', {
 			isEditMode: false,
 		});
@@ -309,6 +312,7 @@ export const mapDispatchToProps = (dispatch: Function): Object => (
 		actions: {
 			...bindActionCreators({
 				showToast,
+				eventReset,
 			}, dispatch),
 		},
 	}
