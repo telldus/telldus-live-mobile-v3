@@ -66,6 +66,7 @@ type Props = {
 	navigation: Object,
 	onPressNext: Function,
 	route: Object,
+	selectedDevicesInitial: Object,
 };
 
 const CommonDevicesList = React.memo<Object>((props: Props): Object => {
@@ -73,6 +74,7 @@ const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 		navigation,
 		onPressNext,
 		route,
+		selectedDevicesInitial = {},
 	} = props;
 	const {
 		params = {},
@@ -81,10 +83,8 @@ const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 	const intl = useIntl();
 
 	const dispatch = useDispatch();
-
-	// let { trigger } = useSelector((state: Object): Object => state.event);
 	const [selectedItems, setSelectedItems] = useState({
-		selectedDevices: {},
+		selectedDevices: selectedDevicesInitial,
 	});
 	const {
 		selectedDevices = {},
