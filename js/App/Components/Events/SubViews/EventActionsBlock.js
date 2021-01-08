@@ -50,6 +50,7 @@ type Props = {
 	navigation: Object,
 	disable: boolean,
 	route: Object,
+	isEdit: boolean,
 };
 
 const EventActionsBlock = memo<Object>((props: Props): Object => {
@@ -57,6 +58,7 @@ const EventActionsBlock = memo<Object>((props: Props): Object => {
 		navigation,
 		disable,
 		route,
+		isEdit,
 	} = props;
 	const {
 		params = {},
@@ -108,12 +110,12 @@ const EventActionsBlock = memo<Object>((props: Props): Object => {
 			{!!actions && actions}
 			<View
 				style={bodyContainerStyle}>
-				<TouchableButton
+				{isEdit && <TouchableButton
 					text={'Add actions'}
 					onPress={onPress}
 					accessible={true}
 					disabled={disable}
-				/>
+				/>}
 			</View>
 		</View>
 	);

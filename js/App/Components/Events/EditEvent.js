@@ -73,6 +73,7 @@ type Props = {
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
 	route: Object,
+	isEditMode: Function,
 };
 
 const EditEvent = React.memo<Object>((props: Props): Object => {
@@ -81,6 +82,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		appLayout,
 		onDidMount,
 		route,
+		isEditMode,
 	} = props;
 
 	const {
@@ -142,77 +144,75 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 	const onSaveEvent = useCallback(() => {
 		(async () => {
 			setIsSaving(true);
-			const promises = [
-				dispatch(setEvent(id, {
+			let promises = [];
+			try {
+				const response = await dispatch(setEvent(id, {
 					description,
 					group,
 					minRepeatInterval,
 					active: active ? 1 : 0,
-				})),
-			];
-			trigger.forEach((t: Object) => {
-				const {
-					id: _id,
-					eventId,
-					deviceId,
-					method,
-					local,
-				} = t;
-				if (local) {
-					promises.push(dispatch(setEventDeviceTrigger({
+				}));
+				trigger.forEach((t: Object) => {
+					const {
 						id: _id,
 						eventId,
 						deviceId,
 						method,
-					})));
-				}
-			});
-			condition.forEach((c: Object) => {
-				const {
-					id: _id,
-					eventId,
-					deviceId,
-					method,
-					local,
-					group: _group,
-				} = c;
-				if (local) {
-					promises.push(dispatch(setEventDeviceCondition({
+						local,
+					} = t;
+					if (local) {
+						promises.push(dispatch(setEventDeviceTrigger({
+							id: _id,
+							eventId: eventId || response.id,
+							deviceId,
+							method,
+						})));
+					}
+				});
+				condition.forEach((c: Object) => {
+					const {
 						id: _id,
 						eventId,
 						deviceId,
 						method,
+						local,
 						group: _group,
-					})));
-				}
-			});
-			action.forEach((a: Object) => {
-				const {
-					id: _id,
-					eventId,
-					deviceId,
-					method,
-					local,
-					value,
-					repeats,
-					delay,
-					delayPolicy,
-				} = a;
-				if (local) {
-					promises.push(dispatch(setEventDeviceAction({
+					} = c;
+					if (local) {
+						promises.push(dispatch(setEventDeviceCondition({
+							id: _id,
+							eventId: eventId || response.id,
+							deviceId,
+							method,
+							group: _group,
+						})));
+					}
+				});
+				action.forEach((a: Object) => {
+					const {
 						id: _id,
 						eventId,
 						deviceId,
 						method,
+						local,
 						value,
 						repeats,
 						delay,
 						delayPolicy,
-					})));
-				}
-			});
-
-			try {
+					} = a;
+					if (local) {
+						promises.push(dispatch(setEventDeviceAction({
+							id: _id,
+							eventId: eventId || response.id,
+							deviceId,
+							method,
+							value,
+							repeats,
+							delay,
+							delayPolicy,
+						})));
+					}
+				});
 				await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
 					return promise.then((res: Object): Object => {
 						return res;
@@ -292,6 +292,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 	});
 
 	const disable = isDeleting || isSaving;
+	const isEdit = isEditMode();
 
 	return (
 		<ThemedScrollView
@@ -312,15 +313,18 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 			<EventTriggersBlock
 				route={route}
 				navigation={navigation}
-				disable={disable}/>
+				disable={disable}
+				isEdit={isEdit}/>
 			<EventConditionsBlock
 				route={route}
 				navigation={navigation}
-				disable={disable}/>
+				disable={disable}
+				isEdit={isEdit}/>
 			<EventActionsBlock
 				route={route}
 				navigation={navigation}
-				disable={disable}/>
+				disable={disable}
+				isEdit={isEdit}/>
 			<SelectGroupDD
 				groupsList={groupsList}
 				disable={disable}/>

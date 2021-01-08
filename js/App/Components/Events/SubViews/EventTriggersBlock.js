@@ -50,6 +50,7 @@ type Props = {
 	navigation: Object,
 	disable: boolean,
 	route: Object,
+	isEdit: boolean,
 };
 
 const EventTriggersBlock = memo<Object>((props: Props): Object => {
@@ -57,6 +58,7 @@ const EventTriggersBlock = memo<Object>((props: Props): Object => {
 		navigation,
 		disable,
 		route,
+		isEdit,
 	} = props;
 	const {
 		params = {},
@@ -107,12 +109,12 @@ const EventTriggersBlock = memo<Object>((props: Props): Object => {
 			{!!triggers && triggers}
 			<View
 				style={bodyContainerStyle}>
-				<TouchableButton
+				{isEdit && <TouchableButton
 					text={'Add trigger'}
 					onPress={onPress}
 					accessible={true}
 					disabled={disable}
-				/>
+				/>}
 			</View>
 		</View>
 	);

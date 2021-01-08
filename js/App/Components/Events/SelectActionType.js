@@ -143,8 +143,10 @@ const SelectActionType = React.memo<Object>((props: Props): Object => {
 	}, [onPressNext]);
 
 	const _onPressNext = useCallback(() => {
-		// DONE ?
-	}, []);
+		navigation.navigate('EditEvent', {
+			...params,
+		});
+	}, [navigation, params]);
 
 	const isEdit = isEditMode();
 
