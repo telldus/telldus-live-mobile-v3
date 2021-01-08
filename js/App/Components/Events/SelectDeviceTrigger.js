@@ -24,6 +24,7 @@
 import React, {
 	useCallback,
 	useEffect,
+	useMemo,
 } from 'react';
 import {
 	useSelector,
@@ -65,6 +66,24 @@ const SelectDeviceTrigger = React.memo<Object>((props: Props): Object => {
 	const {
 		id,
 	} = useSelector((state: Object): Object => state.event) || {};
+	const {
+		trigger = [],
+	} = useSelector((state: Object): Object => state.event);
+	const selectedDevicesInitial = useMemo((): Object => {
+		return trigger.reduce((acc: Object, t: Object): Object => {
+			const { deviceId, method, value } = t;
+			return {
+				...acc,
+				[deviceId]: {
+					deviceId,
+					method,
+					stateValues: {
+						method: [value],
+					},
+				},
+			};
+		}, {});
+	}, [trigger]);
 
 	const onPressNext = useCallback(({selectedDevices}: Object = {}) => {
 		let data = [];
@@ -96,6 +115,7 @@ const SelectDeviceTrigger = React.memo<Object>((props: Props): Object => {
 			navigation={navigation}
 			onPressNext={onPressNext}
 			route={route}
+			selectedDevicesInitial={selectedDevicesInitial}
 		/>
 	);
 });

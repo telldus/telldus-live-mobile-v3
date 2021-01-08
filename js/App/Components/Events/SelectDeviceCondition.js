@@ -24,6 +24,7 @@
 import React, {
 	useCallback,
 	useEffect,
+	useMemo,
 } from 'react';
 import {
 	useSelector,
@@ -92,11 +93,28 @@ const SelectDeviceCondition = React.memo<Object>((props: Props): Object => {
 		}
 	}, [conditionGroup, dispatch, id, isEditMode, navigation, params]);
 
+	const {
+		condition = [],
+	} = useSelector((state: Object): Object => state.event);
+	const selectedDevicesInitial = useMemo((): Object => {
+		return condition.reduce((acc: Object, t: Object): Object => {
+			const { deviceId, method } = t;
+			return {
+				...acc,
+				[deviceId]: {
+					deviceId,
+					method,
+				},
+			};
+		}, {});
+	}, [condition]);
+
 	return (
 		<CommonDevicesList
 			navigation={navigation}
 			onPressNext={onPressNext}
 			route={route}
+			selectedDevicesInitial={selectedDevicesInitial}
 		/>
 	);
 });
