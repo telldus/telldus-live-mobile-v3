@@ -126,12 +126,12 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
+	const isEdit = isEditMode();
 	useEffect(() => {
 		refreshGroups();
-		onDidMount('Event settings', description); // TODO: Translate
+		onDidMount(isEdit ? 'Event settings' : 'Summary', description); // TODO: Translate
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [isEdit]);
 
 	const dispatch = useDispatch();
 
@@ -292,7 +292,6 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 	});
 
 	const disable = isDeleting || isSaving;
-	const isEdit = isEditMode();
 
 	return (
 		<ThemedScrollView
@@ -336,7 +335,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 				disabled={disable}
 				showThrobber={isSaving}
 			/>
-			<TouchableButton
+			{isEdit && <TouchableButton
 				text={i18n.delete}
 				style={buttonStyle}
 				buttonLevel={isDeleting ? undefined : 10}
@@ -345,6 +344,7 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 				disabled={disable}
 				showThrobber={isDeleting}
 			/>
+			}
 		</ThemedScrollView>
 	);
 });
