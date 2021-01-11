@@ -24,6 +24,9 @@ import renderer from 'react-test-renderer';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { useIntl } from 'react-intl';
+import {
+	Dimensions,
+} from 'react-native';
 
 import { configureStore } from '../App/Store/ConfigureStore';
 const store = configureStore().store;
@@ -31,6 +34,10 @@ import {
 	setAppLayout,
 	deviceInfoSuccess,
 } from '../App/Actions';
+
+const appLayout = {
+	...Dimensions.get('window'),
+};
 
 const messages = require('../App/Translations');
 
@@ -49,6 +56,24 @@ const withIntlHOC = (Element) => {
 		return (
 			React.cloneElement(Element, {
 				intl,
+			})
+		);
+	};
+};
+
+const onOp = () => {
+};
+
+const withScreenPropsHOC = (Element) => {
+	return (props) => {
+		const intl = useIntl();
+		return (
+			React.cloneElement(Element, {
+				screenProps: {
+					intl,
+					appLayout,
+					toggleDialogueBox: onOp,
+				},
 			})
 		);
 	};
@@ -113,6 +138,63 @@ const DEVICE_MANU_INFO_433 = {
 };
 
 const DUMMY_SENSOR = {
+	battery: 100,
+	client: '255765',
+	clientName: 'Guest House',
+	editable: 1,
+	id: '1540005247',
+	ignored: 0,
+	keepHistory: 0,
+	lastUpdated: 1605794707,
+	miscValues: '{}',
+	model: 'n/a',
+	name: 'Aeon Multisensor 6',
+	online: '1',
+	protocol: 'zwave',
+	sensorId: '69',
+	data: [
+		{
+			lastUpdated: 1605794707,
+			max: '0',
+			maxTime: 1605268888,
+			name: 'uv',
+			scale: '0',
+			value: '0',
+		},
+		{
+			lastUpdated: 1605794706,
+			max: '25.2',
+			maxTime: 1605697463,
+			min: '18.9',
+			minTime: 1605268886,
+			name: 'temp',
+			scale: '0',
+			value: '24.7',
+		},
+		{
+			lastUpdated: 1605794706,
+			max: '58',
+			maxTime: 1605268886,
+			min: '35',
+			minTime: 1605783902,
+			name: 'humidity',
+			scale: '0',
+			value: '35',
+		},
+		{
+			lastUpdated: 1605794707,
+			max: '27',
+			maxTime: 1605434551,
+			min: '0',
+			minTime: 1605279683,
+			name: 'lum',
+			scale: '1',
+			value: '10',
+		},
+	],
+};
+
+const DUMMY_SENSOR_IN_REDUX = {
 	battery: 100,
 	clientId: 255765,
 	data: {
@@ -237,11 +319,13 @@ export {
 	setAppLayoutInStore,
 	NAVIGATION_PROP,
 	DEVICE_MANU_INFO_433,
-	DUMMY_SENSOR,
+	DUMMY_SENSOR_IN_REDUX,
 	DUMMY_CLIENT,
 	setDeviceListInStore,
 	setGatewaysListInStore,
 	setDeviceInfoInStore,
 	getStore,
 	withIntlHOC,
+	withScreenPropsHOC,
+	DUMMY_SENSOR,
 };

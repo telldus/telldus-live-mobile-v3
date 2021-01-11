@@ -28,7 +28,7 @@ import {act} from 'react-test-renderer';
 
 import {
 	rendererWithIntlAndReduxProviders,
-	DUMMY_SENSOR,
+	DUMMY_SENSOR_IN_REDUX,
 	withIntlHOC,
 } from '../../../../../Utils/jestUtils';
 
@@ -44,7 +44,7 @@ const store = configureStore().store;
 const {
 	id,
 	data,
-} = DUMMY_SENSOR;
+} = DUMMY_SENSOR_IN_REDUX;
 
 jest.useFakeTimers();
 
