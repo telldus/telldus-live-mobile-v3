@@ -79,6 +79,25 @@ const withScreenPropsHOC = (Element) => {
 	};
 };
 
+const DUMMY_CLIENT = {
+	'id': '422192',
+	'uuid': '88669026-4417-4a34-9a0b-666355a763ee',
+	'name': 'Three',
+	'online': '1',
+	'editable': 1,
+	'extensions': 3,
+	'version': '1.2.0',
+	'type': 'TellStick ZNet Lite v2',
+	'ip': '43.229.90.244',
+	'longitude': 13.19321,
+	'latitude': 55.70584,
+	'sunrise': 1578036960,
+	'sunset': 1578062820,
+	'timezone': 'Asia\/Kolkata',
+	'tzoffset': 19800,
+	'transports': 'zwave,433,group',
+};
+
 const DUMMY_DEVICE_433 = {
 	'id': '5928354',
 	'clientDeviceId': '630',
@@ -139,8 +158,8 @@ const DEVICE_MANU_INFO_433 = {
 
 const DUMMY_SENSOR = {
 	battery: 100,
-	client: '255765',
-	clientName: 'Guest House',
+	client: DUMMY_CLIENT.id,
+	clientName: DUMMY_CLIENT.name,
 	editable: 1,
 	id: '1540005247',
 	ignored: 0,
@@ -196,7 +215,7 @@ const DUMMY_SENSOR = {
 
 const DUMMY_SENSOR_IN_REDUX = {
 	battery: 100,
-	clientId: 255765,
+	client: DUMMY_CLIENT.id,
 	data: {
 		1_0: {
 			lastUpdated: 1605794706,
@@ -246,25 +265,6 @@ const DUMMY_SENSOR_IN_REDUX = {
 	name: 'Aeon Multisensor 6',
 	protocol: 'zwave',
 	sensorId: 69,
-};
-
-const DUMMY_CLIENT = {
-	'id': '422192',
-	'uuid': '88669026-4417-4a34-9a0b-666355a763ee',
-	'name': 'Three',
-	'online': '1',
-	'editable': 1,
-	'extensions': 3,
-	'version': '1.2.0',
-	'type': 'TellStick ZNet Lite v2',
-	'ip': '43.229.90.244',
-	'longitude': 13.19321,
-	'latitude': 55.70584,
-	'sunrise': 1578036960,
-	'sunset': 1578062820,
-	'timezone': 'Asia\/Kolkata',
-	'tzoffset': 19800,
-	'transports': 'zwave,433,group',
 };
 
 const setAppLayoutInStore = () => {
