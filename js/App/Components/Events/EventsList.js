@@ -38,6 +38,7 @@ import {
 } from 'react-native';
 import groupBy from 'lodash/groupBy';
 import reduce from 'lodash/reduce';
+import orderBy from 'lodash/orderBy';
 
 import {
 	View,
@@ -89,14 +90,25 @@ const EventsList = memo<Object>((props: Props): Object => {
 
 	const events = useSelector((state: Object): Object => state.events);
 	const sections = useMemo((): Array<Object> => {
-		const ev = groupBy(events, (it: Object): string => it.group);
-		return reduce(ev, (acc: Array<any>, next: Object, index: number): Array<any> => {
+		let orderedD = orderBy(events, [(e: Object): any => {
+			let { description = '' } = e;
+			description = typeof description !== 'string' ? '' : description;
+			return description.toLowerCase();
+		}], ['asc']);
+		const ev = groupBy(orderedD, (it: Object): string => it.group);
+		const list = reduce(ev, (acc: Array<any>, next: Object, index: number): Array<any> => {
 			acc.push({
 				data: next,
 				header: index,
 			});
 			return acc;
 		}, []);
+		let orderedList = orderBy(list, [(e: Object): any => {
+			let { header = '' } = e;
+			header = typeof header !== 'string' ? '' : header;
+			return header.toLowerCase();
+		}], ['asc']);
+		return orderedList;
 	}, [events]);
 
 	useEffect(() => {
