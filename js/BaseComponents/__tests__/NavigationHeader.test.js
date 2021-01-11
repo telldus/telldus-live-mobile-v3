@@ -25,7 +25,7 @@ import {
 import {act} from 'react-test-renderer';
 
 import {
-	rendererWithIntlAndRedux,
+	rendererWithIntlAndReduxProviders,
 } from '../../Utils/jestUtils';
 import NavigationHeader from '../NavigationHeader';
 import {
@@ -49,7 +49,7 @@ describe('<NavigationHeader /> - snapshot', () => {
 	it('renders NavigationHeader when showLeftIcon is true', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<NavigationHeader
 					showLeftIcon/>
 			);
@@ -62,7 +62,7 @@ describe('<NavigationHeader /> - snapshot', () => {
 	it('renders NavigationHeader when showLeftIcon is false', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<NavigationHeader/>
 			);
 		});

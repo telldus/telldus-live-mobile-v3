@@ -25,7 +25,7 @@ import {
 import {act} from 'react-test-renderer';
 
 import {
-	rendererWithIntlAndRedux,
+	rendererWithIntlAndReduxProviders,
 } from '../../Utils/jestUtils';
 import TitledInfoBlock from '../TitledInfoBlock';
 import {
@@ -51,7 +51,7 @@ describe('<TitledInfoBlock /> - snapshot', () => {
 		let component;
 		act(() => {
 			setLayout();
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<TitledInfoBlock
 					label={'TitledInfoBlock'}
 					value={'value'}
@@ -68,7 +68,7 @@ describe('<TitledInfoBlock /> - snapshot', () => {
 		let component;
 		act(() => {
 			setLayout();
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<TitledInfoBlock
 					label={'TitledInfoBlock'}
 					value={'value'}

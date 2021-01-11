@@ -25,7 +25,7 @@ import {
 import {act} from 'react-test-renderer';
 
 import {
-	rendererWithIntlAndRedux,
+	rendererWithIntlAndReduxProviders,
 } from '../../Utils/jestUtils';
 import BlockIcon from '../BlockIcon';
 import {
@@ -49,7 +49,7 @@ describe('<BlockIcon /> - snapshot', () => {
 		let component;
 		act(() => {
 			setLayout();
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<BlockIcon icon={'info'}/>
 			);
 		});

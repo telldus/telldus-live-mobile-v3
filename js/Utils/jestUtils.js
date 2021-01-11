@@ -33,7 +33,7 @@ import {
 
 const messages = require('../App/Translations');
 
-const rendererWithIntlAndRedux = (node) => {
+const rendererWithIntlAndReduxProviders = (node) => {
 	return renderer.create(
 		<Provider store={store}>
 			<IntlProvider locale="en" messages={messages}>
@@ -166,7 +166,7 @@ const getStore = () => {
 };
 
 export {
-	rendererWithIntlAndRedux,
+	rendererWithIntlAndReduxProviders,
 	DUMMY_DEVICE_433,
 	setAppLayoutInStore,
 	NAVIGATION_PROP,
