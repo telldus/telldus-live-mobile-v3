@@ -30,6 +30,7 @@ import {
 	rendererWithIntlAndReduxProviders,
 	DUMMY_SENSOR,
 	withScreenPropsHOC,
+	DUMMY_CLIENT,
 } from '../../../../Utils/jestUtils';
 
 import SettingsTab from '../SettingsTab';
@@ -62,7 +63,16 @@ describe('<SettingsTab /> - snapshot', () => {
 					DUMMY_SENSOR,
 				],
 			};
+			const clients = {
+				client: [
+					DUMMY_CLIENT,
+				],
+			};
 			store.dispatch(onReceivedSensors(sensors));
+			store.dispatch({
+				type: 'RECEIVED_GATEWAYS',
+				payload: clients,
+			});
 
 			const WithIntl = withScreenPropsHOC(
 				<SettingsTab
