@@ -70,6 +70,16 @@ const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
 		actionDelayPolicy,
 	} = useSelector((state: Object): Object => state.event) || {};
 	const onPressNext = useCallback(({selectedDevices}: Object = {}) => {
+		if (isEditMode()) {
+			navigation.navigate('EditEvent', {
+				...params,
+			});
+		} else {
+			navigation.goBack();
+		}
+	}, [isEditMode, navigation, params]);
+
+	const onSelectionChange = useCallback(({selectedDevices}: Object = {}) => {
 		let data = [];
 		Object.keys(selectedDevices).forEach((deviceId: string) => {
 			const {
@@ -91,14 +101,8 @@ const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
 			});
 		});
 		dispatch(eventSetDeviceAction(data));
-		if (isEditMode()) {
-			navigation.navigate('EditEvent', {
-				...params,
-			});
-		} else {
-			navigation.goBack();
-		}
-	}, [actionDelay, actionDelayPolicy, actionRepeats, dispatch, id, isEditMode, navigation, params]);
+	}, [actionDelay, actionDelayPolicy, actionRepeats, dispatch, id]);
+
 
 	const {
 		action = [],
@@ -125,6 +129,7 @@ const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
 			onPressNext={onPressNext}
 			route={route}
 			selectedDevicesInitial={selectedDevicesInitial}
+			onSelectionChange={onSelectionChange}
 		/>
 	);
 });

@@ -67,12 +67,14 @@ type Props = {
 	onPressNext: Function,
 	route: Object,
 	selectedDevicesInitial: Object,
+	onSelectionChange: Function,
 };
 
 const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		onPressNext,
+		onSelectionChange,
 		route,
 		selectedDevicesInitial = {},
 	} = props;
@@ -122,8 +124,9 @@ const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 			},
 		};
 		setSelectedItems(newSelected);
+		onSelectionChange(newSelected);
 		setDevices(prepareDevicesWithNewStateValues(devices, newSelected.selectedDevices));
-	}, [devices, selectedDevices, selectedItems]);
+	}, [devices, onSelectionChange, selectedDevices, selectedItems]);
 
 	const listData = useMemo((): Array<Object> => {
 		return prepareDevicesDataWithCustomStateForList(
@@ -194,7 +197,8 @@ const CommonDevicesList = React.memo<Object>((props: Props): Object => {
 			};
 		}
 		setSelectedItems(newSelected);
-	}, [selectedDevices, selectedItems]);
+		onSelectionChange(newSelected);
+	}, [onSelectionChange, selectedDevices, selectedItems]);
 
 	const renderDevice = useCallback(({item, index, section}: Object): Object => {
 		const checkBoxId = item.id;

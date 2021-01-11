@@ -86,6 +86,16 @@ const SelectDeviceTrigger = React.memo<Object>((props: Props): Object => {
 	}, [trigger]);
 
 	const onPressNext = useCallback(({selectedDevices}: Object = {}) => {
+		if (isEditMode()) {
+			navigation.navigate('EditEvent', {
+				...params,
+			});
+		} else {
+			navigation.goBack();
+		}
+	}, [isEditMode, navigation, params]);
+
+	const onSelectionChange = useCallback(({selectedDevices}: Object = {}) => {
 		let data = [];
 		Object.keys(selectedDevices).forEach((deviceId: string) => {
 			const {
@@ -101,14 +111,7 @@ const SelectDeviceTrigger = React.memo<Object>((props: Props): Object => {
 			});
 		});
 		dispatch(eventSetDeviceTrigger(data));
-		if (isEditMode()) {
-			navigation.navigate('EditEvent', {
-				...params,
-			});
-		} else {
-			navigation.goBack();
-		}
-	}, [dispatch, id, isEditMode, navigation, params]);
+	}, [dispatch, id]);
 
 	return (
 		<CommonDevicesList
@@ -116,6 +119,7 @@ const SelectDeviceTrigger = React.memo<Object>((props: Props): Object => {
 			onPressNext={onPressNext}
 			route={route}
 			selectedDevicesInitial={selectedDevicesInitial}
+			onSelectionChange={onSelectionChange}
 		/>
 	);
 });
