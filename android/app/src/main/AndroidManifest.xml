@@ -182,12 +182,12 @@
           android:required="false"/>
 
         <!-- Geo Fence/ BG Location -->
-        <!-- <meta-data
+        <meta-data
           android:name="com.transistorsoft.locationmanager.license"
           android:value="${geolocationApplicationKey}"/>
         <service android:name="com.transistorsoft.locationmanager.service.TrackingService" android:foregroundServiceType="location" />
         <service android:name="com.transistorsoft.locationmanager.service.LocationRequestService" android:foregroundServiceType="location" />
-   -->
+  
     </application>
 
 </manifest>
