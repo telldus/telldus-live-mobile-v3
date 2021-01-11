@@ -23,6 +23,7 @@ jest.mock('react-dom');
 import renderer from 'react-test-renderer';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import { configureStore } from '../App/Store/ConfigureStore';
 const store = configureStore().store;
@@ -40,6 +41,17 @@ const rendererWithIntlAndReduxProviders = (node) => {
 				{node}
 			</IntlProvider>
 		</Provider>);
+};
+
+const withIntlHOC = (Element) => {
+	return (props) => {
+		const intl = useIntl();
+		return (
+			React.cloneElement(Element, {
+				intl,
+			})
+		);
+	};
 };
 
 const DUMMY_DEVICE_433 = {
@@ -98,6 +110,60 @@ const DEVICE_MANU_INFO_433 = {
 		},
 	],
 	'modelName': 'Remote Control',
+};
+
+const DUMMY_SENSOR = {
+	battery: 100,
+	clientId: 255765,
+	data: {
+		1_0: {
+			lastUpdated: 1605794706,
+			max: '25.2',
+			maxTime: 1605697463,
+			min: '18.9',
+			minTime: 1605268886,
+			name: 'temp',
+			scale: '0',
+			value: '24.7',
+		},
+		2_0: {
+			lastUpdated: 1605794706,
+			max: '58',
+			maxTime: 1605268886,
+			min: '35',
+			minTime: 1605783902,
+			name: 'humidity',
+			scale: '0',
+			value: '35',
+		},
+		128_0: {
+			lastUpdated: 1605794707,
+			max: '0',
+			maxTime: 1605268888,
+			name: 'uv',
+			scale: '0',
+			value: '0',
+		},
+		512_1: {
+			lastUpdated: 1605794707,
+			max: '27',
+			maxTime: 1605434551,
+			min: '0',
+			minTime: 1605279683,
+			name: 'lum',
+			scale: '1',
+			value: '10',
+		},
+	},
+	editable: true,
+	id: 1540005247,
+	ignored: false,
+	keepHistory: false,
+	lastUpdated: 1605794707,
+	model: 'n/a',
+	name: 'Aeon Multisensor 6',
+	protocol: 'zwave',
+	sensorId: 69,
 };
 
 const DUMMY_CLIENT = {
@@ -171,9 +237,11 @@ export {
 	setAppLayoutInStore,
 	NAVIGATION_PROP,
 	DEVICE_MANU_INFO_433,
+	DUMMY_SENSOR,
 	DUMMY_CLIENT,
 	setDeviceListInStore,
 	setGatewaysListInStore,
 	setDeviceInfoInStore,
 	getStore,
+	withIntlHOC,
 };
