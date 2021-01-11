@@ -1,0 +1,544 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SmoothingDropDown /> - snapshot renders SmoothingDropDown 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "flex-start",
+        "backgroundColor": "transparent",
+        "flex": 0,
+      },
+      Object {
+        "marginLeft": 10.416375,
+      },
+    ]
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      Array [
+        Object {
+          "backgroundColor": "transparent",
+          "color": "#777777",
+          "fontFamily": "SuisseIntl",
+          "fontSize": 36,
+          "marginBottom": 5,
+        },
+        undefined,
+      ]
+    }
+  >
+    Smoothing
+  </Text>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 0,
+          "flexDirection": "row",
+          "justifyContent": "center",
+        },
+        undefined,
+      ]
+    }
+  >
+    <View
+      onLayout={[Function]}
+      style={
+        Array [
+          Object {
+            "backgroundColor": "#f5f5f5",
+            "elevation": 2,
+            "flex": 1,
+            "marginBottom": 10.416375,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.23,
+            "shadowRadius": 2,
+          },
+          undefined,
+        ]
+      }
+    >
+      <View
+        accessible={true}
+        focusable={true}
+        hitSlop={
+          Object {
+            "bottom": 6,
+            "left": 4,
+            "right": 4,
+            "top": 6,
+          }
+        }
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        pointerEvents="box-only"
+      >
+        <View
+          accessibilityLabel="Smoothing Drop down menu, Selected Off, Double tap to activate"
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onLayout={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          pointerEvents="box-only"
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "transparent",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "flex-start",
+              "padding": 30,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            numberOfLines={1}
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "color": "#4C4C4C",
+                  "flex": 1,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 30,
+                  "marginRight": 30,
+                  "textAlignVertical": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            Off
+          </Text>
+          <Text
+            accessible={false}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#4C4C4C",
+                "fontFamily": "telldusicons",
+                "fontSize": 30,
+              }
+            }
+          >
+            down
+          </Text>
+          <View
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "bottom": 0,
+                  "left": 0,
+                  "overflow": "hidden",
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                },
+                Object {
+                  "borderRadius": 0,
+                },
+              ]
+            }
+          />
+        </View>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onLayout={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onRippleAnimation={[Function]}
+          onStartShouldSetResponder={[Function]}
+          pointerEvents="box-only"
+          rippleCentered={false}
+          rippleColor="#000"
+          rippleDuration={400}
+          rippleFades={true}
+          rippleOpacity={0.54}
+          rippleSequential={true}
+          rippleSize={0}
+          style={
+            Object {
+              "height": 69,
+              "left": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 16,
+            }
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "bottom": 0,
+                  "left": 0,
+                  "overflow": "hidden",
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                },
+                Object {
+                  "borderRadius": 0,
+                },
+              ]
+            }
+          />
+        </View>
+      </View>
+      <Modal
+        hardwareAccelerated={false}
+        onRequestClose={[Function]}
+        supportedOrientations={
+          Array [
+            "portrait",
+            "portrait-upside-down",
+            "landscape",
+            "landscape-left",
+            "landscape-right",
+          ]
+        }
+        transparent={true}
+        visible={false}
+      >
+        <View
+          onResponderRelease={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            }
+          }
+        >
+          <View
+            onStartShouldSetResponder={[Function]}
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "rgba(255, 255, 255, 1.0)",
+                  "borderRadius": 2,
+                  "position": "absolute",
+                  "shadowColor": "rgba(0, 0, 0, 1.0)",
+                  "shadowOffset": Object {
+                    "height": 2,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0.54,
+                  "shadowRadius": 2,
+                },
+                Object {
+                  "height": 138,
+                  "left": undefined,
+                  "top": undefined,
+                  "transform": Array [
+                    Object {
+                      "translateY": -8,
+                    },
+                  ],
+                  "width": undefined,
+                },
+                Array [
+                  Object {
+                    "backgroundColor": "#f5f5f5",
+                    "left": 20.83275,
+                    "width": 708.3345,
+                  },
+                  undefined,
+                ],
+              ]
+            }
+          >
+            <RCTScrollView
+              contentContainerStyle={
+                Object {
+                  "paddingVertical": 8,
+                }
+              }
+              data={
+                Array [
+                  Object {
+                    "key": true,
+                    "value": "On",
+                  },
+                  Object {
+                    "key": false,
+                    "value": "Off",
+                  },
+                ]
+              }
+              disableVirtualization={false}
+              extraData={
+                Object {
+                  "selected": -1,
+                }
+              }
+              getItem={[Function]}
+              getItemCount={[Function]}
+              horizontal={false}
+              initialNumToRender={10}
+              keyExtractor={[Function]}
+              maxToRenderPerBatch={10}
+              onContentSizeChange={[Function]}
+              onEndReachedThreshold={2}
+              onLayout={[Function]}
+              onMomentumScrollEnd={[Function]}
+              onScroll={[Function]}
+              onScrollBeginDrag={[Function]}
+              onScrollEndDrag={[Function]}
+              removeClippedSubviews={false}
+              renderItem={[Function]}
+              scrollEnabled={false}
+              scrollEventThrottle={50}
+              stickyHeaderIndices={Array []}
+              style={
+                Object {
+                  "borderRadius": 2,
+                  "flex": 1,
+                }
+              }
+              updateCellsBatchingPeriod={50}
+              viewabilityConfigCallbackPairs={Array []}
+              windowSize={21}
+            >
+              <View>
+                <View
+                  onLayout={[Function]}
+                  style={null}
+                >
+                  <View
+                    accessible={true}
+                    focusAnimation={null}
+                    focusAnimationDuration={225}
+                    focusable={true}
+                    hitSlop={
+                      Object {
+                        "bottom": 6,
+                        "left": 4,
+                        "right": 4,
+                        "top": 6,
+                      }
+                    }
+                    onClick={[Function]}
+                    onLayout={[Function]}
+                    onPress={[Function]}
+                    onPressIn={[Function]}
+                    onPressOut={[Function]}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    pointerEvents="box-only"
+                    rippleCentered={false}
+                    rippleColor="#000"
+                    rippleDuration={400}
+                    rippleFades={true}
+                    rippleOpacity={0.54}
+                    rippleSequential={true}
+                    rippleSize={0}
+                    style={
+                      Object {
+                        "backgroundColor": "transparent",
+                        "borderRadius": 0,
+                        "height": 61,
+                        "justifyContent": "center",
+                        "paddingLeft": undefined,
+                        "paddingRight": undefined,
+                        "paddingVertical": 8,
+                      }
+                    }
+                  >
+                    <Text
+                      numberOfLines={1}
+                      style={
+                        Array [
+                          Object {
+                            "textAlign": "left",
+                          },
+                          undefined,
+                          Object {
+                            "color": "#A59F9A",
+                            "fontSize": 30,
+                          },
+                        ]
+                      }
+                    >
+                      On
+                    </Text>
+                    <View
+                      style={
+                        Object {
+                          "backgroundColor": "#000",
+                          "borderRadius": 0,
+                          "bottom": 0,
+                          "left": 0,
+                          "opacity": 0,
+                          "position": "absolute",
+                          "right": 0,
+                          "top": 0,
+                        }
+                      }
+                    />
+                    <View
+                      style={
+                        Array [
+                          Object {
+                            "backgroundColor": "transparent",
+                            "bottom": 0,
+                            "left": 0,
+                            "overflow": "hidden",
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          },
+                          Object {
+                            "borderRadius": 0,
+                          },
+                        ]
+                      }
+                    />
+                  </View>
+                </View>
+                <View
+                  onLayout={[Function]}
+                  style={null}
+                >
+                  <View
+                    accessible={true}
+                    focusAnimation={null}
+                    focusAnimationDuration={225}
+                    focusable={true}
+                    hitSlop={
+                      Object {
+                        "bottom": 6,
+                        "left": 4,
+                        "right": 4,
+                        "top": 6,
+                      }
+                    }
+                    onClick={[Function]}
+                    onLayout={[Function]}
+                    onPress={[Function]}
+                    onPressIn={[Function]}
+                    onPressOut={[Function]}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    pointerEvents="box-only"
+                    rippleCentered={false}
+                    rippleColor="#000"
+                    rippleDuration={400}
+                    rippleFades={true}
+                    rippleOpacity={0.54}
+                    rippleSequential={true}
+                    rippleSize={0}
+                    style={
+                      Object {
+                        "backgroundColor": "transparent",
+                        "borderRadius": 0,
+                        "height": 61,
+                        "justifyContent": "center",
+                        "paddingLeft": undefined,
+                        "paddingRight": undefined,
+                        "paddingVertical": 8,
+                      }
+                    }
+                  >
+                    <Text
+                      numberOfLines={1}
+                      style={
+                        Array [
+                          Object {
+                            "textAlign": "left",
+                          },
+                          undefined,
+                          Object {
+                            "color": "#A59F9A",
+                            "fontSize": 30,
+                          },
+                        ]
+                      }
+                    >
+                      Off
+                    </Text>
+                    <View
+                      style={
+                        Object {
+                          "backgroundColor": "#000",
+                          "borderRadius": 0,
+                          "bottom": 0,
+                          "left": 0,
+                          "opacity": 0,
+                          "position": "absolute",
+                          "right": 0,
+                          "top": 0,
+                        }
+                      }
+                    />
+                    <View
+                      style={
+                        Array [
+                          Object {
+                            "backgroundColor": "transparent",
+                            "bottom": 0,
+                            "left": 0,
+                            "overflow": "hidden",
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          },
+                          Object {
+                            "borderRadius": 0,
+                          },
+                        ]
+                      }
+                    />
+                  </View>
+                </View>
+              </View>
+            </RCTScrollView>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  </View>
+</View>
+`;
