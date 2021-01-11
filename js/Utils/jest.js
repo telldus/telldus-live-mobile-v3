@@ -19,6 +19,8 @@
 
 // @flow
 
+import React from 'react';
+
 global.window.addEventListener = (): null => null;
 global.__DEV__ = true;
 
@@ -167,5 +169,20 @@ jest.mock('redux-persist', (): Object => {
 		persistCombineReducers: jest
 			.fn()
 			.mockImplementation((config: Object, reducers: Function): Object => combineReducers(reducers)),
+	};
+});
+
+
+jest.mock('react-native-safe-area-context', (): Object => {
+	return {
+		withSafeAreaInsets: (Elem: Object): Object => {
+			return (props: Object): Object => {
+				return <Elem
+					{...props}
+					insets={{
+						left: 0,
+					}}/>;
+			};
+		},
 	};
 });
