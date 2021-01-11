@@ -32,6 +32,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Linking,
+	Platform,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -58,6 +59,8 @@ import i18n from '../../Translations/common';
 const PremiumBenefitsScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
 	let swiperRef = React.useRef();
+
+	const isiOS = Platform.OS === 'ios';
 
 	const [ selectedIndex, setSelectedIndex ] = useState(0);
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -237,7 +240,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 					</View>
 					<Text
 						level={23}
-						style={moreText} onPress={onPressMore}>...{formatMessage(i18n.labelMuchMore)}</Text>
+						style={moreText} onPress={isiOS ? undefined : onPressMore}>...{formatMessage(i18n.labelMuchMore)}</Text>
 				</View>
 				<UpgradePremiumButton
 					navigation={navigation}/>
