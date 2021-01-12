@@ -1,0 +1,505 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChartLegend /> - snapshot renders ChartLegend when chart fullscreen, scale one shown and scale two not shown 1`] = `
+<View
+  pointerEvents="box-none"
+  style={
+    Object {
+      "backgroundColor": "transparent",
+      "flex": 0,
+      "flexDirection": "row",
+      "marginLeft": 10,
+      "marginTop": 20,
+      "paddingBottom": 20,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "backgroundColor": "transparent",
+        "flex": 1,
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onLayout={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      pointerEvents="box-only"
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "flex-start",
+          "marginRight": 10,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        importantForAccessibility="yes"
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#d9534f",
+            "fontFamily": "telldusicons",
+            "fontSize": 45,
+            "marginRight": 5,
+          }
+        }
+      >
+        selectedOneIcon
+      </Text>
+      <Text
+        allowFontScaling={false}
+        numberOfLines={1}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "color": undefined,
+              "flex": 1,
+              "fontFamily": "SuisseIntl",
+              "fontSize": 28.5,
+            },
+            Object {
+              "color": "#d9534f",
+            },
+          ]
+        }
+      >
+        selectedOneValue
+      </Text>
+      <View
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "overflow": "hidden",
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+            Object {
+              "borderRadius": 0,
+            },
+          ]
+        }
+      />
+    </View>
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onLayout={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      pointerEvents="box-only"
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "flex-start",
+          "marginRight": 10,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        importantForAccessibility="yes"
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#A59F9A",
+            "fontFamily": "telldusicons",
+            "fontSize": 45,
+            "marginRight": 5,
+          }
+        }
+      >
+        selectedTwoIcon
+      </Text>
+      <Text
+        allowFontScaling={false}
+        numberOfLines={1}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "color": undefined,
+              "flex": 1,
+              "fontFamily": "SuisseIntl",
+              "fontSize": 28.5,
+            },
+            Object {
+              "color": "#A59F9A",
+            },
+          ]
+        }
+      >
+        selectedTwoValue
+      </Text>
+      <View
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "overflow": "hidden",
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+            Object {
+              "borderRadius": 0,
+            },
+          ]
+        }
+      />
+    </View>
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 0,
+          "height": 40,
+          "justifyContent": "center",
+          "padding": 0,
+          "width": 30,
+        },
+      ]
+    }
+  >
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        style={
+          Array [
+            Object {
+              "color": "#8e8e93",
+              "fontSize": 52.50000000000001,
+            },
+            undefined,
+            Object {
+              "fontFamily": "Material Icons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Object {},
+          ]
+        }
+      >
+        
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`<ChartLegend /> - snapshot renders ChartLegend when chart not fullscreen, both scales shown 1`] = `
+<View
+  pointerEvents="box-none"
+  style={
+    Object {
+      "backgroundColor": "transparent",
+      "flex": 0,
+      "flexDirection": "row",
+      "marginLeft": 10,
+      "marginTop": 20,
+      "paddingBottom": 20,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "backgroundColor": "transparent",
+        "flex": 1,
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onLayout={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      pointerEvents="box-only"
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "flex-start",
+          "marginRight": 10,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        importantForAccessibility="yes"
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#d9534f",
+            "fontFamily": "telldusicons",
+            "fontSize": 45,
+            "marginRight": 5,
+          }
+        }
+      >
+        selectedOneIcon
+      </Text>
+      <Text
+        allowFontScaling={false}
+        numberOfLines={1}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "color": undefined,
+              "flex": 1,
+              "fontFamily": "SuisseIntl",
+              "fontSize": 28.5,
+            },
+            Object {
+              "color": "#d9534f",
+            },
+          ]
+        }
+      >
+        selectedOneValue
+      </Text>
+      <View
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "overflow": "hidden",
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+            Object {
+              "borderRadius": 0,
+            },
+          ]
+        }
+      />
+    </View>
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onLayout={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      pointerEvents="box-only"
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "flex-start",
+          "marginRight": 10,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        importantForAccessibility="yes"
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#5bc0de",
+            "fontFamily": "telldusicons",
+            "fontSize": 45,
+            "marginRight": 5,
+          }
+        }
+      >
+        selectedTwoIcon
+      </Text>
+      <Text
+        allowFontScaling={false}
+        numberOfLines={1}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "color": undefined,
+              "flex": 1,
+              "fontFamily": "SuisseIntl",
+              "fontSize": 28.5,
+            },
+            Object {
+              "color": "#5bc0de",
+            },
+          ]
+        }
+      >
+        selectedTwoValue
+      </Text>
+      <View
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "overflow": "hidden",
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+            Object {
+              "borderRadius": 0,
+            },
+          ]
+        }
+      />
+    </View>
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 0,
+          "height": 40,
+          "justifyContent": "center",
+          "padding": 0,
+          "width": 30,
+        },
+      ]
+    }
+  >
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        style={
+          Array [
+            Object {
+              "color": "#8e8e93",
+              "fontSize": 52.50000000000001,
+            },
+            undefined,
+            Object {
+              "fontFamily": "Material Icons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Object {},
+          ]
+        }
+      >
+        
+      </Text>
+    </View>
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        importantForAccessibility="yes"
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#8e8e93",
+            "fontFamily": "telldusicons",
+            "fontSize": 48.50000000000001,
+          }
+        }
+      >
+        resetzoom
+      </Text>
+    </View>
+  </View>
+</View>
+`;
