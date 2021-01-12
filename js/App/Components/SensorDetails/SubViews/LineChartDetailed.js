@@ -320,7 +320,7 @@ renderLine(d: Array<Object>, i: number, styles: Object): null | Object {
 				key={i}
 				data={d}
 				style={{ data: { fill: colors[i] } }}
-				y={this.getY}
+				y={i === 1 ? this.getYTwo : this.getYOne}
 				x={this.getX}
 			/>
 		);
