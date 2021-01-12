@@ -54,6 +54,7 @@ jest.mock('react-native-device-info', (): Object => {
 		getSystemVersion: jest.fn(),
 		isTablet: jest.fn(),
 		getUniqueId: jest.fn(),
+		getVersion: jest.fn(),
 	};
 });
 
@@ -193,5 +194,23 @@ jest.mock('react-native-safe-area-context', (): Object => {
 jest.mock('react-native-localize', (): Object => {
 	return {
 		uses24HourClock: (): boolean => false,
+		getLocales: (): Array<Object> => {
+			return [
+				{
+					languageTag: 'en-En',
+				},
+			];
+		},
+	};
+});
+
+const mockedNavigate = jest.fn();
+
+jest.mock('@react-navigation/native', (): Object => {
+	return {
+		...jest.requireActual('@react-navigation/native'),
+		useNavigation: (): Object => ({
+			navigate: mockedNavigate,
+		}),
 	};
 });
