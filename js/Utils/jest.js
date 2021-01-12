@@ -104,6 +104,9 @@ NativeModules.AndroidWidget = {
 	disableAllWidgets: jest.fn(),
 };
 
+NativeModules.RNFetchBlob = {
+};
+
 jest.mock('@react-native-async-storage/async-storage', (): Object => mockAsyncStorage);
 
 jest.mock('@react-native-community/netinfo', (): Object => {
@@ -184,5 +187,11 @@ jest.mock('react-native-safe-area-context', (): Object => {
 					}}/>;
 			};
 		},
+	};
+});
+
+jest.mock('react-native-localize', (): Object => {
+	return {
+		uses24HourClock: (): boolean => false,
 	};
 });
