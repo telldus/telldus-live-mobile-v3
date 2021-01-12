@@ -158,6 +158,7 @@ const EventsList = memo<Object>((props: Props): Object => {
 			<View
 				style={sectionHeaderCoverStyle}>
 				<Text
+					level={3}
 					style={sectionHeaderTextStyle}>
 					{section.header}
 				</Text>
