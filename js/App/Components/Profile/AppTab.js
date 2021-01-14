@@ -48,7 +48,7 @@ import {
 } from '../../../BaseComponents';
 import {
 	AppVersionBlock,
-	WhatsNewLink,
+	// WhatsNewLink,
 	PushInfoBlock,
 	DBSortControlBlock,
 	LanguageControlBlock,
@@ -226,7 +226,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 				level={3}
 				style={body}>
 				<AppVersionBlock/>
-				<WhatsNewLink/>
+				{/* <WhatsNewLink/> */}
 				<Text
 					level={2}
 					style={titleStyle}>
