@@ -148,7 +148,7 @@ addNewDevice = () => {
 addNewSchedule = () => {
 	const { navigation, dispatch, devices, route } = this.props;
 
-	const { deviceId = ''} = route.params || {};
+	const { deviceId = '', ...others } = route.params || {};
 
 	const {
 		supportedMethods = {},
@@ -163,10 +163,16 @@ addNewSchedule = () => {
 		navigation.navigate('Schedule', {
 			editMode: false,
 			screen,
-			params: { editMode: false },
+			params: {
+				...others,
+				editMode: false,
+			},
 		});
 	} else {
-		navigation.navigate('Schedule', { editMode: false });
+		navigation.navigate('Schedule', {
+			...others,
+			editMode: false,
+		});
 	}
 }
 

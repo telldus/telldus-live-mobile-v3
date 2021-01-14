@@ -213,6 +213,7 @@ class Summary extends View<null, Props, State> {
 			name: 'InfoScreen',
 			key: 'InfoScreen',
 			params: {
+				...params,
 				info: 'add_schedule_another',
 				deviceId: schedule.deviceId,
 			},
