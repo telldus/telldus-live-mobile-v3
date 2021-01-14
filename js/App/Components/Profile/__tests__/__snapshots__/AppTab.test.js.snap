@@ -132,23 +132,6 @@ exports[`<AppTab /> - snapshot renders AppTab 1`] = `
       </View>
       <Text
         allowFontScaling={false}
-        onPress={[Function]}
-        style={
-          Object {
-            "alignSelf": "center",
-            "backgroundColor": "transparent",
-            "color": "#000000",
-            "fontFamily": "SuisseIntl",
-            "fontSize": 33,
-            "marginBottom": 16.5,
-            "paddingVertical": 5,
-          }
-        }
-      >
-        What's new in this version?
-      </Text>
-      <Text
-        allowFontScaling={false}
         style={
           Object {
             "backgroundColor": "transparent",
