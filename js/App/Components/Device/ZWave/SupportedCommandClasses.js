@@ -145,7 +145,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 	useEffect((): Function => {
 		if (interviewDoneData && interviewDoneData.cmdClass === interviewingCommand && interviewDoneData.data && interviewDoneData.data.interviewed) {
 			dispatch(requestNodeInfo(clientId, clientDeviceId));
-			if (!listening) {
+			if (listening) {
 				_setInterviewStatusConf({
 					cmdClass: interviewDoneData.cmdClass,
 					status: KEY_SUCCESS,
@@ -172,7 +172,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 			'device': clientDeviceId,
 			'class': cmdClass,
 		}));
-		if (!listening) {
+		if (listening) {
 			timeoutInterviewRef.current = setTimeout(() => {
 				dispatch(stopCommandClassInterview());
 				_setInterviewStatusConf({
@@ -231,7 +231,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 					}}>
 						{isTheOneCurrentlyInterviewing ?
 							<>
-								{listening ?
+								{!listening ?
 									<IconTelldus
 										icon={'time'}
 										style={throbberStyle}
