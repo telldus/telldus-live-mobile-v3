@@ -187,6 +187,7 @@ class SettingsTab extends View {
 		this.markAsFailedTimeoutTwo = null;
 
 		this.timeoutConfirmDeviceRemove = null;
+		this.refreshInfoDelay = null;
 
 		this.onConfirmRemoveFailedNode = this.onConfirmRemoveFailedNode.bind(this);
 	}
@@ -237,6 +238,7 @@ class SettingsTab extends View {
 			this.timeoutConfirmDeviceRemove = null;
 		}
 		this.isMount = false;
+		clearTimeout(this.refreshInfoDelay);
 	}
 
 	get433MHzDeviceSettings(): Object {
@@ -647,15 +649,17 @@ class SettingsTab extends View {
 			this.props.showToast(formatMessage(i18n.settingsNotSaved));
 		}
 
-		this.props.dispatch(getDeviceInfoCommon(deviceId)).then(() => {
-			this.setState({
-				isSaving433MhzParams: false,
+		this.refreshInfoDelay = setTimeout(() => {
+			this.props.dispatch(getDeviceInfoCommon(deviceId)).then(() => {
+				this.setState({
+					isSaving433MhzParams: false,
+				});
+			}).catch(() => {
+				this.setState({
+					isSaving433MhzParams: false,
+				});
 			});
-		}).catch(() => {
-			this.setState({
-				isSaving433MhzParams: false,
-			});
-		});
+		}, 1000);
 	}
 
 	isDeviceTypeEqual = (devicetypeCurrent: string = '', devicetypeNext: string = ''): boolean => {
