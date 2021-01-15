@@ -63,20 +63,20 @@ class FormContainerComponent extends View<Props, null> {
 	}
 
 	componentDidMount() {
-		const {
-			screenProps,
-			navigation,
-		} = this.props;
-		const {
-			showChangeLog,
-			changeLogVersion,
-		} = screenProps;
-		if (showChangeLog) {
-			navigation.navigate('ChangeLogScreen', {
-				forceShowChangeLog: false,
-				changeLogVersion: changeLogVersion,
-			});
-		}
+		// const {
+		// 	screenProps,
+		// 	navigation,
+		// } = this.props;
+		// const {
+		// 	showChangeLog,
+		// 	changeLogVersion,
+		// } = screenProps;
+		// if (showChangeLog) {
+		// 	navigation.navigate('ChangeLogScreen', {
+		// 		forceShowChangeLog: false,
+		// 		changeLogVersion: changeLogVersion,
+		// 	});
+		// }
 	}
 
 	render(): Object {
