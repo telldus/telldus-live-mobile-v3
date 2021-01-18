@@ -63,6 +63,7 @@ class FormContainerComponent extends View<Props, null> {
 	}
 
 	componentDidMount() {
+		// TODO: Bring back when next app version has changelog
 		// const {
 		// 	screenProps,
 		// 	navigation,

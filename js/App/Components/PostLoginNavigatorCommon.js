@@ -246,7 +246,7 @@ actionsToPerformOnStart = async () => {
 		// showChangeLog,
 		// changeLogVersion,
 	} = this.props;
-
+	// TODO: Bring back when next app version has changelog
 	// if (showChangeLog) {
 	// 	navigate('ChangeLogScreen', {
 	// 		forceShowChangeLog: false,
