@@ -153,16 +153,13 @@ const AdvancedConf = (props: Props): Object => {
 			let _values = [];
 			// TODO: Unlike xml used at web, JSON response in app do not
 			// have a type attribute, so confirm the type inference logic.
-			let type = values.length > 0 ? 'bitset' : undefined;
+			let type;
 
 			for (let i = 0; i < values.length; ++i) {
 				const {
 					From,
 					To,
 				} = values[i];
-				if (From !== To) {
-					type = undefined;
-				}
 				let from = parseInt(From, 16);
 				let to = parseInt(To, 16);
 				let signed = false;
@@ -212,32 +209,30 @@ const AdvancedConf = (props: Props): Object => {
 			const hasMultiple = Size > 1 && values.length > 1 && values.length === Size;
 			if (hasMultiple) {
 				let row = [];
-				values.forEach((v: Object) => {
+				const setting = getConfSettings({
+					values: _values,
+					type,
+					stepsTot: steps,
+					defaultValue: defaultValue.toString(),
+					min,
+					max,
+					Size,
+					ConfigurationParameterValues: values,
+				});
+				values.forEach((v: Object, i: number) => {
 					const {
 						Description: d,
+						From,
 					} = v;
-					const setting = getConfSettings({
-						values: _values,
-						type,
-						stepsTot: steps,
-						defaultValue: defaultValue.toString(),
-						min,
-						max,
-						Size,
-						ConfigurationParameterValues: values,
-					});
 					row.push(
 						<View
+							key={`${i}`}
 							style={horizontalBlockCoverMultiple}>
 							<Text
 								level={3}
 								style={hItemLabelDef}>
-								{`${d}`}
+								{`${From}. ${d}`}
 							</Text>
-							<View
-								style={rightBlockMultiple}>
-								{setting}
-							</View>
 						</View>
 					);
 				});
@@ -277,6 +272,10 @@ const AdvancedConf = (props: Props): Object => {
 						<View
 							style={verticalBlockCoverMultiple}>
 							{row}
+						</View>
+						<View
+							style={rightBlockMultiple}>
+							{setting}
 						</View>
 					</View>
 				);
@@ -426,6 +425,7 @@ const getStyles = ({
 		},
 		rightBlockMultiple: {
 			flexDirection: 'row',
+			width: '30%',
 			alignItems: 'center',
 			justifyContent: 'flex-end',
 		},

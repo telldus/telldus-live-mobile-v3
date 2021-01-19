@@ -121,7 +121,7 @@ const getStyles = ({
 
 	return {
 		textFieldStyle: {
-			flex: 1,
+			width: '100%',
 			paddingBottom: 0,
 			paddingTop: 0,
 			fontSize,
