@@ -100,12 +100,17 @@ constructor(props: Props) {
 	this.setRef = this.setRef.bind(this);
 
 	this.inputRefs = {};
+	this.postSubmitTimeout = null;
 }
 
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.name), formatMessage(i18n.AddZDNameHeaderTwo));
+}
+
+componentWillUnmount() {
+	clearTimeout(this.postSubmitTimeout);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -145,7 +150,9 @@ submitName() {
 			isLoading: true,
 		}, () => {
 			Promise.all(promises).then(() => {
-				this.postSubmitName();
+				this.postSubmitTimeout = setTimeout(() => {
+					this.postSubmitName();
+				}, 1000);
 			});
 		});
 	} else if (this.inputRefs[emptyField]) {
