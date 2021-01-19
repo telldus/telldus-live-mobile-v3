@@ -269,15 +269,20 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 				</Text>
 			</View>
 			<View style={horizontalCoverDef}>
-				<Text
-					level={3}
-					style={hItemLabelDef}>
-					{'Currently associated devices: '}
-				</Text>
-				<Text
-					level={4}
-					style={hItemValueDef}>
-					{currentAssociations}
+				<Text style={{
+					flex: 1,
+					flexWrap: 'wrap',
+				}}>
+					<Text
+						level={3}
+						style={hItemLabelDef}>
+						{'Currently associated devices: '}
+					</Text>
+					<Text
+						level={4}
+						style={hItemValueDef}>
+						{currentAssociations}
+					</Text>
 				</Text>
 			</View>
 			<TouchableButton
