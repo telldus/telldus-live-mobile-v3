@@ -718,7 +718,7 @@ class SettingsTab extends View {
 
 		const isZWave = protocol.trim().toLowerCase() === 'zwave';
 		const { isFailed = false } = nodeInfo;
-		const manufacturerAttributes = nodeInfo ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC] : {};
+		const manufacturerAttributes = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC] : {};
 
 		return (
 			<ThemedScrollView
