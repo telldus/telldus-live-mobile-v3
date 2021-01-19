@@ -55,12 +55,14 @@ type Props = {
 	parameters: Object,
 	manufacturerAttributes: Object,
 	configurationParameters: Array<Object>,
+	onChangeValue: (Object) => void,
 };
 
 const AdvancedConf = (props: Props): Object => {
 	const {
 		parameters = {},
 		configurationParameters,
+		onChangeValue,
 	} = props;
 
 	const {
@@ -101,6 +103,10 @@ const AdvancedConf = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const _onChangeValue = useCallback((data: Object) => {
+		onChangeValue(data);
+	}, [onChangeValue]);
+
 	const getConfSettings = useCallback(({
 		type,
 		...others
@@ -109,29 +115,33 @@ const AdvancedConf = (props: Props): Object => {
 			case 'bitset': {
 				return (
 					<BitsetConfSetting
-						{...others}/>
+						{...others}
+						onChangeValue={_onChangeValue}/>
 				);
 			}
 			case 'range': {
 				return (
 					<RangeConfSetting
-						{...others}/>
+						{...others}
+						onChangeValue={_onChangeValue}/>
 				);
 			}
 			case 'rangemapped': {
 				return (
 					<RangeMappedConfSetting
-						{...others}/>
+						{...others}
+						onChangeValue={_onChangeValue}/>
 				);
 			}
 			default:
 				return (
 					<GenericConfSetting
-						{...others}/>
+						{...others}
+						onChangeValue={_onChangeValue}/>
 				);
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [_onChangeValue]);
 
 	const cParamsLength = configurationParameters.length;
 	const paramsLen = Object.keys(parameters);
@@ -218,6 +228,7 @@ const AdvancedConf = (props: Props): Object => {
 					max,
 					Size,
 					ConfigurationParameterValues: values,
+					ParameterNumber,
 				});
 				values.forEach((v: Object, i: number) => {
 					const {
@@ -289,6 +300,7 @@ const AdvancedConf = (props: Props): Object => {
 				max,
 				Size,
 				ConfigurationParameterValues: values,
+				ParameterNumber,
 			});
 			return (
 				<View

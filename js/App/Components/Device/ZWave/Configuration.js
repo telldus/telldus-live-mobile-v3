@@ -27,8 +27,13 @@ import React, {
 	useState,
 	useCallback,
 	useMemo,
+	useRef,
+	useEffect,
 } from 'react';
-import { useSelector } from 'react-redux';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
 import {
 	LayoutAnimation,
 } from 'react-native';
@@ -39,6 +44,7 @@ import {
 	ThemedMaterialIcon,
 	Text,
 	View,
+	TouchableButton,
 } from '../../../../BaseComponents';
 import ProtectionConf from './ProtectionConf';
 import AdvancedConf from './AdvancedConf';
@@ -46,6 +52,11 @@ import AdvancedConf from './AdvancedConf';
 import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 import Theme from '../../../Theme';
+
+import {
+	sendSocketMessage,
+} from '../../../Actions';
+import { requestNodeInfo } from '../../../Actions/Websockets';
 
 type Props = {
     id: string,
@@ -56,15 +67,22 @@ type Props = {
 const Configuration = (props: Props): Object => {
 	const {
 		id,
+		clientId,
+		clientDeviceId,
 	} = props;
 
 	const [ expand, setExpand ] = useState(true);
+	const [ configurations, setConfigurations ] = useState({
+		advanced: [],
+		protection: [],
+	});
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		nodeInfo,
 		zwaveInfo = {},
 	} = useSelector((state: Object): Object => state.devices.byId[id]) || {};
+	const nodeId = nodeInfo ? nodeInfo.nodeId : '';
 	const {
 		ConfigurationParameters = [],
 	} = zwaveInfo;
@@ -75,6 +93,7 @@ const Configuration = (props: Props): Object => {
 		iconStyle,
 		iconSize,
 		padding,
+		buttonStyle,
 	} = getStyles(layout);
 
 	const protectionClass = nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION];
@@ -82,6 +101,15 @@ const Configuration = (props: Props): Object => {
 	const manufacturerAttributes = nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC];
 	const hasProtection = !!protectionClass;
 	const hasConfiguration = !!configurationClass;
+
+	const timeoutRef = useRef();
+	useEffect((): Function => {
+		return () => {
+			if (timeoutRef) {
+				clearTimeout(timeoutRef.current);
+			}
+		};
+	}, []);
 
 	const protection = useMemo((): ?Object => {
 		if (!hasProtection) {
@@ -94,6 +122,16 @@ const Configuration = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasProtection]);
 
+	const onChangeConfigurationAdv = useCallback((data: Object) => {
+		setConfigurations({
+			...configurations,
+			advanced: [
+				...configurations.advanced,
+				data,
+			],
+		});
+	}, [configurations]);
+
 	const configuration = useMemo((): ?Object => {
 		if (!hasConfiguration) {
 			return;
@@ -102,7 +140,8 @@ const Configuration = (props: Props): Object => {
 			<AdvancedConf
 				{...configurationClass}
 				manufacturerAttributes={manufacturerAttributes}
-				configurationParameters={ConfigurationParameters}/>
+				configurationParameters={ConfigurationParameters}
+				onChangeValue={onChangeConfigurationAdv}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasConfiguration, manufacturerAttributes, ConfigurationParameters]);
@@ -111,6 +150,55 @@ const Configuration = (props: Props): Object => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		setExpand(!expand);
 	}, [expand]);
+
+	const dispatch = useDispatch();
+
+	const onPressSave = useCallback(() => {
+		const {
+			advanced: advancedC = [],
+			// protection: protectionC = [],
+		} = configurations;
+		const paramsConf = advancedC.map(({
+			number,
+			value,
+			size,
+		}: Object): Object => {
+			return {
+				number,
+				value,
+				size,
+			};
+		});
+		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': 'cmdClass',
+			'nodeId': nodeId,
+			'class': ZWaveFunctions.COMMAND_CLASS_CONFIGURATION,
+			'cmd': 'setConfigurations',
+			'data': paramsConf,
+		}));
+		timeoutRef.current = setTimeout(() => {
+			dispatch(requestNodeInfo(clientId, clientDeviceId));
+		}, 1000);
+	}, [clientDeviceId, clientId, configurations, dispatch, nodeId]);
+
+	let hasChanged = useMemo((): boolean => {
+		const {
+			advanced: advancedC = [],
+			protection: protectionC = [],
+		} = configurations;
+		for (let i = 0; i < advancedC.length; i++) {
+			if (advancedC[i].hasChanged) {
+				return true;
+			}
+		}
+		for (let i = 0; i < protectionC.length; i++) {
+			if (protectionC[i].hasChanged) {
+				return true;
+			}
+		}
+		return false;
+	}, [configurations]);
 
 	if (!id || !nodeInfo || (!protection && (!configuration || ConfigurationParameters.length === 0))) {
 		return <EmptyView/>;
@@ -138,6 +226,12 @@ const Configuration = (props: Props): Object => {
 				}}>
 					{!!protection && protection}
 					{!!configuration && configuration}
+					{hasChanged &&
+						<TouchableButton
+							style={buttonStyle}
+							text={'Save new configurations'} // TODO: Translate
+							onPress={onPressSave}/>
+					}
 				</View>
 			)}
 		</>

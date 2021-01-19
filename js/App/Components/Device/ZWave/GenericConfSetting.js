@@ -52,6 +52,9 @@ const GenericConfSetting = (props: Object): Object => {
 		defaultValue,
 		min,
 		max,
+		onChangeValue,
+		Size,
+		ParameterNumber,
 	} = props;
 
 	const [ value, setValue ] = useState(defaultValue);
@@ -72,8 +75,16 @@ const GenericConfSetting = (props: Object): Object => {
 	} = useDialogueBox();
 
 	const _onChangeText = useCallback((v: string) => {
-		setValue(v);
-	}, []);
+		if (!v || !isNaN(parseInt(v, 10))) {
+			onChangeValue({
+				number: ParameterNumber,
+				value: v,
+				size: Size,
+				hasChanged: v !== defaultValue,
+			});
+			setValue(v);
+		}
+	}, [onChangeValue, ParameterNumber, Size, defaultValue]);
 
 	const _onSubmitEditing = useCallback(() => {
 		let asNum = parseInt(value, 10);
