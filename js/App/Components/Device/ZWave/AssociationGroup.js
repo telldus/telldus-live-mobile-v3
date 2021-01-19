@@ -120,13 +120,24 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		} else {
 			_selectedList = _selectedList.filter((item: string): boolean => item !== key);
 		}
+		if (_selectedList.length > maxNodes) {
+			toggleDialogueBoxState({
+				show: true,
+				header: undefined, // TODO: Need to confirm and set
+				showHeader: true,
+				imageHeader: true,
+				text: `Maximum number of associated devices is ${maxNodes}.`,
+				showPositive: true,
+			});
+			return;
+		}
 		setSelectedList(_selectedList);
 		onAssociationsChange({
 			selectedList: _selectedList,
 			queue,
 			group,
 		});
-	}, [onAssociationsChange, selectedList, queue, group]);
+	}, [selectedList, maxNodes, onAssociationsChange, queue, group, toggleDialogueBoxState]);
 
 	const onPressInfo = useCallback(({
 		associationWarningDisabled,
