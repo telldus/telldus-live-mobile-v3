@@ -131,12 +131,12 @@ class ThermostatButtonDB extends View<Props, State> {
 		} = this.props;
 
 		const { stateValues = {} } = item;
-		const { THERMOSTAT: { mode, setpoint = {} } } = stateValues;
+		let { THERMOSTAT: { mode, setpoint = {} } } = stateValues;
 
-		let currentModeValue = setpoint[mode];
-		if (!mode && Object.keys(setpoint).length === 0) {
-			currentModeValue = setpoint[Object.keys(setpoint)[0]];
+		if (!mode && Object.keys(setpoint).length !== 0) {
+			mode = Object.keys(setpoint)[0];
 		}
+		let currentModeValue = setpoint[mode];
 		currentModeValue = isNaN(currentModeValue) ? -100.0 : currentModeValue;
 
 		const buttonTwo = <HeatInfoBlock
