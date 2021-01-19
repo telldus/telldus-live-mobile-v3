@@ -239,7 +239,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		textStyle: {
 			fontSize,
-			textAlign: 'center',
+			textAlign: 'left',
 		},
 		interviewLinkStyle: {
 			fontSize,
