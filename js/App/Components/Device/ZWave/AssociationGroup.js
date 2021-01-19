@@ -68,6 +68,7 @@ type Props = {
 	nodeId: string,
 	onAssociationsChange: (Object) => void,
 	currentAssociations: string,
+	description: string,
 };
 
 const AssociationGroup = memo<Object>((props: Props): Object => {
@@ -79,6 +80,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		nodeId,
 		onAssociationsChange,
 		currentAssociations = '',
+		description,
 	} = props;
 
 	const {
@@ -244,6 +246,15 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		<View
 			level={2}
 			style={verticalCoverDef}>
+			<View style={horizontalCoverDef}>
+				{!!description && (
+					<Text
+						level={4}
+						style={hItemValueDef}>
+						{description.replace(/(\r\n|\n|\r)/gm, '')}
+					</Text>
+				)}
+			</View>
 			<View style={horizontalCoverDef}>
 				<Text
 					level={3}

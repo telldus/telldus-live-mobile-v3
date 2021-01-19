@@ -122,7 +122,11 @@ const Associations = (props: Props): Object => {
 	} = byId[clientId];
 	const {
 		nodeInfo,
+		zwaveInfo = {},
 	} = useSelector((state: Object): Object => state.devices.byId[id]) || {};
+	const {
+		AssociationGroups = [],
+	} = zwaveInfo;
 
 	const {
 		titleCoverStyle,
@@ -175,11 +179,14 @@ const Associations = (props: Props): Object => {
 	const isNodeListEqual = isEqual(prevNodeList, nodeList);
 
 	const groupings = useMemo((): Object => {
-		return ZWaveFunctions.prepareGroups(nodeList, nodeId, nodeInfo);
+		return ZWaveFunctions.prepareGroups(nodeList, nodeId, nodeInfo, {
+			AssociationGroups,
+		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		isNodeInfoEqual,
 		isNodeListEqual,
+		AssociationGroups,
 	]);
 
 	const groups = useMemo((): ?Array<Object> => {
@@ -202,6 +209,7 @@ const Associations = (props: Props): Object => {
 					clientId={clientId}
 					nodeId={nodeId}
 					{...groupings[key].group}
+					description={groupings[key].description}
 					currentAssociations={groupings[key].currentAssociations.join(', ')}
 					onAssociationsChange={onAssociationsChange}/>
 			);
