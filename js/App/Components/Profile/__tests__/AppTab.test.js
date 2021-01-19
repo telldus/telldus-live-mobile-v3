@@ -18,64 +18,50 @@
  *
  */
 
+
 import React from 'react';
 import {
 	Dimensions,
 } from 'react-native';
 import {act} from 'react-test-renderer';
 
+import { configureStore } from '../../../Store/ConfigureStore';
 import {
 	rendererWithIntlAndReduxProviders,
-} from '../../Utils/jestUtils';
+	withScreenPropsHOC,
+} from '../../../../Utils/jestUtils';
+
+import AppTab from '../AppTab';
 import {
 	setAppLayout,
-} from '../../App/Actions';
-import { configureStore } from '../../App/Store/ConfigureStore';
-import CheckBoxIconText from '../CheckBoxIconText';
+} from '../../../Actions';
 
 let {height, width} = Dimensions.get('window');
 
 const store = configureStore().store;
 
-const intl = {
-	formatMessage: () => '',
-};
+jest.useFakeTimers();
 
-it('renders CheckBoxIconText when checked', () => {
-	let component;
-	act(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
 
-		component = rendererWithIntlAndReduxProviders(
-			<CheckBoxIconText
-				text="CheckBoxIconText"
-				isChecked
-				intl={intl}/>
-		);
+describe('<AppTab /> - snapshot', () => {
+	it('renders AppTab', () => {
+		let component;
+		act(() => {
+			store.dispatch(setAppLayout({
+				height,
+				width,
+			}));
+
+			const WithIntl = withScreenPropsHOC(
+				<AppTab/>
+			);
+
+			component = rendererWithIntlAndReduxProviders(
+				<WithIntl/>
+			);
+		});
+
+		const tree = component.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
-
-	const tree = component.toJSON();
-	expect(tree).toMatchSnapshot();
-});
-
-it('renders CheckBoxIconText when unchecked', () => {
-	let component;
-	act(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
-
-		component = rendererWithIntlAndReduxProviders(
-			<CheckBoxIconText
-				text="CheckBoxIconText"
-				intl={intl}/>
-		);
-	});
-
-	const tree = component.toJSON();
-	expect(tree).toMatchSnapshot();
 });

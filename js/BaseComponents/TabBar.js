@@ -105,6 +105,7 @@ const getStyles = ({
 
 	return {
 		container: {
+			flex: 1,
 			flexDirection: 'row',
 			alignItems: 'center',
 		},

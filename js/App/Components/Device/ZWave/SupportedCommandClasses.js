@@ -49,6 +49,7 @@ import {
 	ThemedMaterialIcon,
 	TouchableOpacity,
 	Throbber,
+	IconTelldus,
 } from '../../../../BaseComponents';
 
 import {
@@ -110,6 +111,9 @@ const SupportedCommandClasses = (props: Props): Object => {
 		cmd: interviewingCommand,
 		interviewDoneData,
 	} = manualInterviewConf;
+	const {
+		listening,
+	} = nodeInfo || {};
 
 	const {
 		itemsCoverStyle,
@@ -129,8 +133,10 @@ const SupportedCommandClasses = (props: Props): Object => {
 	const timeoutInterviewRef = useRef(null);
 	useEffect((): Function => {
 		return () => {
+			dispatch(stopCommandClassInterview());
 			clearTimeout(timeoutInterviewRef.current);
 		};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const _setInterviewStatusConf = useCallback(({
@@ -146,14 +152,16 @@ const SupportedCommandClasses = (props: Props): Object => {
 	useEffect((): Function => {
 		if (interviewDoneData && interviewDoneData.cmdClass === interviewingCommand && interviewDoneData.data && interviewDoneData.data.interviewed) {
 			dispatch(requestNodeInfo(clientId, clientDeviceId));
-			_setInterviewStatusConf({
-				cmdClass: interviewDoneData.cmdClass,
-				status: KEY_SUCCESS,
-			});
-			dispatch(stopCommandClassInterview());
-			clearTimeout(timeoutInterviewRef.current);
+			if (listening) {
+				_setInterviewStatusConf({
+					cmdClass: interviewDoneData.cmdClass,
+					status: KEY_SUCCESS,
+				});
+				dispatch(stopCommandClassInterview());
+				clearTimeout(timeoutInterviewRef.current);
+			}
 		}
-	}, [_setInterviewStatusConf, clientDeviceId, clientId, dispatch, interviewDoneData, interviewingCommand]);
+	}, [_setInterviewStatusConf, clientDeviceId, clientId, dispatch, interviewDoneData, interviewingCommand, listening]);
 
 	const onPressInterview = useCallback(({cmd}: Object) => {
 		const cmdClass = parseInt(cmd, 10);
@@ -171,14 +179,16 @@ const SupportedCommandClasses = (props: Props): Object => {
 			'device': clientDeviceId,
 			'class': cmdClass,
 		}));
-		timeoutInterviewRef.current = setTimeout(() => {
-			dispatch(stopCommandClassInterview());
-			_setInterviewStatusConf({
-				cmdClass,
-				status: KEY_FAIL,
-			});
-		}, 8000);
-	}, [_setInterviewStatusConf, clientDeviceId, clientId, dispatch, id]);
+		if (listening) {
+			timeoutInterviewRef.current = setTimeout(() => {
+				dispatch(stopCommandClassInterview());
+				_setInterviewStatusConf({
+					cmdClass,
+					status: KEY_FAIL,
+				});
+			}, 8000);
+		}
+	}, [_setInterviewStatusConf, clientDeviceId, clientId, dispatch, id, listening]);
 
 	const [cWidth, setCWidth] = useState();
 	const onItemLayout = useCallback(({
@@ -227,13 +237,22 @@ const SupportedCommandClasses = (props: Props): Object => {
 						justifyContent: 'flex-end',
 					}}>
 						{isTheOneCurrentlyInterviewing ?
-							<Throbber
-								throbberStyle={throbberStyle}
-								throbberContainerStyle={[
-									throbberContainerStyle,
-									{width: cWidth},
-								]}
-							/>
+							<>
+								{!listening ?
+									<IconTelldus
+										icon={'time'}
+										style={throbberStyle}
+										level={23}/>
+									:
+									<Throbber
+										throbberStyle={throbberStyle}
+										throbberContainerStyle={[
+											throbberContainerStyle,
+											{width: cWidth},
+										]}
+									/>
+								}
+							</>
 							: <TouchableOpacity
 								onPress={onPressInterview}
 								onPressData={{cmd}}
@@ -272,6 +291,7 @@ const SupportedCommandClasses = (props: Props): Object => {
 		interviewStatusConf,
 		onItemLayout,
 		cWidth,
+		listening,
 	]);
 
 	const onPressToggle = useCallback(() => {

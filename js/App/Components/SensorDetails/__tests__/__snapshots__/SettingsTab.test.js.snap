@@ -1,0 +1,1200 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SettingsTab /> - snapshot renders Sensor SettingsTab 1`] = `
+<RCTScrollView
+  contentContainerStyle={
+    Object {
+      "flexGrow": 1,
+    }
+  }
+  style={
+    Object {
+      "backgroundColor": "#eeeeee",
+      "flex": 1,
+    }
+  }
+>
+  <View>
+    <View
+      style={
+        Object {
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "paddingBottom": 20.83275,
+          "paddingHorizontal": 20.83275,
+          "paddingTop": 10.416375,
+        }
+      }
+    >
+      <View
+        accessibilityLabel="Name, Aeon Multisensor 6 , Double tap to edit"
+        accessible={true}
+        importantForAccessibility="yes"
+        style={
+          Array [
+            Object {
+              "backgroundColor": "#f5f5f5",
+              "borderRadius": 2,
+              "elevation": 2,
+              "marginTop": 10.416375,
+              "shadowColor": "#000",
+              "shadowOffset": Object {
+                "height": 1,
+                "width": 0,
+              },
+              "shadowOpacity": 0.23,
+              "shadowRadius": 2,
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onLayout={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          pointerEvents="box-only"
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "transparent",
+              "borderRadius": 2,
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "overflow": "hidden",
+              "padding": 30,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flexDirection": "row",
+                "justifyContent": "flex-start",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#000",
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "justifyContent": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Name
+            </Text>
+          </View>
+          <View
+            accessible={true}
+            focusable={false}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 1,
+                "flexDirection": "row",
+                "justifyContent": "flex-end",
+                "opacity": 1,
+                "paddingVertical": 8,
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#4C4C4C",
+                    "flex": 1,
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "textAlign": "right",
+                    "textAlignVertical": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Aeon Multisensor 6
+               
+            </Text>
+          </View>
+          <Image
+            source={
+              Object {
+                "uri": "right_arrow_key",
+              }
+            }
+            style={
+              Object {
+                "height": 30,
+                "marginLeft": 30,
+                "tintColor": "#BDBDBD",
+                "width": 30,
+              }
+            }
+          />
+          <View
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "bottom": 0,
+                  "left": 0,
+                  "overflow": "hidden",
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                },
+                Object {
+                  "borderRadius": 0,
+                },
+              ]
+            }
+          />
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Show on dashboard,  , "
+        accessible={false}
+        importantForAccessibility="yes"
+        style={
+          Array [
+            Object {
+              "backgroundColor": "#f5f5f5",
+              "borderRadius": 2,
+              "elevation": 2,
+              "marginTop": 10.416375,
+              "shadowColor": "#000",
+              "shadowOffset": Object {
+                "height": 1,
+                "width": 0,
+              },
+              "shadowOpacity": 0.23,
+              "shadowRadius": 2,
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "borderRadius": 2,
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "overflow": "hidden",
+                "padding": 30,
+              },
+              undefined,
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flexDirection": "row",
+                "justifyContent": "flex-start",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#000",
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "justifyContent": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Show on dashboard
+            </Text>
+          </View>
+          <RCTSwitch
+            accessibilityRole="switch"
+            onChange={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            onTintColor="#ccc"
+            style={
+              Array [
+                Object {
+                  "height": 31,
+                  "width": 51,
+                },
+                Array [
+                  Array [
+                    Object {
+                      "justifyContent": "flex-end",
+                    },
+                    undefined,
+                  ],
+                  Object {
+                    "backgroundColor": "#cccccc",
+                    "borderRadius": 16,
+                  },
+                ],
+              ]
+            }
+            thumbTintColor="#999999"
+            tintColor="#cccccc"
+            value={false}
+          />
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Hide from sensor list,  , "
+        accessible={false}
+        importantForAccessibility="yes"
+        style={
+          Array [
+            Object {
+              "backgroundColor": "#f5f5f5",
+              "borderRadius": 2,
+              "elevation": 2,
+              "marginTop": 10.416375,
+              "shadowColor": "#000",
+              "shadowOffset": Object {
+                "height": 1,
+                "width": 0,
+              },
+              "shadowOpacity": 0.23,
+              "shadowRadius": 2,
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "borderRadius": 2,
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "overflow": "hidden",
+                "padding": 30,
+              },
+              undefined,
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flexDirection": "row",
+                "justifyContent": "flex-start",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#000",
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "justifyContent": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Hide from sensor list
+            </Text>
+          </View>
+          <RCTSwitch
+            accessibilityRole="switch"
+            onChange={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            onTintColor="#ccc"
+            style={
+              Array [
+                Object {
+                  "height": 31,
+                  "width": 51,
+                },
+                Array [
+                  Array [
+                    Object {
+                      "justifyContent": "flex-end",
+                    },
+                    undefined,
+                  ],
+                  Object {
+                    "backgroundColor": "#cccccc",
+                    "borderRadius": 16,
+                  },
+                ],
+              ]
+            }
+            thumbTintColor="#999999"
+            tintColor="#cccccc"
+            value={false}
+          />
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Store history,  , "
+        accessible={false}
+        importantForAccessibility="yes"
+        style={
+          Array [
+            Object {
+              "backgroundColor": "#f5f5f5",
+              "borderRadius": 2,
+              "elevation": 2,
+              "marginTop": 10.416375,
+              "shadowColor": "#000",
+              "shadowOffset": Object {
+                "height": 1,
+                "width": 0,
+              },
+              "shadowOpacity": 0.23,
+              "shadowRadius": 2,
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "borderRadius": 2,
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "overflow": "hidden",
+                "padding": 30,
+              },
+              undefined,
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flexDirection": "row",
+                "justifyContent": "flex-start",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#000",
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "justifyContent": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Store history
+            </Text>
+          </View>
+          <RCTSwitch
+            accessibilityRole="switch"
+            onChange={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            onTintColor="#ccc"
+            style={
+              Array [
+                Object {
+                  "height": 31,
+                  "width": 51,
+                },
+                Array [
+                  Array [
+                    Object {
+                      "justifyContent": "flex-end",
+                    },
+                    undefined,
+                  ],
+                  Object {
+                    "backgroundColor": "#cccccc",
+                    "borderRadius": 16,
+                  },
+                ],
+              ]
+            }
+            thumbTintColor="#999999"
+            tintColor="#cccccc"
+            value={false}
+          />
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Clear sensor history button, Double tap to activate"
+        accessible={true}
+        focusable={true}
+        importantForAccessibility="yes"
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "backgroundColor": "#000000",
+            "borderRadius": 44,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "marginTop": 41.6655,
+            "maxWidth": 675,
+            "minWidth": 375,
+            "opacity": 1,
+            "paddingHorizontal": 15,
+            "paddingVertical": 22,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.3,
+            "shadowRadius": 2,
+            "width": 600,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "transparent",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "center",
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "color": "#ffffff",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 26,
+                  "textAlign": "center",
+                  "textAlignVertical": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            Clear sensor history
+          </Text>
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Reset Max/Min values button, Double tap to activate"
+        accessible={true}
+        focusable={true}
+        importantForAccessibility="yes"
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "backgroundColor": "#000000",
+            "borderRadius": 44,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "marginTop": 41.6655,
+            "maxWidth": 675,
+            "minWidth": 375,
+            "opacity": 1,
+            "paddingHorizontal": 15,
+            "paddingVertical": 22,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.3,
+            "shadowRadius": 2,
+            "width": 600,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "transparent",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "center",
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "color": "#ffffff",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 26,
+                  "textAlign": "center",
+                  "textAlignVertical": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            Reset max/min values
+          </Text>
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Clear history cache button, Double tap to activate"
+        accessible={true}
+        focusable={true}
+        importantForAccessibility="yes"
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "backgroundColor": "#000000",
+            "borderRadius": 44,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "marginTop": 41.6655,
+            "maxWidth": 675,
+            "minWidth": 375,
+            "opacity": 1,
+            "paddingHorizontal": 15,
+            "paddingVertical": 22,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.3,
+            "shadowRadius": 2,
+            "width": 600,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "transparent",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "center",
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "color": "#ffffff",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 26,
+                  "textAlign": "center",
+                  "textAlignVertical": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            Clear history cache
+          </Text>
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Mark node as failed button, Double tap to activate"
+        accessible={true}
+        focusable={true}
+        importantForAccessibility="yes"
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "backgroundColor": "#b5b5b5",
+            "borderRadius": 44,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "marginTop": 41.6655,
+            "maxWidth": 675,
+            "minWidth": 375,
+            "opacity": 1,
+            "paddingHorizontal": 15,
+            "paddingVertical": 22,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.5,
+            "shadowRadius": 2,
+            "width": 600,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "transparent",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "center",
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "color": "#f5f5f5",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 26,
+                  "textAlign": "center",
+                  "textAlignVertical": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            Mark node as failed
+          </Text>
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Exclude device button, Double tap to activate"
+        accessible={true}
+        focusable={true}
+        importantForAccessibility="yes"
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "backgroundColor": "#b5b5b5",
+            "borderRadius": 44,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "marginTop": 41.6655,
+            "maxWidth": 675,
+            "minWidth": 375,
+            "opacity": 1,
+            "paddingHorizontal": 15,
+            "paddingVertical": 22,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.5,
+            "shadowRadius": 2,
+            "width": 600,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "transparent",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "center",
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "color": "#f5f5f5",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 26,
+                  "textAlign": "center",
+                  "textAlignVertical": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            Exclude device
+          </Text>
+        </View>
+      </View>
+      <Text
+        allowFontScaling={false}
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#555555",
+            "fontFamily": "SuisseIntl",
+            "fontSize": 30,
+            "marginHorizontal": 41.6655,
+            "marginTop": 41.6655,
+            "textAlign": "center",
+          }
+        }
+      >
+        History cache is stored on your device to shorten load times. Clear the cache if you want to reload the values from the database
+        .
+      </Text>
+      <Text
+        allowFontScaling={false}
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#777777",
+            "fontFamily": "SuisseIntl",
+            "fontSize": 30,
+            "marginTop": 41.6655,
+          }
+        }
+      >
+        Technical information
+      </Text>
+      <View
+        accessibilityLabel="Protocol, Z-Wave , "
+        accessible={true}
+        importantForAccessibility="yes"
+        style={
+          Array [
+            Object {
+              "backgroundColor": "#f5f5f5",
+              "borderRadius": 2,
+              "elevation": 2,
+              "marginTop": 10.416375,
+              "shadowColor": "#000",
+              "shadowOffset": Object {
+                "height": 1,
+                "width": 0,
+              },
+              "shadowOpacity": 0.23,
+              "shadowRadius": 2,
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "borderRadius": 2,
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "overflow": "hidden",
+                "padding": 30,
+              },
+              undefined,
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flexDirection": "row",
+                "justifyContent": "flex-start",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#000",
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "justifyContent": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Protocol
+            </Text>
+          </View>
+          <View
+            accessible={true}
+            focusable={false}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 1,
+                "flexDirection": "row",
+                "justifyContent": "flex-end",
+                "opacity": 1,
+                "paddingVertical": 8,
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#4C4C4C",
+                    "flex": 1,
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "textAlign": "right",
+                    "textAlignVertical": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Z-Wave
+               
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Model, n/a , "
+        accessible={true}
+        importantForAccessibility="yes"
+        style={
+          Array [
+            Object {
+              "backgroundColor": "#f5f5f5",
+              "borderRadius": 2,
+              "elevation": 2,
+              "marginTop": 10.416375,
+              "shadowColor": "#000",
+              "shadowOffset": Object {
+                "height": 1,
+                "width": 0,
+              },
+              "shadowOpacity": 0.23,
+              "shadowRadius": 2,
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "borderRadius": 2,
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "overflow": "hidden",
+                "padding": 30,
+              },
+              undefined,
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flexDirection": "row",
+                "justifyContent": "flex-start",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#000",
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "justifyContent": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Model
+            </Text>
+          </View>
+          <View
+            accessible={true}
+            focusable={false}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 1,
+                "flexDirection": "row",
+                "justifyContent": "flex-end",
+                "opacity": 1,
+                "paddingVertical": 8,
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#4C4C4C",
+                    "flex": 1,
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "textAlign": "right",
+                    "textAlignVertical": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              n/a
+               
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        accessibilityLabel="Sensor ID, 69 , "
+        accessible={true}
+        importantForAccessibility="yes"
+        style={
+          Array [
+            Object {
+              "backgroundColor": "#f5f5f5",
+              "borderRadius": 2,
+              "elevation": 2,
+              "marginTop": 10.416375,
+              "shadowColor": "#000",
+              "shadowOffset": Object {
+                "height": 1,
+                "width": 0,
+              },
+              "shadowOpacity": 0.23,
+              "shadowRadius": 2,
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "borderRadius": 2,
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "overflow": "hidden",
+                "padding": 30,
+              },
+              undefined,
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flexDirection": "row",
+                "justifyContent": "flex-start",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#000",
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "justifyContent": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Sensor ID
+            </Text>
+          </View>
+          <View
+            accessible={true}
+            focusable={false}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 1,
+                "flexDirection": "row",
+                "justifyContent": "flex-end",
+                "opacity": 1,
+                "paddingVertical": 8,
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                    "color": "#4C4C4C",
+                    "flex": 1,
+                    "fontFamily": "SuisseIntl",
+                    "fontSize": 30,
+                    "textAlign": "right",
+                    "textAlignVertical": "center",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              69
+               
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</RCTScrollView>
+`;

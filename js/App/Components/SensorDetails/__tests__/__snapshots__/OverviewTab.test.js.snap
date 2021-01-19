@@ -1,0 +1,1682 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<OverviewTab /> - snapshot renders Sensor OverviewTab 1`] = `
+<RCTScrollView
+  contentContainerStyle={
+    Object {
+      "flexGrow": 1,
+      "paddingVertical": 20.83275,
+    }
+  }
+  refreshControl={
+    <Memo
+      onRefresh={[Function]}
+      refreshing={false}
+    />
+  }
+  style={
+    Object {
+      "backgroundColor": "#eeeeee",
+      "flex": 1,
+    }
+  }
+>
+  <RCTRefreshControl />
+  <View>
+    <View
+      style={
+        Object {
+          "alignItems": "flex-start",
+          "backgroundColor": "transparent",
+          "flex": 0,
+          "flexDirection": "row",
+          "flexWrap": "wrap",
+          "justifyContent": "center",
+        }
+      }
+    >
+      <View
+        accessible={true}
+        importantForAccessibility="yes"
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#f5f5f5",
+            "borderRadius": 2,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+            "marginBottom": 10.416375,
+            "marginHorizontal": 5.2081875,
+            "padding": 14.3,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.23,
+            "shadowRadius": 2,
+            "width": 708.3345,
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={false}
+          importantForAccessibility="yes"
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "color": "#9C7D69",
+              "fontFamily": "telldusicons",
+              "fontSize": 120,
+              "marginRight": 14.3,
+            }
+          }
+        >
+          uv
+        </Text>
+        <View
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "flexDirection": "column",
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#9C7D69",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 23.25,
+              }
+            }
+          >
+            UV Index
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#9C7D69",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 56.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            0
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/19/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              7:35 PM
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "#9C7D69",
+                    "fontSize": 30.375,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              defaultMessage="Max"
+              id="reserved.widget.android.label.max"
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              Max
+            </Text>
+            : 0, 
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/13/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              5:31 PM
+            </Text>
+          </Text>
+        </View>
+      </View>
+      <View
+        accessible={true}
+        importantForAccessibility="yes"
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#f5f5f5",
+            "borderRadius": 2,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+            "marginBottom": 10.416375,
+            "marginHorizontal": 5.2081875,
+            "padding": 14.3,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.23,
+            "shadowRadius": 2,
+            "width": 708.3345,
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={false}
+          importantForAccessibility="yes"
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "color": "#9C7D69",
+              "fontFamily": "telldusicons",
+              "fontSize": 120,
+              "marginRight": 14.3,
+            }
+          }
+        >
+          temperature
+        </Text>
+        <View
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "flexDirection": "column",
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#9C7D69",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 23.25,
+              }
+            }
+          >
+            Temperature
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#9C7D69",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 56.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            24.7
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 6,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 56.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              °C
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/19/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              7:35 PM
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "#9C7D69",
+                    "fontSize": 30.375,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              defaultMessage="Max"
+              id="reserved.widget.android.label.max"
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              Max
+            </Text>
+            : 25.2°C, 
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/18/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              4:34 PM
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "#9C7D69",
+                    "fontSize": 30.375,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              defaultMessage="Min"
+              id="label.min"
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              Min
+            </Text>
+            : 18.9°C, 
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/13/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              5:31 PM
+            </Text>
+          </Text>
+        </View>
+      </View>
+      <View
+        accessible={true}
+        importantForAccessibility="yes"
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#f5f5f5",
+            "borderRadius": 2,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+            "marginBottom": 10.416375,
+            "marginHorizontal": 5.2081875,
+            "padding": 14.3,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.23,
+            "shadowRadius": 2,
+            "width": 708.3345,
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={false}
+          importantForAccessibility="yes"
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "color": "#9C7D69",
+              "fontFamily": "telldusicons",
+              "fontSize": 120,
+              "marginRight": 14.3,
+            }
+          }
+        >
+          humidity
+        </Text>
+        <View
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "flexDirection": "column",
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#9C7D69",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 23.25,
+              }
+            }
+          >
+            Humidity
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#9C7D69",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 56.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            35
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 6,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 56.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              %
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/19/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              7:35 PM
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "#9C7D69",
+                    "fontSize": 30.375,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              defaultMessage="Max"
+              id="reserved.widget.android.label.max"
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              Max
+            </Text>
+            : 58%, 
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/13/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              5:31 PM
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "#9C7D69",
+                    "fontSize": 30.375,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              defaultMessage="Min"
+              id="label.min"
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              Min
+            </Text>
+            : 35%, 
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/19/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              4:35 PM
+            </Text>
+          </Text>
+        </View>
+      </View>
+      <View
+        accessible={true}
+        importantForAccessibility="yes"
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#f5f5f5",
+            "borderRadius": 2,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+            "marginBottom": 10.416375,
+            "marginHorizontal": 5.2081875,
+            "padding": 14.3,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.23,
+            "shadowRadius": 2,
+            "width": 708.3345,
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={false}
+          importantForAccessibility="yes"
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "color": "#9C7D69",
+              "fontFamily": "telldusicons",
+              "fontSize": 120,
+              "marginRight": 14.3,
+            }
+          }
+        >
+          luminance
+        </Text>
+        <View
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "flexDirection": "column",
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#9C7D69",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 23.25,
+              }
+            }
+          >
+            Luminance
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#9C7D69",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 56.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            10
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 6,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 56.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              lx
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/19/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              7:35 PM
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "#9C7D69",
+                    "fontSize": 30.375,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              defaultMessage="Max"
+              id="reserved.widget.android.label.max"
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              Max
+            </Text>
+            : 27lx, 
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/15/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              3:32 PM
+            </Text>
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={
+              Object {
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "#000",
+                "fontFamily": "SuisseIntl",
+                "fontSize": 20.25,
+                "textShadowColor": "rgba(0,0,0,0)",
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "#9C7D69",
+                    "fontSize": 30.375,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              defaultMessage="Min"
+              id="label.min"
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              Min
+            </Text>
+            : 0lx, 
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              11/13/2020
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": "rgba(0,0,0,0)",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 14,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+               
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                  "color": undefined,
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 20.25,
+                  "textShadowColor": "rgba(0,0,0,0)",
+                }
+              }
+            >
+              8:31 PM
+            </Text>
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "backgroundColor": "#f5f5f5",
+          "borderRadius": 2,
+          "elevation": 2,
+          "flex": 0,
+          "flexDirection": "column",
+          "justifyContent": "center",
+          "marginBottom": 10.416375,
+          "marginHorizontal": 20.83275,
+          "opacity": 1,
+          "padding": 14.3,
+          "shadowColor": "#000",
+          "shadowOffset": Object {
+            "height": 1,
+            "width": 0,
+          },
+          "shadowOpacity": 0.23,
+          "shadowRadius": 2,
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "color": "#8e8e93",
+              "fontFamily": "SuisseIntl",
+              "fontSize": 29,
+            },
+            Object {
+              "marginLeft": 10,
+            },
+          ]
+        }
+      >
+        Location:
+      </Text>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "transparent",
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "flex-start",
+              "backgroundColor": "transparent",
+              "justifyContent": "center",
+              "minWidth": 180,
+            }
+          }
+        >
+          <ActivityIndicator
+            animating={true}
+            color="#999999"
+            hidesWhenStopped={true}
+            size="small"
+            style={
+              Array [
+                Array [
+                  Object {
+                    "alignSelf": "flex-start",
+                    "height": 160.07999999999998,
+                    "maxWidth": 165,
+                    "width": 165,
+                  },
+                  Object {
+                    "alignItems": "center",
+                    "backgroundColor": "transparent",
+                    "justifyContent": "center",
+                  },
+                ],
+                Object {
+                  "backgroundColor": "transparent",
+                },
+              ]
+            }
+          />
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "flex-start",
+                "backgroundColor": "transparent",
+                "justifyContent": "center",
+                "marginRight": 112.5,
+                "marginTop": 10,
+                "width": 434.99999999999994,
+              },
+              Object {
+                "flex": 1,
+                "marginRight": 0,
+                "width": undefined,
+              },
+            ]
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            numberOfLines={1}
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "color": "#333333",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 35,
+                },
+                undefined,
+              ]
+            }
+          >
+            Three
+          </Text>
+          <Text
+            allowFontScaling={false}
+            numberOfLines={1}
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "color": "#8e8e93",
+                  "fontFamily": "SuisseIntl",
+                  "fontSize": 29,
+                },
+                undefined,
+              ]
+            }
+          >
+            TellStick ZNet Lite v2
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#f5f5f5",
+            "borderRadius": 2,
+            "elevation": 2,
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "padding": 24.3,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.23,
+            "shadowRadius": 2,
+            "width": 708.3345,
+          },
+          Object {
+            "marginHorizontal": 20.83275,
+          },
+        ]
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        defaultMessage="Battery"
+        id="label.battery"
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#000",
+            "fontFamily": "SuisseIntl",
+            "fontSize": 37.5,
+          }
+        }
+      >
+        Battery
+      </Text>
+      <View
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "flexDirection": "row",
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "transparent",
+              "flex": 0,
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+            }
+          }
+        >
+          <View
+            onLayout={[Function]}
+            style={
+              Array [
+                Object {
+                  "alignItems": "flex-start",
+                  "backgroundColor": "transparent",
+                  "borderRadius": 6,
+                  "borderWidth": 1,
+                  "height": 30,
+                  "justifyContent": "center",
+                  "padding": 1,
+                  "width": 52,
+                },
+                Object {
+                  "borderColor": "#5cb85c",
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "transparent",
+                  },
+                  Object {
+                    "backgroundColor": "#5cb85c",
+                    "height": -3,
+                    "width": -3,
+                  },
+                ]
+              }
+            />
+          </View>
+          <View
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "borderBottomRightRadius": 6,
+                  "borderTopRightRadius": 6,
+                  "height": 15,
+                  "width": 6,
+                },
+                Object {
+                  "backgroundColor": "#5cb85c",
+                },
+              ]
+            }
+          />
+        </View>
+        <Text
+          allowFontScaling={false}
+          style={
+            Object {
+              "backgroundColor": "transparent",
+              "color": "#4C4C4C",
+              "fontFamily": "SuisseIntl",
+              "fontSize": 37.5,
+              "marginLeft": 5,
+            }
+          }
+        >
+          100
+          %
+        </Text>
+      </View>
+    </View>
+  </View>
+</RCTScrollView>
+`;

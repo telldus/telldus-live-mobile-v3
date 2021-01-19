@@ -32,6 +32,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Linking,
+	Platform,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -57,7 +58,9 @@ import i18n from '../../Translations/common';
 
 const PremiumBenefitsScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
-	let swiperRef = React.createRef();
+	let swiperRef = React.useRef();
+
+	const isiOS = Platform.OS === 'ios';
 
 	const [ selectedIndex, setSelectedIndex ] = useState(0);
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -116,9 +119,9 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 		},
 	];
 
-	function onIndexChanged(index: number) {
+	const onIndexChanged = useCallback((index: number) => {
 		setSelectedIndex(index);
-	}
+	}, []);
 
 	const {
 		screens,
@@ -173,26 +176,24 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 	]);
 
 	const onPressMore = useCallback(() => {
-		(() => {
-			let url = 'https://live.telldus.com/profile/premium';
-			Linking.canOpenURL(url)
-				.then((supported: boolean): any => {
-					if (!supported) {
-						return;
-					}
-					return Linking.openURL(url);
-				})
-				.catch((err: any) => {
-					const message = err.message;
-					screenProps.toggleDialogueBox({
-						show: true,
-						showHeader: true,
-						text: message,
-						showPositive: true,
-						closeOnPressPositive: true,
-					});
+		let url = 'https://live.telldus.com/profile/premium';
+		Linking.canOpenURL(url)
+			.then((supported: boolean): any => {
+				if (!supported) {
+					return;
+				}
+				return Linking.openURL(url);
+			})
+			.catch((err: any) => {
+				const message = err.message;
+				screenProps.toggleDialogueBox({
+					show: true,
+					showHeader: true,
+					text: message,
+					showPositive: true,
+					closeOnPressPositive: true,
 				});
-		})();
+			});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -239,7 +240,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 					</View>
 					<Text
 						level={23}
-						style={moreText} onPress={onPressMore}>...{formatMessage(i18n.labelMuchMore)}</Text>
+						style={moreText} onPress={isiOS ? undefined : onPressMore}>...{formatMessage(i18n.labelMuchMore)}</Text>
 				</View>
 				<UpgradePremiumButton
 					navigation={navigation}/>

@@ -243,16 +243,16 @@ actionsToPerformOnStart = async () => {
 		showLoadingIndicator,
 		enableGeoFence,
 		intl,
-		showChangeLog,
-		changeLogVersion,
+		// showChangeLog,
+		// changeLogVersion,
 	} = this.props;
-
-	if (showChangeLog) {
-		navigate('ChangeLogScreen', {
-			forceShowChangeLog: false,
-			changeLogVersion,
-		});
-	}
+	// TODO: Bring back when next app version has changelog
+	// if (showChangeLog) {
+	// 	navigate('ChangeLogScreen', {
+	// 		forceShowChangeLog: false,
+	// 		changeLogVersion,
+	// 	});
+	// }
 
 	try {
 		// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.

@@ -74,6 +74,7 @@ const Title = memo<Object>(({
 				duration={5000}
 				repeatSpacer={50}
 				marqueeDelay={5000}
+				allowFontScaling={false}
 				style={[
 					styles.name, {
 						fontSize: Math.floor(tileWidth / 10),

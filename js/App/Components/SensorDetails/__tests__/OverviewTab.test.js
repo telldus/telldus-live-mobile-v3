@@ -18,57 +18,78 @@
  *
  */
 
+
 import React from 'react';
 import {
 	Dimensions,
 } from 'react-native';
 import {act} from 'react-test-renderer';
 
+import { configureStore } from '../../../Store/ConfigureStore';
 import {
 	rendererWithIntlAndReduxProviders,
-} from '../../Utils/jestUtils';
-import NavigationHeader from '../NavigationHeader';
+	DUMMY_SENSOR,
+	withScreenPropsHOC,
+	DUMMY_CLIENT,
+} from '../../../../Utils/jestUtils';
+
+import OverviewTab from '../OverviewTab';
 import {
 	setAppLayout,
-} from '../../App/Actions';
-import { configureStore } from '../../App/Store/ConfigureStore';
+	onReceivedSensors,
+} from '../../../Actions';
 
 let {height, width} = Dimensions.get('window');
 
 const store = configureStore().store;
 
-describe('<NavigationHeader /> - snapshot', () => {
+jest.useFakeTimers();
 
-	beforeAll(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
-	});
 
-	it('renders NavigationHeader when showLeftIcon is true', () => {
+const onOp = () => {
+};
+
+describe('<OverviewTab /> - snapshot', () => {
+	it('renders Sensor OverviewTab', () => {
 		let component;
 		act(() => {
+			store.dispatch(setAppLayout({
+				height,
+				width,
+			}));
+
+			const sensors = {
+				sensor: [
+					DUMMY_SENSOR,
+				],
+			};
+			const clients = {
+				client: [
+					DUMMY_CLIENT,
+				],
+			};
+			store.dispatch(onReceivedSensors(sensors));
+			store.dispatch({
+				type: 'RECEIVED_GATEWAYS',
+				payload: clients,
+			});
+
+			const WithIntl = withScreenPropsHOC(
+				<OverviewTab
+					dispatch={onOp}
+					route={{params: {
+						id: DUMMY_SENSOR.id,
+					}}}
+					currentScreen={'SOverview'}
+					getSensorInfo={onOp}/>
+			);
+
 			component = rendererWithIntlAndReduxProviders(
-				<NavigationHeader
-					showLeftIcon/>
+				<WithIntl/>
 			);
 		});
 
 		const tree = component.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
-
-	it('renders NavigationHeader when showLeftIcon is false', () => {
-		let component;
-		act(() => {
-			component = rendererWithIntlAndReduxProviders(
-				<NavigationHeader/>
-			);
-		});
-
-		const tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-
 });

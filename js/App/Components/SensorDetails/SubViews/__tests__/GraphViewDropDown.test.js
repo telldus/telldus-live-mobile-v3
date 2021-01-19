@@ -18,64 +18,54 @@
  *
  */
 
+
 import React from 'react';
 import {
 	Dimensions,
 } from 'react-native';
+import { configureStore } from '../../../../Store/ConfigureStore';
 import {act} from 'react-test-renderer';
 
 import {
 	rendererWithIntlAndReduxProviders,
-} from '../../Utils/jestUtils';
+	withIntlHOC,
+} from '../../../../../Utils/jestUtils';
+
+import GraphViewDropDown from '../GraphViewDropDown';
 import {
 	setAppLayout,
-} from '../../App/Actions';
-import { configureStore } from '../../App/Store/ConfigureStore';
-import CheckBoxIconText from '../CheckBoxIconText';
+} from '../../../../Actions';
 
 let {height, width} = Dimensions.get('window');
 
 const store = configureStore().store;
 
-const intl = {
-	formatMessage: () => '',
+jest.useFakeTimers();
+
+const onOp = () => {
 };
 
-it('renders CheckBoxIconText when checked', () => {
-	let component;
-	act(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
+describe('<GraphViewDropDown /> - snapshot', () => {
+	it('renders GraphViewDropDown', () => {
+		let component;
+		act(() => {
+			store.dispatch(setAppLayout({
+				height,
+				width,
+			}));
 
-		component = rendererWithIntlAndReduxProviders(
-			<CheckBoxIconText
-				text="CheckBoxIconText"
-				isChecked
-				intl={intl}/>
-		);
+			const WithIntl = withIntlHOC(<GraphViewDropDown
+				appLayout={{
+					height,
+					width,
+				}}
+				graphView={'overview'}
+				onValueChange={onOp}/>);
+
+			component = rendererWithIntlAndReduxProviders(<WithIntl/>);
+		});
+
+		const tree = component.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
-
-	const tree = component.toJSON();
-	expect(tree).toMatchSnapshot();
-});
-
-it('renders CheckBoxIconText when unchecked', () => {
-	let component;
-	act(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
-
-		component = rendererWithIntlAndReduxProviders(
-			<CheckBoxIconText
-				text="CheckBoxIconText"
-				intl={intl}/>
-		);
-	});
-
-	const tree = component.toJSON();
-	expect(tree).toMatchSnapshot();
 });

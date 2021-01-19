@@ -281,13 +281,14 @@ class App extends React.Component<Props> {
 
 	render(): Object {
 		let {
-			prevChangeLogVersion,
+			// prevChangeLogVersion,
 			accessToken,
 			isTokenValid,
 			dialogueData,
 		} = this.props;
 
-		let showChangeLog = changeLogVersion !== prevChangeLogVersion;
+		// let showChangeLog = changeLogVersion !== prevChangeLogVersion; // TODO: Bring back when next app version has changelog
+		let showChangeLog = false;
 
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 

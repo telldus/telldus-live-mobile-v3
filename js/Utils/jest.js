@@ -19,6 +19,8 @@
 
 // @flow
 
+import React from 'react';
+
 global.window.addEventListener = (): null => null;
 global.__DEV__ = true;
 
@@ -52,6 +54,7 @@ jest.mock('react-native-device-info', (): Object => {
 		getSystemVersion: jest.fn(),
 		isTablet: jest.fn(),
 		getUniqueId: jest.fn(),
+		getVersion: jest.fn(),
 	};
 });
 
@@ -100,6 +103,9 @@ jest.mock('reconnecting-websocket', (): Object => {
 NativeModules.WidgetModule = {
 	configureWidgetAuthData: jest.fn(),
 	disableAllWidgets: jest.fn(),
+};
+
+NativeModules.RNFetchBlob = {
 };
 
 jest.mock('@react-native-async-storage/async-storage', (): Object => mockAsyncStorage);
@@ -167,5 +173,44 @@ jest.mock('redux-persist', (): Object => {
 		persistCombineReducers: jest
 			.fn()
 			.mockImplementation((config: Object, reducers: Function): Object => combineReducers(reducers)),
+	};
+});
+
+
+jest.mock('react-native-safe-area-context', (): Object => {
+	return {
+		withSafeAreaInsets: (Elem: Object): Object => {
+			return (props: Object): Object => {
+				return <Elem
+					{...props}
+					insets={{
+						left: 0,
+					}}/>;
+			};
+		},
+	};
+});
+
+jest.mock('react-native-localize', (): Object => {
+	return {
+		uses24HourClock: (): boolean => false,
+		getLocales: (): Array<Object> => {
+			return [
+				{
+					languageTag: 'en-En',
+				},
+			];
+		},
+	};
+});
+
+const mockedNavigate = jest.fn();
+
+jest.mock('@react-navigation/native', (): Object => {
+	return {
+		...jest.requireActual('@react-navigation/native'),
+		useNavigation: (): Object => ({
+			navigate: mockedNavigate,
+		}),
 	};
 });

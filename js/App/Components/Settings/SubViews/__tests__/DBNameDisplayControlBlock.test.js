@@ -18,64 +18,42 @@
  *
  */
 
+
 import React from 'react';
 import {
 	Dimensions,
 } from 'react-native';
+import { configureStore } from '../../../../Store/ConfigureStore';
 import {act} from 'react-test-renderer';
 
 import {
 	rendererWithIntlAndReduxProviders,
-} from '../../Utils/jestUtils';
+} from '../../../../../Utils/jestUtils';
+
+import DBNameDisplayControlBlock from '../DBNameDisplayControlBlock';
 import {
 	setAppLayout,
-} from '../../App/Actions';
-import { configureStore } from '../../App/Store/ConfigureStore';
-import CheckBoxIconText from '../CheckBoxIconText';
+} from '../../../../Actions';
 
 let {height, width} = Dimensions.get('window');
 
 const store = configureStore().store;
 
-const intl = {
-	formatMessage: () => '',
-};
+jest.useFakeTimers();
 
-it('renders CheckBoxIconText when checked', () => {
-	let component;
-	act(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
+describe('<DBNameDisplayControlBlock /> - snapshot', () => {
+	it('renders DBNameDisplayControlBlock', () => {
+		let component;
+		act(() => {
+			store.dispatch(setAppLayout({
+				height,
+				width,
+			}));
 
-		component = rendererWithIntlAndReduxProviders(
-			<CheckBoxIconText
-				text="CheckBoxIconText"
-				isChecked
-				intl={intl}/>
-		);
+			component = rendererWithIntlAndReduxProviders(<DBNameDisplayControlBlock/>);
+		});
+
+		const tree = component.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
-
-	const tree = component.toJSON();
-	expect(tree).toMatchSnapshot();
-});
-
-it('renders CheckBoxIconText when unchecked', () => {
-	let component;
-	act(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
-
-		component = rendererWithIntlAndReduxProviders(
-			<CheckBoxIconText
-				text="CheckBoxIconText"
-				intl={intl}/>
-		);
-	});
-
-	const tree = component.toJSON();
-	expect(tree).toMatchSnapshot();
 });

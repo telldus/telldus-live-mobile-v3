@@ -18,89 +18,82 @@
  *
  */
 
+
 import React from 'react';
 import {
 	Dimensions,
 } from 'react-native';
+import { configureStore } from '../../../../Store/ConfigureStore';
 import {act} from 'react-test-renderer';
 
 import {
 	rendererWithIntlAndReduxProviders,
-} from '../../Utils/jestUtils';
-import TouchableButton from '../TouchableButton';
+} from '../../../../../Utils/jestUtils';
+
+import DateBlock from '../DateBlock';
 import {
 	setAppLayout,
-} from '../../App/Actions';
-import { configureStore } from '../../App/Store/ConfigureStore';
+} from '../../../../Actions';
 
 let {height, width} = Dimensions.get('window');
 
 const store = configureStore().store;
+
 jest.useFakeTimers();
 
-describe('<TouchableButton /> - snapshot', () => {
 
-	beforeAll(() => {
-		store.dispatch(setAppLayout({
-			height,
-			width,
-		}));
-	});
+const onOp = () => {
+};
 
-	it('renders TouchableButton when enabled', () => {
+describe('<DateBlock /> - snapshot', () => {
+	it('renders DateBlock align left', () => {
 		let component;
 		act(() => {
+			store.dispatch(setAppLayout({
+				height,
+				width,
+			}));
+
 			component = rendererWithIntlAndReduxProviders(
-				<TouchableButton
-					text={'TouchableButton'}/>
+				<DateBlock
+					appLayout={{
+						height,
+						width,
+					}}
+					align={'left'}
+					label={'From:'}
+					onPress={onOp}
+					date={1610259107}
+					propToUpdateIndex={1}/>
 			);
 		});
 
 		const tree = component.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
-
-	it('renders TouchableButton when disabled', () => {
+	it('renders DateBlock align right', () => {
 		let component;
 		act(() => {
+			store.dispatch(setAppLayout({
+				height,
+				width,
+			}));
+
 			component = rendererWithIntlAndReduxProviders(
-				<TouchableButton
-					disabled
-					text={'TouchableButton'}/>
+				<DateBlock
+					appLayout={{
+						height,
+						width,
+					}}
+					align={'right'}
+					label={'To:'}
+					onPress={onOp}
+					date={1610359107}
+					propToUpdateIndex={2}/>
 			);
 		});
 
 		const tree = component.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
-
-	it('renders TouchableButton when enabled and loading', () => {
-		let component;
-		act(() => {
-			component = rendererWithIntlAndReduxProviders(
-				<TouchableButton
-					text={'TouchableButton'}
-					showThrobber={true}/>
-			);
-		});
-
-		const tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-
-	it('renders TouchableButton when disabled and loading', () => {
-		let component;
-		act(() => {
-			component = rendererWithIntlAndReduxProviders(
-				<TouchableButton
-					disabled
-					text={'TouchableButton'}
-					showThrobber={true}/>
-			);
-		});
-
-		const tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-
 });
