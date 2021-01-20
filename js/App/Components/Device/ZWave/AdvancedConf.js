@@ -30,21 +30,18 @@ import React, {
 import {
 	useSelector,
 } from 'react-redux';
-import {
-	Platform,
-} from 'react-native';
 
 import {
 	Text,
 	View,
 	EmptyView,
 	RoundedInfoButton,
-	ThemedTextInput,
 } from '../../../../BaseComponents';
 import GenericConfSetting from './GenericConfSetting';
 import BitsetConfSetting from './BitsetConfSetting';
 import RangeConfSetting from './RangeConfSetting';
 import RangeMappedConfSetting from './RangeMappedConfSetting';
+import ManualConfigBlock from './ManualConfigBlock';
 
 import Theme from '../../../Theme';
 
@@ -87,7 +84,6 @@ const AdvancedConf = (props: Props): Object => {
 		horizontalBlockCoverMultiple,
 		horizontalCoverMultiple,
 		rightBlockMultiple,
-		textFieldStyle,
 		verticalBlockCoverManual,
 	} = getStyles({
 		layout,
@@ -384,47 +380,24 @@ const AdvancedConf = (props: Props): Object => {
 				const {
 					pNumber,
 					size,
-					value = '0',
+					value,
 				} = mp;
+				const _size = typeof size === undefined ? '' : size.toString();
+				const _value = typeof value === undefined ? '' : value.toString();
+
 				rows.push(
 					<View
 						key={`${index}-${pNumber}`}>
-						<View>
-							<Text
-								level={3}
-								style={hItemLabelDef}>
-								Size
-							</Text>
-							<ThemedTextInput
-								level={23}
-								value={size}
-								style={textFieldStyle}
-								onChangeText={onChangeTextSize}
-								onSubmitEditing={onSubmitEditingSize}
-								autoCorrect={false}
-								autoFocus={false}
-								returnKeyType={'done'}
-								keyboardType={Platform.OS === 'ios' ? 'phone-pad' : 'decimal-pad'}
-							/>
-						</View>
-						<View>
-							<Text
-								level={3}
-								style={hItemLabelDef}>
-								Value
-							</Text>
-							<ThemedTextInput
-								level={23}
-								value={value}
-								style={textFieldStyle}
-								onChangeText={onChangeTextValue}
-								onSubmitEditing={onSubmitEditingValue}
-								autoCorrect={false}
-								autoFocus={false}
-								returnKeyType={'done'}
-								keyboardType={Platform.OS === 'ios' ? 'phone-pad' : 'decimal-pad'}
-							/>
-						</View>
+						<ManualConfigBlock
+							label={'Size : '}
+							inputValue={_size}
+							onChangeText={onChangeTextSize}
+							onSubmitEditing={onSubmitEditingSize}/>
+						<ManualConfigBlock
+							label={'Value : '}
+							inputValue={_value}
+							onChangeText={onChangeTextValue}
+							onSubmitEditing={onSubmitEditingValue}/>
 					</View>
 				);
 
@@ -554,15 +527,6 @@ const getStyles = ({
 			width: '30%',
 			alignItems: 'center',
 			justifyContent: 'flex-end',
-		},
-		textFieldStyle: {
-			width: '100%',
-			paddingBottom: 0,
-			paddingTop: 0,
-			fontSize,
-			textAlign: 'right',
-			borderBottomWidth: 1,
-			borderBottomColor: colors.inAppBrandSecondary,
 		},
 	};
 };
