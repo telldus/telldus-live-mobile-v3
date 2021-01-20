@@ -24,6 +24,8 @@
 
 import React, {
 	memo,
+	useState,
+	useCallback,
 } from 'react';
 import {
 	useSelector,
@@ -45,18 +47,23 @@ import Theme from '../../../Theme';
 
 type Props = {
     label: string,
-    inputValue: string,
-    onChangeText: Function,
-    onSubmitEditing: Function,
+    inputValueKey: string,
+	number: string,
+	value: string,
+	size: string,
+    onChangeValue: Function,
 };
 
 const ManualConfigBlock = memo<Object>((props: Props): Object => {
 	const {
 		label,
-		inputValue,
-		onChangeText,
-		onSubmitEditing,
+		inputValueKey,
+		number,
+		value,
+		size,
+		onChangeValue,
 	} = props;
+	const inputVal = props[inputValueKey];
 
 	const {
 		colors,
@@ -73,6 +80,19 @@ const ManualConfigBlock = memo<Object>((props: Props): Object => {
 		layout,
 		colors,
 	});
+	const [ inputValue, setInputValue ] = useState(inputVal);
+	const _onChangeText = useCallback((v: string) => {
+		if (!v || !isNaN(parseInt(v, 10))) {
+			onChangeValue({
+				number,
+				value,
+				size,
+				[inputValueKey]: v,
+				hasChanged: v !== props[inputValueKey],
+			});
+			setInputValue(v);
+		}
+	}, [onChangeValue, number, value, size, inputValueKey, props]);
 
 	return (
 		<View style={horizontalCover}>
@@ -88,8 +108,7 @@ const ManualConfigBlock = memo<Object>((props: Props): Object => {
 					level={23}
 					value={inputValue}
 					style={textFieldStyle}
-					onChangeText={onChangeText}
-					onSubmitEditing={onSubmitEditing}
+					onChangeText={_onChangeText}
 					autoCorrect={false}
 					autoFocus={false}
 					returnKeyType={'done'}

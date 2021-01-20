@@ -145,24 +145,6 @@ const AdvancedConf = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_onChangeValue]);
 
-	// const onChangeTextNumber = useCallback(() => {
-	// }, []);
-
-	// const onSubmitEditingNumber = useCallback(() => {
-	// }, []);
-
-	const onChangeTextSize = useCallback(() => {
-	}, []);
-
-	const onSubmitEditingSize = useCallback(() => {
-	}, []);
-
-	const onChangeTextValue = useCallback(() => {
-	}, []);
-
-	const onSubmitEditingValue = useCallback(() => {
-	}, []);
-
 	const cParamsLength = configurationParameters.length;
 	const paramsLen = Object.keys(parameters);
 	const configurationSettings = useMemo((): Array<Object> => {
@@ -390,14 +372,18 @@ const AdvancedConf = (props: Props): Object => {
 						key={`${index}-${pNumber}`}>
 						<ManualConfigBlock
 							label={'Size : '}
-							inputValue={_size}
-							onChangeText={onChangeTextSize}
-							onSubmitEditing={onSubmitEditingSize}/>
+							inputValueKey={'size'}
+							number={pNumber}
+							value={_value}
+							size={_size}
+							onChangeValue={_onChangeValue}/>
 						<ManualConfigBlock
 							label={'Value : '}
-							inputValue={_value}
-							onChangeText={onChangeTextValue}
-							onSubmitEditing={onSubmitEditingValue}/>
+							inputValueKey={'value'}
+							number={pNumber}
+							value={_value}
+							size={_size}
+							onChangeValue={_onChangeValue}/>
 					</View>
 				);
 
@@ -418,9 +404,43 @@ const AdvancedConf = (props: Props): Object => {
 				);
 			});
 		}
+		_configurationSettings.push(
+			<View
+				style={verticalBlockCoverManual}>
+				<View
+					style={leftBlockMultiple}>
+					<Text
+						level={3}
+						style={hItemLabelDef}>
+						Sometimes a device can have extra configuration that we can't detect automatically, if there are some listed in the device manual, you can enter them here.
+					</Text>
+				</View>
+				<ManualConfigBlock
+					label={'Number : '}
+					inputValueKey={'number'}
+					number={'0'}
+					size={'1'}
+					value={'0'}
+					onChangeValue={_onChangeValue}/>
+				<ManualConfigBlock
+					label={'Size : '}
+					inputValueKey={'size'}
+					number={'0'}
+					size={'1'}
+					value={'0'}
+					onChangeValue={_onChangeValue}/>
+				<ManualConfigBlock
+					label={'Value : '}
+					inputValueKey={'value'}
+					number={'0'}
+					size={'1'}
+					value={'0'}
+					onChangeValue={_onChangeValue}/>
+			</View>
+		);
 		return _configurationSettings;
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [cParamsLength, paramsLen, layout, getConfSettings]);
+	}, [cParamsLength, paramsLen, layout, getConfSettings, _onChangeValue]);
 
 	if (configurationSettings.length <= 0) {
 		return <EmptyView/>;
