@@ -79,7 +79,7 @@ const Configuration = (props: Props): Object => {
 	const [ expand, setExpand ] = useState(true);
 	const [ configurations, setConfigurations ] = useState({
 		advanced: [],
-		protection,
+		protection: undefined,
 	});
 	const [isLoading, setIsLoading] = useState({
 		isLoadingAdv: false,
