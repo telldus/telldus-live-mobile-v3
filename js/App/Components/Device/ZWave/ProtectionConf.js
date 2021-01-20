@@ -26,15 +26,20 @@ import React, {
 	memo,
 	useState,
 	useCallback,
+	useEffect,
 } from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
+import {
+	LayoutAnimation,
+} from 'react-native';
 
 import {
 	Text,
 	View,
 	DropDown,
 } from '../../../../BaseComponents';
+import LayoutAnimations from '../../../Lib/LayoutAnimations';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -45,6 +50,7 @@ type Props = {
     supportRFProtection: number,
 	rfQueue: number,
 	rfState: number,
+	onChangeValue: Function,
 };
 
 const prepareProtectionOptionsAndValue = ({
@@ -116,6 +122,9 @@ const prepareRFProtectionOptionsAndValue = ({
 
 const ProtectionConf = (props: Props): Object => {
 	const {
+		onChangeValue,
+	} = props;
+	const {
 		options,
 		value,
 	} = prepareProtectionOptionsAndValue(props);
@@ -149,13 +158,42 @@ const ProtectionConf = (props: Props): Object => {
 		horizontalCoverStyle,
 	} = getStyles(layout);
 
+	useEffect(() => {
+		const f1 = parseInt(value.key, 10) === parseInt(selectedState.key, 10);
+		const f2 = parseInt(valueRF.key, 10) === parseInt(selectedStateRF.key, 10);
+		if (f1 || f2) {
+			let protect = f1 ? value : selectedState;
+			let protectRF = f2 ? valueRF : selectedStateRF;
+			setSelectedStateRF(valueRF);
+			onChangeValue({
+				'localProtection': protect.key,
+				'rfProtection': protectRF.key,
+				hasChanged: !f1 || !f2,
+			});
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [onChangeValue, selectedState.key, selectedStateRF.key, value.key, valueRF.key]);
+
 	const saveProtection = useCallback((v: string, itemIndex: number, data: Array<any>) => {
 		setSelectedState(data[itemIndex]);
-	}, []);
+		onChangeValue({
+			'localProtection': data[itemIndex].key,
+			'rfProtection': selectedStateRF.key,
+			hasChanged: parseInt(data[itemIndex].key, 10) !== parseInt(value.key, 10) || parseInt(valueRF.key, 10) !== parseInt(selectedStateRF.key, 10),
+		});
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
+	}, [onChangeValue, selectedStateRF.key, value.key, valueRF.key]);
 
 	const saveProtectionRF = useCallback((v: string, itemIndex: number, data: Array<any>) => {
 		setSelectedStateRF(data[itemIndex]);
-	}, []);
+		onChangeValue({
+			'localProtection': selectedState.key,
+			'rfProtection': data[itemIndex].key,
+			hasChanged: parseInt(data[itemIndex].key, 10) !== parseInt(valueRF.key, 10) || parseInt(value.key, 10) !== parseInt(selectedState.key, 10),
+		});
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
+	}, [onChangeValue, selectedState.key, value.key, valueRF.key]);
 
 	const intl = useIntl();
 

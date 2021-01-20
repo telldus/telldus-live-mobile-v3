@@ -79,7 +79,7 @@ const Configuration = (props: Props): Object => {
 	const [ expand, setExpand ] = useState(true);
 	const [ configurations, setConfigurations ] = useState({
 		advanced: [],
-		protection: [],
+		protection,
 	});
 	const [isLoading, setIsLoading] = useState({
 		isLoadingAdv: false,
@@ -125,13 +125,21 @@ const Configuration = (props: Props): Object => {
 	const prevNodeInfo = usePreviousValue(nodeInfo);
 	const isNodeInfoEqual = isEqual(prevNodeInfo, nodeInfo);
 
+	const onChangeConfigurationProtect = useCallback((protection: Object) => {
+		setConfigurations({
+			...configurations,
+			protection,
+		});
+	}, [configurations]);
+
 	const protection = useMemo((): ?Object => {
 		if (!hasProtection) {
 			return;
 		}
 		return (
 			<ProtectionConf
-				{...protectionClass}/>
+				{...protectionClass}
+				onChangeValue={onChangeConfigurationProtect}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasProtection, isNodeInfoEqual]);
@@ -174,9 +182,9 @@ const Configuration = (props: Props): Object => {
 	const onPressSave = useCallback(() => {
 		const {
 			advanced: advancedC = [],
-			// protection: protectionC = [],
+			protection: protectionC,
 		} = configurations;
-		const paramsConf = advancedC.map(({
+		const paramsConfAdv = advancedC.map(({
 			number,
 			value,
 			size,
@@ -187,7 +195,7 @@ const Configuration = (props: Props): Object => {
 				size,
 			};
 		});
-		if (paramsConf) {
+		if (paramsConfAdv) {
 			setIsLoading({
 				...isLoading,
 				isLoadingAdv: true,
@@ -198,7 +206,21 @@ const Configuration = (props: Props): Object => {
 				'nodeId': nodeId,
 				'class': ZWaveFunctions.COMMAND_CLASS_CONFIGURATION,
 				'cmd': 'setConfigurations',
-				'data': paramsConf,
+				'data': paramsConfAdv,
+			}));
+		}
+		if (protectionC) {
+			setIsLoading({
+				...isLoading,
+				isLoadingAdv: true,
+			});
+			dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+				'module': 'zwave',
+				'action': 'cmdClass',
+				'nodeId': nodeId,
+				'class': ZWaveFunctions.COMMAND_CLASS_PROTECTION,
+				'cmd': 'setProtection',
+				'data': protectionC,
 			}));
 		}
 		timeoutRef.current = setTimeout(() => {
@@ -212,17 +234,18 @@ const Configuration = (props: Props): Object => {
 	let hasChanged = useMemo((): boolean => {
 		const {
 			advanced: advancedC = [],
-			protection: protectionC = [],
+			protection: protectionC,
 		} = configurations;
 		for (let i = 0; i < advancedC.length; i++) {
 			if (advancedC[i].hasChanged) {
 				return true;
 			}
 		}
-		for (let i = 0; i < protectionC.length; i++) {
-			if (protectionC[i].hasChanged) {
-				return true;
-			}
+		if (!protectionC) {
+			return false;
+		}
+		if (protectionC.hasChanged) {
+			return true;
 		}
 		return false;
 	}, [configurations]);
