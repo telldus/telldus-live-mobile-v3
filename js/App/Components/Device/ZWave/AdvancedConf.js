@@ -30,12 +30,16 @@ import React, {
 import {
 	useSelector,
 } from 'react-redux';
+import {
+	Platform,
+} from 'react-native';
 
 import {
 	Text,
 	View,
 	EmptyView,
 	RoundedInfoButton,
+	ThemedTextInput,
 } from '../../../../BaseComponents';
 import GenericConfSetting from './GenericConfSetting';
 import BitsetConfSetting from './BitsetConfSetting';
@@ -83,6 +87,8 @@ const AdvancedConf = (props: Props): Object => {
 		horizontalBlockCoverMultiple,
 		horizontalCoverMultiple,
 		rightBlockMultiple,
+		textFieldStyle,
+		verticalBlockCoverManual,
 	} = getStyles({
 		layout,
 		colors,
@@ -143,10 +149,29 @@ const AdvancedConf = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_onChangeValue]);
 
+	// const onChangeTextNumber = useCallback(() => {
+	// }, []);
+
+	// const onSubmitEditingNumber = useCallback(() => {
+	// }, []);
+
+	const onChangeTextSize = useCallback(() => {
+	}, []);
+
+	const onSubmitEditingSize = useCallback(() => {
+	}, []);
+
+	const onChangeTextValue = useCallback(() => {
+	}, []);
+
+	const onSubmitEditingValue = useCallback(() => {
+	}, []);
+
 	const cParamsLength = configurationParameters.length;
 	const paramsLen = Object.keys(parameters);
 	const configurationSettings = useMemo((): Array<Object> => {
-		const _configurationSettings = configurationParameters.map((cp: Object, index: number): Object => {
+		let deviceDescriptorParamIds = [];
+		let _configurationSettings = configurationParameters.map((cp: Object, index: number): Object => {
 			// TODO: Move to shared data
 			const {
 				Name,
@@ -156,6 +181,8 @@ const AdvancedConf = (props: Props): Object => {
 				Size,
 				DefaultValue,
 			} = cp;
+
+			deviceDescriptorParamIds.push(ParameterNumber);
 
 			let min = null;
 			let max = null;
@@ -342,6 +369,82 @@ const AdvancedConf = (props: Props): Object => {
 				</View>
 			);
 		});
+		let manualParams = [];
+		for (let index in parameters) {
+			if (parameters[index] && deviceDescriptorParamIds.indexOf(parseInt(index, 10)) < 0) {
+				manualParams.push({
+					...parameters[index],
+					pNumber: index,
+				});
+			}
+		}
+		if (manualParams.length > 0) {
+			let rows = [];
+			manualParams.forEach((mp: Object, index: number) => {
+				const {
+					pNumber,
+					size,
+					value = '0',
+				} = mp;
+				rows.push(
+					<View
+						key={`${index}-${pNumber}`}>
+						<View>
+							<Text
+								level={3}
+								style={hItemLabelDef}>
+								Size
+							</Text>
+							<ThemedTextInput
+								level={23}
+								value={size}
+								style={textFieldStyle}
+								onChangeText={onChangeTextSize}
+								onSubmitEditing={onSubmitEditingSize}
+								autoCorrect={false}
+								autoFocus={false}
+								returnKeyType={'done'}
+								keyboardType={Platform.OS === 'ios' ? 'phone-pad' : 'decimal-pad'}
+							/>
+						</View>
+						<View>
+							<Text
+								level={3}
+								style={hItemLabelDef}>
+								Value
+							</Text>
+							<ThemedTextInput
+								level={23}
+								value={value}
+								style={textFieldStyle}
+								onChangeText={onChangeTextValue}
+								onSubmitEditing={onSubmitEditingValue}
+								autoCorrect={false}
+								autoFocus={false}
+								returnKeyType={'done'}
+								keyboardType={Platform.OS === 'ios' ? 'phone-pad' : 'decimal-pad'}
+							/>
+						</View>
+					</View>
+				);
+
+				_configurationSettings.push(
+					<View
+						key={`${index}-${pNumber}`}
+						style={verticalBlockCoverManual}>
+						<View
+							style={leftBlockMultiple}>
+							<Text
+								level={3}
+								style={hItemLabelDef}>
+								{`${pNumber}. This is a manually added configuration`}
+							</Text>
+						</View>
+						{rows}
+					</View>
+				);
+			});
+		}
 		return _configurationSettings;
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [cParamsLength, paramsLen, layout, getConfSettings]);
@@ -425,6 +528,11 @@ const getStyles = ({
 			flexDirection: 'column',
 			paddingLeft: 8,
 		},
+		verticalBlockCoverManual: {
+			flex: 1,
+			flexDirection: 'column',
+			marginTop: padding,
+		},
 		horizontalBlockCoverMultiple: {
 			flex: 1,
 			flexDirection: 'row',
@@ -446,6 +554,15 @@ const getStyles = ({
 			width: '30%',
 			alignItems: 'center',
 			justifyContent: 'flex-end',
+		},
+		textFieldStyle: {
+			width: '100%',
+			paddingBottom: 0,
+			paddingTop: 0,
+			fontSize,
+			textAlign: 'right',
+			borderBottomWidth: 1,
+			borderBottomColor: colors.inAppBrandSecondary,
 		},
 	};
 };
