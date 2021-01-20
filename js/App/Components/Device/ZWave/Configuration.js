@@ -37,6 +37,7 @@ import {
 import {
 	LayoutAnimation,
 } from 'react-native';
+const isEqual = require('react-fast-compare');
 
 import {
 	EmptyView,
@@ -51,6 +52,10 @@ import AdvancedConf from './AdvancedConf';
 
 import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
+import {
+	usePreviousValue,
+} from '../../../Hooks/App';
+
 import Theme from '../../../Theme';
 
 import {
@@ -117,6 +122,9 @@ const Configuration = (props: Props): Object => {
 		};
 	}, []);
 
+	const prevNodeInfo = usePreviousValue(nodeInfo);
+	const isNodeInfoEqual = isEqual(prevNodeInfo, nodeInfo);
+
 	const protection = useMemo((): ?Object => {
 		if (!hasProtection) {
 			return;
@@ -126,13 +134,17 @@ const Configuration = (props: Props): Object => {
 				{...protectionClass}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasProtection]);
+	}, [hasProtection, isNodeInfoEqual]);
 
 	const onChangeConfigurationAdv = useCallback((data: Object) => {
+		const {
+			advanced,
+		} = configurations;
+		const _advanced = advanced.filter((d: Object): boolean => d.number !== data.number);
 		setConfigurations({
 			...configurations,
 			advanced: [
-				...configurations.advanced,
+				..._advanced,
 				data,
 			],
 		});
@@ -150,7 +162,7 @@ const Configuration = (props: Props): Object => {
 				onChangeValue={onChangeConfigurationAdv}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasConfiguration, manufacturerAttributes, ConfigurationParameters]);
+	}, [hasConfiguration, manufacturerAttributes, ConfigurationParameters, isNodeInfoEqual]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));

@@ -26,6 +26,7 @@ import React, {
 	memo,
 	useCallback,
 	useState,
+	useEffect,
 } from 'react';
 import {
 	useSelector,
@@ -33,6 +34,7 @@ import {
 import {
 	Platform,
 	KeyboardAvoidingView,
+	LayoutAnimation,
 } from 'react-native';
 
 import {
@@ -45,6 +47,7 @@ import {
 import {
 	useDialogueBox,
 } from '../../../Hooks/Dialoguebox';
+import LayoutAnimations from '../../../Lib/LayoutAnimations';
 import Theme from '../../../Theme';
 
 const GenericConfSetting = (props: Object): Object => {
@@ -69,6 +72,19 @@ const GenericConfSetting = (props: Object): Object => {
 		layout,
 		colors,
 	});
+
+	useEffect(() => {
+		if (defaultValue === value) {
+			onChangeValue({
+				number: ParameterNumber,
+				value: defaultValue,
+				size: Size,
+				hasChanged: false,
+			});
+			setValue(defaultValue);
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
+		}
+	}, [ParameterNumber, Size, defaultValue, onChangeValue, value]);
 
 	const {
 		toggleDialogueBoxState,

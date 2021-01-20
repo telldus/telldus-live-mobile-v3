@@ -299,7 +299,8 @@ class OverviewTab extends View<Props, null> {
 					<Configuration
 						id={device.id}
 						clientId={clientId}
-						gatewayTimezone={gatewayTimezone}/>
+						gatewayTimezone={gatewayTimezone}
+						clientDeviceId={clientDeviceId}/>
 				)}
 				{!!nodeInfo.cmdClasses && (
 					<TelldusInfo
