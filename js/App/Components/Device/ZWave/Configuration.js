@@ -76,6 +76,12 @@ const Configuration = (props: Props): Object => {
 		advanced: [],
 		protection: [],
 	});
+	const [isLoading, setIsLoading] = useState({
+		isLoadingAdv: false,
+	});
+	const {
+		isLoadingAdv,
+	} = isLoading;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
@@ -169,18 +175,27 @@ const Configuration = (props: Props): Object => {
 				size,
 			};
 		});
-		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
-			'module': 'zwave',
-			'action': 'cmdClass',
-			'nodeId': nodeId,
-			'class': ZWaveFunctions.COMMAND_CLASS_CONFIGURATION,
-			'cmd': 'setConfigurations',
-			'data': paramsConf,
-		}));
+		if (paramsConf) {
+			setIsLoading({
+				...isLoading,
+				isLoadingAdv: true,
+			});
+			dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+				'module': 'zwave',
+				'action': 'cmdClass',
+				'nodeId': nodeId,
+				'class': ZWaveFunctions.COMMAND_CLASS_CONFIGURATION,
+				'cmd': 'setConfigurations',
+				'data': paramsConf,
+			}));
+		}
 		timeoutRef.current = setTimeout(() => {
 			dispatch(requestNodeInfo(clientId, clientDeviceId));
+			setIsLoading({
+				isLoadingAdv: false,
+			});
 		}, 1000);
-	}, [clientDeviceId, clientId, configurations, dispatch, nodeId]);
+	}, [clientDeviceId, clientId, configurations, dispatch, isLoading, nodeId]);
 
 	let hasChanged = useMemo((): boolean => {
 		const {
@@ -230,7 +245,9 @@ const Configuration = (props: Props): Object => {
 						<TouchableButton
 							style={buttonStyle}
 							text={'Save new configurations'} // TODO: Translate
-							onPress={onPressSave}/>
+							onPress={onPressSave}
+							showThrobber={isLoadingAdv}
+							disabled={isLoadingAdv}/>
 					}
 				</View>
 			)}
