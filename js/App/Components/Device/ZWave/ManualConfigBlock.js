@@ -43,6 +43,13 @@ import {
 
 import Theme from '../../../Theme';
 
+type Props = {
+    label: string,
+    inputValue: string,
+    onChangeText: Function,
+    onSubmitEditing: Function,
+};
+
 const ManualConfigBlock = memo<Object>((props: Props): Object => {
 	const {
 		label,
