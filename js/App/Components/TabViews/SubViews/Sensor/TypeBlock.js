@@ -26,6 +26,9 @@ import React, {
 } from 'react';
 import { Animated } from 'react-native';
 import Ripple from 'react-native-material-ripple';
+import {
+	useSelector,
+} from 'react-redux';
 
 import {
 	View,
@@ -70,6 +73,10 @@ const TypeBlock = memo<Object>(({
 		moreItemsIndicatorColor,
 	} = colors;
 
+	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
+	const { dBTileDisplayMode } = defaultSettings;
+	const isBroard = dBTileDisplayMode !== 'compact';
+
 	return (
 		<AnimatedTouchable
 			onPress={changeDisplayType}
@@ -89,7 +96,7 @@ const TypeBlock = memo<Object>(({
 				importantForAccessibility="no-hide-descendants"
 				accessibilityElementsHidden={true}>
 				{defaultSensor}
-				{totalTypes.length > 1 && (
+				{isBroard && totalTypes.length > 1 && (
 					<View style={dotCoverStyle}>
 						{
 							totalTypes.map((key: string, index: number): Object => {

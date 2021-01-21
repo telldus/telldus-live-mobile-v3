@@ -56,7 +56,13 @@ const Title = memo<Object>(({
 }: Object): Object => {
 
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	const { tileNameDisplayMode } = defaultSettings;
+	const {
+		tileNameDisplayMode,
+		dBTileDisplayMode,
+	} = defaultSettings;
+	console.log('TEST dbTileDisplayMode', dBTileDisplayMode);
+
+	const isBroard = dBTileDisplayMode !== 'compact';
 
 	const {
 		colors,
@@ -94,11 +100,11 @@ const Title = memo<Object>(({
 			level={2}
 			style={[styles.title, {
 				width: tileWidth,
-				height: Math.ceil(tileWidth * 0.6),
+				height: Math.ceil(tileWidth * (isBroard ? 0.6 : 0.22)),
 				paddingHorizontal: tileWidth * 0.06,
-				paddingVertical: tileWidth * 0.06,
+				paddingVertical: tileWidth * (isBroard ? 0.06 : 0.022),
 			}]}>
-			{!!iconRight && (<BlockIcon
+			{!!iconRight && isBroard && (<BlockIcon
 				onPress={onPressIconRight}
 				icon={iconRight}
 				containerStyle={{
@@ -118,29 +124,29 @@ const Title = memo<Object>(({
 					textAlign: 'center',
 					alignSelf: 'center',
 				}}/>)}
-			{!!icon && (<BlockIcon
+			{!!icon && isBroard && (<BlockIcon
 				blockLevel={21}
 				icon={icon}
 				containerStyle={iconContainerStyle}
 				style={iconStyle}/>)}
 			<View style={styles.textCover}>
 				{NameInfo}
-				{!!info &&
-			typeof info === 'string' ?
-					<Text
-						ellipsizeMode="middle"
-						numberOfLines={1}
-						style={[
-							styles.name, {
-								fontSize: Math.floor(tileWidth / 12),
-								color: Theme.Core.rowTextColor,
-							},
-						]}>
-						{info}
-					</Text>
-					:
-					info
-				}
+				{!!info && isBroard && (
+					typeof info === 'string' ?
+						<Text
+							ellipsizeMode="middle"
+							numberOfLines={1}
+							style={[
+								styles.name, {
+									fontSize: Math.floor(tileWidth / 12),
+									color: Theme.Core.rowTextColor,
+								},
+							]}>
+							{info}
+						</Text>
+						:
+						info
+				)}
 			</View>
 		</View>
 	);

@@ -29,6 +29,7 @@ import React, {
 let dayjs = require('dayjs');
 import {
 	useDispatch,
+	useSelector,
 } from 'react-redux';
 
 import DashboardShadowTile from '../DashboardShadowTile';
@@ -75,6 +76,12 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 
 	const dispatch = useDispatch();
 
+	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
+	const {
+		dBTileDisplayMode,
+	} = defaultSettings;
+	const isBroard = dBTileDisplayMode !== 'compact';
+
 	const {
 		iconStyle,
 		valueUnitCoverStyle,
@@ -88,6 +95,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 	} = getStyles({
 		item,
 		tileWidth,
+		isBroard,
 	});
 
 	const {
@@ -196,7 +204,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 			style={[
 				style, {
 					width: tileWidth,
-					height: tileWidth,
+					height: (isBroard ? tileWidth : (tileWidth * 0.52)),
 				},
 			]}>
 			<TypeBlockDB
@@ -212,7 +220,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 					justifyContent: 'flex-start',
 					alignItems: 'center',
 					width: tileWidth,
-					height: tileWidth * 0.4,
+					height: tileWidth * (isBroard ? 0.4 : 0.3),
 					backgroundColor: background,
 				}}
 				valueCoverStyle={sensorValueCover}
@@ -225,6 +233,7 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 const getStyles = ({
 	tileWidth,
 	item,
+	isBroard,
 }: Object): Object => {
 	const { data = []} = item;
 
@@ -232,7 +241,7 @@ const getStyles = ({
 
 	return {
 		iconStyle: {
-			fontSize: tileWidth * 0.28,
+			fontSize: tileWidth * (isBroard ? 0.28 : 0.2),
 		},
 		valueUnitCoverStyle: {
 			height: tileWidth * 0.16,
@@ -250,7 +259,7 @@ const getStyles = ({
 			textAlignVertical: 'center',
 		},
 		sensorValueCoverStyle: {
-			marginBottom: data.length <= 1 ? 0 : tileWidth * 0.1,
+			marginBottom: (data.length <= 1 || !isBroard) ? 0 : tileWidth * 0.1,
 		},
 		sensorValueCover: {
 			height: '100%',

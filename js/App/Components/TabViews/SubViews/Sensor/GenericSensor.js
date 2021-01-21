@@ -24,6 +24,9 @@
 import React, {
 	memo,
 } from 'react';
+import {
+	useSelector,
+} from 'react-redux';
 
 import { FormattedNumber, Text, View, IconTelldus } from '../../../../../BaseComponents';
 
@@ -51,6 +54,10 @@ const GenericSensor = memo<Object>(({
 	coverStyle, valueUnitCoverStyle, sensorValueCoverStyle,
 	iconStyle, valueStyle, unitStyle, labelStyle }: sensorProps): Object => {
 
+	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
+	const { dBTileDisplayMode } = defaultSettings;
+	const isBroard = dBTileDisplayMode !== 'compact';
+
 	const { sensorValue, sensorValueText, sensorValueLabelText } = Theme.Styles;
 
 	const labelLength = label.length;
@@ -59,7 +66,6 @@ const GenericSensor = memo<Object>(({
 		<View style={[sensorValue, coverStyle]}>
 			{!isLarge && labelLength < 14 && (
 				<IconTelldus icon={icon} style={{
-					fontSize: 40,
 					color: '#fff',
 					...iconStyle}}/>
 			)}
@@ -82,9 +88,11 @@ const GenericSensor = memo<Object>(({
 							}
 						</View>
 				}
-				<Text style={[{color: '#ffffff'}, labelStyle]}>
-					{label}
-				</Text>
+				{isBroard && (
+					<Text style={[{color: '#ffffff'}, labelStyle]}>
+						{label}
+					</Text>
+				)}
 			</View>
 		</View>
 	);

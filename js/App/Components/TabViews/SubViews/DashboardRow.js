@@ -68,6 +68,7 @@ type Props = {
 	colorScheme: string,
 	dark: boolean,
 	selectedThemeSet: Object,
+	dBTileDisplayMode: string,
 
     style: Object,
 	setScrollEnabled: (boolean) => void,
@@ -123,6 +124,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'colorScheme',
 		'dark',
 		'selectedThemeSet',
+		'dBTileDisplayMode',
 	]);
 	if (propsChange) {
 		return true;
@@ -328,7 +330,16 @@ getButtonsInfo(item: Object, styles: Object): Object {
 }
 
 render(): Object {
-	const { item, tileWidth, intl, appLayout, colors, selectedThemeSet } = this.props;
+	const {
+		item,
+		tileWidth,
+		intl,
+		appLayout,
+		colors,
+		selectedThemeSet,
+		dBTileDisplayMode,
+	} = this.props;
+	const isBroard = dBTileDisplayMode !== 'compact';
 	const { showMoreActions } = this.state;
 	const { name, isInState } = item;
 	const deviceName = name ? name : intl.formatMessage(i18n.noName);
@@ -338,6 +349,7 @@ render(): Object {
 		appLayout,
 		tileWidth,
 		colors,
+		isBroard,
 	});
 	const { buttons, buttonsInfo } = this.getButtonsInfo(item, styles);
 	const { iconContainerStyle, iconsName } = buttonsInfo[0];
@@ -375,7 +387,7 @@ render(): Object {
 			tileWidth={tileWidth}
 			accessibilityLabel={accessibilityLabel}
 			formatMessage={intl.formatMessage}
-			style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
+			style={[this.props.style, { width: tileWidth, height: (isBroard ? tileWidth : (tileWidth * 0.52))}]}>
 			<View style={[styles.buttonsContainerStyle, {width: tileWidth}]}>
 				{buttons.length === 1 ?
 					buttons[0]
@@ -432,6 +444,7 @@ getStyles({
 	appLayout,
 	tileWidth,
 	colors,
+	isBroard,
 }: Object): Object {
 
 	const {
@@ -441,7 +454,7 @@ getStyles({
 
 	return {
 		buttonsContainerStyle: {
-			height: tileWidth * 0.4,
+			height: tileWidth * (isBroard ? 0.4 : 0.3),
 			flexDirection: 'row',
 			justifyContent: 'center',
 		},
@@ -480,12 +493,18 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		offColorMultiplier,
 	} = JSON.parse(rgb);
 
+	const {
+		defaultSettings,
+		layout,
+	} = store.app;
+
 	return {
-		appLayout: store.app.layout,
+		appLayout: layout,
 		powerConsumed,
 		currentTemp,
 		onColorMultiplier,
 		offColorMultiplier,
+		dBTileDisplayMode: defaultSettings.dBTileDisplayMode,
 	};
 }
 

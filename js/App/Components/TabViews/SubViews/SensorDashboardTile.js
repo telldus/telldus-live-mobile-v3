@@ -59,6 +59,7 @@ type Props = {
 	colorScheme: string,
 	themeInApp: string,
 	selectedThemeSet: Object,
+	dBTileDisplayMode: string,
 
 	style: Object,
 	onPress: (number, string) => void,
@@ -125,6 +126,7 @@ class SensorDashboardTile extends View<Props, null> {
 			'themeInApp',
 			'colorScheme',
 			'selectedThemeSet',
+			'dBTileDisplayMode',
 		]);
 	}
 
@@ -236,9 +238,10 @@ class SensorDashboardTile extends View<Props, null> {
 			themeInApp,
 			colorScheme,
 			selectedThemeSet,
+			dBTileDisplayMode,
 		} = this.props;
 		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
-
+		const isBroard = dBTileDisplayMode !== 'compact';
 		const {
 			lastUpdated,
 			gatewayTimezone,
@@ -294,7 +297,7 @@ class SensorDashboardTile extends View<Props, null> {
 				style={[
 					this.props.style, {
 						width: tileWidth,
-						height: tileWidth,
+						height: (isBroard ? tileWidth : (tileWidth * 0.52)),
 					},
 				]}>
 				<TypeBlockDB
@@ -305,7 +308,7 @@ class SensorDashboardTile extends View<Props, null> {
 					tileWidth={tileWidth}
 					style={[styles.body, {
 						width: tileWidth,
-						height: tileWidth * 0.4,
+						height: tileWidth * (isBroard ? 0.4 : 0.3),
 						backgroundColor: background,
 					}]}
 					valueCoverStyle={sensorValueCover}
@@ -320,7 +323,14 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	getStyles(): Object {
-		const { tileWidth, isGatewayActive, item, colors, selectedThemeSet } = this.props;
+		const {
+			tileWidth,
+			isGatewayActive,
+			item,
+			colors,
+			selectedThemeSet,
+			dBTileDisplayMode,
+		} = this.props;
 		const { data = {}} = item;
 
 		const dotSize = tileWidth * 0.045;
@@ -330,12 +340,13 @@ class SensorDashboardTile extends View<Props, null> {
 			itemIconBGColor,
 			itemIconBGColorOffline,
 		} = colors;
+		const isBroard = dBTileDisplayMode !== 'compact';
 
 		const backgroundColor = isGatewayActive ? sensorValueBGColor : Theme.Core.offlineColor;
 
 		return {
 			iconStyle: {
-				fontSize: tileWidth * 0.28,
+				fontSize: tileWidth * (isBroard ? 0.28 : 0.2),
 			},
 			valueUnitCoverStyle: {
 				height: tileWidth * 0.16,
@@ -353,7 +364,7 @@ class SensorDashboardTile extends View<Props, null> {
 				textAlignVertical: 'center',
 			},
 			sensorValueCoverStyle: {
-				marginBottom: Object.keys(data).length <= 1 ? 0 : tileWidth * 0.1,
+				marginBottom: (Object.keys(data).length <= 1 || !isBroard) ? 0 : tileWidth * 0.1,
 			},
 			sensorValueCover: {
 				height: '100%',
@@ -404,7 +415,10 @@ function mapStateToProps(state: Object, props: Object): Object {
 	const { defaultSettings } = state.app;
 	const { sensorsById = {} } = state.dashboard;
 
-	const { activeDashboardId } = defaultSettings;
+	const {
+		activeDashboardId,
+		dBTileDisplayMode,
+	} = defaultSettings;
 	const { userId } = state.user;
 	const { id } = props.item || {};
 
@@ -416,6 +430,7 @@ function mapStateToProps(state: Object, props: Object): Object {
 
 	return {
 		sensorTypesInCurrentDb: _selectedScales,
+		dBTileDisplayMode,
 	};
 }
 

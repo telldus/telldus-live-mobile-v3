@@ -54,6 +54,7 @@ import {
 	LanguageControlBlock,
 	SensorLastUpdateModeControlBlock,
 	DBNameDisplayControlBlock,
+	DBTileDisplayControlBlock,
 } from '../Settings/SubViews';
 import {
 	WidgetFontSizeSetting,
@@ -265,6 +266,8 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					style={[contentCoverStyle, {
 						marginTop: 0,
 					}]}/>
+				<DBTileDisplayControlBlock
+					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
 				<Text
 					level={2}
 					style={titleStyle}>
