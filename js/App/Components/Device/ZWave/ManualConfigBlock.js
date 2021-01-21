@@ -26,12 +26,14 @@ import React, {
 	memo,
 	useState,
 	useCallback,
+	useEffect,
 } from 'react';
 import {
 	useSelector,
 } from 'react-redux';
 import {
 	Platform,
+	LayoutAnimation,
 } from 'react-native';
 
 import {
@@ -42,6 +44,7 @@ import {
 import {
 	useAppTheme,
 } from '../../../Hooks/Theme';
+import LayoutAnimations from '../../../Lib/LayoutAnimations';
 
 import Theme from '../../../Theme';
 
@@ -51,7 +54,8 @@ type Props = {
 	number: string,
 	value: string,
 	size: string,
-    onChangeValue: Function,
+	onChangeValue: Function,
+	resetOnSave: boolean,
 };
 
 const ManualConfigBlock = memo<Object>((props: Props): Object => {
@@ -62,6 +66,7 @@ const ManualConfigBlock = memo<Object>((props: Props): Object => {
 		value,
 		size,
 		onChangeValue,
+		resetOnSave,
 	} = props;
 	const inputVal = props[inputValueKey];
 
@@ -81,6 +86,19 @@ const ManualConfigBlock = memo<Object>((props: Props): Object => {
 		colors,
 	});
 	const [ inputValue, setInputValue ] = useState(inputVal);
+	useEffect(() => {
+		if (resetOnSave && props[inputValueKey] === inputValue) {
+			onChangeValue({
+				number,
+				value,
+				size,
+				[inputValueKey]: props[inputValueKey],
+				hasChanged: false,
+			});
+			setInputValue(props[inputValueKey]);
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
+		}
+	}, [inputValue, inputValueKey, number, onChangeValue, props, resetOnSave, size, value]);
 	const _onChangeText = useCallback((v: string) => {
 		if (!v || !isNaN(parseInt(v, 10))) {
 			onChangeValue({

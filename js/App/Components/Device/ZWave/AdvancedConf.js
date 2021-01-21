@@ -376,14 +376,16 @@ const AdvancedConf = (props: Props): Object => {
 							number={pNumber}
 							value={_value}
 							size={_size}
-							onChangeValue={_onChangeValue}/>
+							onChangeValue={_onChangeValue}
+							resetOnSave/>
 						<ManualConfigBlock
 							label={'Value : '}
 							inputValueKey={'value'}
 							number={pNumber}
 							value={_value}
 							size={_size}
-							onChangeValue={_onChangeValue}/>
+							onChangeValue={_onChangeValue}
+							resetOnSave/>
 					</View>
 				);
 
@@ -421,21 +423,24 @@ const AdvancedConf = (props: Props): Object => {
 					number={'0'}
 					size={'1'}
 					value={'0'}
-					onChangeValue={_onChangeValue}/>
+					onChangeValue={_onChangeValue}
+					resetOnSave={false}/>
 				<ManualConfigBlock
 					label={'Size : '}
 					inputValueKey={'size'}
 					number={'0'}
 					size={'1'}
 					value={'0'}
-					onChangeValue={_onChangeValue}/>
+					onChangeValue={_onChangeValue}
+					resetOnSave={false}/>
 				<ManualConfigBlock
 					label={'Value : '}
 					inputValueKey={'value'}
 					number={'0'}
 					size={'1'}
 					value={'0'}
-					onChangeValue={_onChangeValue}/>
+					onChangeValue={_onChangeValue}
+					resetOnSave={false}/>
 			</View>
 		);
 		return _configurationSettings;
