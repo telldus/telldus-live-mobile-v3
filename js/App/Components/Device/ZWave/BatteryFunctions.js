@@ -425,7 +425,7 @@ const getStyles = ({
 		},
 		textStyle: {
 			fontSize,
-			textAlign: 'center',
+			textAlign: 'left',
 		},
 		slider: {
 			track: {
