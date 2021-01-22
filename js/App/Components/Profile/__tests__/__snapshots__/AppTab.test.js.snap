@@ -4738,7 +4738,7 @@ exports[`<AppTab /> - snapshot renders AppTab 1`] = `
                 pointerEvents="box-only"
               >
                 <View
-                  accessibilityLabel=" Drop down menu, Selected Broad, Double tap to activate"
+                  accessibilityLabel=" Drop down menu, Selected Normal, Double tap to activate"
                   accessible={true}
                   focusable={true}
                   onClick={[Function]}
@@ -4781,7 +4781,7 @@ exports[`<AppTab /> - snapshot renders AppTab 1`] = `
                       ]
                     }
                   >
-                    Broad
+                    Normal
                   </Text>
                   <Text
                     accessible={false}
@@ -4947,8 +4947,8 @@ exports[`<AppTab /> - snapshot renders AppTab 1`] = `
                             "value": "Compact",
                           },
                           Object {
-                            "key": "broad",
-                            "value": "Broad",
+                            "key": "normal",
+                            "value": "Normal",
                           },
                         ]
                       }
@@ -5149,7 +5149,7 @@ exports[`<AppTab /> - snapshot renders AppTab 1`] = `
                                 ]
                               }
                             >
-                              Broad
+                              Normal
                             </Text>
                             <View
                               style={
