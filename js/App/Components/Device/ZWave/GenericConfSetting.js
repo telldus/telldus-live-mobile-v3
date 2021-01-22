@@ -36,6 +36,7 @@ import {
 	KeyboardAvoidingView,
 	LayoutAnimation,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	ThemedTextInput,
@@ -50,6 +51,8 @@ import {
 import LayoutAnimations from '../../../Lib/LayoutAnimations';
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 const GenericConfSetting = (props: Object): Object => {
 	const {
 		defaultValue,
@@ -59,6 +62,11 @@ const GenericConfSetting = (props: Object): Object => {
 		Size,
 		ParameterNumber,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const [ value, setValue ] = useState(defaultValue);
 
@@ -109,12 +117,15 @@ const GenericConfSetting = (props: Object): Object => {
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				text: `Please set value between: ${min}-${max}`, // TODO: Translate
+				text: formatMessage(i18n.pleaseSetValueBetween, {
+					min,
+					max,
+				}),
 				showPositive: true,
 			});
 			return;
 		}
-	}, [value, max, min, toggleDialogueBoxState]);
+	}, [value, max, min, toggleDialogueBoxState, formatMessage]);
 
 	return (
 		<KeyboardAvoidingView

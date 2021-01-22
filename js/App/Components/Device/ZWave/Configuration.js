@@ -38,6 +38,9 @@ import {
 	LayoutAnimation,
 } from 'react-native';
 const isEqual = require('react-fast-compare');
+import {
+	useIntl,
+} from 'react-intl';
 
 import {
 	EmptyView,
@@ -62,6 +65,7 @@ import {
 	sendSocketMessage,
 } from '../../../Actions';
 import { requestNodeInfo } from '../../../Actions/Websockets';
+import i18n from '../../../Translations/common';
 
 type Props = {
     id: string,
@@ -75,6 +79,11 @@ const Configuration = (props: Props): Object => {
 		clientId,
 		clientDeviceId,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const [ expand, setExpand ] = useState(true);
 	const [ configurations, setConfigurations ] = useState({
@@ -264,10 +273,10 @@ const Configuration = (props: Props): Object => {
 					size={iconSize}
 					style={iconStyle}
 					level={38}/>
-				<Text // TODO: Translate
+				<Text
 					level={2}
 					style={titleStyle}>
-					Configuration
+					{formatMessage(i18n.configurations)}
 				</Text>
 			</TouchableOpacity>
 			{!expand && (
@@ -279,7 +288,7 @@ const Configuration = (props: Props): Object => {
 					{hasChanged &&
 						<TouchableButton
 							style={buttonStyle}
-							text={'Save new configurations'} // TODO: Translate
+							text={formatMessage(i18n.saveNewConfigurations)}
 							onPress={onPressSave}
 							showThrobber={isLoadingAdv}
 							disabled={isLoadingAdv}/>

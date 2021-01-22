@@ -30,6 +30,7 @@ import React, {
 import {
 	useSelector,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	Text,
@@ -52,6 +53,8 @@ import {
 	useAppTheme,
 } from '../../../Hooks/Theme';
 
+import i18n from '../../../Translations/common';
+
 type Props = {
 	parameters: Object,
 	manufacturerAttributes: Object,
@@ -65,6 +68,11 @@ const AdvancedConf = (props: Props): Object => {
 		configurationParameters,
 		onChangeValue,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		colors,
@@ -96,7 +104,7 @@ const AdvancedConf = (props: Props): Object => {
 	const onPressInfo = useCallback(({Description}: Object) => {
 		toggleDialogueBoxState({
 			show: true,
-			header: ' ',
+			header: formatMessage(i18n.confDescription),
 			showHeader: true,
 			imageHeader: true,
 			text: Description,
@@ -371,7 +379,7 @@ const AdvancedConf = (props: Props): Object => {
 					<View
 						key={`${index}-${pNumber}`}>
 						<ManualConfigBlock
-							label={'Size : '}
+							label={`${formatMessage(i18n.size)} : `}
 							inputValueKey={'size'}
 							number={pNumber}
 							value={_value}
@@ -379,7 +387,7 @@ const AdvancedConf = (props: Props): Object => {
 							onChangeValue={_onChangeValue}
 							resetOnSave/>
 						<ManualConfigBlock
-							label={'Value : '}
+							label={`${formatMessage(i18n.labelValue)} : `}
 							inputValueKey={'value'}
 							number={pNumber}
 							value={_value}
@@ -398,7 +406,7 @@ const AdvancedConf = (props: Props): Object => {
 							<Text
 								level={3}
 								style={hItemLabelDef}>
-								{`${pNumber}. This is a manually added configuration`}
+								{`${pNumber}. ${formatMessage(i18n.manualConfOne)}`}
 							</Text>
 						</View>
 						{rows}
@@ -414,11 +422,11 @@ const AdvancedConf = (props: Props): Object => {
 					<Text
 						level={3}
 						style={hItemLabelDef}>
-						Sometimes a device can have extra configuration that we can't detect automatically, if there are some listed in the device manual, you can enter them here.
+						{formatMessage(i18n.manualConfTwo)}
 					</Text>
 				</View>
 				<ManualConfigBlock
-					label={'Number : '}
+					label={`${formatMessage(i18n.number)} : `}
 					inputValueKey={'number'}
 					number={'0'}
 					size={'1'}
@@ -426,7 +434,7 @@ const AdvancedConf = (props: Props): Object => {
 					onChangeValue={_onChangeValue}
 					resetOnSave={false}/>
 				<ManualConfigBlock
-					label={'Size : '}
+					label={`${formatMessage(i18n.size)} : `}
 					inputValueKey={'size'}
 					number={'0'}
 					size={'1'}
@@ -434,7 +442,7 @@ const AdvancedConf = (props: Props): Object => {
 					onChangeValue={_onChangeValue}
 					resetOnSave={false}/>
 				<ManualConfigBlock
-					label={'Value : '}
+					label={`${formatMessage(i18n.labelValue)} : `}
 					inputValueKey={'value'}
 					number={'0'}
 					size={'1'}
@@ -454,10 +462,10 @@ const AdvancedConf = (props: Props): Object => {
 	return (
 		<View
 			style={verticalCover}>
-			<Text // TODO: Translate
+			<Text
 				level={2}
 				style={subTitleTextStyle}>
-                 Advanced settings
+				{formatMessage(i18n.advancedSettings)}
 			</Text>
 			<View
 				level={2}

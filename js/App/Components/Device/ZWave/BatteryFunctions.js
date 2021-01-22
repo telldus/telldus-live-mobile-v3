@@ -40,6 +40,7 @@ import {
 } from 'react-redux';
 import Slider from 'react-native-slider';
 const isEqual = require('react-fast-compare');
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -66,6 +67,8 @@ import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 type Props = {
 	id: string,
@@ -101,6 +104,11 @@ const BatteryFunctions = (props: Props): Object => {
 		gatewayTimezone,
 		clientId,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		formatDate,
@@ -202,14 +210,16 @@ const BatteryFunctions = (props: Props): Object => {
 			const lastReceivedDateTime = new Date(lastReceived * 1000);
 			toggleDialogueBoxState({
 				show: true,
-				header: ' ', // TODO: Need to confirm and set
+				header: formatMessage(i18n.zWaveBatteryLabelFive),
 				showHeader: true,
-				imageHeader: true, // TODO: Translate
-				text: `Battery level was received ${formatDate(lastReceivedDateTime)} ${formatTime(lastReceivedDateTime)}.`,
+				imageHeader: true,
+				text: formatMessage(i18n.batteryLevelLastReceivedAt, {
+					time: `${formatDate(lastReceivedDateTime)} ${formatTime(lastReceivedDateTime)}`,
+				}),
 				showPositive: true,
 			});
 		}
-	}, [formatDate, formatTime, lastReceived, toggleDialogueBoxState]);
+	}, [formatDate, formatMessage, formatTime, lastReceived, toggleDialogueBoxState]);
 
 	const getWakeUpIntervalValue = useCallback((value: number): Object => {
 		value = value < 0 ? 0 : value;
@@ -284,7 +294,6 @@ const BatteryFunctions = (props: Props): Object => {
 			return;
 		}
 
-		// TODO: Translate
 		return (
 			<View
 				level={2}
@@ -293,44 +302,48 @@ const BatteryFunctions = (props: Props): Object => {
 					<Text
 						level={4}
 						style={textStyle}>
-This device is running on battery. To save as much power as possible this device sleeps and will not accept commands. Changes in its settings will only be set the next time it wakes up.
+						{formatMessage(i18n.zWaveBatteryInfoMessage)}
 					</Text>
 				)}
 				{!!wakeupNote && (
 					<BatteryInfoItem
-						label={'Waking this device is done by: '}
+						label={`${formatMessage(i18n.zWaveBatteryLabeltwo)}: `}
 						value={wakeupNote}/>
 				)}
 				{(lastWakeup > 0 && supportsWakeup) && (
 					<BatteryInfoItem
-						label={'This device was previously awake: '}
+						label={`${formatMessage(i18n.zWaveBatteryLabelThree)}: `}
 						value={`${formatDate(lastWakeupDateTime)} ${formatTime(lastWakeupDateTime)}`}/>
 				)}
+				{/* TODO: Show new string when wake up time is in the past */}
 				{(wakeupInterval > 0 && lastWakeup > 0) && (
 					<BatteryInfoItem
-						label={'Next time this device will wake up will probably be: '}
+						label={`${formatMessage(i18n.zWaveBatteryLabelFour)}: `}
 						value={`${formatDate(nextWakeupDateTime)} ${formatTime(nextWakeupDateTime)}`}/>
 				)}
 				<BatteryInfoItem
-					label={'Battery level: '}
+					label={`${formatMessage(i18n.zWaveBatteryLabelFive)}: `}
 					value={`${level}%`}
 					showInfo={true}
 					onPressInfo={onPressInfo}
 					infoKey={infoKeyBatteryLevel}/>
 				{(!!batteryType && !!batteryCount) && (
 					<BatteryInfoItem
-						label={'Battery type: '}
-						value={`${batteryCount} pcs of ${batteryType}`}/>
+						label={`${formatMessage(i18n.zWaveBatteryLabelSix)}: `}
+						value={formatMessage(i18n.zWaveBatteryLabelSixValue, {
+							batteryCount,
+							batteryType,
+						})}/>
 				)}
 				{(!!batteryType && !batteryCount) && (
 					<BatteryInfoItem
-						label={'Battery type: '}
+						label={`${formatMessage(i18n.zWaveBatteryLabelSix)}: `}
 						value={batteryType}/>
 				)}
 				{supportsWakeup && (
 					<>
 						<BatteryInfoItem
-							label={'Wakeup interval: '}
+							label={`${formatMessage(i18n.zWaveBatteryLabelSeven)}: `}
 							value={wakeUpIntervalValue.timeString}/>
 						{!isNaN(sliderValue) && !isNaN(maximumValue) && (
 							<Slider
@@ -348,7 +361,7 @@ This device is running on battery. To save as much power as possible this device
 				)}
 			</View>
 		);
-	}, [id, coverStyle, supportsWakeup, textStyle, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, maximumValue, sliderValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
+	}, [id, coverStyle, supportsWakeup, textStyle, formatMessage, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, sliderValue, maximumValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
@@ -372,7 +385,7 @@ This device is running on battery. To save as much power as possible this device
 				<Text
 					level={2}
 					style={titleStyle}>
-					Battery
+					{formatMessage(i18n.labelBattery)}
 				</Text>
 			</TouchableOpacity>
 			{!expand && body}
