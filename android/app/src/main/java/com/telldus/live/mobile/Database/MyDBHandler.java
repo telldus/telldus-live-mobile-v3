@@ -395,9 +395,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setSecondaryStateValue(cursor.getString(14));
             r.setPrimarySetting(cursor.getString(15));
             r.setSecondarySetting(cursor.getString(16));
-            r.setRequestedStateValue(cursor.getString(17));
-            r.setRequestedSecStateValue(cursor.getString(18));
-            r.setUserUuid(cursor.getString(19));
+            int index17 = cursor.getColumnIndex(REQUESTED_DEVICE_STATE_VALUE);
+            r.setRequestedStateValue(index17 != -1 ? cursor.getString(index17) : "");
+            int index18 = cursor.getColumnIndex(REQUESTED_DEVICE_SECONDARY_STATE_VALUE);
+            r.setRequestedSecStateValue(index18 != -1 ? cursor.getString(index18) : "");
+            int index19 = cursor.getColumnIndex(COLUMN_USER_UUID);
+            r.setUserUuid(index19 != -1 ? cursor.getString(index19) : "");
 
             cursor.close();
         } else {
@@ -663,9 +666,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setSecondaryStateValue(cursor.getString(14));
                 r.setPrimarySetting(cursor.getString(15));
                 r.setSecondarySetting(cursor.getString(16));
-                r.setRequestedStateValue(cursor.getString(17));
-                r.setRequestedSecStateValue(cursor.getString(18));
-                r.setUserUuid(cursor.getString(19));
+                int index17 = cursor.getColumnIndex(REQUESTED_DEVICE_STATE_VALUE);
+                r.setRequestedStateValue(index17 != -1 ? cursor.getString(index17) : "");
+                int index18 = cursor.getColumnIndex(REQUESTED_DEVICE_SECONDARY_STATE_VALUE);
+                r.setRequestedSecStateValue(index18 != -1 ? cursor.getString(index18) : "");
+                int index19 = cursor.getColumnIndex(COLUMN_USER_UUID);
+                r.setUserUuid(index19 != -1 ? cursor.getString(index19) : "");
 
                 list.add(r);
             } while (cursor.moveToNext());
