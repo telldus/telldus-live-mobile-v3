@@ -144,7 +144,7 @@ const TelldusInfo = (props: Props): Object => {
 				<Text
 					level={2}
 					style={titleStyle}>
-					{formatMessage(i18n.labelManual)}
+					{formatMessage(i18n.linkToManual)}
 				</Text>
 			</TouchableOpacity>
 			{!expand && (
