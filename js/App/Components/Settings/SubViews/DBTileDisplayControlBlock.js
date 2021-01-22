@@ -38,14 +38,14 @@ import { changeDBTileDisplayMode } from '../../../Actions';
 
 import Theme from '../../../Theme';
 
-// import i18n from '../../../Translations/common';
+import i18n from '../../../Translations/common';
 
 const DBTileDisplayControlBlock = (props: Object): Object => {
 	const {
 		dropDownContainerStyle,
 	} = props;
 	const intl = useIntl();
-	// const { formatMessage } = intl;
+	const { formatMessage } = intl;
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { dBTileDisplayMode } = defaultSettings;
@@ -67,7 +67,9 @@ const DBTileDisplayControlBlock = (props: Object): Object => {
 		dispatch(changeDBTileDisplayMode(settings));
 	}, [dispatch]);
 
-	// TODO: Translate
+	const compact = formatMessage(i18n.compact);
+	const normal = formatMessage(i18n.normal);
+
 	return (
 		<View
 			level={2}
@@ -75,14 +77,14 @@ const DBTileDisplayControlBlock = (props: Object): Object => {
 			<Text
 				level={3}
 				style={labelStyle} numberOfLine={1}>
-				Tile display mode
+				{formatMessage(i18n.tileDisplayMode)}
 			</Text>
 			<DropDown
 				items={[
-					{key: 'compact', value: 'Compact'},
-					{key: 'broad', value: 'Broad'},
+					{key: 'compact', value: compact},
+					{key: 'normal', value: normal},
 				]}
-				value={dBTileDisplayMode === 'compact' ? 'Compact' : 'Broad'}
+				value={dBTileDisplayMode === 'compact' ? compact : normal}
 				onValueChange={saveSortingDB}
 				appLayout={layout}
 				intl={intl}

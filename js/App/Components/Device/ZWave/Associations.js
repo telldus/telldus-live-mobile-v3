@@ -40,6 +40,9 @@ import {
 	useDispatch,
 } from 'react-redux';
 import xor from 'lodash/xor';
+import {
+	useIntl,
+} from 'react-intl';
 
 import {
 	Text,
@@ -61,6 +64,7 @@ import {
 } from '../../../Actions';
 
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
     id: string,
@@ -94,6 +98,11 @@ const Associations = (props: Props): Object => {
 		clientId,
 		clientDeviceId,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const timeoutRef = useRef();
 	useEffect((): Function => {
@@ -272,7 +281,7 @@ const Associations = (props: Props): Object => {
 				<Text
 					level={2}
 					style={titleStyle}>
-                    Associations
+					{formatMessage(i18n.associations)}
 				</Text>
 			</TouchableOpacity>
 			{!expand &&
@@ -283,7 +292,7 @@ const Associations = (props: Props): Object => {
 				{hasChanged &&
 				<TouchableButton
 					style={buttonStyle}
-					text={'Save new associations'} // TODO: Translate
+					text={formatMessage(i18n.saveNewAssociations)}
 					onPress={onPressSave}/>
 				}
 			</View>
