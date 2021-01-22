@@ -77,6 +77,7 @@ type Props = {
 };
 
 const infoKeyBatteryLevel = '1';
+const infoKeyBatteryWakeupInterval = '2';
 
 function usePreviousNodeInfo(value: Object): Object {
 	const ref = useRef();
@@ -218,6 +219,15 @@ const BatteryFunctions = (props: Props): Object => {
 				}),
 				showPositive: true,
 			});
+		} else if (infoKey === infoKeyBatteryWakeupInterval) {
+			toggleDialogueBoxState({
+				show: true,
+				header: formatMessage(i18n.zWaveBatteryLabelSeven),
+				showHeader: true,
+				imageHeader: true,
+				text: formatMessage(i18n.batteryWakeupIntervalInfo),
+				showPositive: true,
+			});
 		}
 	}, [formatDate, formatMessage, formatTime, lastReceived, toggleDialogueBoxState]);
 
@@ -285,6 +295,8 @@ const BatteryFunctions = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isBatteryInfoEqual]);
 
+	const nowTS = Math.floor(Date.now() / 1000);
+	const isWakeupPast = lastWakeup < nowTS;
 	const lastWakeupDateTime = new Date(lastWakeup * 1000);
 	const nextWakeupDateTime = new Date((lastWakeup + wakeupInterval) * 1000);
 
@@ -315,11 +327,17 @@ const BatteryFunctions = (props: Props): Object => {
 						label={`${formatMessage(i18n.zWaveBatteryLabelThree)}: `}
 						value={`${formatDate(lastWakeupDateTime)} ${formatTime(lastWakeupDateTime)}`}/>
 				)}
-				{/* TODO: Show new string when wake up time is in the past */}
 				{(wakeupInterval > 0 && lastWakeup > 0) && (
-					<BatteryInfoItem
-						label={`${formatMessage(i18n.zWaveBatteryLabelFour)}: `}
-						value={`${formatDate(nextWakeupDateTime)} ${formatTime(nextWakeupDateTime)}`}/>
+					isWakeupPast ?
+						<BatteryInfoItem
+							value={formatMessage(i18n.zWaveBatteryLabelFourPast, {
+								time: `${formatDate(nextWakeupDateTime)} ${formatTime(nextWakeupDateTime)}`,
+							})}/>
+						:
+						<BatteryInfoItem
+							label={`${formatMessage(i18n.zWaveBatteryLabelFour)}: `}
+							value={`${formatDate(nextWakeupDateTime)} ${formatTime(nextWakeupDateTime)}`}/>
+
 				)}
 				<BatteryInfoItem
 					label={`${formatMessage(i18n.zWaveBatteryLabelFive)}: `}
@@ -343,6 +361,9 @@ const BatteryFunctions = (props: Props): Object => {
 				{supportsWakeup && (
 					<>
 						<BatteryInfoItem
+							showInfo={true}
+							onPressInfo={onPressInfo}
+							infoKey={infoKeyBatteryWakeupInterval}
 							label={`${formatMessage(i18n.zWaveBatteryLabelSeven)}: `}
 							value={wakeUpIntervalValue.timeString}/>
 						{!isNaN(sliderValue) && !isNaN(maximumValue) && (
@@ -361,7 +382,7 @@ const BatteryFunctions = (props: Props): Object => {
 				)}
 			</View>
 		);
-	}, [id, coverStyle, supportsWakeup, textStyle, formatMessage, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, sliderValue, maximumValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
+	}, [id, coverStyle, supportsWakeup, textStyle, formatMessage, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, isWakeupPast, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, sliderValue, maximumValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
