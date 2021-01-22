@@ -261,7 +261,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 				<Text
 					level={4}
 					style={hItemValueDef}>
-					{group}
+					{`${group} : `}
 				</Text>
 			</View>
 			<View style={horizontalCoverDef}>
@@ -277,7 +277,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 				<Text
 					level={3}
 					style={hItemLabelDef}>
-					{formatMessage(i18n.associationLabelTwo)}
+					{`${formatMessage(i18n.associationLabelTwo)} : `}
 				</Text>
 				<Text
 					level={4}
@@ -293,7 +293,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 					<Text
 						level={3}
 						style={hItemLabelDef}>
-						{formatMessage(i18n.associationLabelThree)}
+						{`${formatMessage(i18n.associationLabelThree)} : `}
 					</Text>
 					<Text
 						level={4}
