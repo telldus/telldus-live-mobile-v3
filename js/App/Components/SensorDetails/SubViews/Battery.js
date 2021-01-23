@@ -32,7 +32,8 @@ type Props = {
 	appLayout: Object,
 	style: any,
 	padding: number,
-    borderWidth: number,
+	borderWidth: number,
+	outerContainerStyle: Object,
 };
 
 type DefaultProps = {
@@ -85,9 +86,14 @@ getFillHeightWidth(value: number): Object {
 }
 
 render(): Object {
-	const { value, appLayout, style } = this.props;
 	const {
-		outerContainer,
+		value,
+		appLayout,
+		style,
+		outerContainerStyle,
+	} = this.props;
+	const {
+		outerContainerDef,
 		containerStyle,
 		nobStyle,
 		backgroundColor,
@@ -97,7 +103,7 @@ render(): Object {
 	const { height, width } = this.getFillHeightWidth(value);
 
 	return (
-		<View style={outerContainer}>
+		<View style={[outerContainerDef, outerContainerStyle]}>
 			<View style={[containerStyle, {borderColor: backgroundColor}, style]} onLayout={this.onLayout}>
 				<View style={[batteryFillStyle, {backgroundColor, height, width}]}/>
 			</View>
@@ -124,7 +130,7 @@ getStyle(appLayout: Object, value: number): Object {
 	const { padding, borderWidth } = this.props;
 
 	return {
-		outerContainer: {
+		outerContainerDef: {
 			flex: 0,
 			flexDirection: 'row',
 			justifyContent: 'space-between',
