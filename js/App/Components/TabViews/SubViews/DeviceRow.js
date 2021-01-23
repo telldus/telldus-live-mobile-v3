@@ -42,6 +42,7 @@ import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
 import ThermostatButton from './Thermostat/ThermostatButton';
 import MultiActionModal from './Device/MultiActionModal';
+import Battery from '../../SensorDetails/SubViews/Battery';
 
 import {
 	withTheme,
@@ -58,6 +59,8 @@ import {
 	getMainColorRGB,
 	prepareMainColor,
 	getThermostatValue,
+	getMatchingSensorInfo,
+	getBatteryPercentage,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
@@ -79,6 +82,7 @@ type Props = PropsThemedComponent & {
 	propsSwipeRow: Object,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
+	battery?: number,
 
 	onBell: (number) => void,
 	onDown: (number) => void,
@@ -184,6 +188,7 @@ class DeviceRow extends View<Props, State> {
 				'colorScheme',
 				'dark',
 				'selectedThemeSet',
+				'battery',
 			]);
 			if (propsChange) {
 				return true;
@@ -520,7 +525,11 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	getNameInfo(device: Object, deviceName: string, powerConsumed: string | null, styles: Object): Object {
-		let { intl, currentTemp } = this.props;
+		let {
+			intl,
+			currentTemp,
+			battery,
+		} = this.props;
 		let {
 			name,
 			nameTablet,
@@ -545,6 +554,8 @@ class DeviceRow extends View<Props, State> {
 			info = `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W`;
 		}
 
+		const percentage = getBatteryPercentage(battery);
+
 		return (
 			<View style={coverStyle}>
 				<Text
@@ -552,13 +563,24 @@ class DeviceRow extends View<Props, State> {
 					style={[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1}>
 					{deviceName}
 				</Text>
-				{!!info && (
-					<Text
-						level={25}
-						style = {textPowerStyle} numberOfLines={1}>
-						{info}
-					</Text>
-				)}
+				<View style={{
+					flexDirection: 'row',
+				}}>
+					{(!!battery && battery !== 254) && (
+						<Battery
+							value={percentage}
+							appLayout={styles.appLayout}
+							style={styles.batteryStyle}
+							outerContainerStyle={styles.batteryOuterContainerStyle}/>
+					)}
+					{!!info && (
+						<Text
+							level={25}
+							style = {textPowerStyle} numberOfLines={1}>
+							{info}
+						</Text>
+					)}
+				</View>
 			</View>
 		);
 	}
@@ -617,6 +639,16 @@ class DeviceRow extends View<Props, State> {
 		const padding = deviceWidth * paddingFactor;
 
 		return {
+			appLayout,
+			batteryStyle: {
+				height: Math.floor(deviceWidth * 0.03),
+				width: Math.floor(deviceWidth * 0.055),
+			},
+			batteryOuterContainerStyle: {
+				marginTop: infoFontSize * 0.411,
+				marginRight: 8,
+				marginLeft: 6,
+			},
 			touchableContainer: {
 				flex: 1,
 				flexDirection: 'row',
@@ -733,6 +765,9 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const { clientDeviceId, clientId, deviceType } = ownProps.device;
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId, deviceType);
 	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
+	const {
+		battery,
+	} = getMatchingSensorInfo(store.sensors.byId, clientDeviceId, clientId) || {};
 
 	const { firebaseRemoteConfig = {} } = store.user;
 	const { rgb = JSON.stringify({}) } = firebaseRemoteConfig;
@@ -746,6 +781,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		currentTemp,
 		onColorMultiplier,
 		offColorMultiplier,
+		battery,
 	};
 }
 

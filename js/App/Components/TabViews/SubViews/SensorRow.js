@@ -36,6 +36,7 @@ import HiddenRow from './Sensor/HiddenRow';
 import GenericSensor from './Sensor/GenericSensor';
 import TypeBlockList from './Sensor/TypeBlockList';
 import LastUpdatedInfo from './Sensor/LastUpdatedInfo';
+import Battery from '../../SensorDetails/SubViews/Battery';
 
 import i18n from '../../../Translations/common';
 
@@ -49,6 +50,7 @@ import {
 	shouldUpdate,
 	getSensorInfo,
 	getWindDirection,
+	getBatteryPercentage,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -349,6 +351,9 @@ class SensorRow extends View<Props, State> {
 
 	getNameInfo(sensor: Object, sensorName: string, minutesAgo: number, lastUpdatedValue: string, isGatewayActive: boolean, styles: Object): Object {
 		let { name, nameTablet, time, timeTablet } = styles;
+		const {
+			battery,
+		} = sensor;
 		let coverStyle = name;
 		let textInfoStyle = time;
 		if (this.isTablet) {
@@ -357,6 +362,7 @@ class SensorRow extends View<Props, State> {
 		}
 
 		const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdatedValue));
+		const percentage = getBatteryPercentage(battery);
 
 		return (
 			<View style={coverStyle}>
@@ -367,26 +373,37 @@ class SensorRow extends View<Props, State> {
 					numberOfLines={1}>
 					{sensorName}
 				</Text>
-				{isGatewayActive ?
-					<LastUpdatedInfo
-						value={-seconds}
-						numeric="auto"
-						updateIntervalInSeconds={60}
-						timestamp={lastUpdatedValue}
-						gatewayTimezone={sensor.gatewayTimezone}
-						level={minutesAgo < 1440 ? 25 : 8}
-						textStyle={[
-							textInfoStyle, {
-								opacity: minutesAgo < 1440 ? 1 : 0.5,
-							},
-						]} />
-					:
-					<Text
-						level={26}
-						style={textInfoStyle}>
-						{this.offline}
-					</Text>
-				}
+				<View style={{
+					flexDirection: 'row',
+				}}>
+					{(!!battery && battery !== 254) && (
+						<Battery
+							value={percentage}
+							appLayout={styles.appLayout}
+							style={styles.batteryStyle}
+							outerContainerStyle={styles.batteryOuterContainerStyle}/>
+					)}
+					{isGatewayActive ?
+						<LastUpdatedInfo
+							value={-seconds}
+							numeric="auto"
+							updateIntervalInSeconds={60}
+							timestamp={lastUpdatedValue}
+							gatewayTimezone={sensor.gatewayTimezone}
+							level={minutesAgo < 1440 ? 25 : 8}
+							textStyle={[
+								textInfoStyle, {
+									opacity: minutesAgo < 1440 ? 1 : 0.5,
+								},
+							]} />
+						:
+						<Text
+							level={26}
+							style={textInfoStyle}>
+							{this.offline}
+						</Text>
+					}
+				</View>
 			</View>
 		);
 	}
@@ -437,6 +454,14 @@ class SensorRow extends View<Props, State> {
 		const dotSize = rowHeight * 0.09;
 
 		return {
+			appLayout,
+			batteryStyle: {
+				height: Math.floor(deviceWidth * 0.03),
+				width: Math.floor(deviceWidth * 0.055),
+			},
+			batteryOuterContainerStyle: {
+				marginRight: 8,
+			},
 			container: {
 				flex: 1,
 				backgroundColor: 'transparent',
