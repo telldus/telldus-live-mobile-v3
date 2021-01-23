@@ -1598,13 +1598,16 @@ exports[`<OverviewTab /> - snapshot renders Sensor OverviewTab 1`] = `
       >
         <View
           style={
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "transparent",
-              "flex": 0,
-              "flexDirection": "row",
-              "justifyContent": "space-between",
-            }
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flex": 0,
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+              },
+              undefined,
+            ]
           }
         >
           <View
