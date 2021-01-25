@@ -33,6 +33,7 @@ import SensorLastUpdateModeControlBlock from './SensorLastUpdateModeControlBlock
 import DBNameDisplayControlBlock from './DBNameDisplayControlBlock';
 import SelectThemeSetDD from './SelectThemeSetDD';
 import DBTileDisplayControlBlock from './DBTileDisplayControlBlock';
+import TabsBatteryStatusControlBlock from './TabsBatteryStatusControlBlock';
 
 module.exports = {
 	PushSettingsRow,
@@ -49,4 +50,5 @@ module.exports = {
 	DBNameDisplayControlBlock,
 	SelectThemeSetDD,
 	DBTileDisplayControlBlock,
+	TabsBatteryStatusControlBlock,
 };
