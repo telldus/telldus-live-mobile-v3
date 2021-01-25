@@ -34,6 +34,7 @@ type Props = {
 	padding: number,
 	borderWidth: number,
 	outerContainerStyle: Object,
+	nobStyle: Object,
 };
 
 type DefaultProps = {
@@ -91,11 +92,12 @@ render(): Object {
 		appLayout,
 		style,
 		outerContainerStyle,
+		nobStyle,
 	} = this.props;
 	const {
 		outerContainerDef,
 		containerStyle,
-		nobStyle,
+		nobStyleDef,
 		backgroundColor,
 		batteryFillStyle,
 	} = this.getStyle(appLayout, value);
@@ -107,7 +109,7 @@ render(): Object {
 			<View style={[containerStyle, {borderColor: backgroundColor}, style]} onLayout={this.onLayout}>
 				<View style={[batteryFillStyle, {backgroundColor, height, width}]}/>
 			</View>
-			<View style={[nobStyle, {backgroundColor}]}/>
+			<View style={[nobStyleDef, {backgroundColor}, nobStyle]}/>
 		</View>
 	);
 }
@@ -139,17 +141,18 @@ getStyle(appLayout: Object, value: number): Object {
 		containerStyle: {
 			height: batteryHeight,
 			width: batteryWidth,
-			borderRadius: batteryHeight * 0.2,
-			borderWidth,
+			borderRadius: Math.floor(batteryHeight * 0.2),
+			borderWidth: Math.floor(borderWidth),
 			justifyContent: 'center',
 			alignItems: 'flex-start',
 			padding,
 		},
-		nobStyle: {
-			height: batteryHeight * 0.5,
-			width: batteryHeight * 0.2,
-			borderTopRightRadius: batteryHeight * 0.2,
-			borderBottomRightRadius: batteryHeight * 0.2,
+		nobStyleDef: {
+			height: Math.floor(batteryHeight * 0.5),
+			width: Math.floor(batteryHeight * 0.2),
+			overflow: 'hidden',
+			borderTopRightRadius: Math.floor(batteryHeight * 0.2),
+			borderBottomRightRadius: Math.floor(batteryHeight * 0.2),
 		},
 		batteryFillStyle: {
 		},
