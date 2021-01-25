@@ -60,7 +60,6 @@ const Title = memo<Object>(({
 		tileNameDisplayMode,
 		dBTileDisplayMode,
 	} = defaultSettings;
-	console.log('TEST dbTileDisplayMode', dBTileDisplayMode);
 
 	const isBroard = dBTileDisplayMode !== 'compact';
 
