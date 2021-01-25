@@ -61,6 +61,7 @@ import {
 	getThermostatValue,
 	getMatchingSensorInfo,
 	getBatteryPercentage,
+	showBatteryStatus,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
@@ -83,6 +84,7 @@ type Props = PropsThemedComponent & {
 	offColorMultiplier: number,
 	onColorMultiplier: number,
 	battery?: number,
+	batteryStatus: string,
 
 	onBell: (number) => void,
 	onDown: (number) => void,
@@ -189,6 +191,7 @@ class DeviceRow extends View<Props, State> {
 				'dark',
 				'selectedThemeSet',
 				'battery',
+				'batteryStatus',
 			]);
 			if (propsChange) {
 				return true;
@@ -308,6 +311,7 @@ class DeviceRow extends View<Props, State> {
 			colors,
 			selectedThemeSet,
 			battery,
+			batteryStatus,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -453,6 +457,10 @@ class DeviceRow extends View<Props, State> {
 
 		const nameInfo = this.getNameInfo(device, deviceName, powerConsumed, styles);
 		const percentage = getBatteryPercentage(battery);
+		const showBattery = showBatteryStatus({
+			percentage,
+			batteryStatus,
+		});
 
 		return (
 			<View>
@@ -503,7 +511,7 @@ class DeviceRow extends View<Props, State> {
 											containerStyle={[styles.iconContainerStyle, {
 												backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : colorDeviceIconBack,
 											}]}/>
-										{(!!battery && battery !== 254) && (
+										{(!!battery && battery !== 254) && showBattery && (
 											<Battery
 												value={percentage}
 												appLayout={styles.appLayout}

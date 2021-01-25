@@ -51,6 +51,7 @@ import {
 	getSensorInfo,
 	getWindDirection,
 	getBatteryPercentage,
+	showBatteryStatus,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -65,6 +66,7 @@ type Props = {
 	defaultType?: string,
 	screenReaderEnabled: boolean,
 	isLast: boolean,
+	batteryStatus: string,
 
 	isNew: boolean,
 	gatewayId: string,
@@ -165,6 +167,7 @@ class SensorRow extends View<Props, State> {
 				'themeInApp',
 				'colorScheme',
 				'selectedThemeSet',
+				'batteryStatus',
 			]);
 			if (propsChange) {
 				return true;
@@ -277,7 +280,14 @@ class SensorRow extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { sensor = {}, currentScreen, isGatewayActive, intl, screenReaderEnabled } = this.props;
+		const {
+			sensor = {},
+			currentScreen,
+			isGatewayActive,
+			intl,
+			screenReaderEnabled,
+			batteryStatus,
+		} = this.props;
 		const styles = this.getStyles();
 		const {
 			data = {},
@@ -301,6 +311,10 @@ class SensorRow extends View<Props, State> {
 
 		const nameInfo = this.getNameInfo(sensor, sensorName, minutesAgo, lastUpdated, isGatewayActive, styles);
 		const percentage = getBatteryPercentage(battery);
+		const showBattery = showBatteryStatus({
+			percentage,
+			batteryStatus,
+		});
 
 		return (
 			<SwipeRow
@@ -339,7 +353,7 @@ class SensorRow extends View<Props, State> {
 									alignItems: 'center',
 								}}>
 								<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle} />
-								{(!!battery && battery !== 254) && (
+								{(!!battery && battery !== 254) && showBattery && (
 									<Battery
 										value={percentage}
 										appLayout={styles.appLayout}

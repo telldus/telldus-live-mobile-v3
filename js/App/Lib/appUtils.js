@@ -160,6 +160,22 @@ const getThemeSetOptions = (): Array<Object> => {
 	];
 };
 
+const showBatteryStatus = ({
+	percentage,
+	batteryStatus,
+}: Object): boolean => {
+	switch (batteryStatus) {
+		case 'always': {
+			return true;
+		}
+		case 'never': {
+			return false;
+		}
+		default:
+			return percentage < 10;
+	}
+};
+
 module.exports = {
 	supportRSA,
 	getLocale,
@@ -173,4 +189,5 @@ module.exports = {
 	getSectionHeaderHeight,
 	getDefaultMapCoordinates,
 	getThemeSetOptions,
+	showBatteryStatus,
 };
