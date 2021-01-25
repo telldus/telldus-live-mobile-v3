@@ -307,6 +307,7 @@ class DeviceRow extends View<Props, State> {
 			dark,
 			colors,
 			selectedThemeSet,
+			battery,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -451,6 +452,7 @@ class DeviceRow extends View<Props, State> {
 		let accessibilityLabel = `${getLabelDevice(intl.formatMessage, device)}, ${intl.formatMessage(i18n.accessibilityLabelViewDD)}`;
 
 		const nameInfo = this.getNameInfo(device, deviceName, powerConsumed, styles);
+		const percentage = getBatteryPercentage(battery);
 
 		return (
 			<View>
@@ -484,17 +486,32 @@ class DeviceRow extends View<Props, State> {
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 								accessibilityLabel={accessibilityLabel}>
-								{showDeviceIcon && <BlockIcon
-									icon={icon}
-									style={[
-										styles.deviceIcon,
-										{
-											color: selectedThemeSet.key === 2 ? colorDeviceIconBack : '#ffffff',
-										},
-									]}
-									containerStyle={[styles.iconContainerStyle, {
-										backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : colorDeviceIconBack,
-									}]}/>}
+								{showDeviceIcon && (
+									<View style={{
+										flex: 0,
+										flexDirection: 'column',
+										alignItems: 'center',
+									}}>
+										<BlockIcon
+											icon={icon}
+											style={[
+												styles.deviceIcon,
+												{
+													color: selectedThemeSet.key === 2 ? colorDeviceIconBack : '#ffffff',
+												},
+											]}
+											containerStyle={[styles.iconContainerStyle, {
+												backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : colorDeviceIconBack,
+											}]}/>
+										{(!!battery && battery !== 254) && (
+											<Battery
+												value={percentage}
+												appLayout={styles.appLayout}
+												style={styles.batteryStyle}
+												nobStyle={styles.nobStyle}/>
+										)}
+									</View>
+								)}
 								{nameInfo}
 							</TouchableOpacity>
 							<View style={styles.buttonsCover}>
@@ -528,7 +545,6 @@ class DeviceRow extends View<Props, State> {
 		let {
 			intl,
 			currentTemp,
-			battery,
 		} = this.props;
 		let {
 			name,
@@ -554,8 +570,6 @@ class DeviceRow extends View<Props, State> {
 			info = `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W`;
 		}
 
-		const percentage = getBatteryPercentage(battery);
-
 		return (
 			<View style={coverStyle}>
 				<Text
@@ -563,24 +577,13 @@ class DeviceRow extends View<Props, State> {
 					style={[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1}>
 					{deviceName}
 				</Text>
-				<View style={{
-					flexDirection: 'row',
-				}}>
-					{(!!battery && battery !== 254) && (
-						<Battery
-							value={percentage}
-							appLayout={styles.appLayout}
-							style={styles.batteryStyle}
-							outerContainerStyle={styles.batteryOuterContainerStyle}/>
-					)}
-					{!!info && (
-						<Text
-							level={25}
-							style = {textPowerStyle} numberOfLines={1}>
-							{info}
-						</Text>
-					)}
-				</View>
+				{!!info && (
+					<Text
+						level={25}
+						style = {textPowerStyle} numberOfLines={1}>
+						{info}
+					</Text>
+				)}
 			</View>
 		);
 	}
@@ -637,17 +640,21 @@ class DeviceRow extends View<Props, State> {
 		let backgroundColor = !isGatewayActive ? offlineColor : color;
 
 		const padding = deviceWidth * paddingFactor;
+		const iconSize = 18;
+		const batteryHeight = 9;
 
 		return {
 			appLayout,
 			batteryStyle: {
-				height: Math.floor(deviceWidth * 0.03),
-				width: Math.floor(deviceWidth * 0.055),
+				height: batteryHeight,
+				width: 17,
 			},
-			batteryOuterContainerStyle: {
-				marginTop: infoFontSize * 0.411,
-				marginRight: 8,
-				marginLeft: 6,
+			nobStyle: {
+				height: Math.floor(batteryHeight * 0.47),
+				width: Math.floor(batteryHeight * 0.2),
+				overflow: 'hidden',
+				borderTopRightRadius: Math.floor(batteryHeight * 0.17),
+				borderBottomRightRadius: Math.floor(batteryHeight * 0.17),
 			},
 			touchableContainer: {
 				flex: 1,
@@ -708,7 +715,7 @@ class DeviceRow extends View<Props, State> {
 				marginRight: 4,
 			},
 			deviceIcon: {
-				fontSize: 18,
+				fontSize: iconSize,
 			},
 			iconContainerStyle: {
 				backgroundColor,

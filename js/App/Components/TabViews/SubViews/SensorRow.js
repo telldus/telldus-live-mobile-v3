@@ -284,6 +284,7 @@ class SensorRow extends View<Props, State> {
 			name,
 			lastUpdated,
 			id,
+			battery,
 		} = sensor;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
@@ -299,6 +300,7 @@ class SensorRow extends View<Props, State> {
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
 
 		const nameInfo = this.getNameInfo(sensor, sensorName, minutesAgo, lastUpdated, isGatewayActive, styles);
+		const percentage = getBatteryPercentage(battery);
 
 		return (
 			<SwipeRow
@@ -330,7 +332,21 @@ class SensorRow extends View<Props, State> {
 							accessible={accessible}
 							importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 							accessibilityLabel={accessible ? accessibilityLabel : ''}>
-							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle} />
+							<View
+								style={{
+									flex: 0,
+									flexDirection: 'column',
+									alignItems: 'center',
+								}}>
+								<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle} />
+								{(!!battery && battery !== 254) && (
+									<Battery
+										value={percentage}
+										appLayout={styles.appLayout}
+										style={styles.batteryStyle}
+										nobStyle={styles.nobStyle}/>
+								)}
+							</View>
 							{nameInfo}
 						</TouchableOpacity>
 						<TypeBlockList
@@ -351,9 +367,6 @@ class SensorRow extends View<Props, State> {
 
 	getNameInfo(sensor: Object, sensorName: string, minutesAgo: number, lastUpdatedValue: string, isGatewayActive: boolean, styles: Object): Object {
 		let { name, nameTablet, time, timeTablet } = styles;
-		const {
-			battery,
-		} = sensor;
 		let coverStyle = name;
 		let textInfoStyle = time;
 		if (this.isTablet) {
@@ -362,7 +375,6 @@ class SensorRow extends View<Props, State> {
 		}
 
 		const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdatedValue));
-		const percentage = getBatteryPercentage(battery);
 
 		return (
 			<View style={coverStyle}>
@@ -373,37 +385,26 @@ class SensorRow extends View<Props, State> {
 					numberOfLines={1}>
 					{sensorName}
 				</Text>
-				<View style={{
-					flexDirection: 'row',
-				}}>
-					{(!!battery && battery !== 254) && (
-						<Battery
-							value={percentage}
-							appLayout={styles.appLayout}
-							style={styles.batteryStyle}
-							outerContainerStyle={styles.batteryOuterContainerStyle}/>
-					)}
-					{isGatewayActive ?
-						<LastUpdatedInfo
-							value={-seconds}
-							numeric="auto"
-							updateIntervalInSeconds={60}
-							timestamp={lastUpdatedValue}
-							gatewayTimezone={sensor.gatewayTimezone}
-							level={minutesAgo < 1440 ? 25 : 8}
-							textStyle={[
-								textInfoStyle, {
-									opacity: minutesAgo < 1440 ? 1 : 0.5,
-								},
-							]} />
-						:
-						<Text
-							level={26}
-							style={textInfoStyle}>
-							{this.offline}
-						</Text>
-					}
-				</View>
+				{isGatewayActive ?
+					<LastUpdatedInfo
+						value={-seconds}
+						numeric="auto"
+						updateIntervalInSeconds={60}
+						timestamp={lastUpdatedValue}
+						gatewayTimezone={sensor.gatewayTimezone}
+						level={minutesAgo < 1440 ? 25 : 8}
+						textStyle={[
+							textInfoStyle, {
+								opacity: minutesAgo < 1440 ? 1 : 0.5,
+							},
+						]} />
+					:
+					<Text
+						level={26}
+						style={textInfoStyle}>
+						{this.offline}
+					</Text>
+				}
 			</View>
 		);
 	}
@@ -453,14 +454,21 @@ class SensorRow extends View<Props, State> {
 		const widthValueBlock = (buttonWidth * 2) + 6;
 		const dotSize = rowHeight * 0.09;
 
+		const iconSize = 22;
+		const batteryHeight = 9;
+
 		return {
 			appLayout,
 			batteryStyle: {
-				height: Math.floor(deviceWidth * 0.03),
-				width: Math.floor(deviceWidth * 0.055),
+				height: batteryHeight,
+				width: 17,
 			},
-			batteryOuterContainerStyle: {
-				marginRight: 8,
+			nobStyle: {
+				height: Math.floor(batteryHeight * 0.47),
+				width: Math.floor(batteryHeight * 0.2),
+				overflow: 'hidden',
+				borderTopRightRadius: Math.floor(batteryHeight * 0.17),
+				borderBottomRightRadius: Math.floor(batteryHeight * 0.17),
 			},
 			container: {
 				flex: 1,
@@ -517,7 +525,7 @@ class SensorRow extends View<Props, State> {
 				flexDirection: 'row',
 			},
 			sensorIcon: {
-				fontSize: 16,
+				fontSize: iconSize,
 				color: iconColor,
 			},
 			iconContainerStyle: {
