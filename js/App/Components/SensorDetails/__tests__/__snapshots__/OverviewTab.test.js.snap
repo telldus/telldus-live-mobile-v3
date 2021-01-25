@@ -1654,11 +1654,13 @@ exports[`<OverviewTab /> - snapshot renders Sensor OverviewTab 1`] = `
                   "borderBottomRightRadius": 6,
                   "borderTopRightRadius": 6,
                   "height": 15,
+                  "overflow": "hidden",
                   "width": 6,
                 },
                 Object {
                   "backgroundColor": "#5cb85c",
                 },
+                undefined,
               ]
             }
           />
