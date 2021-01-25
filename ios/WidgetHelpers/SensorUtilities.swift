@@ -9,23 +9,23 @@
 import Foundation
 struct SensorUtilities {
   let WIND_DIR = [
-    "N",
-    "NNE",
-    "NE",
-    "ENE",
-    "E",
-    "ESE",
-    "SE",
-    "SSE",
-    "S",
-    "SSW",
-    "SW",
-    "WSW",
-    "W",
-    "WNW",
-    "NW",
-    "NNW",
-    "N"
+    String(format: "widget_ios_sensorDirN"),
+    String(format: "widget_ios_sensorDirNNE"),
+    String(format: "widget_ios_sensorDirNE"),
+    String(format: "widget_ios_sensorDirENE"),
+    String(format: "widget_ios_sensorDirE"),
+    String(format: "widget_ios_sensorDirESE"),
+    String(format: "widget_ios_sensorDirSE"),
+    String(format: "widget_ios_sensorDirSSE"),
+    String(format: "widget_ios_sensorDirS"),
+    String(format: "widget_ios_sensorDirSSW"),
+    String(format: "widget_ios_sensorDirSW"),
+    String(format: "widget_ios_sensorDirWSW"),
+    String(format: "widget_ios_sensorDirW"),
+    String(format: "widget_ios_sensorDirWNW"),
+    String(format: "widget_ios_sensorDirNW"),
+    String(format: "widget_ios_sensorDirNNW"),
+    String(format: "widget_ios_sensorDirN")
   ]
   
   func getConstants() -> Dictionary<String, Any>? {
@@ -105,7 +105,7 @@ struct SensorUtilities {
   func getSensorInfo(name: String, scale: Int, value: Double) -> Dictionary<String, Any> {
     var info: Dictionary<String, Any> = [:]
     var unit: String = ""
-    info["label"] = "Unknown"
+    info["label"] = String(format: "widget_ios_unknown")
     info["icon"] = "sensor"
     info["iconUniC"] = "\u{e911}"
     info["unit"] = unit
@@ -126,30 +126,30 @@ struct SensorUtilities {
     info["unit"] = unit
     
     if (name == "humidity") {
-      info["label"] = "Humidity"
+      info["label"] = String(format: "widget_ios_labelHumidity")
       info["icon"] = "humidity"
       info["iconUniC"] = "\u{e910}"
       return info
     }
     if (name == "temp") {
-      info["label"] = "Temperature"
+      info["label"] = String(format: "widget_ios_labelTemperature")
       info["icon"] = "temperature"
       info["iconUniC"] = "\u{e90d}"
       return info
     }
     if (name == "rrate" || name == "rtot") {
-      let label = name == "rrate" ? "Rain Rate" : "Rain Total"
+      let label = name == "rrate" ? String(format: "widget_ios_labelRainRate") : String(format: "widget_ios_labelRainTotal")
       info["label"] = label
       info["icon"] = "rain"
       info["iconUniC"] = "\u{e90e}"
       return info
     }
     if (name == "wgust" || name == "wavg" || name == "wdir") {
-      var label = name == "wgust" ? "Wind Gust" : "Wind Average"
+      var label = name == "wgust" ? String(format: "widget_ios_labelWindGust") : String(format: "widget_ios_labelWindAverage")
       info["icon"] = "wind"
       info["iconUniC"] = "\u{e904}"
       if (name == "wdir") {
-        label = "Wind Direction"
+        label = String(format: "widget_ios_labelWindDirection")
         let direction = getWindDirection(value: value)
         info["value"] = direction
       }
@@ -157,31 +157,31 @@ struct SensorUtilities {
       return info
     }
     if (name == "uv") {
-      let label = "UV Index"
+      let label = String(format: "widget_ios_labelUVIndex")
       info["label"] = label
       info["icon"] = "uv"
       info["iconUniC"] = "\u{e90c}"
       return info
     }
     if (name == "watt") {
-      var label = "Energy"
+      var label = String(format: "widget_ios_energy")
       if (scale == 0) {
         label = "Accumulated"+" "+"Power"
       }
       if (scale == 2) {
-        label = "Power"
+        label = String(format: "widget_ios_labelWatt")
       }
       if (scale == 3) {
-        label = "Pulse"
+        label = String(format: "widget_ios_pulse")
       }
       if (scale == 4) {
-        label = "Voltage"
+        label = String(format: "widget_ios_voltage")
       }
       if (scale == 5) {
-        label = "Current"
+        label = String(format: "widget_ios_current")
       }
       if (scale == 6) {
-        label = "Power Factor"
+        label = String(format: "widget_ios_powerFactor")
       }
       info["label"] = label
       info["icon"] = "watt"
@@ -189,28 +189,28 @@ struct SensorUtilities {
       return info
     }
     if (name == "lum") {
-      let label = "Luminance"
+      let label = String(format: "widget_ios_labelLuminance")
       info["label"] = label
       info["icon"] = "luminance"
       info["iconUniC"] = "\u{e90f}"
       return info
     }
     if (name == "dewp") {
-      let label = "Dew Point"
+      let label = String(format: "widget_ios_labelDewPoint")
       info["label"] = label
       info["icon"] = "humidity"
       info["iconUniC"] = "\u{e910}"
       return info
     }
     if (name  == "barpress") {
-      let label = "Barometric Pressure"
+      let label = String(format: "widget_ios_labelBarometricPressure")
       info["label"] = label
       info["icon"] = "gauge"
       info["iconUniC"] = "\u{e95e}"
       return info
     }
     if (name == "genmeter") {
-      let label = "Generic Meter"
+      let label = String(format: "widget_ios_labelGenericMeter")
       info["label"] = label
       info["icon"] = "sensor"
       info["iconUniC"] = "\u{e911}"
@@ -224,7 +224,7 @@ struct SensorUtilities {
       return info
     }
     if (name == "volume") {
-      let label = "Volume"
+      let label = String(format: "widget_ios_labelVolume")
       let icon = scale == 0 ? "volumeliquid" : "volume3d"
       info["label"] = label
       info["icon"] = icon
@@ -232,7 +232,7 @@ struct SensorUtilities {
       return info
     }
     if (name == "loudness") {
-      let label = "Loudness"
+      let label = String(format: "widget_ios_labelLoudness")
       info["label"] = label
       info["icon"] = "speaker"
       info["iconUniC"] = "\u{e979}"
@@ -253,14 +253,14 @@ struct SensorUtilities {
       return info
     }
     if (name == "weight") {
-      let label = "Weight"
+      let label = String(format: "widget_ios_labelWeight")
       info["label"] = label
       info["icon"] = "weight"
       info["iconUniC"] = "\u{e985}"
       return info
     }
     if (name == "moisture") {
-      let label = "Moisture"
+      let label = String(format: "widget_ios_labelMoisture")
       info["label"] = label
       info["icon"] = "humidity"
       info["iconUniC"] = "\u{e910}"
