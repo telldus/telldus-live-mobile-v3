@@ -497,7 +497,6 @@ const getStyles = ({
 		coverStyle: {
 			justifyContent: 'space-between',
 			marginTop: 2,
-			marginHorizontal: padding,
 			borderRadius: 2,
 			padding,
 			...shadow,
@@ -506,7 +505,6 @@ const getStyles = ({
 		},
 		subTitleTextStyle: {
 			fontSize: fontSize * 1.1,
-			marginLeft: padding,
 			marginTop: 8,
 			marginBottom: 5,
 		},

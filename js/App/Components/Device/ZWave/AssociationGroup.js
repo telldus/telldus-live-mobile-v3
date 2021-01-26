@@ -342,7 +342,6 @@ const getStyles = ({
 		infoOneColorBlockDisabled,
 		inAppBrandSecondary,
 		verticalCoverDef: {
-			marginHorizontal: padding,
 			padding,
 			marginBottom: padding / 2,
 			...shadow,

@@ -31,8 +31,6 @@ const { images: {DEVICES} } = utils;
 import {
 	SupportedCommandClasses,
 	BatteryFunctions,
-	Associations,
-	Configuration,
 	BasicSettings,
 	TelldusInfo,
 	NodeRelations,
@@ -267,14 +265,6 @@ class OverviewTab extends View<Props, null> {
 		const showBatteryFunctions = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_BATTERY] ||
 		supportsWakeup) : false;
 
-		const showAssociations = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_ASSOCIATION] : false;
-
-		const showConfiguration = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_CONFIGURATION] ||
-			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_INDICATOR] ||
-			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION] ||
-			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_SWITCH_ALL]) :
-			false;
-
 		let nodesRelation;
 		if (nodeInfo.nodeId !== undefined) {
 			nodesRelation = nodeList[nodeInfo.nodeId];
@@ -317,25 +307,11 @@ class OverviewTab extends View<Props, null> {
 						clientDeviceId={device.clientDeviceId}
 						clientId={device.clientId}/>
 				)}
-				{!!showAssociations && (
-					<Associations
-						id={device.id}
-						clientId={clientId}
-						gatewayTimezone={gatewayTimezone}
-						clientDeviceId={clientDeviceId}/>
-				)}
 				{!!showBatteryFunctions && (
 					<BatteryFunctions
 						id={device.id}
 						clientId={clientId}
 						gatewayTimezone={gatewayTimezone}/>
-				)}
-				{!!showConfiguration && (
-					<Configuration
-						id={device.id}
-						clientId={clientId}
-						gatewayTimezone={gatewayTimezone}
-						clientDeviceId={clientDeviceId}/>
 				)}
 				{!!nodeInfo.cmdClasses && (
 					<TelldusInfo

@@ -311,7 +311,6 @@ const getStyles = (appLayout: Object): Object => {
 		iconSize: deviceWidth * 0.06,
 		titleCoverStyle: {
 			flexDirection: 'row',
-			marginLeft: padding,
 			marginBottom: padding / 2,
 			alignItems: 'center',
 		},

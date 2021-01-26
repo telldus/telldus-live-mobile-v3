@@ -35,6 +35,11 @@ import {
 } from '../../../../BaseComponents';
 
 import {
+	Associations,
+	Configuration,
+} from '../ZWave';
+
+import {
 	withTheme,
 	PropsThemedComponent,
 } from '../../HOC/withTheme';
@@ -94,6 +99,7 @@ type Props = PropsThemedComponent & {
 	transports: string,
 	gatewaySupportEditModel: boolean,
 	currentScreen: string,
+	gatewayTimezone: string,
 
 	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
@@ -213,6 +219,7 @@ class SettingsTab extends View {
 				'addDevice433',
 				'transports',
 				'gatewaySupportEditModel',
+				'gatewayTimezone',
 			]);
 			if (propsChange) {
 				return true;
@@ -862,6 +869,7 @@ class SettingsTab extends View {
 			transports,
 			gatewaySupportEditModel,
 			colors,
+			gatewayTimezone,
 		} = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
@@ -937,6 +945,14 @@ class SettingsTab extends View {
 
 		const transportsArray = transports.split(',');
 		const showScan = supportsScan(transportsArray) && scannable;
+
+		const showAssociations = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_ASSOCIATION] : false;
+
+		const showConfiguration = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_CONFIGURATION] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_INDICATOR] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_SWITCH_ALL]) :
+			false;
 
 		return (
 			<ThemedScrollView
@@ -1078,6 +1094,20 @@ class SettingsTab extends View {
 								}
 							</>
 						}
+						{!!showAssociations && (
+							<Associations
+								id={device.id}
+								clientId={clientId}
+								gatewayTimezone={gatewayTimezone}
+								clientDeviceId={clientDeviceId}/>
+						)}
+						{!!showConfiguration && (
+							<Configuration
+								id={device.id}
+								clientId={clientId}
+								gatewayTimezone={gatewayTimezone}
+								clientDeviceId={clientDeviceId}/>
+						)}
 					</View>
 				}
 			</ThemedScrollView>
@@ -1169,7 +1199,13 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	let device = state.devices.byId[id] || {};
 
 	const { clientId } = device;
-	const { online = false, websocketOnline = false, transports = '', type } = state.gateways.byId[clientId] || {};
+	const {
+		online = false,
+		websocketOnline = false,
+		transports = '',
+		type,
+		timezone: gatewayTimezone,
+	} = state.gateways.byId[clientId] || {};
 
 	const gatewaySupportEditModel = doesSupportEditModel(type);
 	const { addDevice433 = {}} = state.addDevice;
@@ -1198,6 +1234,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		transports,
 		gatewaySupportEditModel,
 		currentScreen,
+		gatewayTimezone,
 	};
 }
 
