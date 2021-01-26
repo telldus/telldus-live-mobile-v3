@@ -48,14 +48,14 @@ allprojects {
         maven {
             url ("https://developer.huawei.com/repo/")
         }
-        // maven {
-        //    // Required for react-native-background-geolocation
-        //    url("${project(':react-native-background-geolocation').projectDir}/libs")
-        // }
-        // maven {
-        //     // react-native-background-fetch
-        //     url("${project(':react-native-background-fetch').projectDir}/libs")
-        // }
+        maven {
+           // Required for react-native-background-geolocation
+           url("${project(':react-native-background-geolocation').projectDir}/libs")
+        }
+        maven {
+            // react-native-background-fetch
+            url("${project(':react-native-background-fetch').projectDir}/libs")
+        }
     }
 }
 
