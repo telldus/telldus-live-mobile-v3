@@ -232,7 +232,9 @@ const Associations = (props: Props): Object => {
 		setExpand(!expand);
 	}, [expand]);
 
+	const [ isLoading, setIsLoading ] = useState(false);
 	const saveAssociation = useCallback((data: Object) => {
+		setIsLoading(true);
 		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
 			'module': 'zwave',
 			'action': 'cmdClass',
@@ -243,6 +245,7 @@ const Associations = (props: Props): Object => {
 		}));
 		timeoutRef.current = setTimeout(() => {
 			dispatch(requestNodeInfo(clientId, clientDeviceId));
+			setIsLoading(false);
 		}, 1000);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [clientId, nodeId, clientDeviceId]);
@@ -285,7 +288,9 @@ const Associations = (props: Props): Object => {
 				<TouchableButton
 					style={buttonStyle}
 					text={formatMessage(i18n.saveNewAssociations)}
-					onPress={onPressSave}/>
+					onPress={onPressSave}
+					showThrobber={isLoading}
+					disabled={isLoading}/>
 				}
 			</View>
 			}
