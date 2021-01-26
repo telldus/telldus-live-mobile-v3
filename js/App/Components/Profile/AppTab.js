@@ -241,13 +241,6 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					submitPushToken={submitPushToken}
 				/>
 				<LanguageControlBlock/>
-				<Text
-					level={2}
-					style={titleStyle}>
-					{formatMessage(i18n.menuTabs)}
-				</Text>
-				<TabsBatteryStatusControlBlock
-					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
 				<ShowHideTabsBlock
 					intl={intl}
 					layout={layout}/>
@@ -279,10 +272,12 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 				<Text
 					level={2}
 					style={titleStyle}>
-					{formatMessage(i18n.labelSensor)}
+					{formatMessage(i18n.dAndSList)}
 				</Text>
 				<SensorLastUpdateModeControlBlock
 					showLabel={true}
+					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
+				<TabsBatteryStatusControlBlock
 					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
 				<Text
 					level={2}
