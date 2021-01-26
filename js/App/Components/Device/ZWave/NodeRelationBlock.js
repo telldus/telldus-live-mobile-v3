@@ -34,6 +34,10 @@ import {
 
 import Theme from '../../../Theme';
 
+type Props = {
+	nodeName: string,
+};
+
 const NodeRelationBlock = memo<Object>((props: Props): Object => {
 	const {
 		nodeName,

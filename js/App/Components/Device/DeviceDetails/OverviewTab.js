@@ -81,6 +81,7 @@ type Props = {
 	gatewayTimezone: string,
 	locale: string,
 	currentScreen: string,
+	nodeList: Object,
 
 	screenProps: Object,
 	dispatch: Function,
