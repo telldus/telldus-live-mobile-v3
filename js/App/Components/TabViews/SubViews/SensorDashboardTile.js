@@ -317,6 +317,8 @@ class SensorDashboardTile extends View<Props, null> {
 					extraData={{
 						themeInApp,
 						colorScheme,
+						background,
+						isBroard,
 					}}/>
 			</DashboardShadowTile>
 		);
