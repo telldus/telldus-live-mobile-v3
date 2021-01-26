@@ -35,6 +35,7 @@ import {
 	Configuration,
 	BasicSettings,
 	TelldusInfo,
+	NodeRelations,
 } from '../ZWave';
 import {
 	ThemedScrollView,
@@ -236,6 +237,7 @@ class OverviewTab extends View<Props, null> {
 			lastUpdated,
 			currentTemp,
 			gatewayTimezone,
+			nodeList = {},
 		} = this.props;
 		const { appLayout, intl } = screenProps;
 
@@ -272,6 +274,11 @@ class OverviewTab extends View<Props, null> {
 			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION] ||
 			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_SWITCH_ALL]) :
 			false;
+
+		let nodesRelation;
+		if (nodeInfo.nodeId !== undefined) {
+			nodesRelation = nodeList[nodeInfo.nodeId];
+		}
 
 		return (
 			<ThemedScrollView
@@ -333,6 +340,16 @@ class OverviewTab extends View<Props, null> {
 				{!!nodeInfo.cmdClasses && (
 					<TelldusInfo
 						id={device.id}/>
+				)}
+				{!!nodesRelation && (
+					<NodeRelations
+						id={device.id}
+						clientId={clientId}
+						gatewayTimezone={gatewayTimezone}
+						clientDeviceId={clientDeviceId}
+						nodesRelation={nodesRelation}
+						nodeId={nodeInfo.nodeId}
+						nodeList={nodeList}/>
 				)}
 			</ThemedScrollView>
 		);
