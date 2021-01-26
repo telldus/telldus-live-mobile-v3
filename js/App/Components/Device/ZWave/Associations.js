@@ -116,14 +116,6 @@ const Associations = (props: Props): Object => {
 	const [ expand, setExpand ] = useState(true);
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
-			'module': 'zwave',
-			'action': 'nodeList',
-		}));
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [clientId]);
-
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { byId = {} } = useSelector((state: Object): Object => state.gateways);
 	const {

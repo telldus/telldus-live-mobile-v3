@@ -49,7 +49,10 @@ import {
 	deviceSetStateThermostat,
 	getDeviceInfoCommon,
 } from '../../../Actions/Devices';
-import { requestNodeInfo } from '../../../Actions/Websockets';
+import {
+	requestNodeInfo,
+	sendSocketMessage,
+} from '../../../Actions/Websockets';
 import getDeviceType from '../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import { getLastUpdated, getThermostatValue } from '../../../Lib/SensorUtils';
@@ -92,10 +95,14 @@ class OverviewTab extends View<Props, null> {
 		super(props);
 
 		this.boxTitle = `${props.screenProps.intl.formatMessage(i18n.location)}:`;
+		this.getRoutingInfoTimeout = null;
 	}
 
 	componentDidMount() {
-		const { dispatch, device } = this.props;
+		const {
+			dispatch,
+			device,
+		} = this.props;
 		if (!device) {
 			return;
 		}
@@ -132,6 +139,26 @@ class OverviewTab extends View<Props, null> {
 				});
 		}
 		dispatch(requestNodeInfo(clientId, clientDeviceId));
+		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': 'nodeList',
+		}));
+		this.getRoutingInfoTimeout = setTimeout(() => {
+			const {
+				nodeList = {},
+			} = this.props;
+			Object.keys(nodeList).forEach((nodeId: string) => {
+				dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+					'module': 'zwave',
+					'action': 'getRoutingInfo',
+					'nodeId': parseInt(nodeId, 10),
+				}));
+			});
+		}, 2000);
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.getRoutingInfoTimeout);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -146,6 +173,7 @@ class OverviewTab extends View<Props, null> {
 				'device',
 				'lastUpdated',
 				'currentTemp',
+				'nodeList',
 			]);
 		}
 		return false;
@@ -360,6 +388,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		type: gatewayType,
 		online: isGatewayActive,
 		timezone: gatewayTimezone,
+		nodeList,
 	} = gateway ? gateway : {};
 
 	const { defaultSettings } = state.app;
@@ -380,6 +409,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		gatewayTimezone,
 		locale,
 		currentScreen,
+		nodeList,
 	};
 }
 
