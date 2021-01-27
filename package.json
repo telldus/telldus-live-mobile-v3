@@ -52,7 +52,7 @@
     "intl": "~1.2.5",
     "jsc-android": "npm:@kudo-ci/jsc-android",
     "jwt-decode": "^2.2.0",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#cd2b7ab29c008dc3ad464cadf592e12d78289233",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#8dad1d03399f06a7c8467e2c10608d0616a8b32b",
     "lodash": "~4.17.11",
     "node-forge": "~0.9.1",
     "react": "16.13.1",
