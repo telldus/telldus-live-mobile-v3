@@ -187,10 +187,8 @@ exports[`<ChartLegend /> - snapshot renders ChartLegend when chart fullscreen, s
           "alignItems": "center",
           "backgroundColor": "transparent",
           "flex": 0,
-          "height": 40,
           "justifyContent": "center",
           "padding": 0,
-          "width": 30,
         },
       ]
     }
@@ -423,10 +421,8 @@ exports[`<ChartLegend /> - snapshot renders ChartLegend when chart not fullscree
           "alignItems": "center",
           "backgroundColor": "transparent",
           "flex": 0,
-          "height": 40,
           "justifyContent": "center",
           "padding": 0,
-          "width": 30,
         },
       ]
     }
