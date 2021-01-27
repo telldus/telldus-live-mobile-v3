@@ -192,7 +192,7 @@ const NodeRelations = (props: Props): Object => {
 					<Text
 						level={4}
 						style={textStyle}>
-						{formatMessage(i18n.nodeRelationInfo)}
+						{formatMessage(i18n.nodeRelationInfoMessage)}
 					</Text>
 					{!!nodeRelations && nodeRelations}
 					<TouchableButton
