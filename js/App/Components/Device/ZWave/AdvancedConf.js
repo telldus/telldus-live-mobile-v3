@@ -321,11 +321,16 @@ const AdvancedConf = (props: Props): Object => {
 					style={horizontalCover}>
 					<View
 						style={leftBlock}>
-						<Text
-							level={3}
-							style={hItemLabelDef}>
-							{`${ParameterNumber}. ${Name}`}
-						</Text>
+						<View
+							style={{
+								flex: 1,
+							}}>
+							<Text
+								level={3}
+								style={hItemLabelDef}>
+								{`${ParameterNumber}. ${Name}`}
+							</Text>
+						</View>
 						{!!Description && (
 							<>
 								<Text style={Theme.Styles.hiddenText}>
