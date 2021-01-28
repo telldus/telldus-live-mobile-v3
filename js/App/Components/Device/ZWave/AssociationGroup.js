@@ -55,6 +55,7 @@ import {
 import {
 	useDialogueBox,
 } from '../../../Hooks/Dialoguebox';
+import orderBy from 'lodash/orderBy';
 
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
@@ -174,7 +175,10 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 
 	const selectionList = useMemo((): Array<Object> => {
 		let list = [];
-		for (let key in nodeList) {
+		let _nodeList = orderBy(nodeList, (item: Object): string => {
+			return item.name;
+		});
+		for (let key in _nodeList) {
 			if (key === nodeId) {
 				continue;
 			}
@@ -185,7 +189,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 				associationWarningDisabled,
 				associationWarningQueue,
 				associationWarningRemoved,
-			} = nodeList[key];
+			} = _nodeList[key];
 			const showInfo = associationWarningDisabled || associationWarningQueue || associationWarningRemoved;
 
 			list.push(
