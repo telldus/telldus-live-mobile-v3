@@ -370,8 +370,8 @@ const AdvancedConf = (props: Props): Object => {
 				});
 			}
 		}
+
 		if (manualParams.length > 0) {
-			let rows = [];
 			manualParams.forEach((mp: Object, index: number) => {
 				const {
 					pNumber,
@@ -380,28 +380,6 @@ const AdvancedConf = (props: Props): Object => {
 				} = mp;
 				const _size = typeof size === undefined ? '' : size.toString();
 				const _value = typeof value === undefined ? '' : value.toString();
-
-				rows.push(
-					<View
-						key={`${index}-${pNumber}`}>
-						<ManualConfigBlock
-							label={`${formatMessage(i18n.size)} : `}
-							inputValueKey={'size'}
-							number={pNumber}
-							value={_value}
-							size={_size}
-							onChangeValue={_onChangeValue}
-							resetOnSave/>
-						<ManualConfigBlock
-							label={`${formatMessage(i18n.labelValue)} : `}
-							inputValueKey={'value'}
-							number={pNumber}
-							value={_value}
-							size={_size}
-							onChangeValue={_onChangeValue}
-							resetOnSave/>
-					</View>
-				);
 
 				_configurationSettings.push(
 					<View
@@ -415,7 +393,25 @@ const AdvancedConf = (props: Props): Object => {
 								{`${pNumber}. ${formatMessage(i18n.manualConfOne)}`}
 							</Text>
 						</View>
-						{rows}
+						<View
+							key={`${index}-${pNumber}`}>
+							<ManualConfigBlock
+								label={`${formatMessage(i18n.size)} : `}
+								inputValueKey={'size'}
+								number={pNumber}
+								value={_value}
+								size={_size}
+								onChangeValue={_onChangeValue}
+								resetOnSave/>
+							<ManualConfigBlock
+								label={`${formatMessage(i18n.labelValue)} : `}
+								inputValueKey={'value'}
+								number={pNumber}
+								value={_value}
+								size={_size}
+								onChangeValue={_onChangeValue}
+								resetOnSave/>
+						</View>
 					</View>
 				);
 			});
