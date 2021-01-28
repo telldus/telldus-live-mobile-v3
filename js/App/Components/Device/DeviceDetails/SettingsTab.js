@@ -1010,6 +1010,20 @@ class SettingsTab extends View {
 									coverStyle={{
 										marginTop: padding / 2,
 									}}/>
+								{!!showAssociations && (
+									<Associations
+										id={device.id}
+										clientId={clientId}
+										gatewayTimezone={gatewayTimezone}
+										clientDeviceId={clientDeviceId}/>
+								)}
+								{!!showConfiguration && (
+									<Configuration
+										id={device.id}
+										clientId={clientId}
+										gatewayTimezone={gatewayTimezone}
+										clientDeviceId={clientDeviceId}/>
+								)}
 								{!!settings433MHz &&
 									<DeviceSettings
 										coverStyle={coverStyleDeviceSettings433}
@@ -1094,20 +1108,6 @@ class SettingsTab extends View {
 								}
 							</>
 						}
-						{!!showAssociations && (
-							<Associations
-								id={device.id}
-								clientId={clientId}
-								gatewayTimezone={gatewayTimezone}
-								clientDeviceId={clientDeviceId}/>
-						)}
-						{!!showConfiguration && (
-							<Configuration
-								id={device.id}
-								clientId={clientId}
-								gatewayTimezone={gatewayTimezone}
-								clientDeviceId={clientDeviceId}/>
-						)}
 					</View>
 				}
 			</ThemedScrollView>
