@@ -233,6 +233,12 @@ const BatteryFunctions = (props: Props): Object => {
 
 	const getWakeUpIntervalValue = useCallback((value: number): Object => {
 		value = value < 0 ? 0 : value;
+		if (value === 0) {
+			return {
+				timeValue: 0,
+				timeString: '0',
+			};
+		}
 		let _wakeupInterval = (value * wakeupIntervalStep) + minimumWakeupInterval;
 		let seconds = _wakeupInterval;
 		let time = [];
@@ -259,6 +265,7 @@ const BatteryFunctions = (props: Props): Object => {
 
 	let maximumValue = (maximumWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
 	let sliderValueInitial = (storedWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
+	sliderValueInitial = sliderValueInitial < 0 ? 0 : sliderValueInitial;
 	const initialWakeUpIntervalValue = getWakeUpIntervalValue(sliderValueInitial);
 	const [ wakeUpIntervalValue, setWakeUpIntervalValue ] = useState(initialWakeUpIntervalValue);
 	const [ sliderValue, setSliderValue ] = useState(sliderValueInitial);
