@@ -299,7 +299,11 @@ class SensorDashboardTile extends View<Props, null> {
 						width: tileWidth,
 						height: (isBroard ? tileWidth : (tileWidth * 0.52)),
 					},
-				]}>
+				]}
+				titleStyle={isBroard ? {} : {
+					color: minutesAgo < 1440 ? colors.baseColorTwo : colors.colorTimeExpired,
+					opacity: minutesAgo < 1440 ? 1 : 0.5,
+				}}>
 				<TypeBlockDB
 					sensors={slideList}
 					onPress={this.onPressTile}

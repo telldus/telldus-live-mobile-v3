@@ -53,6 +53,7 @@ const Title = memo<Object>(({
 	iconRight,
 	iconRightStyle,
 	onPressIconRight,
+	titleStyle = {},
 }: Object): Object => {
 
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
@@ -85,6 +86,7 @@ const Title = memo<Object>(({
 						fontSize: Math.floor(tileWidth / 10),
 						opacity: name ? 1 : 0.7,
 						color: colors.baseColorTwo,
+						...titleStyle,
 					},
 				]}
 				bounce={false}>
@@ -92,7 +94,7 @@ const Title = memo<Object>(({
 			</TextTicker>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [name, tileWidth, tileNameDisplayMode, selectedThemeSet.key, themeInApp, colorScheme]);
+	}, [titleStyle, name, tileWidth, tileNameDisplayMode, selectedThemeSet.key, themeInApp, colorScheme]);
 
 	return (
 		<View
@@ -158,6 +160,7 @@ type Props = {
 	intl: Object,
 	accessibilityLabel: string,
 	icon?: string,
+	titleStyle?: Object,
 };
 
 class DashboardShadowTile extends View<Props, null> {
