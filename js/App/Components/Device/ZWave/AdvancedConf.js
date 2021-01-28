@@ -422,6 +422,7 @@ const AdvancedConf = (props: Props): Object => {
 		}
 		_configurationSettings.push(
 			<View
+				key={'manual-two'}
 				style={[verticalBlockCoverManual, {
 					paddingTop: _configurationSettings.length > 0 ? padding / 2 : 0,
 					borderTopWidth: _configurationSettings.length > 0 ? 3 : 0,
