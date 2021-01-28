@@ -137,28 +137,17 @@ class OverviewTab extends View<Props, null> {
 						dispatch(deviceZWaveInfo(payload));
 					}
 				});
+			dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+				'module': 'zwave',
+				'action': 'getRoutingInfo',
+				'nodeId': parseInt(nodeInfo.nodeId, 10),
+			}));
 		}
 		dispatch(requestNodeInfo(clientId, clientDeviceId));
 		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
 			'module': 'zwave',
 			'action': 'nodeList',
 		}));
-		this.getRoutingInfoTimeout = setTimeout(() => {
-			const {
-				nodeList = {},
-			} = this.props;
-			Object.keys(nodeList).forEach((nodeId: string) => {
-				dispatch(sendSocketMessage(clientId, 'client', 'forward', {
-					'module': 'zwave',
-					'action': 'getRoutingInfo',
-					'nodeId': parseInt(nodeId, 10),
-				}));
-			});
-		}, 2000);
-	}
-
-	componentWillUnmount() {
-		clearTimeout(this.getRoutingInfoTimeout);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
