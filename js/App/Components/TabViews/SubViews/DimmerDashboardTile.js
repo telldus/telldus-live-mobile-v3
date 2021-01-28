@@ -54,6 +54,7 @@ type Props = {
 	setScrollEnabled: boolean,
 	screenReaderEnabled: boolean,
 	sensitive: number,
+	dBTileDisplayMode?: string,
 
 	style: Object,
 	intl: Object,
@@ -126,7 +127,13 @@ class DimmerDashboardTile extends View<Props, void> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item', 'showSlider', 'screenReaderEnabled', 'sensitive']);
+		const propsChange = shouldUpdate(others, othersN, [
+			'item',
+			'showSlider',
+			'screenReaderEnabled',
+			'sensitive',
+			'dBTileDisplayMode',
+		]);
 		if (propsChange) {
 			return true;
 		}

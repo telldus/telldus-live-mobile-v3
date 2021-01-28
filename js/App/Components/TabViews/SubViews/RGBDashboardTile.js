@@ -61,6 +61,7 @@ type Props = {
 	offColorMultiplier: number,
 	onColorMultiplier: number,
 	preparedMainColorRgb: string,
+	dBTileDisplayMode?: string,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -147,6 +148,7 @@ class RGBDashboardTile extends View<Props, null> {
 			'offColorMultiplier',
 			'onColorMultiplier',
 			'preparedMainColorRgb',
+			'dBTileDisplayMode',
 		]);
 		if (propsChange) {
 			return true;

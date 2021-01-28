@@ -33,6 +33,7 @@ type Props = {
 	item: Object,
 	tileWidth: number,
 	showStopButton?: boolean,
+	dBTileDisplayMode?: string,
 
 	style: Object,
 	intl: Object,
@@ -66,7 +67,7 @@ class NavigationalDashboardTile extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth']);
+		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth', 'dBTileDisplayMode']);
 		if (propsChange) {
 			return true;
 		}

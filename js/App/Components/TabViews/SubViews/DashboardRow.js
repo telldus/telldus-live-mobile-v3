@@ -394,7 +394,15 @@ render(): Object {
 					:
 					[
 						buttons[0],
-						<ShowMoreButton onPress={this.onPressMore} style={styles.moreButtonStyle} dotStyle={styles.dotStyle} name={name} buttons={buttons} key={6} intl={intl}/>,
+						<ShowMoreButton
+							onPress={this.onPressMore}
+							style={styles.moreButtonStyle}
+							dotStyle={styles.dotStyle}
+							name={name}
+							buttons={buttons}
+							key={6}
+							intl={intl}
+							dBTileDisplayMode={dBTileDisplayMode}/>,
 					]
 				}
 			</View>

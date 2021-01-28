@@ -38,6 +38,7 @@ type Props = {
 	showStopButton?: boolean,
 	isOpen?: boolean,
 	currentTemp?: number,
+	dBTileDisplayMode?: string,
 
 	colors: Object,
 	colorScheme: string,
@@ -97,6 +98,7 @@ class ThermostatButtonDB extends View<Props, State> {
 			'colorScheme',
 			'themeInApp',
 			'selectedThemeSet',
+			'dBTileDisplayMode',
 		]);
 		if (propsChange) {
 			return true;

@@ -34,6 +34,7 @@ type Props = {
 	item: Object,
 	tileWidth: number,
 	actionIcons?: Object,
+	dBTileDisplayMode?: string,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -58,7 +59,7 @@ class ToggleDashboardTile extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['actionIcons', 'item']);
+		const propsChange = shouldUpdate(others, othersN, ['actionIcons', 'item', 'dBTileDisplayMode']);
 		if (propsChange) {
 			return true;
 		}

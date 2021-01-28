@@ -48,6 +48,7 @@ type Props = {
 	colors: Object,
 	colorScheme: string,
 	themeInApp: string,
+	dBTileDisplayMode?: string,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -95,6 +96,7 @@ class BellDashboardTile extends View<Props, null> {
 			'colorScheme',
 			'local',
 			'selectedThemeSet',
+			'dBTileDisplayMode',
 		]);
 		if (propsChange) {
 			return true;
