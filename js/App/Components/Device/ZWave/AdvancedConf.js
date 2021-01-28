@@ -93,6 +93,7 @@ const AdvancedConf = (props: Props): Object => {
 		horizontalCoverMultiple,
 		rightBlockMultiple,
 		verticalBlockCoverManual,
+		padding,
 	} = getStyles({
 		layout,
 		colors,
@@ -421,7 +422,11 @@ const AdvancedConf = (props: Props): Object => {
 		}
 		_configurationSettings.push(
 			<View
-				style={verticalBlockCoverManual}>
+				style={[verticalBlockCoverManual, {
+					paddingTop: _configurationSettings.length > 0 ? padding / 2 : 0,
+					borderTopWidth: _configurationSettings.length > 0 ? 3 : 0,
+					borderTopColor: colors.screenBackground,
+				}]}>
 				<View
 					style={leftBlockMultiple}>
 					<Text
@@ -499,6 +504,7 @@ const getStyles = ({
 	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
+		padding,
 		coverStyle: {
 			justifyContent: 'space-between',
 			marginTop: 2,
