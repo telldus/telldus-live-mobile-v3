@@ -78,6 +78,7 @@ const NodeRelations = (props: Props): Object => {
 		nodesRelation,
 		nodeId,
 		nodeList,
+		clientDeviceId,
 	} = props;
 
 	const intl = useIntl();
@@ -151,7 +152,7 @@ const NodeRelations = (props: Props): Object => {
 		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
 			'module': 'zwave',
 			'action': 'requestNodeNeighborUpdate',
-			'nodeId': parseInt(nodeId, 10),
+			'device': clientDeviceId,
 		}));
 		timeoutRef.current = setTimeout(() => {
 			dispatch(sendSocketMessage(clientId, 'client', 'forward', {
