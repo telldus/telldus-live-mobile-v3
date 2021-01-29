@@ -56,6 +56,7 @@ type Props = {
 	size: string,
 	onChangeValue: Function,
 	resetOnSave: boolean,
+	index: number,
 };
 
 const ManualConfigBlock = memo<Object>((props: Props): Object => {
@@ -67,6 +68,7 @@ const ManualConfigBlock = memo<Object>((props: Props): Object => {
 		size,
 		onChangeValue,
 		resetOnSave,
+		index,
 	} = props;
 	const inputVal = props[inputValueKey];
 
@@ -86,19 +88,23 @@ const ManualConfigBlock = memo<Object>((props: Props): Object => {
 		colors,
 	});
 	const [ inputValue, setInputValue ] = useState(inputVal);
+	const _v = props[inputValueKey];
 	useEffect(() => {
-		if (resetOnSave && props[inputValueKey] === inputValue) {
+		if (resetOnSave && _v === inputValue) {
 			onChangeValue({
 				number,
 				value,
 				size,
-				[inputValueKey]: props[inputValueKey],
+				[inputValueKey]: _v,
 				hasChanged: false,
+				inputValueKey,
+				index,
 			});
-			setInputValue(props[inputValueKey]);
+			setInputValue(_v);
 			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		}
-	}, [inputValue, inputValueKey, number, onChangeValue, props, resetOnSave, size, value]);
+	}, [_v, index, inputValue, inputValueKey, number, onChangeValue, resetOnSave, size, value]);
+
 	const _onChangeText = useCallback((v: string) => {
 		if (!v || !isNaN(parseInt(v, 10))) {
 			onChangeValue({
@@ -106,11 +112,13 @@ const ManualConfigBlock = memo<Object>((props: Props): Object => {
 				value,
 				size,
 				[inputValueKey]: v,
-				hasChanged: v !== props[inputValueKey],
+				hasChanged: v !== _v,
+				inputValueKey,
+				index,
 			});
 			setInputValue(v);
 		}
-	}, [onChangeValue, number, value, size, inputValueKey, props]);
+	}, [_v, index, inputValueKey, number, onChangeValue, size, value]);
 
 	return (
 		<View style={horizontalCover}>

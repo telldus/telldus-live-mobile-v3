@@ -194,7 +194,6 @@ const ProtectionConf = (props: Props): Object => {
 		setSelectedState(data[itemIndex]);
 		onChangeValue({
 			'localProtection': data[itemIndex].key,
-			'rfProtection': selectedStateRF.key,
 			hasChanged: parseInt(data[itemIndex].key, 10) !== parseInt(value.key, 10) || parseInt(valueRF.key, 10) !== parseInt(selectedStateRF.key, 10),
 		});
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
@@ -203,7 +202,6 @@ const ProtectionConf = (props: Props): Object => {
 	const saveProtectionRF = useCallback((v: string, itemIndex: number, data: Array<any>) => {
 		setSelectedStateRF(data[itemIndex]);
 		onChangeValue({
-			'localProtection': selectedState.key,
 			'rfProtection': data[itemIndex].key,
 			hasChanged: parseInt(data[itemIndex].key, 10) !== parseInt(valueRF.key, 10) || parseInt(value.key, 10) !== parseInt(selectedState.key, 10),
 		});

@@ -57,6 +57,7 @@ import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 import {
 	usePreviousValue,
+	useDifferentFromPevValueWhenFalse,
 } from '../../../Hooks/App';
 
 import Theme from '../../../Theme';
@@ -86,10 +87,15 @@ const Configuration = (props: Props): Object => {
 	} = intl;
 
 	const [ expand, setExpand ] = useState(true);
-	const [ configurations, setConfigurations ] = useState({
-		advanced: [],
-		protection: undefined,
-	});
+	const [ configurationsProtection, setConfigurationsProtection ] = useState({});
+	const [ configurationsNormal, setConfigurationsNormal ] = useState([]);
+	const [ configurationsManual, setConfigurationsManual ] = useState([{
+		number: '0',
+		size: '1',
+		value: '0',
+		hasChanged: false,
+	}]);
+	const [ configurationsManualQueued, setConfigurationsManualQueued ] = useState([]);
 	const [isLoading, setIsLoading] = useState({
 		isLoadingAdv: false,
 	});
@@ -132,14 +138,31 @@ const Configuration = (props: Props): Object => {
 	}, []);
 
 	const prevNodeInfo = usePreviousValue(nodeInfo);
-	const isNodeInfoEqual = isEqual(prevNodeInfo, nodeInfo);
+	const isNodeInfoEqual = useDifferentFromPevValueWhenFalse(
+		isEqual(prevNodeInfo, nodeInfo));
+
+	const prevProtection = usePreviousValue(configurationsProtection);
+	const isProtectionEqual = useDifferentFromPevValueWhenFalse(
+		isEqual(prevProtection, configurationsProtection));
+	const configurationsProtectionLength = Object.keys(configurationsProtection).length;
+
+	const prevConfNormal = usePreviousValue(configurationsNormal);
+	const isConfNormalEqual = useDifferentFromPevValueWhenFalse(
+		isEqual(prevConfNormal, configurationsNormal));
+	const prevConfManual = usePreviousValue(configurationsManual);
+	const isConfManualEqual = useDifferentFromPevValueWhenFalse(
+		isEqual(prevConfManual, configurationsManual));
+	const prevConfManualQueued = usePreviousValue(configurationsManualQueued);
+	const isConfManualQueuedEqual = useDifferentFromPevValueWhenFalse(
+		isEqual(prevConfManualQueued, configurationsManualQueued));
 
 	const onChangeConfigurationProtect = useCallback((protection: Object) => {
-		setConfigurations({
-			...configurations,
-			protection,
+		setConfigurationsProtection({
+			...configurationsProtection,
+			...protection,
 		});
-	}, [configurations]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isProtectionEqual, configurationsProtectionLength]);
 
 	const protection = useMemo((): ?Object => {
 		if (!hasProtection) {
@@ -151,21 +174,63 @@ const Configuration = (props: Props): Object => {
 				onChangeValue={onChangeConfigurationProtect}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasProtection, isNodeInfoEqual]);
+	}, [hasProtection, isNodeInfoEqual, onChangeConfigurationProtect]);
 
 	const onChangeConfigurationAdv = useCallback((data: Object) => {
+		const _configurationsNormal = configurationsNormal.filter((d: Object): boolean => d.number !== data.number && d.number !== '');
+		setConfigurationsNormal([
+			..._configurationsNormal,
+			data,
+		]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isConfNormalEqual, configurationsNormal.length]);
+
+	const onChangeConfigurationAdvManual = useCallback((data: Array<Object>) => {
 		const {
-			advanced,
-		} = configurations;
-		const _advanced = advanced.filter((d: Object): boolean => d.number !== data.number);
-		setConfigurations({
-			...configurations,
-			advanced: [
-				..._advanced,
-				data,
-			],
+			index,
+			inputValueKey,
+			hasChanged,
+			...others
+		} = data;
+		const current = configurationsManual[index];
+		const changeItem = others[inputValueKey];
+		const updatedCurrent = {
+			...current,
+			[inputValueKey]: changeItem,
+			hasChanged,
+		};
+		let updateManualL = configurationsManual.map((i: Object, ii: number): Object => {
+			if (ii === index) {
+				return updatedCurrent;
+			}
+			return i;
 		});
-	}, [configurations]);
+		updateManualL = updateManualL.filter((d: Object): boolean => d.hasChanged);
+		setConfigurationsManual(updateManualL);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isConfManualEqual, configurationsManual.length]);
+
+	const onChangeConfigurationAdvManualQueued = useCallback((data: Array<Object>) => {
+		const _configurationsManualQueued = configurationsManualQueued.filter((d: Object): boolean => d.number !== data.number && d.number !== '');
+		setConfigurationsManualQueued([
+			..._configurationsManualQueued,
+			data,
+		]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isConfManualQueuedEqual, configurationsManualQueued.length]);
+
+	const addNewManual = useCallback(() => {
+		setConfigurationsManual([
+			...configurationsManual,
+			{
+				number: '0',
+				size: '1',
+				value: '0',
+				hasChanged: false,
+			},
+		]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isConfManualEqual, configurationsManual.length]);
 
 	const configuration = useMemo((): ?Object => {
 		if (!hasConfiguration) {
@@ -176,10 +241,26 @@ const Configuration = (props: Props): Object => {
 				{...configurationClass}
 				manufacturerAttributes={manufacturerAttributes}
 				configurationParameters={ConfigurationParameters}
-				onChangeValue={onChangeConfigurationAdv}/>
+				onChangeValue={onChangeConfigurationAdv}
+				onChangeConfigurationAdvManual={onChangeConfigurationAdvManual}
+				onChangeConfigurationAdvManualQueued={onChangeConfigurationAdvManualQueued}
+				configurationsManual={configurationsManual}
+				configurationsManualQueued={configurationsManualQueued}
+				isLoadingAdv={isLoadingAdv}
+				addNewManual={addNewManual}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasConfiguration, manufacturerAttributes, ConfigurationParameters, isNodeInfoEqual]);
+	}, [
+		onChangeConfigurationAdv,
+		onChangeConfigurationAdvManual,
+		onChangeConfigurationAdvManualQueued,
+		addNewManual,
+		isLoadingAdv,
+		hasConfiguration,
+		manufacturerAttributes,
+		ConfigurationParameters,
+		isNodeInfoEqual,
+	]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
@@ -187,22 +268,49 @@ const Configuration = (props: Props): Object => {
 	}, [expand]);
 
 	const dispatch = useDispatch();
-
 	const onPressSave = useCallback(() => {
-		const {
-			advanced: advancedC = [],
-			protection: protectionC,
-		} = configurations;
-		const paramsConfAdv = advancedC.map(({
+		let paramsConfAdv = [];
+		configurationsNormal.map(({
 			number,
 			value,
 			size,
+			hasChanged,
 		}: Object): Object => {
-			return {
-				number,
-				value,
-				size,
-			};
+			if (hasChanged) {
+				paramsConfAdv.push({
+					number,
+					value,
+					size,
+				});
+			}
+		});
+		configurationsManual.map(({
+			number,
+			value,
+			size,
+			hasChanged,
+		}: Object): Object => {
+			if (hasChanged) {
+				paramsConfAdv.push({
+					number,
+					value,
+					size,
+				});
+			}
+		});
+		configurationsManualQueued.map(({
+			number,
+			value,
+			size,
+			hasChanged,
+		}: Object): Object => {
+			if (hasChanged) {
+				paramsConfAdv.push({
+					number,
+					value,
+					size,
+				});
+			}
 		});
 		if (paramsConfAdv) {
 			setIsLoading({
@@ -218,7 +326,7 @@ const Configuration = (props: Props): Object => {
 				'data': paramsConfAdv,
 			}));
 		}
-		if (protectionC) {
+		if (configurationsProtection && configurationsProtection.hasChanged) {
 			setIsLoading({
 				...isLoading,
 				isLoadingAdv: true,
@@ -229,7 +337,7 @@ const Configuration = (props: Props): Object => {
 				'nodeId': nodeId,
 				'class': ZWaveFunctions.COMMAND_CLASS_PROTECTION,
 				'cmd': 'setProtection',
-				'data': protectionC,
+				'data': configurationsProtection,
 			}));
 		}
 		timeoutRef.current = setTimeout(() => {
@@ -238,26 +346,56 @@ const Configuration = (props: Props): Object => {
 				isLoadingAdv: false,
 			});
 		}, 1000);
-	}, [clientDeviceId, clientId, configurations, dispatch, isLoading, nodeId]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		clientDeviceId,
+		clientId,
+		dispatch,
+		isLoading,
+		nodeId,
+		isConfManualQueuedEqual,
+		configurationsManualQueued.length,
+		isConfManualEqual,
+		configurationsManual.length,
+		isConfNormalEqual,
+		configurationsNormal.length,
+		isProtectionEqual,
+		configurationsProtectionLength,
+	]);
 
 	let hasChanged = useMemo((): boolean => {
-		const {
-			advanced: advancedC = [],
-			protection: protectionC,
-		} = configurations;
-		for (let i = 0; i < advancedC.length; i++) {
-			if (advancedC[i].hasChanged) {
+		for (let i = 0; i < configurationsNormal.length; i++) {
+			if (configurationsNormal[i].hasChanged) {
 				return true;
 			}
 		}
-		if (!protectionC) {
+		for (let i = 0; i < configurationsManual.length; i++) {
+			if (configurationsManual[i].hasChanged) {
+				return true;
+			}
+		}
+		for (let i = 0; i < configurationsManualQueued.length; i++) {
+			if (configurationsManualQueued[i].hasChanged) {
+				return true;
+			}
+		}
+		if (!configurationsProtection) {
 			return false;
 		}
-		if (protectionC.hasChanged) {
+		if (configurationsProtection.hasChanged) {
 			return true;
 		}
 		return false;
-	}, [configurations]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isConfManualQueuedEqual,
+		configurationsManualQueued.length,
+		isConfManualEqual,
+		configurationsManual.length,
+		isConfNormalEqual,
+		configurationsNormal.length,
+		isProtectionEqual,
+		configurationsProtectionLength,
+	]);
 
 	if (!id || !nodeInfo || (!protection && (!configuration || ConfigurationParameters.length === 0))) {
 		return <EmptyView/>;

@@ -37,12 +37,14 @@ import {
 	View,
 	EmptyView,
 	RoundedInfoButton,
+	TouchableButton,
 } from '../../../../BaseComponents';
 import GenericConfSetting from './GenericConfSetting';
 import BitsetConfSetting from './BitsetConfSetting';
 import RangeConfSetting from './RangeConfSetting';
 import RangeMappedConfSetting from './RangeMappedConfSetting';
 import ManualConfigBlock from './ManualConfigBlock';
+import QueuedManualConfigBlock from './QueuedManualConfigBlock';
 
 import Theme from '../../../Theme';
 
@@ -60,6 +62,11 @@ type Props = {
 	manufacturerAttributes: Object,
 	configurationParameters: Array<Object>,
 	onChangeValue: (Object) => void,
+	onChangeConfigurationAdvManual: (Object) => void,
+	onChangeConfigurationAdvManualQueued: (Object) => void,
+	isLoadingAdv: boolean,
+	configurationsManual: Array<Object>,
+	addNewManual: Function,
 };
 
 const AdvancedConf = (props: Props): Object => {
@@ -67,6 +74,11 @@ const AdvancedConf = (props: Props): Object => {
 		parameters = {},
 		configurationParameters,
 		onChangeValue,
+		isLoadingAdv,
+		onChangeConfigurationAdvManual,
+		onChangeConfigurationAdvManualQueued,
+		configurationsManual,
+		addNewManual,
 	} = props;
 
 	const intl = useIntl();
@@ -94,6 +106,7 @@ const AdvancedConf = (props: Props): Object => {
 		rightBlockMultiple,
 		verticalBlockCoverManual,
 		padding,
+		buttonStyle,
 	} = getStyles({
 		layout,
 		colors,
@@ -114,10 +127,6 @@ const AdvancedConf = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const _onChangeValue = useCallback((data: Object) => {
-		onChangeValue(data);
-	}, [onChangeValue]);
-
 	const getConfSettings = useCallback(({
 		type,
 		...others
@@ -127,32 +136,32 @@ const AdvancedConf = (props: Props): Object => {
 				return (
 					<BitsetConfSetting
 						{...others}
-						onChangeValue={_onChangeValue}/>
+						onChangeValue={onChangeValue}/>
 				);
 			}
 			case 'range': {
 				return (
 					<RangeConfSetting
 						{...others}
-						onChangeValue={_onChangeValue}/>
+						onChangeValue={onChangeValue}/>
 				);
 			}
 			case 'rangemapped': {
 				return (
 					<RangeMappedConfSetting
 						{...others}
-						onChangeValue={_onChangeValue}/>
+						onChangeValue={onChangeValue}/>
 				);
 			}
 			default:
 				return (
 					<GenericConfSetting
 						{...others}
-						onChangeValue={_onChangeValue}/>
+						onChangeValue={onChangeValue}/>
 				);
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [_onChangeValue]);
+	}, [onChangeValue]);
 
 	const cParamsLength = configurationParameters.length;
 	const paramsLen = Object.keys(parameters);
@@ -395,72 +404,95 @@ const AdvancedConf = (props: Props): Object => {
 						</View>
 						<View
 							key={`${index}-${pNumber}`}>
-							<ManualConfigBlock
-								label={`${formatMessage(i18n.size)} : `}
-								inputValueKey={'size'}
+							<QueuedManualConfigBlock
+								formatMessage={formatMessage}
 								number={pNumber}
 								value={_value}
 								size={_size}
-								onChangeValue={_onChangeValue}
-								resetOnSave/>
-							<ManualConfigBlock
-								label={`${formatMessage(i18n.labelValue)} : `}
-								inputValueKey={'value'}
-								number={pNumber}
-								value={_value}
-								size={_size}
-								onChangeValue={_onChangeValue}
+								onChangeValue={onChangeConfigurationAdvManualQueued}
 								resetOnSave/>
 						</View>
 					</View>
 				);
 			});
 		}
+		let manualConfs = [];
+		configurationsManual.forEach((mcs: Objec, index: number) => {
+			const {
+				number,
+				size,
+				value,
+			} = mcs;
+			manualConfs.push(
+				<View
+					key={`${index}-manual-two`}
+					style={[verticalBlockCoverManual, {
+						paddingTop: _configurationSettings.length > 0 ? padding / 2 : 0,
+						borderTopWidth: _configurationSettings.length > 0 ? 3 : 0,
+						borderTopColor: colors.screenBackground,
+					}]}>
+					<View
+						style={leftBlockMultiple}>
+						<Text
+							level={3}
+							style={hItemLabelDef}>
+							{formatMessage(i18n.manualConfTwo)}
+						</Text>
+					</View>
+					<ManualConfigBlock
+						label={`${formatMessage(i18n.number)} : `}
+						inputValueKey={'number'}
+						number={number}
+						size={size}
+						value={value}
+						onChangeValue={onChangeConfigurationAdvManual}
+						resetOnSave={false}
+						index={index}/>
+					<ManualConfigBlock
+						label={`${formatMessage(i18n.size)} : `}
+						inputValueKey={'size'}
+						number={number}
+						size={size}
+						value={value}
+						onChangeValue={onChangeConfigurationAdvManual}
+						resetOnSave={false}
+						index={index}/>
+					<ManualConfigBlock
+						label={`${formatMessage(i18n.labelValue)} : `}
+						inputValueKey={'value'}
+						number={number}
+						size={size}
+						value={value}
+						onChangeValue={onChangeConfigurationAdvManual}
+						resetOnSave={false}
+						index={index}/>
+				</View>
+			);
+		});
 		_configurationSettings.push(
 			<View
-				key={'manual-two'}
-				style={[verticalBlockCoverManual, {
-					paddingTop: _configurationSettings.length > 0 ? padding / 2 : 0,
-					borderTopWidth: _configurationSettings.length > 0 ? 3 : 0,
-					borderTopColor: colors.screenBackground,
-				}]}>
-				<View
-					style={leftBlockMultiple}>
-					<Text
-						level={3}
-						style={hItemLabelDef}>
-						{formatMessage(i18n.manualConfTwo)}
-					</Text>
-				</View>
-				<ManualConfigBlock
-					label={`${formatMessage(i18n.number)} : `}
-					inputValueKey={'number'}
-					number={'0'}
-					size={'1'}
-					value={'0'}
-					onChangeValue={_onChangeValue}
-					resetOnSave={false}/>
-				<ManualConfigBlock
-					label={`${formatMessage(i18n.size)} : `}
-					inputValueKey={'size'}
-					number={'0'}
-					size={'1'}
-					value={'0'}
-					onChangeValue={_onChangeValue}
-					resetOnSave={false}/>
-				<ManualConfigBlock
-					label={`${formatMessage(i18n.labelValue)} : `}
-					inputValueKey={'value'}
-					number={'0'}
-					size={'1'}
-					value={'0'}
-					onChangeValue={_onChangeValue}
-					resetOnSave={false}/>
+				key={'manual-two'}>
+				{manualConfs}
+				<TouchableButton
+					style={buttonStyle}
+					text={formatMessage(i18n.labelAdd)}
+					onPress={addNewManual}
+					showThrobber={isLoadingAdv}
+					disabled={isLoadingAdv}/>
 			</View>
 		);
 		return _configurationSettings;
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [cParamsLength, paramsLen, layout, getConfSettings, _onChangeValue]);
+	}, [
+		addNewManual,
+		cParamsLength,
+		paramsLen,
+		layout,
+		getConfSettings,
+		onChangeValue,
+		onChangeConfigurationAdvManualQueued,
+		onChangeConfigurationAdvManual,
+		isLoadingAdv]);
 
 	if (configurationSettings.length <= 0) {
 		return <EmptyView/>;
@@ -566,6 +598,13 @@ const getStyles = ({
 			width: '30%',
 			alignItems: 'center',
 			justifyContent: 'flex-end',
+		},
+		buttonStyle: {
+			alignSelf: 'flex-end',
+			marginTop: padding,
+			width: '30%',
+			minWidth: '30%',
+			paddingVertical: 7,
 		},
 	};
 };
