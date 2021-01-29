@@ -231,9 +231,10 @@ const BatteryFunctions = (props: Props): Object => {
 		}
 	}, [formatDate, formatMessage, formatTime, lastReceived, toggleDialogueBoxState]);
 
+	const hideSlider = maximumWakeupInterval === 0 && minimumWakeupInterval === 0;
 	const getWakeUpIntervalValue = useCallback((value: number): Object => {
 		value = value < 0 ? 0 : value;
-		if (value === 0) {
+		if (hideSlider) {
 			return {
 				timeValue: 0,
 				timeString: '0',
@@ -261,11 +262,10 @@ const BatteryFunctions = (props: Props): Object => {
 			timeValue: _wakeupInterval,
 			timeString: time.join(', '),
 		};
-	}, [minimumWakeupInterval, wakeupIntervalStep]);
+	}, [hideSlider, minimumWakeupInterval, wakeupIntervalStep]);
 
 	let maximumValue = (maximumWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
 	let sliderValueInitial = (storedWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
-	sliderValueInitial = sliderValueInitial < 0 ? 0 : sliderValueInitial;
 	const initialWakeUpIntervalValue = getWakeUpIntervalValue(sliderValueInitial);
 	const [ wakeUpIntervalValue, setWakeUpIntervalValue ] = useState(initialWakeUpIntervalValue);
 	const [ sliderValue, setSliderValue ] = useState(sliderValueInitial);
@@ -334,7 +334,7 @@ const BatteryFunctions = (props: Props): Object => {
 						label={`${formatMessage(i18n.zWaveBatteryLabelThree)}: `}
 						value={`${formatDate(lastWakeupDateTime)} ${formatTime(lastWakeupDateTime)}`}/>
 				)}
-				{(wakeupInterval > 0 && lastWakeup > 0) && (
+				{(!hideSlider && wakeupInterval > 0 && lastWakeup > 0) && (
 					isWakeupPast ?
 						<BatteryInfoItem
 							value={formatMessage(i18n.zWaveBatteryLabelFourPast, {
@@ -373,7 +373,7 @@ const BatteryFunctions = (props: Props): Object => {
 							infoKey={infoKeyBatteryWakeupInterval}
 							label={`${formatMessage(i18n.zWaveBatteryLabelSeven)}: `}
 							value={wakeUpIntervalValue.timeString}/>
-						{!isNaN(sliderValue) && !isNaN(maximumValue) && (
+						{!hideSlider && !isNaN(sliderValue) && !isNaN(maximumValue) && (
 							<Slider
 								minimumValue= {0}
 								maximumValue={maximumValue}
@@ -389,7 +389,7 @@ const BatteryFunctions = (props: Props): Object => {
 				)}
 			</View>
 		);
-	}, [id, coverStyle, supportsWakeup, textStyle, formatMessage, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, isWakeupPast, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, sliderValue, maximumValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
+	}, [id, coverStyle, supportsWakeup, textStyle, formatMessage, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, isWakeupPast, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, hideSlider, sliderValue, maximumValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
