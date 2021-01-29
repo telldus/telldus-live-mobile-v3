@@ -158,12 +158,14 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 				labelStyle,
 				sensorValueCoverStyle,
 				formatOptions: formatOptions,
+				isDB: true,
+				dBTileDisplayMode,
 			};
 			_slideList[property] = <GenericSensor {...sharedProps}/>;
 		});
 
 		return {slideList: _slideList};
-	}, [data, iconStyle, labelStyle, sensorValueCoverStyle, unitStyle, valueStyle, valueUnitCoverStyle]);
+	}, [dBTileDisplayMode, data, iconStyle, labelStyle, sensorValueCoverStyle, unitStyle, valueStyle, valueUnitCoverStyle]);
 
 	const onPressTile = useCallback(() => {
 		dispatch(updateAllMetWeatherDbTiles());
@@ -213,6 +215,10 @@ const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 				id={item.id}
 				lastUpdated={lastUpdated}
 				tileWidth={tileWidth}
+				extraData={{
+					background,
+					isBroard,
+				}}
 				style={{
 					flexDirection: 'row',
 					borderBottomLeftRadius: 2,
