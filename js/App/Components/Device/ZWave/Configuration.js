@@ -185,7 +185,7 @@ const Configuration = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isConfNormalEqual, configurationsNormal.length]);
 
-	const onChangeConfigurationAdvManual = useCallback((data: Array<Object>) => {
+	const onChangeConfigurationAdvManual = useCallback((data: Object) => {
 		const {
 			index,
 			inputValueKey,
@@ -210,7 +210,7 @@ const Configuration = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isConfManualEqual, configurationsManual.length]);
 
-	const onChangeConfigurationAdvManualQueued = useCallback((data: Array<Object>) => {
+	const onChangeConfigurationAdvManualQueued = useCallback((data: Object) => {
 		const _configurationsManualQueued = configurationsManualQueued.filter((d: Object): boolean => d.number !== data.number && d.number !== '');
 		setConfigurationsManualQueued([
 			..._configurationsManualQueued,

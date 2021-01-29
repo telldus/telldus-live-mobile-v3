@@ -417,7 +417,7 @@ const AdvancedConf = (props: Props): Object => {
 			});
 		}
 		let manualConfs = [];
-		configurationsManual.forEach((mcs: Objec, index: number) => {
+		configurationsManual.forEach((mcs: Object, index: number) => {
 			const {
 				number,
 				size,
