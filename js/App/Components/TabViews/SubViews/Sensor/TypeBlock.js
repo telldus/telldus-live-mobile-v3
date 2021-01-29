@@ -52,6 +52,7 @@ type Props = {
     totalTypes: Array<string>,
 	defaultSensor?: Object | null,
 	colors: Object,
+	isDB?: boolean,
 };
 
 const TypeBlock = memo<Object>(({
@@ -65,6 +66,7 @@ const TypeBlock = memo<Object>(({
 	defaultSensor,
 	defaultType,
 	colors,
+	isDB = false,
 }: Props): Object => {
 	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
@@ -75,7 +77,7 @@ const TypeBlock = memo<Object>(({
 
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { dBTileDisplayMode } = defaultSettings;
-	const isBroard = dBTileDisplayMode !== 'compact';
+	const isBroard = dBTileDisplayMode !== 'compact' || !isDB;
 
 	return (
 		<AnimatedTouchable
@@ -96,7 +98,7 @@ const TypeBlock = memo<Object>(({
 				importantForAccessibility="no-hide-descendants"
 				accessibilityElementsHidden={true}>
 				{defaultSensor}
-				{isBroard && totalTypes.length > 1 && (
+				{(isBroard) && totalTypes.length > 1 && (
 					<View style={dotCoverStyle}>
 						{
 							totalTypes.map((key: string, index: number): Object => {

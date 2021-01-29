@@ -245,6 +245,7 @@ class SensorRow extends View<Props, State> {
 			unitStyle,
 			labelStyle,
 			sensorValueCoverStyle,
+			iconStyle,
 		} = styles;
 
 		for (let key in data) {
@@ -268,6 +269,7 @@ class SensorRow extends View<Props, State> {
 				labelStyle,
 				sensorValueCoverStyle,
 				formatOptions,
+				iconStyle,
 			};
 			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
 
@@ -590,6 +592,9 @@ class SensorRow extends View<Props, State> {
 				height: dotSize,
 				borderRadius: dotSize / 2,
 				marginLeft: 2 + (dotSize * 0.2),
+			},
+			iconStyle: {
+				fontSize: rowHeight * 0.63,
 			},
 			valueUnitCoverStyle: {
 				height: rowHeight * 0.39,

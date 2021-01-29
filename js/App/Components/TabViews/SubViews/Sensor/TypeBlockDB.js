@@ -96,7 +96,8 @@ render(): Object {
 
 	return (
 		<TypeBlock
-			{...props}/>
+			{...props}
+			isDB/>
 	);
 }
 }

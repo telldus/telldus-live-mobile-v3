@@ -47,16 +47,19 @@ type sensorProps = {
 	labelStyle?: Object,
 	valueUnitCoverStyle?: Object,
 	sensorValueCoverStyle?: Object,
+	isDB?: boolean,
 };
 
 const GenericSensor = memo<Object>(({
 	name, value, unit, icon, label, isLarge, formatOptions,
 	coverStyle, valueUnitCoverStyle, sensorValueCoverStyle,
-	iconStyle, valueStyle, unitStyle, labelStyle }: sensorProps): Object => {
+	iconStyle, valueStyle, unitStyle, labelStyle,
+	isDB = false,
+}: sensorProps): Object => {
 
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { dBTileDisplayMode } = defaultSettings;
-	const isBroard = dBTileDisplayMode !== 'compact';
+	const isBroard = dBTileDisplayMode !== 'compact' || !isDB;
 
 	const { sensorValue, sensorValueText, sensorValueLabelText } = Theme.Styles;
 

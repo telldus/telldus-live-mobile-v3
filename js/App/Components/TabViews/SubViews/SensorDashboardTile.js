@@ -166,6 +166,7 @@ class SensorDashboardTile extends View<Props, null> {
 				labelStyle,
 				sensorValueCoverStyle,
 				formatOptions,
+				isDB: true,
 			};
 			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
 
