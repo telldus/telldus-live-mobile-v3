@@ -115,13 +115,17 @@ const AdvancedConf = (props: Props): Object => {
 	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
-	const onPressInfo = useCallback(({Description}: Object) => {
+	const onPressInfo = useCallback(({
+		Description,
+		title,
+		postScript,
+	}: Object) => {
 		toggleDialogueBoxState({
 			show: true,
 			header: formatMessage(i18n.confDescription),
 			showHeader: true,
 			imageHeader: true,
-			text: Description,
+			text: `${title}\n\n${Description}\n\n${postScript}`,
 			showPositive: true,
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,8 +197,8 @@ const AdvancedConf = (props: Props): Object => {
 					From,
 					To,
 				} = values[i];
-				let from = parseInt(From, 16);
-				let to = parseInt(To, 16);
+				let from = parseInt(From, 10);
+				let to = parseInt(To, 10);
 				let signed = false;
 				if (from > to) {
 					// eslint-disable-next-line no-bitwise
@@ -298,6 +302,11 @@ const AdvancedConf = (props: Props): Object => {
 											onPress: onPressInfo,
 											onPressData: {
 												Description,
+												title: `${ParameterNumber}. ${Name}`,
+												postScript: formatMessage(i18n.pleaseSetValueBetween, {
+													min,
+													max,
+												}),
 											},
 										}}/>
 								</>
@@ -357,7 +366,12 @@ const AdvancedConf = (props: Props): Object => {
 										},
 										onPress: onPressInfo,
 										onPressData: {
+											title: `${ParameterNumber}. ${Name}`,
 											Description,
+											postScript: formatMessage(i18n.pleaseSetValueBetween, {
+												min,
+												max,
+											}),
 										},
 									}}/>
 							</>
