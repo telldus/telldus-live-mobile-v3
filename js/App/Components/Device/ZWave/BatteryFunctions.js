@@ -350,7 +350,7 @@ const BatteryFunctions = (props: Props): Object => {
 				)}
 				<BatteryInfoItem
 					label={`${formatMessage(i18n.zWaveBatteryLabelFive)}: `}
-					value={`${level}%`}
+					value={`${level === 255 ? 0 : level}%`}
 					showInfo={true}
 					onPressInfo={onPressInfo}
 					infoKey={infoKeyBatteryLevel}/>
