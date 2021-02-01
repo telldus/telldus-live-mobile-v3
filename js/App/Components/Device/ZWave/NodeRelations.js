@@ -161,7 +161,7 @@ const NodeRelations = (props: Props): Object => {
 				'nodeId': parseInt(nodeId, 10),
 			}));
 			setIsLoading(false);
-		}, 2000);
+		}, 5000);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		isNodeListEqual,
