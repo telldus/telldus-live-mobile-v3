@@ -246,7 +246,7 @@ const BatteryFunctions = (props: Props): Object => {
 		let seconds = _wakeupInterval;
 		let time = [];
 		if (seconds >= 86400) {
-			time.push(`${Math.floor(seconds / 86400)} days`);
+			time.push(`${Math.floor(seconds / 86400)} ${formatMessage(i18n.posterDays)}`);
 			seconds %= 86400;
 		}
 		if (seconds >= 3600) {
@@ -264,7 +264,7 @@ const BatteryFunctions = (props: Props): Object => {
 			timeValue: _wakeupInterval,
 			timeString: time.join(', '),
 		};
-	}, [hideSlider, minimumWakeupInterval, wakeupIntervalStep]);
+	}, [formatMessage, hideSlider, minimumWakeupInterval, wakeupIntervalStep]);
 
 	let maximumValue = (maximumWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
 	let sliderValueInitial = (storedWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
