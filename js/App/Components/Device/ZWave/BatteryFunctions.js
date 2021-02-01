@@ -369,12 +369,13 @@ const BatteryFunctions = (props: Props): Object => {
 				)}
 				{supportsWakeup && (
 					<>
-						<BatteryInfoItem
+						{!!wakeUpIntervalValue.timeString && <BatteryInfoItem
 							showInfo={true}
 							onPressInfo={onPressInfo}
 							infoKey={infoKeyBatteryWakeupInterval}
 							label={`${formatMessage(i18n.zWaveBatteryLabelSeven)}: `}
 							value={wakeUpIntervalValue.timeString}/>
+						}
 						{!hideSlider && !isNaN(sliderValue) && !isNaN(maximumValue) && (
 							<Slider
 								minimumValue= {0}
