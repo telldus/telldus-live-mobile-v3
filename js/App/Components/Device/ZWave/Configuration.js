@@ -345,6 +345,19 @@ const Configuration = (props: Props): Object => {
 			setIsLoading({
 				isLoadingAdv: false,
 			});
+
+			// One dummy call to be able to reset manual conf
+			setConfigurationsManual([]);
+
+			setConfigurationsProtection({});
+			setConfigurationsNormal([]);
+			setConfigurationsManual([{
+				number: '0',
+				size: '1',
+				value: '0',
+				hasChanged: false,
+			}]);
+			setConfigurationsManualQueued([]);
 		}, 1000);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
