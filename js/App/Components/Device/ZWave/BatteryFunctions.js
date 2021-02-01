@@ -183,7 +183,7 @@ const BatteryFunctions = (props: Props): Object => {
 	const showBatteryInfo = zWaveFunctions ? (zWaveFunctions.supportsCommandClass(ZWaveFunctions.COMMAND_CLASS_BATTERY) ||
     supportsWakeup) : false;
 
-	const {
+	let {
 		wakeupNote,
 		lastWakeup,
 		wakeupInterval,
@@ -231,7 +231,9 @@ const BatteryFunctions = (props: Props): Object => {
 		}
 	}, [formatDate, formatMessage, formatTime, lastReceived, toggleDialogueBoxState]);
 
-	const hideSlider = maximumWakeupInterval === 0 && minimumWakeupInterval === 0;
+	const hideSlider = (maximumWakeupInterval === 0 && minimumWakeupInterval === 0) ||
+	(isNaN(maximumWakeupInterval) && isNaN(minimumWakeupInterval));
+
 	const getWakeUpIntervalValue = useCallback((value: number): Object => {
 		value = value < 0 ? 0 : value;
 		if (hideSlider) {
