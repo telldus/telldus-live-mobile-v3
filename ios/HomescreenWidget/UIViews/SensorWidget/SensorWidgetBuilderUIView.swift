@@ -78,8 +78,8 @@ struct SensorWidgetBuilderUIView: Widget {
     IntentConfiguration(kind: kind, intent: SensorWidgetIntent.self, provider: SensorProvider()) { entry in
       SensorWidgetEntryView(entry: entry)
     }
-    .configurationDisplayName("Sensor Widget")
-    .description("This is an example sensor widget.")
+    .configurationDisplayName(LocalizedStringKey("sensor_widget"))
+    .description("")
     .supportedFamilies([.systemSmall])
   }
 }

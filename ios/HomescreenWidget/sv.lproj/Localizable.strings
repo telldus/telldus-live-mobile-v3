@@ -43,3 +43,5 @@
 "widget_ios_sensorDirWNW" = "VNV";
 "widget_ios_sensorDirNW" = "NV";
 "widget_ios_sensorDirNNW" = "NNV";
+"sensor_widget" = "Sensorwidget";
+"device_widget" = "Enhetswidget";

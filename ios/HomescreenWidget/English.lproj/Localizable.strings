@@ -43,3 +43,5 @@
 "widget_ios_sensorDirWNW" = "WNW";
 "widget_ios_sensorDirNW" = "NW";
 "widget_ios_sensorDirNNW" = "NNW";
+"sensor_widget" = "Sensor Widget";
+"device_widget" = "Sensor Widget";

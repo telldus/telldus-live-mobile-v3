@@ -99,8 +99,8 @@ struct DeviceWidgetBuilderUIView: Widget {
     IntentConfiguration(kind: kind, intent: DeviceWidgetIntent.self, provider: DeviceProvider()) { entry in
       DeviceWidgetEntryView(entry: entry)
     }
-    .configurationDisplayName("Device Widget")
-    .description("This is an example device widget.")
+    .configurationDisplayName(LocalizedStringKey("device_widget"))
+    .description("")
     .supportedFamilies([.systemSmall, .systemMedium])
   }
 }

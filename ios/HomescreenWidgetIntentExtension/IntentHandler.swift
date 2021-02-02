@@ -7,6 +7,7 @@
 //
 
 import Intents
+import SwiftUI
 
 class IntentHandler: INExtension {
   static var sensorsLastFetchedTS: Double = 0;
@@ -135,7 +136,7 @@ extension IntentHandler: SensorWidgetIntentHandling {
       let info = SensorUtilities().getSensorInfo(name: item.name, scale: item.scale, value: item.value)
       let label = info["label"] as? String
       let sensorValueIntentObject =
-        SensorValuesList(identifier: id, display: label!)
+        SensorValuesList(identifier: id, display: NSLocalizedString(label!, comment: ""))
       items.append(sensorValueIntentObject)
     }
     completion(INObjectCollection(items: items), nil)
