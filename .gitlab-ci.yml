@@ -72,6 +72,7 @@ ios:
   cache:
     paths:
       - node_modules
+      - ios/Pods
   artifacts:
     paths:
       - ios/main.jsbundle.map
@@ -142,9 +143,6 @@ testflight: &testflight
     - tags
   script:
     - fastlane ios beta --verbose
-    - yarn install --quiet
-    - sudo gem install cocoapods
-    - cd ios && pod install && pod update && cd ..
     - fastlane ios refresh_dsyms --verbose
 
 testflight (master):
