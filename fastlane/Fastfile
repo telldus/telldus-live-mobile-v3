@@ -79,6 +79,7 @@ platform :ios do
       workspace: "ios/TelldusLiveApp.xcworkspace",
       configuration: "Release",
       clean: true,
+      include_bitcode: false, # TODO: Set true when home screen widget works in release builds with include_bitcode true.
       codesigning_identity: "iPhone Distribution",
       xcargs: "PROVISIONING_PROFILE_APP='match AppStore com.telldus.live.mobile' PROVISIONING_PROFILE_WIDGET='match AppStore com.telldus.live.mobile.HomescreenWidget' PROVISIONING_PROFILE_WIDGET_INTENT='match AppStore com.telldus.live.mobile.HomescreenWidgetIntentExtension'"
     )
