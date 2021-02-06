@@ -6,3 +6,4 @@ package_name "com.telldus.live.mobile" # e.g. com.krausefx.app
 app_identifier "com.telldus.live.mobile" # The bundle identifier of your app
 apple_id "ios-dev@telldus.se" # Your Apple email address
 team_id "M2879GJ5VD" # Developer Portal Team ID
+itc_team_id "351536" # App Store Connect Team ID
