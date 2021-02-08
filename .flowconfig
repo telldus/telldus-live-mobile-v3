@@ -43,6 +43,7 @@ node_modules/warning/.*
 .*/node_modules/react-navigation-tabs/.*
 .*/node_modules/redux-persist/.*
 .*/node_modules/@react-native-community/datetimepicker/.*
+.*/node_modules/react-native-siri-shortcut/.*
 [include]
 
 [libs]

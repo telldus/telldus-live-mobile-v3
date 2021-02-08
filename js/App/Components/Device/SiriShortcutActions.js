@@ -32,6 +32,7 @@ import {
 } from 'react-native-siri-shortcut';
 import AddToSiriButton, {
 	SiriButtonStyles,
+	supportsSiriButton,
 } from 'react-native-siri-shortcut/AddToSiriButton';
 import { useSelector } from 'react-redux';
 
@@ -50,7 +51,7 @@ import {
 import Theme from '../../Theme';
 
 type Props = {
-    navigations: Object,
+    navigation: Object,
 	screenProps: Object,
 	route: Object,
 };
@@ -112,10 +113,12 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 				style={{flex: 1}}
 				level={3}
 				contentContainerStyle={contentContainerStyle}>
-				<AddToSiriButton
-					style={buttonTextStyle}
-					buttonStyle={dark ? SiriButtonStyles.white : SiriButtonStyles.black}
-					onPress={onPressAddToSiri}/>
+				{supportsSiriButton && (
+					<AddToSiriButton
+						style={buttonTextStyle}
+						buttonStyle={dark ? SiriButtonStyles.white : SiriButtonStyles.black}
+						onPress={onPressAddToSiri}/>
+				)}
 			</ThemedScrollView>
 		</View>
 	);
@@ -130,7 +133,7 @@ const getStyles = ({
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.036);
+	// const fontSize = Math.floor(deviceWidth * 0.036);
 
 	return {
 		container: {

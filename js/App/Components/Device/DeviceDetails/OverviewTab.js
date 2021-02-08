@@ -86,6 +86,7 @@ type Props = {
 	locale: string,
 	currentScreen: string,
 	nodeList: Object,
+	navigation: Object,
 
 	screenProps: Object,
 	dispatch: Function,

@@ -64,4 +64,8 @@ declare module '@react-native-community/datetimepicker' {
 	declare module.exports: any;
 }
 
+declare module 'react-native-siri-shortcut' {
+	declare module.exports: any;
+}
+
 declare var console: any;
