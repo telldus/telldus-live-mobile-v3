@@ -85,6 +85,7 @@
 		<string>DeviceWidgetIntent</string>
 		<string>HomescreenWidgetIntent</string>
 		<string>SensorWidgetIntent</string>
+		<string>com.telldus.live.mobile.deviceactionshortcut</string>
 	</array>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>If the user has disabled the app setting 'Send crash reports anonymously', we use the user ID to identify crashes in Firebase Crashlytics to create a better user experience.</string>
