@@ -32,6 +32,9 @@ import { LocaleConfig } from 'react-native-calendars';
 import { injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
+import {
+	SiriShortcutsEvent,
+} from 'react-native-siri-shortcut';
 
 import {
 	PreLoginNavigator,
@@ -47,12 +50,16 @@ import {
 	toggleDialogueBoxState,
 	checkForInAppUpdates,
 	addInAppStatusUpdateListener,
+	siriShortcutsEventHandler,
 } from './App/Actions';
 import {
 	getTranslatableDayNames,
 	getTranslatableMonthNames,
 	setGAUserProperty,
 } from './App/Lib';
+import {
+	IOS_SHORTCUT_DEVICE_ACTION_ACTIVITY_TYPE,
+} from './Constants';
 
 import {
 	withTheme,
@@ -140,6 +147,22 @@ class App extends React.Component<Props> {
 
 		this.clearListenerNetWorkInfo = dispatch(networkConnection());
 		setGAUserProperty('deviceUniqueId', deviceId ? deviceId : DeviceInfo.getUniqueId());
+
+		SiriShortcutsEvent.addListener(
+			'SiriShortcutListener',
+			this.handleSiriShortcutsEvent,
+		);
+	}
+
+	handleSiriShortcutsEvent = ({ userInfo, activityType, ...others }: Object) => {
+		console.log('TEST activityType', activityType);
+		console.log('TEST userInfo', userInfo);
+		console.log('TEST others', others);
+		if (activityType === IOS_SHORTCUT_DEVICE_ACTION_ACTIVITY_TYPE) {
+			this.props.dispatch(siriShortcutsEventHandler({
+				userInfo,
+			}));
+		}
 	}
 
 	setCalendarLocale() {

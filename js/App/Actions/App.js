@@ -263,6 +263,11 @@ const addInAppStatusUpdateListener = ({intl}: Object): ThunkAction => {
 	};
 };
 
+const siriShortcutsEventHandler = ({userInfo}: Object): ThunkAction => {
+	return (dispatch: Function, getState: Function): Function => {
+	};
+};
+
 module.exports = {
 	...App,
 	createSupportTicket,
@@ -273,5 +278,6 @@ module.exports = {
 	onReceivedInAppPurchaseProducts,
 	checkForInAppUpdates,
 	addInAppStatusUpdateListener,
+	siriShortcutsEventHandler,
 };
 

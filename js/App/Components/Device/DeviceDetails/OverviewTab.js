@@ -24,6 +24,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
+import {
+	Platform,
+} from 'react-native';
 import { utils } from 'live-shared-data';
 
 const { images: {DEVICES} } = utils;
@@ -39,6 +42,7 @@ import {
 	ThemedScrollView,
 	View,
 	LocationDetails,
+	TouchableButton,
 } from '../../../../BaseComponents';
 
 import {
@@ -215,6 +219,16 @@ class OverviewTab extends View<Props, null> {
 		};
 	}
 
+	onPressManageShortcuts = () => {
+		const {
+			navigation,
+			device,
+		} = this.props;
+		navigation.navigate('SiriShortcutActions', {
+			device,
+		});
+	}
+
 	render(): Object | null {
 		const {
 			device,
@@ -260,6 +274,8 @@ class OverviewTab extends View<Props, null> {
 			nodesRelation = nodeList[nodeInfo.nodeId];
 		}
 
+		const isIOS = Platform.OS === 'ios';
+
 		return (
 			<ThemedScrollView
 				level={3}
@@ -277,6 +293,12 @@ class OverviewTab extends View<Props, null> {
 					deviceSetStateThermostat={this.props.deviceSetStateThermostat}
 					currentTemp={currentTemp}
 					gatewayTimezone={gatewayTimezone}/>
+				{isIOS && (
+					<TouchableButton
+						text={'Manage siri shortcuts'} // TODO: Translate
+						onPress={this.onPressManageShortcuts}
+						style={styles.addToSiriButtonStyle}/>
+				)}
 				{(deviceInfo && deviceInfo.H1) && <LocationDetails
 					{...deviceInfo}
 					style={styles.LocationDetail}/>}
@@ -344,6 +366,11 @@ class OverviewTab extends View<Props, null> {
 				flex: 0,
 				marginTop: 0,
 				marginHorizontal: padding,
+			},
+			addToSiriButtonStyle: {
+				marginTop: padding / 2,
+				width: deviceWidth - (padding * 4),
+				maxWidth: undefined,
 			},
 		};
 	}
