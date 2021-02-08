@@ -82,4 +82,5 @@ module.exports = {
 	TEST_ACCOUNTS: [
 		'9e240224-1759-4246-aeef-484b01215195',
 	],
+	IOS_SHORTCUT_DEVICE_ACTION_ACTIVITY_TYPE: 'com.telldus.live.mobile.deviceactionshortcut',
 };
