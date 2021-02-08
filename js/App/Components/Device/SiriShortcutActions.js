@@ -40,6 +40,7 @@ import {
 	ScrollView,
 } from 'react-native';
 let uuid = require('react-native-uuid');
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -48,12 +49,14 @@ import {
 	TouchableOpacity,
 	ThemedRefreshControl,
 } from '../../../BaseComponents';
+import DeviceActionDetails from './DeviceDetails/SubViews/DeviceActionDetails';
 import {
 	useAppTheme,
 } from '../../Hooks/Theme';
 import {
 	IOS_SHORTCUT_DEVICE_ACTION_ACTIVITY_TYPE,
 } from '../../../Constants';
+import { getLastUpdated, getThermostatValue } from '../../Lib/SensorUtils';
 
 import Theme from '../../Theme';
 
@@ -78,11 +81,15 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 	const {
 		name,
 		id,
+		clientDeviceId,
+		clientId,
 	} = device || {};
 	const {
 		dark,
 	} = useAppTheme();
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const { byId } = useSelector((state: Object): Object => state.sensors);
+	const { byId: gById } = useSelector((state: Object): Object => state.gateways);
 	const {
 		container,
 		contentContainerStyle,
@@ -91,9 +98,13 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 		rowTextStyle,
 		rowRightTextStyle,
 		rowRightBlockStyle,
+		actionDetailsStyle,
+		subTitleStyle,
 	} = getStyles({
 		layout,
 	});
+
+	const intl = useIntl();
 
 	const [ shortcuts, setShortcuts ] = useState([]);
 	const [ isLoading, setIsLoading ] = useState(false);
@@ -152,6 +163,29 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 		);
 	}, [_getShortcuts]);
 
+	const lastUpdated = getLastUpdated(byId, clientDeviceId, clientId);
+	const currentTemp = getThermostatValue(byId, clientDeviceId, clientId);
+	const gateway = gById[clientId];
+	const {
+		timezone: gatewayTimezone,
+	} = gateway ? gateway : {};
+
+	const deviceSetStateThermostat = useCallback((deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => {
+		console.log('TEST deviceSetStateThermostat deviceId, mode, temperature, scale, changeMode, requestedState', deviceId, mode, temperature, scale, changeMode, requestedState);
+	}, []);
+
+
+	const onPressOverride = useCallback(({
+		method,
+		stateValues,
+	}: Object) => {
+		console.log('TEST method, stateValues', method, stateValues);
+	}, []);
+
+	const deviceSetStateRGBOverride = useCallback((dId: number, value: string) => {
+		console.log('TEST deviceSetStateRGBOverride', dId, value);
+	}, []);
+
 	const Shortcuts = useMemo((): Object => {
 		return shortcuts.map((s: Object): Object => {
 			const {
@@ -167,12 +201,14 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 					<View>
 						<Text
 							style={rowTextStyle}
-							level={3}>
+							level={3}
+							numberOfLines={1}>
 							{options.title}
 						</Text>
 						<Text
 							style={rowTextStyle}
-							level={4}>
+							level={4}
+							numberOfLines={1}>
 							{phrase}
 						</Text>
 					</View>
@@ -215,12 +251,40 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 						onRefresh={_getShortcuts}
 					/>
 				}>
-				{(!!Shortcuts && Shortcuts.length > 0) && Shortcuts}
+				{(!!Shortcuts && Shortcuts.length > 0) && (
+					<>
+						<Text
+							style={subTitleStyle}
+							level={4}>
+					Existing shortcuts
+						</Text>
+						{Shortcuts}
+					</>
+				)}
 				{supportsSiriButton && (
-					<AddToSiriButton
-						style={buttonStyle}
-						buttonStyle={dark ? SiriButtonStyles.white : SiriButtonStyles.black}
-						onPress={onPressAddToSiri}/>
+					<>
+						<Text
+							style={subTitleStyle}
+							level={4}>
+							Add new shortcut
+						</Text>
+						<DeviceActionDetails
+							device={device}
+							intl={intl}
+							appLayout={layout}
+							isGatewayActive={true}
+							containerStyle={actionDetailsStyle}
+							lastUpdated={lastUpdated}
+							onPressOverride={onPressOverride}
+							deviceSetStateThermostat={deviceSetStateThermostat}
+							deviceSetStateRGBOverride={deviceSetStateRGBOverride}
+							currentTemp={currentTemp}
+							gatewayTimezone={gatewayTimezone}/>
+						<AddToSiriButton
+							style={buttonStyle}
+							buttonStyle={dark ? SiriButtonStyles.white : SiriButtonStyles.black}
+							onPress={onPressAddToSiri}/>
+					</>
 				)}
 			</ScrollView>
 		</View>
@@ -262,19 +326,28 @@ const getStyles = ({
 			...shadow,
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			padding,
+			paddingHorizontal: padding * 2,
+			paddingVertical: padding,
 		},
 		rowTextStyle: {
 			fontSize,
-			width: '80%',
+			width: '85%',
 		},
 		rowRightBlockStyle: {
-			width: '20%',
+			width: '15%',
 			alignSelf: 'center',
 			justifyContent: 'center',
 		},
 		rowRightTextStyle: {
 			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
+		},
+		actionDetailsStyle: {
+			flex: 0,
+			marginTop: 0,
+		},
+		subTitleStyle: {
+			fontSize,
+			marginVertical: padding,
 		},
 	};
 };
