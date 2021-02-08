@@ -23,11 +23,12 @@
 import React, {
 	memo,
 	useCallback,
+	useEffect,
+	useState,
+	useMemo,
 } from 'react';
 import {
-	// donateShortcut,
-	// clearAllShortcuts,
-	// clearShortcutsWithIdentifiers,
+	getShortcuts,
 	presentShortcut,
 } from 'react-native-siri-shortcut';
 import AddToSiriButton, {
@@ -35,11 +36,17 @@ import AddToSiriButton, {
 	supportsSiriButton,
 } from 'react-native-siri-shortcut/AddToSiriButton';
 import { useSelector } from 'react-redux';
+import {
+	ScrollView,
+} from 'react-native';
+let uuid = require('react-native-uuid');
 
 import {
 	View,
 	NavigationHeaderPoster,
-	ThemedScrollView,
+	Text,
+	TouchableOpacity,
+	ThemedRefreshControl,
 } from '../../../BaseComponents';
 import {
 	useAppTheme,
@@ -79,23 +86,112 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 	const {
 		container,
 		contentContainerStyle,
-		buttonTextStyle,
+		buttonStyle,
+		rowCoverStyle,
+		rowTextStyle,
+		rowRightTextStyle,
+		rowRightBlockStyle,
 	} = getStyles({
 		layout,
 	});
 
+	const [ shortcuts, setShortcuts ] = useState([]);
+	const [ isLoading, setIsLoading ] = useState(false);
+
+	const _getShortcuts = useCallback(() => {
+		setIsLoading(true);
+		getShortcuts()
+			.then((_shortcuts: Array<Object>) => {
+				const _s = _shortcuts.filter((_shortcut: Object): Object => {
+					const {
+						userInfo = {},
+					} = _shortcut.options;
+					return id === userInfo.deviceId;
+				});
+				setIsLoading(false);
+				setShortcuts(_s);
+			});
+	}, [id]);
+
+	useEffect(() => {
+		_getShortcuts();
+	}, [_getShortcuts]);
+
 	const onPressAddToSiri = useCallback(() => {
-		console.log('TEST IN');
+		const _uuid = uuid.v1();
 		presentShortcut(
 			({
-				activityType: `${IOS_SHORTCUT_DEVICE_ACTION_ACTIVITY_TYPE}-${id}`,
+				activityType: `${IOS_SHORTCUT_DEVICE_ACTION_ACTIVITY_TYPE}-${id}-${_uuid}`,
 				title: `Peform action on ${name}`,
+				userInfo: {
+					deviceId: id,
+					uuid: _uuid,
+				},
 			}),
 			(callbackData: Object) => {
-				console.log('TEST IN callbackData', callbackData);
+				_getShortcuts();
 			}
 		);
-	}, [id, name]);
+	}, [_getShortcuts, id, name]);
+
+	const onPressEdit = useCallback(({
+		options,
+	}: Object) => {
+		const {
+			activityType,
+			title,
+		} = options;
+		presentShortcut(
+			({
+				activityType,
+				title,
+			}),
+			(callbackData: Object) => {
+				_getShortcuts();
+			}
+		);
+	}, [_getShortcuts]);
+
+	const Shortcuts = useMemo((): Object => {
+		return shortcuts.map((s: Object): Object => {
+			const {
+				options = {},
+				phrase,
+				identifier,
+			} = s;
+			return (
+				<View
+					style={rowCoverStyle}
+					level={2}
+					key={identifier}>
+					<View>
+						<Text
+							style={rowTextStyle}
+							level={3}>
+							{options.title}
+						</Text>
+						<Text
+							style={rowTextStyle}
+							level={4}>
+							{phrase}
+						</Text>
+					</View>
+					<TouchableOpacity
+						style={rowRightBlockStyle}
+						onPress={onPressEdit}
+						onPressData={{
+							options,
+						}}>
+						<Text
+							style={rowRightTextStyle}
+							level={23}>
+						edit
+						</Text>
+					</TouchableOpacity>
+				</View>
+			);
+		});
+	}, [onPressEdit, rowCoverStyle, rowRightBlockStyle, rowRightTextStyle, rowTextStyle, shortcuts]);
 
 	return (
 		<View
@@ -109,17 +205,24 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 				leftIcon={'close'}
 				navigation={navigation}
 				{...screenProps}/>
-			<ThemedScrollView
+			<ScrollView
 				style={{flex: 1}}
-				level={3}
-				contentContainerStyle={contentContainerStyle}>
+				contentContainerStyle={contentContainerStyle}
+				refreshControl={
+					<ThemedRefreshControl
+						enabled={isLoading}
+						refreshing={isLoading}
+						onRefresh={_getShortcuts}
+					/>
+				}>
+				{(!!Shortcuts && Shortcuts.length > 0) && Shortcuts}
 				{supportsSiriButton && (
 					<AddToSiriButton
-						style={buttonTextStyle}
+						style={buttonStyle}
 						buttonStyle={dark ? SiriButtonStyles.white : SiriButtonStyles.black}
 						onPress={onPressAddToSiri}/>
 				)}
-			</ThemedScrollView>
+			</ScrollView>
 		</View>
 	);
 });
@@ -131,9 +234,17 @@ const getStyles = ({
 	const { height, width } = layout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	// const fontSize = Math.floor(deviceWidth * 0.036);
+	const {
+		shadow,
+		paddingFactor,
+		fontSizeFactorEight,
+		fontSizeFactorFour,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+
+	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
 		container: {
@@ -142,10 +253,28 @@ const getStyles = ({
 		contentContainerStyle: {
 			flexGrow: 1,
 			padding,
-			alignItems: 'center',
 		},
-		buttonTextStyle: {
-			flex: 1,
+		buttonStyle: {
+			marginTop: padding,
+			alignSelf: 'center',
+		},
+		rowCoverStyle: {
+			...shadow,
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			padding,
+		},
+		rowTextStyle: {
+			fontSize,
+			width: '80%',
+		},
+		rowRightBlockStyle: {
+			width: '20%',
+			alignSelf: 'center',
+			justifyContent: 'center',
+		},
+		rowRightTextStyle: {
+			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
 		},
 	};
 };
