@@ -59,6 +59,9 @@ import {
 import { getLastUpdated, getThermostatValue } from '../../Lib/SensorUtils';
 
 import Theme from '../../Theme';
+import {
+	methods,
+} from '../../../Constants';
 
 type Props = {
     navigation: Object,
@@ -84,6 +87,10 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 		clientDeviceId,
 		clientId,
 	} = device || {};
+	const [deviceInstate, setDeviceInstate] = useState(device);
+	const [selections, setSelections] = useState({});
+	const [selectionsRGB, setSelectionsSelectionsRGB] = useState({});
+	const [selectionsThermostat, setSelectionsSelectionsThermostat] = useState({});
 	const {
 		dark,
 	} = useAppTheme();
@@ -137,13 +144,16 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 				userInfo: {
 					deviceId: id,
 					uuid: _uuid,
+					selections,
+					selectionsRGB,
+					selectionsThermostat,
 				},
 			}),
 			(callbackData: Object) => {
 				_getShortcuts();
 			}
 		);
-	}, [_getShortcuts, id, name]);
+	}, [_getShortcuts, id, name, selections, selectionsRGB, selectionsThermostat]);
 
 	const onPressEdit = useCallback(({
 		options,
@@ -171,19 +181,49 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 	} = gateway ? gateway : {};
 
 	const deviceSetStateThermostat = useCallback((deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => {
-		console.log('TEST deviceSetStateThermostat deviceId, mode, temperature, scale, changeMode, requestedState', deviceId, mode, temperature, scale, changeMode, requestedState);
+		setSelectionsSelectionsThermostat({
+			deviceId,
+			mode,
+			temperature,
+			scale,
+			changeMode,
+			requestedState,
+		});
 	}, []);
-
 
 	const onPressOverride = useCallback(({
 		method,
-		stateValues,
+		stateValues = {},
 	}: Object) => {
-		console.log('TEST method, stateValues', method, stateValues);
-	}, []);
-
-	const deviceSetStateRGBOverride = useCallback((dId: number, value: string) => {
-		console.log('TEST deviceSetStateRGBOverride', dId, value);
+		const {
+			stateValues: stateValuesP = {},
+		} = deviceInstate;
+		let newStateValues = {};
+		Object.keys(stateValues).forEach((m: string): Object => {
+			newStateValues = {
+				...newStateValues,
+				[methods[m]]: stateValues[m],
+			};
+		}
+		);
+		setDeviceInstate({
+			...deviceInstate,
+			isInState: methods[method],
+			stateValues: {
+				...stateValuesP,
+				...newStateValues,
+			},
+		});
+		setSelections({
+			method,
+			stateValues,
+		});
+	}, [deviceInstate]);
+	const deviceSetStateRGBOverride = useCallback((deviceId: number, value: string) => {
+		setSelectionsSelectionsRGB({
+			deviceId,
+			value,
+		});
 	}, []);
 
 	const Shortcuts = useMemo((): Object => {
@@ -269,7 +309,7 @@ const SiriShortcutActions = memo<Object>((props: Props): Object => {
 							Add new shortcut
 						</Text>
 						<DeviceActionDetails
-							device={device}
+							device={deviceInstate}
 							intl={intl}
 							appLayout={layout}
 							isGatewayActive={true}
