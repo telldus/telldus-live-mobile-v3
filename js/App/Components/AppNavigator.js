@@ -91,6 +91,7 @@ import SelectWeatherForecastDay from './Dashboard/SelectWeatherForecastDay';
 import SetNameMetWeather from './Dashboard/SetNameMetWeather';
 
 import SiriShortcutActions from './Device/SiriShortcutActions';
+import SiriActionStatusScreen from './Device/SiriActionStatusScreen';
 
 import {
 	RegisterScreen,
@@ -498,6 +499,13 @@ const ScreenConfigs = [
 	{
 		name: 'SiriShortcutActions',
 		Component: SiriShortcutActions,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SiriActionStatusScreen',
+		Component: SiriActionStatusScreen,
 		options: {
 			headerShown: false,
 		},

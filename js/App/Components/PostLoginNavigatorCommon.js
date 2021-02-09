@@ -29,6 +29,9 @@ const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
 import RNIap from 'react-native-iap';
+import {
+	SiriShortcutsEvent,
+} from 'react-native-siri-shortcut';
 
 import {
 	View,
@@ -232,6 +235,17 @@ async componentDidMount() {
 	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
 
 	this._askIfAddNewLocation();
+
+	SiriShortcutsEvent.addListener(
+		'SiriShortcutListener',
+		this.handleSiriShortcutsEvent,
+	);
+}
+
+handleSiriShortcutsEvent = (data: Object) => {
+	navigate('SiriActionStatusScreen', {
+		...data,
+	});
 }
 
 actionsToPerformOnStart = async () => {
