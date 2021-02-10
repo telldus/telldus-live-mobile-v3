@@ -26,12 +26,14 @@ import {
 	UIManager,
 	Platform,
 	StatusBar,
+	NativeModules,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { LocaleConfig } from 'react-native-calendars';
 import { injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
+const { WidgetModule } = NativeModules;
 
 import {
 	PreLoginNavigator,
@@ -131,6 +133,9 @@ class App extends React.Component<Props> {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
 		});
+
+		console.log('TEST WidgetModule', WidgetModule);
+		WidgetModule.donate('rimzici');
 
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
 		if (Platform.OS === 'android' && StatusBar) {

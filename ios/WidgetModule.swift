@@ -8,6 +8,9 @@
 
 import Foundation
 import Security
+import Intents
+import UIKit
+import GitHubFetcher
 
 @objc(WidgetModule)
 class WidgetModule: NSObject {
@@ -57,5 +60,28 @@ class WidgetModule: NSObject {
   @objc(getUserDefault:)
   func getUserDefault(key: NSString) -> NSString {
     return sharedModule.getUserDefault(key: key)
+  }
+  
+  @objc(donate:)
+  func donate(name: String) {
+    if #available(iOS 12.0, *) {
+      let intent = CheckMyGitHubIntent()
+      intent.suggestedInvocationPhrase = "Check my GitHub"
+      intent.name = name
+
+      let interaction = INInteraction(intent: intent, response: nil)
+
+      interaction.donate { (error) in
+          if error != nil {
+              if let error = error as NSError? {
+                  print("Interaction donation failed: \(error.description)")
+              } else {
+                  print("Successfully donated interaction")
+              }
+          }
+      }
+    } else {
+      // Fallback on earlier versions
+    }
   }
 }
