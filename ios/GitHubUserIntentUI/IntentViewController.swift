@@ -32,20 +32,22 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
     // Prepare your view controller for the interaction to handle.
     func configureView(for parameters: Set<INParameter>, of interaction: INInteraction, interactiveBehavior: INUIInteractiveBehavior, context: INUIHostedViewContext, completion: @escaping (Bool, Set<INParameter>, CGSize) -> Void) {
 
-        print("status: ")
+        print("TEST status: ")
         print(interaction.intentHandlingStatus)
 
         guard
             let intent = interaction.intent as? CheckMyGitHubIntent,
-            let name = intent.name
+            let deviceId = intent.deviceId
         else {
             return
         }
-
+        print ("TEST status: 2")
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
+      
+        let method = intent.method
 
-        Fetcher.fetch(name: name) { [weak self] user, followers in
+        Fetcher.fetch(deviceId: deviceId, method: method!) { [weak self] user, followers in
             guard let user = user else {
                 self?.hideActivityIndicator()
                 return

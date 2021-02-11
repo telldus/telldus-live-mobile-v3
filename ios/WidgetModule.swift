@@ -62,21 +62,23 @@ class WidgetModule: NSObject {
     return sharedModule.getUserDefault(key: key)
   }
   
-  @objc(donate:)
-  func donate(name: String) {
+  @objc(donate:device:deviceId:method:)
+  func donate(action: String, device: String, deviceId: String, method: String) {
     if #available(iOS 12.0, *) {
       let intent = CheckMyGitHubIntent()
-      intent.suggestedInvocationPhrase = "Check my GitHub"
-      intent.name = name
-
+      intent.suggestedInvocationPhrase = "action device"
+      intent.action = action
+      intent.device = device
+      intent.deviceId = deviceId
+      intent.method = method
       let interaction = INInteraction(intent: intent, response: nil)
 
       interaction.donate { (error) in
           if error != nil {
               if let error = error as NSError? {
-                  print("Interaction donation failed: \(error.description)")
+                  print("TEST Interaction donation failed: \(error.description)")
               } else {
-                  print("Successfully donated interaction")
+                  print("TEST Successfully donated interaction")
               }
           }
       }

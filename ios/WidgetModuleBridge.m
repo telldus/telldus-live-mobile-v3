@@ -17,6 +17,6 @@ RCT_EXTERN_METHOD(refreshAllWidgetsData)
 RCT_EXTERN_METHOD(setUserDefault:(NSString *)key value:(NSString *)value)
 RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(getUserDefault:(NSString *)key)
 RCT_EXTERN_METHOD(refreshAllWidgets)
-RCT_EXTERN_METHOD(donate:(NSString *)name)
+RCT_EXTERN_METHOD(donate:(NSString *)action device:(NSString *)device deviceId:(NSString *)deviceId method:(NSString *)method)
 
 @end

@@ -22,39 +22,28 @@
 			<key>INIntentDescriptionID</key>
 			<string>0dPbz7</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>3</integer>
+			<integer>8</integer>
 			<key>INIntentName</key>
 			<string>CheckMyGitHub</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
-				<key></key>
-				<dict>
-					<key>INIntentParameterCombinationIsLinked</key>
-					<true/>
-					<key>INIntentParameterCombinationIsPrimary</key>
-					<true/>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Check name profile</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>Z25WmB</string>
-				</dict>
-				<key>name</key>
+				<key>device,action,method,deviceId</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Check ${name} profile</string>
+					<string>${action} ${device}</string>
 					<key>INIntentParameterCombinationTitleID</key>
-					<string>Rynjfn</string>
+					<string>OtG63d</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
 			<array>
 				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Name</string>
+					<string>Action</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>hfkbTc</string>
 					<key>INIntentParameterDisplayPriority</key>
@@ -67,9 +56,104 @@
 						<string>ISR6jc</string>
 					</dict>
 					<key>INIntentParameterName</key>
-					<string>name</string>
+					<string>action</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
 					<key>INIntentParameterTag</key>
 					<integer>3</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Device</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>3cXzex</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataCapitalization</key>
+						<string>Sentences</string>
+						<key>INIntentParameterMetadataDefaultValueID</key>
+						<string>XFi39i</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>device</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>4</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterDisplayName</key>
+					<string>Device Id</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>FcxL4s</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>3</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataCapitalization</key>
+						<string>Sentences</string>
+						<key>INIntentParameterMetadataDefaultValueID</key>
+						<string>e0xloF</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>deviceId</string>
+					<key>INIntentParameterTag</key>
+					<integer>7</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterDisplayName</key>
+					<string>Method</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>MHxJ23</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>4</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataCapitalization</key>
+						<string>Sentences</string>
+						<key>INIntentParameterMetadataDefaultValueID</key>
+						<string>HH8JZs</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>method</string>
+					<key>INIntentParameterTag</key>
+					<integer>8</integer>
 					<key>INIntentParameterType</key>
 					<string>String</string>
 				</dict>
@@ -80,11 +164,11 @@
 				<array>
 					<dict>
 						<key>INIntentResponseCodeConciseFormatString</key>
-						<string>You have ${repos} repos and ${followers} followers</string>
+						<string>Action success</string>
 						<key>INIntentResponseCodeConciseFormatStringID</key>
 						<string>JKABt5</string>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>You have ${repos} repos and ${followers} followers</string>
+						<string>Action success</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>nofw2d</string>
 						<key>INIntentResponseCodeName</key>
@@ -94,11 +178,11 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseCodeConciseFormatString</key>
-						<string>Could not fetch information about your GitHub profile</string>
+						<string>Action could not be completed.</string>
 						<key>INIntentResponseCodeConciseFormatStringID</key>
 						<string>MOGaeE</string>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>Could not fetch information about your GitHub profile</string>
+						<string>Action could not be completed.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>a3YpfA</string>
 						<key>INIntentResponseCodeName</key>
@@ -107,37 +191,6 @@
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
 				<integer>4</integer>
-				<key>INIntentResponseParameters</key>
-				<array>
-					<dict>
-						<key>INIntentResponseParameterDisplayName</key>
-						<string>Repos</string>
-						<key>INIntentResponseParameterDisplayNameID</key>
-						<string>VYa5HH</string>
-						<key>INIntentResponseParameterDisplayPriority</key>
-						<integer>1</integer>
-						<key>INIntentResponseParameterName</key>
-						<string>repos</string>
-						<key>INIntentResponseParameterTag</key>
-						<integer>2</integer>
-						<key>INIntentResponseParameterType</key>
-						<string>Integer</string>
-					</dict>
-					<dict>
-						<key>INIntentResponseParameterDisplayName</key>
-						<string>Followers</string>
-						<key>INIntentResponseParameterDisplayNameID</key>
-						<string>ZCxUc0</string>
-						<key>INIntentResponseParameterDisplayPriority</key>
-						<integer>2</integer>
-						<key>INIntentResponseParameterName</key>
-						<string>followers</string>
-						<key>INIntentResponseParameterTag</key>
-						<integer>4</integer>
-						<key>INIntentResponseParameterType</key>
-						<string>Integer</string>
-					</dict>
-				</array>
 			</dict>
 			<key>INIntentTitle</key>
 			<string>Check My Git Hub</string>

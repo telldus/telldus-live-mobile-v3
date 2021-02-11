@@ -7,13 +7,15 @@
 //
 
 import Intents
+import GitHubFetcher
 
 class IntentHandler: INExtension {
     
   override func handler(for intent: INIntent) -> Any {
-//      guard intent is CheckMyGitHubIntent else {
-//          fatalError("Unhandled intent type: \(intent)")
-//      }
+    print ("TEST handler")
+      guard intent is CheckMyGitHubIntent else {
+          fatalError("Unhandled intent type: \(intent)")
+      }
 
       return CheckMyGitHubIntentHandler()
   }
