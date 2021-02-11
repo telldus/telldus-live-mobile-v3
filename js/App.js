@@ -134,7 +134,7 @@ class App extends React.Component<Props> {
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
 		});
 
-		WidgetModule.donate('turn on', 'my device', '12345', '2');
+		WidgetModule.donate('turn on', '! 😀 Test 1', '8343285', '1');
 
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
 		if (Platform.OS === 'android' && StatusBar) {
