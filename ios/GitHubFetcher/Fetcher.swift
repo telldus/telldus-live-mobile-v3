@@ -9,7 +9,7 @@
 import Foundation
 
 public final class Fetcher: NSObject {
-  public static func fetch(deviceId: String, method: String, completion: @escaping ((user: GitHubUser?, followers: [GitHubFollower])) -> Void) {
+  public static func fetch(deviceId: String, method: String, completion: @escaping (_ status: String) -> Void) {
     
     print ("TEST \(deviceId), \(method)");
 //        guard let url = URL(string: "https://api.github.com/users/\(name)") else {
@@ -23,7 +23,7 @@ public final class Fetcher: NSObject {
 //                let data = data,
 //                let user = try? JSONDecoder().decode(GitHubUser.self, from: data)
 //            else {
-                completion((nil, []))
+                completion("success")
 //                return
 //            }
 //

@@ -47,15 +47,13 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
       
         let method = intent.method
 
-        Fetcher.fetch(deviceId: deviceId, method: method!) { [weak self] user, followers in
-            guard let user = user else {
-                self?.hideActivityIndicator()
-                return
-            }
+        Fetcher.fetch(deviceId: deviceId, method: method!) { [weak self] status in
+            self?.hideActivityIndicator()
+            return
 
             DispatchQueue.main.async {
-                self?.reposLabel.text = "Repos: \(user.repos)"
-                self?.followersLabel.text = "Followers: \(followers.count)"
+                self?.reposLabel.text = status
+//                self?.followersLabel.text = "Followers: \(followers.count)"
 
                 self?.hideActivityIndicator()
             }
