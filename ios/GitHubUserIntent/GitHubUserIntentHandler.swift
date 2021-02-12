@@ -23,7 +23,8 @@ final class CheckMyGitHubIntentHandler: NSObject, CheckMyGitHubIntentHandling {
     
     let method = intent.method
     print("TEST CheckMyGitHubIntentHandler method \(method)")
-    Fetcher.fetch(deviceId: deviceId, method: method!) { (status) in
+    var fetcher = Fetcher();
+    fetcher.fetch(deviceId: deviceId, method: method!) { (status) in
       print("TEST CheckMyGitHubIntentHandler status \(status)")
       
       guard status == "success" else {
