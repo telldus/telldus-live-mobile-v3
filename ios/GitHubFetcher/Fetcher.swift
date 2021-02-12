@@ -13,14 +13,11 @@ public final class Fetcher: NSObject {
     let value = ""
     
     API().callEndPoint("/device/command?id=\(deviceId)&method=\(method)&value=\(value)") {result in
-      print("TEST result \(result) ")
       switch result {
-      case let .success(data):
-        print("TEST success data \(data) ")
+      case .success(_):
         completion("success");
         return;
       case .failure(_):
-        print("TEST failure")
         completion("failed");
         return;
       }

@@ -13,13 +13,9 @@ import GitHubFetcher
 // You will want to replace this or add other intents as appropriate.
 // The intents whose interactions you wish to handle must be declared in the extension's Info.plist.
 
-// You can test this example integration by saying things to Siri like:
-// "Send a message using <myApp>"
-
 class IntentViewController: UIViewController, INUIHostedViewControlling {
     
-    @IBOutlet weak var reposLabel: UILabel!
-    @IBOutlet weak var followersLabel: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
     override func viewDidLoad() {
@@ -32,29 +28,21 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
     // Prepare your view controller for the interaction to handle.
     func configureView(for parameters: Set<INParameter>, of interaction: INInteraction, interactiveBehavior: INUIInteractiveBehavior, context: INUIHostedViewContext, completion: @escaping (Bool, Set<INParameter>, CGSize) -> Void) {
 
-        print("TEST status: ")
-        print(interaction.intentHandlingStatus)
-
         guard
             let intent = interaction.intent as? CheckMyGitHubIntent,
             let deviceId = intent.deviceId
         else {
             return
         }
-        print ("TEST status: 2")
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
       
         let method = intent.method
 
         Fetcher.fetch(deviceId: deviceId, method: method!) { [weak self] status in
-            self?.hideActivityIndicator()
-            return
 
             DispatchQueue.main.async {
-                self?.reposLabel.text = status
-//                self?.followersLabel.text = "Followers: \(followers.count)"
-
+                self?.statusLabel.text = status
                 self?.hideActivityIndicator()
             }
         }
