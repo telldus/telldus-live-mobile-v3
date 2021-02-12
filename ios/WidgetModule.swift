@@ -11,9 +11,24 @@ import Security
 import Intents
 import UIKit
 import GitHubFetcher
+import UIKit
+import Intents
+import IntentsUI
+import CoreSpotlight
+
+enum VoiceShortcutMutationStatus: String {
+  case cancelled = "cancelled"
+  case added = "added"
+  case updated = "updated"
+  case deleted = "deleted"
+}
 
 @objc(WidgetModule)
-class WidgetModule: NSObject {
+class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEditVoiceShortcutViewControllerDelegate {
+  
+  var presenterViewController: UIViewController?
+  var voiceShortcuts: Array<NSObject> = [] // Actually it's INVoiceShortcut, but that way we would have to break compatibility with simple NSUserActivity behaviour
+  var presentShortcutCallback: RCTResponseSenderBlock?
   
   let sharedModule = SharedModule()
   
@@ -62,28 +77,163 @@ class WidgetModule: NSObject {
     return sharedModule.getUserDefault(key: key)
   }
   
-  @objc(donate:device:deviceId:method:)
-  func donate(action: String, device: String, deviceId: String, method: String) {
+  @objc(donate:)
+  func donate(jsonOptions: Dictionary<String, Any>) {
     if #available(iOS 12.0, *) {
       let intent = CheckMyGitHubIntent()
-      intent.suggestedInvocationPhrase = "action device"
-      intent.action = action
-      intent.device = device
+      
+      let phrase = jsonOptions["phrase"] as! String
+      let deviceId = jsonOptions["deviceId"] as! String
+      let method = jsonOptions["method"] as! String
+      let dimValue = jsonOptions["dimValue"] as? String
+      let rgbValue = jsonOptions["rgbValue"] as? String
+      let thermostatValue = jsonOptions["thermostatValue"] as? String
+      
+      intent.suggestedInvocationPhrase = "phrase"
+      intent.phrase = phrase
       intent.deviceId = deviceId
       intent.method = method
+      intent.dimValue = dimValue
+      intent.rgbValue = rgbValue
+      intent.thermostatValue = thermostatValue
+      
       let interaction = INInteraction(intent: intent, response: nil)
-
+      
       interaction.donate { (error) in
-          if error != nil {
-              if let error = error as NSError? {
-                  print("TEST Interaction donation failed: \(error.description)")
-              } else {
-                  print("TEST Successfully donated interaction")
-              }
+        if error != nil {
+          if let error = error as NSError? {
+            print("TEST Interaction donation failed: \(error.description)")
+          } else {
+            print("TEST Successfully donated interaction")
           }
+        }
       }
     } else {
       // Fallback on earlier versions
+    }
+  }
+  
+  @objc(presentShortcut:callback:)
+  func presentShortcut(jsonOptions: Dictionary<String, Any>, callback: @escaping RCTResponseSenderBlock) {
+    if #available(iOS 12.0, *) {
+      self.presentShortcutCallback = callback
+      
+      let intent = CheckMyGitHubIntent()
+      
+      let phrase = jsonOptions["phrase"] as! String
+      let deviceId = jsonOptions["deviceId"] as! String
+      let method = jsonOptions["method"] as! String
+      let dimValue = jsonOptions["dimValue"] as? String
+      let rgbValue = jsonOptions["rgbValue"] as? String
+      let thermostatValue = jsonOptions["thermostatValue"] as? String
+      
+      print("TEST dimValue \(dimValue)")
+      
+      intent.phrase = phrase
+      intent.deviceId = deviceId
+      intent.method = method
+      intent.dimValue = dimValue
+      intent.rgbValue = rgbValue
+      intent.thermostatValue = thermostatValue
+      
+      guard let shortcut = INShortcut(intent: intent) else {
+        return
+      }
+      print("TEST shortcut \(shortcut)")
+      // To preserve compatilibility with iOS >9.0, the array contains NSObjects, so we need to convert here
+      let addedVoiceShortcut = (self.voiceShortcuts as! Array<INVoiceShortcut>).first { (voiceShortcut) -> Bool in
+        print("TEST voiceShortcut \(voiceShortcut)")
+        return false
+      }
+      
+      DispatchQueue.main.async {
+        // The shortcut was not added yet, so present a form to add it
+        if (addedVoiceShortcut == nil) {
+          self.presenterViewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
+          self.presenterViewController!.modalPresentationStyle = .formSheet
+          (self.presenterViewController as! INUIAddVoiceShortcutViewController).delegate = self
+        } // The shortcut was already added, so we present a form to edit it
+        else {
+          self.presenterViewController = INUIEditVoiceShortcutViewController(voiceShortcut: addedVoiceShortcut!)
+          self.presenterViewController!.modalPresentationStyle = .formSheet
+          (self.presenterViewController as! INUIEditVoiceShortcutViewController).delegate = self
+        }
+        
+        UIApplication.shared.keyWindow!.rootViewController!.present(self.presenterViewController!, animated: true, completion: nil)
+      }
+    } else {
+      // Fallback on earlier versions
+    }
+  }
+  
+  @available(iOS 12.0, *)
+  func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
+    // Shortcut was added
+    if (voiceShortcut != nil) {
+      voiceShortcuts.append(voiceShortcut!)
+    }
+    dismissPresenter(.added, withShortcut: voiceShortcut)
+  }
+  
+  @available(iOS 12.0, *)
+  func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
+    // Adding shortcut cancelled
+    dismissPresenter(.cancelled, withShortcut: nil)
+  }
+  
+  @available(iOS 12.0, *)
+  func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didUpdate voiceShortcut: INVoiceShortcut?, error: Error?) {
+    // Shortcut was updated
+    
+    if (voiceShortcut != nil) {
+      // Update the array with the shortcut that was updated, just so we don't have to loop over the existing shortcuts again
+      let indexOfUpdatedShortcut = (voiceShortcuts as! Array<INVoiceShortcut>).firstIndex { (shortcut) -> Bool in
+        return shortcut.identifier == voiceShortcut!.identifier
+      }
+      
+      if (indexOfUpdatedShortcut != nil) {
+        voiceShortcuts[indexOfUpdatedShortcut!] = voiceShortcut!
+      }
+    }
+    
+    dismissPresenter(.updated, withShortcut: voiceShortcut)
+  }
+  
+  @available(iOS 12.0, *)
+  func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didDeleteVoiceShortcutWithIdentifier deletedVoiceShortcutIdentifier: UUID) {
+    // Shortcut was deleted
+    
+    // Keep a reference so we can notify JS about what the invocationPhrase was for this shortcut
+    var deletedShortcut: INVoiceShortcut? = nil
+    
+    // Remove the deleted shortcut from the array
+    let indexOfDeletedShortcut = (voiceShortcuts as! Array<INVoiceShortcut>).firstIndex { (shortcut) -> Bool in
+      return shortcut.identifier == deletedVoiceShortcutIdentifier
+    }
+    
+    if (indexOfDeletedShortcut != nil) {
+      deletedShortcut = voiceShortcuts[indexOfDeletedShortcut!] as? INVoiceShortcut
+      voiceShortcuts.remove(at: indexOfDeletedShortcut!)
+    }
+    
+    dismissPresenter(.deleted, withShortcut: deletedShortcut)
+  }
+  
+  @available(iOS 12.0, *)
+  func editVoiceShortcutViewControllerDidCancel(_ controller: INUIEditVoiceShortcutViewController) {
+    // Shortcut edit was cancelled
+    dismissPresenter(.cancelled, withShortcut: nil)
+  }
+  
+  @available(iOS 12.0, *)
+  func dismissPresenter(_ status: VoiceShortcutMutationStatus, withShortcut voiceShortcut: INVoiceShortcut?) {
+    DispatchQueue.main.async {
+      self.presenterViewController?.dismiss(animated: true, completion: nil)
+      self.presenterViewController = nil
+      self.presentShortcutCallback?([
+        ["status": status.rawValue, "phrase": voiceShortcut?.invocationPhrase]
+      ])
+      self.presentShortcutCallback = nil
     }
   }
 }

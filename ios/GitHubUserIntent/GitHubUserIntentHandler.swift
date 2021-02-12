@@ -15,16 +15,16 @@ final class CheckMyGitHubIntentHandler: NSObject, CheckMyGitHubIntentHandling {
   @available(iOS 12.0, *)
   func handle(intent: CheckMyGitHubIntent, completion: @escaping (CheckMyGitHubIntentResponse) -> Void) {
     print("TEST CheckMyGitHubIntentHandler handle \(intent.deviceId)")
-    print("TEST CheckMyGitHubIntentHandler device \(intent.device)")
         guard let deviceId = intent.deviceId else {
             completion(CheckMyGitHubIntentResponse(code: .failure, userActivity: nil))
             return
         }
     
     let method = intent.method
+    let dimValue = intent.dimValue
     print("TEST CheckMyGitHubIntentHandler method \(method)")
     var fetcher = Fetcher();
-    fetcher.fetch(deviceId: deviceId, method: method!) { (status) in
+    fetcher.fetch(deviceId: deviceId, method: method!, stateValue: dimValue) { (status) in
       print("TEST CheckMyGitHubIntentHandler status \(status)")
       
       guard status == "success" else {

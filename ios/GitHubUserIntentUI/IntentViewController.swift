@@ -38,9 +38,10 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
     activityIndicator.startAnimating()
     
     let method = intent.method
+    let dimValue = intent.dimValue
     
     var fetcher = Fetcher();
-    fetcher.fetch(deviceId: deviceId, method: method!) { [weak self] status in
+    fetcher.fetch(deviceId: deviceId, method: method!, stateValue: dimValue) { [weak self] status in
       
       DispatchQueue.main.async {
         self?.statusLabel.text = status

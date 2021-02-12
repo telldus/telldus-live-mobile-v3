@@ -134,7 +134,15 @@ class App extends React.Component<Props> {
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
 		});
 
-		WidgetModule.donate('turn on', '! 😀 Test 1', '8343285', '1');
+		WidgetModule.presentShortcut({
+			phrase: 'turn on Hank - RGB',
+			deviceId: '6573997',
+			method: '1',
+			dimValue: null,
+			rgbValue: null,
+			thermostatValue: null,
+		}, () => {
+		});
 
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
 		if (Platform.OS === 'android' && StatusBar) {

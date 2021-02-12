@@ -12,13 +12,16 @@ public final class Fetcher: NSObject {
   
   var timerDeviceInfo: [String: Timer] = [:]
   
-  public func fetch(deviceId: String, method: String, completion: @escaping (_ status: String) -> Void) {
-    let value = ""
-    let requestedStateValue = ["": ""];
-    
-    API().callEndPoint("/device/command?id=\(deviceId)&method=\(method)&value=\(value)") {result in
+  public func fetch(deviceId: String, method: String, stateValue: String?, completion: @escaping (_ status: String) -> Void) {
+    print("TEST stateValue \(stateValue)")
+    API().callEndPoint("/device/command?id=\(deviceId)&method=\(method)&value=\(stateValue)") {result in
       switch result {
       case .success(_):
+        var requestedStateValue = ["": ""];
+        if stateValue != nil, method == "16" {
+          requestedStateValue["dimValue"] = stateValue
+        }
+        print("TEST requestedStateValue \(requestedStateValue)")
         self.timerDeviceInfo[deviceId]?.invalidate()
         DispatchQueue.main.async {
           self.timerDeviceInfo[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
