@@ -1027,7 +1027,6 @@ class SettingsTab extends View {
 										onPress={this.onPressManageShortcuts}
 										style={addToSiriButtonStyle}/>
 								)}
-
 								<ChangeDevicetypeBlock
 									devicetype={deviceType}
 									onValueChange={this._onValueChange}

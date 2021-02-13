@@ -27,10 +27,6 @@ import React, {
 	useState,
 	useMemo,
 } from 'react';
-import AddToSiriButton, {
-	SiriButtonStyles,
-	supportsSiriButton,
-} from 'react-native-siri-shortcut/AddToSiriButton';
 import { useSelector } from 'react-redux';
 import {
 	ScrollView,
@@ -50,11 +46,9 @@ import {
 	Text,
 	TouchableOpacity,
 	ThemedRefreshControl,
+	TouchableButton,
 } from '../../../../BaseComponents';
 import DeviceActionDetails from '../DeviceDetails/SubViews/DeviceActionDetails';
-import {
-	useAppTheme,
-} from '../../../Hooks/Theme';
 import { getLastUpdated, getThermostatValue } from '../../../Lib/SensorUtils';
 
 import Theme from '../../../Theme';
@@ -121,9 +115,6 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 	const [selections, setSelections] = useState({});
 	const [selectionsRGB, setSelectionsSelectionsRGB] = useState({});
 	const [selectionsThermostat, setSelectionsSelectionsThermostat] = useState({});
-	const {
-		dark,
-	} = useAppTheme();
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { byId } = useSelector((state: Object): Object => state.sensors);
 	const { byId: gById } = useSelector((state: Object): Object => state.gateways);
@@ -348,31 +339,27 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 						{Shortcuts}
 					</>
 				)}
-				{supportsSiriButton && (
-					<>
-						<Text
-							style={subTitleStyle}
-							level={4}>
+				<Text
+					style={subTitleStyle}
+					level={4}>
 							Add new shortcut
-						</Text>
-						<DeviceActionDetails
-							device={deviceInstate}
-							intl={intl}
-							appLayout={layout}
-							isGatewayActive={true}
-							containerStyle={actionDetailsStyle}
-							lastUpdated={lastUpdated}
-							onPressOverride={onPressOverride}
-							deviceSetStateThermostat={deviceSetStateThermostat}
-							deviceSetStateRGBOverride={deviceSetStateRGBOverride}
-							currentTemp={currentTemp}
-							gatewayTimezone={gatewayTimezone}/>
-						<AddToSiriButton
-							style={buttonStyle}
-							buttonStyle={dark ? SiriButtonStyles.white : SiriButtonStyles.black}
-							onPress={onPressAddToSiri}/>
-					</>
-				)}
+				</Text>
+				<DeviceActionDetails
+					device={deviceInstate}
+					intl={intl}
+					appLayout={layout}
+					isGatewayActive={true}
+					containerStyle={actionDetailsStyle}
+					lastUpdated={lastUpdated}
+					onPressOverride={onPressOverride}
+					deviceSetStateThermostat={deviceSetStateThermostat}
+					deviceSetStateRGBOverride={deviceSetStateRGBOverride}
+					currentTemp={currentTemp}
+					gatewayTimezone={gatewayTimezone}/>
+				<TouchableButton
+					text={'Add to siri'} // TODO: Translate
+					onPress={onPressAddToSiri}
+					style={buttonStyle}/>
 			</ScrollView>
 		</View>
 	);
