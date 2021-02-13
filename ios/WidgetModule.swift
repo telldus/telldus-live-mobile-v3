@@ -126,9 +126,11 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
       let dimValue = jsonOptions["dimValue"] as? String
       let rgbValue = jsonOptions["rgbValue"] as? String
       let thermostatValue = jsonOptions["thermostatValue"] as? String
+      let identifier = jsonOptions["identifier"] as? String
       
       print("TEST dimValue \(dimValue)")
-      
+      print("TEST identifier \(identifier)")
+  
       intent.phrase = phrase
       intent.deviceId = deviceId
       intent.method = method
@@ -139,30 +141,75 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
       guard let shortcut = INShortcut(intent: intent) else {
         return
       }
-      print("TEST shortcut \(shortcut)")
-      // To preserve compatilibility with iOS >9.0, the array contains NSObjects, so we need to convert here
-      let addedVoiceShortcut = (self.voiceShortcuts as! Array<INVoiceShortcut>).first { (voiceShortcut) -> Bool in
-        print("TEST voiceShortcut \(voiceShortcut)")
-        return false
-      }
       
-      DispatchQueue.main.async {
-        // The shortcut was not added yet, so present a form to add it
-        if (addedVoiceShortcut == nil) {
-          self.presenterViewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
-          self.presenterViewController!.modalPresentationStyle = .formSheet
-          (self.presenterViewController as! INUIAddVoiceShortcutViewController).delegate = self
-        } // The shortcut was already added, so we present a form to edit it
-        else {
-          self.presenterViewController = INUIEditVoiceShortcutViewController(voiceShortcut: addedVoiceShortcut!)
-          self.presenterViewController!.modalPresentationStyle = .formSheet
-          (self.presenterViewController as! INUIEditVoiceShortcutViewController).delegate = self
+      var addedVoiceShortcut: INVoiceShortcut?
+      INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcutsFromCenter, error) in
+        if let voiceShortcutsFromCenter = voiceShortcutsFromCenter {
+          for sc in voiceShortcutsFromCenter {
+            if identifier != nil, sc.identifier.uuidString == identifier {
+              addedVoiceShortcut = sc
+            }
+          }
         }
         
-        UIApplication.shared.keyWindow!.rootViewController!.present(self.presenterViewController!, animated: true, completion: nil)
+        DispatchQueue.main.async {
+          // The shortcut was not added yet, so present a form to add it
+          if (addedVoiceShortcut == nil) {
+            self.presenterViewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
+            self.presenterViewController!.modalPresentationStyle = .formSheet
+            (self.presenterViewController as! INUIAddVoiceShortcutViewController).delegate = self
+          } // The shortcut was already added, so we present a form to edit it
+          else {
+            self.presenterViewController = INUIEditVoiceShortcutViewController(voiceShortcut: addedVoiceShortcut!)
+            self.presenterViewController!.modalPresentationStyle = .formSheet
+            (self.presenterViewController as! INUIEditVoiceShortcutViewController).delegate = self
+          }
+          
+          UIApplication.shared.keyWindow!.rootViewController!.present(self.presenterViewController!, animated: true, completion: nil)
+        }
       }
     } else {
       // Fallback on earlier versions
+    }
+  }
+  
+  @objc(getShortcuts:)
+  func getShortcuts(callback: @escaping RCTResponseSenderBlock) {
+    if #available(iOS 12.0, *) {
+      INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcutsFromCenter, error) in
+        if let voiceShortcutsFromCenter = voiceShortcutsFromCenter {
+          var shortcuts: [[String: Any]] = []
+          for sc in voiceShortcutsFromCenter {
+            var userInfo: [String: Any] = [:]
+            if let intent = sc.shortcut.intent as? CheckMyGitHubIntent {
+              print("TEST intent \(intent)")
+              userInfo = [
+                "phrase": intent.phrase,
+                "deviceId": intent.deviceId,
+                "method": intent.method,
+                "dimValue": intent.dimValue,
+                "rgbValue": intent.rgbValue,
+                "thermostatValue": intent.thermostatValue,
+              ]
+            }
+            shortcuts.append([
+              "identifier": sc.identifier.uuidString,
+              "invocationPhrase": sc.invocationPhrase,
+              "userInfo": userInfo,
+            ])
+          }
+          callback([["shortcuts":shortcuts]])
+        } else {
+          if let error = error as NSError? {
+            callback([["error":error]])
+            return
+          }
+        }
+      }
+    } else {
+      // Fallback on earlier versions
+      let shortcuts: [Any] = []
+      callback([["shortcuts":shortcuts]])
     }
   }
   
