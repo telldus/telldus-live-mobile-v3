@@ -22,7 +22,11 @@
 'use strict';
 
 import React from 'react';
-import { LayoutAnimation, BackHandler } from 'react-native';
+import {
+	LayoutAnimation,
+	BackHandler,
+	Platform,
+} from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
@@ -848,6 +852,16 @@ class SettingsTab extends View {
 		);
 	}
 
+	onPressManageShortcuts = () => {
+		const {
+			navigation,
+			device,
+		} = this.props;
+		navigation.navigate('SiriShortcutActionsScreen', {
+			device,
+		});
+	}
+
 	render(): Object | null {
 		const {
 			isHidden,
@@ -900,6 +914,7 @@ class SettingsTab extends View {
 			labelStyle,
 			editBoxStyle,
 			padding,
+			addToSiriButtonStyle,
 		} = this.getStyle(appLayout);
 
 		if (editName) {
@@ -954,6 +969,8 @@ class SettingsTab extends View {
 			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_SWITCH_ALL]) :
 			false;
 
+		const isIOS = Platform.OS === 'ios';
+
 		return (
 			<ThemedScrollView
 				level={3}
@@ -1004,6 +1021,13 @@ class SettingsTab extends View {
 									appLayout={appLayout}
 									intl={intl}
 								/>
+								{isIOS && (
+									<TouchableButton
+										text={'Manage siri shortcuts'} // TODO: Translate
+										onPress={this.onPressManageShortcuts}
+										style={addToSiriButtonStyle}/>
+								)}
+
 								<ChangeDevicetypeBlock
 									devicetype={deviceType}
 									onValueChange={this._onValueChange}
@@ -1179,6 +1203,11 @@ class SettingsTab extends View {
 				marginBottom: 5,
 				color: subHeader,
 				fontSize: Math.floor(deviceWidth * 0.045),
+			},
+			addToSiriButtonStyle: {
+				marginTop: padding / 2,
+				width: deviceWidth - (padding * 4),
+				maxWidth: undefined,
 			},
 		};
 	}

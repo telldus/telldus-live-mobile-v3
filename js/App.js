@@ -26,14 +26,12 @@ import {
 	UIManager,
 	Platform,
 	StatusBar,
-	NativeModules,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { LocaleConfig } from 'react-native-calendars';
 import { injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
-const { WidgetModule } = NativeModules;
 
 import {
 	PreLoginNavigator,
@@ -132,16 +130,6 @@ class App extends React.Component<Props> {
 		AccessibilityInfo.isScreenReaderEnabled().then((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
-		});
-
-		WidgetModule.presentShortcut({
-			phrase: 'turn on Hank - RGB',
-			deviceId: '6573997',
-			method: '1',
-			dimValue: null,
-			rgbValue: null,
-			thermostatValue: null,
-		}, () => {
 		});
 
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
