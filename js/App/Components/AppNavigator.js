@@ -90,6 +90,8 @@ import SelectWeatherAttributes from './Dashboard/SelectWeatherAttributes';
 import SelectWeatherForecastDay from './Dashboard/SelectWeatherForecastDay';
 import SetNameMetWeather from './Dashboard/SetNameMetWeather';
 
+import SiriShortcutActionsScreen from './Device/ShortcutiOS/SiriShortcutActionsScreen';
+
 import {
 	RegisterScreen,
 	LoginScreen,
@@ -489,6 +491,13 @@ const ScreenConfigs = [
 	{
 		name: 'ChangeLogScreen',
 		Component: ChangeLogScreen,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SiriShortcutActionsScreen',
+		Component: SiriShortcutActionsScreen,
 		options: {
 			headerShown: false,
 		},
