@@ -74,20 +74,18 @@ const preparePhrase = (method: string, name: string): string => {
 			return `Toggle ${name}`;
 		case '16':
 			return `Dim ${name}`;
-		case '32':
-			return `Learn ${name}`;
 		case '64':
 			return `Execute ${name}`;
 		case '128':
-			return `Turn up ${name}`;
+			return `Send up to ${name}`;
 		case '256':
-			return `Turn down ${name}`;
+			return `Send down to ${name}`;
 		case '512':
-			return `Stop ${name}`;
+			return `Send stop to ${name}`;
 		case '1024':
-			return `Set rgb value on ${name}`;
+			return `Change color on ${name}`;
 		case '2048':
-			return `Control thermostat ${name}`;
+			return `Control thermostat on ${name}`;
 		default:
 			return `Control ${name}`;
 	}
