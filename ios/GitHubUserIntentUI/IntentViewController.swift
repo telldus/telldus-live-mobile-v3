@@ -29,7 +29,7 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
   func configureView(for parameters: Set<INParameter>, of interaction: INInteraction, interactiveBehavior: INUIInteractiveBehavior, context: INUIHostedViewContext, completion: @escaping (Bool, Set<INParameter>, CGSize) -> Void) {
     
     guard
-      let intent = interaction.intent as? CheckMyGitHubIntent,
+      let intent = interaction.intent as? DeviceActionShortcutIntent,
       let deviceId = intent.deviceId
     else {
       return

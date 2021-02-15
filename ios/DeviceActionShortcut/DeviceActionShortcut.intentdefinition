@@ -24,7 +24,7 @@
 			<key>INIntentLastParameterTag</key>
 			<integer>14</integer>
 			<key>INIntentName</key>
-			<string>CheckMyGitHub</string>
+			<string>DeviceActionShortcut</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
 				<key>method,deviceId,phrase</key>
@@ -237,7 +237,7 @@
 				<integer>4</integer>
 			</dict>
 			<key>INIntentTitle</key>
-			<string>Check My Git Hub</string>
+			<string>Device Action Shortcut</string>
 			<key>INIntentTitleID</key>
 			<string>ZFEH0t</string>
 			<key>INIntentType</key>

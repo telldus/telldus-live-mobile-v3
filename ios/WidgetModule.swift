@@ -80,7 +80,7 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
   @objc(donate:)
   func donate(jsonOptions: Dictionary<String, Any>) {
     if #available(iOS 12.0, *) {
-      let intent = CheckMyGitHubIntent()
+      let intent = DeviceActionShortcutIntent()
       
       let phrase = jsonOptions["phrase"] as! String
       let deviceId = jsonOptions["deviceId"] as! String
@@ -118,7 +118,7 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
     if #available(iOS 12.0, *) {
       self.presentShortcutCallback = callback
       
-      let intent = CheckMyGitHubIntent()
+      let intent = DeviceActionShortcutIntent()
       
       let phrase = jsonOptions["phrase"] as! String
       let deviceId = jsonOptions["deviceId"] as! String
@@ -181,7 +181,7 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
           var shortcuts: [[String: Any]] = []
           for sc in voiceShortcutsFromCenter {
             var userInfo: [String: Any] = [:]
-            if let intent = sc.shortcut.intent as? CheckMyGitHubIntent {
+            if let intent = sc.shortcut.intent as? DeviceActionShortcutIntent {
               print("TEST intent \(intent)")
               userInfo = [
                 "phrase": intent.phrase,

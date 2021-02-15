@@ -13,11 +13,11 @@ class IntentHandler: INExtension {
     
   override func handler(for intent: INIntent) -> Any {
     print ("TEST handler")
-      guard intent is CheckMyGitHubIntent else {
+      guard intent is DeviceActionShortcutIntent else {
           fatalError("Unhandled intent type: \(intent)")
       }
 
-      return CheckMyGitHubIntentHandler()
+      return DeviceActionShortcutIntentHandler()
   }
     
 }

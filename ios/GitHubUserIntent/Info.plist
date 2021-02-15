@@ -30,7 +30,7 @@
 			<array/>
 			<key>IntentsSupported</key>
 			<array>
-				<string>CheckMyGitHubIntent</string>
+				<string>DeviceActionShortcutIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
