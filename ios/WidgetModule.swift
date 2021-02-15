@@ -85,17 +85,45 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
       let phrase = jsonOptions["phrase"] as! String
       let deviceId = jsonOptions["deviceId"] as! String
       let method = jsonOptions["method"] as! String
-      let dimValue = jsonOptions["dimValue"] as? String
-      let rgbValue = jsonOptions["rgbValue"] as? String
-      let thermostatValue = jsonOptions["thermostatValue"] as? String
+      let dimValue = jsonOptions["dimValue"] as? NSNumber
+      let rgbValue = jsonOptions["rgbValue"] as? [String: NSNumber] ?? [:]
+      let thermostatValue = jsonOptions["thermostatValue"] as? [String: Any] ?? [:]
+      
+      let r = rgbValue["r"]
+      let g = rgbValue["g"]
+      let b = rgbValue["b"]
+      let _rgbValue: RGBValue = RGBValue(
+        identifier: "rgbValue",
+        display: "rgb value",
+        pronunciationHint: "rgb value"
+      )
+      
+      let mode = thermostatValue["mode"] as? String ?? ""
+      let temperature = thermostatValue["temperature"] as? NSNumber
+      let scale = thermostatValue["scale"] as? NSNumber ?? 0
+      let changeMode = thermostatValue["changeMode"] as? NSNumber ?? 0
+      let _thermostatValue: ThermostatValue = ThermostatValue(identifier: "_thermostatValue", display: "thermostat value")
+      
+      if #available(iOS 13.0, *) {
+        _rgbValue.r = r
+        _rgbValue.g = g;
+        _rgbValue.b = b;
+        
+        _thermostatValue.mode = mode;
+        _thermostatValue.temperature = temperature;
+        _thermostatValue.scale = scale;
+        _thermostatValue.changeMode = changeMode;
+      } else {
+        // Fallback on earlier versions
+      };
       
       intent.suggestedInvocationPhrase = "phrase"
       intent.phrase = phrase
       intent.deviceId = deviceId
       intent.method = method
       intent.dimValue = dimValue
-      intent.rgbValue = rgbValue
-      intent.thermostatValue = thermostatValue
+      intent.rgbValue = _rgbValue
+      intent.thermostatValue = _thermostatValue
       
       let interaction = INInteraction(intent: intent, response: nil)
       
@@ -123,20 +151,45 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
       let phrase = jsonOptions["phrase"] as! String
       let deviceId = jsonOptions["deviceId"] as! String
       let method = jsonOptions["method"] as! String
-      let dimValue = jsonOptions["dimValue"] as? String
-      let rgbValue = jsonOptions["rgbValue"] as? String
-      let thermostatValue = jsonOptions["thermostatValue"] as? String
+      let dimValue = jsonOptions["dimValue"] as? NSNumber
+      let rgbValue = jsonOptions["rgbValue"] as? [String: NSNumber] ?? [:]
+      let thermostatValue = jsonOptions["thermostatValue"] as? [String: Any] ?? [:]
       let identifier = jsonOptions["identifier"] as? String
       
-      print("TEST dimValue \(dimValue)")
-      print("TEST identifier \(identifier)")
-  
+      let r = rgbValue["r"]
+      let g = rgbValue["g"]
+      let b = rgbValue["b"]
+      let _rgbValue: RGBValue = RGBValue(
+        identifier: "rgbValue",
+        display: "rgb value",
+        pronunciationHint: "rgb value"
+      )
+      
+      let mode = thermostatValue["mode"] as? String ?? ""
+      let temperature = thermostatValue["temperature"] as? NSNumber
+      let scale = thermostatValue["scale"] as? NSNumber ?? 0
+      let changeMode = thermostatValue["changeMode"] as? NSNumber ?? 0
+      let _thermostatValue: ThermostatValue = ThermostatValue(identifier: "_thermostatValue", display: "thermostat value")
+      
+      if #available(iOS 13.0, *) {
+        _rgbValue.r = r
+        _rgbValue.g = g;
+        _rgbValue.b = b;
+        
+        _thermostatValue.mode = mode;
+        _thermostatValue.temperature = temperature;
+        _thermostatValue.scale = scale;
+        _thermostatValue.changeMode = changeMode;
+      } else {
+        // Fallback on earlier versions
+      };
+      
       intent.phrase = phrase
       intent.deviceId = deviceId
       intent.method = method
       intent.dimValue = dimValue
-      intent.rgbValue = rgbValue
-      intent.thermostatValue = thermostatValue
+      intent.rgbValue = _rgbValue
+      intent.thermostatValue = _thermostatValue
       
       guard let shortcut = INShortcut(intent: intent) else {
         return
@@ -182,7 +235,6 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
           for sc in voiceShortcutsFromCenter {
             var userInfo: [String: Any] = [:]
             if let intent = sc.shortcut.intent as? DeviceActionShortcutIntent {
-              print("TEST intent \(intent)")
               userInfo = [
                 "phrase": intent.phrase,
                 "deviceId": intent.deviceId,

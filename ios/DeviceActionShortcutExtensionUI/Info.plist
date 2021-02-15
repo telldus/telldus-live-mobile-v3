@@ -26,8 +26,8 @@
 		<dict>
 			<key>IntentsSupported</key>
 			<array>
-				<string>INSendMessageIntent</string>
 				<string>DeviceActionShortcutIntent</string>
+				<string>INSendMessageIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionMainStoryboard</key>

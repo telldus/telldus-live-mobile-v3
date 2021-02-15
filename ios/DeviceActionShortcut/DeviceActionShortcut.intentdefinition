@@ -22,7 +22,7 @@
 			<key>INIntentDescriptionID</key>
 			<string>0dPbz7</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>14</integer>
+			<integer>17</integer>
 			<key>INIntentName</key>
 			<string>DeviceActionShortcut</string>
 			<key>INIntentParameterCombinations</key>
@@ -126,17 +126,17 @@
 					<integer>3</integer>
 					<key>INIntentParameterMetadata</key>
 					<dict>
-						<key>INIntentParameterMetadataCapitalization</key>
-						<string>Sentences</string>
-						<key>INIntentParameterMetadataDefaultValueID</key>
-						<string>yfB3e9</string>
+						<key>INIntentParameterMetadataMaximumValue</key>
+						<integer>1</integer>
+						<key>INIntentParameterMetadataType</key>
+						<string>Field</string>
 					</dict>
 					<key>INIntentParameterName</key>
 					<string>dimValue</string>
 					<key>INIntentParameterTag</key>
-					<integer>11</integer>
+					<integer>17</integer>
 					<key>INIntentParameterType</key>
-					<string>String</string>
+					<string>Integer</string>
 				</dict>
 				<dict>
 					<key>INIntentParameterDisplayName</key>
@@ -166,19 +166,16 @@
 					<string>DPL7o5</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>5</integer>
-					<key>INIntentParameterMetadata</key>
-					<dict>
-						<key>INIntentParameterMetadataCapitalization</key>
-						<string>Sentences</string>
-						<key>INIntentParameterMetadataDefaultValueID</key>
-						<string>5yEfwl</string>
-					</dict>
 					<key>INIntentParameterName</key>
 					<string>rgbValue</string>
+					<key>INIntentParameterObjectType</key>
+					<string>RGBValue</string>
+					<key>INIntentParameterObjectTypeNamespace</key>
+					<string>6bdHAf</string>
 					<key>INIntentParameterTag</key>
-					<integer>13</integer>
+					<integer>15</integer>
 					<key>INIntentParameterType</key>
-					<string>String</string>
+					<string>Object</string>
 				</dict>
 				<dict>
 					<key>INIntentParameterDisplayName</key>
@@ -187,19 +184,16 @@
 					<string>cXfWGa</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>6</integer>
-					<key>INIntentParameterMetadata</key>
-					<dict>
-						<key>INIntentParameterMetadataCapitalization</key>
-						<string>Sentences</string>
-						<key>INIntentParameterMetadataDefaultValueID</key>
-						<string>EpRuRg</string>
-					</dict>
 					<key>INIntentParameterName</key>
 					<string>thermostatValue</string>
+					<key>INIntentParameterObjectType</key>
+					<string>ThermostatValue</string>
+					<key>INIntentParameterObjectTypeNamespace</key>
+					<string>6bdHAf</string>
 					<key>INIntentParameterTag</key>
-					<integer>14</integer>
+					<integer>16</integer>
 					<key>INIntentParameterType</key>
-					<string>String</string>
+					<string>Object</string>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>
@@ -247,6 +241,231 @@
 		</dict>
 	</array>
 	<key>INTypes</key>
-	<array/>
+	<array>
+		<dict>
+			<key>INTypeDisplayName</key>
+			<string>RGB Value</string>
+			<key>INTypeDisplayNameID</key>
+			<string>1PDMpj</string>
+			<key>INTypeLastPropertyTag</key>
+			<integer>105</integer>
+			<key>INTypeName</key>
+			<string>RGBValue</string>
+			<key>INTypeProperties</key>
+			<array>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>1</integer>
+					<key>INTypePropertyName</key>
+					<string>identifier</string>
+					<key>INTypePropertyTag</key>
+					<integer>1</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>2</integer>
+					<key>INTypePropertyName</key>
+					<string>displayString</string>
+					<key>INTypePropertyTag</key>
+					<integer>2</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>3</integer>
+					<key>INTypePropertyName</key>
+					<string>pronunciationHint</string>
+					<key>INTypePropertyTag</key>
+					<integer>3</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>4</integer>
+					<key>INTypePropertyName</key>
+					<string>alternativeSpeakableMatches</string>
+					<key>INTypePropertySupportsMultipleValues</key>
+					<true/>
+					<key>INTypePropertyTag</key>
+					<integer>4</integer>
+					<key>INTypePropertyType</key>
+					<string>SpeakableString</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>R</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>mVMcei</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>5</integer>
+					<key>INTypePropertyName</key>
+					<string>r</string>
+					<key>INTypePropertyTag</key>
+					<integer>103</integer>
+					<key>INTypePropertyType</key>
+					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>G</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>Bjf99B</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>6</integer>
+					<key>INTypePropertyName</key>
+					<string>g</string>
+					<key>INTypePropertyTag</key>
+					<integer>104</integer>
+					<key>INTypePropertyType</key>
+					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>B</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>98BboY</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>7</integer>
+					<key>INTypePropertyName</key>
+					<string>b</string>
+					<key>INTypePropertyTag</key>
+					<integer>105</integer>
+					<key>INTypePropertyType</key>
+					<string>Integer</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>INTypeDisplayName</key>
+			<string>Thermostat Value</string>
+			<key>INTypeDisplayNameID</key>
+			<string>MWejz6</string>
+			<key>INTypeLastPropertyTag</key>
+			<integer>106</integer>
+			<key>INTypeName</key>
+			<string>ThermostatValue</string>
+			<key>INTypeProperties</key>
+			<array>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>1</integer>
+					<key>INTypePropertyName</key>
+					<string>identifier</string>
+					<key>INTypePropertyTag</key>
+					<integer>1</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>2</integer>
+					<key>INTypePropertyName</key>
+					<string>displayString</string>
+					<key>INTypePropertyTag</key>
+					<integer>2</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>3</integer>
+					<key>INTypePropertyName</key>
+					<string>pronunciationHint</string>
+					<key>INTypePropertyTag</key>
+					<integer>3</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>4</integer>
+					<key>INTypePropertyName</key>
+					<string>alternativeSpeakableMatches</string>
+					<key>INTypePropertySupportsMultipleValues</key>
+					<true/>
+					<key>INTypePropertyTag</key>
+					<integer>4</integer>
+					<key>INTypePropertyType</key>
+					<string>SpeakableString</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Mode</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>vhWwTJ</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>5</integer>
+					<key>INTypePropertyName</key>
+					<string>mode</string>
+					<key>INTypePropertyTag</key>
+					<integer>100</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Temperature</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>56e43t</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>6</integer>
+					<key>INTypePropertyName</key>
+					<string>temperature</string>
+					<key>INTypePropertyTag</key>
+					<integer>104</integer>
+					<key>INTypePropertyType</key>
+					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Scale</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>RkH67V</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>7</integer>
+					<key>INTypePropertyName</key>
+					<string>scale</string>
+					<key>INTypePropertyTag</key>
+					<integer>105</integer>
+					<key>INTypePropertyType</key>
+					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Change Mode</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>SdL9VE</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>8</integer>
+					<key>INTypePropertyName</key>
+					<string>changeMode</string>
+					<key>INTypePropertyTag</key>
+					<integer>106</integer>
+					<key>INTypePropertyType</key>
+					<string>Integer</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

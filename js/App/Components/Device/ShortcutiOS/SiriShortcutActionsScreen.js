@@ -39,6 +39,7 @@ import {
 const {
 	WidgetModule,
 } = NativeModules;
+const colorsys = require('colorsys');
 
 import {
 	View,
@@ -111,8 +112,6 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 	} = device || {};
 	const [deviceInstate, setDeviceInstate] = useState(device);
 	const [selections, setSelections] = useState({});
-	const [selectionsRGB, setSelectionsSelectionsRGB] = useState({});
-	const [selectionsThermostat, setSelectionsSelectionsThermostat] = useState({});
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { byId } = useSelector((state: Object): Object => state.sensors);
 	const { byId: gById } = useSelector((state: Object): Object => state.gateways);
@@ -165,39 +164,22 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 			method = '',
 			stateValues = {},
 		} = selections;
-		const {
-			value,
-		} = selectionsRGB;
-		const {
-			mode,
-			temperature,
-			scale,
-			changeMode,
-			requestedState,
-		} = selectionsThermostat;
 		const _method = method.toString();
-		const dimValue = stateValues[methods[16]];
-		const rgbValue = value;
+		const stateValue = stateValues[_method];
 		WidgetModule.presentShortcut({
 			phrase: preparePhrase(_method, name),
 			deviceId: id.toString(),
 			method: _method,
-			dimValue: (dimValue && _method === '16') ? dimValue : null,
-			rgbValue,
-			thermostatValue: {
-				mode,
-				temperature,
-				scale,
-				changeMode,
-				requestedState,
-			},
+			dimValue: _method === '16' ? stateValue : null,
+			rgbValue: _method === '1024' ? stateValues : null,
+			thermostatValue: _method === '2048' ? stateValues : null,
 			uuid: _uuid,
 		},
 		(callbackData: Object) => {
 			_getShortcuts();
 		}
 		);
-	}, [_getShortcuts, id, name, selections, selectionsRGB, selectionsThermostat]);
+	}, [_getShortcuts, id, name, selections]);
 
 	const onPressEdit = useCallback((data: Object) => {
 		WidgetModule.presentShortcut(data,
@@ -215,13 +197,14 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 	} = gateway ? gateway : {};
 
 	const deviceSetStateThermostat = useCallback((deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => {
-		setSelectionsSelectionsThermostat({
-			deviceId,
-			mode,
-			temperature,
-			scale,
-			changeMode,
-			requestedState,
+		setSelections({
+			method: requestedState === '2' ? requestedState : '2048',
+			stateValues: {
+				mode,
+				temperature,
+				scale,
+				changeMode,
+			},
 		});
 	}, []);
 
@@ -254,9 +237,13 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 		});
 	}, [deviceInstate]);
 	const deviceSetStateRGBOverride = useCallback((deviceId: number, value: string) => {
-		setSelectionsSelectionsRGB({
-			deviceId,
-			value,
+		const rgb = colorsys.hexToRgb(value);
+		const { r, g, b } = rgb;
+		setSelections({
+			method: '1024',
+			stateValues: {
+				r, g, b,
+			},
 		});
 	}, []);
 
@@ -304,6 +291,8 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 			);
 		});
 	}, [onPressEdit, rowCoverStyle, rowRightBlockStyle, rowRightTextStyle, rowTextStyle, shortcuts]);
+
+	const showAdd = !!selections.stateValues;
 
 	return (
 		<View
@@ -354,10 +343,12 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 					deviceSetStateRGBOverride={deviceSetStateRGBOverride}
 					currentTemp={currentTemp}
 					gatewayTimezone={gatewayTimezone}/>
-				<TouchableButton
-					text={'Add to siri'} // TODO: Translate
-					onPress={onPressAddToSiri}
-					style={buttonStyle}/>
+				{showAdd && (
+					<TouchableButton
+						text={'Add to siri'} // TODO: Translate
+						onPress={onPressAddToSiri}
+						style={buttonStyle}/>
+				)}
 			</ScrollView>
 		</View>
 	);

@@ -12,16 +12,14 @@ public final class Fetcher: NSObject {
   
   var timerDeviceInfo: [String: Timer] = [:]
   
-  public func fetch(deviceId: String, method: String, stateValue: String?, completion: @escaping (_ status: String) -> Void) {
-    print("TEST stateValue \(stateValue)")
+  public func fetch(deviceId: String, method: String, stateValue: NSNumber?, completion: @escaping (_ status: String) -> Void) {
     API().callEndPoint("/device/command?id=\(deviceId)&method=\(method)&value=\(stateValue)") {result in
       switch result {
       case .success(_):
-        var requestedStateValue = ["": ""];
+        var requestedStateValue: [String: Any] = [:];
         if stateValue != nil, method == "16" {
           requestedStateValue["dimValue"] = stateValue
         }
-        print("TEST requestedStateValue \(requestedStateValue)")
         self.timerDeviceInfo[deviceId]?.invalidate()
         DispatchQueue.main.async {
           self.timerDeviceInfo[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
@@ -35,7 +33,7 @@ public final class Fetcher: NSObject {
     }
   }
   
-  public func getDeviceInfo(deviceId: String, requestedState: String, requestedStateValue: Dictionary<String, String>, completion: @escaping (_ status: String) -> Void) {
+  public func getDeviceInfo(deviceId: String, requestedState: String, requestedStateValue: Dictionary<String, Any>, completion: @escaping (_ status: String) -> Void) {
     API().callEndPoint("/device/info?id=\(deviceId)&supportedMethods=\(Constants.supportedMethods)") {result in
       switch result {
       case let .success(data):
@@ -47,7 +45,7 @@ public final class Fetcher: NSObject {
         let stateValues = _result["statevalues"] as? Array<Any>
         let currentState = _result["state"] as? String
         
-        let reqDimValue = requestedStateValue["dimValue"]
+        let reqDimValue = requestedStateValue["dimValue"] as? String
         let rgbValue = requestedStateValue["rgbValue"]
         let thermostatMode = requestedStateValue["thermostatMode"]
         let thermostatSetPoint = requestedStateValue["thermostatSetPoint"]
