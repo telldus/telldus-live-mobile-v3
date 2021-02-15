@@ -197,15 +197,16 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 	} = gateway ? gateway : {};
 
 	const deviceSetStateThermostat = useCallback((deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => {
-		setSelections({
-			method: requestedState === '2' ? requestedState : '2048',
+		const sel: Object = {
+			method: parseInt(requestedState, 10) === 2 ? requestedState : '2048',
 			stateValues: {
 				mode,
 				temperature,
 				scale,
 				changeMode,
 			},
-		});
+		};
+		setSelections(sel);
 	}, []);
 
 	const onPressOverride = useCallback(({
@@ -239,12 +240,13 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 	const deviceSetStateRGBOverride = useCallback((deviceId: number, value: string) => {
 		const rgb = colorsys.hexToRgb(value);
 		const { r, g, b } = rgb;
-		setSelections({
+		const sel: Object = {
 			method: '1024',
 			stateValues: {
 				r, g, b,
 			},
-		});
+		};
+		setSelections(sel);
 	}, []);
 
 	const Shortcuts = useMemo((): Object => {
