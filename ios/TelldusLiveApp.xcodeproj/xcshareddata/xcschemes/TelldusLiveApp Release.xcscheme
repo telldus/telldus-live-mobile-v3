@@ -42,8 +42,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2658F5E725D4062700AD834A"
-               BuildableName = "GitHubFetcherTests.xctest"
-               BlueprintName = "GitHubFetcherTests"
+               BuildableName = "DeviceActionShortcutTests.xctest"
+               BlueprintName = "DeviceActionShortcutTests"
                ReferencedContainer = "container:TelldusLiveApp.xcodeproj">
             </BuildableReference>
          </TestableReference>

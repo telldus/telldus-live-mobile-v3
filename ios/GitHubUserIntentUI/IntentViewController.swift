@@ -7,7 +7,7 @@
 //
 
 import IntentsUI
-import GitHubFetcher
+import DeviceActionShortcut
 
 // As an example, this extension's Info.plist has been configured to handle interactions for INSendMessageIntent.
 // You will want to replace this or add other intents as appropriate.

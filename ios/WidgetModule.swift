@@ -10,7 +10,7 @@ import Foundation
 import Security
 import Intents
 import UIKit
-import GitHubFetcher
+import DeviceActionShortcut
 import UIKit
 import Intents
 import IntentsUI

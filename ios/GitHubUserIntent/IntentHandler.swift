@@ -7,7 +7,7 @@
 //
 
 import Intents
-import GitHubFetcher
+import DeviceActionShortcut
 
 class IntentHandler: INExtension {
     

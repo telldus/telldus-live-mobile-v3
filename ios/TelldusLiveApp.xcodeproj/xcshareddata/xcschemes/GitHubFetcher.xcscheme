@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2658F5DF25D4062700AD834A"
-               BuildableName = "GitHubFetcher.framework"
-               BlueprintName = "GitHubFetcher"
+               BuildableName = "DeviceActionShortcut.framework"
+               BlueprintName = "DeviceActionShortcut"
                ReferencedContainer = "container:TelldusLiveApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -58,8 +58,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2658F5DF25D4062700AD834A"
-            BuildableName = "GitHubFetcher.framework"
-            BlueprintName = "GitHubFetcher"
+            BuildableName = "DeviceActionShortcut.framework"
+            BlueprintName = "DeviceActionShortcut"
             ReferencedContainer = "container:TelldusLiveApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
