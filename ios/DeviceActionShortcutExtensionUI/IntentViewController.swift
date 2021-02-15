@@ -1,8 +1,8 @@
 //
 //  IntentViewController.swift
-//  GitHubUserIntentUI
+//  DeviceActionShortcutExtensionUI
 //
-//  Created by Rimnesh Fernandez on 10/02/21.
+//  Created by Rimnesh Fernandez on 15/02/21.
 //  Copyright © 2021 Telldus Technologies AB. All rights reserved.
 //
 
