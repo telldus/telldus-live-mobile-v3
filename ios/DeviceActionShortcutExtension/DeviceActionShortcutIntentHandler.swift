@@ -20,16 +20,40 @@ final class DeviceActionShortcutIntentHandler: NSObject, DeviceActionShortcutInt
     }
     
     let method = intent.method
-    let dimValue = intent.dimValue
-    var fetcher = Fetcher();
-    fetcher.fetch(deviceId: deviceId, method: method!, stateValue: dimValue) { (status) in
-      
-      guard status == "success" else {
-        completion(DeviceActionShortcutIntentResponse(code: .failure, userActivity: nil))
-        return
+    let fetcher = Fetcher();
+    if method == "2048" {
+      let thermostatValue = intent.thermostatValue
+      fetcher.deviceSetStateThermostat(deviceId: deviceId, stateValue: thermostatValue!) { (status) in
+        
+        guard status == "success" else {
+          completion(DeviceActionShortcutIntentResponse(code: .failure, userActivity: nil))
+          return
+        }
+        
+        completion(DeviceActionShortcutIntentResponse(code: .success, userActivity: nil))
       }
-      
-      completion(DeviceActionShortcutIntentResponse(code: .success, userActivity: nil))
+    } else if method == "1024" {
+      let rgbValue = intent.rgbValue
+      fetcher.deviceSetStateRGB(deviceId: deviceId, stateValue: rgbValue!) { (status) in
+        
+        guard status == "success" else {
+          completion(DeviceActionShortcutIntentResponse(code: .failure, userActivity: nil))
+          return
+        }
+        
+        completion(DeviceActionShortcutIntentResponse(code: .success, userActivity: nil))
+      }
+    } else {
+      let dimValue = intent.dimValue
+      fetcher.deviceSetState(deviceId: deviceId, method: method!, stateValue: dimValue) { (status) in
+        
+        guard status == "success" else {
+          completion(DeviceActionShortcutIntentResponse(code: .failure, userActivity: nil))
+          return
+        }
+        
+        completion(DeviceActionShortcutIntentResponse(code: .success, userActivity: nil))
+      }
     }
   }
   

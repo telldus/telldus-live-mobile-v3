@@ -37,15 +37,35 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
     activityIndicator.isHidden = false
     activityIndicator.startAnimating()
     
-    let method = intent.method
-    let dimValue = intent.dimValue
+    let method = intent.method!
     
-    var fetcher = Fetcher();
-    fetcher.fetch(deviceId: deviceId, method: method!, stateValue: dimValue) { [weak self] status in
-      
-      DispatchQueue.main.async {
-        self?.statusLabel.text = status
-        self?.hideActivityIndicator()
+    let fetcher = Fetcher();
+    if method == "2048" {
+      let thermostatValue = intent.thermostatValue
+      fetcher.deviceSetStateThermostat(deviceId: deviceId, stateValue: thermostatValue!) { [weak self] status in
+        
+        DispatchQueue.main.async {
+          self?.statusLabel.text = status
+          self?.hideActivityIndicator()
+        }
+      }
+    } else if method == "1024" {
+      let rgbValue = intent.rgbValue
+      fetcher.deviceSetStateRGB(deviceId: deviceId, stateValue: rgbValue!) { [weak self] status in
+        
+        DispatchQueue.main.async {
+          self?.statusLabel.text = status
+          self?.hideActivityIndicator()
+        }
+      }
+    } else {
+      let dimValue = intent.dimValue
+      fetcher.deviceSetState(deviceId: deviceId, method: method, stateValue: dimValue) { [weak self] status in
+        
+        DispatchQueue.main.async {
+          self?.statusLabel.text = status
+          self?.hideActivityIndicator()
+        }
       }
     }
     

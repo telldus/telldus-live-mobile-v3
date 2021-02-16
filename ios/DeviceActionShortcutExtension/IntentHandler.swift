@@ -10,14 +10,13 @@ import Intents
 import DeviceActionShortcut
 
 class IntentHandler: INExtension {
-    
+  
   override func handler(for intent: INIntent) -> Any {
-    print ("TEST handler")
-      guard intent is DeviceActionShortcutIntent else {
-          fatalError("Unhandled intent type: \(intent)")
-      }
-
-      return DeviceActionShortcutIntentHandler()
-  }
+    guard intent is DeviceActionShortcutIntent else {
+      fatalError("Unhandled intent type: \(intent)")
+    }
     
+    return DeviceActionShortcutIntentHandler()
+  }
+  
 }
