@@ -13,33 +13,66 @@ public final class Fetcher: NSObject {
   var timerDeviceInfo: [String: Timer] = [:]
   
   public func deviceSetState(deviceId: String, method: String, stateValue: NSNumber?, completion: @escaping (_ status: String) -> Void) {
-    var _stateValue: Any = ""
-    if stateValue != nil {
-      _stateValue = String(describing: stateValue!)
+    
+    let dataDict = Utilities().getAuthData()
+    guard dataDict != nil
+    else {
+      completion("failed");
+      return
     }
-    API().callEndPoint("/device/command?id=\(deviceId)&method=\(method)&value=\(_stateValue)") {result in
-      switch result {
-      case .success(_):
-        var requestedStateValue: [String: Any] = [:];
-        if stateValue != nil, method == "16" {
-          requestedStateValue["dimValue"] = stateValue
-        }
-        self.timerDeviceInfo[deviceId]?.invalidate()
-        DispatchQueue.main.async {
-          self.timerDeviceInfo[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
-            self.getDeviceInfo(deviceId: deviceId, requestedState: method, requestedStateValue: requestedStateValue, completion: completion);
-          }
-        }
-      case .failure(_):
+    let pro = dataDict?["pro"] as? Int
+    if #available(iOS 12.0, *) {
+      let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+      if _isBasicUser {
         completion("failed");
         return;
       }
+      var _stateValue: Any = ""
+      if stateValue != nil {
+        _stateValue = String(describing: stateValue!)
+      }
+      API().callEndPoint("/device/command?id=\(deviceId)&method=\(method)&value=\(_stateValue)") {result in
+        switch result {
+        case .success(_):
+          var requestedStateValue: [String: Any] = [:];
+          if stateValue != nil, method == "16" {
+            requestedStateValue["dimValue"] = stateValue
+          }
+          self.timerDeviceInfo[deviceId]?.invalidate()
+          DispatchQueue.main.async {
+            self.timerDeviceInfo[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: method, requestedStateValue: requestedStateValue, completion: completion);
+            }
+          }
+        case .failure(_):
+          completion("failed");
+          return;
+        }
+      }
+    } else {
+      // Fallback on earlier versions
+      completion("failed");
+      return
     }
   }
   
   @available(iOS 12.0, *)
   public func deviceSetStateRGB(deviceId: String, stateValue: RGBValue, completion: @escaping (_ status: String) -> Void) {
     if #available(iOS 13.0, *) {
+      
+      let dataDict = Utilities().getAuthData()
+      guard dataDict != nil
+      else {
+        completion("failed");
+        return
+      }
+      let pro = dataDict?["pro"] as? Int
+      let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+      if _isBasicUser {
+        completion("failed");
+        return;
+      }
+      
       let r: NSNumber = stateValue.r!, g: NSNumber = stateValue.g!, b: NSNumber = stateValue.b!;
       API().callEndPoint("/device/rgb?id=\(deviceId)&r=\(r)&g=\(g)&b=\(b)") {result in
         switch result {
@@ -65,6 +98,20 @@ public final class Fetcher: NSObject {
   @available(iOS 12.0, *)
   public func deviceSetStateThermostat(deviceId: String, stateValue: ThermostatValue, completion: @escaping (_ status: String) -> Void) {
     if #available(iOS 13.0, *) {
+      
+      let dataDict = Utilities().getAuthData()
+      guard dataDict != nil
+      else {
+        completion("failed");
+        return
+      }
+      let pro = dataDict?["pro"] as? Int
+      let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+      if _isBasicUser {
+        completion("failed");
+        return;
+      }
+      
       let mode: String = stateValue.mode!, temperature: NSNumber = stateValue.temperature!, scale: NSNumber = stateValue.scale!, changeMode: NSNumber = stateValue.changeMode!;
       API().callEndPoint("/device/thermostat?id=\(deviceId)&mode=\(mode)&temperature=\(temperature)&scale\(scale)&changeMode\(changeMode)") {result in
         switch result {
