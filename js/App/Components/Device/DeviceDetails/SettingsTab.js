@@ -89,6 +89,7 @@ import {
 	prepare433MHzDeviceDefaultValueForParams,
 	doesSupportEditModel,
 	ZWaveFunctions,
+	isBasicUser,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -104,6 +105,7 @@ type Props = PropsThemedComponent & {
 	gatewaySupportEditModel: boolean,
 	currentScreen: string,
 	gatewayTimezone: string,
+	isBasic: string,
 
 	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
@@ -224,6 +226,7 @@ class SettingsTab extends View {
 				'transports',
 				'gatewaySupportEditModel',
 				'gatewayTimezone',
+				'isBasic',
 			]);
 			if (propsChange) {
 				return true;
@@ -856,7 +859,31 @@ class SettingsTab extends View {
 		const {
 			navigation,
 			device,
+			isBasic,
+			screenProps,
 		} = this.props;
+		if (isBasic) {
+			const {
+				toggleDialogueBox,
+				intl,
+			} = screenProps;
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: intl.formatMessage(i18n.upgradeToPremium),
+				text: intl.formatMessage(i18n.infoWhenAccessPremFromBasic),
+				showPositive: true,
+				showNegative: true,
+				positiveText: intl.formatMessage(i18n.upgrade),
+				onPressPositive: () => {
+					navigation.navigate('PremiumUpgradeScreen');
+				},
+				closeOnPressPositive: true,
+				timeoutToCallPositive: 200,
+			});
+			return;
+		}
 		navigation.navigate('SiriShortcutActionsScreen', {
 			device,
 		});
@@ -1241,7 +1268,10 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	const {
 		dashboard,
-		user: { userId },
+		user: {
+			userId,
+			userProfile = {},
+		},
 		app: {defaultSettings},
 	} = state;
 
@@ -1255,6 +1285,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		screen: currentScreen,
 	} = state.navigation;
 
+	const isBasic = isBasicUser(userProfile.pro);
+
 	return {
 		device,
 		inDashboard: !!devicesByIdInCurrentDb[id],
@@ -1264,6 +1296,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		gatewaySupportEditModel,
 		currentScreen,
 		gatewayTimezone,
+		isBasic,
 	};
 }
 
