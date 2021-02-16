@@ -30,6 +30,7 @@ import React, {
 import { useSelector } from 'react-redux';
 import {
 	ScrollView,
+	Image,
 } from 'react-native';
 let uuid = require('react-native-uuid');
 import { useIntl } from 'react-intl';
@@ -57,6 +58,9 @@ import {
 	methods,
 } from '../../../../Constants';
 
+import i18n from '../../../Translations/common';
+
+
 type Props = {
     navigation: Object,
 	screenProps: Object,
@@ -66,29 +70,29 @@ type Props = {
 const preparePhrase = (method: string, name: string): string => {
 	switch (method) {
 		case '1':
-			return `Turn on ${name}`;
+			return i18n.turnOnDName;
 		case '2':
-			return `Turn off ${name}`;
+			return i18n.turnOffDName;
 		case '4':
-			return `Ring ${name}`;
+			return i18n.ringDName;
 		case '8':
-			return `Toggle ${name}`;
+			return i18n.toggleDName;
 		case '16':
-			return `Dim ${name}`;
+			return i18n.dimDName;
 		case '64':
-			return `Execute ${name}`;
+			return i18n.executeDName;
 		case '128':
-			return `Send up to ${name}`;
+			return i18n.sendUpToDName;
 		case '256':
-			return `Send down to ${name}`;
+			return i18n.sendDownToDName;
 		case '512':
-			return `Send stop to ${name}`;
+			return i18n.sendStopToDName;
 		case '1024':
-			return `Change color on ${name}`;
+			return i18n.changeColorOnDName;
 		case '2048':
-			return `Control thermostat on ${name}`;
+			return i18n.controlThermostatOnDName;
 		default:
-			return `Control ${name}`;
+			return i18n.controlDName;
 	}
 };
 
@@ -125,11 +129,15 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 		rowRightBlockStyle,
 		actionDetailsStyle,
 		subTitleStyle,
+		siriIconStyle,
 	} = getStyles({
 		layout,
 	});
 
 	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const [ shortcuts, setShortcuts ] = useState([]);
 	const [ isLoading, setIsLoading ] = useState(false);
@@ -167,7 +175,7 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 		const _method = method.toString();
 		const stateValue = stateValues[_method];
 		WidgetModule.presentShortcut({
-			phrase: preparePhrase(_method, name),
+			phrase: formatMessage(preparePhrase(_method, name), {name}),
 			deviceId: id.toString(),
 			method: _method,
 			dimValue: _method === '16' ? stateValue : null,
@@ -179,7 +187,7 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 			_getShortcuts();
 		}
 		);
-	}, [_getShortcuts, id, name, selections]);
+	}, [_getShortcuts, formatMessage, id, name, selections]);
 
 	const onPressEdit = useCallback((data: Object) => {
 		WidgetModule.presentShortcut(data,
@@ -286,13 +294,13 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 						<Text
 							style={rowRightTextStyle}
 							level={23}>
-						edit
+							{formatMessage(i18n.edit)}
 						</Text>
 					</TouchableOpacity>
 				</View>
 			);
 		});
-	}, [onPressEdit, rowCoverStyle, rowRightBlockStyle, rowRightTextStyle, rowTextStyle, shortcuts]);
+	}, [formatMessage, onPressEdit, rowCoverStyle, rowRightBlockStyle, rowRightTextStyle, rowTextStyle, shortcuts]);
 
 	const showAdd = !!selections.stateValues;
 
@@ -301,8 +309,8 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 			level={3}
 			style={container}>
 			<NavigationHeaderPoster
-				h1={'Siri shortcuts'} // TODO: Translate
-				h2={'Add or delete shortcuts'}
+				h1={formatMessage(i18n.siriShortcuts)}
+				h2={formatMessage(i18n.addDeleteShortcuts)}
 				align={'left'}
 				showLeftIcon={true}
 				leftIcon={'close'}
@@ -323,7 +331,7 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 						<Text
 							style={subTitleStyle}
 							level={4}>
-					Existing shortcuts
+							{formatMessage(i18n.existingShortcuts)}
 						</Text>
 						{Shortcuts}
 					</>
@@ -331,7 +339,7 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 				<Text
 					style={subTitleStyle}
 					level={4}>
-							Add new shortcut
+					{formatMessage(i18n.addNewShortcut)}
 				</Text>
 				<DeviceActionDetails
 					device={deviceInstate}
@@ -347,10 +355,14 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 					gatewayTimezone={gatewayTimezone}/>
 				{showAdd && (
 					<TouchableButton
-						text={'Add to Siri'} // TODO: Translate
+						text={formatMessage(i18n.addToSiri)}
 						onPress={onPressAddToSiri}
 						style={buttonStyle}
-						preformatted/>
+						preformatted
+						preScript={<Image
+							source={{uri: 'siri_icon'}}
+							style={siriIconStyle}
+						/>}/>
 				)}
 			</ScrollView>
 		</View>
@@ -370,11 +382,16 @@ const getStyles = ({
 		paddingFactor,
 		fontSizeFactorEight,
 		fontSizeFactorFour,
+		maxSizeTextButton,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
+
+	let max = maxSizeTextButton + 5;
+	let iconSize = (deviceWidth * fontSizeFactorFour * 1.5);
+	iconSize = iconSize > max ? max : iconSize;
 
 	return {
 		container: {
@@ -414,6 +431,11 @@ const getStyles = ({
 		subTitleStyle: {
 			fontSize,
 			marginVertical: padding,
+		},
+		siriIconStyle: {
+			height: iconSize,
+			width: iconSize,
+			marginRight: 8,
 		},
 	};
 };
