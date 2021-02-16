@@ -1023,9 +1023,10 @@ class SettingsTab extends View {
 								/>
 								{isIOS && (
 									<TouchableButton
-										text={'Manage siri shortcuts'} // TODO: Translate
+										text={'Manage Siri shortcuts'} // TODO: Translate
 										onPress={this.onPressManageShortcuts}
-										style={addToSiriButtonStyle}/>
+										style={addToSiriButtonStyle}
+										preformatted/>
 								)}
 								<ChangeDevicetypeBlock
 									devicetype={deviceType}

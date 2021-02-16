@@ -347,9 +347,10 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 					gatewayTimezone={gatewayTimezone}/>
 				{showAdd && (
 					<TouchableButton
-						text={'Add to siri'} // TODO: Translate
+						text={'Add to Siri'} // TODO: Translate
 						onPress={onPressAddToSiri}
-						style={buttonStyle}/>
+						style={buttonStyle}
+						preformatted/>
 				)}
 			</ScrollView>
 		</View>
