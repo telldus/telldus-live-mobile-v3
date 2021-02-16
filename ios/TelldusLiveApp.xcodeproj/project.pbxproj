@@ -81,13 +81,15 @@
 		2658F5F525D4062700AD834A /* DeviceActionShortcut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2658F5E025D4062700AD834A /* DeviceActionShortcut.framework */; };
 		2658F5F725D4062700AD834A /* DeviceActionShortcut.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2658F5E025D4062700AD834A /* DeviceActionShortcut.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2658F60925D4068500AD834A /* Fetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2658F60825D4068500AD834A /* Fetcher.swift */; };
-		2658F60F25D406B900AD834A /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2658F60E25D406B900AD834A /* DeviceActionShortcut.intentdefinition */; };
-		2658F65D25D4088E00AD834A /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2658F60E25D406B900AD834A /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
-		2658F67125D4099700AD834A /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2658F60E25D406B900AD834A /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
-		2658F67825D409A200AD834A /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2658F60E25D406B900AD834A /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
-		2658F67925D409A300AD834A /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2658F60E25D406B900AD834A /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
 		2665772E255ABDB800572D52 /* ContainerRelativeShapeSpecificCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26657723255ABD6600572D52 /* ContainerRelativeShapeSpecificCorner.swift */; };
 		266B41D5234B03A200095747 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 266B41D4234B03A200095747 /* libRNGoogleSignin.a */; };
+		2675794425DC234300BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675794C25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
+		2675794525DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675794C25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
+		2675794625DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675794C25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
+		2675794725DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675794C25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition */; };
+		2675794825DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675794C25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
+		2675794925DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675794C25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
+		2675794A25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2675794C25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
 		2675DA492536C9B600802815 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675DA482536C9B500802815 /* IntentHandler.swift */; };
 		2675DA4D2536C9B600802815 /* HomescreenWidgetIntentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		267D2AC025429DD1002F49AE /* SensorClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267D2ABF25429DD1002F49AE /* SensorClass.swift */; };
@@ -135,8 +137,6 @@
 		26DE327825DA7E43000E38D6 /* DeviceActionShortcutExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 26DE326025DA7E43000E38D6 /* DeviceActionShortcutExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		26DE328725DA7E56000E38D6 /* DeviceActionShortcut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2658F5E025D4062700AD834A /* DeviceActionShortcut.framework */; };
 		26DE328825DA7E5E000E38D6 /* DeviceActionShortcut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2658F5E025D4062700AD834A /* DeviceActionShortcut.framework */; };
-		26DE329925DA7E8C000E38D6 /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2658F60E25D406B900AD834A /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
-		26DE329A25DA7E8D000E38D6 /* DeviceActionShortcut.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2658F60E25D406B900AD834A /* DeviceActionShortcut.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
 		26DE330E25DA8286000E38D6 /* DeviceActionShortcutIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26DE330D25DA8286000E38D6 /* DeviceActionShortcutIntentHandler.swift */; };
 		26DE333725DA82FE000E38D6 /* SharedModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269CD37F257A01C3003DC5D2 /* SharedModule.swift */; };
 		26DE333825DA82FE000E38D6 /* SharedModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269CD37F257A01C3003DC5D2 /* SharedModule.swift */; };
@@ -386,12 +386,19 @@
 		2658F5EF25D4062700AD834A /* DeviceActionShortcutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActionShortcutTests.swift; sourceTree = "<group>"; };
 		2658F5F125D4062700AD834A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2658F60825D4068500AD834A /* Fetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fetcher.swift; sourceTree = "<group>"; };
-		2658F60E25D406B900AD834A /* DeviceActionShortcut.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = DeviceActionShortcut.intentdefinition; sourceTree = "<group>"; };
 		2658F62125D4082500AD834A /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		2658F62C25D4082500AD834A /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		265B40BC244F07D100446DE2 /* TelldusLiveApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TelldusLiveApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		26657723255ABD6600572D52 /* ContainerRelativeShapeSpecificCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerRelativeShapeSpecificCorner.swift; sourceTree = "<group>"; };
 		266B41D4234B03A200095747 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2675794B25DC234400BC7D22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/DeviceActionShortcut.intentdefinition; sourceTree = "<group>"; };
+		2675795425DC235500BC7D22 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		2675795C25DC235A00BC7D22 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		2675796425DC235D00BC7D22 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		2675796625DC236100BC7D22 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		2675796825DC236300BC7D22 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		2675796A25DC236600BC7D22 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		2675796C25DC236800BC7D22 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
 		2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetIntentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2675DA482536C9B500802815 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		2675DA4A2536C9B600802815 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -579,7 +586,7 @@
 				2658F5E225D4062700AD834A /* DeviceActionShortcut.h */,
 				2658F5E325D4062700AD834A /* Info.plist */,
 				2658F60825D4068500AD834A /* Fetcher.swift */,
-				2658F60E25D406B900AD834A /* DeviceActionShortcut.intentdefinition */,
+				2675794C25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition */,
 			);
 			path = DeviceActionShortcut;
 			sourceTree = "<group>";
@@ -1349,7 +1356,7 @@
 				260D61CF253D60E200115423 /* CI.swift in Sources */,
 				267D2AC025429DD1002F49AE /* SensorClass.swift in Sources */,
 				26B0AAFD2580C92800765A52 /* GatewaysAPI.swift in Sources */,
-				2658F65D25D4088E00AD834A /* DeviceActionShortcut.intentdefinition in Sources */,
+				2675794425DC234300BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1364,7 +1371,7 @@
 				26E7F18725D59FAB00184C59 /* SQLiteDatabase.swift in Sources */,
 				26E7F14725D59F0A00184C59 /* SharedModule.swift in Sources */,
 				26E7F1D925D5A09C00184C59 /* SensorUtilities.swift in Sources */,
-				2658F60F25D406B900AD834A /* DeviceActionShortcut.intentdefinition in Sources */,
+				2675794725DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */,
 				26E7F17125D59FA600184C59 /* SQLiteError.swift in Sources */,
 				26E7F12725D59ECB00184C59 /* Constants.swift in Sources */,
 				26E7F1B025D5A00700184C59 /* SensorWidgetStructure.swift in Sources */,
@@ -1394,7 +1401,7 @@
 				26E7F20025D5A17E00184C59 /* SensorWidgetIntent.intentdefinition in Sources */,
 				26E7F19825D59FBE00184C59 /* GatewayDetailsModel.swift in Sources */,
 				26E7F15825D59F3B00184C59 /* WidgetUtils.swift in Sources */,
-				2658F67125D4099700AD834A /* DeviceActionShortcut.intentdefinition in Sources */,
+				2675794825DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */,
 				26E7F1A925D5A00600184C59 /* SensorWidgetStructure.swift in Sources */,
 				26E7F10225D59D7000184C59 /* API.swift in Sources */,
 				26E7F1B825D5A01100184C59 /* DeviceWidgetStructure.swift in Sources */,
@@ -1420,7 +1427,7 @@
 				2675DA492536C9B600802815 /* IntentHandler.swift in Sources */,
 				2620CBC725C86D5300F4D2C7 /* DeviceWidgetIntent.intentdefinition in Sources */,
 				260D61D1253D60E200115423 /* CI.swift in Sources */,
-				2658F67825D409A200AD834A /* DeviceActionShortcut.intentdefinition in Sources */,
+				2675794625DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */,
 				261AD8082546C8E400415713 /* DeviceDetailsModel.swift in Sources */,
 				2620CBD325C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition in Sources */,
 				260D61E3253D667B00115423 /* SensorDetails.swift in Sources */,
@@ -1454,7 +1461,7 @@
 				26FEC6E7254174900056EC71 /* EditWidgetInfoUIView.swift in Sources */,
 				2608B59A253737FF00BF0A36 /* NotLoggedInView.swift in Sources */,
 				2608B5932537330E00BF0A36 /* DeviceDetails.swift in Sources */,
-				2658F67925D409A300AD834A /* DeviceActionShortcut.intentdefinition in Sources */,
+				2675794525DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */,
 				260D61A3253D57AC00115423 /* SQLiteDatabase.swift in Sources */,
 				260D61D0253D60E200115423 /* CI.swift in Sources */,
 				2608B5CB253752DF00BF0A36 /* SensorWidgetUIViewProvider.swift in Sources */,
@@ -1503,7 +1510,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				26DE329925DA7E8C000E38D6 /* DeviceActionShortcut.intentdefinition in Sources */,
+				2675794925DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */,
 				26DE337125DA833B000E38D6 /* DeviceWidgetStructure.swift in Sources */,
 				26DE334125DA8310000E38D6 /* CustomTypes.swift in Sources */,
 				26DE337D25DA8344000E38D6 /* SensorsAPI.swift in Sources */,
@@ -1537,7 +1544,7 @@
 				26DE338225DA834B000E38D6 /* DevicesAPI.swift in Sources */,
 				26DE33B625DA836B000E38D6 /* Constants.swift in Sources */,
 				26DE334A25DA8310000E38D6 /* CustomTypes.swift in Sources */,
-				26DE329A25DA7E8D000E38D6 /* DeviceActionShortcut.intentdefinition in Sources */,
+				2675794A25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */,
 				26DE338025DA8348000E38D6 /* Utilities.swift in Sources */,
 				26DE336625DA8328000E38D6 /* SensorWidgetIntent.intentdefinition in Sources */,
 				26DE337225DA833C000E38D6 /* DeviceWidgetStructure.swift in Sources */,
@@ -1627,6 +1634,21 @@
 				2620CBE025C86DB800F4D2C7 /* sv */,
 			);
 			name = SensorWidgetIntent.intentdefinition;
+			sourceTree = "<group>";
+		};
+		2675794C25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2675794B25DC234400BC7D22 /* Base */,
+				2675795425DC235500BC7D22 /* English */,
+				2675795C25DC235A00BC7D22 /* cs */,
+				2675796425DC235D00BC7D22 /* en */,
+				2675796625DC236100BC7D22 /* fr */,
+				2675796825DC236300BC7D22 /* de */,
+				2675796A25DC236600BC7D22 /* nb */,
+				2675796C25DC236800BC7D22 /* sv */,
+			);
+			name = DeviceActionShortcut.intentdefinition;
 			sourceTree = "<group>";
 		};
 		26CA62E0255D22DD0009C7C1 /* Localizable.strings */ = {
