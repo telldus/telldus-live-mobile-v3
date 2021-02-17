@@ -392,13 +392,6 @@
 		26657723255ABD6600572D52 /* ContainerRelativeShapeSpecificCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerRelativeShapeSpecificCorner.swift; sourceTree = "<group>"; };
 		266B41D4234B03A200095747 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2675794B25DC234400BC7D22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/DeviceActionShortcut.intentdefinition; sourceTree = "<group>"; };
-		2675795425DC235500BC7D22 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
-		2675795C25DC235A00BC7D22 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
-		2675796425DC235D00BC7D22 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
-		2675796625DC236100BC7D22 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
-		2675796825DC236300BC7D22 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
-		2675796A25DC236600BC7D22 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
-		2675796C25DC236800BC7D22 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
 		2675DA462536C9B500802815 /* HomescreenWidgetIntentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomescreenWidgetIntentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2675DA482536C9B500802815 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		2675DA4A2536C9B600802815 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -443,6 +436,13 @@
 		26DE330D25DA8286000E38D6 /* DeviceActionShortcutIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActionShortcutIntentHandler.swift; sourceTree = "<group>"; };
 		26DFA9B024F93E1200DA89F5 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		26DFA9B224F93E1200DA89F5 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		26E0613A25DD04E9000F23E8 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		26E0614825DD0510000F23E8 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		26E0615025DD0546000F23E8 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		26E0615225DD0549000F23E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		26E0615425DD054C000F23E8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		26E0615625DD054F000F23E8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
+		26E0615825DD0552000F23E8 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/DeviceActionShortcut.strings; sourceTree = "<group>"; };
 		26EDB68122266ACF003EF9E3 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		26F53BC32547DD060047F514 /* APICacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICacher.swift; sourceTree = "<group>"; };
 		26FEC6D2254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetBuilderUIView.swift; sourceTree = "<group>"; };
@@ -1640,13 +1640,13 @@
 			isa = PBXVariantGroup;
 			children = (
 				2675794B25DC234400BC7D22 /* Base */,
-				2675795425DC235500BC7D22 /* English */,
-				2675795C25DC235A00BC7D22 /* cs */,
-				2675796425DC235D00BC7D22 /* en */,
-				2675796625DC236100BC7D22 /* fr */,
-				2675796825DC236300BC7D22 /* de */,
-				2675796A25DC236600BC7D22 /* nb */,
-				2675796C25DC236800BC7D22 /* sv */,
+				26E0613A25DD04E9000F23E8 /* English */,
+				26E0614825DD0510000F23E8 /* sv */,
+				26E0615025DD0546000F23E8 /* cs */,
+				26E0615225DD0549000F23E8 /* en */,
+				26E0615425DD054C000F23E8 /* fr */,
+				26E0615625DD054F000F23E8 /* de */,
+				26E0615825DD0552000F23E8 /* nb */,
 			);
 			name = DeviceActionShortcut.intentdefinition;
 			sourceTree = "<group>";
