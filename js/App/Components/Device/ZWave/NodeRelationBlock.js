@@ -80,7 +80,7 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'space-between',
 			flexDirection: 'row',
 			alignItems: 'center',
-			marginTop: padding,
+			marginTop: padding / 2,
 		},
 		textStyle: {
 			fontSize,
