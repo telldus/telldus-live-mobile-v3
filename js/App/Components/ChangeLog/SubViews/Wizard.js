@@ -24,11 +24,14 @@
 
 import React, { PureComponent } from 'react';
 import { intlShape } from 'react-intl';
+import {
+	Platform,
+} from 'react-native';
 
 import {
 	Text,
 	View,
-	ThemedMaterialIcon,
+	// ThemedMaterialIcon,
 	IconTelldus,
 } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
@@ -56,15 +59,22 @@ export default class WizardOne extends PureComponent<Props, null> {
 	titleWThree: string;
 	descriptionWThree: string;
 
+	isAndroid: boolean;
+
 	constructor(props: Props) {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.wizardOneHeader316);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription316);
+		this.titleWOne = formatMessage(i18n.wizardOneHeader318);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription318);
 
-		this.titleWTwo = formatMessage(i18n.wizardTwoHeader316);
-		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription316);
+		this.titleWTwo = formatMessage(i18n.wizardTwoHeader318);
+		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription318);
+
+		this.titleWThree = formatMessage(i18n.wizardThreeHeader318);
+		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription318);
+
+		this.isAndroid = Platform.OS === 'android';
 	}
 
 	getScreenData(currentScreen: number, styles: Object): Object {
@@ -84,6 +94,20 @@ export default class WizardOne extends PureComponent<Props, null> {
 			description: '',
 		};
 
+		if (this.isAndroid) {
+			switch (currentScreen) {
+				case 1:
+					return {
+						...screenData,
+						icon: 'zwave',
+						title: this.titleWThree,
+						description: this.descriptionWThree,
+					};
+				default:
+					return screenData;
+			}
+		}
+
 		switch (currentScreen) {
 			case 1:
 				return {
@@ -91,18 +115,34 @@ export default class WizardOne extends PureComponent<Props, null> {
 					icon: 'favorite',
 					title: this.titleWOne,
 					description: this.descriptionWOne,
+					isPremiumFeature: true,
 				};
 			case 2:
 				return {
 					...screenData,
-					icon: <ThemedMaterialIcon
-						style={iconStyle}
-						size={iconSize}
-						name={'open-with'}
-						level={23}/>,
+					icon: 'favorite',
 					title: this.titleWTwo,
 					description: this.descriptionWTwo,
+					isPremiumFeature: true,
 				};
+			case 3:
+				return {
+					...screenData,
+					icon: 'zwave',
+					title: this.titleWThree,
+					description: this.descriptionWThree,
+				};
+			// case 2:
+			// 	return {
+			// 		...screenData,
+			// 		icon: <ThemedMaterialIcon
+			// 			style={iconStyle}
+			// 			size={iconSize}
+			// 			name={'open-with'}
+			// 			level={23}/>,
+			// 		title: this.titleWTwo,
+			// 		description: this.descriptionWTwo,
+			// 	};
 			default:
 				return screenData;
 		}

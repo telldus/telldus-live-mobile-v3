@@ -59,7 +59,7 @@ import {
 } from './App/Components/HOC/withTheme';
 
 import Theme from './App/Theme';
-const changeLogVersion = '3.15';
+const changeLogVersion = '3.18';
 
 type Props = {
 	dispatch: Function,
@@ -281,14 +281,13 @@ class App extends React.Component<Props> {
 
 	render(): Object {
 		let {
-			// prevChangeLogVersion,
+			prevChangeLogVersion,
 			accessToken,
 			isTokenValid,
 			dialogueData,
 		} = this.props;
 
-		// let showChangeLog = changeLogVersion !== prevChangeLogVersion; // TODO: Bring back when next app version has changelog
-		let showChangeLog = false;
+		let showChangeLog = changeLogVersion !== prevChangeLogVersion;
 
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 
