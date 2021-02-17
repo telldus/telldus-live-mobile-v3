@@ -36,6 +36,7 @@ import {
 	TouchableButton,
 	EditBox,
 	ThemedScrollView,
+	EmptyView,
 } from '../../../BaseComponents';
 import {
 	ExcludeDevice,
@@ -845,13 +846,17 @@ class SettingsTab extends View {
 										}
 									</>
 									:
-									<TouchableButton
-										text={formatMessage(i18n.deleteSensor)}
-										onPress={this.deleteSensor}
-										style={[buttonStyle, {
+									<>
+										<EmptyView/>
+										{/* <TouchableButton
+											text={formatMessage(i18n.deleteSensor)}
+											onPress={this.deleteSensor}
+											style={[buttonStyle, {
 											backgroundColor: brandDanger,
-										}]}
-										accessible={true}/>
+											}]}
+											accessible={true}/>
+											*/}
+									</>
 								}
 								<Text
 									level={26}
