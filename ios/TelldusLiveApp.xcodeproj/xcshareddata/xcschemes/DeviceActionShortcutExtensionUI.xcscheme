@@ -67,13 +67,6 @@
             ReferencedContainer = "container:TelldusLiveApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "TELLDUS_API_SERVER"
-            value = "https://api3.telldus.com"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
