@@ -22,7 +22,7 @@ final class DeviceActionShortcutIntentHandler: NSObject, DeviceActionShortcutInt
       return
     }
     let pro = dataDict?["pro"] as? Int
-    let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+    let _isBasicUser = SharedUtils().isBasicUser(pro: pro)
     if _isBasicUser {
       completion(DeviceActionShortcutIntentResponse(code: .basic, userActivity: nil))
       return;

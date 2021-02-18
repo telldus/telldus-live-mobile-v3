@@ -22,7 +22,7 @@ public final class Fetcher: NSObject {
     }
     let pro = dataDict?["pro"] as? Int
     if #available(iOS 12.0, *) {
-      let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+      let _isBasicUser = SharedUtils().isBasicUser(pro: pro)
       if _isBasicUser {
         completion("failed");
         return;
@@ -67,7 +67,7 @@ public final class Fetcher: NSObject {
         return
       }
       let pro = dataDict?["pro"] as? Int
-      let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+      let _isBasicUser = SharedUtils().isBasicUser(pro: pro)
       if _isBasicUser {
         completion("failed");
         return;
@@ -106,7 +106,7 @@ public final class Fetcher: NSObject {
         return
       }
       let pro = dataDict?["pro"] as? Int
-      let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+      let _isBasicUser = SharedUtils().isBasicUser(pro: pro)
       if _isBasicUser {
         completion("failed");
         return;

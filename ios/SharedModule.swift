@@ -21,7 +21,7 @@ class SharedModule {
     let status = setSecureData(data: stringifiedData)
     if status {
       if #available(iOS 12.0, *) {
-        WidgetUtils.refreshAllWidgets()
+        SharedUtils.refreshAllWidgets()
       } else {
         // Fallback on earlier versions
       }
@@ -93,7 +93,7 @@ class SharedModule {
     let stringifiedData = Utilities().convertDictionaryToString(dict: authData)
     updateSecureData(data: stringifiedData)
     if #available(iOS 12.0, *) {
-      WidgetUtils.refreshAllWidgets()
+      SharedUtils.refreshAllWidgets()
     } else {
       // Fallback on earlier versions
     }
@@ -102,7 +102,7 @@ class SharedModule {
   func refreshAllWidgetsData() {
     APICacher().cacheAPIData() {
       if #available(iOS 12.0, *) {
-        WidgetUtils.refreshAllWidgets()
+        SharedUtils.refreshAllWidgets()
       } else {
         // Fallback on earlier versions
       }
@@ -111,7 +111,7 @@ class SharedModule {
   
   func refreshAllWidgets() {
     if #available(iOS 12.0, *) {
-      WidgetUtils.refreshAllWidgets()
+      SharedUtils.refreshAllWidgets()
     } else {
       // Fallback on earlier versions
     }

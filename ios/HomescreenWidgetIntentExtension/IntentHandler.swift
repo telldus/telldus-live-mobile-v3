@@ -76,7 +76,7 @@ extension IntentHandler: SensorWidgetIntentHandling {
       return
     }
     let pro = dataDict?["pro"] as? Int
-    let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+    let _isBasicUser = SharedUtils().isBasicUser(pro: pro)
     guard !_isBasicUser else {
       completion(INObjectCollection(items: []), nil)
       return
