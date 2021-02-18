@@ -27,6 +27,17 @@
 			<string>DeviceActionShortcut</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
+				<key>deviceId,thermostatValue,phrase,rgbValue,method</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<true/>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>${phrase}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>VaVjR4</string>
+				</dict>
 				<key>method,deviceId,phrase</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
@@ -71,6 +82,15 @@
 					<string>${phrase}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>9KxnyJ</string>
+				</dict>
+				<key>rgbValue,deviceId,thermostatValue,phrase,dimValue,method</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>${phrase}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>gqjUWq</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>

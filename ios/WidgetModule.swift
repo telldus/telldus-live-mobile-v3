@@ -169,7 +169,11 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
       let temperature = thermostatValue["temperature"] as? NSNumber
       let scale = thermostatValue["scale"] as? NSNumber ?? 0
       let changeMode = thermostatValue["changeMode"] as? NSNumber ?? 0
-      let _thermostatValue: ThermostatValue = ThermostatValue(identifier: "_thermostatValue", display: "thermostat value")
+      let _thermostatValue: ThermostatValue = ThermostatValue(
+        identifier: "thermostatValue",
+        display: "thermostat value",
+        pronunciationHint: "thermostat value"
+        )
       
       if #available(iOS 13.0, *) {
         _rgbValue.r = r
