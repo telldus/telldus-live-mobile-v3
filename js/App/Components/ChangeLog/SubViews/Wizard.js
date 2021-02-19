@@ -171,7 +171,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 					{title}
 				</Text>
 				<Text
-					level={25}
+					level={26}
 					style={descriptionStyle}>
 					{description}
 				</Text>
@@ -243,7 +243,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 			fontSizeFactorTwelve,
 		} = Theme.Core;
 		const titleFontSize = Math.floor(deviceWidth * 0.052);
-		const iconSize = Math.floor(deviceWidth * 0.315);
+		const iconSize = Math.floor(deviceWidth * 0.15);
 
 		const padding = deviceWidth * paddingFactor;
 
