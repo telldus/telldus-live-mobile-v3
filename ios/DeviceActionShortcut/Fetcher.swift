@@ -10,7 +10,15 @@ import Foundation
 
 public final class Fetcher: NSObject {
   
-  var timerDeviceInfo: [String: Timer] = [:]
+  var timerDeviceInfo2: [String: Timer] = [:]
+  var timerDeviceInfo5: [String: Timer] = [:]
+  var timerDeviceInfo10: [String: Timer] = [:]
+  
+  public func invalidateTimers(deviceId: String) {
+    self.timerDeviceInfo2[deviceId]?.invalidate()
+    self.timerDeviceInfo5[deviceId]?.invalidate()
+    self.timerDeviceInfo10[deviceId]?.invalidate()
+  }
   
   public func deviceSetState(deviceId: String, method: String, stateValue: NSNumber?, completion: @escaping (_ status: String) -> Void) {
     
@@ -38,10 +46,16 @@ public final class Fetcher: NSObject {
           if stateValue != nil, method == "16" {
             requestedStateValue["dimValue"] = stateValue
           }
-          self.timerDeviceInfo[deviceId]?.invalidate()
+          self.invalidateTimers(deviceId: deviceId)
           DispatchQueue.main.async {
-            self.timerDeviceInfo[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
-              self.getDeviceInfo(deviceId: deviceId, requestedState: method, requestedStateValue: requestedStateValue, completion: completion);
+            self.timerDeviceInfo2[deviceId] = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: method, requestedStateValue: requestedStateValue, isFinalPol: false, completion: completion);
+            }
+            self.timerDeviceInfo5[deviceId] = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: method, requestedStateValue: requestedStateValue, isFinalPol: false, completion: completion);
+            }
+            self.timerDeviceInfo10[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: method, requestedStateValue: requestedStateValue, isFinalPol: true, completion: completion);
             }
           }
         case .failure(_):
@@ -78,10 +92,16 @@ public final class Fetcher: NSObject {
         switch result {
         case .success(_):
           let requestedStateValue: [String: RGBValue] = ["rgbValue":stateValue];
-          self.timerDeviceInfo[deviceId]?.invalidate()
+          self.invalidateTimers(deviceId: deviceId)
           DispatchQueue.main.async {
-            self.timerDeviceInfo[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
-              self.getDeviceInfo(deviceId: deviceId, requestedState: "1024", requestedStateValue: requestedStateValue, completion: completion);
+            self.timerDeviceInfo2[deviceId] = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: "1024", requestedStateValue: requestedStateValue, isFinalPol: false, completion: completion);
+            }
+            self.timerDeviceInfo5[deviceId] = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: "1024", requestedStateValue: requestedStateValue, isFinalPol: false, completion: completion);
+            }
+            self.timerDeviceInfo10[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: "1024", requestedStateValue: requestedStateValue, isFinalPol: true, completion: completion);
             }
           }
         case .failure(_):
@@ -117,10 +137,16 @@ public final class Fetcher: NSObject {
         switch result {
         case .success(_):
           let requestedStateValue: [String: ThermostatValue] = ["thermostatValue":stateValue];
-          self.timerDeviceInfo[deviceId]?.invalidate()
+          self.invalidateTimers(deviceId: deviceId)
           DispatchQueue.main.async {
-            self.timerDeviceInfo[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
-              self.getDeviceInfo(deviceId: deviceId, requestedState: "2048", requestedStateValue: requestedStateValue, completion: completion);
+            self.timerDeviceInfo2[deviceId] = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: "2048", requestedStateValue: requestedStateValue, isFinalPol: false, completion: completion);
+            }
+            self.timerDeviceInfo5[deviceId] = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: "2048", requestedStateValue: requestedStateValue, isFinalPol: false, completion: completion);
+            }
+            self.timerDeviceInfo10[deviceId] = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) {timer in
+              self.getDeviceInfo(deviceId: deviceId, requestedState: "2048", requestedStateValue: requestedStateValue, isFinalPol: true, completion: completion);
             }
           }
         case .failure(_):
@@ -134,13 +160,15 @@ public final class Fetcher: NSObject {
     }
   }
   
-  public func getDeviceInfo(deviceId: String, requestedState: String, requestedStateValue: Dictionary<String, Any>, completion: @escaping (_ status: String) -> Void) {
+  public func getDeviceInfo(deviceId: String, requestedState: String, requestedStateValue: Dictionary<String, Any>, isFinalPol: Bool, completion: @escaping (_ status: String) -> Void) {
     if #available(iOS 13.0, *) {
       API().callEndPoint("/device/info?id=\(deviceId)&supportedMethods=\(Constants.supportedMethods)") {result in
         switch result {
         case let .success(data):
           guard let _result = data["result"] as? [String:Any] else {
-            completion("failed");
+            if isFinalPol {
+              completion("failed");
+            }
             return;
           }
           
@@ -209,13 +237,16 @@ public final class Fetcher: NSObject {
             }
           }
           if isStateEqual && isStateValueEqual {
+            self.invalidateTimers(deviceId: deviceId)
             completion("success");
-          } else {
+          } else if isFinalPol {
             completion("failed");
           }
           return;
         case .failure(_):
-          completion("failed");
+          if isFinalPol {
+            completion("failed");
+          }
           return;
         }
       }
