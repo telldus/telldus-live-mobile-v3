@@ -7,15 +7,36 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct SensorWidgetUIViewProvider: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+  
+  let sensorWidgetStructure: SensorWidgetStructure
+  @Environment(\.widgetFamily) var family: WidgetFamily
+  
+  @available(iOS 13.0.0, *)
+  var body: some View {
+    switch sensorWidgetStructure.displayType {
+    case .preview:
+        return AnyView(SWPreviewSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+    case .preEditView:
+      return AnyView(EditWidgetInfoUIView())
+    case .postEditView:
+        return AnyView(SensorWidgetSmallUIView(sensorWidgetStructure: sensorWidgetStructure))
+    case .notLoggedInView:
+        return AnyView(NotLoggedInView())
+    case .notSameAccountView:
+        return AnyView(NotSameAccountUIView(owningAccount: sensorWidgetStructure.owningAccount))
+    case .upgradeToPremiumView:
+        return AnyView(PurchasePremiumUIView())
     }
+  }
 }
 
 struct SensorWidgetUIViewProvider_Previews: PreviewProvider {
-    static var previews: some View {
-        SensorWidgetUIViewProvider()
+  static var previews: some View {
+    Group {
+      SensorWidgetUIViewProvider(sensorWidgetStructure: WidgetUtils.previewPostEditSensorWidgetStructure).previewContext(WidgetPreviewContext(family: .systemSmall))
     }
+  }
 }

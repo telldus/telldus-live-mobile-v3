@@ -30,8 +30,7 @@
 			<array/>
 			<key>IntentsSupported</key>
 			<array>
-				<string>DeviceWidgetIntent</string>
-				<string>SensorWidgetIntent</string>
+				<string>ConfigurationIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>

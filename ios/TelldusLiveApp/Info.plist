@@ -82,6 +82,7 @@
 	<string>Used for GeoFencing.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>ConfigurationIntent</string>
 		<string>DeviceActionShortcutIntent</string>
 		<string>DeviceWidgetIntent</string>
 		<string>HomescreenWidgetIntent</string>

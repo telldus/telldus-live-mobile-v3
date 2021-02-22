@@ -1,7 +1,39 @@
-/* 
-  Localizable.strings
-  TelldusLiveApp
-
-  Created by Rimnesh Fernandez on 22/02/21.
-  Copyright © 2021 Telldus Technologies AB. All rights reserved.
-*/
+"widget_ios_unknown" = "Unbekannt";
+"widget_ios_labelHumidity" = "Luftfeuchtigkeit";
+"widget_ios_labelTemperature" = "Temperatur";
+"widget_ios_labelRainRate" = "Niederschlagsrate";
+"widget_ios_labelRainTotal" = "Gesamte Regenmenge";
+"widget_ios_labelWindGust" = "Windböe";
+"widget_ios_labelWindAverage" = "Wind Durchschnitt";
+"widget_ios_labelWindDirection" = "Windrichtung";
+"widget_ios_labelUVIndex" = "UV Index";
+"widget_ios_energy" = "Energie";
+"widget_ios_accumulated" = "Angesammelt";
+"widget_ios_labelWatt" = "Strom";
+"widget_ios_pulse" = "Impuls";
+"widget_ios_voltage" = "Stromspannung";
+"widget_ios_current" = "Ampere";
+"widget_ios_powerFactor" = "Leistungsfaktor";
+"widget_ios_labelLuminance" = "Helligkeit";
+"widget_ios_labelDewPoint" = "Taupunkt";
+"widget_ios_labelBarometricPressure" = "Luftdruck";
+"widget_ios_labelGenericMeter" = "Allgemeines Messgerät";
+"widget_ios_labelVolume" = "Volumen";
+"widget_ios_labelLoudness" = "Lautstärke";
+"widget_ios_labelWeight" = "Gewicht";
+"widget_ios_sensorDirN" = "N";
+"widget_ios_sensorDirNNE" = "NNO";
+"widget_ios_sensorDirNE" = "NO";
+"widget_ios_sensorDirENE" = "ONO";
+"widget_ios_sensorDirE" = "O";
+"widget_ios_sensorDirESE" = "OSO";
+"widget_ios_sensorDirSE" = "SO";
+"widget_ios_sensorDirSSE" = "SSO";
+"widget_ios_sensorDirS" = "S";
+"widget_ios_sensorDirSSW" = "SSW";
+"widget_ios_sensorDirSW" = "SW";
+"widget_ios_sensorDirWSW" = "WSW";
+"widget_ios_sensorDirW" = "W";
+"widget_ios_sensorDirWNW" = "WNW";
+"widget_ios_sensorDirNW" = "NW";
+"widget_ios_sensorDirNNW" = "NNW";
