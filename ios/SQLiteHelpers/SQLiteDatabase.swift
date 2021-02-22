@@ -9,7 +9,7 @@
 import Foundation
 import SQLite3
 
-let pathDir = FileManager().containerURL(forSecurityApplicationGroupIdentifier: "com.telldus.live.mobile")
+let pathDir = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.telldus.live.mobile.appwidget")
 
 class SQLiteDatabase {
   private let dbPointer: OpaquePointer?
