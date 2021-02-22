@@ -58,6 +58,27 @@
 		261BEFF825E3613800646F5D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D61C7253D608E00115423 /* Constants.swift */; };
 		261BEFF925E3613D00646F5D /* CI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D61CE253D60E200115423 /* CI.swift */; };
 		261BF00E25E36A3B00646F5D /* telldusicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA4E203FFC8849A6989EDD54 /* telldusicons.ttf */; };
+		261BF04025E36F2300646F5D /* SharedUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261BEF6625E35C6300646F5D /* SharedUtils.swift */; };
+		261BF04725E36F8600646F5D /* SharedUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261BEF6625E35C6300646F5D /* SharedUtils.swift */; };
+		261BF04E25E36FD100646F5D /* SharedUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261BEF6625E35C6300646F5D /* SharedUtils.swift */; };
+		261BF05525E3707D00646F5D /* SharedUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261BEF6625E35C6300646F5D /* SharedUtils.swift */; };
+		261BF07425E374B100646F5D /* APICacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F53BC32547DD060047F514 /* APICacher.swift */; };
+		261BF07B25E374E500646F5D /* SharedUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261BEF6625E35C6300646F5D /* SharedUtils.swift */; };
+		261BF08225E3757B00646F5D /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260381D6253DAF8700D4F8CA /* Utilities.swift */; };
+		261BF08925E3757E00646F5D /* SensorsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D61D5253D63DE00115423 /* SensorsAPI.swift */; };
+		261BF08A25E3758100646F5D /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D61AB253D5D3B00115423 /* API.swift */; };
+		261BF08B25E3758700646F5D /* DevicesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26035742253ED333000798D1 /* DevicesAPI.swift */; };
+		261BF08C25E3758B00646F5D /* GatewaysAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0AAFC2580C92700765A52 /* GatewaysAPI.swift */; };
+		261BF08D25E3758D00646F5D /* SensorUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691878E254C281B00C3C569 /* SensorUtilities.swift */; };
+		261BF09425E3759000646F5D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D61C7253D608E00115423 /* Constants.swift */; };
+		261BF09525E3759300646F5D /* SQLiteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D619A253D578800115423 /* SQLiteError.swift */; };
+		261BF09625E3759600646F5D /* SQLiteDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D61A1253D57AC00115423 /* SQLiteDatabase.swift */; };
+		261BF09725E3759900646F5D /* SensorDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD80C2546C8F600415713 /* SensorDetailsModel.swift */; };
+		261BF09825E3759C00646F5D /* GatewayDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0AB032580CB3600765A52 /* GatewayDetailsModel.swift */; };
+		261BF09925E3759E00646F5D /* SQLTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD8132546C9B500415713 /* SQLTable.swift */; };
+		261BF0A025E375FA00646F5D /* CI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D61CE253D60E200115423 /* CI.swift */; };
+		261BF0A725E375FE00646F5D /* DeviceDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD8052546C8E400415713 /* DeviceDetailsModel.swift */; };
+		261BF0A825E3760300646F5D /* SharedModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269CD37F257A01C3003DC5D2 /* SharedModule.swift */; };
 		2631ECF525E2BBA200916ED8 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B024F93E1200DA89F5 /* WidgetKit.framework */; };
 		2631ECF625E2BBA200916ED8 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DFA9B224F93E1200DA89F5 /* SwiftUI.framework */; };
 		2631ECF925E2BBA200916ED8 /* HomescreenWidgetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2631ECF825E2BBA200916ED8 /* HomescreenWidgetExtension.swift */; };
@@ -1268,8 +1289,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				261BF08B25E3758700646F5D /* DevicesAPI.swift in Sources */,
+				261BF0A825E3760300646F5D /* SharedModule.swift in Sources */,
+				261BF09925E3759E00646F5D /* SQLTable.swift in Sources */,
+				261BF09425E3759000646F5D /* Constants.swift in Sources */,
+				261BF09825E3759C00646F5D /* GatewayDetailsModel.swift in Sources */,
+				261BF0A025E375FA00646F5D /* CI.swift in Sources */,
+				261BF09625E3759600646F5D /* SQLiteDatabase.swift in Sources */,
+				261BF07B25E374E500646F5D /* SharedUtils.swift in Sources */,
+				261BF08D25E3758D00646F5D /* SensorUtilities.swift in Sources */,
+				261BF09525E3759300646F5D /* SQLiteError.swift in Sources */,
 				2631ED1825E2BCC500916ED8 /* IntentHandler.swift in Sources */,
+				261BF08925E3757E00646F5D /* SensorsAPI.swift in Sources */,
+				261BF09725E3759900646F5D /* SensorDetailsModel.swift in Sources */,
 				2631ED2625E2BCEB00916ED8 /* HomescreenWidgetExtension.intentdefinition in Sources */,
+				261BF08C25E3758B00646F5D /* GatewaysAPI.swift in Sources */,
+				261BF08225E3757B00646F5D /* Utilities.swift in Sources */,
+				261BF07425E374B100646F5D /* APICacher.swift in Sources */,
+				261BF0A725E375FE00646F5D /* DeviceDetailsModel.swift in Sources */,
+				261BF08A25E3758100646F5D /* API.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
