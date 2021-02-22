@@ -33,10 +33,18 @@ import {
 	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
+
 const MapOverlay = React.memo<Object>((props: Object): Object => {
 	const {
 		overlayWidth,
 	} = props;
+
+	const {
+		colorScheme,
+	} = useAppTheme();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -66,7 +74,7 @@ const MapOverlay = React.memo<Object>((props: Object): Object => {
 				<ThemedMaterialIcon
 					name={'place'}
 					style={marker}
-					level={45}/>
+					level={colorScheme === 'dark' ? 14 : 45}/>
 			</View>
 		</View>
 	);
