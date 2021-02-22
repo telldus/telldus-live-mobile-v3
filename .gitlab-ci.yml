@@ -72,7 +72,6 @@ ios:
   cache:
     paths:
       - node_modules
-      - ios/Pods
   artifacts:
     paths:
       - ios/main.jsbundle.map

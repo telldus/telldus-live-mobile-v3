@@ -102,6 +102,7 @@ platform :ios do
 
   desc "Download dSYM files from iTC"
   lane :refresh_dsyms do
+    cocoapods(podfile: "ios/Podfile", repo_update: true)
     download_dsyms(
       version: ENV["APP_VERSION"],
       wait_for_dsym_processing: true,
