@@ -1217,6 +1217,7 @@
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				261AD8062546C8E400415713 /* DeviceDetailsModel.swift in Sources */,
 				26F53BC42547DD060047F514 /* APICacher.swift in Sources */,
+				261BF05525E3707D00646F5D /* SharedUtils.swift in Sources */,
 				260D61CF253D60E200115423 /* CI.swift in Sources */,
 				26B0AAFD2580C92800765A52 /* GatewaysAPI.swift in Sources */,
 				2675794425DC234300BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */,
@@ -1288,6 +1289,7 @@
 				26E7F18B25D59FB000184C59 /* DeviceDetailsModel.swift in Sources */,
 				26E7F0FB25D59D7000184C59 /* API.swift in Sources */,
 				26E7F19725D59FBD00184C59 /* GatewayDetailsModel.swift in Sources */,
+				261BF04025E36F2300646F5D /* SharedUtils.swift in Sources */,
 				2658F60925D4068500AD834A /* Fetcher.swift in Sources */,
 				26E7F1D525D5A09800184C59 /* GatewaysAPI.swift in Sources */,
 				26E7F13125D59EFE00184C59 /* CI.swift in Sources */,
@@ -1334,6 +1336,7 @@
 				26DE337F25DA8347000E38D6 /* Utilities.swift in Sources */,
 				26DE33A925DA8364000E38D6 /* SQLTable.swift in Sources */,
 				26DE33A725DA8361000E38D6 /* SensorDetailsModel.swift in Sources */,
+				261BF04E25E36FD100646F5D /* SharedUtils.swift in Sources */,
 				26DE33A325DA835C000E38D6 /* SQLiteDatabase.swift in Sources */,
 				26DE339125DA8359000E38D6 /* SQLiteError.swift in Sources */,
 				26DE333725DA82FE000E38D6 /* SharedModule.swift in Sources */,
@@ -1364,6 +1367,7 @@
 				26DE338E25DA8351000E38D6 /* SensorUtilities.swift in Sources */,
 				26DE338C25DA834E000E38D6 /* APICacher.swift in Sources */,
 				26DE326E25DA7E43000E38D6 /* IntentViewController.swift in Sources */,
+				261BF04725E36F8600646F5D /* SharedUtils.swift in Sources */,
 				26DE337C25DA8342000E38D6 /* API.swift in Sources */,
 				26DE337E25DA8345000E38D6 /* SensorsAPI.swift in Sources */,
 				26DE33A625DA835F000E38D6 /* DeviceDetailsModel.swift in Sources */,
@@ -1580,10 +1584,12 @@
 				MTL_FAST_MATH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1622,10 +1628,12 @@
 				MTL_FAST_MATH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = $PROVISIONING_PROFILE_WIDGET;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1662,10 +1670,12 @@
 				MTL_FAST_MATH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidgetIntentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1702,10 +1712,12 @@
 				MTL_FAST_MATH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.HomescreenWidgetIntentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = $PROVISIONING_PROFILE_WIDGET_INTENT;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
