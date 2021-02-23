@@ -35,6 +35,7 @@ class SharedModule {
     if (hasNotStored) {
       let keychainItemQuery = [
         kSecClass: kSecClassGenericPassword,
+        kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock,
         kSecAttrService: KEYCHAIN_SERVICE,
         kSecAttrAccount: KEYCHAIN_ACCOUNT,
         kSecValueData: data.data(using: .utf8)!,
@@ -51,6 +52,7 @@ class SharedModule {
   func updateSecureData(data: String) -> Int {
     let keychainItemQuery = [
       kSecClass: kSecClassGenericPassword,
+      kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock,
       kSecAttrService: KEYCHAIN_SERVICE,
       kSecAttrAccount: KEYCHAIN_ACCOUNT,
     ] as CFDictionary
