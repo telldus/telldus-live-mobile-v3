@@ -61,10 +61,10 @@
 		261AD81C2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
 		261AD81D2546E88400415713 /* DeviceWidgetStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AD81A2546E88400415713 /* DeviceWidgetStructure.swift */; };
 		261AE60125499EFC00084FAD /* NotSameAccountUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261AE60025499EFC00084FAD /* NotSameAccountUIView.swift */; };
-		2620CBC525C86D5300F4D2C7 /* DeviceWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2620CBC925C86D5300F4D2C7 /* DeviceWidgetIntent.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
+		2620CBC525C86D5300F4D2C7 /* DeviceWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2620CBC925C86D5300F4D2C7 /* DeviceWidgetIntent.intentdefinition */; settings = {ATTRIBUTES = (codegen, ); }; };
 		2620CBC625C86D5300F4D2C7 /* DeviceWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2620CBC925C86D5300F4D2C7 /* DeviceWidgetIntent.intentdefinition */; };
 		2620CBC725C86D5300F4D2C7 /* DeviceWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2620CBC925C86D5300F4D2C7 /* DeviceWidgetIntent.intentdefinition */; settings = {ATTRIBUTES = (codegen, ); }; };
-		2620CBD125C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2620CBD525C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
+		2620CBD125C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2620CBD525C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition */; settings = {ATTRIBUTES = (codegen, ); }; };
 		2620CBD225C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2620CBD525C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition */; };
 		2620CBD325C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 2620CBD525C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition */; settings = {ATTRIBUTES = (codegen, ); }; };
 		263988B425543CBA000015DF /* LaunchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 263988B325543CBA000015DF /* LaunchView.xib */; };
