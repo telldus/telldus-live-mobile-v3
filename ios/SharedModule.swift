@@ -33,6 +33,11 @@ class SharedModule {
   
   @discardableResult
   func setSecureData(data: String) -> Bool {
+    
+    if getSecureDataPrev() != nil {
+      deleteSecureDataPrev()
+    }
+    
     var status = 1;
     let hasNotStored = getSecureData() == nil
     if (hasNotStored) {
@@ -46,9 +51,9 @@ class SharedModule {
       ] as CFDictionary
       status = Int(SecItemAdd(keychainItemQuery, nil))
     } else {
-      deleteSecureData()
       status = updateSecureData(data: data)
     }
+    
     return status == 0;
   }
   
@@ -88,8 +93,28 @@ class SharedModule {
     return String(data: passwordData, encoding: .utf8)!
   }
   
+  func getSecureDataPrev() -> String? {
+    let query = [
+      kSecClass: kSecClassGenericPassword,
+      kSecReturnAttributes: true,
+      kSecReturnData: true,
+      kSecAttrAccessGroup: KEYCHAIN_GROUP,
+      kSecAttrService: KEYCHAIN_SERVICE,
+      kSecAttrAccount: KEYCHAIN_ACCOUNT_PREV_1,
+    ] as CFDictionary
+    
+    var result: AnyObject?
+    let status = SecItemCopyMatching(query, &result)
+    guard status == 0 else {
+      return nil;
+    }
+    let dic = result as! NSDictionary
+    let passwordData = dic[kSecValueData] as! Data
+    return String(data: passwordData, encoding: .utf8)!
+  }
+  
   @discardableResult
-  func deleteSecureData() -> Bool {
+  func deleteSecureDataPrev() -> Bool {
       let query = [
         kSecClass: kSecClassGenericPassword,
         kSecAttrAccessGroup: KEYCHAIN_GROUP,
