@@ -11,14 +11,16 @@
 	<key>INIntentDefinitionSystemVersion</key>
 	<string>19H15</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>12A7209</string>
+	<string>12D4e</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>12.0</string>
+	<string>12.4</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
 			<key>INIntentCategory</key>
 			<string>information</string>
+			<key>INIntentDescription</key>
+			<string>Stores a sensor widget data</string>
 			<key>INIntentDescriptionID</key>
 			<string>bdyGmn</string>
 			<key>INIntentEligibleForWidgets</key>
