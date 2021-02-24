@@ -17,16 +17,16 @@ class IntentHandler: INExtension {
   override func handler(for intent: INIntent) -> Any {
     // This is the default implementation.  If you want different objects to handle different intents,
     // you can override this and return the handler you want for that particular intent.
-
+    
     // Refresh sensors list/data on pressing edit widget, 1 hour apart
-//   let interval = Date().timeIntervalSince1970 - IntentHandler.sensorsLastFetchedTS
-//   if intent is SensorWidgetIntent, !IntentHandler.isFetchingSensorsData, (IntentHandler.sensorsLastFetchedTS == 0 || interval > IntentHandler.REFETCH_INTERVAL) {
-//     IntentHandler.isFetchingSensorsData = true
-//     APICacher().cacheAPIData() {
-//       IntentHandler.sensorsLastFetchedTS = Date().timeIntervalSince1970
-//       IntentHandler.isFetchingSensorsData = false
-//     }
-//   }
+    let interval = Date().timeIntervalSince1970 - IntentHandler.sensorsLastFetchedTS
+    if intent is SensorWidgetIntent, !IntentHandler.isFetchingSensorsData, (IntentHandler.sensorsLastFetchedTS == 0 || interval > IntentHandler.REFETCH_INTERVAL) {
+      IntentHandler.isFetchingSensorsData = true
+      APICacher().cacheAPIData() {
+        IntentHandler.sensorsLastFetchedTS = Date().timeIntervalSince1970
+        IntentHandler.isFetchingSensorsData = false
+      }
+    }
     return self
   }
   
