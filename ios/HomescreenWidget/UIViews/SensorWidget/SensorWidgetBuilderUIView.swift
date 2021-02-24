@@ -29,10 +29,6 @@ struct SensorProvider: IntentTimelineProvider {
   }
   
   func getSnapshot(for configuration: SensorWidgetIntent, in context: Context, completion: @escaping (SensorSimpleEntry) -> ()) {
-    var displayType = WidgetViewType.preEditView
-    if (context.isPreview) {
-      displayType = WidgetViewType.preview
-    }
     let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
       id: WidgetUtils.previewPostEditSensorWidgetStructure.id,
       name: WidgetUtils.previewPostEditSensorWidgetStructure.name,
