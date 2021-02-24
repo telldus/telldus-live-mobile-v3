@@ -11,8 +11,11 @@ import Security
 
 class SharedModule {
   
+  let KEYCHAIN_ACCOUNT_PREV_1 = "widgetData";
+  
   let KEYCHAIN_SERVICE = "TelldusKeychain";
-  let KEYCHAIN_ACCOUNT = "widgetData";
+  let KEYCHAIN_ACCOUNT = "widgetData_1";
+  let KEYCHAIN_GROUP = "M2879GJ5VD.com.telldus.live.mobile"
   
   var userDefaults = UserDefaults(suiteName: "group.com.telldus.live.mobile.appwidget")!
   
@@ -36,12 +39,14 @@ class SharedModule {
       let keychainItemQuery = [
         kSecClass: kSecClassGenericPassword,
         kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock,
+        kSecAttrAccessGroup: KEYCHAIN_GROUP,
         kSecAttrService: KEYCHAIN_SERVICE,
         kSecAttrAccount: KEYCHAIN_ACCOUNT,
         kSecValueData: data.data(using: .utf8)!,
       ] as CFDictionary
       status = Int(SecItemAdd(keychainItemQuery, nil))
     } else {
+      deleteSecureData()
       status = updateSecureData(data: data)
     }
     return status == 0;
@@ -53,6 +58,7 @@ class SharedModule {
     let keychainItemQuery = [
       kSecClass: kSecClassGenericPassword,
       kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock,
+      kSecAttrAccessGroup: KEYCHAIN_GROUP,
       kSecAttrService: KEYCHAIN_SERVICE,
       kSecAttrAccount: KEYCHAIN_ACCOUNT,
     ] as CFDictionary
@@ -67,6 +73,7 @@ class SharedModule {
       kSecClass: kSecClassGenericPassword,
       kSecReturnAttributes: true,
       kSecReturnData: true,
+      kSecAttrAccessGroup: KEYCHAIN_GROUP,
       kSecAttrService: KEYCHAIN_SERVICE,
       kSecAttrAccount: KEYCHAIN_ACCOUNT,
     ] as CFDictionary
@@ -79,6 +86,19 @@ class SharedModule {
     let dic = result as! NSDictionary
     let passwordData = dic[kSecValueData] as! Data
     return String(data: passwordData, encoding: .utf8)!
+  }
+  
+  @discardableResult
+  func deleteSecureData() -> Bool {
+      let query = [
+        kSecClass: kSecClassGenericPassword,
+        kSecAttrAccessGroup: KEYCHAIN_GROUP,
+        kSecAttrService: KEYCHAIN_SERVICE,
+        kSecAttrAccount: KEYCHAIN_ACCOUNT_PREV_1,
+      ]  as CFDictionary
+
+      let status = SecItemDelete(query)
+      return status == errSecSuccess
   }
   
   func disableAllWidgets() -> Void {
