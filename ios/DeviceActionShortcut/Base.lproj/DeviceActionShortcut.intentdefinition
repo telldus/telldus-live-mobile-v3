@@ -19,6 +19,8 @@
 		<dict>
 			<key>INIntentCategory</key>
 			<string>generic</string>
+			<key>INIntentDescription</key>
+			<string>Stores device shortcut action data</string>
 			<key>INIntentDescriptionID</key>
 			<string>0dPbz7</string>
 			<key>INIntentLastParameterTag</key>
