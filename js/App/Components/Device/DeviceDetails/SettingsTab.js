@@ -942,6 +942,7 @@ class SettingsTab extends View {
 			editBoxStyle,
 			padding,
 			addToSiriButtonStyle,
+			coverStyle,
 		} = this.getStyle(appLayout);
 
 		if (editName) {
@@ -1053,6 +1054,7 @@ class SettingsTab extends View {
 										text={formatMessage(i18n.manageSiriShortcuts)}
 										onPress={this.onPressManageShortcuts}
 										style={addToSiriButtonStyle}
+										coverStyle={coverStyle}
 										preformatted/>
 								)}
 								<ChangeDevicetypeBlock
@@ -1233,8 +1235,11 @@ class SettingsTab extends View {
 			},
 			addToSiriButtonStyle: {
 				marginTop: padding / 2,
-				width: deviceWidth - (padding * 4),
-				maxWidth: undefined,
+				width: undefined,
+				maxWidth: deviceWidth - (padding * 3),
+			},
+			coverStyle: {
+				flex: 0,
 			},
 		};
 	}
