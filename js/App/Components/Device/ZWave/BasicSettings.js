@@ -205,13 +205,13 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		shadow,
 		fontSizeFactorEight,
-		fontSizeFactorFour,
+		fontSizeFactorOne,
 	} = Theme.Core;
 	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const padding = deviceWidth * paddingFactor;
 
 	return {
-		iconSize: deviceWidth * 0.06,
+		iconSize: deviceWidth * 0.07,
 		titleCoverStyle: {
 			flexDirection: 'row',
 			marginLeft: padding,
@@ -220,7 +220,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			marginLeft: 8,
-			fontSize: deviceWidth * fontSizeFactorFour,
+			fontSize: deviceWidth * fontSizeFactorOne,
 		},
 		coverStyle: {
 			justifyContent: 'space-between',

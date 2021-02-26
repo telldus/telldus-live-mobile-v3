@@ -436,7 +436,7 @@ const getStyles = ({
 		paddingFactor,
 		shadow,
 		fontSizeFactorEight,
-		fontSizeFactorFour,
+		fontSizeFactorOne,
 	} = Theme.Core;
 	const {
 		inAppBrandSecondary,
@@ -447,7 +447,7 @@ const getStyles = ({
 
 	return {
 		padding,
-		iconSize: deviceWidth * 0.06,
+		iconSize: deviceWidth * 0.07,
 		titleCoverStyle: {
 			flexDirection: 'row',
 			marginLeft: padding,
@@ -456,7 +456,7 @@ const getStyles = ({
 		},
 		titleStyle: {
 			marginLeft: 8,
-			fontSize: deviceWidth * fontSizeFactorFour,
+			fontSize: deviceWidth * fontSizeFactorOne,
 		},
 		coverStyle: {
 			justifyContent: 'space-between',
