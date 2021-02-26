@@ -130,6 +130,7 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 		actionDetailsStyle,
 		subTitleStyle,
 		siriIconStyle,
+		coverStyle,
 	} = getStyles({
 		layout,
 	});
@@ -358,6 +359,7 @@ const SiriShortcutActionsScreen = memo<Object>((props: Props): Object => {
 						text={formatMessage(i18n.addToSiri)}
 						onPress={onPressAddToSiri}
 						style={buttonStyle}
+						coverStyle={coverStyle}
 						preformatted
 						preScript={<Image
 							source={{uri: 'siri_icon'}}
@@ -402,8 +404,11 @@ const getStyles = ({
 			padding,
 		},
 		buttonStyle: {
+			flex: 0,
 			marginTop: padding,
 			alignSelf: 'center',
+			width: undefined,
+			maxWidth: deviceWidth - (padding * 3),
 		},
 		rowCoverStyle: {
 			...shadow,
@@ -414,12 +419,13 @@ const getStyles = ({
 		},
 		rowTextStyle: {
 			fontSize,
-			width: '85%',
+			width: '75%',
 		},
 		rowRightBlockStyle: {
-			width: '15%',
+			width: '25%',
 			alignSelf: 'center',
 			justifyContent: 'center',
+			alignItems: 'flex-end',
 		},
 		rowRightTextStyle: {
 			fontSize: Math.floor(deviceWidth * fontSizeFactorFour),
@@ -436,6 +442,9 @@ const getStyles = ({
 			height: iconSize,
 			width: iconSize,
 			marginRight: 8,
+		},
+		coverStyle: {
+			flex: 0,
 		},
 	};
 };
