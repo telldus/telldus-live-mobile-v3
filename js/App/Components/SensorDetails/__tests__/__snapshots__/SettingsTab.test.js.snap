@@ -515,13 +515,16 @@ exports[`<SettingsTab /> - snapshot renders Sensor SettingsTab 1`] = `
       >
         <View
           style={
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "transparent",
-              "flex": 1,
-              "flexDirection": "row",
-              "justifyContent": "center",
-            }
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flex": 1,
+                "flexDirection": "row",
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
           }
         >
           <Text
@@ -586,13 +589,16 @@ exports[`<SettingsTab /> - snapshot renders Sensor SettingsTab 1`] = `
       >
         <View
           style={
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "transparent",
-              "flex": 1,
-              "flexDirection": "row",
-              "justifyContent": "center",
-            }
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flex": 1,
+                "flexDirection": "row",
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
           }
         >
           <Text
@@ -657,13 +663,16 @@ exports[`<SettingsTab /> - snapshot renders Sensor SettingsTab 1`] = `
       >
         <View
           style={
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "transparent",
-              "flex": 1,
-              "flexDirection": "row",
-              "justifyContent": "center",
-            }
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flex": 1,
+                "flexDirection": "row",
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
           }
         >
           <Text
@@ -728,13 +737,16 @@ exports[`<SettingsTab /> - snapshot renders Sensor SettingsTab 1`] = `
       >
         <View
           style={
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "transparent",
-              "flex": 1,
-              "flexDirection": "row",
-              "justifyContent": "center",
-            }
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flex": 1,
+                "flexDirection": "row",
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
           }
         >
           <Text
@@ -799,13 +811,16 @@ exports[`<SettingsTab /> - snapshot renders Sensor SettingsTab 1`] = `
       >
         <View
           style={
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "transparent",
-              "flex": 1,
-              "flexDirection": "row",
-              "justifyContent": "center",
-            }
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "flex": 1,
+                "flexDirection": "row",
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
           }
         >
           <Text
