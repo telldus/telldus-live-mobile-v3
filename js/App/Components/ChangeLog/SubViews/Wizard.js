@@ -109,15 +109,15 @@ export default class WizardOne extends PureComponent<Props, null> {
 		}
 
 		switch (currentScreen) {
+			// case 1:
+			// 	return {
+			// 		...screenData,
+			// 		icon: 'favorite',
+			// 		title: this.titleWOne,
+			// 		description: this.descriptionWOne,
+			// 		isPremiumFeature: true,
+			// 	};
 			case 1:
-				return {
-					...screenData,
-					icon: 'favorite',
-					title: this.titleWOne,
-					description: this.descriptionWOne,
-					isPremiumFeature: true,
-				};
-			case 2:
 				return {
 					...screenData,
 					icon: 'favorite',
@@ -125,7 +125,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 					description: this.descriptionWTwo,
 					isPremiumFeature: true,
 				};
-			case 3:
+			case 2:
 				return {
 					...screenData,
 					icon: 'zwave',
