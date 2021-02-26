@@ -54,6 +54,7 @@ type Props = {
 	textLevel?: number,
 	throbberLevel?: number,
 	preformatted?: boolean,
+	coverStyle?: Object,
 };
 
 type DefaultProps = {
@@ -116,6 +117,7 @@ class TouchableButton extends Component<Props, void> {
 			textLevel,
 			throbberLevel,
 			preformatted = false,
+			coverStyle,
 		} = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		accessibilityLabel = !accessible ? '' :
@@ -127,7 +129,7 @@ class TouchableButton extends Component<Props, void> {
 			buttonLabel,
 			throbberStyleDef,
 			throbberContainerStyleDef,
-			cover,
+			coverStyleDef,
 		} = this.getStyle();
 
 		const bLevel = buttonLevel || (disabled ? 7 : 23);
@@ -143,7 +145,7 @@ class TouchableButton extends Component<Props, void> {
 				level={bLevel}
 				disabled={disabled}
 				onPress={this.onPress}>
-				<View style={cover}>
+				<View style={[coverStyleDef, coverStyle]}>
 					{(typeof preScript === 'object' ||
 					typeof preScript === 'function') && preScript}
 					<Text
@@ -199,7 +201,7 @@ class TouchableButton extends Component<Props, void> {
 				...shadow,
 				shadowOpacity: disabled ? 0.5 : 0.3,
 			},
-			cover: {
+			coverStyleDef: {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
