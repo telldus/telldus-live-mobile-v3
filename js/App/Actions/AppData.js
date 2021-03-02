@@ -28,7 +28,10 @@ const {DevicesCommon: {getDevices}} = actions;
 const {
 	Sensors: {getSensors},
 	Jobs: {getJobs},
-	Events: {getEvents},
+	Events: {
+		getEvents,
+		getEventGroupsList,
+	},
 } = actions;
 const {Websockets: {authenticateSession, connectToGateways}} = actions;
 
@@ -38,6 +41,7 @@ function getAppData(): ThunkAction {
 		dispatch(connectToGateways());
 		dispatch(getJobs());
 		dispatch(getEvents());
+		dispatch(getEventGroupsList());
 		return Promise.all([
 			dispatch(getDevices()),
 			dispatch(getSensors()),
