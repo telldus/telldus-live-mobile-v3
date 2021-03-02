@@ -110,12 +110,12 @@ const getItemLayout = (appLayout: Object): any => {
 
 	return sectionListGetItemLayout({
 		// The height of the row with rowData at the given sectionIndex and rowIndex
-		getItemHeight: (): number => rowHeight,
+		getItemHeight: (): number => rowHeight + (padding / 2),
 
 		// These four properties are optional
-		getSeparatorHeight: (): number => padding / 2, // The height of your separators
-		getSectionHeaderHeight: (): number => getSectionHeaderHeight(getSectionHeaderFontSize(deviceWidth)), // The height of your section headers
-		getSectionFooterHeight: (): number => 0, // The height of your section footers
+		getSeparatorHeight: (): number => 0, // The height of your separators
+		getSectionHeaderHeight: (): number => getSectionHeaderHeight(getSectionHeaderFontSize(deviceWidth)) + (padding / 2), // The height of your section headers
+		getSectionFooterHeight: (): number => padding, // The height of your section footers
 		listHeaderHeight: 0, // The height of your list header
 	});
 };
