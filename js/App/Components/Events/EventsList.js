@@ -89,6 +89,8 @@ const EventsList = memo<Object>((props: Props): Object => {
 	} = useAppTheme();
 
 	const events = useSelector((state: Object): Object => state.events);
+	const eventGroups = useSelector((state: Object): Object => state.eventGroups) || {};
+
 	const sections = useMemo((): Array<Object> => {
 		let orderedD = orderBy(events, [(e: Object): any => {
 			let { description = '' } = e;
@@ -154,17 +156,19 @@ const EventsList = memo<Object>((props: Props): Object => {
 	}, [dispatch, navigation, params]);
 
 	const renderSectionHeader = useCallback(({section}: Object = {}): Object => {
+		let item = eventGroups[section.header] || {};
 		return (
 			<View
 				style={sectionHeaderCoverStyle}>
 				<Text
 					level={3}
 					style={sectionHeaderTextStyle}>
-					{section.header}
+					{item.name || section.header}
 				</Text>
 			</View>
 		);
-	}, [sectionHeaderCoverStyle, sectionHeaderTextStyle]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sectionHeaderCoverStyle, sectionHeaderTextStyle, Object.keys(eventGroups).length]);
 
 	const renderRow = useCallback((rowData: Object = {}): Object => {
 		const {
