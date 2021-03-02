@@ -168,7 +168,7 @@ getY(data: Object): number {
 
 getYOne(data: Object): number {
 	const { max1, min1 } = this.props;
-	if (!data.value || !max1) {
+	if (data.value === undefined || data.value === null || !max1) {
 		return data.value;
 	}
 	const denom = (max1.value - min1.value) || 1;
@@ -177,7 +177,7 @@ getYOne(data: Object): number {
 
 getYTwo(data: Object): number {
 	const { max2, min2 } = this.props;
-	if (!data.value || !max2) {
+	if (data.value === undefined || data.value === null || !max2) {
 		return data.value;
 	}
 	const denom = (max2.value - min2.value) || 1;
@@ -320,7 +320,7 @@ renderLine(d: Array<Object>, i: number, styles: Object): null | Object {
 				key={i}
 				data={d}
 				style={{ data: { fill: colors[i] } }}
-				y={this.getY}
+				y={i === 1 ? this.getYTwo : this.getYOne}
 				x={this.getX}
 			/>
 		);

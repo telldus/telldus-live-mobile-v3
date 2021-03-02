@@ -151,7 +151,9 @@ render(): Object | null {
 		supportedModes = getSetPoints(parameter, setpoint, intl);
 		if (supportedModes) {
 			currentSetPoint = getCurrentSetPoint(supportedModes, mode);
-			activeMode = currentSetPoint.mode;
+			if (currentSetPoint) {
+				activeMode = currentSetPoint.mode;
+			}
 		}
 	}
 

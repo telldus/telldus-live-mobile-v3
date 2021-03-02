@@ -243,7 +243,7 @@ class DialogueBox extends Component<Props, null> {
 		return (
 			<View style={styles.notificationModalBody} accessible={true} importantForAccessibility={'yes'} accessibilityLabel={text}>
 				<Text
-					level={18}
+					level={4}
 					style={styles.notificationModalBodyText}>{text}</Text>
 			</View>
 		);

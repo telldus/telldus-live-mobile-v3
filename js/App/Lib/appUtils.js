@@ -78,9 +78,9 @@ function isDeviceLanguageAndHasChanged(currentLanguageInfo: Object): boolean {
 }
 
 function isDeviceLanguage(currentLanguageInfo: Object): boolean {
-	const { key } = currentLanguageInfo;
+	const { key = '' } = currentLanguageInfo;
 	const device = key.split('-')[1];
-	return device && device === 'device';
+	return !!device && device === 'device';
 }
 
 function hasTellStickNetGetOne(gatewaysById: Object): boolean {
@@ -160,6 +160,22 @@ const getThemeSetOptions = (): Array<Object> => {
 	];
 };
 
+const showBatteryStatus = ({
+	percentage,
+	batteryStatus,
+}: Object): boolean => {
+	switch (batteryStatus) {
+		case 'always': {
+			return true;
+		}
+		case 'never': {
+			return false;
+		}
+		default:
+			return percentage < 10;
+	}
+};
+
 module.exports = {
 	supportRSA,
 	getLocale,
@@ -173,4 +189,5 @@ module.exports = {
 	getSectionHeaderHeight,
 	getDefaultMapCoordinates,
 	getThemeSetOptions,
+	showBatteryStatus,
 };

@@ -25,7 +25,7 @@ import {
 import {act} from 'react-test-renderer';
 
 import {
-	rendererWithIntlAndRedux,
+	rendererWithIntlAndReduxProviders,
 } from '../../Utils/jestUtils';
 import TouchableButton from '../TouchableButton';
 import {
@@ -50,7 +50,7 @@ describe('<TouchableButton /> - snapshot', () => {
 	it('renders TouchableButton when enabled', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<TouchableButton
 					text={'TouchableButton'}/>
 			);
@@ -63,7 +63,7 @@ describe('<TouchableButton /> - snapshot', () => {
 	it('renders TouchableButton when disabled', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<TouchableButton
 					disabled
 					text={'TouchableButton'}/>
@@ -77,7 +77,7 @@ describe('<TouchableButton /> - snapshot', () => {
 	it('renders TouchableButton when enabled and loading', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<TouchableButton
 					text={'TouchableButton'}
 					showThrobber={true}/>
@@ -91,7 +91,7 @@ describe('<TouchableButton /> - snapshot', () => {
 	it('renders TouchableButton when disabled and loading', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<TouchableButton
 					disabled
 					text={'TouchableButton'}

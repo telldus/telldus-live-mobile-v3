@@ -106,7 +106,7 @@ const Push = {
 		return () => {};
 	},
 	isPremiumExpireHeadsup: (notification: Object): boolean => {
-		if (notification) {
+		if (notification && notification.getCategory) {
 			const category = notification.getCategory();
 			return category === 'PREMIUM_EXPIRE_HEADSUP';
 		}

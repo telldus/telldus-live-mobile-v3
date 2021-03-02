@@ -133,7 +133,9 @@ export default class ActionThermostat extends View<null, Props, State> {
 			this.supportedModes = getSetPoints(parameter, setpoint, intl);
 			if (this.supportedModes) {
 				currentSetPoint = getCurrentSetPoint(this.supportedModes, mode);
-				this.currentMode = currentSetPoint.mode;
+				if (currentSetPoint) {
+					this.currentMode = currentSetPoint.mode;
+				}
 			}
 		}
 		this.supportedModes = this.supportedModes.map((sm: Object): Object => {

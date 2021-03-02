@@ -1,0 +1,3 @@
+- Fix for device settings sub menu
+- Fix for buttons not working
+

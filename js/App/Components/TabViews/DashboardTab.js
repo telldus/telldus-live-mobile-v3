@@ -87,6 +87,7 @@ type Props = {
 	currentScreen: string,
 	hiddenTabsCurrentUser: Array<string>,
 	sortingDB: 'Manual' | 'Alphabetical',
+	dBTileDisplayMode: string,
 
 	navigation: Object,
 	changeSensorDisplayTypeDB: (id?: number, kind?: string) => void,
@@ -413,6 +414,7 @@ class DashboardTab extends View {
 			rows,
 			gateways,
 			gatewaysDidFetch,
+			dBTileDisplayMode,
 		} = this.props;
 		const {
 			appLayout,
@@ -450,6 +452,7 @@ class DashboardTab extends View {
 		const extraData = {
 			propOne: tileWidth,
 			propTwo: appLayout,
+			dBTileDisplayMode,
 		};
 
 		return (
@@ -685,7 +688,12 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	const { deviceIds = {}, sensorIds = {}, metWeatherIds = {}} = state.dashboard;
 	const { defaultSettings } = state.app;
-	const { dbCarousel = true, activeDashboardId, sortingDB } = defaultSettings || {};
+	const {
+		dbCarousel = true,
+		activeDashboardId,
+		sortingDB,
+		dBTileDisplayMode,
+	} = defaultSettings || {};
 
 	const { userId } = state.user;
 
@@ -715,6 +723,7 @@ function mapStateToProps(state: Object, props: Object): Object {
 		currentScreen,
 		hiddenTabsCurrentUser,
 		sortingDB,
+		dBTileDisplayMode,
 	};
 }
 

@@ -64,6 +64,7 @@ type Props = {
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
 	currentScreen: string,
+	batteryStatus: string,
 };
 
 type State = {
@@ -466,7 +467,12 @@ class SensorsTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, route, currentScreen } = this.props;
+		const {
+			screenProps,
+			route,
+			currentScreen,
+			batteryStatus,
+		} = this.props;
 		const { propsSwipeRow } = this.state;
 		const { intl, appLayout, screenReaderEnabled } = screenProps;
 		const { item, section, index } = row;
@@ -501,7 +507,8 @@ class SensorsTab extends View {
 				screenReaderEnabled={screenReaderEnabled}
 				isLast={isLast}
 				gatewayId={section.header}
-				isNew={!!newSensors[id]}/>
+				isNew={!!newSensors[id]}
+				batteryStatus={batteryStatus}/>
 		);
 	}
 
@@ -670,8 +677,14 @@ const getRowsAndSections = createSelector(
 
 function mapStateToProps(store: Object): Object {
 
-	const { screenReaderEnabled } = store.app;
+	const {
+		screenReaderEnabled,
+		defaultSettings = {},
+	 } = store.app;
 	const { screen: currentScreen } = store.navigation;
+	const {
+		batteryStatus,
+	} = defaultSettings;
 
 	return {
 		rowsAndSections: getRowsAndSections(store),
@@ -682,6 +695,7 @@ function mapStateToProps(store: Object): Object {
 		gateways: store.gateways.allIds,
 		gatewaysDidFetch: store.gateways.didFetch,
 		currentScreen,
+		batteryStatus,
 	};
 }
 

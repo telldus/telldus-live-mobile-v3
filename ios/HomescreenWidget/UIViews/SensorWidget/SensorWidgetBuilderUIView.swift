@@ -29,10 +29,6 @@ struct SensorProvider: IntentTimelineProvider {
   }
   
   func getSnapshot(for configuration: SensorWidgetIntent, in context: Context, completion: @escaping (SensorSimpleEntry) -> ()) {
-    var displayType = WidgetViewType.preEditView
-    if (context.isPreview) {
-      displayType = WidgetViewType.preview
-    }
     let entry = SensorSimpleEntry(date: Date(), sensorWidgetStructure: SensorWidgetStructure(
       id: WidgetUtils.previewPostEditSensorWidgetStructure.id,
       name: WidgetUtils.previewPostEditSensorWidgetStructure.name,
@@ -78,8 +74,8 @@ struct SensorWidgetBuilderUIView: Widget {
     IntentConfiguration(kind: kind, intent: SensorWidgetIntent.self, provider: SensorProvider()) { entry in
       SensorWidgetEntryView(entry: entry)
     }
-    .configurationDisplayName("Sensor Widget")
-    .description("This is an example sensor widget.")
+    .configurationDisplayName(LocalizedStringKey("sensor_widget"))
+    .description("")
     .supportedFamilies([.systemSmall])
   }
 }

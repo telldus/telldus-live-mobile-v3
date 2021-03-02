@@ -26,6 +26,7 @@ import React, {
 	memo,
 	useCallback,
 	useState,
+	useEffect,
 } from 'react';
 import {
 	useSelector,
@@ -33,7 +34,9 @@ import {
 import {
 	Platform,
 	KeyboardAvoidingView,
+	LayoutAnimation,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	ThemedTextInput,
@@ -45,14 +48,25 @@ import {
 import {
 	useDialogueBox,
 } from '../../../Hooks/Dialoguebox';
+import LayoutAnimations from '../../../Lib/LayoutAnimations';
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 const GenericConfSetting = (props: Object): Object => {
 	const {
 		defaultValue,
 		min,
 		max,
+		onChangeValue,
+		Size,
+		ParameterNumber,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const [ value, setValue ] = useState(defaultValue);
 
@@ -67,13 +81,34 @@ const GenericConfSetting = (props: Object): Object => {
 		colors,
 	});
 
+	useEffect(() => {
+		if (defaultValue === value) {
+			onChangeValue({
+				number: ParameterNumber,
+				value: defaultValue,
+				size: Size,
+				hasChanged: false,
+			});
+			setValue(defaultValue);
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
+		}
+	}, [ParameterNumber, Size, defaultValue, onChangeValue, value]);
+
 	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
 
 	const _onChangeText = useCallback((v: string) => {
-		setValue(v);
-	}, []);
+		if (!v || !isNaN(parseInt(v, 10))) {
+			onChangeValue({
+				number: ParameterNumber,
+				value: v,
+				size: Size,
+				hasChanged: v !== defaultValue,
+			});
+			setValue(v);
+		}
+	}, [onChangeValue, ParameterNumber, Size, defaultValue]);
 
 	const _onSubmitEditing = useCallback(() => {
 		let asNum = parseInt(value, 10);
@@ -82,12 +117,15 @@ const GenericConfSetting = (props: Object): Object => {
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				text: `Please set value between: ${min}-${max}`, // TODO: Translate
+				text: formatMessage(i18n.pleaseSetValueBetween, {
+					min,
+					max,
+				}),
 				showPositive: true,
 			});
 			return;
 		}
-	}, [value, max, min, toggleDialogueBoxState]);
+	}, [value, max, min, toggleDialogueBoxState, formatMessage]);
 
 	return (
 		<KeyboardAvoidingView
@@ -121,7 +159,7 @@ const getStyles = ({
 
 	return {
 		textFieldStyle: {
-			flex: 1,
+			width: '100%',
 			paddingBottom: 0,
 			paddingTop: 0,
 			fontSize,

@@ -34,9 +34,9 @@ import {
 	useSelector,
 	useDispatch,
 } from 'react-redux';
-// import {
-// 	useIntl,
-// } from 'react-intl';
+import {
+	useIntl,
+} from 'react-intl';
 
 import {
 	View,
@@ -54,7 +54,7 @@ import {
 } from '../../../Actions/Websockets';
 
 import Theme from '../../../Theme';
-// import i18n from '../../../Translations/common';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	id: string,
@@ -70,10 +70,10 @@ const BasicSettings = (props: Props): Object => {
 	} = props;
 
 	const dispatch = useDispatch();
-	// const intl = useIntl();
-	// const {
-	// 	formatMessage,
-	// } = intl;
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const [ expand, setExpand ] = useState(true);
 
@@ -136,7 +136,7 @@ const BasicSettings = (props: Props): Object => {
 				<Text
 					level={2}
 					style={titleStyle}>
-					Basic commands
+					{formatMessage(i18n.basicCommands)}
 				</Text>
 			</TouchableOpacity>
 			{!expand && (
@@ -146,12 +146,12 @@ const BasicSettings = (props: Props): Object => {
 					<Text
 						level={4}
 						style={textStyle}>
-TellStick ZNet may not fully support all types of devices included in it's network. It will still be possible to control essential functions by sending basic commands.
+						{formatMessage(i18n.basicCommandsInfoMessage)}
 					</Text>
 					<View style={commandsCover}>
 						<BasicCommandButton
 							index={0}
-							label={'Basic set off'}
+							label={formatMessage(i18n.basicSetOff)}
 							disabled={!isOnline}
 							onPress={onPressSendCommand}
 							onPressData={{
@@ -160,7 +160,7 @@ TellStick ZNet may not fully support all types of devices included in it's netwo
 							}}/>
 						<BasicCommandButton
 							index={1}
-							label={'Basic set on'}
+							label={formatMessage(i18n.basicSetOn)}
 							disabled={!isOnline}
 							onPress={onPressSendCommand}
 							onPressData={{
@@ -171,7 +171,7 @@ TellStick ZNet may not fully support all types of devices included in it's netwo
 							<>
 								<BasicCommandButton
 									index={2}
-									label={'Secure basic set off'}
+									label={formatMessage(i18n.secBasicSetOff)}
 									disabled={!isOnline}
 									onPress={onPressSendCommand}
 									onPressData={{
@@ -180,7 +180,7 @@ TellStick ZNet may not fully support all types of devices included in it's netwo
 									}}/>
 								<BasicCommandButton
 									index={3}
-									label={'Secure basic set on'}
+									label={formatMessage(i18n.secBasicSetOn)}
 									disabled={!isOnline}
 									onPress={onPressSendCommand}
 									onPressData={{
@@ -205,13 +205,13 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		shadow,
 		fontSizeFactorEight,
-		fontSizeFactorFour,
+		fontSizeFactorOne,
 	} = Theme.Core;
 	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const padding = deviceWidth * paddingFactor;
 
 	return {
-		iconSize: deviceWidth * 0.06,
+		iconSize: deviceWidth * 0.07,
 		titleCoverStyle: {
 			flexDirection: 'row',
 			marginLeft: padding,
@@ -220,7 +220,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			marginLeft: 8,
-			fontSize: deviceWidth * fontSizeFactorFour,
+			fontSize: deviceWidth * fontSizeFactorOne,
 		},
 		coverStyle: {
 			justifyContent: 'space-between',
@@ -239,7 +239,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		textStyle: {
 			fontSize,
-			textAlign: 'center',
+			textAlign: 'left',
 		},
 		interviewLinkStyle: {
 			fontSize,

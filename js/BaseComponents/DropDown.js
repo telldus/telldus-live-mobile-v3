@@ -165,6 +165,7 @@ static defaultProps: DefaultProps = {
 			'onFocus',
 			'insets',
 			'selectedThemeSet',
+			'onValueChange',
 		]);
 		if (propsChange) {
 			return true;

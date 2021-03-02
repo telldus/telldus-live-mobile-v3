@@ -36,6 +36,7 @@ import {
 	TouchableButton,
 	EditBox,
 	ThemedScrollView,
+	EmptyView,
 } from '../../../BaseComponents';
 import {
 	ExcludeDevice,
@@ -718,7 +719,7 @@ class SettingsTab extends View {
 
 		const isZWave = protocol.trim().toLowerCase() === 'zwave';
 		const { isFailed = false } = nodeInfo;
-		const manufacturerAttributes = nodeInfo ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC] : {};
+		const manufacturerAttributes = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_MANUFACTURER_SPECIFIC] : {};
 
 		return (
 			<ThemedScrollView
@@ -845,13 +846,17 @@ class SettingsTab extends View {
 										}
 									</>
 									:
-									<TouchableButton
-										text={formatMessage(i18n.deleteSensor)}
-										onPress={this.deleteSensor}
-										style={[buttonStyle, {
+									<>
+										<EmptyView/>
+										{/* <TouchableButton
+											text={formatMessage(i18n.deleteSensor)}
+											onPress={this.deleteSensor}
+											style={[buttonStyle, {
 											backgroundColor: brandDanger,
-										}]}
-										accessible={true}/>
+											}]}
+											accessible={true}/>
+											*/}
+									</>
 								}
 								<Text
 									level={26}

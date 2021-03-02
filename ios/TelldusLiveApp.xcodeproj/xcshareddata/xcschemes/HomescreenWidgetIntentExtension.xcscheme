@@ -43,6 +43,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2658F5E725D4062700AD834A"
+               BuildableName = "DeviceActionShortcutTests.xctest"
+               BlueprintName = "DeviceActionShortcutTests"
+               ReferencedContainer = "container:TelldusLiveApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -71,13 +81,6 @@
             ReferencedContainer = "container:TelldusLiveApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "TELLDUS_API_SERVER"
-            value = "https://api3.telldus.com"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

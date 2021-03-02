@@ -232,10 +232,21 @@ function usePreviousValue(value: Object): Object {
 	return ref.current;
 }
 
+const useDifferentFromPevValueWhenFalse = (incomingValue: boolean): boolean => {
+	const ref = useRef();
+	if (!incomingValue) {
+		ref.current = !ref.current;
+	} else {
+		ref.current = incomingValue;
+	}
+	return ref.current;
+};
+
 module.exports = {
 	useRelativeIntl,
 	useNoInternetDialogue,
 	useCampaignAction,
 	useSwitchOrAddAccountAction,
 	usePreviousValue,
+	useDifferentFromPevValueWhenFalse,
 };

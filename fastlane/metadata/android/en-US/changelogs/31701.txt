@@ -1,0 +1,4 @@
+- Fix issue where duplicate sensors shown on DB
+- Fix for overriding device type
+- Add Geofence for Android
+

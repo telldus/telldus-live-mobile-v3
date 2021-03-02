@@ -53,12 +53,15 @@ type Props = {
 	buttonLevel?: number,
 	textLevel?: number,
 	throbberLevel?: number,
+	preformatted?: boolean,
+	coverStyle?: Object,
 };
 
 type DefaultProps = {
 	disabled: boolean,
 	accessible: boolean,
 	showThrobber: boolean,
+	preformatted: boolean,
 };
 
 class TouchableButton extends Component<Props, void> {
@@ -72,6 +75,7 @@ class TouchableButton extends Component<Props, void> {
 		disabled: false,
 		accessible: true,
 		showThrobber: false,
+		preformatted: false,
 	}
 
 	constructor(props: Props) {
@@ -112,6 +116,8 @@ class TouchableButton extends Component<Props, void> {
 			buttonLevel,
 			textLevel,
 			throbberLevel,
+			preformatted = false,
+			coverStyle,
 		} = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		accessibilityLabel = !accessible ? '' :
@@ -123,7 +129,7 @@ class TouchableButton extends Component<Props, void> {
 			buttonLabel,
 			throbberStyleDef,
 			throbberContainerStyleDef,
-			cover,
+			coverStyleDef,
 		} = this.getStyle();
 
 		const bLevel = buttonLevel || (disabled ? 7 : 23);
@@ -139,7 +145,7 @@ class TouchableButton extends Component<Props, void> {
 				level={bLevel}
 				disabled={disabled}
 				onPress={this.onPress}>
-				<View style={cover}>
+				<View style={[coverStyleDef, coverStyle]}>
 					{(typeof preScript === 'object' ||
 					typeof preScript === 'function') && preScript}
 					<Text
@@ -148,7 +154,7 @@ class TouchableButton extends Component<Props, void> {
 						accessible={accessible}
 						importantForAccessibility={importantForAccessibility}
 						{...textProps}>
-						{typeof preScript === 'string' && preScript}{capitalize(label)}{postScript}
+						{typeof preScript === 'string' && preScript}{preformatted ? label : capitalize(label)}{postScript}
 					</Text>
 					{!!showThrobber &&
 					(
@@ -195,7 +201,7 @@ class TouchableButton extends Component<Props, void> {
 				...shadow,
 				shadowOpacity: disabled ? 0.5 : 0.3,
 			},
-			cover: {
+			coverStyleDef: {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',

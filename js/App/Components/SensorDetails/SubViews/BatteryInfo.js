@@ -26,26 +26,17 @@ import React from 'react';
 import { View, Text, FormattedMessage } from '../../../../BaseComponents';
 import Battery from './Battery';
 
+import {
+	getBatteryPercentage,
+} from '../../../Lib/DeviceUtils';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 export default class BatteryInfo extends View {
 
-	getPercentage(battery: number): number {
-		switch (battery) {
-			case 253:
-				return 100;
-			case 254:
-				return battery;
-			case 255:
-				return 0;
-			default:
-				return battery;
-		}
-	}
 	render(): Object {
 		const { battery, style, appLayout } = this.props;
-		const percentage = this.getPercentage(battery);
+		const percentage = getBatteryPercentage(battery);
 		const {
 			containerStyle,
 			labelStyle,

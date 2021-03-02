@@ -39,13 +39,16 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled 1`
 >
   <View
     style={
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "transparent",
-        "flex": 1,
-        "flexDirection": "row",
-        "justifyContent": "center",
-      }
+      Array [
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "center",
+        },
+        undefined,
+      ]
     }
   >
     <Text
@@ -111,13 +114,16 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when disabled an
 >
   <View
     style={
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "transparent",
-        "flex": 1,
-        "flexDirection": "row",
-        "justifyContent": "center",
-      }
+      Array [
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "center",
+        },
+        undefined,
+      ]
     }
   >
     <Text
@@ -222,13 +228,16 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled 1`]
 >
   <View
     style={
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "transparent",
-        "flex": 1,
-        "flexDirection": "row",
-        "justifyContent": "center",
-      }
+      Array [
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "center",
+        },
+        undefined,
+      ]
     }
   >
     <Text
@@ -294,13 +303,16 @@ exports[`<TouchableButton /> - snapshot renders TouchableButton when enabled and
 >
   <View
     style={
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "transparent",
-        "flex": 1,
-        "flexDirection": "row",
-        "justifyContent": "center",
-      }
+      Array [
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "center",
+        },
+        undefined,
+      ]
     }
   >
     <Text

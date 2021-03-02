@@ -56,6 +56,8 @@ type Props = {
 	lastUpdated?: number,
 	currentTemp?: string,
 	gatewayTimezone: string,
+	onPressOverride?: Function,
+	deviceSetStateRGBOverride: Function,
 
 	containerStyle?: Array<any> | Object,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
@@ -78,6 +80,8 @@ class DeviceActionDetails extends View {
 			lastUpdated,
 			currentTemp,
 			gatewayTimezone,
+			onPressOverride,
+			deviceSetStateRGBOverride,
 		} = this.props;
 		const {
 			supportedMethods = {},
@@ -118,6 +122,7 @@ class DeviceActionDetails extends View {
 			...device,
 			isGatewayActive,
 			intl,
+			onPressOverride: onPressOverride,
 		};
 
 		if (UP && !THERMOSTAT) {
@@ -204,7 +209,9 @@ class DeviceActionDetails extends View {
 				supportedModes = getSetPoints(parameter, setpoint, intl);
 				if (supportedModes) {
 					currentSetPoint = getCurrentSetPoint(supportedModes, mode);
-					activeMode = currentSetPoint.mode;
+					if (currentSetPoint) {
+						activeMode = currentSetPoint.mode;
+					}
 				}
 			}
 		}
@@ -248,7 +255,8 @@ class DeviceActionDetails extends View {
 							colorWheelCover={colorWheelCover}
 							swatchWheelCover={swatchWheelCover}
 							thumbSize={thumbSize}
-							showActionIndicator={false}/>
+							showActionIndicator={false}
+							deviceSetStateRGBOverride={deviceSetStateRGBOverride}/>
 					</>
 					}
 					{!!DIM && !THERMOSTAT && (
@@ -256,7 +264,8 @@ class DeviceActionDetails extends View {
 							device={device}
 							intl={intl}
 							isGatewayActive={isGatewayActive}
-							appLayout={appLayout}/>
+							appLayout={appLayout}
+							onPressOverride={onPressOverride}/>
 					)}
 					<View style={{flex: 1, alignItems: 'stretch'}}>
 						<View style={buttonsContainer}>

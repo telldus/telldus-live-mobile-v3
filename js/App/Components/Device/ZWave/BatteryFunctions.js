@@ -40,6 +40,7 @@ import {
 } from 'react-redux';
 import Slider from 'react-native-slider';
 const isEqual = require('react-fast-compare');
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -67,6 +68,8 @@ import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 type Props = {
 	id: string,
 	gatewayTimezone: string,
@@ -74,6 +77,7 @@ type Props = {
 };
 
 const infoKeyBatteryLevel = '1';
+const infoKeyBatteryWakeupInterval = '2';
 
 function usePreviousNodeInfo(value: Object): Object {
 	const ref = useRef();
@@ -101,6 +105,11 @@ const BatteryFunctions = (props: Props): Object => {
 		gatewayTimezone,
 		clientId,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		formatDate,
@@ -174,7 +183,7 @@ const BatteryFunctions = (props: Props): Object => {
 	const showBatteryInfo = zWaveFunctions ? (zWaveFunctions.supportsCommandClass(ZWaveFunctions.COMMAND_CLASS_BATTERY) ||
     supportsWakeup) : false;
 
-	const {
+	let {
 		wakeupNote,
 		lastWakeup,
 		wakeupInterval,
@@ -202,22 +211,42 @@ const BatteryFunctions = (props: Props): Object => {
 			const lastReceivedDateTime = new Date(lastReceived * 1000);
 			toggleDialogueBoxState({
 				show: true,
-				header: ' ', // TODO: Need to confirm and set
+				header: formatMessage(i18n.zWaveBatteryLabelFive),
 				showHeader: true,
-				imageHeader: true, // TODO: Translate
-				text: `Battery level was received ${formatDate(lastReceivedDateTime)} ${formatTime(lastReceivedDateTime)}.`,
+				imageHeader: true,
+				text: formatMessage(i18n.batteryLevelLastReceivedAt, {
+					time: `${formatDate(lastReceivedDateTime)} ${formatTime(lastReceivedDateTime)}`,
+				}),
+				showPositive: true,
+			});
+		} else if (infoKey === infoKeyBatteryWakeupInterval) {
+			toggleDialogueBoxState({
+				show: true,
+				header: formatMessage(i18n.zWaveBatteryLabelSeven),
+				showHeader: true,
+				imageHeader: true,
+				text: formatMessage(i18n.batteryWakeupIntervalInfo),
 				showPositive: true,
 			});
 		}
-	}, [formatDate, formatTime, lastReceived, toggleDialogueBoxState]);
+	}, [formatDate, formatMessage, formatTime, lastReceived, toggleDialogueBoxState]);
+
+	const hideSlider = (maximumWakeupInterval === 0 && minimumWakeupInterval === 0) ||
+	(isNaN(maximumWakeupInterval) && isNaN(minimumWakeupInterval));
 
 	const getWakeUpIntervalValue = useCallback((value: number): Object => {
 		value = value < 0 ? 0 : value;
+		if (hideSlider) {
+			return {
+				timeValue: 0,
+				timeString: '0',
+			};
+		}
 		let _wakeupInterval = (value * wakeupIntervalStep) + minimumWakeupInterval;
 		let seconds = _wakeupInterval;
 		let time = [];
 		if (seconds >= 86400) {
-			time.push(`${Math.floor(seconds / 86400)} days`);
+			time.push(`${Math.floor(seconds / 86400)} ${formatMessage(i18n.posterDays)}`);
 			seconds %= 86400;
 		}
 		if (seconds >= 3600) {
@@ -235,7 +264,7 @@ const BatteryFunctions = (props: Props): Object => {
 			timeValue: _wakeupInterval,
 			timeString: time.join(', '),
 		};
-	}, [minimumWakeupInterval, wakeupIntervalStep]);
+	}, [formatMessage, hideSlider, minimumWakeupInterval, wakeupIntervalStep]);
 
 	let maximumValue = (maximumWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
 	let sliderValueInitial = (storedWakeupInterval - minimumWakeupInterval) / wakeupIntervalStep;
@@ -275,6 +304,8 @@ const BatteryFunctions = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isBatteryInfoEqual]);
 
+	const nowTS = Math.floor(Date.now() / 1000);
+	const isWakeupPast = lastWakeup < nowTS;
 	const lastWakeupDateTime = new Date(lastWakeup * 1000);
 	const nextWakeupDateTime = new Date((lastWakeup + wakeupInterval) * 1000);
 
@@ -284,7 +315,6 @@ const BatteryFunctions = (props: Props): Object => {
 			return;
 		}
 
-		// TODO: Translate
 		return (
 			<View
 				level={2}
@@ -293,46 +323,60 @@ const BatteryFunctions = (props: Props): Object => {
 					<Text
 						level={4}
 						style={textStyle}>
-This device is running on battery. To save as much power as possible this device sleeps and will not accept commands. Changes in its settings will only be set the next time it wakes up.
+						{formatMessage(i18n.zWaveBatteryInfoMessage)}
 					</Text>
 				)}
 				{!!wakeupNote && (
 					<BatteryInfoItem
-						label={'Waking this device is done by: '}
+						label={`${formatMessage(i18n.zWaveBatteryLabeltwo)}: `}
 						value={wakeupNote}/>
 				)}
 				{(lastWakeup > 0 && supportsWakeup) && (
 					<BatteryInfoItem
-						label={'This device was previously awake: '}
+						label={`${formatMessage(i18n.zWaveBatteryLabelThree)}: `}
 						value={`${formatDate(lastWakeupDateTime)} ${formatTime(lastWakeupDateTime)}`}/>
 				)}
-				{(wakeupInterval > 0 && lastWakeup > 0) && (
-					<BatteryInfoItem
-						label={'Next time this device will wake up will probably be: '}
-						value={`${formatDate(nextWakeupDateTime)} ${formatTime(nextWakeupDateTime)}`}/>
+				{(!hideSlider && wakeupInterval > 0 && lastWakeup > 0) && (
+					isWakeupPast ?
+						<BatteryInfoItem
+							value={formatMessage(i18n.zWaveBatteryLabelFourPast, {
+								time: `${formatDate(nextWakeupDateTime)} ${formatTime(nextWakeupDateTime)}`,
+							})}/>
+						:
+						<BatteryInfoItem
+							label={`${formatMessage(i18n.zWaveBatteryLabelFour)}: `}
+							value={`${formatDate(nextWakeupDateTime)} ${formatTime(nextWakeupDateTime)}`}/>
+
 				)}
 				<BatteryInfoItem
-					label={'Battery level: '}
-					value={`${level}%`}
+					label={`${formatMessage(i18n.zWaveBatteryLabelFive)}: `}
+					value={`${level === 255 ? 0 : level}%`}
 					showInfo={true}
 					onPressInfo={onPressInfo}
 					infoKey={infoKeyBatteryLevel}/>
 				{(!!batteryType && !!batteryCount) && (
 					<BatteryInfoItem
-						label={'Battery type: '}
-						value={`${batteryCount} pcs of ${batteryType}`}/>
+						label={`${formatMessage(i18n.zWaveBatteryLabelSix)}: `}
+						value={formatMessage(i18n.zWaveBatteryLabelSixValue, {
+							batteryCount,
+							batteryType,
+						})}/>
 				)}
 				{(!!batteryType && !batteryCount) && (
 					<BatteryInfoItem
-						label={'Battery type: '}
+						label={`${formatMessage(i18n.zWaveBatteryLabelSix)}: `}
 						value={batteryType}/>
 				)}
 				{supportsWakeup && (
 					<>
-						<BatteryInfoItem
-							label={'Wakeup interval: '}
+						{!!wakeUpIntervalValue.timeString && <BatteryInfoItem
+							showInfo={true}
+							onPressInfo={onPressInfo}
+							infoKey={infoKeyBatteryWakeupInterval}
+							label={`${formatMessage(i18n.zWaveBatteryLabelSeven)}: `}
 							value={wakeUpIntervalValue.timeString}/>
-						{!isNaN(sliderValue) && !isNaN(maximumValue) && (
+						}
+						{!hideSlider && !isNaN(sliderValue) && !isNaN(maximumValue) && (
 							<Slider
 								minimumValue= {0}
 								maximumValue={maximumValue}
@@ -348,7 +392,7 @@ This device is running on battery. To save as much power as possible this device
 				)}
 			</View>
 		);
-	}, [id, coverStyle, supportsWakeup, textStyle, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, maximumValue, sliderValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
+	}, [id, coverStyle, supportsWakeup, textStyle, formatMessage, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, isWakeupPast, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, hideSlider, sliderValue, maximumValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
@@ -372,7 +416,7 @@ This device is running on battery. To save as much power as possible this device
 				<Text
 					level={2}
 					style={titleStyle}>
-					Battery
+					{formatMessage(i18n.labelBattery)}
 				</Text>
 			</TouchableOpacity>
 			{!expand && body}
@@ -392,7 +436,7 @@ const getStyles = ({
 		paddingFactor,
 		shadow,
 		fontSizeFactorEight,
-		fontSizeFactorFour,
+		fontSizeFactorOne,
 	} = Theme.Core;
 	const {
 		inAppBrandSecondary,
@@ -403,7 +447,7 @@ const getStyles = ({
 
 	return {
 		padding,
-		iconSize: deviceWidth * 0.06,
+		iconSize: deviceWidth * 0.07,
 		titleCoverStyle: {
 			flexDirection: 'row',
 			marginLeft: padding,
@@ -412,7 +456,7 @@ const getStyles = ({
 		},
 		titleStyle: {
 			marginLeft: 8,
-			fontSize: deviceWidth * fontSizeFactorFour,
+			fontSize: deviceWidth * fontSizeFactorOne,
 		},
 		coverStyle: {
 			justifyContent: 'space-between',
@@ -425,7 +469,7 @@ const getStyles = ({
 		},
 		textStyle: {
 			fontSize,
-			textAlign: 'center',
+			textAlign: 'left',
 		},
 		slider: {
 			track: {

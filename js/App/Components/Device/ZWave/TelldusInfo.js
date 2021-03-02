@@ -78,7 +78,6 @@ const TelldusInfo = (props: Props): Object => {
 	const {
 		titleCoverStyle,
 		coverStyle,
-		textStyle,
 		titleStyle,
 		iconStyle,
 		iconSize,
@@ -132,7 +131,6 @@ const TelldusInfo = (props: Props): Object => {
 	const linkParts = ManualUrl.split('/');
 	const fileName = linkParts[linkParts.length - 1];
 
-	// TODO: Translate
 	return (
 		<>
 			<TouchableOpacity
@@ -146,7 +144,7 @@ const TelldusInfo = (props: Props): Object => {
 				<Text
 					level={2}
 					style={titleStyle}>
-					Telldus Info
+					{formatMessage(i18n.linkToManual)}
 				</Text>
 			</TouchableOpacity>
 			{!expand && (
@@ -155,11 +153,6 @@ const TelldusInfo = (props: Props): Object => {
 					style={coverStyle}>
 					{!!ManualUrl && (
 						<>
-							<Text
-								level={4}
-								style={textStyle}>
-                            Manual :
-							</Text>
 							<TouchableOpacity
 								onPress={onPressViewManual}
 								onPressData={{
@@ -190,13 +183,13 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		shadow,
 		fontSizeFactorEight,
-		fontSizeFactorFour,
+		fontSizeFactorOne,
 	} = Theme.Core;
 	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 	const padding = deviceWidth * paddingFactor;
 
 	return {
-		iconSize: deviceWidth * 0.06,
+		iconSize: deviceWidth * 0.07,
 		titleCoverStyle: {
 			flexDirection: 'row',
 			marginLeft: padding,
@@ -205,7 +198,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			marginLeft: 8,
-			fontSize: deviceWidth * fontSizeFactorFour,
+			fontSize: deviceWidth * fontSizeFactorOne,
 		},
 		coverStyle: {
 			marginTop: 2,
@@ -216,10 +209,6 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			justifyContent: 'flex-start',
 			...shadow,
-		},
-		textStyle: {
-			fontSize,
-			textAlign: 'center',
 		},
 		manualLinkStyle: {
 			flex: 1,

@@ -27,7 +27,7 @@ import { configureStore } from '../../../../Store/ConfigureStore';
 import {act} from 'react-test-renderer';
 
 import {
-	rendererWithIntlAndRedux,
+	rendererWithIntlAndReduxProviders,
 	DUMMY_DEVICE_433,
 } from '../../../../../Utils/jestUtils';
 
@@ -86,7 +86,7 @@ describe('<DeviceSettings /> - snapshot', () => {
 			});
 			store.dispatch(deviceInfoSuccess(DUMMY_DEVICE_433));
 
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<DeviceSettings
 					settings={setting}
 					deviceId={deviceId}
@@ -118,7 +118,7 @@ describe('<DeviceSettings /> - snapshot', () => {
 			store.dispatch(setWidgetParamHouse('13'));
 			store.dispatch(setWidgetParamUnit('5'));
 
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<DeviceSettings
 					settings={setting}/>
 			);

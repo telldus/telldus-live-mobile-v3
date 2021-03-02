@@ -30,17 +30,21 @@ import React, {
 import {
 	useSelector,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	Text,
 	View,
 	EmptyView,
 	RoundedInfoButton,
+	TouchableButton,
 } from '../../../../BaseComponents';
 import GenericConfSetting from './GenericConfSetting';
 import BitsetConfSetting from './BitsetConfSetting';
 import RangeConfSetting from './RangeConfSetting';
 import RangeMappedConfSetting from './RangeMappedConfSetting';
+import ManualConfigBlock from './ManualConfigBlock';
+import QueuedManualConfigBlock from './QueuedManualConfigBlock';
 
 import Theme from '../../../Theme';
 
@@ -51,17 +55,36 @@ import {
 	useAppTheme,
 } from '../../../Hooks/Theme';
 
+import i18n from '../../../Translations/common';
+
 type Props = {
 	parameters: Object,
 	manufacturerAttributes: Object,
 	configurationParameters: Array<Object>,
+	onChangeValue: (Object) => void,
+	onChangeConfigurationAdvManual: (Object) => void,
+	onChangeConfigurationAdvManualQueued: (Object) => void,
+	isLoadingAdv: boolean,
+	configurationsManual: Array<Object>,
+	addNewManual: Function,
 };
 
 const AdvancedConf = (props: Props): Object => {
 	const {
 		parameters = {},
 		configurationParameters,
+		onChangeValue,
+		isLoadingAdv,
+		onChangeConfigurationAdvManual,
+		onChangeConfigurationAdvManualQueued,
+		configurationsManual,
+		addNewManual,
 	} = props;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		colors,
@@ -81,6 +104,9 @@ const AdvancedConf = (props: Props): Object => {
 		horizontalBlockCoverMultiple,
 		horizontalCoverMultiple,
 		rightBlockMultiple,
+		verticalBlockCoverManual,
+		padding,
+		buttonStyle,
 	} = getStyles({
 		layout,
 		colors,
@@ -89,13 +115,17 @@ const AdvancedConf = (props: Props): Object => {
 	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
-	const onPressInfo = useCallback(({Description}: Object) => {
+	const onPressInfo = useCallback(({
+		Description,
+		title,
+		postScript,
+	}: Object) => {
 		toggleDialogueBoxState({
 			show: true,
-			header: ' ',
+			header: formatMessage(i18n.confDescription),
 			showHeader: true,
 			imageHeader: true,
-			text: Description,
+			text: `${title}\n\n${Description}\n\n${postScript}`,
 			showPositive: true,
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,34 +139,39 @@ const AdvancedConf = (props: Props): Object => {
 			case 'bitset': {
 				return (
 					<BitsetConfSetting
-						{...others}/>
+						{...others}
+						onChangeValue={onChangeValue}/>
 				);
 			}
 			case 'range': {
 				return (
 					<RangeConfSetting
-						{...others}/>
+						{...others}
+						onChangeValue={onChangeValue}/>
 				);
 			}
 			case 'rangemapped': {
 				return (
 					<RangeMappedConfSetting
-						{...others}/>
+						{...others}
+						onChangeValue={onChangeValue}/>
 				);
 			}
 			default:
 				return (
 					<GenericConfSetting
-						{...others}/>
+						{...others}
+						onChangeValue={onChangeValue}/>
 				);
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [onChangeValue]);
 
 	const cParamsLength = configurationParameters.length;
 	const paramsLen = Object.keys(parameters);
 	const configurationSettings = useMemo((): Array<Object> => {
-		const _configurationSettings = configurationParameters.map((cp: Object, index: number): Object => {
+		let deviceDescriptorParamIds = [];
+		let _configurationSettings = configurationParameters.map((cp: Object, index: number): Object => {
 			// TODO: Move to shared data
 			const {
 				Name,
@@ -147,24 +182,23 @@ const AdvancedConf = (props: Props): Object => {
 				DefaultValue,
 			} = cp;
 
+			deviceDescriptorParamIds.push(ParameterNumber);
+
 			let min = null;
 			let max = null;
 			let steps = 0;
 			let _values = [];
 			// TODO: Unlike xml used at web, JSON response in app do not
 			// have a type attribute, so confirm the type inference logic.
-			let type = values.length > 0 ? 'bitset' : undefined;
+			let type;
 
 			for (let i = 0; i < values.length; ++i) {
 				const {
 					From,
 					To,
 				} = values[i];
-				if (From !== To) {
-					type = undefined;
-				}
-				let from = parseInt(From, 16);
-				let to = parseInt(To, 16);
+				let from = parseInt(From, 10);
+				let to = parseInt(To, 10);
 				let signed = false;
 				if (from > to) {
 					// eslint-disable-next-line no-bitwise
@@ -212,32 +246,31 @@ const AdvancedConf = (props: Props): Object => {
 			const hasMultiple = Size > 1 && values.length > 1 && values.length === Size;
 			if (hasMultiple) {
 				let row = [];
-				values.forEach((v: Object) => {
+				const setting = getConfSettings({
+					values: _values,
+					type,
+					stepsTot: steps,
+					defaultValue: defaultValue.toString(),
+					min,
+					max,
+					Size,
+					ConfigurationParameterValues: values,
+					ParameterNumber,
+				});
+				values.forEach((v: Object, i: number) => {
 					const {
 						Description: d,
+						From,
 					} = v;
-					const setting = getConfSettings({
-						values: _values,
-						type,
-						stepsTot: steps,
-						defaultValue: defaultValue.toString(),
-						min,
-						max,
-						Size,
-						ConfigurationParameterValues: values,
-					});
 					row.push(
 						<View
+							key={`${i}`}
 							style={horizontalBlockCoverMultiple}>
 							<Text
 								level={3}
 								style={hItemLabelDef}>
-								{`${d}`}
+								{`${From}. ${d}`}
 							</Text>
-							<View
-								style={rightBlockMultiple}>
-								{setting}
-							</View>
 						</View>
 					);
 				});
@@ -269,6 +302,11 @@ const AdvancedConf = (props: Props): Object => {
 											onPress: onPressInfo,
 											onPressData: {
 												Description,
+												title: `${ParameterNumber}. ${Name}`,
+												postScript: formatMessage(i18n.pleaseSetValueBetween, {
+													min,
+													max,
+												}),
 											},
 										}}/>
 								</>
@@ -277,6 +315,10 @@ const AdvancedConf = (props: Props): Object => {
 						<View
 							style={verticalBlockCoverMultiple}>
 							{row}
+						</View>
+						<View
+							style={rightBlockMultiple}>
+							{setting}
 						</View>
 					</View>
 				);
@@ -290,6 +332,7 @@ const AdvancedConf = (props: Props): Object => {
 				max,
 				Size,
 				ConfigurationParameterValues: values,
+				ParameterNumber,
 			});
 			return (
 				<View
@@ -297,11 +340,16 @@ const AdvancedConf = (props: Props): Object => {
 					style={horizontalCover}>
 					<View
 						style={leftBlock}>
-						<Text
-							level={3}
-							style={hItemLabelDef}>
-							{`${ParameterNumber}. ${Name}`}
-						</Text>
+						<View
+							style={{
+								flex: 1,
+							}}>
+							<Text
+								level={3}
+								style={hItemLabelDef}>
+								{`${ParameterNumber}. ${Name}`}
+							</Text>
+						</View>
 						{!!Description && (
 							<>
 								<Text style={Theme.Styles.hiddenText}>
@@ -318,7 +366,12 @@ const AdvancedConf = (props: Props): Object => {
 										},
 										onPress: onPressInfo,
 										onPressData: {
+											title: `${ParameterNumber}. ${Name}`,
 											Description,
+											postScript: formatMessage(i18n.pleaseSetValueBetween, {
+												min,
+												max,
+											}),
 										},
 									}}/>
 							</>
@@ -331,9 +384,129 @@ const AdvancedConf = (props: Props): Object => {
 				</View>
 			);
 		});
+		let manualParams = [];
+		for (let index in parameters) {
+			if (parameters[index] && deviceDescriptorParamIds.indexOf(parseInt(index, 10)) < 0) {
+				manualParams.push({
+					...parameters[index],
+					pNumber: index,
+				});
+			}
+		}
+
+		if (manualParams.length > 0) {
+			manualParams.forEach((mp: Object, index: number) => {
+				const {
+					pNumber,
+					size,
+					value,
+				} = mp;
+				const _size = typeof size === undefined ? '' : size.toString();
+				const _value = typeof value === undefined ? '' : value.toString();
+
+				_configurationSettings.push(
+					<View
+						key={`${index}-${pNumber}`}
+						style={verticalBlockCoverManual}>
+						<View
+							style={leftBlockMultiple}>
+							<Text
+								level={3}
+								style={hItemLabelDef}>
+								{`${pNumber}. ${formatMessage(i18n.manualConfOne)}`}
+							</Text>
+						</View>
+						<View
+							key={`${index}-${pNumber}`}>
+							<QueuedManualConfigBlock
+								formatMessage={formatMessage}
+								number={pNumber}
+								value={_value}
+								size={_size}
+								onChangeValue={onChangeConfigurationAdvManualQueued}
+								resetOnSave/>
+						</View>
+					</View>
+				);
+			});
+		}
+		let manualConfs = [];
+		configurationsManual.forEach((mcs: Object, index: number) => {
+			const {
+				number,
+				size,
+				value,
+			} = mcs;
+			manualConfs.push(
+				<View
+					key={`${index}-manual-two`}
+					style={[verticalBlockCoverManual, {
+						paddingTop: _configurationSettings.length > 0 ? padding / 2 : 0,
+						borderTopWidth: _configurationSettings.length > 0 ? 3 : 0,
+						borderTopColor: colors.screenBackground,
+					}]}>
+					<View
+						style={leftBlockMultiple}>
+						<Text
+							level={3}
+							style={hItemLabelDef}>
+							{formatMessage(i18n.manualConfTwo)}
+						</Text>
+					</View>
+					<ManualConfigBlock
+						label={`${formatMessage(i18n.number)} : `}
+						inputValueKey={'number'}
+						number={number}
+						size={size}
+						value={value}
+						onChangeValue={onChangeConfigurationAdvManual}
+						resetOnSave={false}
+						index={index}/>
+					<ManualConfigBlock
+						label={`${formatMessage(i18n.size)} : `}
+						inputValueKey={'size'}
+						number={number}
+						size={size}
+						value={value}
+						onChangeValue={onChangeConfigurationAdvManual}
+						resetOnSave={false}
+						index={index}/>
+					<ManualConfigBlock
+						label={`${formatMessage(i18n.labelValue)} : `}
+						inputValueKey={'value'}
+						number={number}
+						size={size}
+						value={value}
+						onChangeValue={onChangeConfigurationAdvManual}
+						resetOnSave={false}
+						index={index}/>
+				</View>
+			);
+		});
+		_configurationSettings.push(
+			<View
+				key={'manual-two'}>
+				{manualConfs}
+				<TouchableButton
+					style={buttonStyle}
+					text={formatMessage(i18n.labelAdd)}
+					onPress={addNewManual}
+					showThrobber={isLoadingAdv}
+					disabled={isLoadingAdv}/>
+			</View>
+		);
 		return _configurationSettings;
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [cParamsLength, paramsLen, layout, getConfSettings]);
+	}, [
+		addNewManual,
+		cParamsLength,
+		paramsLen,
+		layout,
+		getConfSettings,
+		onChangeValue,
+		onChangeConfigurationAdvManualQueued,
+		onChangeConfigurationAdvManual,
+		isLoadingAdv]);
 
 	if (configurationSettings.length <= 0) {
 		return <EmptyView/>;
@@ -342,10 +515,10 @@ const AdvancedConf = (props: Props): Object => {
 	return (
 		<View
 			style={verticalCover}>
-			<Text // TODO: Translate
+			<Text
 				level={2}
 				style={subTitleTextStyle}>
-                 Advanced settings
+				{formatMessage(i18n.advancedSettings)}
 			</Text>
 			<View
 				level={2}
@@ -374,10 +547,10 @@ const getStyles = ({
 	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
 
 	return {
+		padding,
 		coverStyle: {
 			justifyContent: 'space-between',
 			marginTop: 2,
-			marginHorizontal: padding,
 			borderRadius: 2,
 			padding,
 			...shadow,
@@ -386,7 +559,6 @@ const getStyles = ({
 		},
 		subTitleTextStyle: {
 			fontSize: fontSize * 1.1,
-			marginLeft: padding,
 			marginTop: 8,
 			marginBottom: 5,
 		},
@@ -414,6 +586,11 @@ const getStyles = ({
 			flexDirection: 'column',
 			paddingLeft: 8,
 		},
+		verticalBlockCoverManual: {
+			flex: 1,
+			flexDirection: 'column',
+			marginTop: padding,
+		},
 		horizontalBlockCoverMultiple: {
 			flex: 1,
 			flexDirection: 'row',
@@ -426,6 +603,7 @@ const getStyles = ({
 		},
 		rightBlockMultiple: {
 			flexDirection: 'row',
+			width: '30%',
 			alignItems: 'center',
 			justifyContent: 'flex-end',
 		},
@@ -434,6 +612,13 @@ const getStyles = ({
 			width: '30%',
 			alignItems: 'center',
 			justifyContent: 'flex-end',
+		},
+		buttonStyle: {
+			alignSelf: 'flex-end',
+			marginTop: padding,
+			width: '30%',
+			minWidth: '30%',
+			paddingVertical: 7,
 		},
 	};
 };

@@ -25,7 +25,7 @@ import {
 import {act} from 'react-test-renderer';
 
 import {
-	rendererWithIntlAndRedux,
+	rendererWithIntlAndReduxProviders,
 } from '../../Utils/jestUtils';
 import FloatingButton from '../FloatingButton';
 import {
@@ -50,7 +50,7 @@ describe('<FloatingButton /> - snapshot', () => {
 	it('renders FloatingButton when enabled', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<FloatingButton/>
 			);
 		});
@@ -62,7 +62,7 @@ describe('<FloatingButton /> - snapshot', () => {
 	it('renders FloatingButton when disabled', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<FloatingButton
 					disabled/>
 			);
@@ -75,7 +75,7 @@ describe('<FloatingButton /> - snapshot', () => {
 	it('renders FloatingButton when enabled and loading', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<FloatingButton
 					showThrobber={true}/>
 			);
@@ -88,7 +88,7 @@ describe('<FloatingButton /> - snapshot', () => {
 	it('renders FloatingButton when disabled and loading', () => {
 		let component;
 		act(() => {
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<FloatingButton
 					disabled
 					showThrobber={true}/>

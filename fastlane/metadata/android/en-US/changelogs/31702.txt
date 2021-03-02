@@ -1,0 +1,3 @@
+- Fix some sensor history issues
+- Disable font scaling on DB
+

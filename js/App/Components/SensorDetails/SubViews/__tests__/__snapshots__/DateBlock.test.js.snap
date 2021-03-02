@@ -1,0 +1,251 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DateBlock /> - snapshot renders DateBlock align left 1`] = `
+<View
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onLayout={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  pointerEvents="box-only"
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "transparent",
+      "flexDirection": "row",
+      "justifyContent": "flex-start",
+      "marginBottom": 20.83275,
+      "marginLeft": 10.416375,
+      "width": 348.9590625,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#000000",
+        "borderRadius": 45,
+        "elevation": 2,
+        "height": 90,
+        "justifyContent": "center",
+        "marginLeft": 0,
+        "marginRight": 20.83275,
+        "marginVertical": 20.83275,
+        "shadowColor": "#000",
+        "shadowOffset": Object {
+          "height": 1,
+          "width": 0,
+        },
+        "shadowOpacity": 0.23,
+        "shadowRadius": 2,
+        "width": 90,
+      }
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        Array [
+          Object {
+            "color": "#fff",
+            "fontSize": 37.5,
+          },
+          undefined,
+          Object {
+            "fontFamily": "FontAwesome",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          Object {},
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "flex-start",
+        "backgroundColor": "transparent",
+      }
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        Object {
+          "backgroundColor": "transparent",
+          "color": "#000",
+          "fontFamily": "SuisseIntl",
+          "fontSize": 26.250000000000004,
+        }
+      }
+    >
+      From:
+    </Text>
+    <Text
+      allowFontScaling={false}
+      style={
+        Object {
+          "backgroundColor": "transparent",
+          "color": "#000",
+          "fontFamily": "SuisseIntl",
+          "fontSize": 36.75,
+        }
+      }
+    >
+      1/10/2021
+    </Text>
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "transparent",
+          "bottom": 0,
+          "left": 0,
+          "overflow": "hidden",
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        },
+        Object {
+          "borderRadius": 0,
+        },
+      ]
+    }
+  />
+</View>
+`;
+
+exports[`<DateBlock /> - snapshot renders DateBlock align right 1`] = `
+<View
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onLayout={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  pointerEvents="box-only"
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "transparent",
+      "flexDirection": "row",
+      "justifyContent": "flex-end",
+      "marginBottom": 20.83275,
+      "marginLeft": 10.416375,
+      "width": 348.9590625,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "flex-end",
+        "backgroundColor": "transparent",
+      }
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        Object {
+          "backgroundColor": "transparent",
+          "color": "#000",
+          "fontFamily": "SuisseIntl",
+          "fontSize": 26.250000000000004,
+        }
+      }
+    >
+      To:
+    </Text>
+    <Text
+      allowFontScaling={false}
+      style={
+        Object {
+          "backgroundColor": "transparent",
+          "color": "#000",
+          "fontFamily": "SuisseIntl",
+          "fontSize": 36.75,
+        }
+      }
+    >
+      1/11/2021
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#000000",
+        "borderRadius": 45,
+        "elevation": 2,
+        "height": 90,
+        "justifyContent": "center",
+        "marginLeft": 20.83275,
+        "marginRight": 0,
+        "marginVertical": 20.83275,
+        "shadowColor": "#000",
+        "shadowOffset": Object {
+          "height": 1,
+          "width": 0,
+        },
+        "shadowOpacity": 0.23,
+        "shadowRadius": 2,
+        "width": 90,
+      }
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        Array [
+          Object {
+            "color": "#fff",
+            "fontSize": 37.5,
+          },
+          undefined,
+          Object {
+            "fontFamily": "FontAwesome",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          Object {},
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "transparent",
+          "bottom": 0,
+          "left": 0,
+          "overflow": "hidden",
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        },
+        Object {
+          "borderRadius": 0,
+        },
+      ]
+    }
+  />
+</View>
+`;

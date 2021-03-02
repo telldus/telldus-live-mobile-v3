@@ -42,6 +42,7 @@ import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
 import ThermostatButton from './Thermostat/ThermostatButton';
 import MultiActionModal from './Device/MultiActionModal';
+import Battery from '../../SensorDetails/SubViews/Battery';
 
 import {
 	withTheme,
@@ -58,6 +59,9 @@ import {
 	getMainColorRGB,
 	prepareMainColor,
 	getThermostatValue,
+	getMatchingSensorInfo,
+	getBatteryPercentage,
+	showBatteryStatus,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
@@ -79,6 +83,8 @@ type Props = PropsThemedComponent & {
 	propsSwipeRow: Object,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
+	battery?: number,
+	batteryStatus: string,
 
 	onBell: (number) => void,
 	onDown: (number) => void,
@@ -184,6 +190,8 @@ class DeviceRow extends View<Props, State> {
 				'colorScheme',
 				'dark',
 				'selectedThemeSet',
+				'battery',
+				'batteryStatus',
 			]);
 			if (propsChange) {
 				return true;
@@ -302,6 +310,8 @@ class DeviceRow extends View<Props, State> {
 			dark,
 			colors,
 			selectedThemeSet,
+			battery,
+			batteryStatus,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -446,6 +456,11 @@ class DeviceRow extends View<Props, State> {
 		let accessibilityLabel = `${getLabelDevice(intl.formatMessage, device)}, ${intl.formatMessage(i18n.accessibilityLabelViewDD)}`;
 
 		const nameInfo = this.getNameInfo(device, deviceName, powerConsumed, styles);
+		const percentage = getBatteryPercentage(battery);
+		const showBattery = showBatteryStatus({
+			percentage,
+			batteryStatus,
+		});
 
 		return (
 			<View>
@@ -479,17 +494,32 @@ class DeviceRow extends View<Props, State> {
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 								accessibilityLabel={accessibilityLabel}>
-								{showDeviceIcon && <BlockIcon
-									icon={icon}
-									style={[
-										styles.deviceIcon,
-										{
-											color: selectedThemeSet.key === 2 ? colorDeviceIconBack : '#ffffff',
-										},
-									]}
-									containerStyle={[styles.iconContainerStyle, {
-										backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : colorDeviceIconBack,
-									}]}/>}
+								{showDeviceIcon && (
+									<View style={{
+										flex: 0,
+										flexDirection: 'column',
+										alignItems: 'center',
+									}}>
+										<BlockIcon
+											icon={icon}
+											style={[
+												styles.deviceIcon,
+												{
+													color: selectedThemeSet.key === 2 ? colorDeviceIconBack : '#ffffff',
+												},
+											]}
+											containerStyle={[styles.iconContainerStyle, {
+												backgroundColor: selectedThemeSet.key === 2 ? 'transparent' : colorDeviceIconBack,
+											}]}/>
+										{(!!battery && battery !== 254) && showBattery && (
+											<Battery
+												value={percentage}
+												appLayout={styles.appLayout}
+												style={styles.batteryStyle}
+												nobStyle={styles.nobStyle}/>
+										)}
+									</View>
+								)}
 								{nameInfo}
 							</TouchableOpacity>
 							<View style={styles.buttonsCover}>
@@ -520,7 +550,10 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	getNameInfo(device: Object, deviceName: string, powerConsumed: string | null, styles: Object): Object {
-		let { intl, currentTemp } = this.props;
+		let {
+			intl,
+			currentTemp,
+		} = this.props;
 		let {
 			name,
 			nameTablet,
@@ -615,8 +648,22 @@ class DeviceRow extends View<Props, State> {
 		let backgroundColor = !isGatewayActive ? offlineColor : color;
 
 		const padding = deviceWidth * paddingFactor;
+		const iconSize = 18;
+		const batteryHeight = 9;
 
 		return {
+			appLayout,
+			batteryStyle: {
+				height: batteryHeight,
+				width: 17,
+			},
+			nobStyle: {
+				height: Math.floor(batteryHeight * 0.47),
+				width: Math.floor(batteryHeight * 0.2),
+				overflow: 'hidden',
+				borderTopRightRadius: Math.floor(batteryHeight * 0.17),
+				borderBottomRightRadius: Math.floor(batteryHeight * 0.17),
+			},
 			touchableContainer: {
 				flex: 1,
 				flexDirection: 'row',
@@ -676,7 +723,7 @@ class DeviceRow extends View<Props, State> {
 				marginRight: 4,
 			},
 			deviceIcon: {
-				fontSize: 18,
+				fontSize: iconSize,
 			},
 			iconContainerStyle: {
 				backgroundColor,
@@ -733,6 +780,9 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const { clientDeviceId, clientId, deviceType } = ownProps.device;
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId, deviceType);
 	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
+	const {
+		battery,
+	} = getMatchingSensorInfo(store.sensors.byId, clientDeviceId, clientId) || {};
 
 	const { firebaseRemoteConfig = {} } = store.user;
 	const { rgb = JSON.stringify({}) } = firebaseRemoteConfig;
@@ -746,6 +796,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		currentTemp,
 		onColorMultiplier,
 		offColorMultiplier,
+		battery,
 	};
 }
 

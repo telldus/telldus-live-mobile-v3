@@ -212,6 +212,9 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			item,
 			colors,
 		} = this.props;
+		const {
+			successStatus,
+		} = item;
 
 		let {
 			locationCover,
@@ -268,7 +271,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			bGColor,
 			iconColor,
 		} = this.getColorSet(item, deviceState);
-
+		let roundIcon = successStatus !== 0 ? 'info' : '';
 		let Icon, currentModeLabel = '', stateValSec;
 		if (deviceState === 'THERMOSTAT') {
 			let thermoStateValue = {};
@@ -312,13 +315,18 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				iconColor = colors.colorOffActiveIcon;
 				icon = 'off';
 			}
+			if (successStatus === 6) {
+				roundIcon = 'time';
+				roundIconStyle = {
+					...roundIconStyle,
+					color: colors.inAppBrandSecondary,
+				};
+			}
 		}
 
 		let accessibilityLabel = this.accessibilityLabel(deviceState);
 		accessibilityLabel = `${accessibilityLabel}. ${currentModeLabel}, ${originInfo}`;
 		let accessible = !isModalOpen && currentScreen === 'History';
-
-		let roundIcon = item.successStatus !== 0 ? 'info' : '';
 
 		return (
 			<TouchableOpacity style={styles.rowItemsContainer}

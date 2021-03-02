@@ -246,7 +246,6 @@ actionsToPerformOnStart = async () => {
 		showChangeLog,
 		changeLogVersion,
 	} = this.props;
-
 	if (showChangeLog) {
 		navigate('ChangeLogScreen', {
 			forceShowChangeLog: false,
@@ -258,7 +257,7 @@ actionsToPerformOnStart = async () => {
 		// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
 		await dispatch(fetchRemoteConfig());
 
-		if (enableGeoFence && Platform.OS === 'ios') {
+		if (enableGeoFence) {
 			await dispatch(setupGeoFence(intl));
 		}
 	} catch (e) {
@@ -271,52 +270,54 @@ actionsToPerformOnStart = async () => {
 
 	if (Platform.OS === 'ios') {
 		try {
-			await RNIap.initConnection();
-			let productIds = [];
-			getSubscriptionPlans().forEach((plans: Object) => {
-				if (plans.productIdIap) {
-					productIds.push(plans.productIdIap);
-				}
-			});
-			const subs = Platform.select({
-				ios: productIds,
-			});
-			const products = await RNIap.getSubscriptions(subs);
-			dispatch(onReceivedInAppPurchaseProducts(products));
+			const flag = await RNIap.initConnection();
+			if (flag) {
+				let productIds = [];
+				getSubscriptionPlans().forEach((plans: Object) => {
+					if (plans.productIdIap) {
+						productIds.push(plans.productIdIap);
+					}
+				});
+				const subs = Platform.select({
+					ios: productIds,
+				});
+				const products = await RNIap.getSubscriptions(subs);
+				dispatch(onReceivedInAppPurchaseProducts(products));
 
-			const purchases = await RNIap.getAvailablePurchases() || [];// Those not called 'finishTransaction' post-purchase
-			dispatch(onReceivedInAppAvailablePurchases(purchases));
-			// purchases.forEach((purchase: Object) => {
-			// const idsAutoRenewing = ['premiumauto'];// TODO update with the actual auto renewing susbscriptions
-			// const {
-			// 	productId,
-			// } = purchase;
+				const purchases = await RNIap.getAvailablePurchases() || [];// Those not called 'finishTransaction' post-purchase
+				dispatch(onReceivedInAppAvailablePurchases(purchases));
+				// purchases.forEach((purchase: Object) => {
+				// const idsAutoRenewing = ['premiumauto'];// TODO update with the actual auto renewing susbscriptions
+				// const {
+				// 	productId,
+				// } = purchase;
 
-			// Fix for ISSUE 1 reported below. But with a cost one unnecessary
-			// API call/report(auto renewing subscription).
-			// const isAutoRenewing = idsAutoRenewing.indexOf(productId) === -1;
-			// if (!isAutoRenewing) {
-			// 	dispatch(reportIapAtServer(purchase));
-			// }
-			// TODO: If auto renewing subscription:
-			// 1- Take the one with latest 'originTransactionDateIOS'
-			// 2- Report that alone at the server
-			// Even after reporting and calling 'finishTransaction' and 'finishTransactionIOS',
-			// Unlike non-renew, it will still be present in this list.
-			// });
-			// TODO: These are the purchases made successfully but failed to
-			// report at our server(createTransaction not success), may be try to report now?
+				// Fix for ISSUE 1 reported below. But with a cost one unnecessary
+				// API call/report(auto renewing subscription).
+				// const isAutoRenewing = idsAutoRenewing.indexOf(productId) === -1;
+				// if (!isAutoRenewing) {
+				// 	dispatch(reportIapAtServer(purchase));
+				// }
+				// TODO: If auto renewing subscription:
+				// 1- Take the one with latest 'originTransactionDateIOS'
+				// 2- Report that alone at the server
+				// Even after reporting and calling 'finishTransaction' and 'finishTransactionIOS',
+				// Unlike non-renew, it will still be present in this list.
+				// });
+				// TODO: These are the purchases made successfully but failed to
+				// report at our server(createTransaction not success), may be try to report now?
 
-			// ISSUES when reporting to server from here:
+				// ISSUES when reporting to server from here:
 
-			// ISSUE 1: All transactions of auto-renewable subscription seem to be present
-			// here even after calling 'finishTransaction' and 'finishTransactionIOS'.
-			// Which will be an issue while reporting!!
-			// ISSUE 2: In future when user log into multiple accounts, there is a
-			// chance for the user to have purchased a subscription from one account,
-			// and report at server from another.(Made purchase from acc. 'A', failed report
-			// at server, hence finishTransaction not called, user switched to acc. 'B', prev. purchase
-			// made from acc 'A' gets reported now from here)
+				// ISSUE 1: All transactions of auto-renewable subscription seem to be present
+				// here even after calling 'finishTransaction' and 'finishTransactionIOS'.
+				// Which will be an issue while reporting!!
+				// ISSUE 2: In future when user log into multiple accounts, there is a
+				// chance for the user to have purchased a subscription from one account,
+				// and report at server from another.(Made purchase from acc. 'A', failed report
+				// at server, hence finishTransaction not called, user switched to acc. 'B', prev. purchase
+				// made from acc 'A' gets reported now from here)
+			}
 		} catch (err) {
 			// Ignore
 		}

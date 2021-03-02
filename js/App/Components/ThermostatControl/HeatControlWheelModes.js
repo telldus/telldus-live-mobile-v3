@@ -552,7 +552,7 @@ render(): Object | null {
 		gradientColorFromOverride,
 		source,
 		shouldHaveMode,
-		actionsQueueThermostat,
+		actionsQueueThermostat = {},
 	} = this.props;
 
 	const {

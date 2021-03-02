@@ -53,10 +53,16 @@ const Title = memo<Object>(({
 	iconRight,
 	iconRightStyle,
 	onPressIconRight,
+	titleStyle = {},
 }: Object): Object => {
 
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	const { tileNameDisplayMode } = defaultSettings;
+	const {
+		tileNameDisplayMode,
+		dBTileDisplayMode,
+	} = defaultSettings;
+
+	const isBroard = dBTileDisplayMode !== 'compact';
 
 	const {
 		colors,
@@ -74,11 +80,13 @@ const Title = memo<Object>(({
 				duration={5000}
 				repeatSpacer={50}
 				marqueeDelay={5000}
+				allowFontScaling={false}
 				style={[
 					styles.name, {
 						fontSize: Math.floor(tileWidth / 10),
 						opacity: name ? 1 : 0.7,
 						color: colors.baseColorTwo,
+						...titleStyle,
 					},
 				]}
 				bounce={false}>
@@ -86,18 +94,18 @@ const Title = memo<Object>(({
 			</TextTicker>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [name, tileWidth, tileNameDisplayMode, selectedThemeSet.key, themeInApp, colorScheme]);
+	}, [titleStyle, name, tileWidth, tileNameDisplayMode, selectedThemeSet.key, themeInApp, colorScheme]);
 
 	return (
 		<View
 			level={2}
 			style={[styles.title, {
 				width: tileWidth,
-				height: Math.ceil(tileWidth * 0.6),
+				height: Math.ceil(tileWidth * (isBroard ? 0.6 : 0.22)),
 				paddingHorizontal: tileWidth * 0.06,
-				paddingVertical: tileWidth * 0.06,
+				paddingVertical: tileWidth * (isBroard ? 0.06 : 0.022),
 			}]}>
-			{!!iconRight && (<BlockIcon
+			{!!iconRight && isBroard && (<BlockIcon
 				onPress={onPressIconRight}
 				icon={iconRight}
 				containerStyle={{
@@ -117,29 +125,29 @@ const Title = memo<Object>(({
 					textAlign: 'center',
 					alignSelf: 'center',
 				}}/>)}
-			{!!icon && (<BlockIcon
+			{!!icon && isBroard && (<BlockIcon
 				blockLevel={21}
 				icon={icon}
 				containerStyle={iconContainerStyle}
 				style={iconStyle}/>)}
 			<View style={styles.textCover}>
 				{NameInfo}
-				{!!info &&
-			typeof info === 'string' ?
-					<Text
-						ellipsizeMode="middle"
-						numberOfLines={1}
-						style={[
-							styles.name, {
-								fontSize: Math.floor(tileWidth / 12),
-								color: Theme.Core.rowTextColor,
-							},
-						]}>
-						{info}
-					</Text>
-					:
-					info
-				}
+				{!!info && isBroard && (
+					typeof info === 'string' ?
+						<Text
+							ellipsizeMode="middle"
+							numberOfLines={1}
+							style={[
+								styles.name, {
+									fontSize: Math.floor(tileWidth / 12),
+									color: Theme.Core.rowTextColor,
+								},
+							]}>
+							{info}
+						</Text>
+						:
+						info
+				)}
 			</View>
 		</View>
 	);
@@ -152,6 +160,7 @@ type Props = {
 	intl: Object,
 	accessibilityLabel: string,
 	icon?: string,
+	titleStyle?: Object,
 };
 
 class DashboardShadowTile extends View<Props, null> {

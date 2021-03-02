@@ -25,7 +25,7 @@ import {act} from 'react-test-renderer';
 import { connect } from 'react-redux';
 
 import {
-	rendererWithIntlAndRedux,
+	rendererWithIntlAndReduxProviders,
 	setAppLayoutInStore,
 	NAVIGATION_PROP,
 	DUMMY_DEVICE_433,
@@ -121,7 +121,7 @@ describe('<Include433 />', () => {
 		let component;
 		act(() => {
 			initiate();
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<Include433
 					navigation={navigation}
 					route={route}
@@ -195,7 +195,7 @@ describe('<Include433 /> with container component', () => {
 				appLayout,
 				intl,
 			};
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
 					navigation={navigation}
@@ -264,7 +264,7 @@ describe('<Include433 /> on success with container component', () => {
 				appLayout,
 				intl,
 			};
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
 					currentScreen={currentScreen}
@@ -336,7 +336,7 @@ describe('<Include433 /> on error with container component', () => {
 				appLayout,
 				intl,
 			};
-			component = rendererWithIntlAndRedux(
+			component = rendererWithIntlAndReduxProviders(
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
 					currentScreen={currentScreen}

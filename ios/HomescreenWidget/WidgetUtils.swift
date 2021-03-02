@@ -24,15 +24,6 @@ struct WidgetUtils {
                                                                           owningAccount: "developer@telldus.com",
                                                                           timezone: nil)
   
-  static func refreshAllWidgets() {
-    if #available(iOS 14.0, *) {
-      #if arch(arm64) || arch(i386) || arch(x86_64)
-      WidgetCenter.shared.reloadAllTimelines()
-      #endif
-    } else {
-      // Fallback on earlier versions
-    }
-  }
   
   func getSensorSimpleEntry(configuration: SensorWidgetIntent, completion: @escaping (SensorWidgetStructure) -> ()) {
     var displayType = WidgetViewType.preEditView
@@ -60,7 +51,7 @@ struct WidgetUtils {
       return
     } else if (configuration.item?.identifier != nil) {
       let pro = dataDict?["pro"] as? Int
-      let _isBasicUser = isBasicUser(pro: pro)
+      let _isBasicUser = SharedUtils().isBasicUser(pro: pro)
       displayType = _isBasicUser ? .upgradeToPremiumView : .postEditView
       APICacher().cacheSensorData(sensorId: Int(id)!) {
         var icon = ""
@@ -119,7 +110,7 @@ struct WidgetUtils {
       }
     } else {
       let pro = dataDict?["pro"] as? Int
-      let _isBasicUser = isBasicUser(pro: pro)
+      let _isBasicUser = SharedUtils().isBasicUser(pro: pro)
       completion(SensorWidgetStructure(
         id: id,
         name: name,
@@ -133,9 +124,5 @@ struct WidgetUtils {
         timezone:  timezone
       ))
     }
-  }
-  
-  func isBasicUser (pro: Int?) -> Bool {
-    return pro == nil || (Double(pro!) < Date().timeIntervalSince1970)
   }
 }

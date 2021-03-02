@@ -12,7 +12,7 @@ struct SensorWidgetSmallUIView: View {
   let sensorWidgetStructure: SensorWidgetStructure
   var body: some View {
     let name = sensorWidgetStructure.name
-    let label = sensorWidgetStructure.label
+    let label = NSLocalizedString(sensorWidgetStructure.label, comment: "")
     let icon = sensorWidgetStructure.icon
     let value = sensorWidgetStructure.value
     let unit = sensorWidgetStructure.unit

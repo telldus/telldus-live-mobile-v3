@@ -40,6 +40,9 @@ import {
 	useDispatch,
 } from 'react-redux';
 import xor from 'lodash/xor';
+import {
+	useIntl,
+} from 'react-intl';
 
 import {
 	Text,
@@ -61,6 +64,7 @@ import {
 } from '../../../Actions';
 
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
     id: string,
@@ -95,6 +99,11 @@ const Associations = (props: Props): Object => {
 		clientDeviceId,
 	} = props;
 
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
 	const timeoutRef = useRef();
 	useEffect((): Function => {
 		return () => {
@@ -107,14 +116,6 @@ const Associations = (props: Props): Object => {
 	const [ expand, setExpand ] = useState(true);
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
-			'module': 'zwave',
-			'action': 'nodeList',
-		}));
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [clientId]);
-
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { byId = {} } = useSelector((state: Object): Object => state.gateways);
 	const {
@@ -122,7 +123,11 @@ const Associations = (props: Props): Object => {
 	} = byId[clientId];
 	const {
 		nodeInfo,
+		zwaveInfo = {},
 	} = useSelector((state: Object): Object => state.devices.byId[id]) || {};
+	const {
+		AssociationGroups = [],
+	} = zwaveInfo;
 
 	const {
 		titleCoverStyle,
@@ -175,11 +180,14 @@ const Associations = (props: Props): Object => {
 	const isNodeListEqual = isEqual(prevNodeList, nodeList);
 
 	const groupings = useMemo((): Object => {
-		return ZWaveFunctions.prepareGroups(nodeList, nodeId, nodeInfo);
+		return ZWaveFunctions.prepareGroups(nodeList, nodeId, nodeInfo, {
+			AssociationGroups,
+		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		isNodeInfoEqual,
 		isNodeListEqual,
+		AssociationGroups,
 	]);
 
 	const groups = useMemo((): ?Array<Object> => {
@@ -202,6 +210,7 @@ const Associations = (props: Props): Object => {
 					clientId={clientId}
 					nodeId={nodeId}
 					{...groupings[key].group}
+					description={groupings[key].description}
 					currentAssociations={groupings[key].currentAssociations.join(', ')}
 					onAssociationsChange={onAssociationsChange}/>
 			);
@@ -223,7 +232,9 @@ const Associations = (props: Props): Object => {
 		setExpand(!expand);
 	}, [expand]);
 
+	const [ isLoading, setIsLoading ] = useState(false);
 	const saveAssociation = useCallback((data: Object) => {
+		setIsLoading(true);
 		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
 			'module': 'zwave',
 			'action': 'cmdClass',
@@ -234,6 +245,7 @@ const Associations = (props: Props): Object => {
 		}));
 		timeoutRef.current = setTimeout(() => {
 			dispatch(requestNodeInfo(clientId, clientDeviceId));
+			setIsLoading(false);
 		}, 1000);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [clientId, nodeId, clientDeviceId]);
@@ -264,7 +276,7 @@ const Associations = (props: Props): Object => {
 				<Text
 					level={2}
 					style={titleStyle}>
-                    Associations
+					{formatMessage(i18n.associations)}
 				</Text>
 			</TouchableOpacity>
 			{!expand &&
@@ -275,8 +287,10 @@ const Associations = (props: Props): Object => {
 				{hasChanged &&
 				<TouchableButton
 					style={buttonStyle}
-					text={'Save new associations'} // TODO: Translate
-					onPress={onPressSave}/>
+					text={formatMessage(i18n.saveNewAssociations)}
+					onPress={onPressSave}
+					showThrobber={isLoading}
+					disabled={isLoading}/>
 				}
 			</View>
 			}
@@ -291,7 +305,7 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		fontSizeFactorFour,
+		fontSizeFactorOne,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -299,16 +313,15 @@ const getStyles = (appLayout: Object): Object => {
 
 	return {
 		padding,
-		iconSize: deviceWidth * 0.06,
+		iconSize: deviceWidth * 0.07,
 		titleCoverStyle: {
 			flexDirection: 'row',
-			marginLeft: padding,
 			marginBottom: padding / 2,
 			alignItems: 'center',
 		},
 		titleStyle: {
 			marginLeft: 8,
-			fontSize: deviceWidth * fontSizeFactorFour,
+			fontSize: deviceWidth * fontSizeFactorOne,
 		},
 		buttonStyle: {
 			marginTop: padding / 2,

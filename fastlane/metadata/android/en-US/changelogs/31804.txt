@@ -1,0 +1,3 @@
+- Fix of Siri shortcuts
+- Home screen widgets yet to fix
+

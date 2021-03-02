@@ -48,4 +48,24 @@ struct Utilities {
     }
     return dataDict
   }
+  
+  func getMainColorRGB (decimalRGB: Int) -> String {
+    var mainColor = String(decimalRGB, radix: 16);
+    let length = mainColor.count
+    let len = 6;
+    
+    if (length == len) {
+      return "#"+mainColor;
+    } else if (length < len) {
+      // Make sure it is in "#rrggbb" format
+      let deficit = len - length;
+      let i = 1
+      for _ in i...deficit {
+        mainColor = "0"+mainColor;
+      }
+      return "#"+mainColor;
+    }
+    let index = String.Index(utf16Offset: len, in: mainColor)
+    return "#"+mainColor[..<index];
+  }
 }

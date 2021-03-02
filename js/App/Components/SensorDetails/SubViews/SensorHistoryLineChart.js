@@ -185,8 +185,13 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	toggleTwo() {
-		const { showTwo, showOne, onToggleChartData } = this.props;
-		if (showOne || (!showOne && !showTwo)) {
+		const {
+			showTwo,
+			showOne,
+			onToggleChartData,
+			chartDataOne,
+		} = this.props;
+		if ((showOne || (!showOne && !showTwo)) && chartDataOne.length > 0) {
 			onToggleChartData({ showTwo: !showTwo });
 			this.setLargeYTick('2');
 		} else if (!showOne && !showTwo) {
@@ -196,8 +201,13 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	toggleOne() {
-		const { showOne, showTwo, onToggleChartData } = this.props;
-		if (showTwo || (!showTwo && !showOne)) {
+		const {
+			showOne,
+			showTwo,
+			onToggleChartData,
+			chartDataTwo,
+		} = this.props;
+		if ((showTwo || (!showTwo && !showOne)) && chartDataTwo.length > 0) {
 			onToggleChartData({ showOne: !showOne });
 			this.setLargeYTick('2');
 		} else if (!showOne && !showTwo) {

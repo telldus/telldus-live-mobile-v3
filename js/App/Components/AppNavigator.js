@@ -91,6 +91,7 @@ import SelectWeatherForecastDay from './Dashboard/SelectWeatherForecastDay';
 import SetNameMetWeather from './Dashboard/SetNameMetWeather';
 
 import EventsNavigator from './Events/EventsNavigator';
+import SiriShortcutActionsScreen from './Device/ShortcutiOS/SiriShortcutActionsScreen';
 
 import {
 	RegisterScreen,
@@ -498,6 +499,13 @@ const ScreenConfigs = [
 	{
 		name: 'EventsNavigator',
 		Component: EventsNavigator,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SiriShortcutActionsScreen',
+		Component: SiriShortcutActionsScreen,
 		options: {
 			headerShown: false,
 		},

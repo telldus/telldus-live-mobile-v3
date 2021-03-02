@@ -34,6 +34,7 @@ import {
 	Platform,
 	KeyboardAvoidingView,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	ThemedTextInput,
@@ -46,6 +47,7 @@ import {
 	useDialogueBox,
 } from '../../../Hooks/Dialoguebox';
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 const RangeConfSetting = (props: Object): Object => {
 	const {
@@ -67,6 +69,11 @@ const RangeConfSetting = (props: Object): Object => {
 		colors,
 	});
 
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
 	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
@@ -82,12 +89,15 @@ const RangeConfSetting = (props: Object): Object => {
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				text: `Please set value between: ${min}-${max}`, // TODO: Translate
+				text: formatMessage(i18n.pleaseSetValueBetween, {
+					min,
+					max,
+				}),
 				showPositive: true,
 			});
 			return;
 		}
-	}, [value, max, min, toggleDialogueBoxState]);
+	}, [value, max, min, toggleDialogueBoxState, formatMessage]);
 
 	return (
 		<KeyboardAvoidingView

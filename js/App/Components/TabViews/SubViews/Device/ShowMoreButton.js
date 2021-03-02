@@ -39,6 +39,7 @@ type Props = PropsThemedComponent & {
 	name: string,
 	style: Object | Array<any>,
 	dotStyle: Array<any> | Object,
+	dBTileDisplayMode?: string,
 };
 
 class ShowMoreButton extends View<Props, null> {

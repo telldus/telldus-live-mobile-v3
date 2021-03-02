@@ -32,6 +32,8 @@ import GeoFenceEventsLogRow from './GeoFenceEventsLogRow';
 import SensorLastUpdateModeControlBlock from './SensorLastUpdateModeControlBlock';
 import DBNameDisplayControlBlock from './DBNameDisplayControlBlock';
 import SelectThemeSetDD from './SelectThemeSetDD';
+import DBTileDisplayControlBlock from './DBTileDisplayControlBlock';
+import TabsBatteryStatusControlBlock from './TabsBatteryStatusControlBlock';
 
 module.exports = {
 	PushSettingsRow,
@@ -47,4 +49,6 @@ module.exports = {
 	SensorLastUpdateModeControlBlock,
 	DBNameDisplayControlBlock,
 	SelectThemeSetDD,
+	DBTileDisplayControlBlock,
+	TabsBatteryStatusControlBlock,
 };

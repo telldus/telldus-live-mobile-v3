@@ -31,10 +31,9 @@ const { images: {DEVICES} } = utils;
 import {
 	SupportedCommandClasses,
 	BatteryFunctions,
-	Associations,
-	Configuration,
 	BasicSettings,
 	TelldusInfo,
+	NodeRelations,
 } from '../ZWave';
 import {
 	ThemedScrollView,
@@ -49,7 +48,10 @@ import {
 	deviceSetStateThermostat,
 	getDeviceInfoCommon,
 } from '../../../Actions/Devices';
-import { requestNodeInfo } from '../../../Actions/Websockets';
+import {
+	requestNodeInfo,
+	sendSocketMessage,
+} from '../../../Actions/Websockets';
 import getDeviceType from '../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import { getLastUpdated, getThermostatValue } from '../../../Lib/SensorUtils';
@@ -79,6 +81,7 @@ type Props = {
 	gatewayTimezone: string,
 	locale: string,
 	currentScreen: string,
+	nodeList: Object,
 
 	screenProps: Object,
 	dispatch: Function,
@@ -92,10 +95,14 @@ class OverviewTab extends View<Props, null> {
 		super(props);
 
 		this.boxTitle = `${props.screenProps.intl.formatMessage(i18n.location)}:`;
+		this.getRoutingInfoTimeout = null;
 	}
 
 	componentDidMount() {
-		const { dispatch, device } = this.props;
+		const {
+			dispatch,
+			device,
+		} = this.props;
 		if (!device) {
 			return;
 		}
@@ -116,6 +123,7 @@ class OverviewTab extends View<Props, null> {
 							Brand,
 							ManualUrl,
 							ConfigurationParameters,
+							AssociationGroups,
 						} = res;
 						const payload = {
 							Image,
@@ -124,12 +132,22 @@ class OverviewTab extends View<Props, null> {
 							deviceId: id,
 							ManualUrl,
 							ConfigurationParameters,
+							AssociationGroups,
 						};
 						dispatch(deviceZWaveInfo(payload));
 					}
 				});
+			dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+				'module': 'zwave',
+				'action': 'getRoutingInfo',
+				'nodeId': parseInt(nodeInfo.nodeId, 10),
+			}));
 		}
 		dispatch(requestNodeInfo(clientId, clientDeviceId));
+		dispatch(sendSocketMessage(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': 'nodeList',
+		}));
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -144,6 +162,7 @@ class OverviewTab extends View<Props, null> {
 				'device',
 				'lastUpdated',
 				'currentTemp',
+				'nodeList',
 			]);
 		}
 		return false;
@@ -206,6 +225,7 @@ class OverviewTab extends View<Props, null> {
 			lastUpdated,
 			currentTemp,
 			gatewayTimezone,
+			nodeList = {},
 		} = this.props;
 		const { appLayout, intl } = screenProps;
 
@@ -235,13 +255,10 @@ class OverviewTab extends View<Props, null> {
 		const showBatteryFunctions = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_BATTERY] ||
 		supportsWakeup) : false;
 
-		const showAssociations = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_ASSOCIATION] : false;
-
-		const showConfiguration = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_CONFIGURATION] ||
-			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_INDICATOR] ||
-			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION] ||
-			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_SWITCH_ALL]) :
-			false;
+		let nodesRelation;
+		if (nodeInfo.nodeId !== undefined) {
+			nodesRelation = nodeList[nodeInfo.nodeId];
+		}
 
 		return (
 			<ThemedScrollView
@@ -280,21 +297,8 @@ class OverviewTab extends View<Props, null> {
 						clientDeviceId={device.clientDeviceId}
 						clientId={device.clientId}/>
 				)}
-				{!!showAssociations && (
-					<Associations
-						id={device.id}
-						clientId={clientId}
-						gatewayTimezone={gatewayTimezone}
-						clientDeviceId={clientDeviceId}/>
-				)}
 				{!!showBatteryFunctions && (
 					<BatteryFunctions
-						id={device.id}
-						clientId={clientId}
-						gatewayTimezone={gatewayTimezone}/>
-				)}
-				{!!showConfiguration && (
-					<Configuration
 						id={device.id}
 						clientId={clientId}
 						gatewayTimezone={gatewayTimezone}/>
@@ -302,6 +306,16 @@ class OverviewTab extends View<Props, null> {
 				{!!nodeInfo.cmdClasses && (
 					<TelldusInfo
 						id={device.id}/>
+				)}
+				{!!nodesRelation && (
+					<NodeRelations
+						id={device.id}
+						clientId={clientId}
+						gatewayTimezone={gatewayTimezone}
+						clientDeviceId={clientDeviceId}
+						nodesRelation={nodesRelation}
+						nodeId={nodeInfo.nodeId}
+						nodeList={nodeList}/>
 				)}
 			</ThemedScrollView>
 		);
@@ -357,6 +371,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		type: gatewayType,
 		online: isGatewayActive,
 		timezone: gatewayTimezone,
+		nodeList,
 	} = gateway ? gateway : {};
 
 	const { defaultSettings } = state.app;
@@ -377,6 +392,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		gatewayTimezone,
 		locale,
 		currentScreen,
+		nodeList,
 	};
 }
 

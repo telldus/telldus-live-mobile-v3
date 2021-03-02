@@ -25,7 +25,7 @@ import {
 import {act} from 'react-test-renderer';
 
 import {
-	rendererWithIntlAndRedux,
+	rendererWithIntlAndReduxProviders,
 } from '../../Utils/jestUtils';
 import {
 	setAppLayout,
@@ -49,7 +49,7 @@ it('renders CheckBoxIconText when checked', () => {
 			width,
 		}));
 
-		component = rendererWithIntlAndRedux(
+		component = rendererWithIntlAndReduxProviders(
 			<CheckBoxIconText
 				text="CheckBoxIconText"
 				isChecked
@@ -69,7 +69,7 @@ it('renders CheckBoxIconText when unchecked', () => {
 			width,
 		}));
 
-		component = rendererWithIntlAndRedux(
+		component = rendererWithIntlAndReduxProviders(
 			<CheckBoxIconText
 				text="CheckBoxIconText"
 				intl={intl}/>

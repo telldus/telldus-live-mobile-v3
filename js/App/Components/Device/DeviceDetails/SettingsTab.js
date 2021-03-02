@@ -22,7 +22,11 @@
 'use strict';
 
 import React from 'react';
-import { LayoutAnimation, BackHandler } from 'react-native';
+import {
+	LayoutAnimation,
+	BackHandler,
+	Platform,
+} from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
@@ -33,6 +37,11 @@ import {
 	EditBox,
 	ThemedScrollView,
 } from '../../../../BaseComponents';
+
+import {
+	Associations,
+	Configuration,
+} from '../ZWave';
 
 import {
 	withTheme,
@@ -80,6 +89,7 @@ import {
 	prepare433MHzDeviceDefaultValueForParams,
 	doesSupportEditModel,
 	ZWaveFunctions,
+	isBasicUser,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -94,6 +104,8 @@ type Props = PropsThemedComponent & {
 	transports: string,
 	gatewaySupportEditModel: boolean,
 	currentScreen: string,
+	gatewayTimezone: string,
+	isBasic: string,
 
 	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
@@ -188,6 +200,7 @@ class SettingsTab extends View {
 		this.markAsFailedTimeoutTwo = null;
 
 		this.timeoutConfirmDeviceRemove = null;
+		this.refreshInfoDelay = null;
 
 		this.onConfirmRemoveFailedNode = this.onConfirmRemoveFailedNode.bind(this);
 	}
@@ -212,6 +225,8 @@ class SettingsTab extends View {
 				'addDevice433',
 				'transports',
 				'gatewaySupportEditModel',
+				'gatewayTimezone',
+				'isBasic',
 			]);
 			if (propsChange) {
 				return true;
@@ -238,6 +253,7 @@ class SettingsTab extends View {
 			this.timeoutConfirmDeviceRemove = null;
 		}
 		this.isMount = false;
+		clearTimeout(this.refreshInfoDelay);
 	}
 
 	get433MHzDeviceSettings(): Object {
@@ -648,15 +664,17 @@ class SettingsTab extends View {
 			this.props.showToast(formatMessage(i18n.settingsNotSaved));
 		}
 
-		this.props.dispatch(getDeviceInfoCommon(deviceId)).then(() => {
-			this.setState({
-				isSaving433MhzParams: false,
+		this.refreshInfoDelay = setTimeout(() => {
+			this.props.dispatch(getDeviceInfoCommon(deviceId)).then(() => {
+				this.setState({
+					isSaving433MhzParams: false,
+				});
+			}).catch(() => {
+				this.setState({
+					isSaving433MhzParams: false,
+				});
 			});
-		}).catch(() => {
-			this.setState({
-				isSaving433MhzParams: false,
-			});
-		});
+		}, 1000);
 	}
 
 	isDeviceTypeEqual = (devicetypeCurrent: string = '', devicetypeNext: string = ''): boolean => {
@@ -837,6 +855,40 @@ class SettingsTab extends View {
 		);
 	}
 
+	onPressManageShortcuts = () => {
+		const {
+			navigation,
+			device,
+			isBasic,
+			screenProps,
+		} = this.props;
+		if (isBasic) {
+			const {
+				toggleDialogueBox,
+				intl,
+			} = screenProps;
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: intl.formatMessage(i18n.upgradeToPremium),
+				text: intl.formatMessage(i18n.infoWhenAccessPremFromBasic),
+				showPositive: true,
+				showNegative: true,
+				positiveText: intl.formatMessage(i18n.upgrade),
+				onPressPositive: () => {
+					navigation.navigate('PremiumUpgradeScreen');
+				},
+				closeOnPressPositive: true,
+				timeoutToCallPositive: 200,
+			});
+			return;
+		}
+		navigation.navigate('SiriShortcutActionsScreen', {
+			device,
+		});
+	}
+
 	render(): Object | null {
 		const {
 			isHidden,
@@ -858,6 +910,7 @@ class SettingsTab extends View {
 			transports,
 			gatewaySupportEditModel,
 			colors,
+			gatewayTimezone,
 		} = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
@@ -888,6 +941,8 @@ class SettingsTab extends View {
 			labelStyle,
 			editBoxStyle,
 			padding,
+			addToSiriButtonStyle,
+			coverStyle,
 		} = this.getStyle(appLayout);
 
 		if (editName) {
@@ -933,6 +988,16 @@ class SettingsTab extends View {
 
 		const transportsArray = transports.split(',');
 		const showScan = supportsScan(transportsArray) && scannable;
+
+		const showAssociations = nodeInfo.cmdClasses ? nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_ASSOCIATION] : false;
+
+		const showConfiguration = nodeInfo.cmdClasses ? (nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_CONFIGURATION] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_INDICATOR] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_PROTECTION] ||
+			nodeInfo.cmdClasses[ZWaveFunctions.COMMAND_CLASS_SWITCH_ALL]) :
+			false;
+
+		const isIOS = Platform.OS === 'ios';
 
 		return (
 			<ThemedScrollView
@@ -984,12 +1049,34 @@ class SettingsTab extends View {
 									appLayout={appLayout}
 									intl={intl}
 								/>
+								{isIOS && (
+									<TouchableButton
+										text={formatMessage(i18n.manageSiriShortcuts)}
+										onPress={this.onPressManageShortcuts}
+										style={addToSiriButtonStyle}
+										coverStyle={coverStyle}
+										preformatted/>
+								)}
 								<ChangeDevicetypeBlock
 									devicetype={deviceType}
 									onValueChange={this._onValueChange}
 									coverStyle={{
 										marginTop: padding / 2,
 									}}/>
+								{!!showAssociations && (
+									<Associations
+										id={device.id}
+										clientId={clientId}
+										gatewayTimezone={gatewayTimezone}
+										clientDeviceId={clientDeviceId}/>
+								)}
+								{!!showConfiguration && (
+									<Configuration
+										id={device.id}
+										clientId={clientId}
+										gatewayTimezone={gatewayTimezone}
+										clientDeviceId={clientDeviceId}/>
+								)}
 								{!!settings433MHz &&
 									<DeviceSettings
 										coverStyle={coverStyleDeviceSettings433}
@@ -1146,6 +1233,14 @@ class SettingsTab extends View {
 				color: subHeader,
 				fontSize: Math.floor(deviceWidth * 0.045),
 			},
+			addToSiriButtonStyle: {
+				marginTop: padding / 2,
+				width: undefined,
+				maxWidth: deviceWidth - (padding * 3),
+			},
+			coverStyle: {
+				flex: 0,
+			},
 		};
 	}
 }
@@ -1165,14 +1260,23 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	let device = state.devices.byId[id] || {};
 
 	const { clientId } = device;
-	const { online = false, websocketOnline = false, transports = '', type } = state.gateways.byId[clientId] || {};
+	const {
+		online = false,
+		websocketOnline = false,
+		transports = '',
+		type,
+		timezone: gatewayTimezone,
+	} = state.gateways.byId[clientId] || {};
 
 	const gatewaySupportEditModel = doesSupportEditModel(type);
 	const { addDevice433 = {}} = state.addDevice;
 
 	const {
 		dashboard,
-		user: { userId },
+		user: {
+			userId,
+			userProfile = {},
+		},
 		app: {defaultSettings},
 	} = state;
 
@@ -1186,6 +1290,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		screen: currentScreen,
 	} = state.navigation;
 
+	const isBasic = isBasicUser(userProfile.pro);
+
 	return {
 		device,
 		inDashboard: !!devicesByIdInCurrentDb[id],
@@ -1194,6 +1300,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		transports,
 		gatewaySupportEditModel,
 		currentScreen,
+		gatewayTimezone,
+		isBasic,
 	};
 }
 

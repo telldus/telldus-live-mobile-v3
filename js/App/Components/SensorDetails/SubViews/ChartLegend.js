@@ -151,8 +151,6 @@ export default class ChartLegend extends View<Props, null> {
 			btnContainerIconStyle: {
 				flex: 0,
 				padding: 0,
-				width: 30,
-				height: 40,
 				alignItems: 'center',
 				justifyContent: 'center',
 			},

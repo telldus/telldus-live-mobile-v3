@@ -55,8 +55,10 @@ import {
 import {
 	useDialogueBox,
 } from '../../../Hooks/Dialoguebox';
+import orderBy from 'lodash/orderBy';
 
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
     nodeList: Object,
@@ -68,6 +70,7 @@ type Props = {
 	nodeId: string,
 	onAssociationsChange: (Object) => void,
 	currentAssociations: string,
+	description: string,
 };
 
 const AssociationGroup = memo<Object>((props: Props): Object => {
@@ -79,12 +82,16 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		nodeId,
 		onAssociationsChange,
 		currentAssociations = '',
+		description,
 	} = props;
 
 	const {
 		colors,
 	} = useAppTheme();
 	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
@@ -120,13 +127,26 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		} else {
 			_selectedList = _selectedList.filter((item: string): boolean => item !== key);
 		}
+		if (_selectedList.length > maxNodes) {
+			toggleDialogueBoxState({
+				show: true,
+				header: formatMessage(i18n.associations),
+				showHeader: true,
+				imageHeader: true,
+				text: formatMessage(i18n.maxNodesMessage, {
+					maxNodes,
+				}),
+				showPositive: true,
+			});
+			return;
+		}
 		setSelectedList(_selectedList);
 		onAssociationsChange({
 			selectedList: _selectedList,
 			queue,
 			group,
 		});
-	}, [onAssociationsChange, selectedList, queue, group]);
+	}, [selectedList, maxNodes, onAssociationsChange, queue, group, toggleDialogueBoxState, formatMessage]);
 
 	const onPressInfo = useCallback(({
 		associationWarningDisabled,
@@ -134,28 +154,31 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		associationWarningRemoved,
 	}: Object) => {
 		let text;
-		if (associationWarningDisabled) {// TODO: Translate
-			text = 'Setting association to multi channel endpoints is not supported in this device.';
+		if (associationWarningDisabled) {
+			text = formatMessage(i18n.associationWarningDisabled);
 		} else if (associationWarningQueue) {
-			text = 'This device has been added to this association group but has not yet been stored in the device. This will happen next time the device is awake.';
+			text = formatMessage(i18n.associationWarningQueue);
 		} else if (associationWarningRemoved) {
-			text = 'This device has been removed from this association group but has not yet been removed from the device. This will happen next time the device is awake.';
+			text = formatMessage(i18n.associationWarningRemoved);
 		}
 		if (text) {
 			toggleDialogueBoxState({
 				show: true,
-				header: ' ', // TODO: Need to confirm and set
+				header: formatMessage(i18n.settingNotYetStored),
 				showHeader: true,
 				imageHeader: true,
 				text,
 				showPositive: true,
 			});
 		}
-	}, [toggleDialogueBoxState]);
+	}, [formatMessage, toggleDialogueBoxState]);
 
 	const selectionList = useMemo((): Array<Object> => {
 		let list = [];
-		for (let key in nodeList) {
+		let _nodeList = orderBy(nodeList, (item: Object): string => {
+			return item.name;
+		});
+		for (let key in _nodeList) {
 			if (key === nodeId) {
 				continue;
 			}
@@ -166,7 +189,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 				associationWarningDisabled,
 				associationWarningQueue,
 				associationWarningRemoved,
-			} = nodeList[key];
+			} = _nodeList[key];
 			const showInfo = associationWarningDisabled || associationWarningQueue || associationWarningRemoved;
 
 			list.push(
@@ -228,7 +251,7 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		setEditActive(!editActive);
 	}, [editActive]);
-	// TODO: Translate
+
 	return (
 		<View
 			level={2}
@@ -237,40 +260,54 @@ const AssociationGroup = memo<Object>((props: Props): Object => {
 				<Text
 					level={3}
 					style={hItemLabelDef}>
-					{'Group: '}
+					{`${formatMessage(i18n.group)} `}
 				</Text>
 				<Text
 					level={4}
 					style={hItemValueDef}>
-					{group}
+					{`${group} : `}
 				</Text>
+			</View>
+			<View style={horizontalCoverDef}>
+				{!!description && (
+					<Text
+						level={4}
+						style={hItemValueDef}>
+						{description.replace(/(\r\n|\n|\r)/gm, '')}
+					</Text>
+				)}
 			</View>
 			<View style={horizontalCoverDef}>
 				<Text
 					level={3}
 					style={hItemLabelDef}>
-					{'Max devices: '}
+					{`${formatMessage(i18n.associationLabelTwo)} `}
 				</Text>
 				<Text
 					level={4}
 					style={hItemValueDef}>
-					{maxNodes}
+					{`${maxNodes} : `}
 				</Text>
 			</View>
 			<View style={horizontalCoverDef}>
-				<Text
-					level={3}
-					style={hItemLabelDef}>
-					{'Currently associated devices: '}
-				</Text>
-				<Text
-					level={4}
-					style={hItemValueDef}>
-					{currentAssociations}
+				<Text style={{
+					flex: 1,
+					flexWrap: 'wrap',
+				}}>
+					<Text
+						level={3}
+						style={hItemLabelDef}>
+						{`${formatMessage(i18n.associationLabelThree)} `}
+					</Text>
+					<Text
+						level={4}
+						style={hItemValueDef}>
+						{`${currentAssociations} : `}
+					</Text>
 				</Text>
 			</View>
 			<TouchableButton
-				text={editActive ? 'Hide device associations' : 'Edit device associations'}
+				text={editActive ? formatMessage(i18n.associationButtonLabelOne) : formatMessage(i18n.associationButtonLabelTwo)}
 				style={buttonStyle}
 				labelStyle={labelStyle}
 				throbberStyle={labelStyle}
@@ -309,7 +346,6 @@ const getStyles = ({
 		infoOneColorBlockDisabled,
 		inAppBrandSecondary,
 		verticalCoverDef: {
-			marginHorizontal: padding,
 			padding,
 			marginBottom: padding / 2,
 			...shadow,

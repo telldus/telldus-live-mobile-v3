@@ -20,6 +20,10 @@
 
 // @flow
 
+import {
+	Platform,
+} from 'react-native';
+
 // Set the number of screens here.
-const Screens = [1, 2];
+const Screens = Platform.OS === 'android' ? [1] : [1, 2];
 export default Screens;

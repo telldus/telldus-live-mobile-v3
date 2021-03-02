@@ -7,6 +7,7 @@
 //
 
 import Intents
+import SwiftUI
 
 class IntentHandler: INExtension {
   static var sensorsLastFetchedTS: Double = 0;
@@ -65,19 +66,20 @@ extension IntentHandler: DeviceWidgetIntentHandling {
 
 extension IntentHandler: SensorWidgetIntentHandling {
   func provideItemOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorsList>?, Error?) -> Void) {
+    var items = [SensorsList]()
     let dataDict = Utilities().getAuthData()
     guard dataDict != nil else {
-      completion(INObjectCollection(items: []), nil)
+      completion(INObjectCollection(items: items), nil)
       return
     }
     guard let userId = dataDict?["uuid"] as? NSString else {
-      completion(INObjectCollection(items: []), nil)
+      completion(INObjectCollection(items: items), nil)
       return
     }
     let pro = dataDict?["pro"] as? Int
-    let _isBasicUser = WidgetUtils().isBasicUser(pro: pro)
+    let _isBasicUser = SharedUtils().isBasicUser(pro: pro)
     guard !_isBasicUser else {
-      completion(INObjectCollection(items: []), nil)
+      completion(INObjectCollection(items: items), nil)
       return
     }
     
@@ -87,10 +89,9 @@ extension IntentHandler: SensorWidgetIntentHandling {
       db = try SQLiteDatabase.open(nil)
       itemsList = db?.sensorDetailsModelsCurrentAccount(userId: userId) as! Array<SensorDetailsModel>
     } catch {
-      completion(INObjectCollection(items: []), nil)
+      completion(INObjectCollection(items: items), nil)
       return
     }
-    var items = [SensorsList]()
     for item in itemsList {
       let sensorIntentObject =
         SensorsList(identifier: String(item.id), display: item.name)
@@ -100,23 +101,23 @@ extension IntentHandler: SensorWidgetIntentHandling {
   }
   
   func provideValueOptionsCollection(for intent: SensorWidgetIntent, with completion: @escaping (INObjectCollection<SensorValuesList>?, Error?) -> Swift.Void) {
-    
+    var items = [SensorValuesList]()
     guard let sensorId = intent.item?.identifier else {
-      completion(INObjectCollection(items: []), nil)
+      completion(INObjectCollection(items: items), nil)
       return
     }
     guard let selectedSensorId = Int32(sensorId) else {
-      completion(INObjectCollection(items: []), nil)
+      completion(INObjectCollection(items: items), nil)
       return
     }
     
     let dataDict = Utilities().getAuthData()
     guard dataDict != nil else {
-      completion(INObjectCollection(items: []), nil)
+      completion(INObjectCollection(items: items), nil)
       return
     }
     guard let userId = dataDict?["uuid"] as? NSString else {
-      completion(INObjectCollection(items: []), nil)
+      completion(INObjectCollection(items: items), nil)
       return
     }
     
@@ -126,16 +127,15 @@ extension IntentHandler: SensorWidgetIntentHandling {
       db = try SQLiteDatabase.open(nil)
       itemsList = db?.sensorDataModels(sensorId: selectedSensorId, userId: userId) as! Array<SensorDataModel>
     } catch {
-      completion(INObjectCollection(items: []), nil)
+      completion(INObjectCollection(items: items), nil)
       return
     }
-    var items = [SensorValuesList]()
     for item in itemsList {
       let id = String(item.scale) + item.name
       let info = SensorUtilities().getSensorInfo(name: item.name, scale: item.scale, value: item.value)
       let label = info["label"] as? String
       let sensorValueIntentObject =
-        SensorValuesList(identifier: id, display: label!)
+        SensorValuesList(identifier: id, display: NSLocalizedString(label!, comment: ""))
       items.append(sensorValueIntentObject)
     }
     completion(INObjectCollection(items: items), nil)
