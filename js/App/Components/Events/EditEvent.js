@@ -114,8 +114,8 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 	const [groupsList, setGroupsList] = useState([]);
 	const refreshGroups = useCallback((refreshing?: true) => {
 		dispatch(getEventGroupsList()).then((res: Object) => {
-			if (res && res.group) {
-				const gl = res.group.map((g: Object): Object => {
+			if (res && res.eventGroup) {
+				const gl = res.eventGroup.map((g: Object): Object => {
 					return {
 						key: g.id,
 						value: g.name,
@@ -326,7 +326,8 @@ const EditEvent = React.memo<Object>((props: Props): Object => {
 				isEdit={isEdit}/>
 			<SelectGroupDD
 				groupsList={groupsList}
-				disable={disable}/>
+				disable={disable}
+				groupId={group}/>
 			<TouchableButton
 				text={i18n.confirmAndSave}
 				style={[buttonStyle, save]}

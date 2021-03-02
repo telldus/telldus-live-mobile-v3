@@ -22,7 +22,6 @@
 'use strict';
 
 import React, {
-	useState,
 	memo,
 	useCallback,
 	useMemo,
@@ -31,15 +30,22 @@ import {
 	useSelector,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
 
 import {
 	DropDown,
 } from '../../../../BaseComponents';
 
+import {
+	eventSetGroup,
+} from '../../../Actions/Event';
+
 import Theme from '../../../Theme';
 
 type Props = {
     groupsList: Array<Object>,
+	groupId?: string,
+	dropDownPosition: 'top' | 'bottom',
 };
 
 const NONE_KEY = 'none';
@@ -53,6 +59,8 @@ const BLOCKS = [
 const SelectGroupDD = memo<Object>((props: Props): Object => {
 	const {
 		groupsList,
+		groupId,
+		dropDownPosition,
 	} = props;
 	const intl = useIntl();
 
@@ -66,19 +74,29 @@ const SelectGroupDD = memo<Object>((props: Props): Object => {
 		layout,
 	});
 
-	const [ value, setValue ] = useState(BLOCKS[0].value);
+	const value = useMemo((): string => {
+		let _value = BLOCKS[0].value;
+		for (let i = 0; i < groupsList.length; i++) {
+			if (groupId && groupsList[i].key === groupId) {
+				_value = groupsList[i].value;
+				break;
+			}
+		}
+		return _value;
+	}, [groupId, groupsList]);
 
 	const items = useMemo((): Array<Object> => {
 		return [...groupsList, ...BLOCKS];
 	}, [groupsList]);
 
+	const dispatch = useDispatch();
 	const onValueChange = useCallback((v: string, itemIndex: number, data: Array<any>) => {
-		setValue(data[itemIndex].value);
-	}, []);
+		dispatch(eventSetGroup(data[itemIndex].key));
+	}, [dispatch]);
 
 	return (
 		<DropDown
-			dropDownPosition={'bottom'}
+			dropDownPosition={dropDownPosition || 'top'}
 			showMax
 			label={'Select group'}
 			items={items}

@@ -71,14 +71,18 @@ const SelectGroup = memo<Object>((props: Props): Object => {
 
 	const dispatch = useDispatch();
 
+	const {
+		group,
+	} = useSelector((state: Object): Object => state.event) || {};
+
 	const [groupsList, setGroupsList] = useState([]);
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const refreshGroups = useCallback((refreshing?: boolean = true) => {
 		setIsRefreshing(refreshing);
 		dispatch(getEventGroupsList()).then((res: Object) => {
 			setIsRefreshing(false);
-			if (res && res.group) {
-				const gl = res.group.map((g: Object): Object => {
+			if (res && res.eventGroup) {
+				const gl = res.eventGroup.map((g: Object): Object => {
 					return {
 						key: g.id,
 						value: g.name,
@@ -144,7 +148,9 @@ const SelectGroup = memo<Object>((props: Props): Object => {
 					level={2}
 					style={coverStyle}>
 					<SelectGroupDD
-						groupsList={groupsList}/>
+						groupsList={groupsList}
+						dropDownPosition={'bottom'}
+						groupId={group}/>
 				</View>
 			</ThemedScrollView>
 			<FloatingButton
