@@ -103,6 +103,7 @@ type Props = PropsThemedComponent & {
 	screenReaderEnabled: boolean,
 	openRGBControl: (number) => void,
 	openThermostatControl: (number) => void,
+	toggleDialogueBox: Function,
 };
 
 type State = {
@@ -312,6 +313,7 @@ class DeviceRow extends View<Props, State> {
 			selectedThemeSet,
 			battery,
 			batteryStatus,
+			toggleDialogueBox,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -475,9 +477,14 @@ class DeviceRow extends View<Props, State> {
 					directionalDistanceChangeThreshold={2}
 					disableHiddenLayoutCalculation={true}
 					shouldItemUpdate={this.shouldUpdateSwipeRow}>
-					<HiddenRow device={device} intl={intl} style={styles.hiddenRow}
-						onPressSettings={this.onSettingsSelected} onSetIgnoreDevice={this.onSetIgnoreDevice}
-						isOpen={isOpen}/>
+					<HiddenRow
+						device={device}
+						intl={intl}
+						style={styles.hiddenRow}
+						onPressSettings={this.onSettingsSelected}
+						onSetIgnoreDevice={this.onSetIgnoreDevice}
+						isOpen={isOpen}
+						toggleDialogueBox={toggleDialogueBox}/>
 					<View
 						level={2}
 						style={styles.row}

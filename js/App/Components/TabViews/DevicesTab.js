@@ -518,7 +518,12 @@ class DevicesTab extends View {
 			batteryStatus,
 		} = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, screenReaderEnabled, appLayout } = screenProps;
+		const {
+			intl,
+			screenReaderEnabled,
+			appLayout,
+			toggleDialogueBox,
+		} = screenProps;
 		const { item, section, index } = row;
 		const { isOnline, supportLocalControl, buttonRow, id } = item;
 
@@ -559,6 +564,7 @@ class DevicesTab extends View {
 				isLast={isLast}
 				openThermostatControl={this.openThermostatControl}
 				batteryStatus={batteryStatus}
+				toggleDialogueBox={toggleDialogueBox}
 			/>
 		);
 	}

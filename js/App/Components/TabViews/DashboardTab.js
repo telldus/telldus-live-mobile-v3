@@ -38,6 +38,7 @@ import {
 	TouchableOpacity,
 	Icon,
 	ThemedRefreshControl,
+	TouchableButton,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
@@ -55,6 +56,8 @@ import {
 	changeSensorDisplayTypeDB,
 	updateDashboardOrder,
 	removeFromDashboard,
+	clearPreviousDb,
+	usePreviousDb,
 } from '../../Actions/Dashboard';
 
 import i18n from '../../Translations/common';
@@ -88,6 +91,8 @@ type Props = {
 	hiddenTabsCurrentUser: Array<string>,
 	sortingDB: 'Manual' | 'Alphabetical',
 	dBTileDisplayMode: string,
+	hasPreviousDB: boolean,
+	hasLoggedOutPrevDb: boolean,
 
 	navigation: Object,
 	changeSensorDisplayTypeDB: (id?: number, kind?: string) => void,
@@ -232,7 +237,13 @@ class DashboardTab extends View {
 	}
 
 	componentDidMount() {
-		const { isDBEmpty, navigation, currentScreen, hiddenTabsCurrentUser } = this.props;
+		const {
+			isDBEmpty,
+			navigation,
+			currentScreen,
+			hiddenTabsCurrentUser,
+			hasLoggedOutPrevDb,
+		} = this.props;
 		const possibleScreen = ['Dashboard', 'Tabs', 'Login'];
 		if (isDBEmpty && possibleScreen.indexOf(currentScreen) !== -1) {
 			// Navigating to other tab inside componentDidMount of one tab has an issue in Android
@@ -253,7 +264,9 @@ class DashboardTab extends View {
 				navigation.navigate(tabToCheckOrVeryNext);
 			}
 		}
-		this.startSensorTimer();
+		if (!isDBEmpty && !hasLoggedOutPrevDb) {
+			this.startSensorTimer();
+		}
 	}
 
 	componentWillUnmount() {
@@ -304,6 +317,67 @@ class DashboardTab extends View {
 		const tilesPerRow = Math.floor(listWidth / baseTileSize);
 		const tileWidth = tilesPerRow === 0 ? baseTileSize : Math.floor(listWidth / tilesPerRow);
 		return { tileWidth, numColumns: tilesPerRow };
+	}
+
+	onClearPrevDb = () => {
+		const {
+			dispatch,
+		} = this.props;
+		dispatch(clearPreviousDb());
+	}
+
+	onUsePrevDb = () => {
+		const {
+			dispatch,
+		} = this.props;
+		dispatch(usePreviousDb());
+	}
+
+	usePreviousDBMessage = (style: Object): Object => {
+		return (
+			<View
+				level={3}
+				style={[style.container, {
+					paddingHorizontal: 20,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}>
+				<Icon
+					name={'star'}
+					size={style.starIconSize}
+					level={23}/>
+				<Text
+					level={4}
+					style={style.noItemsTitle}>
+					Found old dashboard settings
+				</Text>
+				<Text
+					level={26}
+					style={style.noItemsContent}>
+					{'\n'}
+					Some old dashboard settings has been detected.
+					Would you like to use those?
+				</Text>
+				<View style={style.oldDBButtonsCover}>
+					<TouchableButton
+						onPress={this.onClearPrevDb}
+						text={'Clear'}
+						style={style.buttonStyle}
+						coverStyle={{
+							flex: 0,
+						}}
+					/>
+					<TouchableButton
+						onPress={this.onUsePrevDb}
+						text={'Use'}
+						style={[style.buttonStyle, {marginLeft: style.padding}]}
+						coverStyle={{
+							flex: 0,
+						}}
+					/>
+				</View>
+			</View>
+		);
 	}
 
 	noItemsMessage(style: Object): Object {
@@ -415,6 +489,7 @@ class DashboardTab extends View {
 			gateways,
 			gatewaysDidFetch,
 			dBTileDisplayMode,
+			hasPreviousDB,
 		} = this.props;
 		const {
 			appLayout,
@@ -443,6 +518,10 @@ class DashboardTab extends View {
 			return <NoGateways
 				disabled={addingNewLocation}
 				onPress={addNewLocation}/>;
+		}
+
+		if (hasPreviousDB) {
+			return this.usePreviousDBMessage(style);
 		}
 
 		if (isDBEmpty) {
@@ -667,6 +746,18 @@ class DashboardTab extends View {
 				},
 				overflow: 'visible',
 			},
+			oldDBButtonsCover: {
+				width: '100%',
+				flexDirection: 'row',
+				justifyContent: 'space-between',
+				paddingVertical: padding,
+			},
+			buttonStyle: {
+				flex: 0,
+				minWidth: undefined,
+				maxWidth: (deviceWidth - (padding * 3)) / 2,
+				width: (deviceWidth - (padding * 6)) / 2,
+			},
 		};
 	}
 }
@@ -711,12 +802,15 @@ function mapStateToProps(state: Object, props: Object): Object {
 
 	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
 
+	const hasLoggedOutPrevDb = userDbsAndSensorIds.hasLoggedOut || userDbsAndDeviceIds.hasLoggedOut || userDbsAndMetWeathersIds.hasLoggedOut;
+	const isDBEmpty = (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0);
+
 	return {
 		rows: getRows({
 			...state,
 			intl: props.screenProps.intl,
 		}),
-		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0),
+		isDBEmpty,
 		dbCarousel,
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
@@ -724,6 +818,8 @@ function mapStateToProps(state: Object, props: Object): Object {
 		hiddenTabsCurrentUser,
 		sortingDB,
 		dBTileDisplayMode,
+		hasLoggedOutPrevDb,
+		hasPreviousDB: !isDBEmpty && hasLoggedOutPrevDb,
 	};
 }
 

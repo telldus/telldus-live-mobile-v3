@@ -67,6 +67,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	isLast: boolean,
 	batteryStatus: string,
+	toggleDialogueBox: Function,
 
 	isNew: boolean,
 	gatewayId: string,
@@ -289,6 +290,7 @@ class SensorRow extends View<Props, State> {
 			intl,
 			screenReaderEnabled,
 			batteryStatus,
+			toggleDialogueBox,
 		} = this.props;
 		const styles = this.getStyles();
 		const {
@@ -330,9 +332,14 @@ class SensorRow extends View<Props, State> {
 				directionalDistanceChangeThreshold={2}
 				disableHiddenLayoutCalculation={true}
 				shouldItemUpdate={this.shouldUpdateSwipeRow}>
-				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
-					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}
-					onPressSettings={this.onSettingsSelected} />
+				<HiddenRow
+					sensor={sensor}
+					intl={intl}
+					style={styles.hiddenRow}
+					onSetIgnoreSensor={this.onSetIgnoreSensor}
+					isOpen={isOpen}
+					onPressSettings={this.onSettingsSelected}
+					toggleDialogueBox={toggleDialogueBox}/>
 				<View
 					level={2}
 					style={styles.row}

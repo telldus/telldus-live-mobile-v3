@@ -76,6 +76,8 @@ import {
 	setDeviceProtocol,
 	setWidgetParamsValue,
 	setMetadata,
+	usePreviousDb,
+	clearPreviousDb,
 } from '../../../Actions';
 import {
 	shouldUpdate,
@@ -106,6 +108,7 @@ type Props = PropsThemedComponent & {
 	currentScreen: string,
 	gatewayTimezone: string,
 	isBasic: string,
+	hasPreviousDB: boolean,
 
 	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
@@ -227,6 +230,7 @@ class SettingsTab extends View {
 				'gatewaySupportEditModel',
 				'gatewayTimezone',
 				'isBasic',
+				'hasPreviousDB',
 			]);
 			if (propsChange) {
 				return true;
@@ -521,10 +525,42 @@ class SettingsTab extends View {
 	}
 
 	onValueChange(value: boolean) {
+		const {
+			hasPreviousDB,
+			device,
+			screenProps,
+			dispatch,
+		} = this.props;
+		const {
+			toggleDialogueBox,
+		} = screenProps;
+		if (hasPreviousDB) {
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: 'Found old dashboard settings',
+				text: 'Some old dashboard settings has been detected. Would you like to use those?',
+				showPositive: true,
+				showNegative: true,
+				positiveText: 'Use',
+				negativeText: 'Clear',
+				onPressPositive: () => {
+					// eslint-disable-next-line react-hooks/rules-of-hooks
+					dispatch(usePreviousDb());
+				},
+				closeOnPressPositive: true,
+				onPressNegative: () => {
+					dispatch(clearPreviousDb());
+				},
+				closeOnPressNegative: true,
+			});
+			return;
+		}
 		if (!value) {
-			this.props.onRemoveFromDashboard(this.props.device.id);
+			this.props.onRemoveFromDashboard(device.id);
 		} else {
-			this.props.onAddToDashboard(this.props.device.id);
+			this.props.onAddToDashboard(device.id);
 		}
 	}
 
@@ -1282,7 +1318,23 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	const { activeDashboardId } = defaultSettings || {};
 
-	const { devicesById = {} } = dashboard;
+	const {
+		deviceIds = {},
+		sensorIds = {},
+		metWeatherIds = {},
+		devicesById,
+	} = dashboard;
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+	const userDbsAndMetWeathersIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeathersIds[activeDashboardId] || [];
+	const userDbsAndDeviceIds = deviceIds[userId] || {};
+	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+
+	const hasLoggedOutPrevDb = userDbsAndSensorIds.hasLoggedOut || userDbsAndDeviceIds.hasLoggedOut || userDbsAndMetWeathersIds.hasLoggedOut;
+	const isDBEmpty = (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0);
+	const hasPreviousDB = !isDBEmpty && hasLoggedOutPrevDb;
+
 	const userDbsAndDevicesById = devicesById[userId] || {};
 	const devicesByIdInCurrentDb = userDbsAndDevicesById[activeDashboardId] || {};
 
@@ -1294,7 +1346,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	return {
 		device,
-		inDashboard: !!devicesByIdInCurrentDb[id],
+		inDashboard: !!devicesByIdInCurrentDb[id] && !hasLoggedOutPrevDb,
 		isGatewayReachable: online && websocketOnline,
 		addDevice433,
 		transports,
@@ -1302,6 +1354,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		currentScreen,
 		gatewayTimezone,
 		isBasic,
+		hasPreviousDB,
 	};
 }
 

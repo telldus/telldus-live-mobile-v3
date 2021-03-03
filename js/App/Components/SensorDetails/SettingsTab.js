@@ -60,6 +60,8 @@ import {
 	resetSensorMaxMin,
 	registerForWebSocketEvents,
 	sendSocketMessage,
+	usePreviousDb,
+	clearPreviousDb,
 } from '../../Actions';
 import { clearHistory } from '../../Actions/LocalStorage';
 
@@ -82,6 +84,7 @@ type Props = {
 	navigation: Object,
 	isGatewayReachable: boolean,
 	currentScreen: string,
+	hasPreviousDB: boolean,
 
 	screenProps: Object,
 	onAddToDashboard: (id: number) => void,
@@ -216,7 +219,11 @@ class SettingsTab extends View {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(others, othersN, ['sensor', 'isGatewayReachable']);
+			const propsChange = shouldUpdate(others, othersN, [
+				'sensor',
+				'isGatewayReachable',
+				'hasPreviousDB',
+			]);
 			if (propsChange) {
 				return true;
 			}
@@ -348,10 +355,42 @@ class SettingsTab extends View {
 	}
 
 	onValueChange(value: boolean) {
+		const {
+			hasPreviousDB,
+			sensor,
+			screenProps,
+			dispatch,
+		} = this.props;
+		const {
+			toggleDialogueBox,
+		} = screenProps;
+		if (hasPreviousDB) {
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: 'Found old dashboard settings',
+				text: 'Some old dashboard settings has been detected. Would you like to use those?',
+				showPositive: true,
+				showNegative: true,
+				positiveText: 'Use',
+				negativeText: 'Clear',
+				onPressPositive: () => {
+					// eslint-disable-next-line react-hooks/rules-of-hooks
+					dispatch(usePreviousDb());
+				},
+				closeOnPressPositive: true,
+				onPressNegative: () => {
+					dispatch(clearPreviousDb());
+				},
+				closeOnPressNegative: true,
+			});
+			return;
+		}
 		if (!value) {
-			this.props.onRemoveFromDashboard(this.props.sensor.id);
+			this.props.onRemoveFromDashboard(sensor.id);
 		} else {
-			this.props.onAddToDashboard(this.props.sensor.id);
+			this.props.onAddToDashboard(sensor.id);
 		}
 	}
 
@@ -668,6 +707,7 @@ class SettingsTab extends View {
 			sensor,
 			isGatewayReachable,
 			screenProps,
+			hasPreviousDB,
 		} = this.props;
 
 		const {
@@ -771,7 +811,8 @@ class SettingsTab extends View {
 										data={data}
 										sensorId={id}
 										appLayout={appLayout}
-										intl={intl}/>
+										intl={intl}
+										hasPreviousDB={hasPreviousDB}/>
 								}
 								<SettingsRow
 									label={formatMessage(i18n.hideFromListS)}
@@ -973,8 +1014,23 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	} = state;
 
 	const { activeDashboardId } = defaultSettings || {};
+	const {
+		deviceIds = {},
+		sensorIds = {},
+		metWeatherIds = {},
+		sensorsById = {},
+	} = dashboard;
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+	const userDbsAndMetWeathersIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeathersIds[activeDashboardId] || [];
+	const userDbsAndDeviceIds = deviceIds[userId] || {};
+	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 
-	const { sensorsById = {} } = dashboard;
+	const hasLoggedOutPrevDb = userDbsAndSensorIds.hasLoggedOut || userDbsAndDeviceIds.hasLoggedOut || userDbsAndMetWeathersIds.hasLoggedOut;
+	const isDBEmpty = (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0);
+	const hasPreviousDB = !isDBEmpty && hasLoggedOutPrevDb;
+
 	const userDbsAndSensorsById = sensorsById[userId] || {};
 	const sensorsByIdInCurrentDb = userDbsAndSensorsById[activeDashboardId] || {};
 
@@ -985,9 +1041,10 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	return {
 		sensor,
-		inDashboard: !!sensorsByIdInCurrentDb[id],
+		inDashboard: !!sensorsByIdInCurrentDb[id] && !hasLoggedOutPrevDb,
 		isGatewayReachable: online && websocketOnline,
 		currentScreen,
+		hasPreviousDB,
 	};
 }
 

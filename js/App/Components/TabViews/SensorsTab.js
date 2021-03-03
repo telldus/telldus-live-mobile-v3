@@ -474,7 +474,12 @@ class SensorsTab extends View {
 			batteryStatus,
 		} = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, appLayout, screenReaderEnabled } = screenProps;
+		const {
+			intl,
+			appLayout,
+			screenReaderEnabled,
+			toggleDialogueBox,
+		} = screenProps;
 		const { item, section, index } = row;
 		const { isOnline, buttonRow, id } = item;
 
@@ -508,7 +513,8 @@ class SensorsTab extends View {
 				isLast={isLast}
 				gatewayId={section.header}
 				isNew={!!newSensors[id]}
-				batteryStatus={batteryStatus}/>
+				batteryStatus={batteryStatus}
+				toggleDialogueBox={toggleDialogueBox}/>
 		);
 	}
 

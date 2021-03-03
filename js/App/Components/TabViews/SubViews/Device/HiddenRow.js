@@ -24,7 +24,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { addToDashboard, removeFromDashboard } from '../../../../Actions';
+import {
+	addToDashboard,
+	removeFromDashboard,
+	usePreviousDb,
+	clearPreviousDb,
+} from '../../../../Actions';
 
 import { View, IconTelldus } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
@@ -42,6 +47,10 @@ type Props = {
 	onSetIgnoreDevice: () => void,
 	isOpen: boolean,
 	style: Object,
+	hasPreviousDB: boolean,
+
+	dispatch: Function,
+	toggleDialogueBox: Function,
 };
 
 class DeviceHiddenRow extends View {
@@ -78,7 +87,37 @@ class DeviceHiddenRow extends View {
 
 	onStarSelected() {
 		const { id } = this.props.device;
-		const { deviceIds } = this.props;
+		const {
+			deviceIds,
+			hasPreviousDB,
+			toggleDialogueBox,
+			dispatch,
+		} = this.props;
+
+		if (hasPreviousDB) {
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: 'Found old dashboard settings',
+				text: 'Some old dashboard settings has been detected. Would you like to use those?',
+				showPositive: true,
+				showNegative: true,
+				positiveText: 'Use',
+				negativeText: 'Clear',
+				onPressPositive: () => {
+					// eslint-disable-next-line react-hooks/rules-of-hooks
+					dispatch(usePreviousDb());
+				},
+				closeOnPressPositive: true,
+				onPressNegative: () => {
+					dispatch(clearPreviousDb());
+				},
+				closeOnPressNegative: true,
+			});
+			return;
+		}
+
 		const isOnDB = deviceIds.indexOf(id) !== -1;
 
 		if (isOnDB) {
@@ -103,9 +142,15 @@ class DeviceHiddenRow extends View {
 	}
 
 	render(): Object {
-		const { deviceIds, isOpen, device, style } = this.props;
+		const {
+			deviceIds,
+			isOpen,
+			device,
+			style,
+			hasPreviousDB,
+		} = this.props;
 		const { id, ignored } = device;
-		const isOnDB = deviceIds.indexOf(id) !== -1;
+		const isOnDB = deviceIds.indexOf(id) !== -1 && !hasPreviousDB;
 
 		let icon = isOnDB ? 'favorite' : 'favorite-outline';
 		let iconHide = ignored ? 'hidden-toggled' : 'hidden';
@@ -163,6 +208,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		addToDashboard: (id: number): any => dispatch(addToDashboard('device', id)),
 		removeFromDashboard: (id: number): any => dispatch(removeFromDashboard('device', id)),
+		dispatch,
 	};
 }
 
@@ -176,12 +222,21 @@ function mapStateToProps(store: Object): Object {
 
 	const { activeDashboardId } = defaultSettings || {};
 
-	const { deviceIds = {} } = dashboard;
+	const { deviceIds = {}, sensorIds = {}, metWeatherIds = {}} = dashboard;
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+	const userDbsAndMetWeathersIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeathersIds[activeDashboardId] || [];
 	const userDbsAndDeviceIds = deviceIds[userId] || {};
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 
+	const hasLoggedOutPrevDb = userDbsAndSensorIds.hasLoggedOut || userDbsAndDeviceIds.hasLoggedOut || userDbsAndMetWeathersIds.hasLoggedOut;
+	const isDBEmpty = (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0);
+	const hasPreviousDB = !isDBEmpty && hasLoggedOutPrevDb;
+
 	return {
 		deviceIds: deviceIdsInCurrentDb,
+		hasPreviousDB,
 	};
 }
 
