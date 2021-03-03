@@ -231,6 +231,8 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		screen,
 		hasGateways,
 		appLayout,
+		hasDevices,
+		hasSensors,
 	]);
 
 	return (
