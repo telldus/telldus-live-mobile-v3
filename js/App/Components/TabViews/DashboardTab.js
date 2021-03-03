@@ -334,6 +334,7 @@ class DashboardTab extends View {
 	}
 
 	usePreviousDBMessage = (style: Object): Object => {
+		// TODO: Translate
 		return (
 			<View
 				level={3}

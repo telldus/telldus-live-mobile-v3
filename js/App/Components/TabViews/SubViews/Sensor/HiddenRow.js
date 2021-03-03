@@ -101,7 +101,7 @@ class SensorHiddenRow extends View {
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				header: 'Found old dashboard settings',
+				header: 'Found old dashboard settings', // TODO: Translate
 				text: 'Some old dashboard settings has been detected. Would you like to use those?',
 				showPositive: true,
 				showNegative: true,
