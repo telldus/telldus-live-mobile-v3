@@ -24,6 +24,7 @@
 import React, {
 	memo,
 	useMemo,
+	useCallback,
 } from 'react';
 import {
 	Platform,
@@ -154,27 +155,27 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		screenReaderEnabled,
 	]);
 
+	const newSchedule = useCallback(() => {
+		dispatch(resetSchedule());
+		navigate('Schedule', {
+			editMode: false,
+			screen: 'Device',
+			params: {
+				editMode: false,
+			},
+		});
+	}, [dispatch]);
+
+	const editDb = useCallback(() => {
+		navigate('SelectTypeScreen');
+	}, []);
+
 	const rightButton = useMemo((): Object | null => {
 
 		const {
 			addIconStyle,
 			rightButtonStyle,
 		} = getStyles(appLayout);
-
-		const newSchedule = () => {
-			dispatch(resetSchedule());
-			navigate('Schedule', {
-				editMode: false,
-				screen: 'Device',
-				params: {
-					editMode: false,
-				},
-			});
-		};
-
-		const editDb = () => {
-			navigate('SelectTypeScreen');
-		};
 
 		const AddButton = {
 			component: <ThemedImage
@@ -233,6 +234,8 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		appLayout,
 		hasDevices,
 		hasSensors,
+		newSchedule,
+		editDb,
 	]);
 
 	return (
