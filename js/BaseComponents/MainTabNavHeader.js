@@ -24,6 +24,7 @@
 import React, {
 	memo,
 	useMemo,
+	useCallback,
 } from 'react';
 import {
 	Platform,
@@ -176,50 +177,50 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		screenReaderEnabled,
 	]);
 
+	const newSchedule = useCallback(() => {
+		dispatch(resetSchedule());
+		navigate('Schedule', {
+			editMode: false,
+			screen: 'Device',
+			params: {
+				editMode: false,
+			},
+		});
+	}, [dispatch]);
+
+	const editDb = useCallback(() => {
+		if (hasPreviousDB) {
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: 'Found old dashboard settings', // TODO: Translate
+				text: 'Some old dashboard settings has been detected. Would you like to use those?',
+				showPositive: true,
+				showNegative: true,
+				positiveText: 'Use',
+				negativeText: 'Clear',
+				onPressPositive: () => {
+					// eslint-disable-next-line react-hooks/rules-of-hooks
+					dispatch(usePreviousDb());
+				},
+				closeOnPressPositive: true,
+				onPressNegative: () => {
+					dispatch(clearPreviousDb());
+				},
+				closeOnPressNegative: true,
+			});
+			return;
+		}
+		navigate('SelectTypeScreen');
+	}, [dispatch, hasPreviousDB, toggleDialogueBox]);
+
 	const rightButton = useMemo((): Object | null => {
 
 		const {
 			addIconStyle,
 			rightButtonStyle,
 		} = getStyles(appLayout);
-
-		const newSchedule = () => {
-			dispatch(resetSchedule());
-			navigate('Schedule', {
-				editMode: false,
-				screen: 'Device',
-				params: {
-					editMode: false,
-				},
-			});
-		};
-
-		const editDb = () => {
-			if (hasPreviousDB) {
-				toggleDialogueBox({
-					show: true,
-					showHeader: true,
-					imageHeader: true,
-					header: 'Found old dashboard settings', // TODO: Translate
-					text: 'Some old dashboard settings has been detected. Would you like to use those?',
-					showPositive: true,
-					showNegative: true,
-					positiveText: 'Use',
-					negativeText: 'Clear',
-					onPressPositive: () => {
-						// eslint-disable-next-line react-hooks/rules-of-hooks
-						dispatch(usePreviousDb());
-					},
-					closeOnPressPositive: true,
-					onPressNegative: () => {
-						dispatch(clearPreviousDb());
-					},
-					closeOnPressNegative: true,
-				});
-				return;
-			}
-			navigate('SelectTypeScreen');
-		};
 
 		const AddButton = {
 			component: <ThemedImage
@@ -277,6 +278,10 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		hasGateways,
 		appLayout,
 		hasPreviousDB,
+		hasDevices,
+		hasSensors,
+		newSchedule,
+		editDb,
 	]);
 
 	return (

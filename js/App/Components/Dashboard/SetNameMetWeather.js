@@ -93,6 +93,7 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 	const {
 		container,
 		body,
+		exitButtonStyle,
 	} = getStyles({layout});
 
 	const [ isLoading, setIsLoading ] = useState(false);
@@ -178,9 +179,16 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 						appLayout={layout}/>
 				</View>
 				<TouchableButton
+					text={formatMessage(i18n.labelAdd)}
+					onPress={onPressNext}
+					disabled={isLoading}
+					showThrobber={isLoading}/>
+				<TouchableButton
 					text={formatMessage(i18n.exit)}
 					buttonLevel={isLoading ? 7 : 10}
-					onPress={goBack}/>
+					onPress={goBack}
+					style={exitButtonStyle}
+					disabled={isLoading}/>
 			</ThemedScrollView>
 			<FloatingButton
 				onPress={onPressNext}
@@ -211,6 +219,9 @@ const getStyles = ({layout}: Object): Object => {
 			paddingHorizontal: padding,
 			paddingBottom: padding,
 			paddingTop: padding * 1.5,
+		},
+		exitButtonStyle: {
+			marginTop: padding,
 		},
 	};
 };
