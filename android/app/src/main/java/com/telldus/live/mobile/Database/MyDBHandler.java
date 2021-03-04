@@ -431,8 +431,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setUserId(cursor.getString(9));
             r.setUpdateInterval(cursor.getInt(10));
             r.setIsUpdating(cursor.getString(11));
-            r.setClientId(cursor.getInt(12));
-            r.setUserUuid(cursor.getString(13));
+            int index12 = cursor.getColumnIndex(CLIENT_ID);
+            r.setClientId(index12 != -1 ? cursor.getInt(index12) : -1);
+            int index13 = cursor.getColumnIndex(COLUMN_USER_UUID);
+            r.setUserUuid(index13 != -1 ? cursor.getString(index13) : "");
 
             cursor.close();
         } else {
@@ -477,8 +479,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setSensorName(cursor.getString(2));
                 r.setSensorDisplayType(cursor.getString(3));
                 r.setUpdateInterval(cursor.getInt(10));
-                r.setClientId(cursor.getInt(12));
-                r.setUserUuid(cursor.getString(13));
+                int index12 = cursor.getColumnIndex(CLIENT_ID);
+                r.setClientId(index12 != -1 ? cursor.getInt(index12) : -1);
+                int index13 = cursor.getColumnIndex(COLUMN_USER_UUID);
+                r.setUserUuid(index13 != -1 ? cursor.getString(index13) : "");
                 mSensorInfo.add(r);
             } while (cursor.moveToNext());
         }
@@ -708,8 +712,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setTransparent(cursor.getString(8));
                 r.setUserId(cursor.getString(9));
                 r.setUpdateInterval(cursor.getInt(10));
-                r.setClientId(cursor.getInt(12));
-                r.setUserUuid(cursor.getString(13));
+                int index12 = cursor.getColumnIndex(CLIENT_ID);
+                r.setClientId(index12 != -1 ? cursor.getInt(index12) : -1);
+                int index13 = cursor.getColumnIndex(COLUMN_USER_UUID);
+                r.setUserUuid(index13 != -1 ? cursor.getString(index13) : "");
 
                 list.add(r);
             } while (cursor.moveToNext());
