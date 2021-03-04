@@ -334,7 +334,8 @@ class DashboardTab extends View {
 	}
 
 	usePreviousDBMessage = (style: Object): Object => {
-		// TODO: Translate
+		const { screenProps } = this.props;
+		const { intl } = screenProps;
 		return (
 			<View
 				level={3}
@@ -350,19 +351,18 @@ class DashboardTab extends View {
 				<Text
 					level={4}
 					style={style.noItemsTitle}>
-					Found old dashboard settings
+					{intl.formatMessage(i18n.prevDBHeader)}
 				</Text>
 				<Text
 					level={26}
 					style={style.noItemsContent}>
 					{'\n'}
-					Some old dashboard settings has been detected.
-					Would you like to use those?
+					{intl.formatMessage(i18n.prevDBBody)}
 				</Text>
 				<View style={style.oldDBButtonsCover}>
 					<TouchableButton
 						onPress={this.onClearPrevDb}
-						text={'Clear'}
+						text={intl.formatMessage(i18n.prevDBNeg)}
 						style={style.buttonStyle}
 						coverStyle={{
 							flex: 0,
@@ -370,8 +370,8 @@ class DashboardTab extends View {
 					/>
 					<TouchableButton
 						onPress={this.onUsePrevDb}
-						text={'Use'}
-						style={[style.buttonStyle, {marginLeft: style.padding}]}
+						text={intl.formatMessage(i18n.prevDBPos)}
+						style={style.buttonStyle}
 						coverStyle={{
 							flex: 0,
 						}}
@@ -749,15 +749,16 @@ class DashboardTab extends View {
 			},
 			oldDBButtonsCover: {
 				width: '100%',
-				flexDirection: 'row',
-				justifyContent: 'space-between',
+				justifyContent: 'center',
+				alignItems: 'center',
 				paddingVertical: padding,
 			},
 			buttonStyle: {
 				flex: 0,
 				minWidth: undefined,
-				maxWidth: (deviceWidth - (padding * 3)) / 2,
-				width: (deviceWidth - (padding * 6)) / 2,
+				maxWidth: (deviceWidth - (padding * 3)),
+				width: (deviceWidth - (padding * 6)),
+				marginTop: padding,
 			},
 		};
 	}

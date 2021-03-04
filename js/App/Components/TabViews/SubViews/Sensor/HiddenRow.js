@@ -93,20 +93,23 @@ class SensorHiddenRow extends View {
 			hasPreviousDB,
 			dispatch,
 			toggleDialogueBox,
+			intl,
 		} = this.props;
-		const isOnDB = sensorIds.indexOf(id) !== -1;
+		const {
+			formatMessage,
+		} = intl;
 
 		if (hasPreviousDB) {
 			toggleDialogueBox({
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				header: 'Found old dashboard settings', // TODO: Translate
-				text: 'Some old dashboard settings has been detected. Would you like to use those?',
+				header: formatMessage(i18n.prevDBHeader),
+				text: formatMessage(i18n.prevDBBody),
 				showPositive: true,
 				showNegative: true,
-				positiveText: 'Use',
-				negativeText: 'Clear',
+				positiveText: formatMessage(i18n.prevDBPos),
+				negativeText: formatMessage(i18n.prevDBNeg),
 				onPressPositive: () => {
 					// eslint-disable-next-line react-hooks/rules-of-hooks
 					dispatch(usePreviousDb());
@@ -116,10 +119,20 @@ class SensorHiddenRow extends View {
 					dispatch(clearPreviousDb());
 				},
 				closeOnPressNegative: true,
+				notificationModalFooterStyle: {
+					flexDirection: 'column',
+					justifyContent: 'flex-end',
+					alignItems: 'flex-end',
+				},
+				notificationModalFooterPositiveTextCoverStyle: {
+					paddingRight: 10,
+					marginRight: 5,
+				},
 			});
 			return;
 		}
 
+		const isOnDB = sensorIds.indexOf(id) !== -1;
 		if (isOnDB) {
 			this.props.removeFromDashboard(id);
 		} else {

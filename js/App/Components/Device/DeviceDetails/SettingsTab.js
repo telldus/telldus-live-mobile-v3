@@ -533,18 +533,22 @@ class SettingsTab extends View {
 		} = this.props;
 		const {
 			toggleDialogueBox,
+			intl,
 		} = screenProps;
+		const {
+			formatMessage,
+		} = intl;
 		if (hasPreviousDB) {
 			toggleDialogueBox({
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				header: 'Found old dashboard settings', // TODO: Translate
-				text: 'Some old dashboard settings has been detected. Would you like to use those?',
+				header: formatMessage(i18n.prevDBHeader),
+				text: formatMessage(i18n.prevDBBody),
 				showPositive: true,
 				showNegative: true,
-				positiveText: 'Use',
-				negativeText: 'Clear',
+				positiveText: formatMessage(i18n.prevDBPos),
+				negativeText: formatMessage(i18n.prevDBNeg),
 				onPressPositive: () => {
 					// eslint-disable-next-line react-hooks/rules-of-hooks
 					dispatch(usePreviousDb());
@@ -554,6 +558,15 @@ class SettingsTab extends View {
 					dispatch(clearPreviousDb());
 				},
 				closeOnPressNegative: true,
+				notificationModalFooterStyle: {
+					flexDirection: 'column',
+					justifyContent: 'flex-end',
+					alignItems: 'flex-end',
+				},
+				notificationModalFooterPositiveTextCoverStyle: {
+					paddingRight: 10,
+					marginRight: 5,
+				},
 			});
 			return;
 		}
