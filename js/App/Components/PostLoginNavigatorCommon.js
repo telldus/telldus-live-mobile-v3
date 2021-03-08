@@ -249,6 +249,7 @@ actionsToPerformOnStart = async () => {
 		intl,
 	} = this.props;
 
+	// NOTE: Setting time out for the navigator 'ref' to get ready(when called from DidMount).
 	this.timeoutNavToChangelog = setTimeout(() => {
 		const {
 			showChangeLog: sCLLate,
