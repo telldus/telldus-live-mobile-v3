@@ -318,7 +318,7 @@ class App extends React.Component<Props> {
 				}
 				<DialogueBox
 					{...others}
-					showDialogue={openModal && !showChangeLog}
+					showDialogue={openModal}
 					showHeader={showHeader}
 					imageHeader={imageHeader}
 					onPressNegative={this.onPressDialogueNegative}
