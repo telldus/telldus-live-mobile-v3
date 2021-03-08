@@ -24,199 +24,37 @@
 
 import React, {
 	memo,
-	useState,
-	useCallback,
 } from 'react';
-import {
-	LayoutAnimation,
-	Linking,
-} from 'react-native';
-import {
-	useSelector,
-} from 'react-redux';
-import {
-	useIntl,
-} from 'react-intl';
 
 import {
-	View,
-	Text,
 	EmptyView,
-	ThemedMaterialIcon,
-	TouchableOpacity,
 } from '../../../../BaseComponents';
 
 import {
-	useDialogueBox,
-} from '../../../Hooks/Dialoguebox';
-import * as LayoutAnimations from '../../../Lib/LayoutAnimations';
-
-import Theme from '../../../Theme';
-import i18n from '../../../Translations/common';
+	DeviceManualUI,
+} from '../DeviceDetails/SubViews';
 
 type Props = {
-	id: string,
+	manualUrl: string,
 };
 
 const TelldusInfo = (props: Props): Object => {
 	const {
-		id,
+		manualUrl,
 	} = props;
 
-	const intl = useIntl();
-	const {
-		formatMessage,
-	} = intl;
-
-	const [ expand, setExpand ] = useState(true);
-
-	const { layout } = useSelector((state: Object): Object => state.app);
-	const {
-		zwaveInfo = {},
-	} = useSelector((state: Object): Object => state.devices.byId[id]) || {};
-
-	const {
-		titleCoverStyle,
-		coverStyle,
-		titleStyle,
-		iconStyle,
-		iconSize,
-		manualLinkStyle,
-	} = getStyles(layout);
-
-	const {
-		toggleDialogueBoxState,
-	} = useDialogueBox();
-
-	const onPressViewManual = useCallback(({link}: Object) => {
-		const defaultMessage = formatMessage(i18n.errortoast);
-		Linking.canOpenURL(link)
-			.then((supported: boolean): any => {
-				if (!supported) {
-					toggleDialogueBoxState({
-						show: true,
-						showHeader: true,
-						imageHeader: true,
-						text: defaultMessage,
-						showPositive: true,
-					});
-				} else {
-					return Linking.openURL(link);
-				}
-			})
-			.catch((err: any) => {
-				const message = err.message || defaultMessage;
-				toggleDialogueBoxState({
-					show: true,
-					showHeader: true,
-					imageHeader: true,
-					text: message,
-					showPositive: true,
-				});
-			});
-	}, [formatMessage, toggleDialogueBoxState]);
-
-	const onPressToggle = useCallback(() => {
-		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
-		setExpand(!expand);
-	}, [expand]);
-
-	const {
-		ManualUrl,
-	} = zwaveInfo;
-	if (!id || !ManualUrl) {
+	if (!manualUrl) {
 		return <EmptyView/>;
 	}
 
-	const linkParts = ManualUrl.split('/');
+	const linkParts = manualUrl.split('/');
 	const fileName = linkParts[linkParts.length - 1];
 
-	return (
-		<>
-			<TouchableOpacity
-				style={titleCoverStyle}
-				onPress={onPressToggle}>
-				<ThemedMaterialIcon
-					name={expand ? 'expand-more' : 'expand-less'}
-					size={iconSize}
-					style={iconStyle}
-					level={38}/>
-				<Text
-					level={2}
-					style={titleStyle}>
-					{formatMessage(i18n.linkToManual)}
-				</Text>
-			</TouchableOpacity>
-			{!expand && (
-				<View
-					level={2}
-					style={coverStyle}>
-					{!!ManualUrl && (
-						<>
-							<TouchableOpacity
-								onPress={onPressViewManual}
-								onPressData={{
-									link: ManualUrl,
-								}}>
-								<Text
-									level={36}
-									style={manualLinkStyle}
-									ellipsizeMode={'middle'}
-									numberOfLines={1}>
-									{fileName}
-								</Text>
-							</TouchableOpacity>
-						</>
-					)}
-				</View>
-			)}
-		</>
-	);
-};
+	return <DeviceManualUI
+		manualUrl={manualUrl}
+		fileName={fileName}
+	/>;
 
-const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
-
-	const {
-		paddingFactor,
-		shadow,
-		fontSizeFactorEight,
-		fontSizeFactorOne,
-	} = Theme.Core;
-	const fontSize = Math.floor(deviceWidth * fontSizeFactorEight);
-	const padding = deviceWidth * paddingFactor;
-
-	return {
-		iconSize: deviceWidth * 0.07,
-		titleCoverStyle: {
-			flexDirection: 'row',
-			marginLeft: padding,
-			marginBottom: padding / 2,
-			alignItems: 'center',
-		},
-		titleStyle: {
-			marginLeft: 8,
-			fontSize: deviceWidth * fontSizeFactorOne,
-		},
-		coverStyle: {
-			marginTop: 2,
-			marginHorizontal: padding,
-			borderRadius: 2,
-			padding,
-			marginBottom: padding,
-			flexDirection: 'row',
-			justifyContent: 'flex-start',
-			...shadow,
-		},
-		manualLinkStyle: {
-			flex: 1,
-			fontSize,
-			marginLeft: 10,
-			flexWrap: 'nowrap',
-		},
-	};
 };
 
 export default memo<Object>(TelldusInfo);
