@@ -191,11 +191,14 @@ class DevicesTab extends View {
 		return (currentScreen === 'Devices') || (currentScreen !== 'Devices' && prevScreen === 'Devices');
 	}
 
-	componentDidUpdate() {
+	componentDidUpdate(prevProps: Object) {
 		this.handleAddDeviceAttentionCapture();
 		this.normalizeNewlyAddedUITimeout();
 
-		const { route } = this.props;
+		const {
+			route,
+			screenProps,
+		} = this.props;
 		const {
 			newDevices = {},
 			gateway,
@@ -205,6 +208,18 @@ class DevicesTab extends View {
 				let gId = gateway.id.toString();
 				this.onNewlyAddedDidMount(parseInt(id, 10), gId);
 			});
+		}
+
+		const {
+			appLayout = {},
+		} = screenProps;
+		const {
+			screenProps: {
+				appLayout: prevAppLayout,
+			},
+		} = prevProps;
+		if (appLayout.height !== prevAppLayout.height || appLayout.width !== prevAppLayout.width) {
+			this.getItemLayout = getItemLayout(appLayout);
 		}
 	}
 

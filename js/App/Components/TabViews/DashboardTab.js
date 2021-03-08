@@ -257,7 +257,10 @@ class DashboardTab extends View {
 
 			if (Platform.OS === 'android') {
 				this.timeoutSwitchTabAndroid = setTimeout(() => {
-					navigation.navigate(tabToCheckOrVeryNext);
+					const { currentScreen: cSLat } = this.props;
+					if (possibleScreen.indexOf(cSLat) !== -1) {
+						navigation.navigate(tabToCheckOrVeryNext);
+					}
 					this.timeoutSwitchTabAndroid = null;
 				}, 1000);
 			} else {

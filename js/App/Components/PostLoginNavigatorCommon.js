@@ -163,6 +163,8 @@ clearNetInfoListener: any;
 clearListenerSyncLiveApiOnForeground: any;
 clearListenerAppState: any;
 
+timeoutNavToChangelog: any;
+
 constructor(props: Props) {
 	super(props);
 
@@ -209,6 +211,8 @@ constructor(props: Props) {
 	this.clearNetInfoListener = null;
 	this.clearListenerSyncLiveApiOnForeground = null;
 	this.clearListenerAppState = null;
+
+	this.timeoutNavToChangelog = null;
 }
 
 getThemeOptions = (): Object => {
@@ -243,15 +247,22 @@ actionsToPerformOnStart = async () => {
 		showLoadingIndicator,
 		enableGeoFence,
 		intl,
-		showChangeLog,
-		changeLogVersion,
 	} = this.props;
-	if (showChangeLog) {
-		navigate('ChangeLogScreen', {
-			forceShowChangeLog: false,
+
+	// NOTE: Setting time out for the navigator 'ref' to get ready(when called from DidMount).
+	this.timeoutNavToChangelog = setTimeout(() => {
+		const {
+			showChangeLog: sCLLate,
 			changeLogVersion,
-		});
-	}
+		} = this.props;
+		if (sCLLate) {
+			navigate('ChangeLogScreen', {
+				forceShowChangeLog: false,
+				changeLogVersion,
+			});
+			this.timeoutNavToChangelog = null;
+		}
+	}, 400);
 
 	try {
 		// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
@@ -579,6 +590,10 @@ componentWillUnmount() {
 	if (this.clearListenerAppState) {
 		this.clearListenerAppState();
 		this.clearListenerAppState = null;
+	}
+
+	if (this.timeoutNavToChangelog) {
+		clearTimeout(this.timeoutNavToChangelog);
 	}
 }
 
