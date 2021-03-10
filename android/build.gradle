@@ -13,6 +13,7 @@ buildscript {
         googlePlayServicesIidVersion = "16.0.1"
         googlePlayServicesLocationVersion = "17.0.0"
         appCompatVersion = "1.1.0" // IMPORTANT:  For new AndroidX compatibility.
+        playCoreVersion = "1.10.0" // NOTE: Used by sp-react-native-in-app-updates
     }
     repositories {
         google()
