@@ -26,12 +26,16 @@ import {
 	UIManager,
 	Platform,
 	StatusBar,
+	NativeModules,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { LocaleConfig } from 'react-native-calendars';
 import { injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
+const {
+	WidgetModule,
+} = NativeModules;
 
 import {
 	PreLoginNavigator,
@@ -105,6 +109,9 @@ class App extends React.Component<Props> {
 		this.setCalendarLocale();
 		if (Platform.OS === 'android') {
 			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+		}
+		if (Platform.OS === 'ios') {
+			WidgetModule.requestPermissionAppTracking();
 		}
 
 		this.closeDialogue = this.closeDialogue.bind(this);
