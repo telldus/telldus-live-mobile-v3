@@ -88,7 +88,7 @@
 		<string>SensorWidgetIntent</string>
 	</array>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>If the user has disabled the app setting 'Send crash reports anonymously', we use the user ID to identify crashes in Firebase Crashlytics to create a better user experience.</string>
+	<string>If the user has disabled the app setting &apos;Send crash reports anonymously&apos;, we use the user ID to identify crashes in Firebase Crashlytics to create a better user experience. We do not use the IDFA though.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>telldusicons.ttf</string>
