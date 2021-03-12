@@ -132,15 +132,18 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 				},
 				ios: {},
 			}),
-			{
-				style: campaingButtonStyle,
-				accessibilityLabel: formatMessage(i18n.linkToCampaigns),
-				onPress: navigateToCampaign,
-				iconComponent: <CampaignIcon
-					size={buttonSize}
-					style={campaingIconStyle}
-					level={22}/>,
-			},
+			Platform.select({
+				android: {
+					style: campaingButtonStyle,
+					accessibilityLabel: formatMessage(i18n.linkToCampaigns),
+					onPress: navigateToCampaign,
+					iconComponent: <CampaignIcon
+						size={buttonSize}
+						style={campaingIconStyle}
+						level={22}/>,
+				},
+				ios: {},
+			}),
 		];
 
 		const customComponent = <HeaderLeftButtonsMainTab style={menuButtonStyle} buttons={buttons}/>;
