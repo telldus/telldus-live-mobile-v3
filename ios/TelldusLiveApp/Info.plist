@@ -87,8 +87,6 @@
 		<string>HomescreenWidgetIntent</string>
 		<string>SensorWidgetIntent</string>
 	</array>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>If you have disabled the app setting 'Send crash reports anonymously', we use your user ID to identify crashes in Firebase Crashlytics to create a better user experience.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>telldusicons.ttf</string>
