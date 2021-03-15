@@ -79,7 +79,6 @@ import {
 	setAppLanguage,
 } from './App/Actions/App';
 import {
-	setUserIdentifierFirebaseCrashlytics,
 	setUserNameFirebaseCrashlytics,
 } from './App/Actions/Analytics';
 
@@ -104,7 +103,6 @@ function Bootstrap(): Object {
 			const { getState, dispatch } = store;
 			let state = getState();
 			if (state.user && state.user.userProfile) {
-				dispatch(setUserIdentifierFirebaseCrashlytics());
 				dispatch(setUserNameFirebaseCrashlytics());
 			}
 			SplashScreen.hide();

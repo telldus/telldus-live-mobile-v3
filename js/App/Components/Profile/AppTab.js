@@ -72,15 +72,7 @@ import {
 import {
 	showToast,
 	setDBCarousel,
-	setReportCrash,
 } from '../../Actions/App';
-import {
-	setUserIdentifierFirebaseCrashlytics,
-	setUserNameFirebaseCrashlytics,
-} from '../../Actions/Analytics';
-import {
-	useDialogueBox,
-} from '../../Hooks/Dialoguebox';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -99,7 +91,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		deviceId,
 	} = useSelector((state: Object): Object => state.user);
 
-	const { dbCarousel = true, reportCrash = true } = defaultSettings;
+	const { dbCarousel = true } = defaultSettings;
 
 	const {
 		container,
@@ -111,10 +103,6 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		contentCoverStyle,
 		bBSortDropDownContainerStyle,
 	} = getStyles(layout);
-
-	const {
-		toggleDialogueBoxState,
-	} = useDialogueBox();
 
 	const dispatch = useDispatch();
 	useEffect(() => {
@@ -203,23 +191,6 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		dispatch(setDBCarousel(!dbCarousel));
 	}
 
-	function toggleReportCrash() {
-		dispatch(setReportCrash(!reportCrash));
-		dispatch(setUserIdentifierFirebaseCrashlytics());
-		dispatch(setUserNameFirebaseCrashlytics());
-	}
-
-	function onPressCrashInfo() {
-		toggleDialogueBoxState({
-			show: true,
-			showHeader: true,
-			imageHeader: true,
-			header: formatMessage(i18n.crashReports),
-			text: formatMessage(i18n.sendCrashAnonymouslyInfo),
-			showPositive: true,
-		});
-	}
-
 	return (
 		<ThemedScrollView
 			level={3}
@@ -279,23 +250,6 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
 				<TabsBatteryStatusControlBlock
 					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
-				<Text
-					level={2}
-					style={titleStyle}>
-					{formatMessage(i18n.crashReports)}
-				</Text>
-				<SettingsRow
-					label={formatMessage(i18n.sendCrashAnonymously)}
-					onPressIconLabelRight={onPressCrashInfo}
-					iconLabelRight={'help'}
-					onValueChange={toggleReportCrash}
-					value={reportCrash}
-					appLayout={layout}
-					intl={intl}
-					labelTextStyle={labelTextStyle}
-					touchableStyle={touchableStyle}
-					switchStyle={switchStyle}
-					style={contentCoverStyle}/>
 				{Platform.OS === 'android' &&
 					<WidgetFontSizeSetting
 						appLayout={layout}

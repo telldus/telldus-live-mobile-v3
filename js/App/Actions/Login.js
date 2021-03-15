@@ -49,7 +49,6 @@ import {
 } from '../Lib/appUtils';
 
 import {
-	setUserIdentifierFirebaseCrashlytics,
 	setUserNameFirebaseCrashlytics,
 } from './Analytics';
 
@@ -166,7 +165,6 @@ function getUserProfile(_accessToken?: Object = undefined, extras?: Object = {})
 					});
 				}
 
-				dispatch(setUserIdentifierFirebaseCrashlytics());
 				dispatch(setUserNameFirebaseCrashlytics());
 
 				try {

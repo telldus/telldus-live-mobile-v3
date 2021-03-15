@@ -31,15 +31,7 @@ import type { ThunkAction } from './Types';
 
 function setUserIdentifierFirebaseCrashlytics(): ThunkAction {
 	return (dispatch: Function, getState: Function): any => {
-		const { app: { defaultSettings = {}}, user: { userProfile = {}} } = getState();
-		const { reportCrash = true } = defaultSettings;
-		const { email } = userProfile;
-
-		let id = email;
-		if (!reportCrash) {
-			id = '';
-		}
-		setUserIdentifier(id);
+		setUserIdentifier('');
 	};
 }
 
