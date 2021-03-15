@@ -188,7 +188,36 @@ validateAndRunTests() {
 					this.validateAndRunTests();
 				});
 			}
+			this.showDialogueIfRequired(index);
 		});
+	}
+}
+
+showDialogueIfRequired = (index: number) => {
+	if (index === 4) {
+		let gotFailedTest = false;
+		for (let i = 0; i < this.TESTS_TO_RUN.length; i++) {
+			const test = this.TESTS_TO_RUN[i];
+			if (test.status === 'fail') {
+				gotFailedTest = true;
+				break;
+			}
+		}
+		if (gotFailedTest && supportRSA()) {
+			const {
+				toggleDialogueBox,
+				intl,
+			} = this.props;
+			toggleDialogueBox({
+				show: true,
+				showPositive: true,
+				imageHeader: true,
+				header: intl.formatMessage(i18n.failedTestsDialogueHeader),
+				text: intl.formatMessage(i18n.failedTestsDialogueBody),
+				showHeader: true,
+				capitalizeHeader: false,
+			});
+		}
 	}
 }
 
@@ -528,7 +557,6 @@ render(): Object | null {
 		...others
 	} = this.getStyles(appLayout);
 
-	let gotFailedTest = false;
 	let failedTestsIndex = [];
 	const tests = this.TESTS_TO_RUN.map((test: Object, i: number): Object => {
 		if (i === index) {
@@ -537,7 +565,6 @@ render(): Object | null {
 		if (test.status === 'fail') {
 			failedTestsIndex.push(i);
 			test = { ...test, h2: intl.formatMessage(i18n.failed)};
-			gotFailedTest = true;
 		}
 		if (test.status === 'ok') {
 			test = { ...test, h2: intl.formatMessage(i18n.defaultPositiveText)};
@@ -551,8 +578,6 @@ render(): Object | null {
 	if (showButtons) {
 		troubleShootHints = this.getTroubleShootInfo(failedTestsIndex, others);
 	}
-
-	const showContactSupport = gotFailedTest && supportRSA();
 
 	return (
 		<>
@@ -571,12 +596,6 @@ render(): Object | null {
 							text={i18n.labelButtonRunTestsAgain}
 							style={button}
 							onPress={this.onPressReRunTest}/>
-						{showContactSupport && <TouchableButton
-							text={i18n.labelButtonRequestSupport}
-							style={[button, {
-								marginBottom: 20,
-							}]}
-							onPress={this.onPressRequestSupport}/>}
 					</>
 			}
 		</>
