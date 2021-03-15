@@ -20,6 +20,5 @@ RCT_EXTERN_METHOD(refreshAllWidgets)
 RCT_EXTERN_METHOD(donate :(NSDictionary *) options)
 RCT_EXTERN_METHOD(presentShortcut :(NSDictionary *) options callback: (RCTResponseSenderBlock) callback)
 RCT_EXTERN_METHOD(getShortcuts : (RCTResponseSenderBlock) callback)
-RCT_EXTERN_METHOD(requestPermissionAppTracking)
 
 @end

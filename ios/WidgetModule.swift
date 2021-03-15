@@ -15,8 +15,6 @@ import UIKit
 import Intents
 import IntentsUI
 import CoreSpotlight
-import AdSupport
-import AppTrackingTransparency
 
 enum VoiceShortcutMutationStatus: String {
   case cancelled = "cancelled"
@@ -339,36 +337,6 @@ class WidgetModule: NSObject, INUIAddVoiceShortcutViewControllerDelegate, INUIEd
         ["status": status.rawValue, "phrase": voiceShortcut?.invocationPhrase]
       ])
       self.presentShortcutCallback = nil
-    }
-  }
-  
-  @objc(requestPermissionAppTracking)
-  func requestPermissionAppTracking() {
-    if #available(iOS 14, *) {
-      ATTrackingManager.requestTrackingAuthorization { status in
-        switch status {
-        case .authorized:
-          // Tracking authorization dialog was shown
-          // and we are authorized
-          print("Authorized")
-          
-          // Now that we are authorized we can get the IDFA
-          print(ASIdentifierManager.shared().advertisingIdentifier)
-        case .denied:
-          // Tracking authorization dialog was
-          // shown and permission is denied
-          print("Denied")
-        case .notDetermined:
-          // Tracking authorization dialog has not been shown
-          print("Not Determined")
-        case .restricted:
-          print("Restricted")
-        @unknown default:
-          print("Unknown")
-        }
-      }
-    } else {
-      // Fallback on earlier versions
     }
   }
 }
