@@ -41,6 +41,11 @@ import {
 import Slider from 'react-native-slider';
 const isEqual = require('react-fast-compare');
 import { useIntl } from 'react-intl';
+let dayjs = require('dayjs');
+let utc = require('dayjs/plugin/utc');
+let timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 import {
 	View,
@@ -304,10 +309,12 @@ const BatteryFunctions = (props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isBatteryInfoEqual]);
 
-	const nowTS = Math.floor(Date.now() / 1000);
-	const isWakeupPast = lastWakeup < nowTS;
-	const lastWakeupDateTime = new Date(lastWakeup * 1000);
-	const nextWakeupDateTime = new Date((lastWakeup + wakeupInterval) * 1000);
+	dayjs.tz.setDefault(gatewayTimezone);
+	const now = dayjs().valueOf();
+	const lastWakeupDateTime = dayjs(lastWakeup * 1000);
+	const nextWakeupDateTime = dayjs((lastWakeup + wakeupInterval) * 1000);
+	const isNextWakeupPast = nextWakeupDateTime.valueOf() < now;
+	dayjs.tz.setDefault();
 
 	const body = useMemo((): ?Object => {
 
@@ -336,8 +343,8 @@ const BatteryFunctions = (props: Props): Object => {
 						label={`${formatMessage(i18n.zWaveBatteryLabelThree)}: `}
 						value={`${formatDate(lastWakeupDateTime)} ${formatTime(lastWakeupDateTime)}`}/>
 				)}
-				{(!hideSlider && wakeupInterval > 0 && lastWakeup > 0) && (
-					isWakeupPast ?
+				{(!hideSlider && wakeupInterval > 0 && wakeUpIntervalValue.timeString !== '0' && lastWakeup > 0) && (
+					isNextWakeupPast ?
 						<BatteryInfoItem
 							value={formatMessage(i18n.zWaveBatteryLabelFourPast, {
 								time: `${formatDate(nextWakeupDateTime)} ${formatTime(nextWakeupDateTime)}`,
@@ -392,7 +399,7 @@ const BatteryFunctions = (props: Props): Object => {
 				)}
 			</View>
 		);
-	}, [id, coverStyle, supportsWakeup, textStyle, formatMessage, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, isWakeupPast, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, hideSlider, sliderValue, maximumValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
+	}, [id, coverStyle, supportsWakeup, textStyle, formatMessage, wakeupNote, lastWakeup, formatDate, lastWakeupDateTime, formatTime, wakeupInterval, isNextWakeupPast, nextWakeupDateTime, level, onPressInfo, batteryType, batteryCount, wakeUpIntervalValue.timeString, hideSlider, sliderValue, maximumValue, onValueChange, onSlidingComplete, minimumTrackTintColor, slider.track, slider.thumb]);
 
 	const onPressToggle = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
