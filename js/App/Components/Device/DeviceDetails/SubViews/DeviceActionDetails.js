@@ -151,7 +151,8 @@ class DeviceActionDetails extends View {
 			buttons.push(
 				<OffButton
 					{...sharedProps}
-					actionIcon={actionIcon}/>
+					actionIcon={actionIcon}
+					enabled={!!TURNOFF}/>
 			);
 		}
 
@@ -161,6 +162,7 @@ class DeviceActionDetails extends View {
 				<OnButton
 					{...sharedProps}
 					actionIcon={actionIcon}
+					enabled={!!TURNON}
 				/>
 			);
 		}
@@ -177,11 +179,13 @@ class DeviceActionDetails extends View {
 				isInState === 'TURNOFF' ?
 					<OffButton
 						{...sharedProps}
-						actionIcon={actionIcon}/>
+						actionIcon={actionIcon}
+						enabled={!!TURNOFF}/>
 					:
 					<OnButton
 						{...sharedProps}
-						actionIcon={actionIcon}/>
+						actionIcon={actionIcon}
+						enabled={!!TURNON}/>
 			);
 		}
 
