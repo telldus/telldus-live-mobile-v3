@@ -133,6 +133,9 @@ const MoreOptionsTab = (props: Props): Object => {
 				text: capitalize(formatMessage(i18n.switchOrAddAccount)),
 				onPress: performAddOrSwitch,
 				enable: true,
+				iconRight: <IconTelldus
+					icon={'premium'}
+					style={premIconStyle}/>,
 			},
 			{
 				icon: 'location',
