@@ -38,9 +38,6 @@ declare module 'react-native-swiper' {
 declare module '../../local-cli/bundle/assetPathUtils' {
 	declare module.exports: any;
 }
-declare module 'react-native-google-signin' {
-	declare module.exports: any;
-}
 declare module 'react-native-color-wheel' {
 	declare module.exports: any;
 }
