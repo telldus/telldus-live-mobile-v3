@@ -477,4 +477,4 @@ function mapStateToProps(store: Object, ownProps: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(injectIntl(HVSliderContainer));
+module.exports = (connect(mapStateToProps, null)(injectIntl(HVSliderContainer)): Object);

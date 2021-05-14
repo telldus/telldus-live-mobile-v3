@@ -800,4 +800,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(withTheme(DeviceRow));
+module.exports = (connect(mapStateToProps, null)(withTheme(DeviceRow)): Object);

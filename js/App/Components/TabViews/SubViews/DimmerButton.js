@@ -430,4 +430,4 @@ function mapStateToProps(store: Object, dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerButton);
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(DimmerButton): Object);

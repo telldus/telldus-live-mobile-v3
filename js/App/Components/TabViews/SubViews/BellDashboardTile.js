@@ -178,4 +178,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(withTheme(BellDashboardTile));
+module.exports = (connect(null, mapDispatchToProps)(withTheme(BellDashboardTile)): Object);

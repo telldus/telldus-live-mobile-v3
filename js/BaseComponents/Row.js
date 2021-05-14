@@ -134,5 +134,5 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(Row);
+module.exports = (connect(mapStateToProps, null)(Row): Object);
 

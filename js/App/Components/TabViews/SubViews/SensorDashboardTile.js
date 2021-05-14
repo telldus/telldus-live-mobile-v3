@@ -441,4 +441,4 @@ function mapStateToProps(state: Object, props: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(withTheme(SensorDashboardTile, true));
+module.exports = (connect(mapStateToProps, null)(withTheme(SensorDashboardTile, true)): Object);

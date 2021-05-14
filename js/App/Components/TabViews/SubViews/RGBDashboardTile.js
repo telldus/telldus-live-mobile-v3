@@ -393,4 +393,4 @@ function mapStateToProps(store: Object, dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(RGBDashboardTile);
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(RGBDashboardTile): Object);

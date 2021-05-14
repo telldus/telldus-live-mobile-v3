@@ -363,4 +363,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(withTheme((injectIntl(App))));
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(withTheme((injectIntl(App)))): Object);

@@ -193,4 +193,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(withTheme(OffButton));
+module.exports = (connect(null, mapDispatchToProps)(withTheme(OffButton)): Object);

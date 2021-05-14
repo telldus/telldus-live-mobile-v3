@@ -177,4 +177,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(withTheme(BellButton));
+module.exports = (connect(null, mapDispatchToProps)(withTheme(BellButton)): Object);

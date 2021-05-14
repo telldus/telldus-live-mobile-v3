@@ -497,4 +497,4 @@ function dispatchToProps(dispatch: Function, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, dispatchToProps)(injectIntl(LoginForm));
+module.exports = (connect(mapStateToProps, dispatchToProps)(injectIntl(LoginForm)): Object);

@@ -78,4 +78,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(LearnButton);
+module.exports = (connect(null, mapDispatchToProps)(LearnButton): Object);

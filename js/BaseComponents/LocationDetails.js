@@ -283,4 +283,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(LocationDetails);
+module.exports = (connect(mapStateToProps, null)(LocationDetails): Object);

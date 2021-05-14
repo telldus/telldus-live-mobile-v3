@@ -435,4 +435,4 @@ function mapStateToProps(store: Object, dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(RGBButton);
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(RGBButton): Object);

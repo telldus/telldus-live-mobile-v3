@@ -225,4 +225,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(AppNavigatorRenderer);
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(AppNavigatorRenderer): Object);

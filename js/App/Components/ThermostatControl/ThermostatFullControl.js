@@ -236,4 +236,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(ThermostatFullControl);
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(ThermostatFullControl): Object);

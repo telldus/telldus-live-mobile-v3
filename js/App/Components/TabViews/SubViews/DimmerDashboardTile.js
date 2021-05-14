@@ -335,4 +335,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerDashboardTile);
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(DimmerDashboardTile): Object);

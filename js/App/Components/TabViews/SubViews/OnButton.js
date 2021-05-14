@@ -183,4 +183,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(withTheme(OnButton));
+module.exports = (connect(null, mapDispatchToProps)(withTheme(OnButton)): Object);

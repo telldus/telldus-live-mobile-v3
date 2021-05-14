@@ -217,5 +217,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 		dispatch,
 	};
 }
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(SessionLocked));
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(injectIntl(SessionLocked)): Object);
 

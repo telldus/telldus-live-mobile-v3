@@ -144,4 +144,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(withTheme(RowWithTriangle));
+module.exports = (connect(mapStateToProps, null)(withTheme(RowWithTriangle)): Object);

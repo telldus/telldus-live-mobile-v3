@@ -516,4 +516,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(withTheme(DashboardRow));
+module.exports = (connect(mapStateToProps, null)(withTheme(DashboardRow)): Object);

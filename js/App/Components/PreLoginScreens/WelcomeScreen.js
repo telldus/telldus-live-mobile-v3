@@ -156,4 +156,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(WelcomeScreen));
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(injectIntl(WelcomeScreen)): Object);

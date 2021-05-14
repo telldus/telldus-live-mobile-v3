@@ -304,4 +304,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(GatewaysScreen);
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(GatewaysScreen): Object);
