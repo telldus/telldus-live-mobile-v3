@@ -180,7 +180,7 @@
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|rn-fetch-blob|victory-/*|react-navigation|@react-native-firebase/|@react-native-community/push-notification-ios|@invertase/react-native-apple-authentication|@react-navigation/.*|@react-native-async-storage/async-storage/(?!(lib))))"
+      "node_modules/(?!((jest-)?react-native|@react-native|rn-fetch-blob|victory-/*|react-navigation|@react-native-firebase/|@react-native-community/push-notification-ios|@invertase/react-native-apple-authentication|@react-navigation/.*|@react-native-async-storage/async-storage/(?!(lib))))"
     ]
   },
   "@comment": {
