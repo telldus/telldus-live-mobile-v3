@@ -358,4 +358,4 @@ const getStyles = ({
 	};
 };
 
-module.exports = withTheme(TimePicker);
+module.exports = (withTheme(TimePicker): Object);

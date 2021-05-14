@@ -272,4 +272,4 @@ SliderScale.defaultProps = {
 	disableActionIndicator: false,
 };
 
-module.exports = withTheme(injectIntl(SliderScale));
+module.exports = (withTheme(injectIntl(SliderScale)): Object);

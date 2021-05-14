@@ -219,4 +219,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = withTheme(HeatInfoBlock);
+module.exports = (withTheme(HeatInfoBlock): Object);

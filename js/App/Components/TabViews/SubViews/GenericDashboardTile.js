@@ -56,4 +56,4 @@ class GenericDashboardTile extends View {
 	}
 }
 
-module.exports = GenericDashboardTile;
+module.exports = (GenericDashboardTile: Object);

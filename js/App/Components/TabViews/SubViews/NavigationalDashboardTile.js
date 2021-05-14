@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = NavigationalDashboardTile;
+module.exports = (NavigationalDashboardTile: Object);

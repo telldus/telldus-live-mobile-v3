@@ -203,4 +203,4 @@ DimmerPopup.defaultProps = {
 	value: 1,
 };
 
-module.exports = withTheme(DimmerPopup, true);
+module.exports = (withTheme(DimmerPopup, true): Object);

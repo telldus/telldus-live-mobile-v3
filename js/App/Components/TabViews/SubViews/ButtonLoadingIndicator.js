@@ -98,4 +98,4 @@ ButtonLoadingIndicator.propTypes = {
 	style: PropTypes.any,
 };
 
-module.exports = withTheme(ButtonLoadingIndicator);
+module.exports = (withTheme(ButtonLoadingIndicator): Object);

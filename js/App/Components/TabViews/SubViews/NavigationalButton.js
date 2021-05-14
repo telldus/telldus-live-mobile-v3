@@ -151,4 +151,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = NavigationalButton;
+module.exports = (NavigationalButton: Object);

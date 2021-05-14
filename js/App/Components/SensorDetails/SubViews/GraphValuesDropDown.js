@@ -386,4 +386,4 @@ class GraphValuesDropDown extends View<Props, State> {
 	}
 }
 
-module.exports = GraphValuesDropDown;
+module.exports = (GraphValuesDropDown: Object);

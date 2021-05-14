@@ -209,4 +209,4 @@ ProgressBarLinear.defaultProps = {
 	progress: 0,
 	width: 150,
 };
-module.exports = withTheme(ProgressBarLinear);
+module.exports = (withTheme(ProgressBarLinear): Object);

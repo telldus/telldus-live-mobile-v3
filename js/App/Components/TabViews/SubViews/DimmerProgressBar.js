@@ -265,4 +265,4 @@ DimmerProgressBar.defaultProps = {
 	progress: 0,
 	width: 150,
 };
-module.exports = withTheme(injectIntl(DimmerProgressBar));
+module.exports = (withTheme(injectIntl(DimmerProgressBar)): Object);

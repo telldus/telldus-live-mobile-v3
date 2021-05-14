@@ -159,4 +159,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = ToggleDashboardTile;
+module.exports = (ToggleDashboardTile: Object);

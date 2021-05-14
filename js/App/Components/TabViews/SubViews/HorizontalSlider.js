@@ -423,4 +423,4 @@ HorizontalSlider.defaultProps = {
 	value: 0,
 };
 
-module.exports = withTheme(injectIntl(HorizontalSlider));
+module.exports = (withTheme(injectIntl(HorizontalSlider)): Object);

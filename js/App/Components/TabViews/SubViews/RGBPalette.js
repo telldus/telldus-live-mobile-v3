@@ -126,4 +126,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = withTheme(RGBPalette);
+module.exports = (withTheme(RGBPalette): Object);

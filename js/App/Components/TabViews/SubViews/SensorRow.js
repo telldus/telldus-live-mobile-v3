@@ -617,4 +617,4 @@ class SensorRow extends View<Props, State> {
 	}
 }
 
-module.exports = withTheme(SensorRow);
+module.exports = (withTheme(SensorRow): Object);

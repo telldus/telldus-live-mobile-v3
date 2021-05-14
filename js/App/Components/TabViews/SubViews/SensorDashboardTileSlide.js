@@ -84,4 +84,4 @@ class SensorDashboardTileSlide extends View<Props, null> {
 	}
 }
 
-module.exports = SensorDashboardTileSlide;
+module.exports = (SensorDashboardTileSlide: Object);

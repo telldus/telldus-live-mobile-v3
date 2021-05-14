@@ -152,4 +152,4 @@ const PreLoginNavigator = React.memo<Object>((props: Props = {}): Object => {
 	'changeLogVersion',
 ]));
 
-module.exports = PreLoginNavigator;
+module.exports = (PreLoginNavigator: Object);

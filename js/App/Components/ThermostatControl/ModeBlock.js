@@ -345,4 +345,4 @@ getStyles(): Object {
 }
 }
 
-module.exports = withTheme(ModeBlock);
+module.exports = (withTheme(ModeBlock): Object);

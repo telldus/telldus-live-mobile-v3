@@ -215,4 +215,4 @@ DimmerOffButton.defaultProps = {
 	disableActionIndicator: false,
 };
 
-module.exports = withTheme(DimmerOffButton);
+module.exports = (withTheme(DimmerOffButton): Object);

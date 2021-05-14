@@ -215,4 +215,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = DashboardShadowTile;
+module.exports = (DashboardShadowTile: Object);

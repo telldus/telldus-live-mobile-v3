@@ -104,4 +104,4 @@ const TabsView = React.memo<Object>((props: Object): Object => {
 	'defaultStartScreenKey',
 ]));
 
-module.exports = TabsView;
+module.exports = (TabsView: Object);

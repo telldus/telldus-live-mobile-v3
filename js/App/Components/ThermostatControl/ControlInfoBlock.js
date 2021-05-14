@@ -465,4 +465,4 @@ getStyles(): Object {
 }
 }
 
-module.exports = withTheme(injectIntl(ControlInfoBlock));
+module.exports = (withTheme(injectIntl(ControlInfoBlock)): Object);

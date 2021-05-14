@@ -150,4 +150,4 @@ ToggleButton.defaultProps = {
 	disableActionIndicator: false,
 };
 
-module.exports = ToggleButton;
+module.exports = (ToggleButton: Object);

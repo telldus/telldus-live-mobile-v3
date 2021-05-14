@@ -820,4 +820,4 @@ HeatControlWheelModes.defaultProps = {
 	timeoutPlusMinus: 2000,
 };
 
-module.exports = withTheme(HeatControlWheelModes);
+module.exports = (withTheme(HeatControlWheelModes): Object);

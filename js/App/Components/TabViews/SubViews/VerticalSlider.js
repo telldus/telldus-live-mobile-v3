@@ -338,4 +338,4 @@ VerticalSlider.defaultProps = {
 	value: 0,
 };
 
-module.exports = injectIntl(VerticalSlider);
+module.exports = (injectIntl(VerticalSlider): Object);

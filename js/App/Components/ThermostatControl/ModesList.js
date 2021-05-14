@@ -181,4 +181,4 @@ const getStyles = ({
 	};
 };
 
-module.exports = injectIntl(ModesList);
+module.exports = (injectIntl(ModesList): Object);
