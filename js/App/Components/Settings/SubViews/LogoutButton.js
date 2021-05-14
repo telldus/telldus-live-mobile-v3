@@ -115,4 +115,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(LogoutButton);
+export default (React.memo<Object>(LogoutButton): Object);

@@ -110,4 +110,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(InfoBlock);
+export default (React.memo<Object>(InfoBlock): Object);

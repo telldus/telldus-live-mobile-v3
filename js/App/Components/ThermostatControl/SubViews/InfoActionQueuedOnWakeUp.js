@@ -71,5 +71,5 @@ const InfoActionQueuedOnWakeUp = (props: Object): Object => {
 	);
 };
 
-export default React.memo<Object>(InfoActionQueuedOnWakeUp);
+export default (React.memo<Object>(InfoActionQueuedOnWakeUp): Object);
 

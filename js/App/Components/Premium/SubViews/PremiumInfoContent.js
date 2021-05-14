@@ -104,4 +104,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(PremiumInfoContent);
+export default (React.memo<Object>(PremiumInfoContent): Object);

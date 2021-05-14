@@ -287,4 +287,4 @@ const getStyles = ({
 	};
 };
 
-export default React.memo<Object>(UpdatePasswordScreen);
+export default (React.memo<Object>(UpdatePasswordScreen): Object);

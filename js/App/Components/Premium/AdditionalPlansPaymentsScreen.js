@@ -525,4 +525,4 @@ const getStyles = ({
 	};
 };
 
-export default React.memo<Object>(withTheme(AdditionalPlansPaymentsScreen));
+export default (React.memo<Object>(withTheme(AdditionalPlansPaymentsScreen)): Object);

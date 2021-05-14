@@ -108,4 +108,4 @@ const getStyles = (): Object => {
 	};
 };
 
-export default React.memo<Object>(MaterialTextInput);
+export default (React.memo<Object>(MaterialTextInput): Object);

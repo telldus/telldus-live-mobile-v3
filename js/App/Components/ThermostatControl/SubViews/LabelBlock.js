@@ -54,5 +54,5 @@ const LabelBlock = (props: Object): Object => {
 	);
 };
 
-export default React.memo<Object>(LabelBlock);
+export default (React.memo<Object>(LabelBlock): Object);
 

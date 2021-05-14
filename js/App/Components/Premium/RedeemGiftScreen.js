@@ -270,4 +270,4 @@ const getStyles = ({
 	};
 };
 
-export default React.memo<Object>(withTheme(RedeemGiftScreen));
+export default (React.memo<Object>(withTheme(RedeemGiftScreen)): Object);

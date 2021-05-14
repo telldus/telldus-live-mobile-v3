@@ -83,4 +83,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(UserInfoBlock);
+export default (React.memo<Object>(UserInfoBlock): Object);

@@ -273,4 +273,4 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 		},
 	};
 };
-export default React.memo<Object>(SensorRow);
+export default (React.memo<Object>(SensorRow): Object);

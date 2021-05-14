@@ -254,4 +254,4 @@ const getStyles = ({
 	};
 };
 
-export default React.memo<Object>(withTheme(SetSensorName));
+export default (React.memo<Object>(withTheme(SetSensorName)): Object);

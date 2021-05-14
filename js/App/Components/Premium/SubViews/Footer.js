@@ -78,4 +78,4 @@ const Footer = (props: Object): Object => {
 
 };
 
-export default React.memo<Object>(Footer);
+export default (React.memo<Object>(Footer): Object);

@@ -576,4 +576,4 @@ const getStyles = (appLayout: Object, {
 	};
 };
 
-export default React.memo<Object>(React.forwardRef<Object, Object>(SwitchAccountActionSheet));
+export default (React.memo<Object>(React.forwardRef<Object, Object>(SwitchAccountActionSheet)): Object);

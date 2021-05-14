@@ -151,4 +151,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(SMSBlock);
+export default (React.memo<Object>(SMSBlock): Object);

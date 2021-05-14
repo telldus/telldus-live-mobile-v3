@@ -97,4 +97,4 @@ const ThemesRow = (props: Props): Object => {
 	);
 };
 
-export default React.memo<Object>(ThemesRow);
+export default (React.memo<Object>(ThemesRow): Object);

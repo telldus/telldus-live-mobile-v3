@@ -292,4 +292,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(PostPurchaseScreen);
+export default (React.memo<Object>(PostPurchaseScreen): Object);

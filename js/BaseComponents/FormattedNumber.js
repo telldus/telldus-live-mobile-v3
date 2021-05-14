@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default React.memo<Object>(FormattedNumberComponent);
+export default (React.memo<Object>(FormattedNumberComponent): Object);

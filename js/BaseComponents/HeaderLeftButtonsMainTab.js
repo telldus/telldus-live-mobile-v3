@@ -73,4 +73,4 @@ const HeaderLeftButtonsMainTab = (props: Object): Object => {
 	);
 };
 
-export default React.memo<Object>(HeaderLeftButtonsMainTab);
+export default (React.memo<Object>(HeaderLeftButtonsMainTab): Object);

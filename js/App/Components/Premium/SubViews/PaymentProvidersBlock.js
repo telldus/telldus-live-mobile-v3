@@ -227,4 +227,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(withTheme(PaymentProvidersBlock));
+export default (React.memo<Object>(withTheme(PaymentProvidersBlock)): Object);

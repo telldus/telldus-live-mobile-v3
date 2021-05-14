@@ -228,4 +228,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(forwardRef<Object, Object>(SetDefaultStartScreenDropDown));
+export default (React.memo<Object>(forwardRef<Object, Object>(SetDefaultStartScreenDropDown)): Object);

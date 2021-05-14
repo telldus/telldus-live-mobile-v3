@@ -153,4 +153,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(DBTileDisplayControlBlock);
+export default (React.memo<Object>(DBTileDisplayControlBlock): Object);

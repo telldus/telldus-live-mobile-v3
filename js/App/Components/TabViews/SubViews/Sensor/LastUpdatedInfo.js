@@ -80,4 +80,4 @@ const LastUpdatedInfo = (props: Object): Object => {
 	);
 };
 
-export default React.memo<Object>(LastUpdatedInfo);
+export default (React.memo<Object>(LastUpdatedInfo): Object);

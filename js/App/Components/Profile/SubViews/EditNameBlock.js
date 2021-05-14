@@ -161,4 +161,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(EditNameBlock);
+export default (React.memo<Object>(EditNameBlock): Object);

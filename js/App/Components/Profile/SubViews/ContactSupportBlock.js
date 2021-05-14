@@ -116,4 +116,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(ContactSupportBlock);
+export default (React.memo<Object>(ContactSupportBlock): Object);

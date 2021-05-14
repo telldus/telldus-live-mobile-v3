@@ -146,4 +146,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(SelectForecastTimeDD);
+export default (React.memo<Object>(SelectForecastTimeDD): Object);

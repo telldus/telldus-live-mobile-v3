@@ -132,4 +132,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(LanguageControlBlock);
+export default (React.memo<Object>(LanguageControlBlock): Object);

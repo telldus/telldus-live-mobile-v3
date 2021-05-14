@@ -35,4 +35,4 @@ const FormattedTimeComponent = (props: Object): React$Element<any> => (
 	</FormattedTime>
 );
 
-export default React.memo<Object>(FormattedTimeComponent);
+export default (React.memo<Object>(FormattedTimeComponent): Object);

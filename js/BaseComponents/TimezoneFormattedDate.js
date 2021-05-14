@@ -45,4 +45,4 @@ const TimezoneFormattedDate = (props: Object): React$Element<any> => {
 	);
 };
 
-export default React.memo<Object>(TimezoneFormattedDate);
+export default (React.memo<Object>(TimezoneFormattedDate): Object);

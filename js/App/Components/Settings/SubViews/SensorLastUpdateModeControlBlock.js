@@ -164,4 +164,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(SensorLastUpdateModeControlBlock);
+export default (React.memo<Object>(SensorLastUpdateModeControlBlock): Object);

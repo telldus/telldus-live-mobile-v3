@@ -32,4 +32,4 @@ const FormattedDateComponent = (props: Object): React$Element<any> => (
 	</FormattedDate>
 );
 
-export default React.memo<Object>(FormattedDateComponent);
+export default (React.memo<Object>(FormattedDateComponent): Object);

@@ -162,4 +162,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(SubscriptionStatusBlock);
+export default (React.memo<Object>(SubscriptionStatusBlock): Object);

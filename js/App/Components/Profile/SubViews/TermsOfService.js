@@ -103,4 +103,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(TermsOfService);
+export default (React.memo<Object>(TermsOfService): Object);

@@ -504,4 +504,4 @@ HeaderComponent.defaultProps = {
 	forceHideStatus: false,
 };
 
-export default React.memo<Object>(HeaderComponent);
+export default (React.memo<Object>(HeaderComponent): Object);

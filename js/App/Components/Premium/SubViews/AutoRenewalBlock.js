@@ -153,4 +153,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(AutoRenewalBlock);
+export default (React.memo<Object>(AutoRenewalBlock): Object);

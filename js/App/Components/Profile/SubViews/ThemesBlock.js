@@ -198,4 +198,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(forwardRef<Object, Object>(ThemesBlock));
+export default (React.memo<Object>(forwardRef<Object, Object>(ThemesBlock)): Object);

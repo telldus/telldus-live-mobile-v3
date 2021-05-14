@@ -79,4 +79,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(WhatsNewLink);
+export default (React.memo<Object>(WhatsNewLink): Object);

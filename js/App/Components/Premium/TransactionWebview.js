@@ -87,4 +87,4 @@ const getStyles = (appLayout: Object): Object => {
 		},
 	};
 };
-export default React.memo<Object>(TransactionWebview);
+export default (React.memo<Object>(TransactionWebview): Object);

@@ -79,4 +79,4 @@ const RippleButton = (props: ThemedRippleButton): Object => {
 	);
 };
 
-export default React.memo<Object>(RippleButton);
+export default (React.memo<Object>(RippleButton): Object);
