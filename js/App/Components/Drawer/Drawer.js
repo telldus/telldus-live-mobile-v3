@@ -509,4 +509,4 @@ function mapDispatchToProps(dispatch: Object, props: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Drawer);
+export default (connect(mapStateToProps, mapDispatchToProps)(Drawer): Object);

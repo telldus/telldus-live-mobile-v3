@@ -92,4 +92,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(Poster);
+export default (connect(mapStateToProps, null)(Poster): Object);

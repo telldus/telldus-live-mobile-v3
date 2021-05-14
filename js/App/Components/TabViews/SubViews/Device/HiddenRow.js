@@ -191,4 +191,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeviceHiddenRow);
+export default (connect(mapStateToProps, mapDispatchToProps)(DeviceHiddenRow): Object);

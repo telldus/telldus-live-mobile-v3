@@ -351,4 +351,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsContainer);
+export default (connect(mapStateToProps, mapDispatchToProps)(SettingsContainer): Object);

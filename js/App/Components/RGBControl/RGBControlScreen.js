@@ -389,4 +389,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RGBControlScreen);
+export default (connect(mapStateToProps, mapDispatchToProps)(RGBControlScreen): Object);

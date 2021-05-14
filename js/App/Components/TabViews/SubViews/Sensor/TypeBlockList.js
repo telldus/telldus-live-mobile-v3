@@ -135,4 +135,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TypeBlockList);
+export default (connect(mapStateToProps, mapDispatchToProps)(TypeBlockList): Object);

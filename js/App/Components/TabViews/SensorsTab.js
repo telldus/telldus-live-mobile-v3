@@ -705,5 +705,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SensorsTab);
+export default (connect(mapStateToProps, mapDispatchToProps)(SensorsTab): Object);
 

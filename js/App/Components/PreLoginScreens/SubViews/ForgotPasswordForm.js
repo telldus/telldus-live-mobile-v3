@@ -193,4 +193,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(injectIntl(ForgotPasswordForm));
+export default (connect(null, mapDispatchToProps)(injectIntl(ForgotPasswordForm)): Object);

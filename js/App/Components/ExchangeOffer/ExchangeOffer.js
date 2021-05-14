@@ -301,4 +301,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ExchangeOffer));
+export default (connect(mapStateToProps, mapDispatchToProps)(injectIntl(ExchangeOffer)): Object);

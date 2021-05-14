@@ -417,4 +417,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(InfoScreen);
+export default (connect(mapStateToProps, mapDispatchToProps)(InfoScreen): Object);

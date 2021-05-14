@@ -157,4 +157,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(MainTabBarAndroid);
+export default (connect(mapStateToProps, null)(MainTabBarAndroid): Object);

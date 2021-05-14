@@ -154,4 +154,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DimmerStep);
+export default (connect(mapStateToProps, mapDispatchToProps)(DimmerStep): Object);

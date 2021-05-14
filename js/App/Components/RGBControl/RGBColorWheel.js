@@ -299,4 +299,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(RGBColorWheel);
+export default (connect(null, mapDispatchToProps)(RGBColorWheel): Object);

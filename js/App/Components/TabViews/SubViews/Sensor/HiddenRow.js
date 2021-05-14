@@ -190,4 +190,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SensorHiddenRow);
+export default (connect(mapStateToProps, mapDispatchToProps)(SensorHiddenRow): Object);

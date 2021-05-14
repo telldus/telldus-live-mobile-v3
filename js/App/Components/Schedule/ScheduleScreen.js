@@ -295,4 +295,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen);
+export default (connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen): Object);

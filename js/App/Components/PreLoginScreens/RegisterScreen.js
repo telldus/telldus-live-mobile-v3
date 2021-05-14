@@ -207,4 +207,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(RegisterScreen));
+export default (connect(mapStateToProps, mapDispatchToProps)(injectIntl(RegisterScreen)): Object);

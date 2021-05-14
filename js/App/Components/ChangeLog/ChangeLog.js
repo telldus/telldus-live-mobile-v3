@@ -478,5 +478,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ChangeLogScreen));
+export default (connect(mapStateToProps, mapDispatchToProps)(injectIntl(ChangeLogScreen)): Object);
 

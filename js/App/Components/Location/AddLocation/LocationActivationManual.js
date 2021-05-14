@@ -293,4 +293,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(withTheme(LocationActivationManual));
+export default (connect(null, mapDispatchToProps)(withTheme(LocationActivationManual)): Object);

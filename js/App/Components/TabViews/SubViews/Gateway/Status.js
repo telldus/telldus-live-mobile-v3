@@ -154,4 +154,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(withTheme(GatewayStatus));
+export default (connect(mapStateToProps, null)(withTheme(GatewayStatus)): Object);

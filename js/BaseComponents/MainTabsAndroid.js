@@ -244,7 +244,7 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(MainTabsAndroid);
+export default (connect(mapStateToProps, null)(MainTabsAndroid): Object);
 
 const styles = StyleSheet.create({
 	tabBar: {

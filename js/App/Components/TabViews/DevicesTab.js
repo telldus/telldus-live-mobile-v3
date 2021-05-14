@@ -903,5 +903,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DevicesTab);
+export default (connect(mapStateToProps, mapDispatchToProps)(DevicesTab): Object);
 

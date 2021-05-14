@@ -206,4 +206,4 @@ const mapStateToProps = (store: Object): Object => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddLocationContainer);
+export default (connect(mapStateToProps, mapDispatchToProps)(AddLocationContainer): Object);

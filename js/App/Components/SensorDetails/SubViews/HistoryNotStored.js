@@ -148,4 +148,4 @@ function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(HistoryNotStored);
+export default (connect(null, mapDispatchToProps)(HistoryNotStored): Object);

@@ -389,4 +389,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Modal);
+export default (connect(mapStateToProps, mapDispatchToProps)(Modal): Object);

@@ -273,4 +273,4 @@ function mapDispatchToProps(dispatch: Object, props: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTheme(GatewayRow));
+export default (connect(mapStateToProps, mapDispatchToProps)(withTheme(GatewayRow)): Object);

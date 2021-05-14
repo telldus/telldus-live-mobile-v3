@@ -430,5 +430,5 @@ const mapDispatchToProps = (dispatch: Function): { dispatch: Function } => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);
+export default (connect(mapStateToProps, mapDispatchToProps)(SchedulerTab): Object);
 

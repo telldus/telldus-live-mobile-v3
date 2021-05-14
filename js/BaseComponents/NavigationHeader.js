@@ -249,4 +249,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(injectIntl(NavigationHeader));
+export default (connect(mapStateToProps, null)(injectIntl(NavigationHeader)): Object);

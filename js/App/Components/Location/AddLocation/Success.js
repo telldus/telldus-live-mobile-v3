@@ -366,4 +366,4 @@ const mapStateToProps = (store: Object): Object => {
 	};
 };
 
-export default connect(mapStateToProps, null)(Success);
+export default (connect(mapStateToProps, null)(Success): Object);

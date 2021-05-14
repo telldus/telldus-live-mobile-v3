@@ -527,4 +527,4 @@ export const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTheme(GeoFenceContainer));
+export default (connect(mapStateToProps, mapDispatchToProps)(withTheme(GeoFenceContainer)): Object);

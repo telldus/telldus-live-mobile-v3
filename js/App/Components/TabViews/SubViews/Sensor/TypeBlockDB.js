@@ -118,4 +118,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(TypeBlockDB);
+export default (connect(mapStateToProps, null)(TypeBlockDB): Object);

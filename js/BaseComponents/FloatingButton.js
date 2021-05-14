@@ -232,4 +232,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(injectIntl(FloatingButton));
+export default (connect(mapStateToProps, null)(injectIntl(FloatingButton)): Object);

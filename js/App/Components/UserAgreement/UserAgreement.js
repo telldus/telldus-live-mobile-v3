@@ -329,4 +329,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(UserAgreement)));
+export default (connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(UserAgreement))): Object);

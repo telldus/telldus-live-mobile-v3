@@ -199,4 +199,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ZWaveSettings);
+export default (connect(mapStateToProps, mapDispatchToProps)(ZWaveSettings): Object);

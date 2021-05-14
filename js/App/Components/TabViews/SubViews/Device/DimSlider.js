@@ -193,4 +193,4 @@ const mapStateToProps = (store: Object, ownProps: Object): Object => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DimSlider);
+export default (connect(mapStateToProps, mapDispatchToProps)(DimSlider): Object);

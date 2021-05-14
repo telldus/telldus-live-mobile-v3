@@ -490,4 +490,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(withTheme(injectIntl(DialogueBox)));
+export default (connect(mapStateToProps, null)(withTheme(injectIntl(DialogueBox))): Object);

@@ -107,4 +107,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(LocationDetailsHeaderPoster);
+export default (connect(mapStateToProps, null)(LocationDetailsHeaderPoster): Object);

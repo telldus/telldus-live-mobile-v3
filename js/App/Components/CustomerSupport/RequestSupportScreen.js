@@ -519,4 +519,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTheme(RequestSupportScreen));
+export default (connect(mapStateToProps, mapDispatchToProps)(withTheme(RequestSupportScreen)): Object);

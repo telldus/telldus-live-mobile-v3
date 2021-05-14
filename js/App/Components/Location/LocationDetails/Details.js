@@ -825,4 +825,4 @@ function mapDispatchToProps(dispatch: Function, ownPRops: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Details);
+export default (connect(mapStateToProps, mapDispatchToProps)(Details): Object);

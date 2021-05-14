@@ -637,4 +637,4 @@ const mapDispatchToProps = (dispatch: Function): Object => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SensorHistoryLineChart);
+export default (connect(mapStateToProps, mapDispatchToProps)(SensorHistoryLineChart): Object);

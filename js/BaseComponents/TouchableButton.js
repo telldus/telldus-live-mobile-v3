@@ -231,4 +231,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(injectIntl(TouchableButton));
+export default (connect(mapStateToProps, null)(injectIntl(TouchableButton)): Object);

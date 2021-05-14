@@ -111,4 +111,4 @@ function mapStateToProps(state: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(RoundedInfoButton);
+export default (connect(mapStateToProps, null)(RoundedInfoButton): Object);

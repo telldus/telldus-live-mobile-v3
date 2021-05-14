@@ -739,4 +739,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardTab);
+export default (connect(mapStateToProps, mapDispatchToProps)(DashboardTab): Object);

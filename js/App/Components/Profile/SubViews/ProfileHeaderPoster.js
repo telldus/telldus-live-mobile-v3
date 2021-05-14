@@ -137,4 +137,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileHeaderPoster);
+export default (connect(mapStateToProps, mapDispatchToProps)(ProfileHeaderPoster): Object);
