@@ -425,4 +425,4 @@ const getStyles = ({
 	};
 };
 
-export default HelpOverlay;
+export default (HelpOverlay: Object);

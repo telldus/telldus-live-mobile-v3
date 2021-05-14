@@ -70,4 +70,4 @@ const AddToDashboardScaleRow = memo<Object>((props: Props): Object => {
 	);
 });
 
-export default AddToDashboardScaleRow;
+export default (AddToDashboardScaleRow: Object);

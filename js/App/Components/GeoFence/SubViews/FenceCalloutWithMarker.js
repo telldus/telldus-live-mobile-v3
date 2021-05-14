@@ -173,4 +173,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default FenceCalloutWithMarker;
+export default (FenceCalloutWithMarker: Object);

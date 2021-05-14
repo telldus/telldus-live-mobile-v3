@@ -222,4 +222,4 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 
 }
 
-export default withTheme(ActionThermostatTwo);
+export default (withTheme(ActionThermostatTwo): Object);

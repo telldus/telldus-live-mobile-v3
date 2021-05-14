@@ -245,5 +245,5 @@ const getStyles = (appLayout: Object, {
 	};
 };
 
-export default EventRow;
+export default (EventRow: Object);
 

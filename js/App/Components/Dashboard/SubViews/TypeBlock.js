@@ -112,4 +112,4 @@ const getStyles = ({layout, selected}: Object): Object => {
 	};
 };
 
-export default TypeBlock;
+export default (TypeBlock: Object);

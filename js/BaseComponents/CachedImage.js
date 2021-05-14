@@ -74,5 +74,5 @@ const CachedImageComponent = React.memo<Object>((props: Object): Object => {
 	);
 });
 
-export default CachedImageComponent;
+export default (CachedImageComponent: Object);
 

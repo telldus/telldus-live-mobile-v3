@@ -139,4 +139,4 @@ const getStyles = ({
 	};
 };
 
-export default RowWithAngle;
+export default (RowWithAngle: Object);

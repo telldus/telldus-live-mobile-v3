@@ -132,7 +132,7 @@ const NavigatorConfigs = {
 
 const Stack = createStackNavigator();
 
-const AddLocationNavigator = React.memo<Object>((props: Object): Object => {
+const AddLocationNavigator: Object = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 export default AddLocationNavigator;

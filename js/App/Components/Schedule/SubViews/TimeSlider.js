@@ -254,4 +254,4 @@ class TimeSlider extends View<null, Props, State> {
 
 }
 
-export default withTheme(TimeSlider);
+export default (withTheme(TimeSlider): Object);

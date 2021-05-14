@@ -225,4 +225,4 @@ class Gateway extends PureComponent<Props, null> {
 	}
 }
 
-export default injectIntl(withTheme(Gateway));
+export default (injectIntl(withTheme(Gateway)): Object);

@@ -245,4 +245,4 @@ class SliderComponent extends Component<Props, State> {
 	};
 }
 
-export default withTheme(SliderComponent);
+export default (withTheme(SliderComponent): Object);

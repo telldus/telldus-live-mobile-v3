@@ -158,4 +158,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ScrollableNavigationHeaderPoster;
+export default (ScrollableNavigationHeaderPoster: Object);

@@ -114,4 +114,4 @@ class TimeZoneContinent extends View {
 	}
 }
 
-export default TimeZoneContinent;
+export default (TimeZoneContinent: Object);

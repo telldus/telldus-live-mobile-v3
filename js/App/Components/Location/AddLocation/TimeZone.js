@@ -239,4 +239,4 @@ class TimeZone extends View<void, Props, State> {
 	}
 }
 
-export default TimeZone;
+export default (TimeZone: Object);

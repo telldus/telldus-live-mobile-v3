@@ -112,4 +112,4 @@ getStyles = (): Object => {
 
 }
 
-export default withTheme(ShowMoreButton);
+export default (withTheme(ShowMoreButton): Object);

@@ -185,4 +185,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default SelectArea;
+export default (SelectArea: Object);

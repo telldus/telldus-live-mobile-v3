@@ -100,4 +100,4 @@ const GeoFenceScreenConfigs = [
 	},
 ];
 
-export default GeoFenceScreenConfigs;
+export default (GeoFenceScreenConfigs: Object);

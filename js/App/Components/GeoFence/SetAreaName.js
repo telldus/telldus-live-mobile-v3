@@ -175,4 +175,4 @@ const getStyles = ({
 	};
 };
 
-export default SetAreaName;
+export default (SetAreaName: Object);

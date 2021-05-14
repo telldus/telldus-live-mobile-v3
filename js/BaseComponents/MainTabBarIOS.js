@@ -114,4 +114,4 @@ const getStyles = (colors: Object, {
 	};
 };
 
-export default MainTabBarIOS;
+export default (MainTabBarIOS: Object);

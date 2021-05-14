@@ -38,4 +38,4 @@ const ThemedImage = (props: Object): Object => {
 	);
 };
 
-export default withTheme(ThemedImage);
+export default (withTheme(ThemedImage): Object);

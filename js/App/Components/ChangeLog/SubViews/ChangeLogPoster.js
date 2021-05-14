@@ -58,4 +58,4 @@ class ChangeLogPoster extends View {
 	}
 }
 
-export default ChangeLogPoster;
+export default (ChangeLogPoster: Object);

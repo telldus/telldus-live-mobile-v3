@@ -231,4 +231,4 @@ getStyle(appLayout: Object): Object {
 }
 }
 
-export default withTheme(EditBox);
+export default (withTheme(EditBox): Object);

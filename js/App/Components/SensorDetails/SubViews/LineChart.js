@@ -404,4 +404,4 @@ getStyle(): Object {
 }
 }
 
-export default LineChart;
+export default (LineChart: Object);

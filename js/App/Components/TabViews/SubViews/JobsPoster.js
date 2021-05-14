@@ -786,4 +786,4 @@ class JobsPoster extends View<null, Props, State> {
 
 }
 
-export default withTheme(JobsPoster);
+export default (withTheme(JobsPoster): Object);

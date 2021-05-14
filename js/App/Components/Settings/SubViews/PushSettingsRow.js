@@ -365,4 +365,4 @@ getStyles(appLayout: Object): Object {
 }
 }
 
-export default PushSettingsRow;
+export default (PushSettingsRow: Object);

@@ -644,4 +644,4 @@ noOP() {
 }
 }
 
-export default TestLocalControl;
+export default (TestLocalControl: Object);

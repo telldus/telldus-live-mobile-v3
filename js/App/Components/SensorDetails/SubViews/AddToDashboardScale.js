@@ -154,4 +154,4 @@ const getStyle = ({
 	};
 };
 
-export default AddToDashboardScale;
+export default (AddToDashboardScale: Object);

@@ -171,4 +171,4 @@ const ProfileNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 
-export default ProfileNavigator;
+export default (ProfileNavigator: Object);

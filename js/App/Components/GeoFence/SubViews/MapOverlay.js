@@ -119,4 +119,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default MapOverlay;
+export default (MapOverlay: Object);

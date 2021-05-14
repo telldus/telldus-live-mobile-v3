@@ -211,4 +211,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default ShowHideTabsBlock;
+export default (ShowHideTabsBlock: Object);

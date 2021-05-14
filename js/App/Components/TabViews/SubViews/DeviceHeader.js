@@ -148,4 +148,4 @@ class DeviceHeader extends View<Props, null> {
 	}
 }
 
-export default withTheme(DeviceHeader);
+export default (withTheme(DeviceHeader): Object);

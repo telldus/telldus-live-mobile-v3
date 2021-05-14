@@ -64,4 +64,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default AddAccountBlock;
+export default (AddAccountBlock: Object);

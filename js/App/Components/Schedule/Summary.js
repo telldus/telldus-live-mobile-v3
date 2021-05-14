@@ -346,4 +346,4 @@ class Summary extends View<null, Props, State> {
 
 }
 
-export default injectIntl(Summary);
+export default (injectIntl(Summary): Object);

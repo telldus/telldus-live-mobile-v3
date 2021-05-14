@@ -118,4 +118,4 @@ const getStyles = ({
 	};
 };
 
-export default TabBar;
+export default (TabBar: Object);

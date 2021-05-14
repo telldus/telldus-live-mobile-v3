@@ -267,4 +267,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default ActiveTime;
+export default (ActiveTime: Object);

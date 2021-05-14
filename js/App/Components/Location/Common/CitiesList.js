@@ -93,4 +93,4 @@ class CitiesList extends View {
 	}
 }
 
-export default CitiesList;
+export default (CitiesList: Object);

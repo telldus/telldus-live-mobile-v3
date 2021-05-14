@@ -100,4 +100,4 @@ const DashboardActionsContainer = memo<Object>((props: Props): Object => {
 	);
 });
 
-export default DashboardActionsContainer;
+export default (DashboardActionsContainer: Object);

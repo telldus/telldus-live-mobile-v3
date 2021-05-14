@@ -387,4 +387,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PosterWithText;
+export default (PosterWithText: Object);

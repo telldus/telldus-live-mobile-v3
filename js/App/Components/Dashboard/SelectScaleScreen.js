@@ -219,4 +219,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default SelectScaleScreen;
+export default (SelectScaleScreen: Object);

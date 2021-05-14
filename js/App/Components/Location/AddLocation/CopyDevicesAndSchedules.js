@@ -420,4 +420,4 @@ const getStyles = ({
 	};
 };
 
-export default CopyDevicesAndSchedules;
+export default (CopyDevicesAndSchedules: Object);

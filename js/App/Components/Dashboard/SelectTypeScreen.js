@@ -177,4 +177,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default SelectTypeScreen;
+export default (SelectTypeScreen: Object);

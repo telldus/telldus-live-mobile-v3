@@ -244,4 +244,4 @@ class EditTimeZoneContinent extends View {
 	}
 }
 
-export default EditTimeZoneContinent;
+export default (EditTimeZoneContinent: Object);

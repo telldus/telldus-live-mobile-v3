@@ -412,4 +412,4 @@ class ActionRow extends View<DefaultProps, Props, null> {
 
 }
 
-export default withTheme(ActionRow);
+export default (withTheme(ActionRow): Object);

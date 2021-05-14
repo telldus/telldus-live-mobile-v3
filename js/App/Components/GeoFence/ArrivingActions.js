@@ -80,4 +80,4 @@ const ArrivingActions = React.memo<Object>((props: Props): Object => {
 	);
 });
 
-export default ArrivingActions;
+export default (ArrivingActions: Object);

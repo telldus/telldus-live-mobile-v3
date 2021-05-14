@@ -418,5 +418,5 @@ const getStyles = (): Object => {
 	};
 };
 
-export default withTheme(ActionSheet);
+export default (withTheme(ActionSheet): Object);
 

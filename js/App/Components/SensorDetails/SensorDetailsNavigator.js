@@ -166,4 +166,4 @@ const SensorDetailsNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 
-export default SensorDetailsNavigator;
+export default (SensorDetailsNavigator: Object);

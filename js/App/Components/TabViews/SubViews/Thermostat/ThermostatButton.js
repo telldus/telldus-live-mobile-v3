@@ -225,4 +225,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default withTheme(ThermostatButton);
+export default (withTheme(ThermostatButton): Object);

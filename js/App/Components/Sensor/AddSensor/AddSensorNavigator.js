@@ -91,4 +91,4 @@ const AddSensorNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 
-export default AddSensorNavigator;
+export default (AddSensorNavigator: Object);

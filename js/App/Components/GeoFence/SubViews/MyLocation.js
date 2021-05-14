@@ -94,4 +94,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default MyLocation;
+export default (MyLocation: Object);

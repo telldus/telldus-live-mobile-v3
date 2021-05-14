@@ -403,4 +403,4 @@ getStyles({
 }
 }
 
-export default withTheme(RequestSupport);
+export default (withTheme(RequestSupport): Object);

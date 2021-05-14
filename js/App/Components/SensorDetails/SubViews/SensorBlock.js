@@ -241,4 +241,4 @@ const SensorBlock = React.memo<Object>((props: Props): Object => {
 	}
 });
 
-export default SensorBlock;
+export default (SensorBlock: Object);

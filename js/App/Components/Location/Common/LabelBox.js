@@ -95,4 +95,4 @@ class LabelBox extends View {
 	}
 }
 
-export default LabelBox;
+export default (LabelBox: Object);

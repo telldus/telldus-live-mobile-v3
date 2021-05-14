@@ -200,4 +200,4 @@ class Name extends View {
 	}
 }
 
-export default withTheme(Name);
+export default (withTheme(Name): Object);

@@ -96,4 +96,4 @@ class ContinentsList extends View {
 	}
 }
 
-export default ContinentsList;
+export default (ContinentsList: Object);

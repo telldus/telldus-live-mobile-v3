@@ -424,4 +424,4 @@ SwipeRow.defaultProps = {
 	slideDuration: 300,
 };
 
-export default SwipeRow;
+export default (SwipeRow: Object);

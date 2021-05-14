@@ -124,4 +124,4 @@ const TypeBlock = memo<Object>(({
 	);
 });
 
-export default withTheme(TypeBlock);
+export default (withTheme(TypeBlock): Object);

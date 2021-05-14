@@ -216,4 +216,4 @@ getStyles(appLayout: Object): Object {
 }
 }
 
-export default withTheme(TimeField);
+export default (withTheme(TimeField): Object);

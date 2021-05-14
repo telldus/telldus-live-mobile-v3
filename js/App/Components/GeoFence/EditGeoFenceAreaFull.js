@@ -180,4 +180,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default EditGeoFenceAreaFull;
+export default (EditGeoFenceAreaFull: Object);

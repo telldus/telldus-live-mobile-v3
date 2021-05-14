@@ -153,4 +153,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default ListRow;
+export default (ListRow: Object);

@@ -238,4 +238,4 @@ class Position extends View {
 	}
 }
 
-export default Position;
+export default (Position: Object);

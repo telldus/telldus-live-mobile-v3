@@ -106,4 +106,4 @@ class Day extends View<null, Props, null> {
 	};
 }
 
-export default withTheme(Day);
+export default (withTheme(Day): Object);

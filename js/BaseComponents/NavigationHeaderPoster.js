@@ -204,4 +204,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default NavigationHeaderPoster;
+export default (NavigationHeaderPoster: Object);

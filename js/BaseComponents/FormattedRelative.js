@@ -37,4 +37,4 @@ const FormattedRelativeComponent = (props: Object): React$Element<any> => {
 	);
 };
 
-export default FormattedRelativeComponent;
+export default (FormattedRelativeComponent: Object);

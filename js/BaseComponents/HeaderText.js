@@ -74,4 +74,4 @@ const getStyles = ({
 	};
 };
 
-export default HeaderText;
+export default (HeaderText: Object);

@@ -501,5 +501,5 @@ const getStyles = (appLayout: Object, {
 	};
 };
 
-export default DeviceRow;
+export default (DeviceRow: Object);
 

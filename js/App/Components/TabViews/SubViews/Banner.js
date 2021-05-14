@@ -234,4 +234,4 @@ const getStyles = ({
 	};
 };
 
-export default Banner;
+export default (Banner: Object);

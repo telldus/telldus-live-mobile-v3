@@ -289,4 +289,4 @@ getStyles(): Object {
 }
 }
 
-export default SelectSensorType;
+export default (SelectSensorType: Object);

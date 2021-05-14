@@ -137,4 +137,4 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 	}
 }
 
-export default withTheme(IconTelldus);
+export default (withTheme(IconTelldus): Object);

@@ -288,4 +288,4 @@ class TimeRow extends View<null, Props, State> {
 
 }
 
-export default withTheme(TimeRow);
+export default (withTheme(TimeRow): Object);

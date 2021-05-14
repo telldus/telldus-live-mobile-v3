@@ -91,4 +91,4 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 	);
 });
 
-export default EditDbListRow;
+export default (EditDbListRow: Object);

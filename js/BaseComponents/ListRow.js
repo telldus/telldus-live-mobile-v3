@@ -170,4 +170,4 @@ ListRow.defaultProps = {
 	},
 };
 
-export default ListRow;
+export default (ListRow: Object);

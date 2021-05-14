@@ -421,4 +421,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default GeoFenceEventsLogScreen;
+export default (GeoFenceEventsLogScreen: Object);

@@ -110,4 +110,4 @@ const getStyles = (layout: Object): Object => {
 	};
 };
 
-export default TransparentFullPageLoadingIndicator;
+export default (TransparentFullPageLoadingIndicator: Object);

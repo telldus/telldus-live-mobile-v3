@@ -282,4 +282,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default SelectItemsScreen;
+export default (SelectItemsScreen: Object);

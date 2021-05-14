@@ -225,4 +225,4 @@ const getStyles = ({appLayout}: Object): Object => {
 	};
 };
 
-export default AdministrationTab;
+export default (AdministrationTab: Object);

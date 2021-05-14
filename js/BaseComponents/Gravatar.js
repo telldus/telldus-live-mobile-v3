@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Gravatar;
+export default (Gravatar: Object);

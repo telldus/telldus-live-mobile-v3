@@ -127,4 +127,4 @@ class DeviceRow extends View<null, Props, null> {
 
 }
 
-export default withTheme(DeviceRow);
+export default (withTheme(DeviceRow): Object);

@@ -541,4 +541,4 @@ const getStyles = (appLayout: Object): Object => {
 };
 
 
-export default Actions;
+export default (Actions: Object);

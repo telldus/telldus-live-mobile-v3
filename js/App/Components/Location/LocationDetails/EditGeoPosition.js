@@ -191,4 +191,4 @@ class EditGeoPosition extends View {
 	}
 }
 
-export default EditGeoPosition;
+export default (EditGeoPosition: Object);

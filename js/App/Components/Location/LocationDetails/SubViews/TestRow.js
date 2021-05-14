@@ -164,4 +164,4 @@ getStyles(appLayout: Object): Object {
 }
 }
 
-export default withTheme(TestRow);
+export default (withTheme(TestRow): Object);

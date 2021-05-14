@@ -93,4 +93,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default EditDbListSection;
+export default (EditDbListSection: Object);

@@ -58,8 +58,8 @@ const ScreenConfigs = [
 	},
 ];
 
-const GeoFenceNavigator = React.memo<Object>((props: Object): Object => {
+const GeoFenceNavigator: Object = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 
-export default GeoFenceNavigator;
+export default (GeoFenceNavigator: Object);

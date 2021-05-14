@@ -165,4 +165,4 @@ const getStyles = ({
 	};
 };
 
-export default withTheme(WidgetFontSizeSetting);
+export default (withTheme(WidgetFontSizeSetting): Object);

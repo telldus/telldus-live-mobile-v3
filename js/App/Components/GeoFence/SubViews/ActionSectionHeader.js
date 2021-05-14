@@ -102,4 +102,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default ActionSectionHeader;
+export default (ActionSectionHeader: Object);

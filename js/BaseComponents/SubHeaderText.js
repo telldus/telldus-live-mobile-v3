@@ -79,4 +79,4 @@ const getStyles = ({
 	};
 };
 
-export default SubHeaderText;
+export default (SubHeaderText: Object);

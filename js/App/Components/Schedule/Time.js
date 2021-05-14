@@ -511,4 +511,4 @@ class Time extends View<null, Props & PropsThemedComponent, State> {
 
 }
 
-export default withTheme(Time);
+export default (withTheme(Time): Object);

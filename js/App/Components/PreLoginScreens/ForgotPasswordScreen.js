@@ -140,4 +140,4 @@ class ForgotPasswordScreen extends View<Props, null> {
 	}
 }
 
-export default injectIntl(ForgotPasswordScreen);
+export default (injectIntl(ForgotPasswordScreen): Object);

@@ -101,4 +101,4 @@ const GenericSensor = memo<Object>(({
 	);
 });
 
-export default GenericSensor;
+export default (GenericSensor: Object);

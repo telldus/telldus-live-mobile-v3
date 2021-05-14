@@ -73,4 +73,4 @@ class TextComponent extends Base {
 
 }
 
-export default withTheme(TextComponent);
+export default (withTheme(TextComponent): Object);

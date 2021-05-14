@@ -48,4 +48,4 @@ const ThemedScrollView = forwardRef((props: Object, ref: any): Object => {
 	);
 });
 
-export default withTheme(ThemedScrollView);
+export default (withTheme(ThemedScrollView): Object);

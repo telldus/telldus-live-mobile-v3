@@ -121,4 +121,4 @@ const LocationDetailsNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 
-export default LocationDetailsNavigator;
+export default (LocationDetailsNavigator: Object);

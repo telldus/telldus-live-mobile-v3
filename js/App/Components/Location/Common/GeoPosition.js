@@ -486,4 +486,4 @@ class GeoPosition extends View {
 	}
 }
 
-export default withTheme(GeoPosition);
+export default (withTheme(GeoPosition): Object);

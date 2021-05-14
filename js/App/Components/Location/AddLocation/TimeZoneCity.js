@@ -100,4 +100,4 @@ class TimeZoneCity extends View {
 	}
 }
 
-export default TimeZoneCity;
+export default (TimeZoneCity: Object);

@@ -307,4 +307,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default SetCoordinates;
+export default (SetCoordinates: Object);

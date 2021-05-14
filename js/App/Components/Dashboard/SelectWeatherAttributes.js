@@ -227,4 +227,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default SelectWeatherAttributes;
+export default (SelectWeatherAttributes: Object);

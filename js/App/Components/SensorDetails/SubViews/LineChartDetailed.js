@@ -491,4 +491,4 @@ getStyle(): Object {
 }
 }
 
-export default LineChartDetailed;
+export default (LineChartDetailed: Object);

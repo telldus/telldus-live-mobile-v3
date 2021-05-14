@@ -68,4 +68,4 @@ class Title extends View<Props, null> {
 
 }
 
-export default withTheme(Title);
+export default (withTheme(Title): Object);

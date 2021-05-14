@@ -184,4 +184,4 @@ CheckBoxIconText.defaultProps = {
 	isChecked: false,
 };
 
-export default withTheme(CheckBoxIconText);
+export default (withTheme(CheckBoxIconText): Object);

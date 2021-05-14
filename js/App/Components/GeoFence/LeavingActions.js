@@ -80,4 +80,4 @@ const LeavingActions = React.memo<Object>((props: Props): Object => {
 	);
 });
 
-export default LeavingActions;
+export default (LeavingActions: Object);

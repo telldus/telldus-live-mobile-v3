@@ -191,4 +191,4 @@ const DetailsNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 
-export default DetailsNavigator;
+export default (DetailsNavigator: Object);

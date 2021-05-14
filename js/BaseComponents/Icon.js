@@ -37,4 +37,4 @@ const IconComponent = (props: Object): Object => {
 		allowFontScaling={false}/>;
 };
 
-export default withTheme(IconComponent);
+export default (withTheme(IconComponent): Object);

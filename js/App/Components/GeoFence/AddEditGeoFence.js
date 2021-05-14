@@ -456,4 +456,4 @@ const getStyles = ({
 	};
 };
 
-export default AddEditGeoFence;
+export default (AddEditGeoFence: Object);

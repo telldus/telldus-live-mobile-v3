@@ -84,4 +84,4 @@ class SwitchComponent extends Base {
 	}
 }
 
-export default withTheme(SwitchComponent);
+export default (withTheme(SwitchComponent): Object);

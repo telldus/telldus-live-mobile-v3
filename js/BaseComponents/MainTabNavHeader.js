@@ -357,4 +357,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default MainTabNavHeader;
+export default (MainTabNavHeader: Object);

@@ -192,4 +192,4 @@ class ActionDim extends View<null, Props, State> {
 
 }
 
-export default withTheme(ActionDim);
+export default (withTheme(ActionDim): Object);

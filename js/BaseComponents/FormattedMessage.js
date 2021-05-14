@@ -50,4 +50,4 @@ class FormattedMessageComponent extends Base {
 		);
 	}
 }
-export default FormattedMessageComponent;
+export default (FormattedMessageComponent: Object);

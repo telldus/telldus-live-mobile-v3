@@ -156,5 +156,5 @@ class LocationDetected extends View {
 	}
 }
 
-export default LocationDetected;
+export default (LocationDetected: Object);
 

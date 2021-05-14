@@ -152,4 +152,4 @@ class LocationName extends View {
 	}
 }
 
-export default LocationName;
+export default (LocationName: Object);

@@ -162,4 +162,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default SelectWeatherForecastDay;
+export default (SelectWeatherForecastDay: Object);

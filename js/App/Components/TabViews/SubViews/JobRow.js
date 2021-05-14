@@ -581,4 +581,4 @@ class JobRow extends View<null, Props, null> {
 
 }
 
-export default withTheme(JobRow);
+export default (withTheme(JobRow): Object);

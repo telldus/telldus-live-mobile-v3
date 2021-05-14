@@ -145,4 +145,4 @@ const TabBarWithTabVisibility = memo<Object>((props: Object): Object => {
 	);
 });
 
-export default TabBarWithTabVisibility;
+export default (TabBarWithTabVisibility: Object);

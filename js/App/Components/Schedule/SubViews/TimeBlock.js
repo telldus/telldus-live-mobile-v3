@@ -148,4 +148,4 @@ class TimeBlock extends View<null, Props, null> {
 	};
 }
 
-export default withTheme(TimeBlock);
+export default (withTheme(TimeBlock): Object);

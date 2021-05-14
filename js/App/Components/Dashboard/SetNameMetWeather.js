@@ -226,4 +226,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default SetNameMetWeather;
+export default (SetNameMetWeather: Object);

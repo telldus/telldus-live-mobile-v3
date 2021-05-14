@@ -276,4 +276,4 @@ _getStyle = (appLayout: Object): Object => {
 
 }
 
-export default AdvancedSettings;
+export default (AdvancedSettings: Object);

@@ -463,4 +463,4 @@ static defaultProps: DefaultProps = {
 	}
 }
 
-export default withTheme(withSafeAreaInsets(DropDown));
+export default (withTheme(withSafeAreaInsets(DropDown)): Object);

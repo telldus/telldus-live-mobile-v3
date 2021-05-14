@@ -308,4 +308,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default AppTab;
+export default (AppTab: Object);

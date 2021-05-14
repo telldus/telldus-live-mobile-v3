@@ -392,4 +392,4 @@ getStyle(appLayout: Object): Object {
 }
 }
 
-export default withTheme(CalendarModalComponent);
+export default (withTheme(CalendarModalComponent): Object);

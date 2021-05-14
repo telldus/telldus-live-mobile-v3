@@ -40,4 +40,4 @@ const ThemedMaterialIcon = (props: Object): Object => {
 	);
 };
 
-export default withTheme(ThemedMaterialIcon);
+export default (withTheme(ThemedMaterialIcon): Object);

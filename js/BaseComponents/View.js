@@ -101,4 +101,4 @@ class ViewComponent extends Base {
 	}
 }
 
-export default ViewComponent;
+export default (ViewComponent: Object);

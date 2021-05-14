@@ -414,4 +414,4 @@ const getStyles = (appLayout: Object, {
 	};
 };
 
-export default ProfileTab;
+export default (ProfileTab: Object);

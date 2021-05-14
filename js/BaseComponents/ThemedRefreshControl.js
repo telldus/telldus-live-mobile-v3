@@ -49,5 +49,5 @@ const ThemedRefreshControl = memo<Object>((props: Object): Object => {
 	);
 });
 
-export default ThemedRefreshControl;
+export default (ThemedRefreshControl: Object);
 

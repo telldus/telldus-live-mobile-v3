@@ -200,4 +200,4 @@ class DimmerControlInfo extends View<Props, null> {
 	}
 }
 
-export default withTheme(DimmerControlInfo);
+export default (withTheme(DimmerControlInfo): Object);

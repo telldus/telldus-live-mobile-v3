@@ -57,4 +57,4 @@ const TouchableOpacityComponent = memo<Object>((props: Object): Object => {
 	);
 });
 
-export default withTheme(TouchableOpacityComponent);
+export default (withTheme(TouchableOpacityComponent): Object);

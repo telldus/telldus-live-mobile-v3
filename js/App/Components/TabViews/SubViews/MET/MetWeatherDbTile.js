@@ -290,4 +290,4 @@ const getStyles = ({
 	};
 };
 
-export default MetWeatherDbTile;
+export default (MetWeatherDbTile: Object);

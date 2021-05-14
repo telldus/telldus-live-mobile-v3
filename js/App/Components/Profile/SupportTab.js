@@ -260,4 +260,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default SupportTab;
+export default (SupportTab: Object);

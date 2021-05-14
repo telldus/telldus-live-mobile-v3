@@ -40,4 +40,4 @@ const ThemedTextInput = (props: Object): Object => {
 	);
 };
 
-export default withTheme(ThemedTextInput);
+export default (withTheme(ThemedTextInput): Object);

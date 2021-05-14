@@ -232,4 +232,4 @@ getStyles(appLayout: Object): Object {
 }
 }
 
-export default PushSettings;
+export default (PushSettings: Object);

@@ -601,4 +601,4 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 	'defaultStartScreenKey',
 ]));
 
-export default AppNavigator;
+export default (AppNavigator: Object);

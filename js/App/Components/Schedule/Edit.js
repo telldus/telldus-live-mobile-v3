@@ -411,4 +411,4 @@ class Edit extends View<null, Props, State> {
 
 }
 
-export default injectIntl(Edit);
+export default (injectIntl(Edit): Object);

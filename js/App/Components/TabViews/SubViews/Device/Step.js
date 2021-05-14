@@ -92,4 +92,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Step;
+export default (Step: Object);

@@ -122,4 +122,4 @@ class EditTimeZoneCity extends View {
 	}
 }
 
-export default EditTimeZoneCity;
+export default (EditTimeZoneCity: Object);

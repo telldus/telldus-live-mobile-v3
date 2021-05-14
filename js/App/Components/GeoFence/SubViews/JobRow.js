@@ -282,5 +282,5 @@ const getStyles = (appLayout: Object, {
 	};
 };
 
-export default JobRow;
+export default (JobRow: Object);
 

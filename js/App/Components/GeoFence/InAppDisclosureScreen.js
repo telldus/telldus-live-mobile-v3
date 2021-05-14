@@ -268,4 +268,4 @@ const getStyles = ({
 	};
 };
 
-export default InAppDisclosureScreen;
+export default (InAppDisclosureScreen: Object);
