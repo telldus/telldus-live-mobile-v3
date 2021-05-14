@@ -180,4 +180,4 @@ getStyles(): Object {
 }
 }
 
-export default SelectDeviceType;
+export default (SelectDeviceType: Object);

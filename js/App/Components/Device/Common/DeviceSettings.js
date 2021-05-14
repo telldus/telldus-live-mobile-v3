@@ -713,5 +713,5 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default DeviceSettings;
+export default (DeviceSettings: Object);
 

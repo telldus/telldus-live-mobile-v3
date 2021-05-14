@@ -219,4 +219,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(TelldusInfo);
+export default (memo<Object>(TelldusInfo): Object);

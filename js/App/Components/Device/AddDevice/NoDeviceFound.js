@@ -178,4 +178,4 @@ getStyles(): Object {
 }
 }
 
-export default NoDeviceFound;
+export default (NoDeviceFound: Object);

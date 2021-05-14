@@ -180,7 +180,7 @@ const NavigatorConfigs = {
 
 const Tab = createMaterialTopTabNavigator();
 
-const DeviceDetailsNavigator = React.memo<Object>((props: Object): Object => {
+const DeviceDetailsNavigator: Object = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 

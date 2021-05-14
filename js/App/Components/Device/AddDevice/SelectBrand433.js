@@ -137,4 +137,4 @@ render(): Object {
 }
 }
 
-export default SelectBrand433;
+export default (SelectBrand433: Object);

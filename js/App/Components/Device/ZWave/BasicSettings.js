@@ -256,4 +256,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(BasicSettings);
+export default (memo<Object>(BasicSettings): Object);

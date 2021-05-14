@@ -170,4 +170,4 @@ const getStyles = ({
 	};
 };
 
-export default memo<Object>(GenericConfSetting);
+export default (memo<Object>(GenericConfSetting): Object);

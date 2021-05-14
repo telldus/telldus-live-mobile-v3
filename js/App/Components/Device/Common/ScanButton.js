@@ -163,5 +163,5 @@ const getStyles = (appLayout: Object, disabled: boolean): Object => {
 	};
 };
 
-export default React.memo<Object>(ScanButton);
+export default (React.memo<Object>(ScanButton): Object);
 

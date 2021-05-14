@@ -105,7 +105,7 @@ const NavigatorConfigs = {
 
 const Stack = createStackNavigator();
 
-const AddDeviceNavigator = React.memo<Object>((props: Object): Object => {
+const AddDeviceNavigator: Object = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 export default AddDeviceNavigator;

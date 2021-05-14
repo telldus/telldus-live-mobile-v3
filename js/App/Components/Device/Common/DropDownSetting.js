@@ -235,4 +235,4 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 	};
 };
 
-export default React.memo<Object>(DropDownSetting);
+export default (React.memo<Object>(DropDownSetting): Object);

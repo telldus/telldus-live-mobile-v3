@@ -338,4 +338,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(ProtectionConf);
+export default (memo<Object>(ProtectionConf): Object);

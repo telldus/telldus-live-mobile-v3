@@ -876,4 +876,4 @@ render(): Object {
 }
 }
 
-export default IncludeDevice;
+export default (IncludeDevice: Object);

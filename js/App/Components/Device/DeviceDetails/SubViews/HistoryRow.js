@@ -497,4 +497,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = withTheme(HistoryRow);
+module.exports = (withTheme(HistoryRow): Object);

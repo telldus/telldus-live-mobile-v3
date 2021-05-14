@@ -123,4 +123,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeviceDetailsHeaderPoster);
+export default (connect(mapStateToProps, mapDispatchToProps)(DeviceDetailsHeaderPoster): Object);

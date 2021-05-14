@@ -421,4 +421,4 @@ getStyles(): Object {
 }
 }
 
-export default withTheme(ZWaveIncludeExcludeUI);
+export default (withTheme(ZWaveIncludeExcludeUI): Object);

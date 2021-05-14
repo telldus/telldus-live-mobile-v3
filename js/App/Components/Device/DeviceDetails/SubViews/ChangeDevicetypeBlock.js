@@ -296,4 +296,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(ChangeDevicetypeBlock);
+export default (React.memo<Object>(ChangeDevicetypeBlock): Object);

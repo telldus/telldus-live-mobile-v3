@@ -253,4 +253,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(NodeRelations);
+export default (memo<Object>(NodeRelations): Object);

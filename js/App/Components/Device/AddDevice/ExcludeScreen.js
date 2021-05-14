@@ -252,4 +252,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(ExcludeScreen);
+module.exports = (connect(null, mapDispatchToProps)(ExcludeScreen): Object);

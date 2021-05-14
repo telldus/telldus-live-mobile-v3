@@ -497,4 +497,4 @@ getStyles(): Object {
 }
 }
 
-export default Include433;
+export default (Include433: Object);

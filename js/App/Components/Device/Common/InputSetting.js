@@ -185,4 +185,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.forwardRef<Object, Object>(InputSetting);
+export default (React.forwardRef<Object, Object>(InputSetting): Object);

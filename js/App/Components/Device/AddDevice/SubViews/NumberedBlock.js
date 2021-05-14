@@ -199,4 +199,4 @@ const getStyles = ({
 	};
 };
 
-export default React.memo<Object>(NumberedBlock);
+export default (React.memo<Object>(NumberedBlock): Object);

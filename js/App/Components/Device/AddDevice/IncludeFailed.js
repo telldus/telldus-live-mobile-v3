@@ -168,4 +168,4 @@ getStyles(): Object {
 }
 }
 
-export default IncludeFailed;
+export default (IncludeFailed: Object);

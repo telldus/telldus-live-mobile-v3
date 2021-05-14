@@ -193,4 +193,4 @@ const getStyles = ({
 	};
 };
 
-export default ManualConfigBlock;
+export default (ManualConfigBlock: Object);

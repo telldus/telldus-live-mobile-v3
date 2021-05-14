@@ -252,4 +252,4 @@ getStyles(): Object {
 }
 }
 
-export default withTheme(DeviceTypeBlock);
+export default (withTheme(DeviceTypeBlock): Object);

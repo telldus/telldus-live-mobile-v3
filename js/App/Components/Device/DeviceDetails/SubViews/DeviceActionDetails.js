@@ -396,4 +396,4 @@ DeviceActionDetails.propTypes = {
 	device: PropTypes.object.isRequired,
 };
 
-module.exports = DeviceActionDetails;
+module.exports = (DeviceActionDetails: Object);

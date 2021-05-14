@@ -140,4 +140,4 @@ getStyles(): Object {
 }
 }
 
-export default CantEnterInclusionExclusionUI;
+export default (CantEnterInclusionExclusionUI: Object);

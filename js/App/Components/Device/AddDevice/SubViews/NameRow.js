@@ -99,4 +99,4 @@ render(): Object {
 }
 }
 
-export default NameRow;
+export default (NameRow: Object);

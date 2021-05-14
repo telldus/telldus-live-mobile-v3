@@ -331,4 +331,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(Associations);
+export default (memo<Object>(Associations): Object);

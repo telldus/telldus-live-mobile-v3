@@ -383,4 +383,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(SupportedCommandClasses);
+export default (memo<Object>(SupportedCommandClasses): Object);

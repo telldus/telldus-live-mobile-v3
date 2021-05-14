@@ -89,4 +89,4 @@ const getStyles = (appLayout: Object): Object => {
 };
 
 
-export default NodeRelationBlock;
+export default (NodeRelationBlock: Object);

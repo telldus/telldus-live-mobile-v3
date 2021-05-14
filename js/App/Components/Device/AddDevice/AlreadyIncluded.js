@@ -190,4 +190,4 @@ getStyles(): Object {
 }
 }
 
-export default AlreadyIncluded;
+export default (AlreadyIncluded: Object);

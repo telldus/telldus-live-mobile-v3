@@ -262,4 +262,4 @@ getStyles(): Object {
 
 }
 
-export default SelectModel433;
+export default (SelectModel433: Object);

@@ -381,4 +381,4 @@ const getStyles = ({
 	};
 };
 
-export default AssociationGroup;
+export default (AssociationGroup: Object);

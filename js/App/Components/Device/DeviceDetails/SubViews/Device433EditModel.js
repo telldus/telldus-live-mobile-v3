@@ -322,4 +322,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(withTheme(forwardRef<Object, Object>(Device433EditModel)));
+export default (memo<Object>(withTheme(forwardRef<Object, Object>(Device433EditModel))): Object);

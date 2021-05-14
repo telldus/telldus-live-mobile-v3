@@ -114,4 +114,4 @@ const getStyles = ({
 	};
 };
 
-export default memo<Object>(BitsetConfSetting);
+export default (memo<Object>(BitsetConfSetting): Object);

@@ -340,4 +340,4 @@ const getStyles = ({
 	};
 };
 
-export default SchedulesTab;
+export default (SchedulesTab: Object);

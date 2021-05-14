@@ -451,4 +451,4 @@ getStyles(): Object {
 }
 }
 
-export default DeviceName;
+export default (DeviceName: Object);

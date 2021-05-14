@@ -114,4 +114,4 @@ const getStyles = ({
 	};
 };
 
-export default memo<Object>(BasicCommandButton);
+export default (memo<Object>(BasicCommandButton): Object);

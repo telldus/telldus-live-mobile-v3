@@ -142,4 +142,4 @@ const getStyles = ({
 	};
 };
 
-export default memo<Object>(RangeConfSetting);
+export default (memo<Object>(RangeConfSetting): Object);

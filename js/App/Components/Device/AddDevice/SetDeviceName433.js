@@ -248,4 +248,4 @@ const getStyles = ({
 	};
 };
 
-export default React.memo<Object>(withTheme(SetDeviceName433));
+export default (React.memo<Object>(withTheme(SetDeviceName433)): Object);

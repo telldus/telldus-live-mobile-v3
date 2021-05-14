@@ -79,4 +79,4 @@ render(): Object {
 }
 }
 
-export default CantEnterInclusion;
+export default (CantEnterInclusion: Object);

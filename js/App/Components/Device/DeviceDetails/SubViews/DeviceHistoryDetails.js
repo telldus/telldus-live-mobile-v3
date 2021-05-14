@@ -499,4 +499,4 @@ function mapStateToProps(state: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(DeviceHistoryDetails);
+export default (connect(mapStateToProps, null)(DeviceHistoryDetails): Object);

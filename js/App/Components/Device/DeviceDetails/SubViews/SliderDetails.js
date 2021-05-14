@@ -293,4 +293,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(withTheme(SliderDetails));
+module.exports = (connect(null, mapDispatchToProps)(withTheme(SliderDetails)): Object);

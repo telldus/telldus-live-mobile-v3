@@ -336,4 +336,4 @@ export const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddDeviceContainer);
+export default (connect(mapStateToProps, mapDispatchToProps)(AddDeviceContainer): Object);

@@ -127,4 +127,4 @@ const getStyles = ({
 	};
 };
 
-export default BatteryInfoItem;
+export default (BatteryInfoItem: Object);

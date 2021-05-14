@@ -157,4 +157,4 @@ class DeviceInfoBlock extends View<Props, null> {
 	}
 }
 
-export default DeviceInfoBlock;
+export default (DeviceInfoBlock: Object);

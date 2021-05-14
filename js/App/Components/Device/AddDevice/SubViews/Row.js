@@ -122,4 +122,4 @@ const getStyles = (appLayout: Object, isLast: boolean): Object => {
 	};
 };
 
-export default React.memo<Object>(Row);
+export default (React.memo<Object>(Row): Object);

@@ -623,4 +623,4 @@ const getStyles = ({
 	};
 };
 
-export default memo<Object>(AdvancedConf);
+export default (memo<Object>(AdvancedConf): Object);

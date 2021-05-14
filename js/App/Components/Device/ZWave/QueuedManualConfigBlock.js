@@ -98,4 +98,4 @@ const QueuedManualConfigBlock = memo<Object>((props: Props): Object => {
 	);
 });
 
-export default QueuedManualConfigBlock;
+export default (QueuedManualConfigBlock: Object);

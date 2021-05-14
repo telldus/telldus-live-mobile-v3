@@ -172,4 +172,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(SelectLocation);
+export default (connect(mapStateToProps, null)(SelectLocation): Object);

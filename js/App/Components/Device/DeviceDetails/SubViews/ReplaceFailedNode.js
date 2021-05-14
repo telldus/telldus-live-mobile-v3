@@ -230,5 +230,5 @@ render(): Object {
 
 }
 
-export default ReplaceFailedNode;
+export default (ReplaceFailedNode: Object);
 

@@ -555,4 +555,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(ExcludeDevice);
+export default (connect(null, mapDispatchToProps)(ExcludeDevice): Object);

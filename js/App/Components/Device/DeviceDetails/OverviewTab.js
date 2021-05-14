@@ -396,4 +396,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(OverviewTab);
+module.exports = (connect(mapStateToProps, mapDispatchToProps)(OverviewTab): Object);

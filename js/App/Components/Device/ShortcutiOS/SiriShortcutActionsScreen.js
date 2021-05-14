@@ -449,4 +449,4 @@ const getStyles = ({
 	};
 };
 
-export default SiriShortcutActionsScreen;
+export default (SiriShortcutActionsScreen: Object);

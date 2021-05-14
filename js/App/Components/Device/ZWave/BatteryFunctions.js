@@ -494,4 +494,4 @@ const getStyles = ({
 	};
 };
 
-export default memo<Object>(BatteryFunctions);
+export default (memo<Object>(BatteryFunctions): Object);
