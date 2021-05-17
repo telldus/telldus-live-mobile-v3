@@ -94,4 +94,4 @@ const NoSensors = (props: Props): Object => {
 	);
 };
 
-export default memo<Object>(NoSensors);
+export default (memo<Object>(NoSensors): Object);

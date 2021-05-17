@@ -95,4 +95,4 @@ const NoGateways = (props: Props): Object => {
 	);
 };
 
-export default memo<Object>(NoGateways);
+export default (memo<Object>(NoGateways): Object);

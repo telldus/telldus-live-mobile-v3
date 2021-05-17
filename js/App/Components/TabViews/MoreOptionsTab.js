@@ -290,4 +290,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(MoreOptionsTab);
+export default (memo<Object>(MoreOptionsTab): Object);

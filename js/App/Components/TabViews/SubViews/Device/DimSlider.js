@@ -55,6 +55,7 @@ type DefaultProps = {
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
+	showTitle: boolean,
 };
 
 class DimSlider extends View<Props, null> {

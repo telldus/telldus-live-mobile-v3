@@ -146,4 +146,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(EmptyTabTemplate);
+export default (memo<Object>(EmptyTabTemplate): Object);

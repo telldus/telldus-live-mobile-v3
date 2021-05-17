@@ -79,4 +79,4 @@ const NoDevices = (props: Props): Object => {
 	);
 };
 
-export default memo<Object>(NoDevices);
+export default (memo<Object>(NoDevices): Object);

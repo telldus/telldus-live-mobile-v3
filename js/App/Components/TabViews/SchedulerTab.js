@@ -367,7 +367,7 @@ class SchedulerTab extends View<null, Props, State> {
 		return { days, daysToRender };
 	};
 
-	_renderRow = (props: Object): React$Element<JobRow> => {
+	_renderRow = (props: Object): React$Element<Object> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
 		const { rowsAndSections, screenProps, currentScreen, ScreenName } = this.props;
 		const { todayIndex } = this.state;
@@ -407,6 +407,10 @@ const getRowsAndSections = createSelector(
 
 type MapStateToPropsType = {
 	rowsAndSections: Object[],
+	showInactive: boolean,
+	gateways: Array<string>,
+	gatewaysDidFetch: boolean,
+	currentScreen: string,
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {

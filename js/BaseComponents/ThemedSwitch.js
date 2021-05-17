@@ -123,4 +123,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default memo<Object>(ThemedSwitch);
+export default (memo<Object>(ThemedSwitch): Object);

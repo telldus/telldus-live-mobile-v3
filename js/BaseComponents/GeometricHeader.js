@@ -94,4 +94,4 @@ GeometricHeader.defaultProps = {
 	headerWidth: 100,
 };
 
-export default memo<Object>(GeometricHeader);
+export default (memo<Object>(GeometricHeader): Object);

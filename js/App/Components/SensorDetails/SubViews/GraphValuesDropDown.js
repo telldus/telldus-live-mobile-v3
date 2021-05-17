@@ -48,12 +48,8 @@ type Props = {
 	intl: Object,
 };
 
-type State = {
-};
-
-class GraphValuesDropDown extends View<Props, State> {
+class GraphValuesDropDown extends View<Props, null> {
 	props: Props;
-	state: State;
 
 	renderBaseOne: (Object) => Object;
 	renderBaseTwo: (Object) => Object;
@@ -68,8 +64,6 @@ class GraphValuesDropDown extends View<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-		};
 
 		this.renderBaseOne = this.renderBaseOne.bind(this);
 		this.renderBaseTwo = this.renderBaseTwo.bind(this);

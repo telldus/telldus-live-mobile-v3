@@ -71,4 +71,4 @@ const SafeAreaViewComponent = (props: Props): Object => {
 	);
 };
 
-export default memo<Object>(SafeAreaViewComponent);
+export default (memo<Object>(SafeAreaViewComponent): Object);

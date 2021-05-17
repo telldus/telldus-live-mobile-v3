@@ -171,4 +171,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(TitledInfoBlock);
+export default (memo<Object>(TitledInfoBlock): Object);

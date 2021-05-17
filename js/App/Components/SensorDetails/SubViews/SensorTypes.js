@@ -39,16 +39,10 @@ type Props = {
 	gatewayTimezoneOffset: number,
 };
 
-type State = {
-};
-
-export default class SensorTypes extends View<Props, State> {
+export default class SensorTypes extends View<Props, null> {
 	props: Props;
-	state: State;
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-		};
 
 		const { formatMessage } = this.props.intl;
 

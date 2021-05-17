@@ -207,4 +207,4 @@ const getStyles = ({
 	};
 };
 
-export default memo<Object>(IconedSelectableBlock);
+export default (memo<Object>(IconedSelectableBlock): Object);

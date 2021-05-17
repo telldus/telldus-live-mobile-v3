@@ -217,4 +217,4 @@ const getStyles = ({
 		},
 	};
 };
-export default memo<Object>(GeoFenceEventsLogRow);
+export default (memo<Object>(GeoFenceEventsLogRow): Object);
