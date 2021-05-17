@@ -41,7 +41,7 @@ type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	intl: Object,
 	isGatewayActive: boolean,
-	isInState: boolean,
+	isInState: string,
 	name: string,
 	methodRequested: string,
 	supportedMethod: string,

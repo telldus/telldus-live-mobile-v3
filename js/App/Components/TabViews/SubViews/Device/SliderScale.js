@@ -71,6 +71,8 @@ type Props = {
 };
 
 type State = {
+	containerWidth: number,
+	containerHeight: number,
 	scaleWidth: number,
 	scaleHeight: number,
 	minimumValue: number,

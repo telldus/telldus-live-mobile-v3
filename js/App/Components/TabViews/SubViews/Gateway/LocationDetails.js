@@ -44,19 +44,13 @@ type Props = {
 	resizeMode?: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center',
 };
 
-type State = {
-};
-
 class LocationDetails extends View {
 	props: Props;
-	state: State;
 
 	onPress: () => void;
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-		};
 
 		this.onPress = this.onPress.bind(this);
 	}

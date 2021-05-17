@@ -233,5 +233,5 @@ export type Schedule = {
 	retries: number,
 	retryInterval: number,
 	reps: number,
-	edit: boolean,
+	edit?: boolean,
 };

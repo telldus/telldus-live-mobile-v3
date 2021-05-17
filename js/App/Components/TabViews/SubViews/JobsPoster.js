@@ -283,7 +283,7 @@ class JobsPoster extends View<null, Props, State> {
 
 			Animated
 				.timing(this.scrollDays, config)
-				.start(({ finished }: { finished: boolean }) => {
+				.start(({ finished }: Object) => {
 					if (finished) {
 						this.setState({ todayIndex: newTodayIndex }, () => {
 							this.scrollDays.setValue(1);
@@ -446,7 +446,6 @@ class JobsPoster extends View<null, Props, State> {
 					style={animation}
 					key={day.date}
 					allowFontScaling={false}
-					accessibilityElementsHidden={!accessible}
 					accessible={accessible}>
 					{day.date}
 				</Animated.Text>

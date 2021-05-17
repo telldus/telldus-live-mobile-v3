@@ -73,7 +73,6 @@ render(): Object {
 			<Animated.Text
 				style={animation.text}
 				numberOfLines={1}
-				pointerEvents={'none'}
 				allowFontScaling={false}
 				accessible={false}>
 				{capitalize(day.day)}

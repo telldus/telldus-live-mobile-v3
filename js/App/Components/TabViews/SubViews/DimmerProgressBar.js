@@ -70,6 +70,7 @@ type State = {
 	animationValue: Object,
 	containerWidth: number,
 	containerHeight: number,
+	indeterminate: boolean,
 };
 
 const animate = (animationValue: any) => {

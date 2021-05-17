@@ -65,6 +65,7 @@ type DefaultProps = {
 	animationOutTiming: number,
 	value: number,
 	isVisible: boolean,
+	hideOnBack: boolean,
 };
 
 class DimmerPopup extends Component<Props, State> {
