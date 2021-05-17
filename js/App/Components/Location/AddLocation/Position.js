@@ -24,7 +24,6 @@
 'use strict';
 
 import React from 'react';
-import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, Text, RoundedInfoButton, GeometricHeader } from '../../../../BaseComponents';
@@ -35,7 +34,7 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	intl: intlShape.isRequired,
+	intl: Object,
 	onDidMount: Function,
 	actions: Object,
 	navigation: Object,

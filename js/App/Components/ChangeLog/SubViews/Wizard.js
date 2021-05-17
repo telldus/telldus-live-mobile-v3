@@ -23,7 +23,6 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { intlShape } from 'react-intl';
 import {
 	Platform,
 } from 'react-native';
@@ -40,7 +39,7 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	intl: intlShape,
+	intl: Object,
 	currentScreen: number,
 	animatedX: Object,
 	animatedOpacity: Object,

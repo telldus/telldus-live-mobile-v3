@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -43,7 +43,7 @@ type Props = {
 	dispatch: Function,
 	onFormSubmit: Function,
 	validationMessage: string,
-	intl: intlShape.isRequired,
+	intl: Object,
 	appLayout: Object,
 	dialogueOpen: boolean,
 	styles: Object,

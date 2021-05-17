@@ -25,7 +25,7 @@ import React from 'react';
 import {
 	ScrollView,
 } from 'react-native';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import {
 	CommonActions,
 } from '@react-navigation/native';
@@ -48,7 +48,7 @@ import i18n from '../../Translations/common';
 interface Props extends ScheduleProps {
 	paddingRight: number,
 	devices: Object,
-	intl: intlShape.isRequired,
+	intl: Object,
 }
 
 type State = {

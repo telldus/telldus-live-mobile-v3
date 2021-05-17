@@ -24,7 +24,7 @@ import React from 'react';
 import { TouchableOpacity, Modal, ScrollView, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import {
 	View,
@@ -46,7 +46,7 @@ import capitalize from '../../Lib/capitalize';
 
 type Props = {
 	showModal: boolean,
-	intl: intlShape,
+	intl: Object,
 	onLayout: (Object) => void,
 	appLayout: Object,
 	toggleVisibilityExchangeOffer: ('show' | 'hide_temp' | 'hide_perm' | 'force_show') => void,

@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Linking, NativeModules, Platform } from 'react-native';
 const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
@@ -131,7 +131,7 @@ type Props = {
 
 	enableGeoFence: boolean,
 
-    intl: intlShape.isRequired,
+    intl: Object,
     dispatch: Function,
 	addNewLocation: () => any,
 	locale: string,

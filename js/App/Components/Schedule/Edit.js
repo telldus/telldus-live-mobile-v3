@@ -24,7 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { View, TouchableButton } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
@@ -35,7 +35,7 @@ import i18n from '../../Translations/common';
 
 interface Props extends ScheduleProps {
 	devices: Object,
-	intl: intlShape.isRequired,
+	intl: Object,
 
 	toggleDialogueBox: (Object) => void,
 }

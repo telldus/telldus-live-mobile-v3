@@ -24,7 +24,6 @@
 'use strict';
 
 import React from 'react';
-import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View } from '../../../../BaseComponents';
@@ -36,7 +35,7 @@ import capitalize from '../../../Lib/capitalize';
 
 type Props = {
 	navigation: Object,
-	intl: intlShape.isRequired,
+	intl: Object,
 	onDidMount: Function,
 	appLayout: Object,
 	screenReaderEnabled: boolean,

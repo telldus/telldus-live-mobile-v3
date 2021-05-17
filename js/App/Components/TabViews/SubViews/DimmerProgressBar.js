@@ -23,7 +23,7 @@
 
 import React, { Component } from 'react';
 import { Animated, Easing } from 'react-native';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import {
 	View,
@@ -52,7 +52,7 @@ type Props = PropsThemedComponent & {
 	style: Object,
 	unfilledColor?: string,
 	width: number,
-	intl: intlShape.isRequired,
+	intl: Object,
 };
 
 type DefaultProps = {

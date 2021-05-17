@@ -23,7 +23,7 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import {
 	IconTelldus,
@@ -43,7 +43,7 @@ import Theme from '../../Theme';
 type Props = PropsThemedComponent & {
 	gateway: Object,
 	onPressGateway: (Object) => void,
-	intl: intlShape,
+	intl: Object,
 	appLayout: Object,
 	dispatch: Function,
 	showExchange: boolean,

@@ -26,7 +26,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Keyboard } from 'react-native';
-import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import {
@@ -52,7 +51,7 @@ type Props = PropsThemedComponent & {
 	dispatch: Function,
 	onDidMount: Function,
 	actions: Object,
-	intl: intlShape.isRequired,
+	intl: Object,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,

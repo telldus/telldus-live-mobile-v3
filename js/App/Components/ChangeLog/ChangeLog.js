@@ -30,7 +30,7 @@ import {
 	Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 
 
@@ -55,7 +55,7 @@ import { setChangeLogVersion } from '../../Actions';
 type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
-	intl: intlShape,
+	intl: Object,
 	dispatch: Function,
 	route: Object,
 	navigation: Object,

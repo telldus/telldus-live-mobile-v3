@@ -24,7 +24,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { FormattedMessage, View } from '../../../BaseComponents';
 import { LoginForm, SessionLocked } from './SubViews';
@@ -50,7 +50,7 @@ type Props = {
 	navigation: Object,
 	loginToTelldus: Function,
 	validationMessage: string,
-	intl: intlShape.isRequired,
+	intl: Object,
 	appLayout: Object,
 	styles: Object,
 	accessToken: Object,

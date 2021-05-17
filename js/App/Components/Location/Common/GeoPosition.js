@@ -25,7 +25,6 @@
 
 import React from 'react';
 import { Keyboard, InteractionManager } from 'react-native';
-import { intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
@@ -51,7 +50,7 @@ import { googleMapsAPIKey } from '../../../../Config';
 import i18n from '../../../Translations/common';
 
 type Props = PropsThemedComponent & {
-	intl: intlShape.isRequired,
+	intl: Object,
 	actions: Object,
 	navigation: Object,
 	appLayout: Object,

@@ -25,7 +25,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Modal from 'react-native-modal';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 
@@ -63,7 +63,7 @@ type Props = PropsThemedComponent & {
 	negativeText?: string,
 	onPressPositive?: () => void,
 	onPressNegative?: () => void,
-	intl: intlShape.isRequired,
+	intl: Object,
 	accessibilityLabel?: string,
 	style?: Array<any> | Object,
 	showHeader?: boolean,

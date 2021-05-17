@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { intlShape } from 'react-intl';
 
 import {
 	View,
@@ -42,7 +41,7 @@ type Props = {
 	reps: number,
     appLayout: Object,
 
-    intl: intlShape.isRequired,
+    intl: Object,
 	onPressInfo: (Object) => void,
     onDoneEditAdvanced: (Object) => void,
     onToggleAdvanced: (boolean) => void,

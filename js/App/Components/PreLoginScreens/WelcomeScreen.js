@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { FormattedMessage, View, Text, TouchableButton, H1 } from '../../../BaseComponents';
 
@@ -46,7 +46,7 @@ type Props = {
 	accessToken: Object,
 	onPressOK: Function,
 	registeredCredential: any,
-	intl: intlShape.isRequired,
+	intl: Object,
 	appLayout: Object,
 	styles: Object,
 	navigation: Object,

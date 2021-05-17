@@ -25,7 +25,6 @@
 
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { intlShape } from 'react-intl';
 import differenceWith from 'lodash/differenceWith';
 import { announceForAccessibility } from 'react-native-accessibility';
 
@@ -44,7 +43,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	navigation: Object,
 	onDidMount: Function,
-	intl: intlShape.isRequired,
+	intl: Object,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,

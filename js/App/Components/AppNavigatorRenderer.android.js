@@ -30,7 +30,6 @@ import {
 import { connect } from 'react-redux';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
-import { intlShape } from 'react-intl';
 import {
 	View,
 	MainTabNavHeader,
@@ -58,7 +57,7 @@ type Props = {
 	hiddenTabsCurrentUser: Array<string>,
 	defaultStartScreenKey: string,
 
-	intl: intlShape.isRequired,
+	intl: Object,
 	dispatch: Function,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,

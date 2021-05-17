@@ -24,7 +24,6 @@
 'use strict';
 
 import React from 'react';
-import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View } from '../../../../BaseComponents';
@@ -37,7 +36,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	navigation: Object,
 	activateGateway: (clientInfo: Object) => void,
-	intl: intlShape.isRequired,
+	intl: Object,
 	onDidMount: Function,
 	appLayout: Object,
 	screenReaderEnabled: boolean,

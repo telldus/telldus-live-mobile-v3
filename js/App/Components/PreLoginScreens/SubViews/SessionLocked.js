@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import {
 	Text,
@@ -43,7 +43,7 @@ import {
 type Props = {
 	refreshAccessToken: (Object) => Promise<any>,
 	logoutFromTelldus: () => Promise<any>,
-	intl: intlShape.isRequired,
+	intl: Object,
 	dispatch: Function,
 	pushToken: string,
 	onPressLogout: boolean,

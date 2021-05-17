@@ -24,7 +24,7 @@
 import React from 'react';
 import { Platform, Keyboard, InteractionManager } from 'react-native';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 import appleAuth, {
@@ -60,7 +60,7 @@ type Props = {
 	dispatch: Function,
 	screenProps: Object,
 	loginToTelldus: Function,
-	intl: intlShape.isRequired,
+	intl: Object,
 	appLayout: Object,
 	dialogueOpen: Object,
 	styles: Object,

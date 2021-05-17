@@ -26,7 +26,6 @@ import React, {
 	createRef,
 } from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
-import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -77,7 +76,7 @@ type Props = {
     dropDownContainerStyle: Array<any> | Object,
 	dropDownListsContainerStyle: Array<any> | Object,
 	accessibilityLabelPrefix?: string,
-	intl: intlShape.isRequired,
+	intl: Object,
 	pickerStyle?: Array<any> | Object,
 	overlayStyle?: Array<any> | Object,
 	dropdownMargins?: DDMargin,

@@ -24,7 +24,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Image, Platform } from 'react-native';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import View from './View';
 import IconTelldus from './IconTelldus';
@@ -50,7 +50,7 @@ type Props = {
 	appLayout: Object,
 	accessible: boolean,
 	accessibilityLabel?: string,
-	intl: intlShape.isRequired,
+	intl: Object,
 	iconStyle?: Object,
 	iconName?: string,
 	customComponent?: Object,

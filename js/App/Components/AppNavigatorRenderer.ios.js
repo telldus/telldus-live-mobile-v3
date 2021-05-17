@@ -24,7 +24,6 @@
 import React from 'react';
 import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
-import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 import appleAuth from '@invertase/react-native-apple-authentication';
 
@@ -50,7 +49,7 @@ type Props = {
 	hiddenTabsCurrentUser: Array<string>,
 	defaultStartScreenKey: string,
 
-	intl: intlShape.isRequired,
+	intl: Object,
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
 	addNewDevice: () => void,

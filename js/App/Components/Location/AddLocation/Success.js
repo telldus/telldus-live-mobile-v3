@@ -25,7 +25,6 @@
 
 import React from 'react';
 import { Linking, Platform } from 'react-native';
-import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 import { connect } from 'react-redux';
 
@@ -49,7 +48,7 @@ import capitalize from '../../../Lib/capitalize';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	intl: intlShape.isRequired,
+	intl: Object,
 	navigation: Object,
 	onDidMount: Function,
 	appLayout: Object,

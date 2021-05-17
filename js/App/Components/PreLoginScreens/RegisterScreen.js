@@ -24,7 +24,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { FormattedMessage, View } from '../../../BaseComponents';
 import { RegisterForm } from './SubViews';
@@ -40,7 +40,7 @@ type Props = {
 	dispatch: Function,
 	validationMessage: string,
 	registeredCredential: any,
-	intl: intlShape.isRequired,
+	intl: Object,
 	validationMessageHeader: string,
 	appLayout: Object,
 	styles: Object,

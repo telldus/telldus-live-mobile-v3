@@ -28,7 +28,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import Markdown from 'react-native-markdown-renderer';
 
 import {
@@ -57,7 +57,7 @@ import Theme from '../../Theme';
 
 type Props = PropsThemedComponent & {
 	showModal: boolean,
-	intl: intlShape,
+	intl: Object,
 	onLayout: (Object) => void,
 	appLayout: Object,
 	getEULA: any,

@@ -35,12 +35,12 @@ import {
 } from '../../Lib/styleUtils';
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 type Props = {
 	screenProps: Object,
 	navigation: Object,
-	intl: intlShape.isRequired,
+	intl: Object,
 	appLayout: Object,
 	styles: Object,
 	validationMessage?: string,

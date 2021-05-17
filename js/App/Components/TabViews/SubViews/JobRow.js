@@ -26,7 +26,6 @@ import {
 	TouchableOpacity,
 	Platform,
 } from 'react-native';
-import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
 import {
@@ -75,7 +74,7 @@ type Props = PropsThemedComponent & {
 	ScreenName: string,
 	showName?: boolean,
 
-	intl: intlShape,
+	intl: Object,
 	editJob: (schedule: Schedule) => void,
 };
 

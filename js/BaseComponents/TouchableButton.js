@@ -22,7 +22,7 @@
 'use strict';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import i18n from '../App/Translations/common';
 import Text from './Text';
@@ -41,7 +41,7 @@ type Props = {
 	throbberStyle?: Array<any> | Object,
 	throbberContainerStyle?: Array<any> | Object,
 	onPress: Function,
-	intl: intlShape.isRequired,
+	intl: Object,
 	postScript?: any,
 	preScript?: any,
 	appLayout: Object,

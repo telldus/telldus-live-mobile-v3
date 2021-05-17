@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { TouchableOpacity, LayoutAnimation } from 'react-native';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import {
 	View,
@@ -62,7 +62,7 @@ type Props = PropsThemedComponent & {
 	actionsQueueThermostat: Object,
 
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
-	intl: intlShape,
+	intl: Object,
 	onEditSubmitValue: (number, ?number) => void,
 	updateCurrentValueInScreen: (string, ?string) => void,
 };

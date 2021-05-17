@@ -25,7 +25,6 @@
 
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import {
@@ -46,7 +45,7 @@ type Props = {
 	timeZone: string,
 	navigation: Object,
 	dispatch: Function,
-	intl: intlShape.isRequired,
+	intl: Object,
 	onDidMount: Function,
 	activateGateway: (clientInfo: Object) => Promise<any>,
 	appLayout: Object,

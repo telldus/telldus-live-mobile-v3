@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { Animated, Platform } from 'react-native';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { Text, View } from '../../../../../BaseComponents';
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
@@ -53,7 +53,7 @@ type Props = {
 	item: Object,
 	fontSize: number,
 	style: Object,
-	intl: intlShape.isRequired,
+	intl: Object,
 	isGatewayActive: boolean,
 	isInState: string,
 	screenReaderEnabled: boolean,

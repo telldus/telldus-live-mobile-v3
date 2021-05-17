@@ -25,7 +25,6 @@
 
 import React from 'react';
 import { Keyboard } from 'react-native';
-import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View } from '../../../../BaseComponents';
@@ -35,7 +34,7 @@ import { googleMapsAPIKey } from '../../../../Config';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	intl: intlShape.isRequired,
+	intl: Object,
 	onDidMount: Function,
 	actions: Object,
 	navigation: Object,

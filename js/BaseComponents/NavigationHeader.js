@@ -27,7 +27,7 @@ import { StyleSheet, Platform, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 const ExtraDimensions = Platform.OS === 'ios' ? {} : require('react-native-extra-dimensions-android');
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import View from './View';
 import Header from './Header';
@@ -41,7 +41,7 @@ import { hasStatusBar } from '../App/Lib';
 type Props = {
 	navigation: Object,
 	appLayout: Object,
-	intl: intlShape.isRequired,
+	intl: Object,
 	showLeftIcon?: boolean,
 	topMargin?: boolean,
 	leftIcon?: string,

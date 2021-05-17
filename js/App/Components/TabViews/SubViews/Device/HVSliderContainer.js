@@ -23,12 +23,12 @@
 
 import React from 'react';
 import { PanResponder, Animated, StyleSheet, Vibration, Platform, TouchableOpacity } from 'react-native';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { View } from '../../../../../BaseComponents';
 
-function getSliderLabel(value: number, intl: intlShape): string {
+function getSliderLabel(value: number, intl: Object): string {
 	return value.toString();
 }
 
@@ -47,7 +47,7 @@ type Props = {
 	item: Object,
 	fontSize: number,
 	style: Object,
-	intl: intlShape.isRequired,
+	intl: Object,
 	isGatewayActive: boolean,
 	isInState: string,
 	screenReaderEnabled: boolean,

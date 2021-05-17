@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -40,7 +40,7 @@ import { validateEmail } from '../../../Lib/UserUtils';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	intl: intlShape.isRequired,
+	intl: Object,
 	appLayout: Object,
 	styles: Object,
 	headerText: string,

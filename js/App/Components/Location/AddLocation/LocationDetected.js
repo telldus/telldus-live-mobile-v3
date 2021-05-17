@@ -25,7 +25,6 @@
 
 import React from 'react';
 import {ScrollView} from 'react-native';
-import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, TouchableButton } from '../../../../BaseComponents';
@@ -37,7 +36,7 @@ import capitalize from '../../../Lib/capitalize';
 
 type Props = {
 	navigation: Object,
-	intl: intlShape.isRequired,
+	intl: Object,
 	onDidMount: Function,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
