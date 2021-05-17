@@ -43,6 +43,8 @@ import i18n from '../../../Translations/common';
 type ActionType = {
 	name: string,
 	description: string | Object,
+	descriptionTwo?: string | Object,
+	descriptionThree?: string | Object,
 	method: number,
 	bgColor: string,
 	textColor: string,
