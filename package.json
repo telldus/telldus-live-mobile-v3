@@ -72,7 +72,7 @@
     "react-native-extra-dimensions-android": "~1.2.5",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-google-places-autocomplete": "~1.8.0",
-    "react-native-iap": "^4.5.2",
+    "react-native-iap": "^6.0.6",
     "react-native-iphone-x-helper": "~1.2.1",
     "react-native-localize": "~1.4.1",
     "react-native-maps": "0.27.1",
