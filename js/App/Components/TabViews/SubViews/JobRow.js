@@ -44,7 +44,7 @@ import {
 	getKnownModes,
 	getRepeatDescription,
 } from '../../../Lib';
-import type { Schedule } from '../../../Reducers/Schedule';
+import type { Schedule } from '../../../Actions/Types';
 import {
 	withTheme,
 	PropsThemedComponent,

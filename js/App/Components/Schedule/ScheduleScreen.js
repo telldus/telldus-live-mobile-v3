@@ -35,7 +35,7 @@ import * as modalActions from '../../Actions/Modal';
 import { getDevices } from '../../Actions/Devices';
 import { showToast } from '../../Actions/App';
 import { getJobs } from '../../Actions';
-import type { Schedule } from '../../Reducers/Schedule';
+import type { Schedule } from '../../Actions/Types';
 
 import shouldUpdate from '../../Lib/shouldUpdate';
 

@@ -28,7 +28,7 @@ import { ActivityIndicator } from 'react-native';
 import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
 import { getHoursAndMinutes } from '../../../Lib';
-import type { Schedule } from '../../../Reducers/Schedule';
+import type { Schedule } from '../../../Actions/Types';
 import i18n from '../../../Translations/common';
 
 import {

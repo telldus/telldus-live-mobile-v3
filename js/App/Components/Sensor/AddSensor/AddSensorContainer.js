@@ -68,7 +68,6 @@ type State = {
 	h1: string,
 	h2: string,
 	infoButton: null | Object,
-	loading: boolean,
 	keyboardShown: boolean,
 	forceLeftIconVisibilty: boolean,
 };
@@ -79,7 +78,7 @@ export class AddSensorContainer extends View<Props, State> {
 	_keyboardDidShow: () => void;
 	_keyboardDidHide: () => void;
 
-	state = {
+	state: State = {
 		h1: '',
 		h2: '',
 		infoButton: null,

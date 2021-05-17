@@ -217,3 +217,21 @@ export type TicketData = {|
 	connectionEffectiveType: string,
 	testCount: number,
 |};
+
+export type Schedule = {
+	id: number,
+	deviceId: number,
+	method: number,
+	methodValue: number,
+	type: string,
+	hour: number,
+	minute: number,
+	offset: number,
+	randomInterval: number,
+	active: boolean,
+	weekdays: number[],
+	retries: number,
+	retryInterval: number,
+	reps: number,
+	edit: boolean,
+};

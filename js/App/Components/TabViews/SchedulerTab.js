@@ -46,7 +46,7 @@ import {
 import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
-import type { Schedule } from '../../Reducers/Schedule';
+import type { Schedule } from '../../Actions/Types';
 
 import Theme from '../../Theme';
 
