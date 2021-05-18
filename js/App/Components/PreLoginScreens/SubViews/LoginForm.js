@@ -27,13 +27,10 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
-import appleAuth, {
-	AppleButton,
-	AppleAuthRequestOperation,
-	AppleAuthRequestScope,
-	AppleAuthCredentialState,
+import {
 	AppleAuthError,
 } from '@invertase/react-native-apple-authentication';
+import { appleAuth, AppleButton } from '@invertase/react-native-apple-authentication';
 const jwtDecode = require('jwt-decode');
 
 import {
@@ -138,14 +135,14 @@ class LoginForm extends View {
 		try {
 			// performs login request
 			const appleAuthRequestResponse = await appleAuth.performRequest({
-				requestedOperation: AppleAuthRequestOperation.LOGIN,
-				requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
+				requestedOperation: appleAuth.Operation.LOGIN,
+				requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
 			});
 
 			// get current authentication state for user
 			const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
 			// use credentialState response to ensure the user is authenticated
-			if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+			if (credentialState === appleAuth.State.AUTHORIZED) {
 				// user is authenticated
 				Keyboard.dismiss();
 				InteractionManager.runAfterInteractions(() => {
@@ -188,7 +185,7 @@ class LoginForm extends View {
 				});
 			}
 		} catch (e) {
-			if (e.code !== AppleAuthError.CANCELED) {
+			if (e.code !== appleAuth.Error.CANCELED) {
 				this.props.openDialogueBox(this.unknownError);
 			}
 			this.setState({

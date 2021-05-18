@@ -25,7 +25,7 @@ import React from 'react';
 import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
-import appleAuth from '@invertase/react-native-apple-authentication';
+import { appleAuth } from '@invertase/react-native-apple-authentication';
 
 import {
 	View,

@@ -25,7 +25,7 @@
     "@formatjs/intl-locale": "^2.4.26",
     "@formatjs/intl-pluralrules": "^4.0.20",
     "@formatjs/intl-relativetimeformat": "^9.1.0",
-    "@invertase/react-native-apple-authentication": "^1.1.2",
+    "@invertase/react-native-apple-authentication": "^2.1.2",
     "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/datetimepicker": "^3.0.2",
     "@react-native-community/masked-view": "~0.1.10",
