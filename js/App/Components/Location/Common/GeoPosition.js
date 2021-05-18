@@ -283,9 +283,9 @@ class GeoPosition extends View {
 					autoFocus={false}
 					textInputProps={{
 						onChangeText: this.onChangeTextCity,
+						returnKeyType: 'search', // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
 					}}
 					listViewDisplayed={showList}
-					returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
 					fetchDetails={true}
 					onPress={this.onChooseAddress}
 
