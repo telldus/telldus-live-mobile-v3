@@ -89,7 +89,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 		topMargin: true,
 		leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
 		forceHideStatus: false,
-	}
+	};
 
 	constructor(props: Props) {
 		super(props);

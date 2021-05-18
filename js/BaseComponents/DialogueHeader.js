@@ -65,7 +65,7 @@ static defaultProps: defaultProps = {
 	shouldCapitalize: true,
 	headerHeight: 20,
 	headerWidth: 100,
-}
+};
 
 onPressIcon: () => void;
 onPressHeader: () => void;

@@ -76,7 +76,7 @@ class TouchableButton extends Component<Props, void> {
 		accessible: true,
 		showThrobber: false,
 		preformatted: false,
-	}
+	};
 
 	constructor(props: Props) {
 		super(props);

@@ -106,7 +106,7 @@ class DialogueBox extends Component<Props, null> {
 		capitalizeHeader: true,
 		extraData: {},
 		showThrobberOnNegative: false,
-	}
+	};
 
 	renderHeader: (Object) => void;
 	renderBody: (Object) => void;

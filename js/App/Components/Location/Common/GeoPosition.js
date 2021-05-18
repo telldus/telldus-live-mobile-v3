@@ -113,7 +113,7 @@ class GeoPosition extends View {
 
 	static defaultProps: DefaultProps = {
 		...getDefaultMapCoordinates(),
-	}
+	};
 
 	constructor(props: Props) {
 		super(props);

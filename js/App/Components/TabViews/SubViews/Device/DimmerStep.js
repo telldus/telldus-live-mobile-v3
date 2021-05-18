@@ -62,7 +62,7 @@ onPressDim: (number) => void;
 static defaultProps: DefaultProps = {
 	commandON: 1,
 	commandDIM: 16,
-}
+};
 
 constructor(props: Props) {
 	super(props);

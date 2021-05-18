@@ -56,7 +56,7 @@ type State = {
 };
 
 class TimeField extends View<Props, State> {
-props: Props
+props: Props;
 onEdit: (string) => void;
 setRef: (any) => void;
 onFocus: () => void;

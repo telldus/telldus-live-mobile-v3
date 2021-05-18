@@ -72,7 +72,7 @@ class LocationDetails extends Component<Props, State> {
 
 	state: State = {
 		errorShowImage: false,
-	}
+	};
 
 	onError: () => void;
 	renderImage: (Object) => Object | null;

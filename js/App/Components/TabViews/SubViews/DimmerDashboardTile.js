@@ -87,7 +87,7 @@ class DimmerDashboardTile extends View<Props, void> {
 		commandOFF: 2,
 		commandDIM: 16,
 		showSlider: true,
-	}
+	};
 
 	parentScrollEnabled: boolean;
 	onValueChangeThrottled: number => void;

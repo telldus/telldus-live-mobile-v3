@@ -67,7 +67,7 @@ class BellDashboardTile extends View<Props, null> {
 
 	static defaultProps: DefaultProps = {
 		command: 4,
-	}
+	};
 
 	onBell: () => void;
 	labelBellButton: string;

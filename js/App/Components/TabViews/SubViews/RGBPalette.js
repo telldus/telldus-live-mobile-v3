@@ -63,7 +63,7 @@ class RGBPalette extends View<Props, null> {
 		fontSize: 9,
 		fontSizeIcon: 26,
 		disableActionIndicator: false,
-	}
+	};
 
 	constructor(props: Props) {
 		super(props);
