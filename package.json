@@ -121,7 +121,7 @@
     "sp-react-native-in-app-updates": "^0.1.1",
     "svgs": "~4.1.1",
     "url": "~0.11.0",
-    "victory-native": "^35.0.1"
+    "victory-native": "^35.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
