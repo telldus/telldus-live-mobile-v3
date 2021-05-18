@@ -21,8 +21,10 @@
     "dgram": "react-native-udp"
   },
   "dependencies": {
-    "@formatjs/intl-pluralrules": "^3.2.5",
-    "@formatjs/intl-relativetimeformat": "^7.0.0",
+    "@formatjs/intl-getcanonicallocales": "^1.6.0",
+    "@formatjs/intl-locale": "^2.4.26",
+    "@formatjs/intl-pluralrules": "^4.0.20",
+    "@formatjs/intl-relativetimeformat": "^9.1.0",
     "@invertase/react-native-apple-authentication": "^1.1.2",
     "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/datetimepicker": "^3.0.2",
@@ -57,7 +59,7 @@
     "react": "17.0.1",
     "react-dom": "^16.13.0",
     "react-fast-compare": "~3.2.0",
-    "react-intl": "^5.17.5",
+    "react-intl": "^5.17.7",
     "react-native": "0.64.1",
     "react-native-accessibility": "git+https://github.com/MaxToyberman/react-native-accessibility.git#319008ffbfd9115cf520a718f3dfc88381161313",
     "react-native-background-fetch": "^3.1.0",

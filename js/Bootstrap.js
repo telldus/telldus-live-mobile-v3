@@ -32,6 +32,10 @@ import 'intl/locale-data/jsonp/fr';
 import 'intl/locale-data/jsonp/nb';
 import 'intl/locale-data/jsonp/de';
 
+import '@formatjs/intl-getcanonicallocales/polyfill';
+
+import '@formatjs/intl-locale/polyfill';
+
 import '@formatjs/intl-pluralrules/polyfill';
 import '@formatjs/intl-pluralrules/locale-data/en';
 import '@formatjs/intl-pluralrules/locale-data/sv';
