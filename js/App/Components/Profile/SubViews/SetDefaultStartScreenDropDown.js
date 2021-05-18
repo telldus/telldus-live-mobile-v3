@@ -67,7 +67,9 @@ const SetDefaultStartScreenDropDown = (props: Props, ref: Object): Object => {
 	} = useSelector((state: Object): Object => state.navigation);
 
 	const defaultStartScreenCurrentUser = defaultStartScreen[userId] || {};
-	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+	const hiddenTabsCurrentUser = useMemo((): Array<string> => {
+		return hiddenTabs[userId] || [];
+	}, [hiddenTabs, userId]);
 	const {
 		options,
 		screenName,

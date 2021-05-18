@@ -120,8 +120,14 @@ const Actions = React.memo<Object>((props: Props): Object => {
 
 	let { screenReaderEnabled, layout: appLayout } = useSelector((state: Object): Object => state.app);
 	let { byId } = useSelector((state: Object): Object => state.devices);
-	let jobs = useSelector((state: Object): Object => state.jobs) || [];
-	let events = useSelector((state: Object): Object => state.events) || [];
+	let _jobs = useSelector((state: Object): Object => state.jobs);
+	let jobs = useMemo((): Array<Object> => {
+		return _jobs || [];
+	}, [_jobs]);
+	let _events = useSelector((state: Object): Object => state.events);
+	let events = useMemo((): Array<Object> => {
+		return _events || [];
+	}, [_events]);
 	let { byId: gatewaysById } = useSelector((state: Object): Object => state.gateways) || [];
 
 	const [ showDevices, setShowDevices ] = useState(Object.keys(selectedDevices).length > 0);

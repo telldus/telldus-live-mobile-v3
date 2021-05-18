@@ -90,29 +90,33 @@ const ShowHideTabsBlock = memo<Object>((props: Object): Object => {
 		defaultStartScreen = {},
 	} = useSelector((store: Object): Object => store.navigation);
 	const { userId } = useSelector((store: Object): Object => store.user);
-	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+	const hiddenTabsCurrentUser = useMemo((): Array<string> => {
+		return hiddenTabs[userId] || [];
+	}, [hiddenTabs, userId]);
 	const defaultStartScreenCurrentUser = defaultStartScreen[userId] || {};
 
 	const dispatch = useDispatch();
 
-	const supportedTabs = [
-		{
-			label: formatMessage(i18n.dashboard),
-			name: 'Dashboard',
-		},
-		{
-			label: formatMessage(i18n.devices),
-			name: 'Devices',
-		},
-		{
-			label: formatMessage(i18n.sensors),
-			name: 'Sensors',
-		},
-		{
-			label: formatMessage(i18n.scheduler),
-			name: 'Scheduler',
-		},
-	];
+	const supportedTabs = useMemo((): Array<Object> => {
+		return [
+			{
+				label: formatMessage(i18n.dashboard),
+				name: 'Dashboard',
+			},
+			{
+				label: formatMessage(i18n.devices),
+				name: 'Devices',
+			},
+			{
+				label: formatMessage(i18n.sensors),
+				name: 'Sensors',
+			},
+			{
+				label: formatMessage(i18n.scheduler),
+				name: 'Scheduler',
+			},
+		];
+	}, [formatMessage]);
 
 	const onValueChange = useCallback((itemKey: string) => {
 		if (hiddenTabsCurrentUser.indexOf(itemKey) === -1) {

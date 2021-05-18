@@ -35,7 +35,9 @@ const useNonHiddenMainTabs = (tabToCheck?: string = ''): Object => {
 
 	const { hiddenTabs = {} } = useSelector((store: Object): Object => store.navigation);
 	const { userId } = useSelector((store: Object): Object => store.user);
-	const hiddenTabsCurrentUser = hiddenTabs[userId] || [];
+	const hiddenTabsCurrentUser = useMemo((): Array<string> => {
+		return hiddenTabs[userId] || [];
+	}, [hiddenTabs, userId]);
 
 	const {
 		visibleTabs,
