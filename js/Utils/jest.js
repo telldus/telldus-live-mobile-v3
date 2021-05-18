@@ -204,6 +204,12 @@ jest.mock('react-native-localize', (): Object => {
 	};
 });
 
+
+jest.mock('react-native-iap', (): Object => {
+	return {
+	};
+});
+
 const mockedNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', (): Object => {
