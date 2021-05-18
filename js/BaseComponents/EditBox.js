@@ -65,6 +65,7 @@ type DefaultProps = {
 	placeholderTextColor: string,
 	autoFocus: boolean,
 	keyboardType: string,
+	placeholder: string,
 };
 
 class EditBox extends Component<Props, null> {

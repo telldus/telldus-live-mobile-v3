@@ -100,7 +100,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		return nextProps.currentScreen === 'Action';
 	}
 
-	selectAction = (action: number) => {
+	selectAction: Function = (action: number) => {
 		const { actions, navigation, isEditMode, route } = this.props;
 
 		actions.selectAction(action);
@@ -116,7 +116,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		}
 	};
 
-	navigateToDim = () => {
+	navigateToDim: Function = () => {
 		const { navigation, isEditMode, route } = this.props;
 
 		if (isEditMode()) {
@@ -137,7 +137,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 			});
 		}
 	};
-	navigateToRgb = () => {
+	navigateToRgb: Function = () => {
 		const { navigation, isEditMode, route } = this.props;
 
 		if (isEditMode()) {
@@ -159,7 +159,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		}
 	};
 
-	navigateToThermostat = () => {
+	navigateToThermostat: Function = () => {
 		const { navigation, isEditMode, route } = this.props;
 
 		if (isEditMode()) {

@@ -82,7 +82,7 @@ class ActionDim extends View<null, Props, State> {
 		return nextProps.currentScreen === 'ActionDim';
 	}
 
-	selectAction = () => {
+	selectAction: Function = () => {
 		const { actions, navigation, isEditMode, route } = this.props;
 
 		actions.selectAction(16, Math.round(this.state.methodValue));

@@ -74,7 +74,6 @@ type State = {
 	h1: string,
 	h2: string,
 	infoButton: null | Object,
-	loading: boolean,
 	keyboardShown: boolean,
 	forceLeftIconVisibilty: boolean,
 };
@@ -85,7 +84,7 @@ export class AddDeviceContainer extends View<Props, State> {
 	_keyboardDidShow: () => void;
 	_keyboardDidHide: () => void;
 
-	state = {
+	state: State = {
 		h1: '',
 		h2: '',
 		infoButton: null,
@@ -171,7 +170,7 @@ export class AddDeviceContainer extends View<Props, State> {
 		return screens.indexOf(currentScreen) !== -1;
 	}
 
-	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
+	onChildDidMount: Function = (h1: string, h2: string, infoButton?: Object | null = null) => {
 		this.setState({
 			h1,
 			h2,
@@ -179,13 +178,13 @@ export class AddDeviceContainer extends View<Props, State> {
 		});
 	};
 
-	toggleLeftIconVisibilty = (forceLeftIconVisibilty: boolean) => {
+	toggleLeftIconVisibilty: Function = (forceLeftIconVisibilty: boolean) => {
 		this.setState({
 			forceLeftIconVisibilty,
 		});
 	}
 
-	getLeftIcon = (CS: string): ?string => {
+	getLeftIcon: Function = (CS: string): ?string => {
 		if (CS === 'SelectDeviceType') {
 			const {
 				route,
@@ -198,12 +197,12 @@ export class AddDeviceContainer extends View<Props, State> {
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
 	}
 
-	getLeftIconPressAction = (CS: string): Function => {
+	getLeftIconPressAction: Function = (CS: string): Function => {
 		const EXSCNS = ['Include433'];
 		return EXSCNS.indexOf(CS) === -1 ? undefined : this.closeAdd433MHz;
 	}
 
-	closeAdd433MHz = () => {
+	closeAdd433MHz: Function = () => {
 		const { navigation, hiddenTabsCurrentUser } = this.props;
 		const {
 			tabToCheckOrVeryNext,

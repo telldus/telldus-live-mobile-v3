@@ -34,6 +34,10 @@ type Props = {
 	level?: number,
 };
 
+type DefaultProps = {
+	throbSpeed: number,
+};
+
 export default class Throbber extends Component<Props, null> {
 	props: Props;
 
@@ -42,7 +46,7 @@ export default class Throbber extends Component<Props, null> {
 	currentValue: number;
 	startThrob: () => void;
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		throbSpeed: 10,
 	}
 

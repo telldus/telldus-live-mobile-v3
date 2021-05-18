@@ -32,7 +32,7 @@ import { LocalApi, hasTokenExpired, getTokenForLocalControl, LiveApi } from '../
 import { validateLocalControlSupport } from './Gateways';
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
-const { Devices, App, DevicesCommon } = actions;
+const { Devices, App, DevicesCommon } = actions;// $FlowFixMe
 const { deviceSetState: deviceSetStateShared, ...otherActions } = Devices;
 const { deviceResetState, requestDeviceAction, getDeviceInfo } = otherActions;
 const { deviceSetStateSuccess } = DevicesCommon;

@@ -85,7 +85,7 @@ import {
 const {
 	store,
 	persistor,
-} = configureStore();
+}: Object = configureStore();
 
 function Bootstrap(): Object {
 
@@ -108,7 +108,7 @@ function Bootstrap(): Object {
 			SplashScreen.hide();
 		}
 
-		render(): Provider {
+		render(): typeof Provider {
 			return (
 				<SafeAreaProvider
 					initialMetrics={initialWindowMetrics}>

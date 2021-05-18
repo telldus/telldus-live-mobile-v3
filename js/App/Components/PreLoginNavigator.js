@@ -97,7 +97,10 @@ type Props = {
 	showChangeLog: boolean,
 };
 
-const PreLoginNavigator = React.memo<Object>((props: Props = {}): Object => {
+const initProps: Object = {
+};
+
+const PreLoginNavigator = React.memo<Object>((props: Props = initProps): Object => {
 	const dispatch = useDispatch();
 
 	React.useEffect((): Function => {

@@ -71,7 +71,6 @@ type State = {
 	h1: string,
 	h2: string,
 	infoButton: null | Object,
-	loading: boolean,
 	keyboardShown: boolean,
 	forceLeftIconVisibilty: boolean,
 	isGeoFenceLoadingStatus: boolean,
@@ -87,7 +86,7 @@ export class GeoFenceContainer extends View<Props, State> {
 	pointsToHiddenCave: number;
 	openCaveTimeout: any;
 
-	state = {
+	state: State = {
 		h1: '',
 		h2: '',
 		infoButton: null,
@@ -174,7 +173,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		return screens.indexOf(currentScreen) !== -1;
 	}
 
-	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
+	onChildDidMount: Function = (h1: string, h2: string, infoButton?: Object | null = null) => {
 		this.setState({
 			h1,
 			h2,
@@ -182,31 +181,31 @@ export class GeoFenceContainer extends View<Props, State> {
 		});
 	};
 
-	toggleLeftIconVisibilty = (forceLeftIconVisibilty: boolean) => {
+	toggleLeftIconVisibilty: Function = (forceLeftIconVisibilty: boolean) => {
 		this.setState({
 			forceLeftIconVisibilty,
 		});
 	}
 
-	getLeftIcon = (CS: string): ?string => {
+	getLeftIcon: Function = (CS: string): ?string => {
 		const SCNS = ['AddEditGeoFence', 'EditGeoFenceAreaFull'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
 	}
 
-	getLeftIconPressAction = (CS: string): Function => {
+	getLeftIconPressAction: Function = (CS: string): Function => {
 		const EXSCNS = [];
 		return EXSCNS.indexOf(CS) === -1 ? undefined : this.closeAdd433MHz;
 	}
 
-	closeAdd433MHz = () => {
+	closeAdd433MHz: Function = () => {
 	}
 
-	shouldShowPoster = (CS: string): Function => {
+	shouldShowPoster: Function = (CS: string): Function => {
 		const EXSCNS = ['AddEditGeoFence'];
 		return EXSCNS.indexOf(CS) === -1;
 	}
 
-	isEditMode = (): boolean => {
+	isEditMode: Function = (): boolean => {
 		const {
 			route,
 		} = this.props;
@@ -214,7 +213,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		return isEditMode;
 	}
 
-	onValueChange = (enableGeoFence: boolean) => {
+	onValueChange: Function = (enableGeoFence: boolean) => {
 		const {
 			actions,
 			screenProps,
@@ -266,12 +265,12 @@ export class GeoFenceContainer extends View<Props, State> {
 		}
 	}
 
-	clearOpenCaveTimeout = () => {
+	clearOpenCaveTimeout: Function = () => {
 		clearTimeout(this.openCaveTimeout);
 		this.openCaveTimeout = null;
 	}
 
-	onPressLogo = () => {
+	onPressLogo: Function = () => {
 		this.pointsToHiddenCave++;
 
 		if (this.openCaveTimeout) {
@@ -288,7 +287,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		}
 	}
 
-	setIsHelpVisible = (isHelpVisible: boolean) => {
+	setIsHelpVisible: Function = (isHelpVisible: boolean) => {
 		if (isHelpVisible) {
 			Orientation.lockToPortrait();
 		} else {
@@ -299,7 +298,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		});
 	}
 
-	showHelp = () => {
+	showHelp: Function = () => {
 		this.setIsHelpVisible(true);
 	}
 
@@ -450,7 +449,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		);
 	}
 
-	getStyles = (appLayout: Object): Object => {
+	getStyles: Function = (appLayout: Object): Object => {
 		const {
 			selectedThemeSet,
 		} = this.props;

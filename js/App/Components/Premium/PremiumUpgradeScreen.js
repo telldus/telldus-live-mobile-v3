@@ -180,7 +180,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			(payload: Object) => {
 				if (!clearListeners) {
 					const listenerData = withInAppPurchaseListeners({
-						_successCallback,
+						successCallback: _successCallback,
 						errorCallback,
 					});
 					// eslint-disable-next-line react-hooks/exhaustive-deps

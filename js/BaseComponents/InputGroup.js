@@ -107,7 +107,7 @@ export default class InputGroup extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	getIconProps(icon: Icon): Object {
+	getIconProps(icon: typeof Icon): Object {
 
 		let defaultStyle = {
 			fontSize: (this.props.toolbar || this.props.atoolbar) ? this.getTheme().toolbarIconSize : 27,

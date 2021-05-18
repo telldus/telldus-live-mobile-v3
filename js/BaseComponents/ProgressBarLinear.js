@@ -59,6 +59,7 @@ type DefaultProps = {
 type State = {
 	progress: Object,
 	animationValue: Object,
+	indeterminate: boolean,
 };
 
 const animate = (animationValue: any) => {

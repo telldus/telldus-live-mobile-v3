@@ -89,7 +89,7 @@ export default class Days extends View<null, Props, State> {
 		return nextProps.currentScreen === 'Days';
 	}
 
-	toggleDayState = (day: string) => {
+	toggleDayState: Function = (day: string) => {
 		const { selectedDays } = this.state;
 
 		let newSelectedWeekdays: string[];
@@ -109,7 +109,7 @@ export default class Days extends View<null, Props, State> {
 		});
 	};
 
-	checkAll = () => {
+	checkAll: Function = () => {
 		if (this.state.shouldCheckAll) {
 			this.setState({
 				selectedDays: this.days,
@@ -121,7 +121,7 @@ export default class Days extends View<null, Props, State> {
 		}
 	};
 
-	uncheckAll = () => {
+	uncheckAll: Function = () => {
 		if (this.state.shouldUncheckAll) {
 			this.setState({
 				selectedDays: [],
@@ -133,7 +133,7 @@ export default class Days extends View<null, Props, State> {
 		}
 	};
 
-	toggleWeekdays = () => {
+	toggleWeekdays: Function = () => {
 		if (this._isSelected('weekdays')) {
 			this.uncheckAll();
 		} else {
@@ -148,7 +148,7 @@ export default class Days extends View<null, Props, State> {
 		}
 	};
 
-	toggleWeekends = () => {
+	toggleWeekends: Function = () => {
 		if (this._isSelected('weekends')) {
 			this.uncheckAll();
 		} else {
@@ -163,7 +163,7 @@ export default class Days extends View<null, Props, State> {
 		}
 	};
 
-	selectDays = () => {
+	selectDays: Function = () => {
 		const { actions, navigation, isEditMode, route } = this.props;
 
 		let selectedDaysIndexes: number[] = [];

@@ -65,20 +65,23 @@ type State = {
 	displayValue: any,
 };
 
+const trackStyleInit: Object = {};
+const valueStyleInit: Object = {};
+
 class SliderComponent extends Component<Props, State> {
 	props: Props;
 	state: State;
 
 	static defaultProps: DefaultProps = {
 		maximumTrackTintColor: Theme.Core.inactiveGray,
-		trackStyle: {},
+		trackStyle: trackStyleInit,
 		thumbStyle: {
 			height: 20,
 			width: 20,
 		},
 		step: 1,
 		showValue: false,
-		valueStyle: {},
+		valueStyle: valueStyleInit,
 	};
 
 	constructor(props: Props) {

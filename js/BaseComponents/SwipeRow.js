@@ -163,7 +163,7 @@ class SwipeRow extends Component<Props, State> {
 	static defaultProps: DefaultProps;
 	state: State;
 	horizontalSwipeGestureBegan: boolean;
-	swipeInitialX: ?number;
+	swipeInitialX: number | null;
 	parentScrollEnabled: boolean;
 	ranPreview: boolean;
 	onContentLayout: (Object) => void;

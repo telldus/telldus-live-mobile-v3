@@ -50,7 +50,7 @@ type State = {
 
 export default class Device extends View<void, Props, State> {
 
-	state = {
+	state: State = {
 		dataSource: this.parseDataForList(this.props.devices.byId, this.props.gateways.byId),
 		refreshing: false,
 	};

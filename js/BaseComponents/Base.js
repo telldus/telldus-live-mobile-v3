@@ -22,25 +22,30 @@
 'use strict';
 
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import Theme from '../App/Theme';
+
+type ContextTypes = {
+	theme: Object,
+	foregroundColor: string,
+};
+
+type PropTypes = {
+	theme: Object,
+	foregroundColor: string,
+};
+
+type ChildContextTypes = {
+	theme: Object,
+	foregroundColor: string,
+};
 
 export default class Base extends Component<Object, Object> {
 
-	static contextTypes = {
-		theme: PropTypes.object,
-		foregroundColor: PropTypes.string,
-	};
+	static contextTypes: ContextTypes;
 
-	static propTypes = {
-		theme: PropTypes.object,
-		foregroundColor: PropTypes.string,
-	};
+	static propTypes: PropTypes;
 
-	static childContextTypes = {
-		theme: PropTypes.object,
-		foregroundColor: PropTypes.string,
-	};
+	static childContextTypes: ChildContextTypes;
 
 	getChildContext(): Object {
 		return {

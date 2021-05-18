@@ -63,7 +63,6 @@ type Props = {
 };
 
 type State = {
-	notificationText?: string,
 	onPressLogout: boolean,
 	showModal: boolean,
 	isRegistering: boolean,
@@ -83,7 +82,6 @@ class LoginScreen extends View {
 		super(props);
 
 		this.state = this.state || {
-			notificationText: false,
 			onPressLogout: false,
 			showModal: false,
 			isRegistering: false,

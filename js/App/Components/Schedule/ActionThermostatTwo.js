@@ -52,7 +52,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 		super(props);
 	}
 
-	onPressOne = () => {
+	onPressOne: Function = () => {
 		const { methodValue } = this.props;
 		const newMethValue = {
 			...methodValue,
@@ -62,7 +62,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 		this.props.onChange(newMethValue);
 	}
 
-	onPressTwo = () => {
+	onPressTwo: Function = () => {
 		const { methodValue } = this.props;
 		const newMethValue = {
 			...methodValue,
@@ -72,7 +72,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 		this.props.onChange(newMethValue);
 	}
 
-	onPressThree = () => {
+	onPressThree: Function = () => {
 		const { methodValue } = this.props;
 		const newMethValue = {
 			...methodValue,

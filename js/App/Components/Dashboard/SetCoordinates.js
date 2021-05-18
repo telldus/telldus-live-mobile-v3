@@ -87,7 +87,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	const { byId = {} } = useSelector((state: Object): Object => state.gateways);
 	const { location: _location = {} } = useSelector((state: Object): Object => state.fences);
 
-	let location: {longitude: number, latitude: number} = (_location && _location.longitude) ? _location : getDefaultMapCoordinates();
+	let location: Object = (_location && _location.longitude) ? _location : getDefaultMapCoordinates();
 
 	const {
 		selectedType,

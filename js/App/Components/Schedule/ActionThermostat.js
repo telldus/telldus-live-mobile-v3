@@ -179,7 +179,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 		return nextProps.currentScreen === 'ActionThermostat' && shouldUpdate(this.props, nextProps, ['schedule', 'appLayout']);
 	}
 
-	selectAction = () => {
+	selectAction: Function = () => {
 		const { actions, navigation, isEditMode, route } = this.props;
 		const { methodValue } = this.state;
 
@@ -214,7 +214,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 		}
 	};
 
-	deviceSetStateThermostat = (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1) => {
+	deviceSetStateThermostat: Function = (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1) => {
 		const { methodValue } = this.state;
 		let methodValueN = {
 			...methodValue,
@@ -231,7 +231,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 		});
 	}
 
-	onChange = (newMethodValue: Object) => {
+	onChange: Function = (newMethodValue: Object) => {
 		const { methodValue } = this.state;
 		const methodValueN = {
 			...methodValue,

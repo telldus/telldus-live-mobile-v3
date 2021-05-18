@@ -23,7 +23,7 @@ import Immutable from 'seamless-immutable';
 import {createReducer} from 'reduxsauce';
 
 
-export const initialState = Immutable({
+export const initialState: Object = Immutable({
 	fence: {},
 	editIndex: -1,
 	location: null,
@@ -133,4 +133,4 @@ const actionHandlers = {
 	['persist/REHYDRATE']: rehydrateFence,
 };
 
-export default createReducer(initialState, actionHandlers);
+export default (createReducer(initialState, actionHandlers): Object);

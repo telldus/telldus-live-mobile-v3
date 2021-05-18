@@ -109,8 +109,7 @@ type State = {
 };
 class DropDown extends Component<PropsDropDownComponent, State> {
 props: PropsDropDownComponent;
-state: State = {
-};
+state: State;
 static defaultProps: DefaultProps = {
 	baseLeftIcon: 'down',
 	dropdownPosition: 0,

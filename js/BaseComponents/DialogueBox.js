@@ -88,6 +88,7 @@ type defaultProps = {
 	capitalizeHeader: boolean,
 	extraData: Object,
 	showThrobberOnNegative: boolean,
+	backdropColor: string,
 };
 
 class DialogueBox extends Component<Props, null> {

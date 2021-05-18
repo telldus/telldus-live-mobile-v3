@@ -23,6 +23,12 @@
 
 import { Platform } from 'react-native';
 
+const titleFontSize: number = (Platform.OS === 'ios' ) ? 17 : 19;
+const subTitleFontSize: number = (Platform.OS === 'ios' ) ? 12 : 14;
+const toolbarHeight: number = (Platform.OS === 'ios' ) ? 64 : 56;
+const radioBtnSize: number = (Platform.OS === 'ios') ? 25 : 23;
+const toolbarIconSize: number = (Platform.OS === 'ios' ) ? 20 : 22;
+
 export default {
 	brandPrimary: '#1b365d',
 	brandSecondary: '#e26901',
@@ -116,8 +122,8 @@ export default {
 	maxSizeTextButton: 26,
 
 	fontSizeBase: 12,
-	titleFontSize: (Platform.OS === 'ios' ) ? 17 : 19,
-	subTitleFontSize: (Platform.OS === 'ios' ) ? 12 : 14,
+	titleFontSize,
+	subTitleFontSize,
 
 	inputFontSize: 15,
 	inputLineHeight: 24,
@@ -192,7 +198,7 @@ export default {
 	},
 
 	footerHeight: 55,
-	toolbarHeight: (Platform.OS === 'ios' ) ? 64 : 56,
+	toolbarHeight,
 	get toolbarDefaultBg(): string {
 		return this.brandPrimary;
 	},
@@ -208,7 +214,7 @@ export default {
 	checkboxSize: 23,
 
 	radioColor: '#7e7e7e',
-	radioBtnSize: (Platform.OS === 'ios') ? 25 : 23,
+	radioBtnSize,
 
 	tabBgColor: '#F8F8F8',
 	tabTextColor: '#fff',
@@ -290,7 +296,7 @@ export default {
 	badgeColor: '#fff',
 	badgeBg: '#ED1727',
 
-	toolbarIconSize: (Platform.OS === 'ios' ) ? 20 : 22,
+	toolbarIconSize,
 
 	toolbarInputColor: '#CECDD2',
 

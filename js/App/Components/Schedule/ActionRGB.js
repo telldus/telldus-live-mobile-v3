@@ -83,7 +83,7 @@ export default class ActionRGB extends View<null, Props, State> {
 		return nextProps.currentScreen === 'ActionRGB' && shouldUpdate(this.props, nextProps, ['schedule', 'appLayout']);
 	}
 
-	selectAction = () => {
+	selectAction: Function = () => {
 		const { actions, navigation, isEditMode, route } = this.props;
 		const { methodValue } = this.state;
 
@@ -102,7 +102,7 @@ export default class ActionRGB extends View<null, Props, State> {
 		}
 	};
 
-	deviceSetStateRGBOverride = (deviceId: string, methodValue: string) => {
+	deviceSetStateRGBOverride: Function = (deviceId: string, methodValue: string) => {
 		this.setState({
 			methodValue,
 		});

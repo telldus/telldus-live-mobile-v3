@@ -37,6 +37,8 @@ type DefaultProps = {
 	tabs: boolean,
 	paddingRight: number,
 	disabled: boolean,
+	accessible: boolean,
+	showThrobber: boolean,
 };
 
 type Props = {

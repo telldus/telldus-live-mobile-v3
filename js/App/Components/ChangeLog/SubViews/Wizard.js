@@ -147,7 +147,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 		}
 	}
 
-	getContents = ({
+	getContents: Function = ({
 		iconProps,
 		titleStyle,
 		title,

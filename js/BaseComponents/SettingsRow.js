@@ -372,4 +372,4 @@ SettingsRow.defaultProps = {
 	keyboardTypeInLineEdit: Platform.OS === 'ios' ? 'phone-pad' : 'decimal-pad',
 };
 
-module.exports = memo<Object>(SettingsRow);
+module.exports = (memo<Object>(SettingsRow): Object);

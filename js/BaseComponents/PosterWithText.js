@@ -70,6 +70,7 @@ type DefaultProps = {
 	align: 'right' | 'center' | 'left',
 	showLeftIcon: boolean,
 	leftIcon: string,
+	scrollableH1: boolean,
 };
 
 type State = {
