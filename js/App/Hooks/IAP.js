@@ -44,7 +44,7 @@ const withInAppPurchaseListeners = ({
 	const isIos = Platform.OS === 'ios';
 
 	let purchaseUpdateSubscription, purchaseErrorSubscription;
-	if (isIos) {
+	if (isIos) {// $FlowFixMe
 		purchaseUpdateSubscription = purchaseUpdatedListener((purchase: InAppPurchase | SubscriptionPurchase | ProductPurchase ) => {
 			const receipt = purchase.transactionReceipt;
 			if (receipt) {
@@ -53,7 +53,7 @@ const withInAppPurchaseListeners = ({
 				}
 			}
 		});
-
+		// $FlowFixMe
 		purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
 			if (errorCallback) {
 				errorCallback(error);
