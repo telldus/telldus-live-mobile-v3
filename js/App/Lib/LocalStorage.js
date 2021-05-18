@@ -55,14 +55,14 @@ export default class TelldusLocalStorage {
 
 	performUpdateActions: Function = async () => {
 		await this.dropOldDeviceHistoryTable();
-	}
+	};
 
 	dropOldDeviceHistoryTable: Function = (): Promise<any> => {
 		return this.loadDatabase().then((DB: Object): any => {
 			return db.executeSql('DROP TABLE IF EXISTS DeviceHistory');
 		}).catch((error: Object) => {
 		});
-	}
+	};
 
 	loadDatabase: Function = (): Promise<any> => {
 		return SQLite.openDatabase(databaseName, databaseVersion, databaseDisplayName, databaseSize).then((DB: Object): Object => {
@@ -71,7 +71,7 @@ export default class TelldusLocalStorage {
 		}).catch((error: Object) => {
 			throw error;
 		});
-	}
+	};
 
 	storeDeviceHistory(data: Object): Promise<any> {
 		return this.loadDatabase().then((DB: Object): any => {
@@ -123,7 +123,7 @@ export default class TelldusLocalStorage {
 			['CREATE INDEX IF NOT EXISTS IndexDeviceId ON DeviceHistory1_1(deviceId);'],
 			...insertQuery,
 		  ]);
-	}
+	};
 
 	prepareInsertQueryDeviceHistory(history: Object, deviceId: string): Array<string> {
 		let query = [];
@@ -176,7 +176,7 @@ export default class TelldusLocalStorage {
 		}).catch((error: Object) => {
 			throw error;
 		});
-	}
+	};
 
 	// SENSOR
 
@@ -223,7 +223,7 @@ export default class TelldusLocalStorage {
 			['CREATE INDEX IF NOT EXISTS IndexSensorId ON SensorHistory(sensorId);'],
 			...insertQuery,
 		  ]);
-	}
+	};
 
 	prepareInsertQuerySensorHistory(history: Object, sensorId: string): Array<string> {
 		let query = [];
@@ -272,7 +272,7 @@ export default class TelldusLocalStorage {
 		}).catch((error: Object) => {
 			throw error;
 		});
-	}
+	};
 
 	getSensorTypes: Function = (id: number, formatMessage: Function): Promise<any> => {
 		return this.loadDatabase().then((DB: Object): Promise<any> => {
@@ -280,7 +280,7 @@ export default class TelldusLocalStorage {
 		}).catch((error: Object) => {
 			throw error;
 		});
-	}
+	};
 
 	// 'formatMessage' is passed in this manner and data 'row' is manipulated this manner to avoid
 	// an extra iteration over the data again after query.
@@ -300,7 +300,7 @@ export default class TelldusLocalStorage {
 		}).catch((error: Object) => {
 			throw error;
 		});
-	}
+	};
 
 
 	// COMMON
@@ -318,7 +318,7 @@ export default class TelldusLocalStorage {
 		}).catch((error: Object) => {
 			throw error;
 		});
-	}
+	};
 
 	queryLatestTimestamp: Function = (tableName: string, uniqueParam: string, id: number): Promise<any> => {
 		return db.executeSql(`SELECT MAX(ts) as tsMax from ${tableName} WHERE ${id} = ${uniqueParam}`).then(([results]: Array<any>): Array<any> | null => {
@@ -329,7 +329,7 @@ export default class TelldusLocalStorage {
 		}).catch((error: Object) => {
 			throw error;
 		});
-	}
+	};
 
 	clearHistory(type: string, id: number): Promise<any> {
 		let tableName = '', uniqueParam = '';
@@ -416,20 +416,20 @@ export default class TelldusLocalStorage {
 		}).catch((error: Object) => {
 			throw error;
 		});
-	}
+	};
 
 	dropTableGeoFenceEvents: Function = (): Promise<any> => {
 		return this.loadDatabase().then((DB: Object): any => {
 			return db.executeSql('DROP TABLE IF EXISTS GeoFenceEvents');
 		}).catch((error: Object) => {
 		});
-	}
+	};
 
 	closeDatabase: Function = () => {
 		if (db) {
 			db.close();
 		}
-	}
+	};
 
 }
 

@@ -182,7 +182,7 @@ export class AddDeviceContainer extends View<Props, State> {
 		this.setState({
 			forceLeftIconVisibilty,
 		});
-	}
+	};
 
 	getLeftIcon: Function = (CS: string): ?string => {
 		if (CS === 'SelectDeviceType') {
@@ -195,12 +195,12 @@ export class AddDeviceContainer extends View<Props, State> {
 		}
 		const SCNS = ['SelectLocation', 'Include433'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
-	}
+	};
 
 	getLeftIconPressAction: Function = (CS: string): Function => {
 		const EXSCNS = ['Include433'];
 		return EXSCNS.indexOf(CS) === -1 ? undefined : this.closeAdd433MHz;
-	}
+	};
 
 	closeAdd433MHz: Function = () => {
 		const { navigation, hiddenTabsCurrentUser } = this.props;
@@ -208,7 +208,7 @@ export class AddDeviceContainer extends View<Props, State> {
 			tabToCheckOrVeryNext,
 		} = prepareVisibleTabs(hiddenTabsCurrentUser, 'Devices');
 		navigation.navigate(tabToCheckOrVeryNext);
-	}
+	};
 
 	render(): Object {
 		const {

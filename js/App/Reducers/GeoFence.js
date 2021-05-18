@@ -24,10 +24,10 @@
 
 export type State = ?Object;
 
-const onGeofence: Array<Object> = [];
+const onGeofenceInit: Array<Object> = [];
 
 export const initialState = {
-	onGeofence: onGeofence,
+	onGeofence: onGeofenceInit,
 	config: {
 		distanceFilter: 5,
 		stopTimeout: 5,

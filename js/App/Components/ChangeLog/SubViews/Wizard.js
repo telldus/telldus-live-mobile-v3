@@ -186,7 +186,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 				)}
 			</>
 		);
-	}
+	};
 
 	render(): Object {
 		const { currentScreen, animatedX, animatedOpacity, appLayout } = this.props;

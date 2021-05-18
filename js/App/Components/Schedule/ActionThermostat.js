@@ -229,7 +229,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 		this.setState({
 			methodValue: methodValueN,
 		});
-	}
+	};
 
 	onChange: Function = (newMethodValue: Object) => {
 		const { methodValue } = this.state;
@@ -241,7 +241,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 		this.setState({
 			methodValue: methodValueN,
 		});
-	}
+	};
 
 	render(): React$Element<any> | null {
 		const {

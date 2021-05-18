@@ -185,25 +185,25 @@ export class GeoFenceContainer extends View<Props, State> {
 		this.setState({
 			forceLeftIconVisibilty,
 		});
-	}
+	};
 
 	getLeftIcon: Function = (CS: string): ?string => {
 		const SCNS = ['AddEditGeoFence', 'EditGeoFenceAreaFull'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
-	}
+	};
 
 	getLeftIconPressAction: Function = (CS: string): Function => {
 		const EXSCNS = [];
 		return EXSCNS.indexOf(CS) === -1 ? undefined : this.closeAdd433MHz;
-	}
+	};
 
 	closeAdd433MHz: Function = () => {
-	}
+	};
 
 	shouldShowPoster: Function = (CS: string): Function => {
 		const EXSCNS = ['AddEditGeoFence'];
 		return EXSCNS.indexOf(CS) === -1;
-	}
+	};
 
 	isEditMode: Function = (): boolean => {
 		const {
@@ -211,7 +211,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		} = this.props;
 		const { isEditMode = false } = route.params || {};
 		return isEditMode;
-	}
+	};
 
 	onValueChange: Function = (enableGeoFence: boolean) => {
 		const {
@@ -263,12 +263,12 @@ export class GeoFenceContainer extends View<Props, State> {
 				actions.showToast(messageOnFail);
 			});
 		}
-	}
+	};
 
 	clearOpenCaveTimeout: Function = () => {
 		clearTimeout(this.openCaveTimeout);
 		this.openCaveTimeout = null;
-	}
+	};
 
 	onPressLogo: Function = () => {
 		this.pointsToHiddenCave++;
@@ -285,7 +285,7 @@ export class GeoFenceContainer extends View<Props, State> {
 			this.pointsToHiddenCave = 0;
 			this.props.navigation.navigate('AdvancedSettings');
 		}
-	}
+	};
 
 	setIsHelpVisible: Function = (isHelpVisible: boolean) => {
 		if (isHelpVisible) {
@@ -296,11 +296,11 @@ export class GeoFenceContainer extends View<Props, State> {
 		this.setState({
 			isHelpVisible,
 		});
-	}
+	};
 
 	showHelp: Function = () => {
 		this.setIsHelpVisible(true);
-	}
+	};
 
 	render(): Object {
 		const {
@@ -484,7 +484,7 @@ export class GeoFenceContainer extends View<Props, State> {
 				backgroundColor: 'transparent',
 			},
 		};
-	}
+	};
 }
 
 export const mapStateToProps = (store: Object): Object => {

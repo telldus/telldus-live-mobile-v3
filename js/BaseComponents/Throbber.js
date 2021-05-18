@@ -48,7 +48,7 @@ export default class Throbber extends Component<Props, null> {
 
 	static defaultProps: DefaultProps = {
 		throbSpeed: 10,
-	}
+	};
 
 	constructor(props: Props) {
 		super(props);

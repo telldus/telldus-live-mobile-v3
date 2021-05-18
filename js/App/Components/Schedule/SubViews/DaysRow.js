@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { Row, View } from '../../../../BaseComponents';
 import Day from './Day';

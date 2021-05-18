@@ -60,7 +60,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 			changeTemp: true,
 		};
 		this.props.onChange(newMethValue);
-	}
+	};
 
 	onPressTwo: Function = () => {
 		const { methodValue } = this.props;
@@ -70,7 +70,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 			changeTemp: false,
 		};
 		this.props.onChange(newMethValue);
-	}
+	};
 
 	onPressThree: Function = () => {
 		const { methodValue } = this.props;
@@ -80,7 +80,7 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 			changeTemp: true,
 		};
 		this.props.onChange(newMethValue);
-	}
+	};
 
 	render(): React$Element<any> | null {
 		const {

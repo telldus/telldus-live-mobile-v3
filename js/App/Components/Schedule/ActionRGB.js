@@ -106,7 +106,7 @@ export default class ActionRGB extends View<null, Props, State> {
 		this.setState({
 			methodValue,
 		});
-	}
+	};
 
 	render(): React$Element<any> | null {
 		const {
