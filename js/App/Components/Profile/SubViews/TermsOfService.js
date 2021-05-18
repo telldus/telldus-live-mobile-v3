@@ -59,7 +59,7 @@ const TermsOfService = (props: Object): Object => {
 	} = getStyles(layout);
 
 	function onPressPP() {
-		if (!netInfo.isConnected) {
+		if (netInfo.isConnected === null || !netInfo.isConnected) {
 			showDialogue(i18n.privacyPolicy);
 			return;
 		}
