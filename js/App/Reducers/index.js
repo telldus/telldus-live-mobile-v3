@@ -44,7 +44,7 @@ const config = {
 	migrate: migrations,
 };
 
-module.exports = persistCombineReducers(config, {
+module.exports = (persistCombineReducers(config, {
 	navigation: Navigation,
 	user: User,
 	liveApi: LiveApi,
@@ -54,4 +54,4 @@ module.exports = persistCombineReducers(config, {
 	jobsList,
 	fences,
 	geoFence,
-});
+}): Object);

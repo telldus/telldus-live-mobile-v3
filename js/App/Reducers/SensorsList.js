@@ -76,7 +76,7 @@ const defaultSensorSettings = (state: Object = {}, action: Object): State => {
 	return state;
 };
 
-export default combineReducers({
+export default (combineReducers({
 	defaultSensorSettings,
-});
+}): Object);
 

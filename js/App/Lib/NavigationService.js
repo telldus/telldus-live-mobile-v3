@@ -28,11 +28,11 @@ import {
 
 import shouldUpdate from './shouldUpdate';
 
-const navigationRef = React.createRef<any>();
-const isReadyRef = React.createRef<any>();
+const navigationRef = (React.createRef<any>(): Object);
+const isReadyRef = (React.createRef<any>(): Object);
 
-const navigationRefPrelogin = React.createRef<any>();
-const isReadyRefPrelogin = React.createRef<any>();
+const navigationRefPrelogin = (React.createRef<any>(): Object);
+const isReadyRefPrelogin = (React.createRef<any>(): Object);
 /**
  *
  * Use this method inside any component that does not have the 'navigation' property, where you want to navigate to any registered

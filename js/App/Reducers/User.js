@@ -64,6 +64,16 @@ export type State = {
 	visibilityEula: boolean,
 };
 
+const phonesListInit: Object = {};
+const subscriptionsInit: Object = {};
+const playServicesInfoInit: Object = {};
+const firebaseRemoteConfigInit: Object = {};
+const accountsInit: Object = {};
+const iapTransactionConfigInit: Object = {};
+const socialAuthConfigInit: Object = {};
+const iapProductsInit: Array<Object> = [];
+const iapAvailablePurchasesInit: Array<Object> = [];
+
 export const initialState = {
 	accessToken: false,
 	isTokenValid: false,
@@ -77,24 +87,24 @@ export const initialState = {
 	osVersion: '',
 	deviceName: '',
 	deviceModel: '',
-	phonesList: {}, // Included in v3.9, and not in migrations, make sure to supply default value while using this prop.
-	subscriptions: {}, // Included in v3.12, and not in migrations, make sure to supply default value while using this prop.
+	phonesList: phonesListInit, // Included in v3.9, and not in migrations, make sure to supply default value while using this prop.
+	subscriptions: subscriptionsInit, // Included in v3.12, and not in migrations, make sure to supply default value while using this prop.
 	hasVisitedCampaign: false,
 	visibilityProExpireHeadsup: 'show',
 	generatePushError: '',
-	playServicesInfo: {},
-	firebaseRemoteConfig: {},
-	accounts: {},
+	playServicesInfo: playServicesInfoInit,
+	firebaseRemoteConfig: firebaseRemoteConfigInit,
+	accounts: accountsInit,
 	userId: '',
 	activeDashboardId: DEFAULT_DASHBOARD_ID,
-	iapTransactionConfig: {},
-	iapProducts: [],
-	iapAvailablePurchases: [],
+	iapTransactionConfig: iapTransactionConfigInit,
+	iapProducts: iapProductsInit,
+	iapAvailablePurchases: iapAvailablePurchasesInit,
 	switchAccountConf: {
 		showAS: false,
 		isLoggingOut: false,
 	},
-	socialAuthConfig: {},
+	socialAuthConfig: socialAuthConfigInit,
 	visibilityEula: false,
 };
 
@@ -590,7 +600,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 	return state;
 }
 
-export const getUserProfile = createSelector(
+export const getUserProfile: Object = createSelector(
 	[({ user }: Object): Object => user.userProfile],
 	(userProfile: Object): Object => userProfile || {
 		firstname: '',

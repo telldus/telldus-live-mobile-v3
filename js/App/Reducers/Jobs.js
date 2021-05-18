@@ -156,6 +156,6 @@ const userOptions = (state: StateUserOptions = initialState, action: Object): St
 	return state;
 };
 
-export default combineReducers({
+export default (combineReducers({
 	userOptions,
-});
+}): Object);
