@@ -27,9 +27,6 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
-import {
-	AppleAuthError,
-} from '@invertase/react-native-apple-authentication';
 import { appleAuth, AppleButton } from '@invertase/react-native-apple-authentication';
 const jwtDecode = require('jwt-decode');
 
