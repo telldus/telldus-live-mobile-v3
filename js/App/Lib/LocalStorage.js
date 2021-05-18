@@ -53,18 +53,18 @@ export default class TelldusLocalStorage {
 		this.performUpdateActions();
 	}
 
-	performUpdateActions = async () => {
+	performUpdateActions: Function = async () => {
 		await this.dropOldDeviceHistoryTable();
 	}
 
-	dropOldDeviceHistoryTable = (): Promise<any> => {
+	dropOldDeviceHistoryTable: Function = (): Promise<any> => {
 		return this.loadDatabase().then((DB: Object): any => {
 			return db.executeSql('DROP TABLE IF EXISTS DeviceHistory');
 		}).catch((error: Object) => {
 		});
 	}
 
-	loadDatabase = (): Promise<any> => {
+	loadDatabase: Function = (): Promise<any> => {
 		return SQLite.openDatabase(databaseName, databaseVersion, databaseDisplayName, databaseSize).then((DB: Object): Object => {
 			db = DB;
 			return DB;
@@ -100,7 +100,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	populateDataDeviceHistory = (data: Object, deviceId: string): Promise<any> => {
+	populateDataDeviceHistory: Function = (data: Object, deviceId: string): Promise<any> => {
 
 		let insertQuery = this.prepareInsertQueryDeviceHistory(data, deviceId);
 
@@ -165,7 +165,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	queryDeviceHistory = (id: number): Promise<any> => {
+	queryDeviceHistory: Function = (id: number): Promise<any> => {
 		return db.executeSql(`SELECT * FROM DeviceHistory1_1 WHERE ${id} = deviceId ORDER BY ts DESC`).then(([results]: Array<any>): Array<any> => {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
@@ -207,7 +207,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	populateDataSensorHistory = (data: Object, sensorId: string): Promise<any> => {
+	populateDataSensorHistory: Function = (data: Object, sensorId: string): Promise<any> => {
 
 		let insertQuery = this.prepareInsertQuerySensorHistory(data, sensorId);
 		return db.sqlBatch([
@@ -259,7 +259,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	querySensorHistory = ({ id, type, scale, from, to }: SensorHistoryQueryParams): Promise<any> => {
+	querySensorHistory: Function = ({ id, type, scale, from, to }: SensorHistoryQueryParams): Promise<any> => {
 		return db.executeSql(`SELECT ts, value FROM SensorHistory WHERE ${id} = sensorId AND "${type}" = type`
 		+ ` AND "${scale}" = scale AND ts >= ${from} AND ts <= ${to} ORDER BY ts DESC`).then(([results]: Array<any>): Array<any> => {
 			let len = results.rows.length, data = [];
@@ -274,7 +274,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	getSensorTypes = (id: number, formatMessage: Function): Promise<any> => {
+	getSensorTypes: Function = (id: number, formatMessage: Function): Promise<any> => {
 		return this.loadDatabase().then((DB: Object): Promise<any> => {
 			return this.querySensorTypes(id, formatMessage);
 		}).catch((error: Object) => {
@@ -284,7 +284,7 @@ export default class TelldusLocalStorage {
 
 	// 'formatMessage' is passed in this manner and data 'row' is manipulated this manner to avoid
 	// an extra iteration over the data again after query.
-	querySensorTypes = (id: number, formatMessage?: Function): Promise<any> => {
+	querySensorTypes: Function = (id: number, formatMessage?: Function): Promise<any> => {
 		return db.executeSql(`SELECT DISTINCT type, scale FROM SensorHistory WHERE ${id} = sensorId`).then(([results]: Array<any>): Array<any> => {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
@@ -304,7 +304,7 @@ export default class TelldusLocalStorage {
 
 
 	// COMMON
-	getLatestTimestamp = (type: string, id: number): Promise<any> => {
+	getLatestTimestamp: Function = (type: string, id: number): Promise<any> => {
 		let tableName = '', uniqueParam = '';
 		if (type === 'device') {
 			tableName = 'DeviceHistory1_1';
@@ -320,7 +320,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	queryLatestTimestamp = (tableName: string, uniqueParam: string, id: number): Promise<any> => {
+	queryLatestTimestamp: Function = (tableName: string, uniqueParam: string, id: number): Promise<any> => {
 		return db.executeSql(`SELECT MAX(ts) as tsMax from ${tableName} WHERE ${id} = ${uniqueParam}`).then(([results]: Array<any>): Array<any> | null => {
 			if (results.rows && results.rows.item(0)) {
 				return results.rows.item(0);
@@ -401,7 +401,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	queryGeoFenceEvents = (): Promise<any> => {
+	queryGeoFenceEvents: Function = (): Promise<any> => {
 		return this.loadDatabase().then((DB: Object): Promise<any> => {
 			return db.executeSql('SELECT * FROM GeoFenceEvents ORDER BY inAppTime DESC').then(([results]: Array<any>): Array<any> => {
 				let len = results.rows.length, data = [];
@@ -418,14 +418,14 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	dropTableGeoFenceEvents = (): Promise<any> => {
+	dropTableGeoFenceEvents: Function = (): Promise<any> => {
 		return this.loadDatabase().then((DB: Object): any => {
 			return db.executeSql('DROP TABLE IF EXISTS GeoFenceEvents');
 		}).catch((error: Object) => {
 		});
 	}
 
-	closeDatabase = () => {
+	closeDatabase: Function = () => {
 		if (db) {
 			db.close();
 		}

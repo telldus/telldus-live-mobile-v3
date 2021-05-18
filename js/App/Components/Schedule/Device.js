@@ -107,7 +107,7 @@ export default class Device extends View<void, Props, State> {
 		return nextProps.currentScreen === 'Device';
 	}
 
-	onRefresh = () => {
+	onRefresh: Function = () => {
 		this.setState({
 			refreshing: true,
 		});
@@ -122,7 +122,7 @@ export default class Device extends View<void, Props, State> {
 		});
 	};
 
-	selectDevice = (row: Object) => {
+	selectDevice: Function = (row: Object) => {
 		const { actions, navigation, route = {} } = this.props;
 		navigation.navigate({
 			name: row.supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',

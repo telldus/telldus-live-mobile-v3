@@ -157,7 +157,7 @@ export class AddSensorContainer extends View<Props, State> {
 		return screens.indexOf(currentScreen) !== -1;
 	}
 
-	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
+	onChildDidMount: Function = (h1: string, h2: string, infoButton?: Object | null = null) => {
 		this.setState({
 			h1,
 			h2,
@@ -165,13 +165,13 @@ export class AddSensorContainer extends View<Props, State> {
 		});
 	};
 
-	toggleLeftIconVisibilty = (forceLeftIconVisibilty: boolean) => {
+	toggleLeftIconVisibilty: Function = (forceLeftIconVisibilty: boolean) => {
 		this.setState({
 			forceLeftIconVisibilty,
 		});
 	}
 
-	getLeftIcon = (CS: string): ?string => {
+	getLeftIcon: Function = (CS: string): ?string => {
 		if (CS === 'SelectSensorType') {
 			const {
 				route,

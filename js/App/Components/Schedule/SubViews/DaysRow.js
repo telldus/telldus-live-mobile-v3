@@ -46,15 +46,7 @@ type DefaultProps = {
 
 export default class DaysRow extends View<DefaultProps, Props, null> {
 
-	static propTypes = {
-		selectedDays: PropTypes.arrayOf(PropTypes.string).isRequired,
-		onDayPress: PropTypes.func,
-		containerStyle: PropTypes.object,
-		editMode: PropTypes.bool,
-		onPress: PropTypes.func,
-	};
-
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		editMode: false,
 	};
 
