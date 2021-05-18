@@ -118,7 +118,7 @@
     "reselect": "~4.0.0",
     "rn-fetch-blob": "git+https://github.com/joltup/rn-fetch-blob.git#9110ef295c42139407607f425ac2d46a5866e872",
     "seamless-immutable": "^7.1.4",
-    "sp-react-native-in-app-updates": "^0.1.1",
+    "sp-react-native-in-app-updates": "^1.1.0",
     "svgs": "~4.1.1",
     "url": "~0.11.0",
     "victory-native": "^35.3.3"
