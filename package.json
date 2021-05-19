@@ -93,7 +93,7 @@
     "react-native-sensitive-info": "https://github.com/telldus/react-native-sensitive-info.git",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-simple-toast": "1.1.3",
-    "react-native-slider": "~0.11.0",
+    "react-native-slider": "https://github.com/telldus/react-native-slider",
     "react-native-snackbar": "^2.4.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-sqlite-storage": "^5.0.0",
