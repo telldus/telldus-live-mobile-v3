@@ -295,12 +295,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 			openDrawer: this.openDrawer,
 			drawer,
 			screenReaderEnabled,
+			toggleDialogueBox,
+			intl,
 		};
 
 		let screenProps = {
-			intl,
 			appLayout,
-			toggleDialogueBox,
 			hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
 			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCaptureAddDevice,

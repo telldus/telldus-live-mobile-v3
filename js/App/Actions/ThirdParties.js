@@ -64,13 +64,14 @@ const updateAllMetWeatherDbTiles = (): ThunkAction => {
 				latitude,
 				longitude,
 				timeKey,
+				selectedType,
 			} = metWeatherByIdInCurrentDb[metDbId];
 
 			const currentDBIdWeatherData = weather[metDbId] || {};
-			if (currentDBIdWeatherData.providerId === MET_ID) {
+			if (currentDBIdWeatherData.providerId === MET_ID || selectedType === MET_ID) {
 				const ts = new Date().getTime();
 				const diff = currentDBIdWeatherData.lastFetchTimestamp ? Math.floor((ts - currentDBIdWeatherData.lastFetchTimestamp) / 60000) : MET_WEATHER_EXPIRE_TIME + 1;
-				if (diff > MET_WEATHER_EXPIRE_TIME) {
+				if (diff > MET_WEATHER_EXPIRE_TIME || userDbsAndMetWeatherById.hasLoggedOut) {
 					dispatch(getWeatherInfo(url, {
 						lon: longitude,
 						lat: latitude,

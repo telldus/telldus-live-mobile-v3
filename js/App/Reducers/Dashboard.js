@@ -58,7 +58,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 
 	let deviceItems = [], _deviceItems = {};
-	if (devices && !isEmpty(devices.byId)) {
+	if (devices && !isEmpty(devices.byId) && !userDbsAndDeviceIds.hasLoggedOut) {
 		deviceIdsInCurrentDb.map((deviceId: number) => {
 			let device = devices.byId[deviceId];
 			if (device) {
@@ -102,7 +102,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
 
 	let sensorItems = [], _sensorItems = {};
-	if (sensors && !isEmpty(sensors.byId)) {
+	if (sensors && !isEmpty(sensors.byId) && !userDbsAndSensorIds.hasLoggedOut) {
 		sensorIdsInCurrentDb.map((sensorId: number) => {
 			let sensor = sensors.byId[sensorId] || {};
 			let { clientId, name } = sensor;
@@ -164,89 +164,91 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 	const providers = getSupportedWeatherProviders(intl.formatMessage);
 
 	let metItems = [], _metItems = {};
-	Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
-		const {
-			id,
-			selectedAttributes = {},
-			name,
-			timeKey,
-			selectedType,
-			latitude,
-			longitude,
-		} = metWeatherByIdInCurrentDb[key] || {};
-		const {
-			timeAndInfo: {
-				listData,
-				meta: _meta,
-			},
-		} = getMetWeatherDataAttributes(weather, id, selectedType, false, {
-			formatMessage: () => {},
-			timeKey,
-		});
-
-		const {
-			supportedScales = {},
-		} = providers[selectedType] || {};
-
-		let _data = {};
-		for (let i = 0; i < listData.length; i++) {
-			if (timeKey === listData[i].key) {
-				_data = listData[i].data;
-				break;
-			}
-		}
-		if (_data.instant && _data.instant.details) {
-			const attributes = Object.keys(selectedAttributes).map((selectedAttribute: Object): Object => {
-				const {
-					property,
-					label,
-				} = selectedAttributes[selectedAttribute];
-				let unit = _meta.units[property];
-				let value = _data.instant.details[property];
-
-				const {
-					label: l,
-					name: n,
-					unitsConversion = {},
-				} = supportedScales[property] || {};
-				const convertor = unitsConversion[unit];
-				if (convertor) {
-					const result = convertor(value) || {};
-					unit = result.unit;
-					value = result.value;
-				}
-
-				return {
-					property,
-					label: l || label,
-					value,
-					unit,
-					name: n,
-				};
-			});
-			const data = {
+	if (!userDbsAndMetWeatherById.hasLoggedOut) {
+		Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
+			const {
 				id,
+				selectedAttributes = {},
 				name,
-				data: attributes,
-				meta: _meta,
+				timeKey,
+				selectedType,
 				latitude,
 				longitude,
-			};
-			metItems.push({
-				objectType: MET_ID,
-				key: id,
-				data,
+			} = metWeatherByIdInCurrentDb[key] || {};
+			const {
+				timeAndInfo: {
+					listData,
+					meta: _meta,
+				},
+			} = getMetWeatherDataAttributes(weather, id, selectedType, false, {
+				formatMessage: () => {},
+				timeKey,
 			});
-			_metItems = {
-				..._metItems,
-				[`${id}${MET_ID}`]: {
+
+			const {
+				supportedScales = {},
+			} = providers[selectedType] || {};
+
+			let _data = {};
+			for (let i = 0; i < listData.length; i++) {
+				if (timeKey === listData[i].key) {
+					_data = listData[i].data;
+					break;
+				}
+			}
+			if (_data.instant && _data.instant.details) {
+				const attributes = Object.keys(selectedAttributes).map((selectedAttribute: Object): Object => {
+					const {
+						property,
+						label,
+					} = selectedAttributes[selectedAttribute];
+					let unit = _meta.units[property];
+					let value = _data.instant.details[property];
+
+					const {
+						label: l,
+						name: n,
+						unitsConversion = {},
+					} = supportedScales[property] || {};
+					const convertor = unitsConversion[unit];
+					if (convertor) {
+						const result = convertor(value) || {};
+						unit = result.unit;
+						value = result.value;
+					}
+
+					return {
+						property,
+						label: l || label,
+						value,
+						unit,
+						name: n,
+					};
+				});
+				const data = {
+					id,
+					name,
+					data: attributes,
+					meta: _meta,
+					latitude,
+					longitude,
+				};
+				metItems.push({
 					objectType: MET_ID,
 					key: id,
 					data,
-				},
-			};
-		}
-	});
+				});
+				_metItems = {
+					..._metItems,
+					[`${id}${MET_ID}`]: {
+						objectType: MET_ID,
+						key: id,
+						data,
+					},
+				};
+			}
+		});
+	}
 
 	const { sortingDB } = defaultSettings;
 	let orderedList = [...deviceItems, ...sensorItems, ...metItems];

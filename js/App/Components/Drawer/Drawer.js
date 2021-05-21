@@ -55,6 +55,9 @@ import {
 	capitalize,
 	hasStatusBar,
 } from '../../Lib';
+import {
+	eventReset,
+} from '../../Actions/Event';
 
 import Theme from '../../Theme';
 
@@ -210,6 +213,18 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		}
 	}
 
+	manageEvents = () => {
+		const {
+			closeDrawer,
+			dispatch,
+		} = this.props;
+		closeDrawer();
+		dispatch(eventReset());
+		navigate('EventsNavigator', {
+			screen: 'EventsList',
+		});
+	}
+
 	render(): Object {
 		const {
 			gateways,
@@ -326,6 +341,20 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 							}}
 							name={'plus-circle'}/>}
 						onPressLink={addNewLocation}/>
+					<SettingsLink
+						styles={{
+							...styles,
+							linkCoverStyle: styles.linkCoverStyleAddNewGateway,
+						}}
+						text={capitalize('Manage events')}
+						iconComponent={<Icon
+							level={23}
+							style={{
+								...styles.linkIconStyle,
+								paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
+							}}
+							name={'plus-circle'}/>}
+						onPressLink={this.manageEvents}/>
 					<Banner/>
 				</View>
 			</ScrollView>

@@ -48,6 +48,7 @@ type Props = {
     appLayout: Object,
     intl: Object,
     sensorId: string,
+	hasPreviousDB: boolean,
 };
 
 const AddToDashboardScale = memo<Object>((props: Props): Object => {
@@ -57,6 +58,7 @@ const AddToDashboardScale = memo<Object>((props: Props): Object => {
 		appLayout,
 		intl,
 		sensorId,
+		hasPreviousDB,
 	} = props;
 	const {
 		formatMessage,
@@ -79,6 +81,9 @@ const AddToDashboardScale = memo<Object>((props: Props): Object => {
 
 	const dispatch = useDispatch();
 	const onValueChange = useCallback((id: string, value: boolean) => {
+		if (hasPreviousDB) {
+			return;
+		}
 		const sd = Object.keys(sensorData);
 		if (sd.length === 1 && !value) {
 			return;
@@ -98,7 +103,7 @@ const AddToDashboardScale = memo<Object>((props: Props): Object => {
 				},
 			},
 		}));
-	}, [dispatch, sensorData, sensorId]);
+	}, [dispatch, sensorData, sensorId, hasPreviousDB]);
 
 	const {
 		contentCoverStyle,

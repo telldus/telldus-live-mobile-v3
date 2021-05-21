@@ -65,6 +65,7 @@ import ZWaveFunctions from '../../../Lib/ZWaveFunctions';
 
 import {
 	DeviceActionDetails,
+	DeviceManualUI,
 } from './SubViews';
 import Theme from '../../../Theme';
 
@@ -190,6 +191,7 @@ class OverviewTab extends View<Props, null> {
 					image,
 					lang,
 					modelName,
+					manual,
 				},
 				vendorInfo: {
 					name,
@@ -200,18 +202,23 @@ class OverviewTab extends View<Props, null> {
 				H1: prepare433ModelName(this.props.locale, lang, modelName),
 				H2: name,
 				fromJS: true,
+				manual,
+				is433: true,
 			};
 		}
 		const {
 			Image,
 			Name,
 			Brand,
+			ManualUrl,
 		} = zwaveInfo;
 		return {
 			image: Image,
 			H1: Name,
 			H2: Brand,
 			fromJS: false,
+			manual: ManualUrl,
+			is433: false,
 		};
 	}
 
@@ -248,6 +255,10 @@ class OverviewTab extends View<Props, null> {
 		};
 
 		const deviceInfo = this.getDeviceInfo(device);
+		const {
+			manual,
+			is433,
+		} = deviceInfo;
 
 		const styles = this.getStyles(appLayout);
 
@@ -303,9 +314,15 @@ class OverviewTab extends View<Props, null> {
 						clientId={clientId}
 						gatewayTimezone={gatewayTimezone}/>
 				)}
-				{!!nodeInfo.cmdClasses && (
+				{!!nodeInfo.cmdClasses && manual && !is433 && (
 					<TelldusInfo
-						id={device.id}/>
+						manualUrl={manual}/>
+				)}
+				{!!manual && is433 && (
+					<DeviceManualUI
+						manualUrl={deviceInfo.manual}
+						fileName={deviceInfo.manual}
+					/>
 				)}
 				{!!nodesRelation && (
 					<NodeRelations

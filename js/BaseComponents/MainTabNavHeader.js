@@ -43,6 +43,8 @@ import ThemedImage from './ThemedImage';
 
 import {
 	resetSchedule,
+	usePreviousDb,
+	clearPreviousDb,
 } from '../App/Actions';
 import {
 	useCampaignAction,
@@ -66,6 +68,7 @@ type Props = {
     openDrawer?: Function, // Required in Android
     screenReaderEnabled?: boolean,
 	drawer?: boolean, // Required in Android
+	toggleDialogueBox: Function,
 
 	addNewDevice: Function,
 	addNewSensor: Function,
@@ -79,9 +82,13 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		openDrawer,
 		addNewDevice,
 		addNewSensor,
+		toggleDialogueBox,
 	} = props;
 
-	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
+	const {
+		layout: appLayout,
+		defaultSettings = {},
+	} = useSelector((state: Object): Object => state.app);
 	const { screen } = useSelector((state: Object): Object => state.navigation);
 	const { didFetch: gDidFetch, allIds: gAllIds } = useSelector((state: Object): Object => state.gateways);
 	const { didFetch: dDidFetch, allIds: dAllIds } = useSelector((state: Object): Object => state.devices);
@@ -89,6 +96,21 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 	const hasGateways = gDidFetch && gAllIds.length > 0;
 	const hasDevices = dDidFetch && dAllIds.length > 0;
 	const hasSensors = sDidFetch && sAllIds.length > 0;
+
+	const {
+		activeDashboardId,
+	} = defaultSettings;
+	const { userId } = useSelector((state: Object): Object => state.user);
+	const { deviceIds = {}, sensorIds = {}, metWeatherIds = {}} = useSelector((state: Object): Object => state.dashboard);
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+	const userDbsAndDeviceIds = deviceIds[userId] || {};
+	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+	const userDbsAndMetWeathersIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeathersIds[activeDashboardId] || [];
+	const hasLoggedOutPrevDb = userDbsAndSensorIds.hasLoggedOut || userDbsAndDeviceIds.hasLoggedOut || userDbsAndMetWeathersIds.hasLoggedOut;
+	const isDBEmpty = (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0);
+	const hasPreviousDB = !isDBEmpty && hasLoggedOutPrevDb;
 
 	const {
 		style,
@@ -170,8 +192,40 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 	}, [dispatch]);
 
 	const editDb = useCallback(() => {
+		if (hasPreviousDB) {
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: formatMessage(i18n.prevDBHeader),
+				text: formatMessage(i18n.prevDBBody),
+				showPositive: true,
+				showNegative: true,
+				positiveText: formatMessage(i18n.prevDBPos),
+				negativeText: formatMessage(i18n.prevDBNeg),
+				onPressPositive: () => {
+					// eslint-disable-next-line react-hooks/rules-of-hooks
+					dispatch(usePreviousDb());
+				},
+				closeOnPressPositive: true,
+				onPressNegative: () => {
+					dispatch(clearPreviousDb());
+				},
+				closeOnPressNegative: true,
+				notificationModalFooterStyle: {
+					flexDirection: 'column',
+					justifyContent: 'flex-end',
+					alignItems: 'flex-end',
+				},
+				notificationModalFooterPositiveTextCoverStyle: {
+					paddingRight: 10,
+					marginRight: 5,
+				},
+			});
+			return;
+		}
 		navigate('SelectTypeScreen');
-	}, []);
+	}, [dispatch, formatMessage, hasPreviousDB, toggleDialogueBox]);
 
 	const rightButton = useMemo((): Object | null => {
 
@@ -235,6 +289,7 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		screen,
 		hasGateways,
 		appLayout,
+		hasPreviousDB,
 		hasDevices,
 		hasSensors,
 		newSchedule,

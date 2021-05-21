@@ -22,10 +22,21 @@
 
 'use strict';
 
+import groupBy from 'lodash/groupBy';
+import orderBy from 'lodash/orderBy';
+import reduce from 'lodash/reduce';
+import isEmpty from 'lodash/isEmpty';
 import { Linking } from 'react-native';
 
 import { utils } from 'live-shared-data';
 const { deviceUtils, addDeviceUtils, addDevice433MHz } = utils;
+
+import {
+	methods,
+} from '../../Constants';
+
+import { hasTokenExpired } from '../Lib/LocalControl';
+import Theme from '../Theme';
 import i18n from '../Translations/common';
 
 function prepareNoZWaveSupportDialogueData(formatMessage: (Object) => string = (): string => '', locale: string): Object {
@@ -95,6 +106,139 @@ const prepare433ModelName = (locale: string, lang: Array<Object> = [], modelName
 	return name;
 };
 
+const prepareDevicesWithNewStateValues = (devices: Object, selectedDevices: Object = {}): Object => {
+	const updatedDevices = {};
+	Object.keys(selectedDevices).forEach((dId: string) => {
+		const { deviceId, stateValues, method } = selectedDevices[dId];
+		if (devices[deviceId]) {
+			const { stateValues: stateValuesP, ...others } = devices[deviceId] || {};
+			let newStateValues = {...stateValuesP} || {};
+			if (stateValues) {
+				Object.keys(stateValues).forEach((k: string) => {
+					const methodS = methods[k];
+					if (methodS === 'THERMOSTAT') {
+						const { setpoint, mode } = stateValues[k];
+						const { setpoint: sp = {} } = newStateValues[methodS];
+						let newSetpoint = {
+							...sp,
+							...setpoint,
+						};
+						newStateValues[methodS] = {
+							setpoint: newSetpoint,
+							mode,
+						};
+
+					} else {
+						newStateValues[methodS] = stateValues[k];
+					}
+				});
+			}
+			updatedDevices[deviceId] = {
+				...others,
+				stateValues: newStateValues,
+				isInState: methods[method],
+			};
+		}
+	});
+	return {
+		...devices,
+		...updatedDevices,
+	};
+};
+
+const prepareSectionRow = (paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> => {
+	let modifiedData = paramOne.map((item: Object, index: number): Object => {
+		let gateway = gateways[item.clientId];
+		if (gateway) {
+			const { localKey, online, websocketOnline } = gateway;
+			const {
+				address,
+				key,
+				ttl,
+				supportLocal,
+			} = localKey;
+			const tokenExpired = hasTokenExpired(ttl);
+			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
+			return { ...item, isOnline: online, websocketOnline, supportLocalControl };
+		}
+		return { ...item, isOnline: false, websocketOnline: false, supportLocalControl: false };
+	});
+	let result = groupBy(modifiedData, (items: Object): Array<any> => {
+		let gateway = gateways[items.clientId];
+		return gateway && gateway.id;
+	});
+	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
+		acc.push({
+			data: next,
+			header: index,
+		});
+		return acc;
+	}, []);
+	return orderBy(result, [(item: Object): any => {
+		const { name = '' } = gateways[item.header] || {};
+		return name.toLowerCase();
+	}], ['asc']);
+};
+
+const parseDevicesForListView = (devices: Object = {}, gateways: Object = {}, {
+	previousSelectedDevices = {},
+	selectedDevices = {},
+	showPreFilledOnTop,
+}: Object = {}): Object => {
+	let devicesList = [];
+	const GeoFenceDevicesHeaderRow = {
+		header: Theme.Core.GeoFenceDevicesHeaderKey,
+		headerText: i18n.devices,
+		data: [],
+	};
+	devicesList.push(GeoFenceDevicesHeaderRow);
+	let isGatwaysEmpty = isEmpty(gateways);
+	let isDevicesEmpty = isEmpty(devices);
+	if (!isGatwaysEmpty && !isDevicesEmpty) {
+		let preFilledDevices = {}, otherDevices = {};
+		Object.keys(devices).forEach((did: string) => {
+			if (showPreFilledOnTop && previousSelectedDevices[did] && selectedDevices[did]) {
+				preFilledDevices[did] = devices[did];
+			} else {
+				otherDevices[did] = devices[did];
+			}
+		});
+		let _preFilledDevices = orderBy(preFilledDevices, [(device: Object): any => {
+			let { name = '' } = device;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
+		}], ['asc']);
+		_preFilledDevices = _preFilledDevices.filter((item: Object): boolean => {
+			const { supportedMethods = {}} = item;
+			return Object.keys(supportedMethods).length > 0;
+		});
+		let _otherDevices = orderBy(otherDevices, [(device: Object): any => {
+			let { name = '' } = device;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
+		}], ['asc']);
+		_otherDevices = _otherDevices.filter((item: Object): boolean => {
+			const { supportedMethods = {}} = item;
+			return Object.keys(supportedMethods).length > 0;
+		});
+		devicesList.push(...prepareSectionRow([..._preFilledDevices, ..._otherDevices], gateways));
+	}
+	return devicesList;
+};
+
+const prepareDevicesDataWithCustomStateForList = (devices: Object, gateways: Object, {
+	showDevices,
+	previousSelectedDevices,
+	selectedDevices,
+	showPreFilledOnTop,
+}: Object): Array<Object> => {
+	return parseDevicesForListView(showDevices ? devices : {}, gateways, {
+		previousSelectedDevices,
+		selectedDevices,
+		showPreFilledOnTop,
+	});
+};
+
 module.exports = {
 	...deviceUtils,
 	...addDeviceUtils,
@@ -104,4 +248,6 @@ module.exports = {
 	openURL,
 	goToWebShop,
 	prepare433ModelName,
+	prepareDevicesWithNewStateValues,
+	prepareDevicesDataWithCustomStateForList,
 };

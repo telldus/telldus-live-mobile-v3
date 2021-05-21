@@ -61,6 +61,7 @@ type Props = {
 	offColorMultiplier: number,
 	onColorMultiplier: number,
 	preparedMainColorRgb: string,
+	showPalette?: boolean,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -153,6 +154,7 @@ class RGBButton extends View<Props, null> {
 			'onColorMultiplier',
 			'onPressOverride',
 			'preparedMainColorRgb',
+			'showPalette',
 		]);
 		if (propsChange) {
 			return true;
@@ -290,6 +292,7 @@ class RGBButton extends View<Props, null> {
 			onColorMultiplier,
 			disableActionIndicator,
 			preparedMainColorRgb,
+			showPalette = true,
 		} = this.props;
 		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -374,7 +377,7 @@ class RGBButton extends View<Props, null> {
 		return (
 			<View style={[styles.container, style]}>
 				{ offButton }
-				{!!showSlider && rgbPalette }
+				{!!showSlider && showPalette && rgbPalette }
 				{ onButton }
 			</View>
 		);

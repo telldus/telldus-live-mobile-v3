@@ -24,7 +24,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { addToDashboard, removeFromDashboard } from '../../../../Actions';
+import {
+	addToDashboard,
+	removeFromDashboard,
+	usePreviousDb,
+	clearPreviousDb,
+} from '../../../../Actions';
 
 import { View, IconTelldus } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
@@ -42,6 +47,10 @@ type Props = {
 	onSetIgnoreDevice: () => void,
 	isOpen: boolean,
 	style: Object,
+	hasPreviousDB: boolean,
+
+	dispatch: Function,
+	toggleDialogueBox: Function,
 };
 
 class DeviceHiddenRow extends View {
@@ -78,7 +87,50 @@ class DeviceHiddenRow extends View {
 
 	onStarSelected() {
 		const { id } = this.props.device;
-		const { deviceIds } = this.props;
+		const {
+			deviceIds,
+			hasPreviousDB,
+			toggleDialogueBox,
+			dispatch,
+			intl,
+		} = this.props;
+		const {
+			formatMessage,
+		} = intl;
+
+		if (hasPreviousDB) {
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: formatMessage(i18n.prevDBHeader),
+				text: formatMessage(i18n.prevDBBody),
+				showPositive: true,
+				showNegative: true,
+				positiveText: formatMessage(i18n.prevDBPos),
+				negativeText: formatMessage(i18n.prevDBNeg),
+				onPressPositive: () => {
+					// eslint-disable-next-line react-hooks/rules-of-hooks
+					dispatch(usePreviousDb());
+				},
+				closeOnPressPositive: true,
+				onPressNegative: () => {
+					dispatch(clearPreviousDb());
+				},
+				closeOnPressNegative: true,
+				notificationModalFooterStyle: {
+					flexDirection: 'column',
+					justifyContent: 'flex-end',
+					alignItems: 'flex-end',
+				},
+				notificationModalFooterPositiveTextCoverStyle: {
+					paddingRight: 10,
+					marginRight: 5,
+				},
+			});
+			return;
+		}
+
 		const isOnDB = deviceIds.indexOf(id) !== -1;
 
 		if (isOnDB) {
@@ -103,9 +155,15 @@ class DeviceHiddenRow extends View {
 	}
 
 	render(): Object {
-		const { deviceIds, isOpen, device, style } = this.props;
+		const {
+			deviceIds,
+			isOpen,
+			device,
+			style,
+			hasPreviousDB,
+		} = this.props;
 		const { id, ignored } = device;
-		const isOnDB = deviceIds.indexOf(id) !== -1;
+		const isOnDB = deviceIds.indexOf(id) !== -1 && !hasPreviousDB;
 
 		let icon = isOnDB ? 'favorite' : 'favorite-outline';
 		let iconHide = ignored ? 'hidden-toggled' : 'hidden';
@@ -163,6 +221,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		addToDashboard: (id: number): any => dispatch(addToDashboard('device', id)),
 		removeFromDashboard: (id: number): any => dispatch(removeFromDashboard('device', id)),
+		dispatch,
 	};
 }
 
@@ -176,12 +235,21 @@ function mapStateToProps(store: Object): Object {
 
 	const { activeDashboardId } = defaultSettings || {};
 
-	const { deviceIds = {} } = dashboard;
+	const { deviceIds = {}, sensorIds = {}, metWeatherIds = {}} = dashboard;
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+	const userDbsAndMetWeathersIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeathersIds[activeDashboardId] || [];
 	const userDbsAndDeviceIds = deviceIds[userId] || {};
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 
+	const hasLoggedOutPrevDb = userDbsAndSensorIds.hasLoggedOut || userDbsAndDeviceIds.hasLoggedOut || userDbsAndMetWeathersIds.hasLoggedOut;
+	const isDBEmpty = (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0);
+	const hasPreviousDB = !isDBEmpty && hasLoggedOutPrevDb;
+
 	return {
 		deviceIds: deviceIdsInCurrentDb,
+		hasPreviousDB,
 	};
 }
 

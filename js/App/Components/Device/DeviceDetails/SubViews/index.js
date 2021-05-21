@@ -27,6 +27,7 @@ import DeviceDetailsHeaderPoster from './DeviceDetailsHeaderPoster';
 import ReplaceFailedNode from './ReplaceFailedNode';
 import Device433EditModel from './Device433EditModel';
 import ChangeDevicetypeBlock from './ChangeDevicetypeBlock';
+import DeviceManualUI from './DeviceManualUI';
 
 module.exports = {
 	DeviceHistoryDetails,
@@ -36,4 +37,5 @@ module.exports = {
 	ReplaceFailedNode,
 	Device433EditModel,
 	ChangeDevicetypeBlock,
+	DeviceManualUI,
 };

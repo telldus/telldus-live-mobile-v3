@@ -24,7 +24,10 @@ let dayjs = require('dayjs');
 let _weekday = require('dayjs/plugin/weekday');
 dayjs.extend(_weekday);
 
-export const getWeekdays = (formatDate: Function): string[] => {
+import { utils } from 'live-shared-data';
+const { getDays } = utils;
+
+const getWeekdays = (formatDate: Function): string[] => {
 	let weekDays = [];
 	if (formatDate) {
 		for (let i = 1; i < 6; i++) {
@@ -37,7 +40,7 @@ export const getWeekdays = (formatDate: Function): string[] => {
 	return DAYS.slice(0, 5);
 };
 
-export const getWeekends = (formatDate: Function): string[] => {
+const getWeekends = (formatDate: Function): string[] => {
 	let weekends = [];
 	if (formatDate) {
 		for (let i = 6; i < 8; i++) {
@@ -49,28 +52,8 @@ export const getWeekends = (formatDate: Function): string[] => {
 	}
 	return DAYS.slice(5, 8);
 };
-// If passed 'formatDate' function from 'intl', will return formatted/translated weekdays.
-export const getSelectedDays = (storedSelectedDays: number[], formatDate?: Function | null = null): string[] => {
-	const selectedDays: string[] = [];
-	if (formatDate) {
-		for (let i = 0; i < storedSelectedDays.length; i++) {
-			let item = DAYS[storedSelectedDays[i] - 1];
-			if (item) {
-				let day = dayjs().weekday(storedSelectedDays[i]);
-				const weekday = formatDate(day, {weekday: 'long'});
-				selectedDays.push(weekday);
-			}
-		}
-	} else {
-		for (let i = 0; i < storedSelectedDays.length; i++) {
-			selectedDays.push(DAYS[storedSelectedDays[i] - 1]);
-		}
-	}
 
-	return selectedDays;
-};
-
-export const getTranslatableDays = (formatDate: Function): string[] => {
+const getTranslatableDays = (formatDate: Function): string[] => {
 	let weekDays = [];
 	for (let i = 1; i <= 7; i++) {
 		let day = dayjs().weekday(i);
@@ -80,7 +63,7 @@ export const getTranslatableDays = (formatDate: Function): string[] => {
 	return weekDays;
 };
 
-export const getTranslatableDayNames = (formatDate: Function, type: 'short' | 'long' = 'long'): string[] => {
+const getTranslatableDayNames = (formatDate: Function, type: 'short' | 'long' = 'long'): string[] => {
 	let weekNames = [];
 	for (let i = 0; i < 7; i++) {
 		const day = dayjs().weekday(i);
@@ -90,7 +73,7 @@ export const getTranslatableDayNames = (formatDate: Function, type: 'short' | 'l
 	return weekNames;
 };
 
-export const getTranslatableMonthNames = (formatDate: Function, type: 'short' | 'long' = 'long'): string[] => {
+const getTranslatableMonthNames = (formatDate: Function, type: 'short' | 'long' = 'long'): string[] => {
 	let monthNames = [];
 	for (let i = 0; i < 12; i++) {
 		const month = dayjs().month(i);
@@ -98,4 +81,13 @@ export const getTranslatableMonthNames = (formatDate: Function, type: 'short' | 
 		monthNames.push(monthName);
 	}
 	return monthNames;
+};
+
+module.exports = {
+	...getDays,
+	getWeekdays,
+	getWeekends,
+	getTranslatableDays,
+	getTranslatableDayNames,
+	getTranslatableMonthNames,
 };
