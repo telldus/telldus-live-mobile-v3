@@ -333,6 +333,7 @@ class DashboardTab extends View {
 		const {
 			dispatch,
 		} = this.props;
+		// eslint-disable-next-line react-hooks/rules-of-hooks
 		dispatch(usePreviousDb());
 	}
 
