@@ -107,7 +107,7 @@
     "react-native-udp": "git+https://github.com/telldus/react-native-udp",
     "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-webview": "^11.4.5",
+    "react-native-webview": "~10.3.3",
     "react-redux": "~7.2.4",
     "reconnecting-websocket": "^4.4.0",
     "redux": "~4.1.0",
