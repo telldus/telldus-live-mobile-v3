@@ -85,7 +85,7 @@ const TYPES = [
 	},
 ];
 
-const SelectTriggerType = React.memo<Object>((props: Props): Object => {
+const SelectTriggerType: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,

@@ -57,7 +57,6 @@ type State = {
 	h1: string,
 	h2: string,
 	infoButton: null | Object,
-	loading: boolean,
 	keyboardShown: boolean,
 	forceLeftIconVisibilty: boolean,
 };
@@ -68,7 +67,7 @@ export class EventsContainer extends View<Props, State> {
 	_keyboardDidShow: () => void;
 	_keyboardDidHide: () => void;
 
-	state = {
+	state: State = {
 		h1: '',
 		h2: '',
 		infoButton: null,
@@ -149,7 +148,7 @@ export class EventsContainer extends View<Props, State> {
 		return screens.indexOf(currentScreen) !== -1;
 	}
 
-	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
+	onChildDidMount: Function = (h1: string, h2: string, infoButton?: Object | null = null) => {
 		this.setState({
 			h1,
 			h2,
@@ -157,33 +156,33 @@ export class EventsContainer extends View<Props, State> {
 		});
 	};
 
-	getLeftIcon = (CS: string): ?string => {
+	getLeftIcon: Function = (CS: string): ?string => {
 		const SCNS = ['EventsList'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
-	}
+	};
 
-	getLeftIconPressAction = (CS: string): Function => {
+	getLeftIconPressAction: Function = (CS: string): Function => {
 		const EXSCNS = [];
 		return EXSCNS.indexOf(CS) === -1 ? undefined : this.closeAdd433MHz;
-	}
+	};
 
-	closeAdd433MHz = () => {
-	}
+	closeAdd433MHz: Function = () => {
+	};
 
-	shouldShowPoster = (CS: string): Function => {
+	shouldShowPoster: Function = (CS: string): Function => {
 		const EXSCNS = [];
 		return EXSCNS.indexOf(CS) === -1;
-	}
+	};
 
-	isEditMode = (): boolean => {
+	isEditMode: Function = (): boolean => {
 		const {
 			route,
 		} = this.props;
 		const { isEditMode = false } = route.params || {};
 		return isEditMode;
-	}
+	};
 
-	onAddNewEvent = () => {
+	onAddNewEvent: Function = () => {
 		const {
 			navigation,
 			actions,
@@ -192,7 +191,7 @@ export class EventsContainer extends View<Props, State> {
 		navigation.navigate('SelectGroupEvent', {
 			isEditMode: false,
 		});
-	}
+	};
 
 	render(): Object {
 		const {
@@ -276,7 +275,7 @@ export class EventsContainer extends View<Props, State> {
 		);
 	}
 
-	getStyles = (appLayout: Object): Object => {
+	getStyles: Function = (appLayout: Object): Object => {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceHeight = isPortrait ? height : width;
@@ -293,7 +292,7 @@ export class EventsContainer extends View<Props, State> {
 				width: fontSizeIcon,
 			},
 		};
-	}
+	};
 }
 
 export const mapStateToProps = (store: Object): Object => {
@@ -318,4 +317,4 @@ export const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTheme(EventsContainer));
+export default (connect(mapStateToProps, mapDispatchToProps)(withTheme(EventsContainer)): Object);

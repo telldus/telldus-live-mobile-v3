@@ -51,7 +51,7 @@ type Props = {
 	isFirst: boolean,
 };
 
-const BlockItem = memo<Object>((props: Props): Object => {
+const BlockItem: Object = memo<Object>((props: Props): Object => {
 	const {
 		leftIcon,
 		label,

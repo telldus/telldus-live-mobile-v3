@@ -45,7 +45,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectSensorCondition = React.memo<Object>((props: Props): Object => {
+const SelectSensorCondition: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		// navigation,
 		appLayout,

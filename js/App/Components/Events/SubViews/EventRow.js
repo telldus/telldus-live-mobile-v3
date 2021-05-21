@@ -46,7 +46,7 @@ type Props = {
 	iconStyle: Object,
 };
 
-const EventRow = memo<Object>((props: Props): Object => {
+const EventRow: Object = memo<Object>((props: Props): Object => {
 	const {
 		description,
 		onPress,

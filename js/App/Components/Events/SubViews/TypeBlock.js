@@ -38,7 +38,7 @@ type Props = {
     h2: string,
 };
 
-const TypeBlock = memo<Object>((props: Props): Object => {
+const TypeBlock: Object = memo<Object>((props: Props): Object => {
 
 	const {
 		onPress,

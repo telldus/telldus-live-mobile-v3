@@ -61,7 +61,7 @@ type Props = {
     toggleDialogueBox: Function,
 };
 
-const EventAdvancedSettingsBlock = memo<Object>((props: Props): Object => {
+const EventAdvancedSettingsBlock: Object = memo<Object>((props: Props): Object => {
 
 	const {
 		minRepeatInterval,

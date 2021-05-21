@@ -45,7 +45,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectUrlAction = React.memo<Object>((props: Props): Object => {
+const SelectUrlAction: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		// navigation,
 		appLayout,

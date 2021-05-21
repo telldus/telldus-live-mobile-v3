@@ -45,7 +45,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectSensorTrigger = React.memo<Object>((props: Props): Object => {
+const SelectSensorTrigger: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		// navigation,
 		appLayout,

@@ -33,7 +33,7 @@ import TypeBlock from './TypeBlock';
 import CommonDevicesList from './CommonDevicesList';
 import SelectGroupDD from './SelectGroupDD';
 
-module.exports = {
+module.exports = ({
 	EventRow,
 	EditEventNameBlock,
 	EventActiveSwichBlock,
@@ -44,4 +44,4 @@ module.exports = {
 	TypeBlock,
 	CommonDevicesList,
 	SelectGroupDD,
-};
+}: Object);

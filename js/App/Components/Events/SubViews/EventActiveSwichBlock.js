@@ -56,7 +56,7 @@ function usePrevious(value: string): ?string {
 	return ref.current;
 }
 
-const EventActiveSwichBlock = (props: Object): Object => {
+const EventActiveSwichBlock: Object = (props: Object): Object => {
 	const {
 		value,
 	} = props;
@@ -118,4 +118,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(EventActiveSwichBlock);
+export default (React.memo<Object>(EventActiveSwichBlock): Object);

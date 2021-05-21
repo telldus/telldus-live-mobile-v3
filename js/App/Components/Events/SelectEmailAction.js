@@ -45,7 +45,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectEmailAction = React.memo<Object>((props: Props): Object => {
+const SelectEmailAction: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		// navigation,
 		appLayout,

@@ -62,7 +62,7 @@ type Props = {
 	minute?: string,
 };
 
-const TriggerBlock = memo<Object>((props: Props): Object => {
+const TriggerBlock: Object = memo<Object>((props: Props): Object => {
 	const {
 		deviceId,
 		method,

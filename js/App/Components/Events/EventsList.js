@@ -71,7 +71,7 @@ type Props = {
 	route: Object,
 };
 
-const EventsList = memo<Object>((props: Props): Object => {
+const EventsList: Object = memo<Object>((props: Props): Object => {
 	const {
 		onDidMount,
 		navigation,

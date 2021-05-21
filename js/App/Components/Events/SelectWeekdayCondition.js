@@ -45,7 +45,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectWeekdayCondition = React.memo<Object>((props: Props): Object => {
+const SelectWeekdayCondition: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		// navigation,
 		appLayout,

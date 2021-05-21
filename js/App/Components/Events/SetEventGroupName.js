@@ -57,7 +57,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SetEventGroupName = React.memo<Object>((props: Props): Object => {
+const SetEventGroupName: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,

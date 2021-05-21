@@ -212,4 +212,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default memo<Object>(DeviceManualUI);
+export default (memo<Object>(DeviceManualUI): Object);

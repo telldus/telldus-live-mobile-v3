@@ -85,7 +85,7 @@ const TYPES = [
 	},
 ];
 
-const SelectConditionType = React.memo<Object>((props: Props): Object => {
+const SelectConditionType: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,

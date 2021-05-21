@@ -57,7 +57,7 @@ const BLOCKS = [
 	},
 ];
 
-const SelectGroupEvent = memo<Object>((props: Props): Object => {
+const SelectGroupEvent: Object = memo<Object>((props: Props): Object => {
 	const {
 		onDidMount,
 		navigation,

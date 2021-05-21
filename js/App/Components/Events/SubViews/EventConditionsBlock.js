@@ -54,7 +54,7 @@ type Props = {
 	isEdit: boolean,
 };
 
-const EventConditionsBlock = memo<Object>((props: Props): Object => {
+const EventConditionsBlock: Object = memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		disable,

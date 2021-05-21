@@ -58,7 +58,7 @@ type Props = {
 	route: Object,
 };
 
-const SetEventName = React.memo<Object>((props: Props): Object => {
+const SetEventName: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,

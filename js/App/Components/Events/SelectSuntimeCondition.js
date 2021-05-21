@@ -45,7 +45,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectSuntimeCondition = React.memo<Object>((props: Props): Object => {
+const SelectSuntimeCondition: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		// navigation,
 		appLayout,

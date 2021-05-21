@@ -70,7 +70,7 @@ type Props = {
 	onSelectionChange: Function,
 };
 
-const CommonDevicesList = React.memo<Object>((props: Props): Object => {
+const CommonDevicesList: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		onPressNext,

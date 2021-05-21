@@ -57,7 +57,7 @@ type Props = {
 	url?: string,
 };
 
-const ActionBlock = memo<Object>((props: Props): Object => {
+const ActionBlock: Object = memo<Object>((props: Props): Object => {
 	const {
 		deviceId,
 		method,

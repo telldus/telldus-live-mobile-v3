@@ -85,7 +85,7 @@ const TYPES = [
 	},
 ];
 
-const SelectActionType = React.memo<Object>((props: Props): Object => {
+const SelectActionType: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,

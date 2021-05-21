@@ -46,7 +46,7 @@ type Props = {
 	isEditMode: Function,
 };
 
-const SelectDeviceAction = React.memo<Object>((props: Props): Object => {
+const SelectDeviceAction: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		onDidMount,

@@ -67,7 +67,7 @@ type Props = {
 	weekdays?: string,
 };
 
-const ConditionBlock = memo<Object>((props: Props): Object => {
+const ConditionBlock: Object = memo<Object>((props: Props): Object => {
 	const {
 		deviceId,
 		method,

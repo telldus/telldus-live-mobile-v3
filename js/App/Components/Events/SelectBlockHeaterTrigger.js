@@ -45,7 +45,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectBlockHeaterTrigger = React.memo<Object>((props: Props): Object => {
+const SelectBlockHeaterTrigger: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		// navigation,
 		appLayout,

@@ -56,7 +56,7 @@ const BLOCKS = [
 	},
 ];
 
-const SelectGroupDD = memo<Object>((props: Props): Object => {
+const SelectGroupDD: Object = memo<Object>((props: Props): Object => {
 	const {
 		groupsList,
 		groupId,

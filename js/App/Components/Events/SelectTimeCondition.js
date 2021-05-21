@@ -45,7 +45,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectTimeCondition = React.memo<Object>((props: Props): Object => {
+const SelectTimeCondition: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		// navigation,
 		appLayout,

@@ -50,7 +50,7 @@ const ScreenConfigs = [
 	...EventsScreenConfigs,
 ];
 
-const EventsNavigator = React.memo<Object>((props: Object): Object => {
+const EventsNavigator: Object = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 }, shouldNavigatorUpdate);
 

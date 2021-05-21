@@ -53,7 +53,7 @@ import SelectPushAction from './SelectPushAction';
 import SelectGroupEvent from './SelectGroupEvent';
 import SetEventGroupName from './SetEventGroupName';
 
-const EventsScreenConfigs = [
+const EventsScreenConfigs: Array<Object> = [
 	{
 		name: 'EventsList',
 		Component: EventsList,

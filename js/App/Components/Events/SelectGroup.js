@@ -59,7 +59,7 @@ type Props = {
 	route: Object,
 };
 
-const SelectGroup = memo<Object>((props: Props): Object => {
+const SelectGroup: Object = memo<Object>((props: Props): Object => {
 	const {
 		onDidMount,
 		navigation,

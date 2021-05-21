@@ -45,7 +45,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectTimeTrigger = React.memo<Object>((props: Props): Object => {
+const SelectTimeTrigger: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		// navigation,
 		appLayout,

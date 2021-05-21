@@ -76,7 +76,7 @@ type Props = {
 	isEditMode: Function,
 };
 
-const EditEvent = React.memo<Object>((props: Props): Object => {
+const EditEvent: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,

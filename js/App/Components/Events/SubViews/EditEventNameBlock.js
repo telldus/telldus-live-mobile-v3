@@ -48,7 +48,7 @@ function usePrevious(value: string): ?string {
 	return ref.current;
 }
 
-const EditEventNameBlock = (props: Object): Object => {
+const EditEventNameBlock: Object = (props: Object): Object => {
 	const {
 		description,
 		toggleDialogueBox,
@@ -150,4 +150,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(EditEventNameBlock);
+export default (React.memo<Object>(EditEventNameBlock): Object);
