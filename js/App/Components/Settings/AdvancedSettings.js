@@ -531,6 +531,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							appLayout={layout}
 							intl={intl}
 							type={'text'}
+							keyboardTypeInLineEdit={'email-address'}
 							labelTextStyle={[labelTextStyle, {
 								width: '50%',
 							}]}
