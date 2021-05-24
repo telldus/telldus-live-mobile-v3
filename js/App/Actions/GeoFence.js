@@ -158,8 +158,18 @@ function setupGeoFence(intl: Object): ThunkAction {
 			}
 			await dispatch(handleFence(geofence));
 			if (Platform.OS === 'ios') {
+				const date = new Date();
+				dispatch(debugGFSetCheckpoint({
+					checkpoint: 'BEFORE STOP BackgroundTimer : ',
+					time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+				}));
 				backgroundTimerStartedIniOS = false;
 				BackgroundTimer.stop();
+				const date2 = new Date();
+				dispatch(debugGFSetCheckpoint({
+					checkpoint: 'AFTER STOP BackgroundTimer : ',
+					time: `${date2.getHours()}:${date2.getMinutes()}:${date2.getSeconds()}`,
+				}));
 			}
 		});
 
