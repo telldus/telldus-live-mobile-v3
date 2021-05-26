@@ -42,6 +42,10 @@ import {
 import ChartLegend from './ChartLegend';
 import LineChartDetailed from './LineChartDetailed';
 import LineChart from './LineChart';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 
 import {
 	storeHistory,
@@ -52,7 +56,7 @@ import {
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import Theme from '../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	chartDataOne: Array<Object>,
 	chartDataTwo: Array<Object>,
 	selectedOne: Object,
@@ -150,7 +154,8 @@ class SensorHistoryLineChart extends View<Props, State> {
 			'timestamp',
 			'selectedOne',
 			'selectedTwo',
-			'appLayout']);
+			'appLayout',
+			'dark']);
 
 		if (propsChange) {
 			return propsChange;
@@ -364,9 +369,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 			smoothing,
 			graphView,
 			intl,
+			dark,
 		} = this.props;
 
-		if (chartDataOne.length === 0 && chartDataTwo.length === 0) {
+		if (chartDataOne.length === 0 && chartDataTwo.length === 0 && !isChartLoading) {
 			return null;
 		}
 
@@ -429,7 +435,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 					onPressToggleView={this.onPressToggleView} />
 				{isLoading || isChartLoading ?
 					<View style={{ width: chartWidth, height: chartHeight }}>
-						<FullPageActivityIndicator size={'small'} />
+						<FullPageActivityIndicator
+							size={'small'}
+							overlayLevel={3}
+							color={dark ? '#fff' : '#000'}/>
 					</View>
 					:
 					<View style={{ flex: 0 }}>
@@ -637,4 +646,4 @@ const mapDispatchToProps = (dispatch: Function): Object => {
 	};
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(SensorHistoryLineChart): Object);
+export default (connect(mapStateToProps, mapDispatchToProps)(withTheme(SensorHistoryLineChart)): Object);

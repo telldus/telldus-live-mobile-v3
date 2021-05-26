@@ -514,6 +514,8 @@ class HistoryTab extends View {
 			showCalendar: false,
 			timestamp: newTimestamp,
 			isChartLoading: true,
+			chartDataOne: [],
+			chartDataTwo: [],
 		}, () => {
 			const { sensorId } = this.props;
 			const { fromTimestamp: from } = newTimestamp;
