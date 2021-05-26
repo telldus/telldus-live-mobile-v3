@@ -50,5 +50,10 @@ export default function getLocationImageUrl(deviceType: string): string {
 		return 'icon_location_otio_box';
 
 	}
+	if (deviceType === 'TellStick Flow') {
+
+		return 'icon_location_tellstick_flow';
+
+	}
 	return 'icon_location_otio_box';
 }
