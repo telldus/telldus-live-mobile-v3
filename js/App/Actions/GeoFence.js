@@ -153,7 +153,6 @@ function setupGeoFence(intl: Object): ThunkAction {
 			storeGeoFenceEvent(event);
 			dispatch(debugGFOnGeofence(event));
 			if (Platform.OS === 'ios' && !backgroundTimerStartedIniOS) {
-				console.log('TEST BackgroundTimer.start()');
 				BackgroundTimer.start();
 				backgroundTimerStartedIniOS = true;
 			}
@@ -165,7 +164,6 @@ function setupGeoFence(intl: Object): ThunkAction {
 					time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 				}));
 				backgroundTimerStartedIniOS = false;
-				console.log('TEST BackgroundTimer.stop()');
 				BackgroundTimer.stop();
 				const date2 = new Date();
 				dispatch(debugGFSetCheckpoint({
@@ -341,11 +339,11 @@ function handleFence(fence: Object): ThunkAction {
 				eventUUID: location.uuid,
 			}));
 			let actions = null;
-			// if (action === 'ENTER') {
+			if (action === 'ENTER') {
 				actions = arriving;
-			// } else if (action === 'EXIT') {
-			// 	actions = leaving;
-			// }
+			} else if (action === 'EXIT') {
+				actions = leaving;
+			}
 
 			if (actions) {
 				dispatch(debugGFSetCheckpoint({
@@ -421,7 +419,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			actionEvent,
 			title,
 		} = extras;
-		console.log('TEST handleActionDevice');
+
 		let { deviceId, method, stateValues = {} } = action;
 		let date = new Date();
 		dispatch(debugGFSetCheckpoint({
@@ -463,7 +461,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					...res,
 					time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 				}));
-				console.log('TEST inside deviceSetState success');
+
 				return res;
 			}).catch((err: Object = {}): Object => {
 
@@ -515,9 +513,8 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 						timeString,
 					})}`,
 				}));
-				console.log('TEST outside platformAppStateIndependentSetTimeout');
+
 				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-					console.log('TEST inside platformAppStateIndependentSetTimeout');
 					dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
 				}, timeout * 1000);
 			});
@@ -950,8 +947,6 @@ function addGeofence(override?: boolean = false): ThunkAction {
 				longitude,
 				notifyOnEntry,
 				notifyOnExit,
-				notifyOnDwell: true,
-				loiteringDelay: 30000,
 				extras: {
 					...fence,
 					radius: radius * 1000,
