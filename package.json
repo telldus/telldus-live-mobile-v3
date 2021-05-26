@@ -66,7 +66,7 @@
     "react-native-background-geolocation": "^4.0.3",
     "react-native-background-timer": "^2.4.1",
     "react-native-cached-image": "https://github.com/telldus/react-native-cached-image.git",
-    "react-native-calendars": "~1.1260.0",
+    "react-native-calendars": "~1.302.0",
     "react-native-circular-slider": "git+https://github.com/telldus/react-native-circular-slider.git",
     "react-native-color-wheel": "https://github.com/telldus/react-native-color-wheel.git",
     "react-native-device-info": "^8.1.3",
