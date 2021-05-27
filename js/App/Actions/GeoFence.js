@@ -479,7 +479,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 							fenceName: title,
 						}),
 					}));
-					return;
+					return Promise.resolve('done');
 				}
 
 				if (!retryQueueDeviceAction[action.uuid]) {
@@ -514,9 +514,12 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					})}`,
 				}));
 
-				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-					dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
-				}, timeout * 1000);
+				// eslint-disable-next-line no-new
+				return new Promise((res: Object): Promise<Any> => {
+					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promis<Any> => {
+						return res(dispatch(handleActionDevice(action, accessToken, eventUUID, extras)));
+					}, timeout * 1000);
+				});
 			});
 		} else if (method === 1024) {
 			const rgbValue = stateValues[1024];
@@ -551,7 +554,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 							fenceName: title,
 						}),
 					}));
-					return;
+					return Promise.resolve('done');
 				}
 
 				if (!retryQueueDeviceAction[action.uuid]) {
@@ -587,9 +590,12 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					})}`,
 				}));
 
-				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-					dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
-				}, timeout * 1000);
+				// eslint-disable-next-line no-new
+				return new Promise((res: Object): Promise<Any> => {
+					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<Any> => {
+						return res(dispatch(handleActionDevice(action, accessToken, eventUUID, extras)));
+					}, timeout * 1000);
+				});
 			});
 		} else if (method === 2048) {
 			const {
@@ -627,7 +633,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 							fenceName: title,
 						}),
 					}));
-					return;
+					return Promise.resolve('done');
 				}
 
 				if (!retryQueueDeviceAction[action.uuid]) {
@@ -663,9 +669,12 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					})}`,
 				}));
 
-				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-					dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
-				}, timeout * 1000);
+				// eslint-disable-next-line no-new
+				return new Promise((res: Object): Promise<Any> => {
+					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<Any> => {
+						return res(dispatch(handleActionDevice(action, accessToken, eventUUID, extras)));
+					}, timeout * 1000);
+				});
 			});
 		}
 		return Promise.resolve('done');
@@ -729,7 +738,7 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 						fenceName: title,
 					}),
 				}));
-				return;
+				return Promise.resolve('done');
 			}
 
 			if (!retryQueueEvent[action.uuid]) {
@@ -765,9 +774,12 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 				})}`,
 			}));
 
-			retryQueueEvent[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-				dispatch(handleActionEvent(action, accessToken, eventUUID, extras));
-			}, timeout * 1000);
+			// eslint-disable-next-line no-new
+			return new Promise((res: Object): Promise<Any> => {
+				retryQueueEvent[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<Any> => {
+					return res(dispatch(handleActionEvent(action, accessToken, eventUUID, extras)));
+				}, timeout * 1000);
+			});
 		});
 	};
 }
@@ -826,7 +838,7 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 						fenceName: title,
 					}),
 				}));
-				return;
+				return Promise.resolve('done');
 			}
 
 			if (!retryQueueSchedule[action.uuid]) {
@@ -862,9 +874,12 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 				})}`,
 			}));
 
-			retryQueueSchedule[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-				dispatch(handleActionSchedule(action, accessToken, eventUUID, extras));
-			}, timeout * 1000);
+			// eslint-disable-next-line no-new
+			return new Promise((res: Object): Promise<Any> => {
+				retryQueueSchedule[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<Any> => {
+					return res(dispatch(handleActionSchedule(action, accessToken, eventUUID, extras)));
+				}, timeout * 1000);
+			});
 		});
 	};
 }
