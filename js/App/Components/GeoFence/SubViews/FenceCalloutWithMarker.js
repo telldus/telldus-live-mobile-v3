@@ -41,6 +41,9 @@ import {
 	Text,
 } from '../../../../BaseComponents';
 
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
 import capitalize from '../../../Lib/capitalize';
 import Theme from '../../../Theme';
 
@@ -59,6 +62,10 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 	} = intl;
 	const hour12 = !RNLocalize.uses24HourClock();
 	const markerRef = useRef(null);
+
+	const {
+		colorScheme,
+	} = useAppTheme();
 
 	const {
 		extras = {},
@@ -105,7 +112,7 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 	return (
 		<MapView.Marker.Animated
 			ref={markerRef}
-			image={{uri: 'marker'}}
+			image={{uri: colorScheme === 'dark' ? 'marker_white' : 'marker'}}
 			coordinate={{ latitude, longitude }}>
 			<MapView.Callout
 				onPress={_onPress}>

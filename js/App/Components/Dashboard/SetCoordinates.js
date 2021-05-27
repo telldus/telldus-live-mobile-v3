@@ -51,6 +51,9 @@ import {
 import {
 	getCurrentLocation,
 } from '../../Actions/GeoFence';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import {
 	SelectCoordinatesDD,
@@ -70,6 +73,10 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 		navigation,
 		route,
 	} = props;
+
+	const {
+		colorScheme,
+	} = useAppTheme();
 
 	const {
 		formatMessage,
@@ -265,7 +272,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 							followsUserLocation={false}
 							scrollEnabled={manual}>
 							<MapView.Marker.Animated
-								image={{uri: 'marker'}}
+								image={{uri: colorScheme === 'dark' ? 'marker_white' : 'marker'}}
 								coordinate={region}/>
 						</MapView.Animated>
 						}
