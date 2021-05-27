@@ -138,7 +138,7 @@ function setupGeoFence(intl: Object): ThunkAction {
 			startOnBoot = true,
 			enableHeadless = true,
 			geofenceModeHighAccuracy = true,
-			preventSuspend = false,
+			preventSuspend = true,
 			geofenceInitialTriggerEntry = false,
 			locationUpdateInterval = 1000,
 			geofenceProximityRadius = 400,

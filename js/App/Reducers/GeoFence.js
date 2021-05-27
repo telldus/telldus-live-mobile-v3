@@ -35,7 +35,7 @@ export const initialState = {
 		startOnBoot: true,
 		enableHeadless: true,
 		geofenceModeHighAccuracy: true,
-		preventSuspend: false,
+		preventSuspend: true,
 		showNotificationOnActionFail: true,
 		locationUpdateInterval: 1000,
 		geofenceProximityRadius: 400,
