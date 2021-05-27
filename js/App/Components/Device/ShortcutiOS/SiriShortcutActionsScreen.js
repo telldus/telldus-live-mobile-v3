@@ -32,7 +32,7 @@ import {
 	ScrollView,
 	Image,
 } from 'react-native';
-let uuid = require('react-native-uuid');
+import uuid from 'react-native-uuid';
 import { useIntl } from 'react-intl';
 import {
 	NativeModules,

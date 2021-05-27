@@ -36,7 +36,7 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { CommonActions } from '@react-navigation/native';
-let uuid = require('react-native-uuid');
+import uuid from 'react-native-uuid';
 
 import {
 	FloatingButton,

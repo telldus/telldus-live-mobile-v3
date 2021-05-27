@@ -36,7 +36,7 @@ import {
 	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
-let uuid = require('react-native-uuid');
+import uuid from 'react-native-uuid';
 
 import {
 	View,
