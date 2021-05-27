@@ -62,6 +62,7 @@ import {
 	getMatchingSensorInfo,
 	getBatteryPercentage,
 	showBatteryStatus,
+	is433MHzTransport,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
@@ -784,12 +785,16 @@ class DeviceRow extends View<Props, State> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { clientDeviceId, clientId, deviceType } = ownProps.device;
+	const { clientDeviceId, clientId, deviceType, transport } = ownProps.device;
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId, deviceType);
 	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
-	const {
-		battery,
-	} = getMatchingSensorInfo(store.sensors.byId, clientDeviceId, clientId) || {};
+	let _battery;
+	if (!is433MHzTransport(transport)) {
+		const {
+			battery,
+		} = getMatchingSensorInfo(store.sensors.byId, clientDeviceId, clientId) || {};
+		_battery = battery;
+	}
 
 	const { firebaseRemoteConfig = {} } = store.user;
 	const { rgb = JSON.stringify({}) } = firebaseRemoteConfig;
@@ -803,7 +808,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		currentTemp,
 		onColorMultiplier,
 		offColorMultiplier,
-		battery,
+		battery: _battery,
 	};
 }
 
