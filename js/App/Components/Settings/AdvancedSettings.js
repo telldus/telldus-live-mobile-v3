@@ -488,7 +488,6 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							intl={intl}
 							labelTextStyle={labelTextStyle}
 							level={18}
-							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
 							}]}
@@ -502,7 +501,6 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							intl={intl}
 							labelTextStyle={labelTextStyle}
 							level={18}
-							touchableStyle={touchableStyle}
 							style={[contentCoverStyle, {
 								marginTop: 0,
 							}]}
