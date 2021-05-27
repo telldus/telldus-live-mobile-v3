@@ -515,8 +515,8 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 
 				// eslint-disable-next-line no-new
-				return new Promise((res: Object): Promise<Any> => {
-					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promis<Any> => {
+				return new Promise((res: Object): any => {
+					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<any> => {
 						return res(dispatch(handleActionDevice(action, accessToken, eventUUID, extras)));
 					}, timeout * 1000);
 				});
@@ -591,8 +591,8 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 
 				// eslint-disable-next-line no-new
-				return new Promise((res: Object): Promise<Any> => {
-					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<Any> => {
+				return new Promise((res: Object): any => {
+					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<any> => {
 						return res(dispatch(handleActionDevice(action, accessToken, eventUUID, extras)));
 					}, timeout * 1000);
 				});
@@ -670,8 +670,8 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 
 				// eslint-disable-next-line no-new
-				return new Promise((res: Object): Promise<Any> => {
-					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<Any> => {
+				return new Promise((res: Object): any => {
+					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<any> => {
 						return res(dispatch(handleActionDevice(action, accessToken, eventUUID, extras)));
 					}, timeout * 1000);
 				});
@@ -775,8 +775,8 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 			}));
 
 			// eslint-disable-next-line no-new
-			return new Promise((res: Object): Promise<Any> => {
-				retryQueueEvent[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<Any> => {
+			return new Promise((res: Object): any => {
+				retryQueueEvent[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<any> => {
 					return res(dispatch(handleActionEvent(action, accessToken, eventUUID, extras)));
 				}, timeout * 1000);
 			});
@@ -875,8 +875,8 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 			}));
 
 			// eslint-disable-next-line no-new
-			return new Promise((res: Object): Promise<Any> => {
-				retryQueueSchedule[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<Any> => {
+			return new Promise((res: Object): any => {
+				retryQueueSchedule[action.uuid].timeoutId = platformAppStateIndependentSetTimeout((): Promise<any> => {
 					return res(dispatch(handleActionSchedule(action, accessToken, eventUUID, extras)));
 				}, timeout * 1000);
 			});
