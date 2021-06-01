@@ -153,4 +153,21 @@ class API {
     }
     task.resume()
   }
+  
+  /**
+   Converts the Data from API to required model type
+   */
+  func parseData<T: Decodable>(data: Data?, model: T.Type) -> T? {
+    var result: T? = nil;
+    do {
+      // Decode data to object
+      if let data = data {
+        let jsonDecoder = JSONDecoder()
+        result = try jsonDecoder.decode(model.self, from: data)
+      }
+    }
+    catch {
+    }
+    return result;
+  }
 }
