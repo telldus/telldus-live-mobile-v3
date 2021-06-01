@@ -74,7 +74,7 @@ class API {
             completion(Result.failure(AppError.unknownError(_error )))
             return
           }
-          completion(Result.success(["result": json, "authData": dataDict]))
+          completion(Result.success(["result": json, "data": data, "authData": dataDict]))
           return
         }
       } catch let error {
