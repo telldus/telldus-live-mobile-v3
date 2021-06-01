@@ -14,7 +14,7 @@ class DevicesAPI {
     api.callEndPoint("/devices/list?supportedMethods=\(Constants.supportedMethods)&includeIgnored=1&extras=devicetype,transport,room") {result in
       switch result {
       case let .success(data):
-        guard let parsedData = api.parseData(jsonData: data["data"] as? Data, model: Devices.self) else {
+        guard let parsedData = api.parseData(data: data["data"] as? Data, model: Devices.self) else {
           completion(["devices": [], "authData": []]);
           return
         }
