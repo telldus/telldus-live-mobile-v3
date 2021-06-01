@@ -158,7 +158,7 @@ struct APICacher {
       for device in devices {
         
         let id = Int(device.id)!
-        let name = device.name
+        let name = device.name ?? ""
         let state = device.state
         let methods = device.methods
         let deviceType = device.deviceType
@@ -196,7 +196,7 @@ struct APICacher {
 
 func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
   SensorsAPI().getSensorsList() {result in
-    guard let sensors = result["sensors"] as? Array<Dictionary<String, Any>> else {
+    guard let sensors = result["sensors"] as? [Sensor] else {
       completion()
       return
     }
@@ -214,35 +214,25 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
     db.deleteAllRecordsCurrentAccount(table: SensorDetailsModel.self, userId: uuid as! NSString)
     
     for sensor in sensors {
-      let did = sensor["id"] as? String;
-      guard did != nil else {
+      let did = sensor.id
+      let id = Int(did)!
+      let name = sensor.name ?? ""
+      let _sensorId = sensor.sensorId
+      let sensorId = Int(_sensorId)!
+      let _clientId = sensor.client
+      let clientId = Int(_clientId)!
+      let lastUpdated = sensor.lastUpdated
+      let model = sensor.model
+      let sensorProtocol = sensor.sensorProtocol
+      guard let sensorData = sensor.data else {
         continue
       }
-      let id = Int(did!)!
-      let name = sensor["name"] as? String;
-      guard name != nil else {
-        continue
-      }
-      let _sensorId = sensor["sensorId"] as? String;
-      guard _sensorId != nil else {
-        continue
-      }
-      let sensorId = Int(_sensorId!)!
-      let _clientId = sensor["client"] as? String;
-      guard _clientId != nil else {
-        continue
-      }
-      let clientId = Int(_clientId!)!
-      let lastUpdated = sensor["lastUpdated"] as? Int ?? -1;
-      let model = sensor["model"] as! String;
-      let sensorProtocol = sensor["protocol"] as! String;
-      let data = sensor["data"] as? Array<Dictionary<String, Any>> ?? []
-      guard data.count > 0 else {
+      guard sensorData.count > 0 else {
         continue
       }
       let sensorDetailsModel = SensorDetailsModel(
         id: id,
-        name: name!,
+        name: name,
         userId: uuid!,
         sensorId: Int(sensorId),
         clientId: Int(clientId),
@@ -254,18 +244,13 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
       )
       do {
         try db.insertSensorDetailsModel(sensorDetailsModel: sensorDetailsModel)
-        for item in data {
-          let _scale = item["scale"] as? String;
-          let _value = item["value"] as? String;
-          guard _value != nil && _value != nil else {
-            continue
-          }
-          
-          let scale = Int(_scale!)!
-          let value = Double(_value!)!
-          
-          let _lastUpdated = item["lastUpdated"] as? Int ?? -1;
-          let scaleName = item["name"] as! String;
+        for item in sensorData {
+          let _scale = item.scale;
+          let scale = Int(_scale)!
+          let _value = item.value;
+          let value = Double(_value)!
+          let _lastUpdated = item.lastUpdated;
+          let scaleName = item.name;
           
           let sensorDataModel = SensorDataModel(
             sensorId: id,

@@ -10,10 +10,11 @@ import Foundation
 
 class SensorsAPI {
   func getSensorsList(completion: @escaping (Dictionary<String, Any>) -> Void)  {
-    API().callEndPoint("/sensors/list?includeValues=1&includeScale=1") {result in
+    let api = API()
+    api.callEndPoint("/sensors/list?includeValues=1&includeScale=1") {result in
       switch result {
       case let .success(data):
-        guard let dataNew = data["result"] as? [String:Any] else {
+        guard let parsedData = api.parseData(data: data["data"] as? Data, model: Sensors.self) else {
           completion(["sensors": [], "authData": []]);
           return
         }
@@ -21,11 +22,7 @@ class SensorsAPI {
           completion(["sensors": [], "authData": []]);
           return
         }
-        guard let sensors = dataNew["sensor"] as? Array<Dictionary<String, Any>> else {
-          completion(["sensors": [], "authData": []]);
-          return
-        }
-        completion(["sensors": sensors, "authData": authData])
+        completion(["sensors": parsedData.sensor!, "authData": authData])
         return;
       case .failure(_):
         completion(["sensors": [], "authData": []]);
