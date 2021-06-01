@@ -140,7 +140,7 @@ struct APICacher {
   
   func cacheDevicesData(db: SQLiteDatabase, completion: @escaping () -> Void) {
     DevicesAPI().getDevicesList() {result in
-      guard let devices = result["devices"] as? Array<Dictionary<String, Any>> else {
+      guard let devices = result["devices"] as? [Device] else {
         completion()
         return
       }
@@ -156,48 +156,23 @@ struct APICacher {
       }
       //      db.deleteAllRecordsCurrentAccount(table: DeviceDetailsModel.self, userId: uuid as! NSString) // TODO: Enable device widget
       for device in devices {
-        let did = device["id"] as? String;
-        guard did != nil else {
-          continue
-        }
-        let id = Int(did!)!
-        let name = device["name"] as? String;
-        guard name != nil else {
-          continue
-        }
         
-        var state: Int? = -1
-        if let _state = device["state"] as? Int {
-          state = _state
-        }
-        var methods: Int? = -1
-        if let _methods = device["methods"] as? Int {
-          methods = _methods
-        }
-        guard state != nil && methods != nil else {
-          continue
-        }
-        var deviceType = ""
-        if let _deviceType = device["deviceType"] as? String {
-          deviceType = _deviceType
-        }
+        let id = Int(device.id)!
+        let name = device.name
+        let state = device.state
+        let methods = device.methods
+        let deviceType = device.deviceType
         let stateValue = ""
-        let _clientId = device["client"] as? String;
-        guard _clientId != nil else {
-          continue
-        }
-        let clientId = Int(_clientId!)!
-        let _clientDeviceId = device["clientDeviceId"] as? String;
-        guard _clientDeviceId != nil else {
-          continue
-        }
-        let clientDeviceId = Int(_clientDeviceId!)!
+        let _clientId = device.client
+        let clientId = Int(_clientId)!
+        let _clientDeviceId = device.clientDeviceId
+        let clientDeviceId = Int(_clientDeviceId)!
         
         let deviceDetailsModel = DeviceDetailsModel(
           id: id,
-          name: name!,
-          state: state!,
-          methods: methods!,
+          name: name,
+          state: state,
+          methods: methods,
           deviceType: deviceType,
           stateValue: stateValue,
           userId: uuid!,

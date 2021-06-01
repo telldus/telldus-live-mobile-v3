@@ -10,10 +10,11 @@ import Foundation
 
 class DevicesAPI {
   func getDevicesList(completion: @escaping (Dictionary<String, Any>) -> Void)  {
-    API().callEndPoint("/devices/list?supportedMethods=\(Constants.supportedMethods)&includeIgnored=1&extras=devicetype,transport,room") {result in
+    let api = API()
+    api.callEndPoint("/devices/list?supportedMethods=\(Constants.supportedMethods)&includeIgnored=1&extras=devicetype,transport,room") {result in
       switch result {
       case let .success(data):
-        guard let dataNew = data["result"] as? [String:Any] else {
+        guard let parsedData = api.parseData(jsonData: data["data"] as? Data, model: Devices.self) else {
           completion(["devices": [], "authData": []]);
           return
         }
@@ -21,11 +22,7 @@ class DevicesAPI {
           completion(["devices": [], "authData": []]);
           return
         }
-        guard let devices = dataNew["device"] as? Array<Dictionary<String, Any>> else {
-          completion(["devices": [], "authData": []]);
-          return
-        }
-        completion(["devices": devices, "authData": authData])
+        completion(["devices": parsedData.device!, "authData": authData])
         return;
       case .failure(_):
         completion(["devices": [], "authData": []]);
