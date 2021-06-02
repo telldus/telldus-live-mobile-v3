@@ -32,7 +32,7 @@ class SensorsAPI {
   
   func getSensorInfo(sensorId: Int, completion: @escaping (Dictionary<String, Any>) -> Void)  {
     let api = API()
-    api.callEndPoint("\(EndPoints.getSensorInfo.rawValue)?id=\(sensorId)") {result in
+    api.callEndPoint("\(EndPoints.getSensorInfo.rawValue)?\(GetSensorInfo.id.rawValue)=\(sensorId)") {result in
       switch result {
       case let .success(data):
         guard let sensor = api.parseData(data: data["data"] as? Data, model: Sensor.self) else {
