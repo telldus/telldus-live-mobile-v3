@@ -35,6 +35,9 @@ import { GatewayRow } from '../../TabViews/SubViews';
 
 import { parseGatewaysForListView } from '../../../Reducers/Gateways';
 import capitalize from '../../../Lib/capitalize';
+import {
+	filterBlackListedClientTypes,
+} from '../../../Lib/gatewayUtils';
 
 import Theme from '../../../Theme';
 
@@ -170,7 +173,7 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	return {
-		rows: getRows(state),
+		rows: filterBlackListedClientTypes(getRows(state)),
 	};
 }
 
