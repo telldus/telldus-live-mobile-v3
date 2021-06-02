@@ -11,7 +11,7 @@ import Foundation
 class SensorsAPI {
   func getSensorsList(completion: @escaping (Dictionary<String, Any>) -> Void)  {
     let api = API()
-    api.callEndPoint("/sensors/list?includeValues=1&includeScale=1") {result in
+    api.callEndPoint("\(EndPoints.getSensors.rawValue)?\(GetSensors.includeValues.rawValue)=1&\(GetSensors.includeScale.rawValue)=1") {result in
       switch result {
       case let .success(data):
         guard let parsedData = api.parseData(data: data["data"] as? Data, model: Sensors.self) else {
@@ -32,7 +32,7 @@ class SensorsAPI {
   
   func getSensorInfo(sensorId: Int, completion: @escaping (Dictionary<String, Any>) -> Void)  {
     let api = API()
-    api.callEndPoint("/sensor/info?id=\(sensorId)") {result in
+    api.callEndPoint("\(EndPoints.getSensorInfo.rawValue)?id=\(sensorId)") {result in
       switch result {
       case let .success(data):
         guard let sensor = api.parseData(data: data["data"] as? Data, model: Sensor.self) else {

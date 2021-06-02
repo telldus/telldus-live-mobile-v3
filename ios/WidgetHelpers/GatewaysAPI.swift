@@ -11,7 +11,7 @@ import Foundation
 class GatewaysAPI {
   func getGatewaysList(completion: @escaping (Dictionary<String, Any>) -> Void)  {
     let api =  API()
-    api.callEndPoint("/clients/list?&extras=timezone") {result in
+    api.callEndPoint("\(EndPoints.getClients.rawValue)?&\(GetClients.extras.rawValue)=timezone") {result in
       switch result {
       case let .success(data):
         guard let parsedData = api.parseData(data: data["data"] as? Data, model: Gateways.self) else {

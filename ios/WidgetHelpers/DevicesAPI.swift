@@ -11,7 +11,7 @@ import Foundation
 class DevicesAPI {
   func getDevicesList(completion: @escaping (Dictionary<String, Any>) -> Void)  {
     let api = API()
-    api.callEndPoint("/devices/list?supportedMethods=\(Constants.supportedMethods)&includeIgnored=1&extras=devicetype,transport,room") {result in
+    api.callEndPoint("\(EndPoints.getDevices.rawValue)?\(GetDevices.supportedMethods.rawValue)=\(Constants.supportedMethods)&\(GetDevices.includeIgnored.rawValue)=1&\(GetDevices.extras.rawValue)=devicetype,transport,room") {result in
       switch result {
       case let .success(data):
         guard let parsedData = api.parseData(data: data["data"] as? Data, model: Devices.self) else {
