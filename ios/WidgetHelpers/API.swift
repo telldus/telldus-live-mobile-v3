@@ -167,6 +167,7 @@ class API {
       }
     }
     catch {
+      print("Error parsing API data : \(error)")
     }
     return result;
   }
