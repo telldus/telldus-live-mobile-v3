@@ -12,10 +12,10 @@ class Sensor: Codable {
   
   var id: String
   var name: String?
-  var sensorId: String
-  var client: String
+  var sensorId: String?
+  var client: String?
   var lastUpdated:  Int
-  var model: String
+  var model: String?
   var sensorProtocol: String
   var data: [SensorData]?
   

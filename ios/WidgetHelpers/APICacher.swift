@@ -25,7 +25,7 @@ struct APICacher {
         return
       }
       
-      guard let sensor = result["sensor"] as? Dictionary<String, Any> else {
+      guard let sensor = result["sensor"] as? Sensor else {
         completion()
         return
       }
@@ -39,19 +39,15 @@ struct APICacher {
         completion()
         return
       }
-      let did = sensor["id"] as? String;
-      guard did != nil else {
-        completion()
-        return
-      }
-      let id = Int(did!)!
-      let name = sensor["name"] as? String;
+      let did = sensor.id;
+      let id = Int(did)!
+      let name = sensor.name;
       guard name != nil else {
         completion()
         return
       }
-      let lastUpdated = sensor["lastUpdated"] as? Int ?? -1;
-      let sensorProtocol = sensor["protocol"] as! String;
+      let lastUpdated = sensor.lastUpdated;
+      let sensorProtocol = sensor.sensorProtocol;
       
       guard let dataFromDb = db?.sensorDetailsModel(sensorId: Int32(id)) else {
         completion()
@@ -75,23 +71,21 @@ struct APICacher {
       } catch {
       }
       
-      let data = sensor["data"] as? Array<Dictionary<String, Any>> ?? []
+      guard let data = sensor.data else {
+        completion()
+        return
+      }
       guard data.count > 0 else {
         completion()
         return
       }
       for item in data {
-        let _scale = item["scale"] as? String;
-        let _value = item["value"] as? String;
-        guard _value != nil && _value != nil else {
-          continue
-        }
-        
-        let scale = Int(_scale!)!
-        let value = Double(_value!)!
-        
-        let _lastUpdated = item["lastUpdated"] as? Int ?? -1;
-        let scaleName = item["name"] as! String;
+        let _scale = item.scale;
+        let _value = item.value;
+        let scale = Int(_scale)!
+        let value = Double(_value)!
+        let _lastUpdated = item.lastUpdated;
+        let scaleName = item.name;
         
         let sensorDataModel = SensorDataModel(
           sensorId: id,
@@ -216,13 +210,15 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
     for sensor in sensors {
       let did = sensor.id
       let id = Int(did)!
-      let name = sensor.name ?? ""
+      guard let name = sensor.name else {
+        continue
+      }
       let _sensorId = sensor.sensorId
-      let sensorId = Int(_sensorId)!
+      let sensorId = Int(_sensorId!)!
       let _clientId = sensor.client
-      let clientId = Int(_clientId)!
+      let clientId = Int(_clientId!)!
       let lastUpdated = sensor.lastUpdated
-      let model = sensor.model
+      let model = sensor.model!
       let sensorProtocol = sensor.sensorProtocol
       guard let sensorData = sensor.data else {
         continue
@@ -234,8 +230,8 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
         id: id,
         name: name,
         userId: uuid!,
-        sensorId: Int(sensorId),
-        clientId: Int(clientId),
+        sensorId: sensorId,
+        clientId: clientId,
         lastUpdated: lastUpdated,
         model: model,
         sensorProtocol: sensorProtocol,
