@@ -8,7 +8,13 @@
 
 import Foundation
 
+/**
+ This class does fetching of data from API and caching in local DB
+ */
 struct APICacher {
+  /**
+   Fetches a sensor info from API and update local DB
+   */
   func cacheSensorData(sensorId: Int, completion: @escaping () -> Void) {
     SensorsAPI().getSensorInfo(sensorId: sensorId) {result in
       var db: SQLiteDatabase? = nil
@@ -104,6 +110,10 @@ struct APICacher {
       completion()
     }
   }
+  
+  /**
+   Fetches Devices, Sensors and Gateways list from API and update local DB
+   */
   func cacheAPIData(completion: @escaping () -> Void) {
     var db: SQLiteDatabase? = nil
     do {
@@ -132,6 +142,9 @@ struct APICacher {
     //    }
   }
   
+  /**
+   Fetches Devices list from API and update local DB
+   */
   func cacheDevicesData(db: SQLiteDatabase, completion: @escaping () -> Void) {
     DevicesAPI().getDevicesList() {result in
       guard let devices = result["devices"] as? [Device] else {
@@ -188,6 +201,9 @@ struct APICacher {
   }
 }
 
+/**
+ Fetches Sensors list from API and update local DB
+ */
 func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
   SensorsAPI().getSensorsList() {result in
     guard let sensors = result["sensors"] as? [Sensor] else {
@@ -268,6 +284,9 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
   }
 }
 
+/**
+ Fetches Gateways list from API and update local DB
+ */
 func cacheGatewaysData(db: SQLiteDatabase, completion: @escaping () -> Void) {
   GatewaysAPI().getGatewaysList() {result in
     guard let clients = result["clients"] as? [Gateway] else {

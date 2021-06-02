@@ -9,6 +9,9 @@
 import Foundation
 
 struct Utilities {
+  /**
+   Converts a dictionary to string
+   */
   func convertDictionaryToString (dict: Dictionary<String?, Any>) -> String {
     var data: Data?;
     do {
@@ -22,6 +25,9 @@ struct Utilities {
     return "";
   }
   
+  /**
+   Converts a string to dictionary
+   */
   func stringToDictionary(string: String) -> Dictionary<String?, Any>? {
     let data = string.data(using: .utf8)!
     do {
@@ -36,6 +42,9 @@ struct Utilities {
     }
   }
   
+  /**
+   Returns the access token and other authorization releated data as a dictionary
+   */
   func getAuthData() -> Dictionary<String?, Any>? {
     let data: String? = SharedModule().getSecureData()
     guard data != nil else {
@@ -49,6 +58,9 @@ struct Utilities {
     return dataDict
   }
   
+  /**
+   Converts the RGB value in decimal to Hexadecimal format
+   */
   func getMainColorRGB (decimalRGB: Int) -> String {
     var mainColor = String(decimalRGB, radix: 16);
     let length = mainColor.count

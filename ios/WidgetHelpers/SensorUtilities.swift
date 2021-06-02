@@ -7,7 +7,13 @@
 //
 
 import Foundation
+/**
+ This class has sensor related utility methods
+ */
 struct SensorUtilities {
+  /**
+   List of string values of wind direction
+   */
   let WIND_DIR = [
     String(format: "widget_ios_sensorDirN"),
     String(format: "widget_ios_sensorDirNNE"),
@@ -28,6 +34,9 @@ struct SensorUtilities {
     String(format: "widget_ios_sensorDirN")
   ]
   
+  /**
+   Reads a returns contents of sensorConstants JSON file
+   */
   func getConstants() -> Dictionary<String, Any>? {
     guard let path = Bundle.main.path(forResource: "sensorConstants", ofType: "json") else {
       return nil
@@ -45,6 +54,9 @@ struct SensorUtilities {
     }
   }
   
+  /**
+   Reads contents of sensorConstants JSON file and returns "lexical" value as key and Type as value
+   */
   func getSensorTypes() ->  Dictionary<String, String> {
     let sensorConstants = getConstants()
     var names: Dictionary<String, String> = [:]
@@ -65,6 +77,9 @@ struct SensorUtilities {
     return names
   }
   
+  /**
+   Reads contents of sensorConstants JSON file and returns the unit matching the sensor type
+   */
   func getSensorUnits(sensorType: String) -> Dictionary<String, String> {
     var units: Dictionary<String, String> = [:]
     let sensorConstants = getConstants()
@@ -102,6 +117,9 @@ struct SensorUtilities {
     return units
   }
   
+  /**
+   Returns a sensor's prepared info like, unit label and more by matching name and scale with  sensorConstants JSON file
+   */
   func getSensorInfo(name: String, scale: Int, value: Double) -> Dictionary<String, Any> {
     var info: Dictionary<String, Any> = [:]
     var unit: String = ""
@@ -269,6 +287,9 @@ struct SensorUtilities {
     return info
   }
   
+  /**
+   Returns wind direction as String, from Double value
+   */
   func getWindDirection(value: Double) -> String {
     var index = value / 22.5
     index.round(.towardZero)
@@ -278,6 +299,9 @@ struct SensorUtilities {
     return ""
   }
   
+  /**
+   Returns sensor last updated value as Date Object
+   */
   func getLastUpdatedDate(lastUpdated: Int) -> Date? {
     guard lastUpdated != -1 else {
       return nil
@@ -285,6 +309,9 @@ struct SensorUtilities {
     return Date(timeIntervalSince1970: TimeInterval(lastUpdated))
   }
   
+  /**
+   Returns sensor last updated value as a string
+   */
   func getLastUpdatedString(lastUpdated: Int, timezone: String?) -> String {
     guard lastUpdated != -1 else {
       return ""
@@ -299,6 +326,9 @@ struct SensorUtilities {
     return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(lastUpdated)))
   }
   
+  /**
+   Checks if sensor last updated timestamp is too old
+   */
   func isTooOld(lastUpdated: Int) -> Bool {
     guard lastUpdated != -1 else {
       return true
@@ -309,6 +339,9 @@ struct SensorUtilities {
     return timeAgo >= limit
   }
   
+  /**
+   Check if sensor value is large(in length)
+   */
   func isValueLarge(value: String) -> Bool {
     return value.count > 3
   }
