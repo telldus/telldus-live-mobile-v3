@@ -47,13 +47,6 @@ export default class Base extends Component<Object, Object> {
 
 	static childContextTypes: ChildContextTypes;
 
-	getChildContext(): Object {
-		return {
-			theme: this.props && this.props.theme ? this.props.theme : this.getTheme(),
-			foregroundColor: this.props && this.props.foregroundColor ? this.props.foregroundColor : this.getTheme().textColor,
-		};
-	}
-
 	getContextForegroundColor(): string {
 		return this.context.foregroundColor;
 	}
