@@ -13,6 +13,20 @@
 		26012B35254BE77400D26A25 /* sensorConstants.json in Resources */ = {isa = PBXBuildFile; fileRef = 26012B34254BE77400D26A25 /* sensorConstants.json */; };
 		26012B36254BE77400D26A25 /* sensorConstants.json in Resources */ = {isa = PBXBuildFile; fileRef = 26012B34254BE77400D26A25 /* sensorConstants.json */; };
 		26012B37254BE77400D26A25 /* sensorConstants.json in Resources */ = {isa = PBXBuildFile; fileRef = 26012B34254BE77400D26A25 /* sensorConstants.json */; };
+		260228C4266743AC001B780C /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228C3266743AC001B780C /* Gateway.swift */; };
+		260228C5266743AC001B780C /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228C3266743AC001B780C /* Gateway.swift */; };
+		260228C6266743AC001B780C /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228C3266743AC001B780C /* Gateway.swift */; };
+		260228C7266743AC001B780C /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228C3266743AC001B780C /* Gateway.swift */; };
+		260228C8266743AC001B780C /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228C3266743AC001B780C /* Gateway.swift */; };
+		260228C9266743AC001B780C /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228C3266743AC001B780C /* Gateway.swift */; };
+		260228CA266743AC001B780C /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228C3266743AC001B780C /* Gateway.swift */; };
+		260228CC266743E5001B780C /* Gateways.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228CB266743E5001B780C /* Gateways.swift */; };
+		260228CD266743E5001B780C /* Gateways.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228CB266743E5001B780C /* Gateways.swift */; };
+		260228CE266743E5001B780C /* Gateways.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228CB266743E5001B780C /* Gateways.swift */; };
+		260228CF266743E5001B780C /* Gateways.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228CB266743E5001B780C /* Gateways.swift */; };
+		260228D0266743E5001B780C /* Gateways.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228CB266743E5001B780C /* Gateways.swift */; };
+		260228D1266743E5001B780C /* Gateways.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228CB266743E5001B780C /* Gateways.swift */; };
+		260228D2266743E5001B780C /* Gateways.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260228CB266743E5001B780C /* Gateways.swift */; };
 		26035743253ED333000798D1 /* DevicesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26035742253ED333000798D1 /* DevicesAPI.swift */; };
 		26035744253ED333000798D1 /* DevicesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26035742253ED333000798D1 /* DevicesAPI.swift */; };
 		26035745253ED333000798D1 /* DevicesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26035742253ED333000798D1 /* DevicesAPI.swift */; };
@@ -365,6 +379,8 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TelldusLiveApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TelldusLiveApp/main.m; sourceTree = "<group>"; };
 		26012B34254BE77400D26A25 /* sensorConstants.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sensorConstants.json; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.json; };
+		260228C3266743AC001B780C /* Gateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gateway.swift; sourceTree = "<group>"; };
+		260228CB266743E5001B780C /* Gateways.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gateways.swift; sourceTree = "<group>"; };
 		26035742253ED333000798D1 /* DevicesAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesAPI.swift; sourceTree = "<group>"; };
 		260381D6253DAF8700D4F8CA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2608B58A253732F300BF0A36 /* DeviceWidgetUIViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceWidgetUIViewProvider.swift; sourceTree = "<group>"; };
@@ -704,6 +720,8 @@
 				2633C00C266666A300D732CA /* Sensor.swift */,
 				2633C014266666B400D732CA /* Sensors.swift */,
 				2633C01C26667BB000D732CA /* SensorData.swift */,
+				260228C3266743AC001B780C /* Gateway.swift */,
+				260228CB266743E5001B780C /* Gateways.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1347,6 +1365,7 @@
 				260C09A0255BF71C00B2EA50 /* WidgetModule.swift in Sources */,
 				269CD380257A01C3003DC5D2 /* SharedModule.swift in Sources */,
 				26035743253ED333000798D1 /* DevicesAPI.swift in Sources */,
+				260228C4266743AC001B780C /* Gateway.swift in Sources */,
 				264F3394244F459A0042BDEE /* File.swift in Sources */,
 				2620CBD125C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition in Sources */,
 				26D2B622253ED4D800EB096F /* DeviceDetails.swift in Sources */,
@@ -1361,6 +1380,7 @@
 				26C80B4A266627CA0061A325 /* Device.swift in Sources */,
 				261AD81B2546E88400415713 /* DeviceWidgetStructure.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				260228CC266743E5001B780C /* Gateways.swift in Sources */,
 				2633C0052666341400D732CA /* Devices.swift in Sources */,
 				261AD8062546C8E400415713 /* DeviceDetailsModel.swift in Sources */,
 				26F53BC42547DD060047F514 /* APICacher.swift in Sources */,
@@ -1384,6 +1404,7 @@
 				2655F51825DEBD2F009C8CB6 /* SharedUtils.swift in Sources */,
 				26E7F1F925D5A17D00184C59 /* SensorWidgetIntent.intentdefinition in Sources */,
 				26E7F18725D59FAB00184C59 /* SQLiteDatabase.swift in Sources */,
+				260228C7266743AC001B780C /* Gateway.swift in Sources */,
 				2633C02026667BB100D732CA /* SensorData.swift in Sources */,
 				26E7F14725D59F0A00184C59 /* SharedModule.swift in Sources */,
 				2633C0082666341400D732CA /* Devices.swift in Sources */,
@@ -1392,6 +1413,7 @@
 				26E7F17125D59FA600184C59 /* SQLiteError.swift in Sources */,
 				26E7F12725D59ECB00184C59 /* Constants.swift in Sources */,
 				26E7F1B025D5A00700184C59 /* SensorWidgetStructure.swift in Sources */,
+				260228CF266743E5001B780C /* Gateways.swift in Sources */,
 				26E7F1E925D5A10E00184C59 /* CustomTypes.swift in Sources */,
 				26E7F1B725D5A01000184C59 /* DeviceWidgetStructure.swift in Sources */,
 				2633C010266666A300D732CA /* Sensor.swift in Sources */,
@@ -1414,6 +1436,7 @@
 			files = (
 				26E7F12825D59ECC00184C59 /* Constants.swift in Sources */,
 				26E7F19425D59FB900184C59 /* SQLTable.swift in Sources */,
+				260228C8266743AC001B780C /* Gateway.swift in Sources */,
 				26E7F1D225D5A09200184C59 /* DevicesAPI.swift in Sources */,
 				26E7F1D625D5A09900184C59 /* GatewaysAPI.swift in Sources */,
 				26E7F20025D5A17E00184C59 /* SensorWidgetIntent.intentdefinition in Sources */,
@@ -1432,6 +1455,7 @@
 				26E7F13825D59EFE00184C59 /* CI.swift in Sources */,
 				26E7F18825D59FAC00184C59 /* SQLiteDatabase.swift in Sources */,
 				26E7F1E025D5A09D00184C59 /* SensorUtilities.swift in Sources */,
+				260228D0266743E5001B780C /* Gateways.swift in Sources */,
 				26E7F19025D59FB500184C59 /* SensorDetailsModel.swift in Sources */,
 				26E7F1C825D5A08E00184C59 /* SensorsAPI.swift in Sources */,
 				26E7F17825D59FA700184C59 /* SQLiteError.swift in Sources */,
@@ -1456,6 +1480,7 @@
 				2620CBD325C86DA000F4D2C7 /* SensorWidgetIntent.intentdefinition in Sources */,
 				260D61E3253D667B00115423 /* SensorDetails.swift in Sources */,
 				26918791254C281B00C3C569 /* SensorUtilities.swift in Sources */,
+				260228CE266743E5001B780C /* Gateways.swift in Sources */,
 				267D2ACC2542D75D002F49AE /* SensorWidgetStructure.swift in Sources */,
 				260D619D253D578800115423 /* SQLiteError.swift in Sources */,
 				2633C017266666B400D732CA /* Sensors.swift in Sources */,
@@ -1468,6 +1493,7 @@
 				261AD80F2546C8F600415713 /* SensorDetailsModel.swift in Sources */,
 				26D2B626253ED66900EB096F /* DeviceDetails.swift in Sources */,
 				2633C0072666341400D732CA /* Devices.swift in Sources */,
+				260228C6266743AC001B780C /* Gateway.swift in Sources */,
 				26C80B4C266627CA0061A325 /* Device.swift in Sources */,
 				261AD81D2546E88400415713 /* DeviceWidgetStructure.swift in Sources */,
 				260381D9253DAF8700D4F8CA /* Utilities.swift in Sources */,
@@ -1515,12 +1541,14 @@
 				2665772E255ABDB800572D52 /* ContainerRelativeShapeSpecificCorner.swift in Sources */,
 				2633C00E266666A300D732CA /* Sensor.swift in Sources */,
 				26FEC715254194590056EC71 /* DeviceWidgetLargeUIView.swift in Sources */,
+				260228C5266743AC001B780C /* Gateway.swift in Sources */,
 				2655F47B25DEB992009C8CB6 /* SharedUtils.swift in Sources */,
 				26FEC71C254198BA0056EC71 /* DWPreviewSmallUIView.swift in Sources */,
 				26FEC6D4254169CB0056EC71 /* DeviceWidgetBuilderUIView.swift in Sources */,
 				26035744253ED333000798D1 /* DevicesAPI.swift in Sources */,
 				269CD381257A01C3003DC5D2 /* SharedModule.swift in Sources */,
 				2608B5C6253752AE00BF0A36 /* SensorDetails.swift in Sources */,
+				260228CD266743E5001B780C /* Gateways.swift in Sources */,
 				260D619C253D578800115423 /* SQLiteError.swift in Sources */,
 				261AD80E2546C8F600415713 /* SensorDetailsModel.swift in Sources */,
 				260D61AD253D5D3B00115423 /* API.swift in Sources */,
@@ -1547,6 +1575,7 @@
 				26DE337125DA833B000E38D6 /* DeviceWidgetStructure.swift in Sources */,
 				26DE334125DA8310000E38D6 /* CustomTypes.swift in Sources */,
 				26DE337D25DA8344000E38D6 /* SensorsAPI.swift in Sources */,
+				260228C9266743AC001B780C /* Gateway.swift in Sources */,
 				2633C012266666A300D732CA /* Sensor.swift in Sources */,
 				26DE330E25DA8286000E38D6 /* DeviceActionShortcutIntentHandler.swift in Sources */,
 				26DE337B25DA8341000E38D6 /* API.swift in Sources */,
@@ -1556,6 +1585,7 @@
 				26DE33A925DA8364000E38D6 /* SQLTable.swift in Sources */,
 				26DE33A725DA8361000E38D6 /* SensorDetailsModel.swift in Sources */,
 				26DE33A325DA835C000E38D6 /* SQLiteDatabase.swift in Sources */,
+				260228D1266743E5001B780C /* Gateways.swift in Sources */,
 				2633C01A266666B400D732CA /* Sensors.swift in Sources */,
 				26DE339125DA8359000E38D6 /* SQLiteError.swift in Sources */,
 				26DE333725DA82FE000E38D6 /* SharedModule.swift in Sources */,
@@ -1586,6 +1616,7 @@
 				2655F51F25DEBE51009C8CB6 /* SharedUtils.swift in Sources */,
 				2675794A25DC234400BC7D22 /* DeviceActionShortcut.intentdefinition in Sources */,
 				26DE338025DA8348000E38D6 /* Utilities.swift in Sources */,
+				260228CA266743AC001B780C /* Gateway.swift in Sources */,
 				2633C02326667BB100D732CA /* SensorData.swift in Sources */,
 				26DE336625DA8328000E38D6 /* SensorWidgetIntent.intentdefinition in Sources */,
 				2633C00B2666341400D732CA /* Devices.swift in Sources */,
@@ -1594,6 +1625,7 @@
 				26DE33A425DA835C000E38D6 /* SQLiteDatabase.swift in Sources */,
 				26DE33C025DA836E000E38D6 /* CI.swift in Sources */,
 				26DE33AA25DA8364000E38D6 /* SQLTable.swift in Sources */,
+				260228D2266743E5001B780C /* Gateways.swift in Sources */,
 				26DE339225DA835A000E38D6 /* SQLiteError.swift in Sources */,
 				26DE339025DA8354000E38D6 /* GatewaysAPI.swift in Sources */,
 				2633C013266666A300D732CA /* Sensor.swift in Sources */,
