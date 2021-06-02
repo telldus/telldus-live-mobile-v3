@@ -270,7 +270,7 @@ func cacheSensorsData(db: SQLiteDatabase, completion: @escaping () -> Void) {
 
 func cacheGatewaysData(db: SQLiteDatabase, completion: @escaping () -> Void) {
   GatewaysAPI().getGatewaysList() {result in
-    guard let clients = result["clients"] as? Array<Dictionary<String, Any>> else {
+    guard let clients = result["clients"] as? [Gateway] else {
       completion()
       return
     }
@@ -288,12 +288,9 @@ func cacheGatewaysData(db: SQLiteDatabase, completion: @escaping () -> Void) {
     db.deleteAllRecordsCurrentAccount(table: GatewayDetailsModel.self, userId: uuid as! NSString)
     
     for client in clients {
-      let cid = client["id"] as? String;
-      guard cid != nil else {
-        continue
-      }
-      let id = Int(cid!)!
-      var timezone = client["timezone"] as? String;
+      let cid = client.id;
+      let id = Int(cid)!
+      var timezone = client.timezone;
       if timezone == nil {
         timezone = ""
       }

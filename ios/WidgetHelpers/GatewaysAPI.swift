@@ -10,10 +10,11 @@ import Foundation
 
 class GatewaysAPI {
   func getGatewaysList(completion: @escaping (Dictionary<String, Any>) -> Void)  {
-    API().callEndPoint("/clients/list?&extras=timezone") {result in
+    let api =  API()
+    api.callEndPoint("/clients/list?&extras=timezone") {result in
       switch result {
       case let .success(data):
-        guard let dataNew = data["result"] as? [String:Any] else {
+        guard let parsedData = api.parseData(data: data["data"] as? Data, model: Gateways.self) else {
           completion(["clients": [], "authData": []]);
           return
         }
@@ -21,11 +22,7 @@ class GatewaysAPI {
           completion(["clients": [], "authData": []]);
           return
         }
-        guard let clients = dataNew["client"] as? Array<Dictionary<String, Any>> else {
-          completion(["clients": [], "authData": []]);
-          return
-        }
-        completion(["clients": clients, "authData": authData])
+        completion(["clients": parsedData.client, "authData": authData])
         return;
       case .failure(_):
         completion(["clients": [], "authData": []]);
