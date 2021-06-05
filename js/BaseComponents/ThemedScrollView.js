@@ -36,12 +36,14 @@ import {
 const ThemedScrollView = forwardRef((props: Object, ref: any): Object => {
 	const {
 		children,
+		refreshControl,
 		...others
 	} = props;
 
 	return (
 		<ScrollView
 			ref={ref}
+			refreshControl={refreshControl}
 			{...prepareRootPropsView(others)}>
 			{children}
 		</ScrollView>
