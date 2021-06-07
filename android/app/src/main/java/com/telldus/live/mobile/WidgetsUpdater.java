@@ -23,6 +23,9 @@ import android.content.Context;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 
+import com.telldus.live.mobile.Database.MyDBHandler;
+import com.telldus.live.mobile.Model.DeviceInfo;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,16 +77,32 @@ public class WidgetsUpdater  {
     }
 
     public void updateAllWidgets(Context context, Map extraArgs) {
+        MyDBHandler db = new MyDBHandler(context);
+        Object normalizeUIO = extraArgs.get("normalizeUI");
+        Boolean normalizeUI = normalizeUIO == null ? false : (Boolean) normalizeUIO;
+        
         int widgetIdsSensor[] = getAllWidgetsSensor(context);
         for (int widgetId : widgetIdsSensor) {
             updateUIWidgetSensor(widgetId, context, extraArgs);
         }
         int widgetIdsDevice2By1[] = getAllWidgetsDevice2By1(context);
         for (int widgetId : widgetIdsDevice2By1) {
+            if (normalizeUI) {
+                DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
+                String secondaryStateValue = widgetInfo.getSecondaryStateValue();
+                String stateValue = widgetInfo.getDeviceStateValue();
+                db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
+            }
             updateUIWidgetDevice2By1(widgetId, context, extraArgs);
         }
         int widgetIdsDevice3By1[] = getAllWidgetsDevice3By1(context);
         for (int widgetId : widgetIdsDevice3By1) {
+            if (normalizeUI) {
+                DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
+                String secondaryStateValue = widgetInfo.getSecondaryStateValue();
+                String stateValue = widgetInfo.getDeviceStateValue();
+                db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
+            }
             updateUIWidgetDevice3By1(widgetId, context, extraArgs);
         }
         int widgetIdsDeviceThermo[] = getAllThermostatWidgets(context);
@@ -92,6 +111,12 @@ public class WidgetsUpdater  {
         }
         int widgetIdsDeviceRGB[] = getAllRGBWidgets(context);
         for (int widgetId : widgetIdsDeviceRGB) {
+            if (normalizeUI) {
+                DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
+                String secondaryStateValue = widgetInfo.getSecondaryStateValue();
+                String stateValue = widgetInfo.getDeviceStateValue();
+                db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId, null, null);
+            }
             updateUIWidgetDeviceRGB(widgetId, context, extraArgs);
         }
     }
